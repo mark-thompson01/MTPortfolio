@@ -155,7 +155,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <h3>Reconnaissance Traffic</h3>
 
     <ul>
-        <li> ARP-Scan Traffic</li>
+        <li><strong>ARP-Scan Traffic</strong></li>
     </ul>
     <P>Address Resolution Protocol - ARP is essential for mapping IP addresses to MAC addresses on a local network. However, attackers or administrators can exploit ARP to discover devices by sending a series or ARP requests to various IP addresses. This traffic demonstrates an ARP sweep, which systematically queries a range of IP addresses to identify active hosts on a local network.</P>
     <p>This ARP storm demonstrates how attackers or network administrators might query an entire subnet to discover active hosts. The systematic ARP request (who has ?) and the corresponding replies ( is at ) reveal live devices and their MAC addresses. This behavior is typical of reconnaissance activity and highlights the importance of monitoring ARP traffic to detect and mitigate unauthorized network mapping attempts.</p>
@@ -165,7 +165,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
 
 
     <ul>
-        <li>Ping Sweep Traffic</li>
+        <li><strong>Ping Sweep Traffic</strong></li>
     </ul>    
 
     <p>This ping sweep traffic demonstrates how attackes can use ICMP traffic to discover live hosts on a network. The systematic nature of Echo Requests (targeting multiple IPs) and the rapid sequence of packets indicate automated reconnaissance. The responses from specific hosts reveal which devices are active and reachable, providing valuable information for further attacks. This activity underscores the importance of monitoring ICMP traffic and implementing network defenses and block reconnaissance attempts.
@@ -173,7 +173,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <img src="Images/ICMP.png" alt="ICMP Traffic">
 
     <ul>
-        <li>Nmap Scan Traffic</li>
+        <li><strong>Nmap Scan Traffic</strong></li>
     </ul>
     <p>    <p>This capture highlights an Nmap SYN scan, where the scanner sequentually probes multiple ports on the target system. Closed ports respond with RST, ACK packets, while open ports (e.g., SSH port port 22) sends SYN, ACK packets. This reconnaissance activity demonstrates the early stages of an attack, providing critical information about a targets network and services.
 </p>
@@ -188,7 +188,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <img src="Images/Port%2080%20Open.png" alt="Port 80 Open">
 
     <ul>
-        <li>SSH Traffic</li>
+        <li><strong>SSH Traffic</strong></li>
     </ul>
     <img src="Images/SSH%20Connection%20TCP%20Handshake.png" alt="SSH Handshake">
 
@@ -214,13 +214,13 @@ The setup consists of a small, virtualized network consisting of two virtual mac
 
     
     <ul>
-        <li>TCP SYN Flood on Port 80</li>
+        <li><strong>TCP SYN Flood on Port 80</strong></li>
     </ul>
     <p>These packets represent a TCP SYN Flood attack targeting port 80 on the destination IP. The rapid rate of SYN packets with no corresponding responses indicates a deliberate attempt to exhuast the target's resources by creating half-open TCP connections. This is a classic Denial of Service (DoS) tactic, designed to disrupt services by overwhelming the target's ability to handle legitimate traffic.</p>
     <img src="Images/TCP%20SYN%20Flood%20on%20port%2080.png" alt="TCP SYN Flood">
 
     <ul>
-        <li> Malformed (Fragmented) Packets</li>
+        <li><strong>Malformed (Fragmented) Packets</strong></li>
     </ul>
     <p>This traffic highlights the deliberate fragmentation of packets, with the More Fragments (MF) flag set. Fragmented packets, each with a small size of 54 bytes, are sent in rapid succession to overwhelm the target. This technique can evade firewalls and IDS by making reassembly difficult, demonstrating how attackers might bypass detection or consume system resources.
     </p>
@@ -228,7 +228,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <img src="Images/Capture%201.PNG" alt="Fragmented Packets">
 
     <ul>
-        <li>Custom Payload</li>
+        <li><strong>Custom Payload</strong>strong></li>
     </ul>
     <p>Here we have the traffic from the command "hping -S -p 443 -d 100 --data "malicious payload" 10.38.1.116"</p>
     <p>The [RST, ACK] flags indicate that the receiving system (destination) is rejecting the connection. This is expected if the system is not configured to handle the specific payload or if it identifies the packets as malformed or suspicious. The packet length (60) matches the size of the TCP headers plus any payload. Since the -d 100 option was used, the payload adds extra bytes to the total length. The high volume of packets sequential source ports suggests that this is artificially generated traffic, consistent with hping3's behavior. The receiving system is responding with TCP Reset (RST), which occurs when a system does not expect or cannot process a connection request. This is often a sign of suspicious or malformed traffic being rejected.
@@ -236,7 +236,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <img src="Images/Malicious.png" alt="Custom Payload">
 
     <ul>
-        <li>Spoofed Traffic</li>
+        <li><strong>Spoofed Traffic</strong></li>
     </ul>
     <p>Here we can see the traffic from the command "hping3 -S -p 80 --spoof 192.168.1.100 10.38.1.116".
 </p>
