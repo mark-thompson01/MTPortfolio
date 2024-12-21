@@ -168,18 +168,18 @@ The setup consists of a small, virtualized network consisting of two virtual mac
         <li>Ping Sweep Traffic</li>
     </ul>    
 
-    <ul>
-        <li>Nmap Scan Traffic</li>
-    </ul>
-    <p>This capture highlights an Nmap SYN scan, where the scanner sequentually probes multiple ports on the target system. Closed ports respond with RST, ACK packets, while open ports (e.g., SSH port port 22) sends SYN, ACK packets. This reconnaissance activity demonstrates the early stages of an attack, providing critical information about a targets network and services.
+    <p>This ping sweep traffic demonstrates how attackes can use ICMP traffic to discover live hosts on a network. The systematic nature of Echo Requests (targeting multiple IPs) and the rapid sequence of packets indicate automated reconnaissance. The responses from specific hosts reveal which devices are active and reachable, providing valuable information for further attacks. This activity underscores the importance of monitoring ICMP traffic and implementing network defenses and block reconnaissance attempts.
 
-</p>
     <img src="Images/ICMP.png" alt="ICMP Traffic">
 
     <ul>
         <li>Nmap Scan Traffic</li>
     </ul>
+    <p>    <p>This capture highlights an Nmap SYN scan, where the scanner sequentually probes multiple ports on the target system. Closed ports respond with RST, ACK packets, while open ports (e.g., SSH port port 22) sends SYN, ACK packets. This reconnaissance activity demonstrates the early stages of an attack, providing critical information about a targets network and services.
+</p>
     <img src="Images/Screenshot%20from%202024-12-13%2023-20-00.png" alt="Nmap SYN Scan">
+
+    
 
     <p>Port 22 SYN, ACK - Port 22 Open</p>
     <img src="Images/Port%2022%20Open.png" alt="Port 22 Open">
