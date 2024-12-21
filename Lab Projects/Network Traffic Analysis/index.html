@@ -103,12 +103,24 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <img src="Images/Ubuntu%20Port%20Scan.PNG" alt="Ubuntu Port Scan">
 
     <h3>2. File Transfers via SSH</h3>
-    <p>SSH connection and file transfer examples:</p>
+    <p>Establish an SSH session from Kali to Ubuntu and use scp to transfer files. This simulates secure file transfer.</p>
+
     <img src="Images/SSH%20Login.PNG" alt="SSH Login Successful">
+
+    <p>SSH connection from Kali VM to Ubuntu VM successful. Before proceeding further, I'll create a tst file on the Kali VM and then transfer it to the Ubuntu VM.</p>
+
+    
     <img src="Images/Test%20File%20Creation%20and%20Transfer%20to%20Ubuntu.PNG" alt="File Creation and Transfer">
+
+    <p>File transfer verification on Ubuntu VM.</p>
+    
     <img src="Images/File%20Transfer%20Verification.PNG" alt="File Transfer Verification">
 
     <h3>3. Simulated Malicious Activity</h3>
+
+    <p>Use tools like hping3 on Kali to create malformed or suspicious packets, mimicking attack patterns.</p>
+
+    
     <p>Examples of malicious traffic:</p>
     <img src="Images/hping%20port%2080%20flood.PNG" alt="hping Port 80 Flood">
     <img src="Images/hping%20icmp%20flood%20116.PNG" alt="hping ICMP Flood">
@@ -119,25 +131,75 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <h2>Saving Captures for Analysis</h2>
     <p>Use the following command to save traffic to a PCAP file:</p>
     <code>tcpdump -i eth0 -w network_capture.pcap</code>
+    <p>To preserve captured traffic for analysis with Wireshark, use the -w option: tcpdump -i eth0 -w network_capture.pcap. This saves the traffic to a PCAP file, which can be loaded into Wireshark for detailed inspection.</p>
     <img src="Images/tcpdump%20capture%20start%202.PNG" alt="tcpdump Capture Start">
 
     <h2>Analyzing Traffic with Wireshark</h2>
+    <p>Wireshark allows for in-depth examination of network data:</p>
+
+    <ul>
+        <li><strong>Load the capture:</strong> Open the network_capture.pcap file in Wireshark</li>
+        <li><strong>Apply Filters:</strong> Use Wireshark's powerful filtering capabilities to isolate specific types of traffic, such as HTTP, ICMP, or SSH.</li>
+        <li><strong>Idenify Patterns and Anomalies:</strong></li>
+            <ul>
+                <li>Examine HTTP requests and responses to analyze web activity.</li>
+                <li>Investigate SSH traffic for unauthorized access attempts.</li>
+                <li>Detect unusual packet structures indicative of malicious behavior.</li>
+            </ul>
+    </ul>
+
+    <p>Let's further examine the network_capture.pcap file.</p>
+
+    <p>The commands ran in this lab produce various traffic types on computer networks. In this lab, I've captured various traffic types to simulate reconnaissance, attacks, and legitimate activity. In this section, the most interesting findings will be analyzed.</p>
+    
     <h3>Reconnaissance Traffic</h3>
+
+    <ul>
+        <li> ARP-Scan Traffic</li>
+    </ul>
+    <P>Address Resolution Protocol - ARP is essential for mapping IP addresses to MAC addresses on a local network. However, attackers or administrators can exploit ARP to discover devices by sending a series or ARP requests to various IP addresses. This traffic demonstrates an ARP sweep, which systematically queries a range of IP addresses to identify active hosts on a local network.</P>
+    <p>This ARP storm demonstrates how attackers or network administrators might query an entire subnet to discover active hosts. The systematic ARP request (who has ?) and the corresponding replies ( is at ) reveal live devices and their MAC addresses. This behavior is typical of reconnaissance activity and highlights the importance of monitoring ARP traffic to detect and mitigate unauthorized network mapping attempts.</p>
     <img src="Images/Lots%20of%20ARP.PNG" alt="ARP Storm">
     <img src="Images/ARP%20Request.PNG" alt="ARP Request">
     <img src="Images/ARP%20Reply.PNG" alt="ARP Reply">
 
     <h3>Ping Sweep Traffic</h3>
+
+    <ul>
+        <li>Ping Sweep Traffic</li>
+    </ul>    
+
+    <ul>
+        <li>Nmap Scan Traffic</li>
+    </ul>
+    <p>This capture highlights an Nmap SYN scan, where the scanner sequentually probes multiple ports on the target system. Closed ports respond with RST, ACK packets, while open ports (e.g., SSH port port 22) sends SYN, ACK packets. This reconnaissance activity demonstrates the early stages of an attack, providing critical information about a targets network and services.
+
+</p>
     <img src="Images/ICMP.png" alt="ICMP Traffic">
 
-    <h3>Nmap Scan Traffic</h3>
+    <ul>
+        <li>Nmap Scan Traffic</li>
+    </ul>
     <img src="Images/Screenshot%20from%202024-12-13%2023-20-00.png" alt="Nmap SYN Scan">
+
+    <p>Port 22 SYN, ACK - Port 22 Open</p>
     <img src="Images/Port%2022%20Open.png" alt="Port 22 Open">
+
+    <p>Port 80 SYN, ACK - Port 80 Open</p>
     <img src="Images/Port%2080%20Open.png" alt="Port 80 Open">
 
-    <h3>SSH Traffic</h3>
+    <ul>
+        <li>SSH Traffic</li>
+    </ul>
     <img src="Images/SSH%20Connection%20TCP%20Handshake.png" alt="SSH Handshake">
+
+    <p>If we right click on the first SSH packet and select Follow > TCP Stream, we have the TCP Threeway Handshake for the SSH connection.
+
+</p>
     <img src="Images/SCP%20File%20Transfer.png" alt="SCP File Transfer">
+    <p>Here we the client/server communication for the key exchange. Packets we can sift through and gather meta data from.
+
+</p>
     <img src="Images/ACK%20PSH.png" alt="ACK PSH Flags">
 
     <h3>TCP SYN Flood</h3>
