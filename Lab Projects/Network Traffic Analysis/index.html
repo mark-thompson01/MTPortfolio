@@ -234,7 +234,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <img src="Images/Capture%201.PNG" alt="Fragmented Packets">
 
     <ul>
-        <li><strong>Custom Payload</strong>strong></li>
+        <li><strong>Custom Payload</strong></li>
     </ul>
     <p>Here we have the traffic from the command "hping -S -p 443 -d 100 --data "malicious payload" 10.38.1.116"</p>
     <p>The [RST, ACK] flags indicate that the receiving system (destination) is rejecting the connection. This is expected if the system is not configured to handle the specific payload or if it identifies the packets as malformed or suspicious. The packet length (60) matches the size of the TCP headers plus any payload. Since the -d 100 option was used, the payload adds extra bytes to the total length. The high volume of packets sequential source ports suggests that this is artificially generated traffic, consistent with hping3's behavior. The receiving system is responding with TCP Reset (RST), which occurs when a system does not expect or cannot process a connection request. This is often a sign of suspicious or malformed traffic being rejected.
