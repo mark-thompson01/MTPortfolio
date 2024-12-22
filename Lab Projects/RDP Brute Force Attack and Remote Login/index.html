@@ -1,1 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RDP Brute Force Attack and Remote Login</title>
+      <style>
+            body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+                       }
+        h1, h2, h3 {
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        code {
+            background-color: #2e2e2e;
+            color: #e0e0e0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: "Courier New", Courier, monospace;
+        }
+          blockquote {
+            background-color: #1e1e1e;
+            border-left: 5px solid #4caf50;
+            padding: 10px;
+            margin: 10px 0;
+            color: #cfcfcf;
+          }
+          img {
+            display: block;
+            margin: 20px 0;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>RDP-Brute-Force-Attack-and-Remote-Login</h1>
 
+    <p>This lab demonstrates using Hydra to perform a brute force attack on a Windows 10 PC with the RDP protocol. Then from there, initiating a successful login to the target system with the compromised login credentials using xfreerdp. This lab was performed in a segmented LAN environment for testing purposes.</p>
+
+    <h2>Performing an nmap scan on port 3389 of the target</h2>
+    <img src="Images/RDPBFLab1.PNG" alt="Nmap Scan Step 1">
+    <img src="Images/RDPBFLab2.PNG" alt="Nmap Scan Step 2">
+
+    <h2>Using Hydra to run a brute force login scan on the target using the RDP protocol in conjunction with the rockyou.txt wordlist</h2>
+    <img src="Images/RDPBFLab3.PNG" alt="Hydra Brute Force Step 1">
+    <img src="Images/RDPBFLab4.PNG" alt="Hydra Brute Force Step 2">
+    <img src="Images/RDPBFLab5.PNG" alt="Hydra Brute Force Step 3">
+    <img src="Images/RDPBFLab6.PNG" alt="Hydra Brute Force Step 4">
+    <img src="Images/RDPBFLab7.PNG" alt="Hydra Brute Force Step 5">
+    <img src="Images/RDPBFLab8.PNG" alt="Hydra Brute Force Step 6">
+
+    <h2>Initiating a successful login attempt with the compromised credentials using xfreerdp</h2>
+    <img src="Images/RDPBFLab9.PNG" alt="Successful Login Step 1">
+    <img src="Images/RDPBFLab10.PNG" alt="Successful Login Step 2">
+    <img src="Images/RDPBFLab11.PNG" alt="Successful Login Step 3">
+    <img src="Images/RDPBFLab12.PNG" alt="Successful Login Step 4">
+</body>
+</html>
