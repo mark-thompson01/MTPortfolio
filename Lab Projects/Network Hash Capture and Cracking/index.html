@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Hash Capture and Cracking</title>
+</head>
+<body>
+    <h1>Network-Hash-Capture-and-Cracking-with-Responder-and-Hashcat</h1>
+
+    <p>This lab outlines the process of using Responder to capture an NTLMv2 hash from a Windows 10 host over the network and then cracking the captured hash with Hashcat to expose the password. This lab was conducted in a segmented LAN environment for testing purposes.</p>
+
+    <img src="Images/ResponderLab2.PNG" alt="Responder Listening Step 1">
+    <img src="Images/ResponderLab3.PNG" alt="Responder Listening Step 2">
+
+    <p>The Responder tool listens for network events through the eth0 interface. While it is running, I will capture the NTLMv2 hash of the Windows 10 target by attempting to authenticate to a nonexistent server named server01. Responder intercepts this authentication request and captures the NTLMv2 hash, performing this locally on the target system within the local network.</p>
+
+    <img src="Images/ResponderLabAdd1.PNG" alt="Responder Capturing Hash Step 1">
+    <img src="Images/ResponderLabAdd2.PNG" alt="Responder Capturing Hash Step 2">
+    <img src="Images/ResponderLabAdd3.PNG" alt="Responder Capturing Hash Step 3">
+    <img src="Images/ResponderLab6.PNG" alt="Responder Capturing Hash Step 4">
+
+    <p>Here we have the captured NTLMv2 hash, which the Responder tool tricked the target system into sending over the network. By having the target host attempt to authenticate to a nonexistent server, Responder captured the NTLMv2 hash by poisoning the response to a broadcast query. From here, we can copy and paste the hash into a .txt file and run a wordlist against it using Hashcat to attempt to crack the hashed password.</p>
+
+    <img src="Images/ResponderLab7.PNG" alt="Hashcat Step 1">
+    <img src="Images/ResponderLab8.PNG" alt="Hashcat Step 2">
+    <img src="Images/ResponderLab9.PNG" alt="Hashcat Step 3">
+    <img src="Images/ResponderLab10.PNG" alt="Hashcat Step 4">
+    <img src="Images/ResponderLab11.PNG" alt="Hashcat Step 5">
+    <img src="Images/ResponderLab12.PNG" alt="Hashcat Step 6">
+    <img src="Images/ResponderLab13.PNG" alt="Hashcat Step 7">
+</body>
+</html>
