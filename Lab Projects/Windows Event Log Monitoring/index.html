@@ -1,1 +1,127 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Event Log Monitoring</title>
+   <style>
+            body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+                       }
+        h1, h2, h3 {
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        code {
+            background-color: #2e2e2e;
+            color: #e0e0e0;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: "Courier New", Courier, monospace;
+        }
+          blockquote {
+            background-color: #1e1e1e;
+            border-left: 5px solid #4caf50;
+            padding: 10px;
+            margin: 10px 0;
+            color: #cfcfcf;
+          }
+          img {
+            display: block;
+            margin: 20px 0;
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+        ul, ol {
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Windows-Event-Log-Monitoring</h1>
+
+    <p>This lab outlines the basics of using Sysmon, Windows Event Viewer, and PowerShell scripts to monitor and analyze Windows Event Logs for security incidents.</p>
+
+    <h2>Tools</h2>
+    <ul>
+        <li><strong>Sysmon</strong> for detailed logging of system activities.</li>
+        <li><strong>Windows Event Viewer</strong> for visualizing and analyzing event logs.</li>
+        <li><strong>PowerShell scripts</strong> for querying and processing event logs.</li>
+    </ul>
+
+    <h2>Monitoring with Sysmon</h2>
+
+    <p>Sysmon (System Monitor) is a Windows system service and device driver that logs system activity of Windows operating systems to the Windows Event Log. The following goes over some basic Sysmon queries in PowerShell with the Get-WinEvent cmdlet that can be used to monitor and analyze activities on Windows systems configured with Sysmon.</p>
+
+    <h3>List All Sysmon Events</h3>
+    <img src="Images/List%20All%20Sysmon%20Events.PNG" alt="List All Sysmon Events">
+
+    <h3>List All Network Connection Events</h3>
+    <img src="Images/List%20all%20network%20connection%20events.PNG" alt="List All Network Connection Events">
+
+    <h3>List All Process Creation Events</h3>
+    <img src="Images/List%20all%20process%20creation%20events.PNG" alt="List All Process Creation Events">
+
+    <h3>List Events for New Files Created</h3>
+    <img src="Images/List%20new%20files%20created.PNG" alt="List Events for New Files Created">
+
+    <h3>List Events for File Modifications</h3>
+    <img src="Images/List%20events%20for%20file%20modifications.PNG" alt="List Events for File Modifications">
+
+    <h3>Monitor for Remote Thread Creation</h3>
+    <img src="Images/Monitor%20for%20Remote%20Thread%20Creation.PNG" alt="Monitor for Remote Thread Creation">
+
+    <h3>Monitor for Changes to the Registry</h3>
+    <img src="Images/Monitor%20for%20changes%20to%20the%20registry.PNG" alt="Monitor for Changes to the Registry">
+
+    <h3>List Failed Logon Attempts</h3>
+    <img src="Images/Retrieve%20Failed%20Logon%20Attempts.PNG" alt="List Failed Logon Attempts">
+
+    <h3>List Successful Logon Events</h3>
+    <img src="Images/Retrieve%20Successful%20Login%20Events.PNG" alt="List Successful Logon Events">
+
+    <h2>Monitoring with Windows Event Viewer</h2>
+
+    <h3>Monitor Failed Login Attempts</h3>
+    <img src="Images/EventViewer1.PNG" alt="Monitor Failed Login Attempts 1">
+    <img src="Images/EventViewer2.PNG" alt="Monitor Failed Login Attempts 2">
+    <img src="Images/EventViewer2.1.PNG" alt="Monitor Failed Login Attempts 3">
+    <img src="Images/EventViewer2.2.PNG" alt="Monitor Failed Login Attempts 4">
+    <img src="Images/EventViewer2.3.PNG" alt="Monitor Failed Login Attempts 5">
+
+    <h3>Monitor Successful Logins</h3>
+    <img src="Images/EventViewer3.PNG" alt="Monitor Successful Logins 1">
+    <img src="Images/EventViewer4.PNG" alt="Monitor Successful Logins 2">
+    <img src="Images/EventViewer5.PNG" alt="Monitor Successful Logins 3">
+    <img src="Images/EventViewer5.1.PNG" alt="Monitor Successful Logins 4">
+    <img src="Images/EventViewer5.2.PNG" alt="Monitor Successful Logins 5">
+    <img src="Images/EventViewer5.3.PNG" alt="Monitor Successful Logins 6">
+
+    <h3>Look for Special Privileges Assigned to New Logon</h3>
+    <img src="Images/EventViewer6.PNG" alt="Special Privileges Assigned 1">
+    <img src="Images/EventViewer7.PNG" alt="Special Privileges Assigned 2">
+    <img src="Images/EventViewer8.PNG" alt="Special Privileges Assigned 3">
+
+    <h2>Monitoring with PowerShell Scripts</h2>
+
+    <h3>Monitor Failed Login Attempts</h3>
+    <img src="Images/FailedLoginMonitoringPSScript.PNG" alt="Monitor Failed Login Attempts Script">
+    <img src="Images/RunningFailedLoginScript.PNG" alt="Running Failed Login Script">
+
+    <h3>Monitor Successful Logins</h3>
+    <img src="Images/SuccessfulLogins.PNG" alt="Monitor Successful Logins Script">
+    <img src="Images/RunningSuccessfulLoginScript.PNG" alt="Running Successful Login Script">
+
+    <h3>Monitor New Process Creation Events</h3>
+    <img src="Images/ProcessCreationEvents.PNG" alt="Process Creation Events Script">
+    <img src="Images/ProcessCreationEventsScriptRun.PNG" alt="Running Process Creation Events Script">
+</body>
+</html>
