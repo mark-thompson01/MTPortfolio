@@ -1,1 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARP Spoofing Lab</title>
+</head>
+<body>
+    <h1>ARP-Spoofing</h1>
+
+    <p>This lab demonstrates how to perform an ARP Spoofing attack, also referred to as ARP Poisoning, Man-in-the-Middle, or On-path attack, on a Local Area Network using the arpspoof tool in Kali Linux. This lab was conducted in a segmented LAN environment to demonstrate the process of performing active reconnaissance with Nmap to enumerate operating system details from the host and to carry out an ARP spoofing attack on the target system. Once the ARP spoofing attack is initiated, further enumeration is performed using Wireshark.</p>
+
+    <h2>Active Reconnaissance on the Target using Nmap</h2>
+    <img src="Images/NmapOSDiscovery1.PNG" alt="Nmap OS Discovery 1">
+    <img src="Images/NmapOSDiscovery2.PNG" alt="Nmap OS Discovery 2">
+    <img src="Images/NmapOSDiscovery3.PNG" alt="Nmap OS Discovery 3">
+
+    <h2>Initiating the ARP Spoofing Attack with arpspoof</h2>
+    <img src="Images/arpspoof2.PNG" alt="Initiating ARP Spoofing Attack">
+    <img src="Images/arpspoof3%20arpspoof%20attack%20in%20action.PNG" alt="ARP Spoofing Attack in Action">
+    <img src="Images/arpspoof4%20attack%20in%20action%202.PNG" alt="ARP Spoofing Attack in Action 2">
+
+    <h2>Analyzing the Traffic with Wireshark</h2>
+
+    <h3>Identifying DNS Server IP Address</h3>
+    <img src="Images/Wireshark%20DNS%20Server%20Extraction.PNG" alt="Wireshark DNS Server Extraction">
+    <img src="Images/Wireshark%20DNS%20Server%20Enumeration%205.PNG" alt="Wireshark DNS Server Enumeration 5">
+    <img src="Images/Wireshark%20DNS%20Server%20Enumeration%206.PNG" alt="Wireshark DNS Server Enumeration 6">
+
+    <h3>NetBIOS and Other Information</h3>
+    <img src="Images/Wireshark%20Enumeration%200.PNG" alt="Wireshark Enumeration 0">
+    <img src="Images/Wireshark%20Enumeration%201.PNG" alt="Wireshark Enumeration 1">
+    <img src="Images/WSEnum1.PNG" alt="Wireshark Enumeration 1">
+    <img src="Images/WSEnum2.PNG" alt="Wireshark Enumeration 2">
+    <img src="Images/WSEnum3.PNG" alt="Wireshark Enumeration 3">
+    <img src="Images/WSEnum4.PNG" alt="Wireshark Enumeration 4">
+
+    <h3>SSDP Enumeration</h3>
+    <img src="Images/WSEnum5.PNG" alt="Wireshark SSDP Enumeration 1">
+    <img src="Images/WSEnum6.PNG" alt="Wireshark SSDP Enumeration 2">
+
+    <h4>Other Host Information</h4>
+    <img src="Images/WSEnum7.PNG" alt="Wireshark Other Host Information">
+</body>
+</html>
 
