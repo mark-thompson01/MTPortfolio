@@ -42,7 +42,13 @@
       display: inline-block;
     }
   </style>
+  <h1>NAS - Attack & Defense Lab 2</h1>
+  <h2>Successful Brute Force Login | Techniques to Mitigate</h2>
+  <p>In the second round of the <strong>TrueNAS - Attack & Defense Lab</strong> a successful brute force attack is carried out against the target system.</p>
+  
+
+
+  
 </head>
 <body>
-</body>
-</html>
+
