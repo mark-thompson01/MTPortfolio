@@ -45,6 +45,10 @@
       width: 700px;
       height: auto; /* Maintain aspect ratio */
     }
+    .small-image {
+      width: 200px;
+      height: auto
+    }
   </style>
 </head>
 <body>
@@ -65,10 +69,10 @@
   <h2>Defensive</h2>
   <h3>Incident Detection</h3>
   <p>Log analysis review on the server side.</p>
-  <img src="Images/TN%20Inves2.png" alt="TN Inves2.png" sytle="width: 200px; height: 300;">
+  <img src="Images/TN%20Inves2.png" alt="TN Inves2.png" alt="small-image">
   <p>Here we can see the brute force login attempts using the different usernames from the Kali Linux attacker machine.</p>
-  <img src="Images/TNInvest3.png" alt="TNInvest3.png">
-  <img src="Images/TNInvest4.png" alt="TNInvest4.png">
+  <img src="Images/TNInvest3.png" alt="TNInvest3.png" alt="small-image">
+  <img src="Images/TNInvest4.png" alt="TNInvest4.png" alt="small-image">
 
   <p>Upon detecting this brute force login attempt, I would immediately check the timestamp of the last log to determine how recent the last attempt was. From there, I would proceed with the following actions.</p>
 
@@ -76,17 +80,15 @@
   <p><strong>Step 1 - Enable pf (if not already enabled)</strong></p>
   <P>Run the following to see if pf is active:</P>
    <p>If pf is already enabled, you'll see an output indicating it's active. If not, this command enables it.</p>
-  <img src="Images/Mitigate1.png" alt="Mitigate1">
+  <img src="Images/Mitigate1.png" alt="Mitigate1" alt="small-image">
 
   <p><strong>Step 2 - Edit the pf.conf Configuration File</strong></p>
   <p>Add the following line to block the IP address. Replace <IP_TO_BLOCK> with the attacker’s IP address.</p>
-  <img src="Images/BlockingIP.png" alt="BlockingIP">
+  <img src="Images/BlockingIP.png" alt="BlockingIP" alt="small-image">
   <p><strong>Step 3 -  Apply the New Rules</strong></p>
   <p>After editing and saving the file, reload the pf rules to apply the changes and confirm the rule is active with <code>pfctl –sr</code>.</p>
-  <img src="Images/ApplyNewRules.png" alt="ApplyNewRules">
+  <img src="Images/ApplyNewRules.png" alt="ApplyNewRules" alt="small-image">
 
   <p>This configuration will block all incoming traffic from the specified IP. You can adjust the rule to target specific IP ports or protocols if needed. This is an example of identifying an actively underway or recent brute force attack on a server – and immediately applying mitigation by blocking the attacker IP using the pf firewall on the server. This puts the activity to a stop while it’s further investigated with further incident response procedures being carried out.</p>
-  
-  
 </body>
 </html>
