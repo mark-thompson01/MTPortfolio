@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab Projects</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      background-color: #2b2b2b; /* Dark background */
+      color: #f0f0f0; /* Light grey text */
+    }
+    h1 {
+      text-align: left;
+      color: #d3d3d3; /* Lighter grey heading */
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: left;
+    }
+    ul {
+      list-style: none; /* Remove default bullets */
+      padding-left: 0;
+      text-align: left; /* Align list to the left */
+    }
+    li {
+      margin: 10px 0;
+    }
+    a {
+      color: #1e90ff; /* Blue link color */
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      color: #ff7f50; /* Coral hover color */
+      text-decoration: underline;
+    }
+    .back-link {
+      margin-top: 20px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <h1>TrueNAS - Attack/Defense Lab 1</h1>
+  <h2>SSH Brute Force Attack | Identification - Counter Defense</h2>
+  <p>The following is the first set of three offensive and defense techniques carried out on a customized machine running TrueNAS 13.1 in a segmented lab environment.  </p>
+  <p>In this scenario, we have a TrueNAS server and a Kali Linux machine running on the segment. Getting started with the offensive activities the Kali machine performs an nmap port scan and discovers port 22 – SSH is open, then proceeds with a brute force attack using the ssh-brute nmap script.</p>
+  <p>On the defensive side, the attack is being identified in reviewing the logs on the server through /var/log/auth.log - and when the contents of that file are concatenated – all the brute force attempts from the different account names of the wordlist are shown along with the Kali Linux IP. </p>
+
+  <h2>Offensive</h2>
+  <p><strong>Port 22 - SSH is open on the target system</strong></p>
+  <img src="Images/NmapSSHOpen.png" alt="NmapSSHOpen">
+  <p><strong>Brute force attack on SSH - port 22 using <code>nmap ssh-brurte</code> script</strong> </p>
+  <img src="Images/NSESSHBrute.png" alt="NSESSHBrute">
+  <p><strong>Brute force attack underway</strong></p>
+  <img src="Nmap%20SSH%20Brute%20Force%In%20Action3.png" alt="Nmap SSH Brute Force In Action3">
+
+  <h2>Defensive</h2>
+</body>
+</html>
