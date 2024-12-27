@@ -48,7 +48,7 @@
   <h2>SSH Brute Force Attack | Identification - Counter Defense</h2>
   <p>The following is the first set of four offensive and defense labs carried out on a customized machine running TrueNAS 13.1 in a segmented lab environment.  </p>
   <p>In this scenario, we have a TrueNAS server and a Kali Linux machine running on the segment. Getting started with the offensive activities, the Kali machine performs an nmap port scan and discovers port 22 – SSH is open, then proceeds with a brute force attack using the ssh-brute nmap script.</p>
-  <p>On the defensive side, the attack is being identified in reviewing the logs on the server through /var/log/auth.log - and when the contents of that file are concatenated – all the brute force attempts from the different account names of the wordlist are shown along with the Kali Linux IP. </p>
+  <p>On the defensive side, the attack is being identified in reviewing the logs on the server through /var/log/auth.log - and when the contents of that file are concatenated – all the brute force attempts from the different account names of the wordlist are shown along with the Kali Linux IP.</p>
 
   <h2>Offensive</h2>
   <p><strong>Port 22 - SSH is open on the target system</strong></p>
@@ -66,7 +66,7 @@
   <img src="Images/TNInvest3.png" alt="TNInvest3.png">
   <img src="Images/TNInvest4.png" alt="TNInvest4.png">
 
-  <p>Upon detecting this brute force login attempt. What I would do immediately is check the timestamp for the last log. To determine how recently the last brute force attempt was.</p>
+  <p>Upon detecting this brute force login attempt, I would immediately check the timestamp of the last log to determine how recent the last attempt was. From there, I would proceed with the following actions.</p>
 
   <h4>Applying Immediate Stop:</h4>
   <p><strong>Step 1 - Enable pf (if not already enabled)</strong></p>
