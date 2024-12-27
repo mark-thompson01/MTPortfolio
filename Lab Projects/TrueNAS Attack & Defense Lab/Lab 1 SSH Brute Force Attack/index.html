@@ -77,17 +77,12 @@
   <p><strong>Step 2 - Edit the pf.conf Configuration File</strong></p>
   <img src="Images/Mitigate2.png" alt="Mitigate2">
   <p>Add the following line to block the IP address. Replace <IP_TO_BLOCK> with the attacker’s IP address.</p>
-  <p><strong>Step 3 - Add the following line to block the IP address</strong></p
   <img src="Images/BlockingIP.png" alt="BlockingIP">
-  <p><strong>Step 4 -  Apply the New Rules</strong></p>
+  <p><strong>Step 3 -  Apply the New Rules</strong></p>
   <p>After editing and saving the file, reload the pf rules to apply the changes and confirm the rule is active with <code>pfctl –sr</code>.</p>
   <img src="Images/ApplyNewRules.png" alt="ApplyNewRules">
 
-  <p>This configuration will block all incoming traffic from the specified IP. You can adjust the rule to target specific IP ports or protocols if needed. This is an example of identifying an actively underway or recent brute force attack on a server – and immediately applying mitigation by blocking the attacker IP using the pf firewall on the server. This puts the activity to a stop while it’s further investigated with further incident response procedures being carried out.  </p>
-  
-   
-  
-  
+  <p>This configuration will block all incoming traffic from the specified IP. You can adjust the rule to target specific IP ports or protocols if needed. This is an example of identifying an actively underway or recent brute force attack on a server – and immediately applying mitigation by blocking the attacker IP using the pf firewall on the server. This puts the activity to a stop while it’s further investigated with further incident response procedures being carried out.</p>
   
   
 </body>
