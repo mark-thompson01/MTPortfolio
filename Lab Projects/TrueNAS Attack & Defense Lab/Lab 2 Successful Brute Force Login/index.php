@@ -17,6 +17,10 @@
       color: #d3d3d3; /* Lighter grey heading */
       margin-bottom: 10px;
     }
+    h2 {
+      text-align: left;
+      color: #d3d3d3;
+    }
     p {
       text-align: left;
     }
@@ -42,11 +46,10 @@
       display: inline-block;
     }
   </style>
-  <h1>NAS - Attack & Defense Lab 2</h1>
-  <h2>Successful Brute Force Login | Techniques to Mitigate</h2>
-  <p>In the second round of the <strong>NAS Security Attack & Defense Lab</strong> a successful brute force attack is carried out against the target system.</p>
 </head>
 <body>
+  <h1>NAS - Attack & Defense Lab 2</h1>
+  <h2>Successful Brute Force Login | Techniques to Mitigate</h2>
+  <p>In the second round of the <strong>NAS Security Attack & Defense Lab</strong>, a successful brute force attack is carried out against the target system.</p>
 </body>
 </html>
-
