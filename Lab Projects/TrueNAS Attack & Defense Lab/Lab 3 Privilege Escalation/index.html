@@ -48,7 +48,65 @@
   </style>
 </head>
 <body>
-  <h1>NAS - Attack & Defense Lab 3</h1>
+  <h1>NAS Security Attack & Defense Lab 3</h1>
   <h2>Privilege Escalation</h2>
+  <p>Following the successful brute-force attack via SSH in Lab 2, the offensive side gained access to the target NAS server and upgraded from a BSD shell to a Meterpreter session.</p>
+  <p>However, the account in use lacks root privileges, so privilege escalation is required to proceed further.</p>
+  <p>For demonstration purposes in this lab, I have set the SUID bit on the <code>vim</code> binary to demonstrate a privilege escalation attack using that method.</p>
+  <p>Before proceeding further, here are a few notes:</p>
+  <p><strong>SUID bit</strong></p>
+  <p>The SUID (Set User ID) bit is a special permission in Unix/Linux file systems that allow a program to run with the privileges of the file’s owner, rather than the privileges of the user who executes it. Is it represented by the s character in the file’s permission field listed using <code>ls –l</code>.</p>
+  <p>WHen the SUID bit is set on an executable file:</p>
+  <ul>
+    <li>If a normal user executes the file, the program runs with the effective user ID of the file's owner.</li>
+    <li>This is useful for programs that need elevated privileges to perform specific tasks, even when run by ordinary users.</li>
+  </ul>
+  <p><strong>Example:</strong></p>
+  <p>For a file owned by the root user with SUID set:</p>
+  <p><strongs>-rwsr-xr-x 1 root root 12345 Dec 27 12:00 example_program </strongs></p>
+  <p>The <strong>s</strong> in <strong>-rwsr-xr-x</strong> indicates the SUID bit is set.</p>
+  <p>If <code>example_program</code> is executed by a non-root user, it runs with root privileges.</p>
+
+  <h2>Offensive</h2>
+  <p>Going further with the privilege escalation we have the Meterpreter session here where I’m going to spawn a shell with <code>/bin/sh -i</code>.</p>
+  <img src="Images/shell.png" alt="shell">
+  <p>In this particular scenario I found that using <code>vim</code> on a spawned shell through Meterpreter didn’t work with vim commands such as :q <Enter>, making it an obstacle to exploit this vulnerability.</p>
+  <p>I then figured out there was a particular environment variable called TERM that was not present.</p>
+  <img src="Images/snv.png" alt="snv">
+  <p>I then learned to set the variable to xterm using the <code>export TERM=xterm</code> command.</p>
+  <img src="Images/xtermvim.png" alt="xtermvim">
+  <p>Allowing the exploitation of the SUID being set to occur in <code>vim</code></p>
+  <p>Running <code>:!sh</code> will spawn a root shell, executing the <code>/bin/sh</code> (or the default shell) with root privileges because the SUID bit allows <code>vim</vim> to run as its owner (root).</p>
+  <img src="Images/:!sh.png" alt=":!sh">
+  <img src="Images/rootaccessgained.png" alt="rootaccessedgained">
+
+  <h2>Defensive</h2>
+  <h3>Incident Detection</h3>
+  <p>In the log below, we see that the <code>ronny</code> user attempted to execute commands involving <code>vim</code> with elevated privileges (e.g., <code>sudo</code>.</p>
+  <p>The execution of <code>/usr/local/bin/vim</code> with the <code>-c /bin/sh</code> argument spawns a shell.</p>
+  <img src="Images/LogData.png alt="LogData">
+  <p>Here we can see the processes spawned by the user account <code>ronny</code>. The <code>/bin/sh</code> and the <code>-sh</code> indicate interactive and script-based shells. Processes like <code>sh –i</code> suggest that an interactive shell was spawned, likely through <code>vim</code> exploit.</p>
+  <p>The processes owned by <code>root</code> (e.g., PID 8554 and PID 9860) indicate privilege escalation was achieved from the <code>ronny</code> user.</p>
+  <img src="Images/psaux.png" alt="psaux">
+
+  <h3>Response</h3>
+  <p>Immediately kill the processes related to the ronny user account as well as other root process that indicate malicious activity.</p>
+  <img src="Images/processkill2.png" alt="processkill2">
+
+  <p>Back on the offensive side, access to the NAS server is lost.</p>
+  <img src="Images/commandterminated.png" alt="commandterminated">
+  <p>From here, a cybersecurity analyst would review the activity for the <code>ronny</code> user account. To trace back the sequence of actions that led to privilege escalation.</p>
+
+  <h2>Privilege Escalation via SUID Binary and Environment Variables</h2>
+  <p>In this lab demonstration, I successfully performed privilege escalation on a TrueNAS-based system by leveraging a misconfigured SUID binary <code>vim</code> and manipulating the <code>TERM</code> environment variable. This attack highlights a critical lesson in identifying and exploiting common privilege escalation vectors in Unix-based systems.</p>
+
+  <h3>Context in Real-World Relevance</h3>
+  <p>While deliberately misconfiguring the <code>vim</code> binary to have the SUID bit set is unlikely in a production system, this scenario is designed to emulate situations where:</p>
+  <ol>
+    <li>Legacy or poorly maintained systems that have insecure configurations.</li>
+    <li>Custom or non-standard administrative actions (e.g., setting SUID on binaries for convenience) to introduce security vulnerabilities.</li>
+    <li>Environment variables, such as <code>TERM</code>, are not properly sanitized, providing opportunities for exploitation.</li>
+  </ol>
+  <p>In real-world penetration testing, identifying and exploiting misconfigured SUID binaries or unsensitized environment variables is a key skill. Although this specific attack setup is tailored for a lab environment, the methodology aligns closely with techniques to uncover and exploit similar vulnerabilities in production systems.</p>
 </body>
 </html>
