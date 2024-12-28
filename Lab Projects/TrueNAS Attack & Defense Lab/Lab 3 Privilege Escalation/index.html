@@ -88,7 +88,7 @@
   <h3>Incident Detection</h3>
   <p>In the log below, we see that the <code>ronny</code> user attempted to execute commands involving <code>vim</code> with elevated privileges (e.g., <code>sudo</code>.</p>
   <p>The execution of <code>/usr/local/bin/vim</code> with the <code>-c /bin/sh</code> argument spawns a shell.</p>
-  <img src="Images/LogData.png alt="LogData">
+  <img src="Images/LogData.png" alt="LogData">
   <p>Here we can see the processes spawned by the user account <code>ronny</code>. The <code>/bin/sh</code> and the <code>-sh</code> indicate interactive and script-based shells. Processes like <code>sh –i</code> suggest that an interactive shell was spawned, likely through <code>vim</code> exploit.</p>
   <p>The processes owned by <code>root</code> (e.g., PID 8554 and PID 9860) indicate privilege escalation was achieved from the <code>ronny</code> user.</p>
   <img src="Images/psaux.png" alt="psaux">
