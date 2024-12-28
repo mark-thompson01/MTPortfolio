@@ -45,11 +45,15 @@
       margin-top: 20px;
       display: inline-block;
     }
+     img {
+      width: 700px;
+      height: auto; /* Maintain aspect ratio */
+    }
   </style>
 </head>
 <body>
   <h1>NAS Security Attack & Defense Lab 3</h1>
-  <h2>Privilege Escalation</h2>
+  <h2>Privilege Escalation | Identify & Response</h2>
   <p>Following the successful brute-force attack via SSH in Lab 2, the offensive side gained access to the target NAS server and upgraded from a BSD shell to a Meterpreter session.</p>
   <p>However, the account in use lacks root privileges, so privilege escalation is required to proceed further.</p>
   <p>For demonstration purposes in this lab, I have set the SUID bit on the <code>vim</code> binary to demonstrate a privilege escalation attack using that method.</p>
