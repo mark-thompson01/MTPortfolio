@@ -82,11 +82,59 @@
   <img src="Images/detection1png" alt=detection1png">
   <p>Well, here we have a concatenated public key file with an @kali, that right there would indeed be very suspicious and considered an IoC to immediately respond to and investigate.</p>
 
-  <ol>
-    <li><strong>Check SSH Logs:</strong></li>
-  </ol>
+    <p><strong>Step 2 - Check SSH Logs:</strong></p>
+ 
   <p>This would be another case to go through the <code>auth.log</code> as done in the previous lab examples.</p>
   <img src="Images/authlog0.png" alt="authlog0">
   <img src="Images/AcceptedAuth.png" alt="AcceptedAuth">
+
+  <p><strong>Step 3 - Check Recent File Modification</strong></p>
+  <p><strong>Identify Recent File Modifications</strong></p>
+  <p>Identify recently modified <code>.ssh/authorized_keys files</code></p>
+  <p>Here we have an example of using the <code>find</code> command to identify recently modified <code>authorized _keys</code> files. This command searches for any <code>authorized_keys</code> files modified within the last 7 days, a common indicator of unauthorized persistence.</p>
+  <img src="Images/recentfilemod.png" alt="recentfilemod">
+
+  <p><strong>Process Monitoring</strong></p>
+  <p>Use the <code>who</code> command to identify active SSH sessions.</p>
+  <p>Here we see the user account ronny making a connection from the Kali Linux IP address.</p>
+  <img src="Images/who" alt="who">
+  <img src="Images/terminate0.png" alt=terminate0">
+
+  <p><strong>Immediate Response</strong></p>
+  <p>Upon detecting these active malicious/suspicious connections, I would immediately terminate them.</p>
+  <p>I would start using the <code>kill</code> command with the <code>-9</code> to forcefully terminate any PID associated with the ronny user account.</p>
+  <img src="Images/kill.png" alt="kill">
+
+  <p><strong>Mitigation of SSH Key-Based Persistence</strong></p>
+
+  <p><strong>Step 1 - Remove Unauthorized Keys</strong></p>
+
+  <p>Manually inspect and remove unauthorized entries from <code>authorized_keys:</code></p>
+  <img src="Images/removeauthkeys.png" alt="removeauthkeys">
+  <img src="Images/removeentryfromfile.png" alt="removeentryfromfile">
+  <img src="Images/modified.png" alt="modified">
+
+  <p><strong>Step 2 - Change User Passwords</strong></p>
+  <p>In case an attacker also knows the user’s password, reset it to prevent further access.</p>
+  <img src="Images/passwordreset.png" alt="passwordreset">
+
+  <h2>Conclusion</h2>
+  <p>The overall detection of this activity would indeed call for immediate response in the event of discovering an active IoC with a suspicious IP, process, and/or unusual activity from a standard user account on the server.</p>
+  <p>In this case and scenario, there are further mitigation options that are applicable in different circumstances depending on how the server is being used and the needs of the given environment.</p>
+  <p>In lab 2, password-based authentication for SSH was disabled to mitigate from SSH brute force attacks. Which is typically a recommended practice to configure SSH and utilize public-key based authentication.</p>
+  <p>Even with that in place, on the offensive side if we manage to find another way into the system, this method of persistence could still be set up.</p>
+  <p>In such cases, depending on the use of the server and needs of the environment, there are a few different directions for mitigation that would be applicable in different scenarios.</p>
+  <p>If SSH isn’t really needed – the service could simply be disabled along with SSH key usage disabled to go the extra mile. However, SSH can always be re-enabled and setup if the server is compromised through a different method.</p>
+  <p>If the operating system is granular enough to setup 2FA for SSH on accounts or explicit permissions for user accounts to use SSH, that’s another avenue. </p>
+  <p>If SSH is needed, an IDS/IPS or other type of monitoring tool specifically set up to alert on <code>authorized_keys</code> would be my next consideration in my aim to mitigate against this.</p>
+                                                                                                                                                              
+  
+  
+  
+  
+  
+  
+
+
 </body>
 </html>
