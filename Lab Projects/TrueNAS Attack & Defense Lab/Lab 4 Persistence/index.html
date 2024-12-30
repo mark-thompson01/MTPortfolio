@@ -54,6 +54,7 @@
   <h1>NAS Security Attack & Defense Lab 4</h1>
   <h2>Persistence | Identify - Response</h2>
   <p>We’ve made it this far to lab 4! On the offensive side, a successful brute force attack has allowed access to be gained on the target NAS server, followed by a successful privilege escalation attack to gain root access to the compromised system. Now it’s time to establish persistence on the target NAS server.</p>
+  <h3>Offensive</h3>
   <p>To establish persistence in this scenario I’m going to add a public SSH key to the <code>user’s ~/ .ssh/authorized_keys</code> file to be able to easily re-authenticate to the system.</p>
   <p>To set that up I’m going to generate an SSH key pair on the Kali Linux machine, like so.</p>
   <img src="Images/sshkeygen.png" alt="sshkeygen">
@@ -72,10 +73,12 @@
   <p>In this scenario, you would still have to go through the steps of setting the TERM environment variable and exploiting the SUID bit in <code>vim</code> to escalate privileges. However, in establishing persistence, this would give you a way back into the system after a reboot.</p>
 
 
-  <h2>Defensive</h2>
+  <h3>Defensive</h3>
   <p><strong>Detection of SSH Key-Based Persistence</strong></p>
-  <ol><strong>Audit:</strong> <code>authorized_keys</code> files.</ol>
-  <ul>SSH key-based persistence relies on the presence of unauthorized public keys in <code>authorized_keys</code> file. Check for unusual entries.</ul>
+  <ol>
+    <li><strong>Audit:</strong> <code>authorized_keys</code> files.</li>
+      <ul></ul>SSH key-based persistence relies on the presence of unauthorized public keys in <code>authorized_keys</code> file. Check for unusual entries.</ul>
+  </ol>
   <img src="Images/detection1png" alt=detection1png">
   <p>Well, here we have a concatenated public key file with an @kali, that right there would indeed be very suspicious and considered an IoC to immediately respond to and investigate.</p>
   
