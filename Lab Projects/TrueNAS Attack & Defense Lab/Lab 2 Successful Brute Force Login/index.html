@@ -49,7 +49,7 @@
 </head>
 <body>
   <h1>NAS Security Attack & Defense Lab 2</h1>
-  <h2>Successful Brute Force Login | Detection and Mitigation</h2>
+  <h2>Successful Brute Force Login | Detection & Mitigation</h2>
   <p>Gaining access to the target server via successful brute force attack through the use of the SSH service.</p>
   <p>We know from the port scan in the previous lab that port 22 on the NAS server is open and running SSH. In this scenario, the NAS server is configured with a user account that has a weak password. Using the Metasploit auxiliary module <code>auxiliary/scanner/ssh_login</code>, a successful brute force attack is performed, leading to the compromise of the NAS server on the offensive side.</p>
   <p>On the defensive side, the logs are reviewed to identify the successful brute force login to the server via the SSH protocol, and further mitigation procedures are implemented.</p>
