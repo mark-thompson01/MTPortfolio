@@ -77,7 +77,7 @@
   <p><strong>Step 1 - Detection of SSH Key-Based Persistence</strong></p>
 
     <p><strong>Audit:</strong> <code>authorized_keys</code> file.</p>
-    <p></p>SSH key-based persistence relies on the presence of unauthorized public keys in <code>authorized_keys</code> file. Check for unusual entries.</p>
+    <p>SSH key-based persistence relies on the presence of unauthorized public keys in <code>authorized_keys</code> file. Check for unusual entries.</p>
   
   <img src="Images/detection1png" alt=detection1png">
   <p>Well, here we have a concatenated public key file with an @kali, that right there would indeed be very suspicious and considered an IoC to immediately respond to and investigate.</p>
