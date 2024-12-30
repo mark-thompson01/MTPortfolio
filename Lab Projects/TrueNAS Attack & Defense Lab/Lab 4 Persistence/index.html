@@ -74,11 +74,11 @@
 
 
   <h3>Defensive</h3>
-  <p><strong>Detection of SSH Key-Based Persistence</strong></p>
-  <ol>
-    <li><strong>Audit:</strong> <code>authorized_keys</code> files.</li>
-      <ul></ul>SSH key-based persistence relies on the presence of unauthorized public keys in <code>authorized_keys</code> file. Check for unusual entries.</ul>
-  </ol>
+  <p><strong>Step 1 - Detection of SSH Key-Based Persistence</strong></p>
+
+    <p><strong>Audit:</strong> <code>authorized_keys</code> file.</p>
+    <p></p>SSH key-based persistence relies on the presence of unauthorized public keys in <code>authorized_keys</code> file. Check for unusual entries.</p>
+  
   <img src="Images/detection1png" alt=detection1png">
   <p>Well, here we have a concatenated public key file with an @kali, that right there would indeed be very suspicious and considered an IoC to immediately respond to and investigate.</p>
 
@@ -88,16 +88,5 @@
   <p>This would be another case to go through the <code>auth.log</code> as done in the previous lab examples.</p>
   <img src="Images/authlog0.png" alt="authlog0">
   <img src="Images/AcceptedAuth.png" alt="AcceptedAuth">
-
-  <ol>
-    <li></li>
-  </ol>
-  
-  
-  
-  
-  
-  
-  
 </body>
 </html>
