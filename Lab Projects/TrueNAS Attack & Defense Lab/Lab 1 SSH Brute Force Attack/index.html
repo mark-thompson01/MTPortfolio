@@ -53,7 +53,7 @@
 </head>
 <body>
   <h1>NAS Security Attack & Defense Lab 1</h1>
-  <h2>SSH Brute Force Attack | Detection & Response/h2>
+  <h2>SSH Brute Force Attack | Detection & Response</h2>
   <p>The following is the first set of four offensive and defense labs carried out on a customized machine running TrueNAS 13.1 in a segmented lab environment.  </p>
   <p>In this scenario, we have a TrueNAS server and a Kali Linux machine running on the segment. Getting started with the offensive activities, the Kali machine performs an nmap port scan and discovers port 22 – SSH is open, then proceeds with a brute force attack using the ssh-brute nmap script.</p>
   <p>On the defensive side, the attack is being identified in reviewing the logs on the server through /var/log/auth.log - and when the contents of that file are concatenated – all the brute force attempts from the different account names of the wordlist are shown along with the Kali Linux IP.</p>
