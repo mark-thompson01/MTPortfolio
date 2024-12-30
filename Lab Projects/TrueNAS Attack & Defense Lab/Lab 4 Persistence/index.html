@@ -1,1 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 4 - Persistence</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      background-color: #2b2b2b; /* Dark background */
+      color: #f0f0f0; /* Light grey text */
+    }
+    h1 {
+      text-align: left;
+      color: #d3d3d3; /* Lighter grey heading */
+      margin-bottom: 10px;
+    }
+    h2 {
+      text-align: left;
+      color: #d3d3d3;
+    }
+    p {
+      text-align: left;
+    }
+    ul {
+      list-style: none; /* Remove default bullets */
+      padding-left: 0;
+      text-align: left; /* Align list to the left */
+    }
+    li {
+      margin: 10px 0;
+    }
+    a {
+      color: #1e90ff; /* Blue link color */
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      color: #ff7f50; /* Coral hover color */
+      text-decoration: underline;
+    }
+    .back-link {
+      margin-top: 20px;
+      display: inline-block;
+    }
+     img {
+      width: 500px;
+      height: auto; /* Maintain aspect ratio */
+    }
+  </style>
+</head>
+  <h1>NAS Security Attack & Defense Lab 4</h1>
+  <h2>Persistence | Identify - Response</h2>
+  <p>We’ve made it this far to lab 4! On the offensive side, a successful brute force attack has allowed access to be gained on the target NAS server, followed by a successful privilege escalation attack to gain root access to the compromised system. Now it’s time to establish persistence on the target NAS server.</p>
+  <p>To establish persistence in this scenario I’m going to add a public SSH key to the <code>user’s ~/ .ssh/authorized_keys</code> file to be able to easily re-authenticate to the system.</p>
+  <p>To set that up I’m going to generate an SSH key pair on the Kali Linux machine, like so.</p>
+  <img src="Images/sshkeygen.png" alt="sshkeygen">
+  <p>Then copy the public key to the target system</p>
+  <img src="Images/keypairtransfer.png" alt="keypairtransfer">
+  <p>IN the <code>/tmp</code> directory on the target NAS system, verify that the <code>id_rsa.pub</code> public key file is there.</code></p>
+  <img src="Images/lslisting.png" alt="lslisting">
+  <p>I'll then the file from the <code>/tmp</code> to <code>/root</code> directory on the system.</p>
+  <img src="Images/movefromtmptoroot.png" alt="movefromtmptoroot">
+  <p>From there, I'll run the following commands to setup an <code>~/.ssh</code> directory for this keypair, as well as use the <code>echo</code> command rename the <code>id_rsa.pub</code> file to <code>authorized_keys</code>, then assign permissions to the <code>authorized_keys</code> file and <code>~/.ssh</code> directory.</p>
+  <img src="Images/sshkeygensetup3.png" alt="sshkeygensetup3">
 
+  <p>Then from there, it’s time to test the persistence.</p>
+  <p>And we are back in.</p>
+  <img src="Images/persistence0.png" alt=persistence0">
+  <p>In this scenario, you would still have to go through the steps of setting the TERM environment variable and exploiting the SUID bit in <code>vim</code> to escalate privileges. However, in establishing persistence, this would give you a way back into the system after a reboot.</p>
+
+
+  <h2>Defensive</h2>
+  <p><strong>Detection of SSH Key-Based Persistence</strong></p>
+  <ol><strong>Audit:</strong> <code>authorized_keys</code> files.</ol>
+  <ul>SSH key-based persistence relies on the presence of unauthorized public keys in <code>authorized_keys</code> file. Check for unusual entries.</ul>
+  <img src="Images/Detection1" alt=Detection1">
+  <p>Well, here we have a concatenated public key file with an @kali, that right there would indeed be very suspicious and considered an IoC to immediately respond to and investigate.</p>
+  
+  
+  
+  
+  
+  
+</body>
+</html>
