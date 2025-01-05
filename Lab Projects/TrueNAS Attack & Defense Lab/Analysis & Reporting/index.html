@@ -1,1 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab Projects</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      background-color: #2b2b2b; /* Dark background */
+      color: #f0f0f0; /* Light grey text */
+    }
+    h1 {
+      text-align: left;
+      color: #d3d3d3; /* Lighter grey heading */
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: left;
+    }
+  </style>
+</head>
+  <body>
+    <h2>Overview</h2>
+<p>The NAS Attack & Defend Lab was designed to simulate real-world attack scenarios and corresponding defensive measures within a controlled environment. Through four distinct lab exercises, this project demonstrates my ability to analyze and exploit system vulnerabilities while also emphasizing the importance of proactive defense and mitigation strategies. This dual focus underscores the necessity of understanding both offensive and defensive security practices to secure modern systems effectively.</p>
 
+<h2>Lab Summaries</h2>
+
+<h3>Lab 1: SSH Brute Force Attack</h3>
+<ul>
+    <li><strong>Attack:</strong> A brute force attack was conducted against the SSH service to simulate an attacker attempting to guess user credentials. The attack utilized a wordlist to automate login attempts.</li>
+    <li><strong>Detection:</strong> Evidence of the attack was found in authentication logs (<code>/var/log/auth.log</code>), showing repeated failed login attempts from the attacker’s IP address.</li>
+    <li><strong>Defensive Measures:</strong>
+        <ul>
+            <li>Implemented rate-limiting via <code>iptables</code> to restrict repeated login attempts.</li>
+            <li>Enforced strong password policies to reduce susceptibility to brute force attacks.</li>
+            <li>Enabled alerts for failed SSH login attempts.</li>
+        </ul>
+    </li>
+</ul>
+
+<h3>Lab 2: Successful Brute Force Login</h3>
+<ul>
+    <li><strong>Attack:</strong> A successful brute force attack was demonstrated by gaining access to a user account after discovering valid credentials.</li>
+    <li><strong>Detection:</strong> Authentication logs revealed an unauthorized login event. Process monitoring identified unusual user activity following the compromise.</li>
+    <li><strong>Defensive Measures:</strong>
+        <ul>
+            <li>Configured multi-factor authentication (MFA) to add an additional layer of security.</li>
+            <li>Regularly audited user accounts and passwords for weak credentials.</li>
+            <li>Restricted SSH access to specific IP ranges via <code>/etc/hosts.allow</code> and <code>/etc/hosts.deny</code>.</li>
+        </ul>
+    </li>
+</ul>
+
+<h3>Lab 3: Privilege Escalation</h3>
+<ul>
+    <li><strong>Attack:</strong> Privilege escalation was achieved by exploiting a vulnerable SUID binary (<code>vim</code>) and setting the <code>TERM</code> environment variable to <code>xterm</code>. This allowed the attacker to spawn a root shell.</li>
+    <li><strong>Detection:</strong> Logs revealed the execution of <code>vim</code> with elevated privileges and unusual processes spawned by non-root users. The exploitation was also identified via process monitoring (<code>ps aux</code>) and auditing recent SUID binary changes.</li>
+    <li><strong>Defensive Measures:</strong>
+        <ul>
+            <li>Removed unnecessary SUID permissions from binaries.</li>
+            <li>Implemented file integrity monitoring to detect changes to critical binaries.</li>
+            <li>Trained administrators to audit SUID binaries regularly and disable unused features.</li>
+        </ul>
+    </li>
+</ul>
+
+<h3>Lab 4: Persistence</h3>
+<ul>
+    <li><strong>Attack:</strong> Persistence was established by adding an attacker’s public SSH key to the root user’s <code>authorized_keys</code> file, enabling passwordless SSH access.</li>
+    <li><strong>Detection:</strong> The unauthorized modification of the <code>authorized_keys</code> file was detected using the <code>find</code> command to locate recently modified files. SSH logs also revealed public key-based logins from the attacker’s machine.</li>
+    <li><strong>Defensive Measures:</strong>
+        <ul>
+            <li>Periodically audited <code>~/.ssh/authorized_keys</code> for unauthorized keys.</li>
+            <li>Restricted public key authentication where not necessary.</li>
+            <li>Implemented multi-factor authentication and set IP-based restrictions for SSH access.</li>
+        </ul>
+    </li>
+</ul>
+
+<h2>Key Takeaways</h2>
+<ol>
+    <li><strong>Proactive Defense is Crucial:</strong> Each attack demonstrated the importance of implementing layered security measures, such as strong password policies, MFA, and network restrictions. Regular auditing of user activity, file modifications, and system configurations can detect and prevent many attacks.</li>
+    <li><strong>Understanding the Attacker’s Perspective:</strong> By simulating attacks, this lab highlights how attackers exploit vulnerabilities, misconfigurations, and weak security practices. This knowledge is invaluable for developing effective defensive strategies.</li>
+    <li><strong>Balance Between Offensive and Defensive Practices:</strong> The ability to execute and detect attacks showcases a well-rounded understanding of both red and blue team methodologies. Combining these perspectives ensures a more robust security posture.</li>
+</ol>
+
+<h2>Conclusion</h2>
+<p>The NAS Attack & Defend Lab demonstrates a comprehensive understanding of offensive and defensive cybersecurity practices. By exploring attack techniques such as brute force, privilege escalation, and persistence, this project provides practical insights into the risks facing modern systems. The corresponding defensive measures showcase the importance of proactive monitoring, strict access controls, and regular audits in mitigating these threats.</p>
+<p>This lab serves as a testament to my skills in analyzing, exploiting, and defending against real-world threats. It highlights my commitment to continuous learning and my ability to translate technical knowledge into actionable security strategies, making me a strong candidate for roles in cybersecurity.</p>
+    
+  </body>
+</html>
