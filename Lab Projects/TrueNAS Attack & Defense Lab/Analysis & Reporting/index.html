@@ -69,7 +69,7 @@
     <li><strong>Detection:</strong> The unauthorized modification of the <code>authorized_keys</code> file was detected using the <code>find</code> command to locate recently modified files. SSH logs also revealed public key-based logins from the attacker’s machine.</li>
     <li><strong>Defensive Measures:</strong>
         <ul>
-            <li>Identified and manually inspected the unauthorized SSH key that was setup in <code>~/.ssh/authorized_keys</code> for unauthorized keys.</li>
+            <li>Identified and manually inspected the unauthorized SSH key that was setup in <code>~/.ssh/authorized_keys</code> for unauthorized key entries.</li>
             <li>Removed the unauthorized entries from <code>~/.ssh/authorized_keys</code>
             <li>Reset the user account password associated with the unauthorized key entries</li>
         </ul>
