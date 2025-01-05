@@ -34,9 +34,7 @@
     <li><strong>Detection:</strong> Evidence of the attack was found in authentication logs (<code>/var/log/auth.log</code>), showing repeated failed login attempts from the attacker’s IP address.</li>
     <li><strong>Defensive Measures:</strong>
         <ul>
-            <li>Implemented rate-limiting via <code>iptables</code> to restrict repeated login attempts.</li>
-            <li>Enforced strong password policies to reduce susceptibility to brute force attacks.</li>
-            <li>Enabled alerts for failed SSH login attempts.</li>
+            <li>Verified pf was enabled and demonstrated blocking the attacker IP in the <code>pf.conf</code> configuration file</li>
         </ul>
     </li>
 </ul>
@@ -47,9 +45,8 @@
     <li><strong>Detection:</strong> Authentication logs revealed an unauthorized login event. Process monitoring identified unusual user activity following the compromise.</li>
     <li><strong>Defensive Measures:</strong>
         <ul>
-            <li>Configured multi-factor authentication (MFA) to add an additional layer of security.</li>
-            <li>Regularly audited user accounts and passwords for weak credentials.</li>
-            <li>Restricted SSH access to specific IP ranges via <code>/etc/hosts.allow</code> and <code>/etc/hosts.deny</code>.</li>
+            <li>Immediately reset the account password upon detection and disabled user account login</li>
+            <li>Disabled password-based authentication for SSH</li>
         </ul>
     </li>
 </ul>
