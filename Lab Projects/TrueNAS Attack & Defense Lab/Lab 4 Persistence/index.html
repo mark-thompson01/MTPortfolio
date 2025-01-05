@@ -124,15 +124,8 @@
   In lab 2, password-based authentication for SSH was disabled to mitigate from SSH brute force attacks. Which is typically a recommended practice to configure SSH and utilize public-key based authentication.</p>
   <p>Even with that in place, on the offensive side if we manage to find another way into the system, this method of persistence could still be set up.
   In such cases, depending on the use of the server and needs of the environment, there are a few different directions for mitigation that would be applicable in different scenarios.
-  If SSH isn’t really needed – the service could simply be disabled along with SSH key usage disabled to go the extra mile. However, SSH can always be re-enabled and setup if the server is compromised through a different method. If the operating system is granular enough to setup 2FA for SSH on accounts or explicit permissions for user accounts to use SSH, that’s another avenue. If SSH is needed, an IDS/IPS or other type of monitoring tool specifically set up to alert on <code>authorized_keys</code> would be my next consideration in my aim to mitigate against this.</p>
-                                                                                                                                                              
-  
-  
-  
-  
-  
-  
+  If SSH isn’t really needed – the service could simply be disabled along with SSH key usage disabled to go the extra mile. However, SSH can always be re-enabled and setup if the server is compromised through a different method. If the operating system is granular enough to setup 2FA for SSH on accounts or explicit permissions for user accounts to use SSH, that’s another avenue. If SSH is needed, an IDS/IPS or other type of monitoring tool specifically set up to alert on <code>authorized_keys</code> would be my next consideration in my aim to mitigate against this.</p><br>
 
-
+  <a href="../" class="back-link">Back to Labs</a>                                                                                                                                                          
 </body>
 </html>
