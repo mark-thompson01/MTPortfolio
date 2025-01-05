@@ -57,9 +57,8 @@
     <li><strong>Detection:</strong> Logs revealed the execution of <code>vim</code> with elevated privileges and unusual processes spawned by non-root users. The exploitation was also identified via process monitoring (<code>ps aux</code>) and auditing recent SUID binary changes.</li>
     <li><strong>Defensive Measures:</strong>
         <ul>
+            <li>Identified processes related to the user account and terminated them immediatelhy</li>
             <li>Removed unnecessary SUID permissions from binaries.</li>
-            <li>Implemented file integrity monitoring to detect changes to critical binaries.</li>
-            <li>Trained administrators to audit SUID binaries regularly and disable unused features.</li>
         </ul>
     </li>
 </ul>
@@ -79,7 +78,7 @@
 
 <h2>Key Takeaways</h2>
 <ol>
-    <li><strong>Proactive Defense is Crucial:</strong> Each attack demonstrated the importance of implementing layered security measures, such as strong password policies, MFA, and network restrictions. Regular auditing of user activity, file modifications, and system configurations can detect and prevent many attacks.</li>
+    <li><strong>Proactive Defense is Crucial:</strong> Each attack demonstrated the importance of implementing immediate response and layered security measures, such as strong password policies, MFA, and network restrictions. Regular auditing of user activity, file modifications, and system configurations can detect and prevent many attacks.</li>
     <li><strong>Understanding the Attacker’s Perspective:</strong> By simulating attacks, this lab highlights how attackers exploit vulnerabilities, misconfigurations, and weak security practices. This knowledge is invaluable for developing effective defensive strategies.</li>
     <li><strong>Balance Between Offensive and Defensive Practices:</strong> The ability to execute and detect attacks showcases a well-rounded understanding of both red and blue team methodologies. Combining these perspectives ensures a more robust security posture.</li>
 </ol>
