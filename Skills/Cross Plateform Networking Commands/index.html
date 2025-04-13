@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>My Portfolio</title>
-  <link rel="stylesheet" href="css/styles.css"> <!-- Link to CSS file -->
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<h1>Cross-Platform Networking Command-Line Skills: A Practical Tutorial</h1>
+  <h1>Cross-Platform Networking Command-Line Skills: A Practical Tutorial</h1>
 
-<section>
+  <section>
     <h2>Understanding Networking Commands</h2>
     <p>Networking commands via the Command-Line Interface (CLI) allow IT professionals to effectively diagnose, troubleshoot, and manage network connections by offering detailed insights and real-time control over network environments.</p>
-</section>
+  </section>
 
-<section>
+  <section>
     <h3>1. Displaying Network Configuration</h3>
     <p><strong>Customized Definition:</strong> Quickly retrieving network interface configurations and IP details to address network connectivity and configuration issues promptly.</p>
-    <pre><strong>Windows:</strong>
-
-
-<p>ipconfig /all
+    <pre>
+Windows:
+ipconfig /all
 ipconfig /release
 ipconfig /renew
 ipconfig /flushdns
@@ -31,109 +30,124 @@ ip a
 sudo dhclient -r
 sudo dhclient
 sudo systemd-resolve --flush-caches
-Scenarios for use: IP acquisition issues, outdated DNS cache.
-</p>
 
-      <section>
+Scenarios for use: IP acquisition issues, outdated DNS cache.
+    </pre>
+  </section>
+
+  <section>
     <h3>2. ARP Table Inspection</h3>
     <p><strong>Customized Definition:</strong> Inspecting ARP tables to correlate IP addresses with MAC addresses.</p>
     <pre>arp -a</pre>
     <p><strong>Benefits:</strong> Identify devices, troubleshoot connectivity, detect unauthorized devices.</p>
-</section>
+  </section>
 
-<section>
+  <section>
     <h3>3. Domain Name Resolution (DNS Lookup)</h3>
     <p>Resolving domain names to IP addresses for verifying DNS records.</p>
-    <pre><strong>Windows:</strong>
-
-
-      <p>nslookup google.com
+    <pre>
+Windows:
+nslookup google.com
 nslookup -type=mx google.com
-nslookup -type=ns google.com</p>
+nslookup -type=ns google.com
 
-      <p>Linux:
+Linux:
 host google.com
 host -t MX google.com
-host -t NS google.com</p>
-
-      <p>dig google.com
+host -t NS google.com
+dig google.com
 dig MX google.com
 dig NS google.com
+
 Troubleshooting scenarios: DNS misconfigurations, email delivery issues.
-</p>
+    </pre>
+  </section>
 
-
-<section>
+  <section>
     <h3>4. Network Statistics and Active Connections</h3>
     <p><strong>Customized Definition:</strong> Monitoring current connections and ports.</p>
-    <pre><strong>Windows:</strong>
+    <pre>
+Windows:
+netstat -an
 
-  <p><strong>netstat -an</strong></p>
-  <p><strong>Linux:</strong></p><p>netstat -an ss -tuln Applicable scenarios: Unauthorized connections, port conflicts</p>
+Linux:
+netstat -an
+ss -tuln
+
+Applicable scenarios: Unauthorized connections, port conflicts
+    </pre>
+  </section>
 
   <section>
     <h3>5. Ping</h3>
     <p><strong>Customized Definition:</strong> Testing connectivity and measuring latency.</p>
-    <pre><strong>Windows:</strong>
-
-      <p>ping google.com
+    <pre>
+Windows:
+ping google.com
 ping -n 10 google.com
 ping -t google.com
-ping -l 1500 google.com</p>
+ping -l 1500 google.com
 
-      <p><strong>Linux:</strong></p>
-      <p>
+Linux:
 ping -c 4 google.com
 ping -i 0.5 google.com
 ping -s 100 google.com
 ping -M do -s 1472 google.com
-      </p>
+    </pre>
+  </section>
 
-<section>
+  <section>
     <h3>6. Trace Routing</h3>
     <p><strong>Customized Definition:</strong> Systematically analyzing the route network packets take.</p>
-    <pre><strong>Windows:</strong>
+    <pre>
+Windows:
+tracert google.com
 
-    <p><strong>tracert google.com</strong></p>
-      <p><strong>Linux:</strong></p><p>traceroute google.com
-      </p>
-      <p><strong>Scenarios for use:</strong></p><p>Slow connectivit, network outages</p>
+Linux:
+traceroute google.com
 
+Scenarios for use: Slow connectivity, network outages
+    </pre>
+  </section>
 
   <section>
     <h3>7. Pathping</h3>
     <p><strong>Customized Definition:</strong> Comprehensive analysis of latency and packet loss.</p>
-    <pre><strong>Windows:</strong>
+    <pre>
+Windows:
+pathping google.com
 
-    <p><strong>pathping google.com</strong></p>
+Linux (using MTR):
+mtr google.com
+    </pre>
+  </section>
 
-    <p><strong>Linux (using MTR):</strong></p><p>mtr google.com</p>
-
-      <section>
+  <section>
     <h3>Additional Useful Commands</h3>
     <p><strong>Route (View routing tables):</strong></p>
-    <pre><strong>Windows:</strong>
+    <pre>
+Windows:
+route print
 
-      <p><strong>route print</strong></p>
-      <p><strong>Linux:</strong></p><p>route -n ip route</p>
+Linux:
+route -n
+ip route
+    </pre>
 
-          <p><strong>Hostname (View or change hostname):</strong></p>
-    <pre><strong>Windows:</strong>
+    <p><strong>Hostname (View or change hostname):</strong></p>
+    <pre>
+Windows:
+hostname
 
-      <p><strong>hostname</strong></p>
-      <p><strong>Linux:</strong></p><p>hostname sudo hostnamectl set-hostname new-hostname</p>
+Linux:
+hostname
+sudo hostnamectl set-hostname new-hostname
+    </pre>
+  </section>
 
-    <section>
+  <section>
     <h3>Conclusion</h3>
     <p>Mastering these networking commands significantly empowers IT professionals to diagnose, troubleshoot, and optimize network environments. This guide provided practical usage and scenarios for each command, delivering crucial insights into network performance and maintenance.</p>
-</section>
-
-      
-      
-      
-
-
-
-
-
-      
+  </section>
+</body>
+</html>
