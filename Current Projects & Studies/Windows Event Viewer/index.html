@@ -1,1 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows Event Viewer Troubleshooting Guide</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        h1, h2 { color: #333; }
+        ul { margin-bottom: 20px; }
+        .section { margin-bottom: 30px; }
+        .event-id { font-weight: bold; color: #0057e7; }
+    </style>
+</head>
+
+<body>
+    <h1>Windows Event Viewer Troubleshooting Guide</h1>
+
+    <div class="section">
+        <h2>1. System Crashes or Unexpected Reboots</h2>
+        <ul>
+            <li><span class="event-id">6008</span> - Unexpected shutdown</li>
+            <li><span class="event-id">41 (Kernel-Power)</span> - System rebooted without clean shutdown</li>
+            <li><span class="event-id">1001</span> - Bugcheck codes (BSOD details)</li>
+        </ul>
+        <strong>Log Location:</strong> Windows Logs → System
+    </div>
+
+    <div class="section">
+        <h2>2. Application Crashes or Freezes</h2>
+        <ul>
+            <li><span class="event-id">1000</span> - Application Error</li>
+            <li><span class="event-id">1001</span> - Windows Error Reporting</li>
+            <li><span class="event-id">1002</span> - Application Hang</li>
+        </ul>
+        <strong>Log Location:</strong> Windows Logs → Application
+    </div>
+
+    <div class="section">
+        <h2>3. User Account Logon/Logoff Issues</h2>
+        <ul>
+            <li><span class="event-id">4624</span> - Successful logon</li>
+            <li><span class="event-id">4625</span> - Logon failure</li>
+            <li><span class="event-id">4634</span> - Logoff events</li>
+        </ul>
+        <strong>Log Location:</strong> Windows Logs → Security
+    </div>
+
+    <div class="section">
+        <h2>4. Windows Update Problems</h2>
+        <ul>
+            <li>Failure events and error codes indicating update issues.</li>
+        </ul>
+        <strong>Log Location:</strong> Windows Logs → System, Applications and Services Logs → Microsoft → Windows → WindowsUpdateClient → Operational
+    </div>
+
+    <div class="section">
+        <h2>5. Group Policy (GPO) Issues</h2>
+        <ul>
+            <li><span class="event-id">7016</span> - GPO client-side extension errors</li>
+            <li><span class="event-id">1129</span> - Policy processing issues at startup/logon</li>
+            <li><span class="event-id">1058, 1030</span> - Problems accessing or applying GPOs</li>
+        </ul>
+        <strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → GroupPolicy → Operational
+    </div>
+
+    <div class="section">
+        <h2>6. Performance Issues (Slow Boot or Login)</h2>
+        <ul>
+            <li><span class="event-id">100</span> - Boot Performance (slow boot)</li>
+            <li><span class="event-id">101</span> - Application Performance (slow app start)</li>
+            <li><span class="event-id">200</span> - Shutdown Performance (slow shutdown)</li>
+        </ul>
+        <strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → Diagnostics-Performance → Operational
+    </div>
+
+    <div class="section">
+        <h2>7. Driver Issues or Device Failures</h2>
+        <ul>
+            <li><span class="event-id">7000, 7001</span> - Driver/service failed to start</li>
+            <li><span class="event-id">7026</span> - Driver loading failures</li>
+        </ul>
+        <strong>Log Location:</strong> Windows Logs → System
+    </div>
+
+    <div class="section">
+        <h2>8. Malware or Security Incidents</h2>
+        <ul>
+            <li><span class="event-id">1116, 1117</span> - Malware detection (Windows Defender)</li>
+            <li><span class="event-id">4625</span> - Multiple failed logins (possible brute force)</li>
+        </ul>
+        <strong>Log Location:</strong> Windows Logs → Security, Application, Windows Defender
+    </div>
+
+    <div class="section">
+        <h2>9. Disk and Filesystem Problems</h2>
+        <ul>
+            <li><span class="event-id">7</span> - Disk bad block</li>
+            <li><span class="event-id">11</span> - Disk controller errors</li>
+            <li><span class="event-id">55</span> - NTFS filesystem issues</li>
+        </ul>
+        <strong>Log Location:</strong> Windows Logs → System
+    </div>
+
+    <div class="section">
+        <h2>10. Print Job Failures</h2>
+        <ul>
+            <li><span class="event-id">307, 372</span> - Print job failures or issues</li>
+            <li><span class="event-id">7031</span> - Spooler service errors</li>
+        </ul>
+        <strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → PrintService → Operational
+    </div>
+
+    <h2>Best Practices for Using Event Viewer</h2>
+    <ul>
+        <li>Filter logs by severity and time</li>
+        <li>Correlate events across multiple logs</li>
+        <li>Export logs for deeper analysis and documentation</li>
+    </ul>
+
+</body>
+
+</html>
