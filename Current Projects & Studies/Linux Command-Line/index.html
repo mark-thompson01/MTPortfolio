@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Linux Command-Line Lab</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      padding: 2rem;
+    }
+    h1, h2 {
+      color: #00ffcc;
+    }
+    code {
+      background-color: #333;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      display: block;
+      white-space: pre-wrap;
+      margin: 0.5rem 0;
+    }
+    section {
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Linux Command-Line Lab</h1>
+
+  <section>
+    <h2>1. Navigating and Managing Directories</h2>
+    <code>cd /home/user/documents</code>
+    <code>mkdir new_folder</code>
+    <code>rmdir new_folder</code>
+  </section>
+
+  <section>
+    <h2>2. File Creation and Editing</h2>
+    <code>touch new_file.txt</code>
+    <code>file new_file.txt</code>
+    <code>nano new_file.txt</code>
+    <code>vi new_file.txt</code>
+  </section>
+
+  <section>
+    <h2>3. Viewing and Searching File Content</h2>
+    <code>cat new_file.txt</code>
+    <code>ls -l /home/user</code>
+    <code>grep "search_term" new_file.txt</code>
+    <code>head -n 5 new_file.txt</code>
+    <code>tail -n 5 new_file.txt</code>
+  </section>
+
+  <section>
+    <h2>4. Archiving and Locating Files</h2>
+    <code>tar -cvf archive.tar /home/user/documents</code>
+    <code>locate filename.txt</code>
+    <code>find /home -name "filename.txt"</code>
+  </section>
+
+  <section>
+    <h2>5. User and Permissions Management</h2>
+    <code>whoami</code>
+    <code>sudo apt update</code>
+    <code>chmod 755 new_file.txt</code>
+    <code>chown user:user new_file.txt</code>
+    <code>sudo useradd newuser</code>
+    <code>sudo passwd newuser</code>
+    <code>sudo userdel newuser</code>
+  </section>
+
+  <section>
+    <h2>6. System Monitoring and Maintenance</h2>
+    <code>df -h</code>
+    <code>du -sh /home/user</code>
+    <code>top</code>
+    <code>htop</code>
+    <code>uname -a</code>
+  </section>
+
+  <section>
+    <h2>7. Package Management</h2>
+    <code>sudo apt install nano</code>
+    <code>sudo dnf update</code>
+    <code>sudo dpkg -i package.deb</code>
+  </section>
+
+  <section>
+    <h2>8. Service and Process Management</h2>
+    <code>sudo systemctl restart ssh</code>
+    <code>kill -9 [PID]</code>
+  </section>
+
+  <section>
+    <h2>9. System Operations</h2>
+    <code>sudo shutdown now</code>
+    <code>sudo reboot</code>
+  </section>
+
+  <section>
+    <h2>10. Network Operations and Data Retrieval</h2>
+    <code>wget http://example.com/file.zip</code>
+    <code>curl http://example.com/file.zip -o file.zip</code>
+  </section>
+
+  <section>
+    <h2>11. Utility and Time Commands</h2>
+    <code>history</code>
+    <code>echo "Hello World"</code>
+    <code>cal</code>
+    <code>time ls -la</code>
+    <code>date</code>
+  </section>
+</body>
+</html>
