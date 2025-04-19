@@ -1,1 +1,109 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PowerShell Fundamentals Tutorial</title>
+</head>
+<body>
+    <h1></h1>PowerShell Fundamentals</h1>
+
+    <h2Introduction: What is PowerShell?</h2>
+    <p>PowerShell is a powerful command-line shell and scripting language built on .NET. Designed for system administrators and power users, it automates repetitive tasks, manages system configurations, and interacts with APIs, registry, and file systems. It is object-based (unlike traditional text-based shells), meaning it passes objects between commands (not just raw text), which gives it unique flexibility.</p>
+
+    <h2>Getting Started with PowerShell</h2>
+    <ul>
+        <li>How to open PowerShell on Windows</li>
+        <li>PowerShell versions (Windows PowerShell vs PowerShell Core)</li>
+        <li>Basic syntax and structure</li>
+    </ul>
+    <pre><code># This is a comment
+Write-Output "Hello, PowerShell"
+    </code></pre>
+
+    <h2>Core Cmdlets and Concepts</h2>
+    <p><strong>Cmdlet</strong> = Command + Let (lightweight commands)</p>
+    <ul>
+        <li><code>Get-Command</code> – Lists available cmdlets</li>
+        <li><code>Get-Help</code> – Displays help info about cmdlets</li>
+        <li><code>Get-Service</code> – Shows running services</li>
+        <li><code>Set-ExecutionPolicy</code> – Changes script execution policy</li>
+    </ul>
+    <pre><code>Get-Help Get-Service -Full</code></pre>
+
+    <h2>Working with Files and Directories</h2>
+    <pre><code>Get-ChildItem
+Set-Location
+New-Item
+Remove-Item
+Copy-Item
+Move-Item
+    </code></pre>
+
+    <h2>Variables and Data Types</h2>
+    <pre><code>$Name = "Mark"
+$Age = 29
+$Services = Get-Service
+    </code></pre>
+    <p>Variables start with <code>$</code><br>
+    Data types: string, int, array, boolean, object</p>
+
+    <h2>Loops and Conditional Statements</h2>
+    <pre><code># If-Else
+if ($Age -gt 18) {
+    Write-Output "Adult"
+} else {
+    Write-Output "Minor"
+}
+
+# ForEach Loop
+$services = Get-Service
+foreach ($service in $services) {
+    Write-Output $service.DisplayName
+}
+    </code></pre>
+
+    <h2>Functions and Scripting</h2>
+    <pre><code>function Greet-User {
+    param ($Name)
+    Write-Output "Welcome, $Name!"
+}
+
+Greet-User -Name "Mark"
+    </code></pre>
+    <p>Create reusable code blocks<br>
+    Scripts end with <code>.ps1</code> extension</p>
+
+    <h2>Permissions and Execution Policy</h2>
+    <pre><code>Get-ExecutionPolicy
+Set-ExecutionPolicy RemoteSigned
+    </code></pre>
+    <p>Policies: Restricted, AllSigned, RemoteSigned, Unrestricted<br>
+    Might need admin privileges</p>
+
+    <h2>Useful Tools and Debugging</h2>
+    <ul>
+        <li><code>Write-Host</code> vs <code>Write-Output</code></li>
+        <li><code>Start-Transcript</code> to log sessions</li>
+        <li><code>Try / Catch / Finally</code> for error handling</li>
+    </ul>
+    <pre><code>try {
+    Get-Item "C:\fakefile.txt"
+} catch {
+    Write-Output "File not found!"
+}
+    </code></pre>
+
+    <h2>Real-World Use Cases</h2>
+    <ul>
+        <li>Batch user creation in AD</li>
+        <li>Automating updates</li>
+        <li>Backing up and archiving logs</li>
+        <li>Scheduled tasks and reporting</li>
+    </ul>
+
+    <h2>Conclusion</h2>
+    <p>PowerShell gives IT professionals control and automation in ways that save time, reduce errors, and increase system reliability. Mastering its fundamentals is the first step to becoming a true IT automation pro.</p>
+</body>
+</html>
+
