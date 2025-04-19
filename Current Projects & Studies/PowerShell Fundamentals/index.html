@@ -46,6 +46,42 @@ Write-Output "Hello, PowerShell"
     <h2>Core Cmdlets and Concepts</h2>
     <p><strong>Cmdlet</strong> = Command + Let (lightweight commands)</p>
         <p>Cmdlets are the <strong>precision tools</strong> of PowerShell - small but powerful commands that do one job and do it well. Cmdlets can be thought of as individual <strong>building blocks</strong> in a high performance automation toolkit. Written in the .NET Framework and designed specifically for administrative tasks, each cmdlet follows a clear <code>Verb-Noun</code> format, making it easy to guess and intuitive to learn. Unlike traditional shell commands that output plain text, cmdlets output <strong>structured objects</strong>, allowing you to filter, sort, and manipulate data with accuracy. Whether you're  pulling system info, managing users, or stopping rogue services, cmdlets are your go-to tools for scripting control and operational mastery.</code></strong></p>
+
+    <h3>Naming Format</h3>
+        <p>Cmdlets use a <strong>Verb-Noun</strong> naming pattern for clarity and consistency:</p>
+
+         <table>
+    <thead>
+      <tr>
+        <th>Verb</th>
+        <th>Noun</th>
+        <th>Meaning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tag">Get-</span></td>
+        <td><span class="tag">Process</span></td>
+        <td>Retrieve information about a process</td>
+      </tr>
+      <tr>
+        <td><span class="tag">Set-</span></td>
+        <td><span class="tag">ExecutionPolicy</span></td>
+        <td>Change the execution policy</td>
+      </tr>
+      <tr>
+        <td><span class="tag">Start-</span></td>
+        <td><span class="tag">Service</span></td>
+        <td>Start a specific service</td>
+      </tr>
+      <tr>
+        <td><span class="tag">Remove-</span></td>
+        <td><span class="tag">Item</span></td>
+        <td>Delete a file or folder</td>
+      </tr>
+    </tbody>
+  </table>
+        
     <ul>
         <li><code>Get-Command</code> – Lists available cmdlets</li>
         <li><code>Get-Help</code> – Displays help info about cmdlets</li>
