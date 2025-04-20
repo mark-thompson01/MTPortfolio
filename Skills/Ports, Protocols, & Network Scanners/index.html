@@ -190,6 +190,15 @@ It’s what loads every web page you visit. HTTP ensures your data – such as l
     <p>For each device it detects, Advanced IP Scanner will display the hostname, IP address, manufacturer, and MAC address.</p>
 
     <h3>Nmap – The Powerhouse</h3>
+    <p><strong>Nmap (Network Mapper)</strong> is a powerful, open-source network scanning tool used to discover hosts, services, and vulnerabilities on a network. It works by sending specially crafted packets to target systems and analyzing their responses.</p>
+    <p>Nmap is widely used by:</p>
+    <ul>
+        <li><strong>Network administrators</strong> to audit infrastructure</li>
+        <li><strong>Cybersecurity professionals</strong> to assess exposure</li>
+        <li><strong>Penetration testers</strong> to enumerate targets during recon</li>
+    </ul>
+    <p>Whether you're scanning a single device or mapping an entire network, Nmap provides deep insight into what's running, where it's running, and how it's communicating - making it one of the most versatile tools in the industry.</p>
+    
     <ul>
         <li>Deep scans for open ports, services, OS, and vulnerabilities</li>
         <li>Scan types:
@@ -201,6 +210,66 @@ It’s what loads every web page you visit. HTTP ensures your data – such as l
             </ul>
         </li>
     </ul>
+
+    <h4>Nmap Linux Commands</h4>
+
+     <code>sudo nmap -sn 10.10.3.2</code>
+    <p><strong>Purpose:</strong> Perform a <strong>ping scan</strong> (aka "host discovery").</p>
+    <p><strong>What it does:</strong></p>
+    <ul>
+        <li>Checks if the host is <strong>up and responding</strong></li>
+        <li>Skips port scanning</li>
+    </ul>
+
+    <p>Ideal for quickly identifying <strong>live devices</strong> on a network</p>
+
+    
+    <code>sudo nmap -sS 10.10.3.2</code>
+    <p><strong>Purpose:</strong> Run a <strong>TCP SYN scan</strong> (stealth scan).</p>
+    <p><strong>What it does:</strong></p>
+    <ul>
+        <li>Sends TCP SYN packets to discover <strong>open TCP ports</strong></li>
+        <li>Doesn't complete the TCP handshake (hence more stealthy)</li>
+    </ul>
+
+    <p>This is Nmap's <strong>default scan type</strong> and is useful for staying low-profile during recon.</p>
+
+
+    <code>sudo nmap -sU 10.10.3.2</code>
+    <p><strong>Purpose:</strong> Perform a <strong>UDP port scan</strong></p>
+    <p><strong>What it does:</strong></p>
+    <ul>
+        <li>Probes <strong>UDP services</strong> like DNS, SMTP, NTP, etc.</li>
+        <li>Slower and more difficult than TCP scans due to lack of acknowledgments</li>
+    </ul>
+
+    <p>Use this to identify <strong>services running over UDP,</strong> which are often overlooked but critical</p>
+
+    
+
+    <code>sudo nmap -A 10.10.3.2</code>
+    <p><strong>Purpose:</strong> Perform an <strong>aggressive scan</strong> on the target</p>
+    <p><strong>What it does:</strong></p>
+    <ul>
+        <li>Detects <strong>open ports</strong></li>
+        <li>Identifies <strong>service versions</strong></li>
+        <li>Attempts <strong>OS detection</strong></li>
+        <li>Performs <strong>traceroute</strong></li>
+        <li>Runs default <strong>Nmap scripts</strong></li>
+    </ul>
+
+    <p>Great for gathering <strong>detailed recon</strong> on a single target in one go.</p>
+
+    <code>sudo nmap --script vuln 10.10.3.2</code>
+    <p><strong>Purpose:</strong> Run the <strong>vulnerability scanning script category.</strong></p>
+    <p><strong>What it does</strong></p>
+    <ul>
+        <li>Use Nmap's built-in NSE (Nmap Scripting Engine)</li>
+        <li>Checks for <strong>known vulnerabilities</strong> using community and default scripts</li>
+    </ul>
+
+    <p>Useful for <strong>vulnerability enumeration</strong>, but can be noisy and intrusive on live systems</p>
+
 
     <h3>Zenmap</h3>
     <ul>
