@@ -1,1 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Bash Shell Scripting Lab</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; background-color: #f4f4f4; }
+    h1, h2, h3 { color: #333; }
+    code { background-color: #eaeaea; padding: 2px 4px; border-radius: 4px; }
+    pre { background: #eaeaea; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    section { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
 
+  <h1>Basic Bash Shell Scripting Lab</h1>
+
+  <section>
+    <h2>What is Bash Shell Scripting?</h2>
+    <p>Bash (Bourne Again SHell) is a command language and shell for Unix-based systems. Bash shell scripting refers to writing a sequence of commands in a file to automate tasks, often involving file operations, user input, loops, and system administration.</p>
+    <p><strong>Customized Definition:</strong> Bash scripting is the art of turning repetitive terminal tasks into simple, reusable command-line programs that can automate workflows, manage systems, and solve problems using logic and built-in Unix tools.</p>
+  </section>
+
+  <section>
+    <h2>Why and When is Bash Scripting Beneficial?</h2>
+    <ul>
+      <li>Automating repetitive administrative tasks (e.g., backups, updates).</li>
+      <li>Creating quick solutions for system monitoring or file manipulation.</li>
+      <li>Running a sequence of commands without human interaction.</li>
+      <li>Configuring environments or software setups.</li>
+      <li>Saving time and reducing human error through automation.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Bash Scripting Fundamentals</h2>
+    <ul>
+      <li><code>#!/bin/bash</code> — shebang line to specify the interpreter.</li>
+      <li><code>echo</code> — prints text to the screen.</li>
+      <li><code>read</code> — takes user input.</li>
+      <li><code>if/else</code> — conditional logic.</li>
+      <li><code>for/while</code> — loop structures.</li>
+      <li><code>functions</code> — reusable blocks of code.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Script Examples</h2>
+
+    <h3>1. Hello World Script</h3>
+    <pre><code>#!/bin/bash
+echo "Hello, World!"</code></pre>
+
+    <h3>2. User Input</h3>
+    <pre><code>#!/bin/bash
+echo "What's your name?"
+read name
+echo "Hello, $name!"</code></pre>
+
+    <h3>3. File Existence Check</h3>
+    <pre><code>#!/bin/bash
+if [ -f "myfile.txt" ]; then
+  echo "File exists."
+else
+  echo "File not found."
+fi</code></pre>
+
+    <h3>4. For Loop</h3>
+    <pre><code>#!/bin/bash
+for i in {1..5}
+do
+  echo "Looping... number $i"
+done</code></pre>
+
+    <h3>5. Simple Backup Script</h3>
+    <pre><code>#!/bin/bash
+backup_dir="/home/user/backup"
+mkdir -p $backup_dir
+cp *.txt $backup_dir
+echo "Backup completed."</code></pre>
+
+    <h3>6. Function Example</h3>
+    <pre><code>#!/bin/bash
+say_hello() {
+  echo "Hello from the function!"
+}
+say_hello</code></pre>
+
+  </section>
+
+</body>
+</html>
