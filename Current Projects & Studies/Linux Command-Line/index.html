@@ -28,8 +28,25 @@
   </style>
 </head>
 <body>
-  <h1>Linux Command-Line Lab</h1>
+  <h1>The Linux Command-Line - Bash Shell Terminal</h1>
+  <p>The <strong>Linux command line</strong> is one of the most powerful tools in a system administrator's or developer's toolkit. It allows users to interact directly with the operating system using typed commands, offering precise control over file systems, processes, networking, and more.</p>
+  <p>What many new users don't realize is that <strong>Linux commands are actually small executable programs.</strong> For example, when you type <strong>ls</strong> to list directory contents, you're not just issuing a special keyword - you're running a compact program located at <strong>/bin/ls</strong>. The same applies <strong>cp</strong>, <strong>mv</strong>, <strong>grep</strong>, and <strong>mkdir</strong>. These are self-contained utilities built to perform specific tasks.</p>
+  <p>At the heart of the command-line experience is the <strong>Linux Terminal</strong>, which serves as a user interface to the system's shell. The terminal sends your input to the <strong>shell interpreter</strong>, most commonly <strong>Bash (Bourne Again Shell</strong>. Bash is responsibile for parsing your command, interpreting it, and then executing the appropriate program or script.</p>
 
+  <p>Here's a simplified flow of what happens:</p>
+  <ul>
+    <ol><strong>You enter a command</strong> (e.g., <strong>ls -l)</strong> into the terminal</ol>
+    <ol>The <strong>terminal forwards this input to Bash,</strong> the shell interpreter.</ol>
+    <ol><strong>Bash parses the command,</strong> checks for syntax, variables, and expansions</ol>
+    <ol>It then <strong>locates and executes the corresponding program</strong> (in this case <strong>/bin/ls</strong>) with provided arguments.</ol>
+    <ol>The <strong>output is returned to the terminal</strong>, where you see the results.</ol>
+  </ul>
+
+  <p>Understanding this flow helps demystify the command-line environment. It’s not magic — it’s a layered process involving human-readable input, a shell that interprets it, and small programs that execute the requested actions.</p>
+
+  <p>This tutorial introduces essential Linux commands and provides hands-on examples with screenshots. Whether you're a beginner or brushing up on core skills, this guide will help you build a strong foundation in working with the Linux command-line environment.</p>
+  
+  
   <section>
     <h2>1. Navigating and Managing Directories</h2>
     <code>cd /home/user/documents</code>
