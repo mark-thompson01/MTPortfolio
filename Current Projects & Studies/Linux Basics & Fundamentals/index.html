@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Linux Bascis & Fundamentals</title>
+  <title>Linux Basics & Fundamentals</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -29,30 +29,29 @@
 </head>
 <body>
 
-<h1>Linux Basics and Fundamentals Lab</h1>
+<h1>Linux Basics and Fundamentals</h1>
 
-<h2>What is Linux?</h2>
-<p><strong>Linux</strong> is a powerful, open-source operating system kernel originally created by Linus Torvalds in 1991. It serves as the core of various operating systems known as Linux distributions, facilitating efficient resource management, robust security, and flexibility ideal for personal computing, servers, networking, and cybersecurity applications. Its transparency, reliability, and adaptability underpin popular distributions such as Debian, Ubuntu, and Linux Mint.</p>
+<p>This tutorial provides a foundational understanding of core Linux management concepts. It focuses on navigating the Linux file system, handling packages on Debian-based systems, managing services with <code>systemd</code>, monitoring processes, and automating tasks using Bash shell scripting. These practical areas are essential for anyone working with Linux in a system administration or support capacity.</p>
 
 <hr>
 
 <h2>Linux File System Hierarchy Overview</h2>
 <p>The <strong>Linux File System Hierarchy</strong> organizes files logically within the Linux system, essential for administration, troubleshooting, and software management.</p>
 <ul>
-    <li><strong>/</strong>: Root directory</li>
-    <li><strong>/bin</strong>: Essential user binaries</li>
-    <li><strong>/sbin</strong>: System maintenance binaries</li>
-    <li><strong>/boot</strong>: Boot loader files</li>
-    <li><strong>/etc</strong>: System-wide configuration files</li>
-    <li><strong>/home</strong>: User directories</li>
-    <li><strong>/lib</strong>, <strong>/lib64</strong>: Shared libraries</li>
-    <li><strong>/usr</strong>: User-installed applications</li>
-    <li><strong>/var</strong>: Variable data like logs and databases</li>
-    <li><strong>/tmp</strong>: Temporary files</li>
-    <li><strong>/opt</strong>: Optional third-party software</li>
-    <li><strong>/dev</strong>: Hardware device files</li>
-    <li><strong>/proc</strong>, <strong>/sys</strong>: Virtual filesystems for real-time system information</li>
-    <li><strong>/mnt</strong>, <strong>/media</strong>: Mount points for external filesystems and removable media</li>
+  <li><strong>/</strong>: Root directory</li>
+  <li><strong>/bin</strong>: Essential user binaries</li>
+  <li><strong>/sbin</strong>: System maintenance binaries</li>
+  <li><strong>/boot</strong>: Boot loader files</li>
+  <li><strong>/etc</strong>: System-wide configuration files</li>
+  <li><strong>/home</strong>: User directories</li>
+  <li><strong>/lib</strong>, <strong>/lib64</strong>: Shared libraries</li>
+  <li><strong>/usr</strong>: User-installed applications</li>
+  <li><strong>/var</strong>: Variable data like logs and databases</li>
+  <li><strong>/tmp</strong>: Temporary files</li>
+  <li><strong>/opt</strong>: Optional third-party software</li>
+  <li><strong>/dev</strong>: Hardware device files</li>
+  <li><strong>/proc</strong>, <strong>/sys</strong>: Virtual filesystems for real-time system information</li>
+  <li><strong>/mnt</strong>, <strong>/media</strong>: Mount points for external filesystems and removable media</li>
 </ul>
 
 <hr>
@@ -60,25 +59,25 @@
 <h2>Package Management on Debian-based Systems</h2>
 <p>Debian-based systems utilize <strong>APT (Advanced Package Tool)</strong>, managing software through repositories hosting pre-compiled software packages.</p>
 <ul>
-    <li><strong>Repositories</strong>: Managed through <code>/etc/apt/sources.list</code> and additional PPA repositories.</li>
-    <li><strong>Key APT commands</strong>:
-        <ul>
-            <li><code>apt update</code>: Refresh package lists</li>
-            <li><code>apt upgrade</code>: Upgrade installed packages</li>
-            <li><code>apt install</code>: Install new packages</li>
-            <li><code>apt remove</code>: Uninstall packages, leaving configuration files</li>
-            <li><code>apt purge</code>: Completely remove packages and configurations</li>
-            <li><code>apt search</code>: Search available software</li>
-        </ul>
-    </li>
+  <li><strong>Repositories</strong>: Managed through <code>/etc/apt/sources.list</code> and additional PPA repositories.</li>
+  <li><strong>Key APT commands</strong>:
+    <ul>
+      <li><code>apt update</code>: Refresh package lists</li>
+      <li><code>apt upgrade</code>: Upgrade installed packages</li>
+      <li><code>apt install</code>: Install new packages</li>
+      <li><code>apt remove</code>: Uninstall packages, leaving configuration files</li>
+      <li><code>apt purge</code>: Completely remove packages and configurations</li>
+      <li><code>apt search</code>: Search available software</li>
+    </ul>
+  </li>
 </ul>
 
 <p><strong><code>dpkg</code> (Debian Package)</strong>: Low-level package manager used for installing, removing, and managing <code>.deb</code> packages directly.</p>
 <ul>
-    <li>Install: <code>dpkg -i package.deb</code></li>
-    <li>Remove: <code>dpkg -r package_name</code></li>
-    <li>Purge: <code>dpkg -P package_name</code></li>
-    <li>List installed packages: <code>dpkg -l</code></li>
+  <li>Install: <code>dpkg -i package.deb</code></li>
+  <li>Remove: <code>dpkg -r package_name</code></li>
+  <li>Purge: <code>dpkg -P package_name</code></li>
+  <li>List installed packages: <code>dpkg -l</code></li>
 </ul>
 
 <hr>
@@ -86,10 +85,10 @@
 <h2>Managing System Services</h2>
 <p><strong>systemd</strong> is the default initialization and service manager system in modern Linux distributions. It handles startup and management of system services through units and targets.</p>
 <ul>
-    <li>Status: <code>systemctl status &lt;service&gt;</code></li>
-    <li>Start/stop/restart: <code>systemctl start|stop|restart &lt;service&gt;</code></li>
-    <li>Enable/disable auto-start: <code>systemctl enable|disable &lt;service&gt;</code></li>
-    <li>Logs: <code>journalctl -u &lt;service&gt;</code></li>
+  <li>Status: <code>systemctl status &lt;service&gt;</code></li>
+  <li>Start/stop/restart: <code>systemctl start|stop|restart &lt;service&gt;</code></li>
+  <li>Enable/disable auto-start: <code>systemctl enable|disable &lt;service&gt;</code></li>
+  <li>Logs: <code>journalctl -u &lt;service&gt;</code></li>
 </ul>
 
 <hr>
@@ -97,19 +96,19 @@
 <h2>Process Management</h2>
 <p><strong>Processes</strong> are active executing programs managed by the Linux kernel, identified by unique PIDs, resource allocation, and scheduling.</p>
 <ul>
-    <li>View: <code>ps</code>, <code>top</code>, <code>htop</code></li>
-    <li>Terminate: <code>kill &lt;PID&gt;</code>, <code>pkill &lt;process_name&gt;</code></li>
-    <li>Background/foreground: <code>bg</code>, <code>fg</code>, <code>jobs</code></li>
+  <li>View: <code>ps</code>, <code>top</code>, <code>htop</code></li>
+  <li>Terminate: <code>kill &lt;PID&gt;</code>, <code>pkill &lt;process_name&gt;</code></li>
+  <li>Background/foreground: <code>bg</code>, <code>fg</code>, <code>jobs</code></li>
 </ul>
 
 <hr>
 
 <h2>System Monitoring and Logging</h2>
 <ul>
-    <li><code>uname</code>: Kernel info</li>
-    <li><code>hostnamectl</code>: Hostname management</li>
-    <li><code>lscpu</code>: CPU info</li>
-    <li><code>free</code>: Memory usage</li>
+  <li><code>uname</code>: Kernel info</li>
+  <li><code>hostnamectl</code>: Hostname management</li>
+  <li><code>lscpu</code>: CPU info</li>
+  <li><code>free</code>: Memory usage</li>
 </ul>
 
 <p><strong>Logging Directories</strong>: <code>/var/log/syslog</code>, <code>/var/log/auth.log</code>, <code>/var/log/dmesg</code></p>
@@ -118,8 +117,14 @@
 
 <h2>Bash Shell Scripting</h2>
 <p>Create scripts to automate repetitive tasks.</p>
-<pre><code>#!/bin/bash</code>
+<pre><code>#!/bin/bash
+echo "Hello, World!"
+</code></pre>
 
+<hr>
+
+<h2>Conclusion</h2>
+<p>This tutorial introduces the essential skills for managing a Linux environment. From understanding the file system hierarchy to installing packages, controlling services, handling processes, and writing shell scripts — these foundational practices are critical for effective Linux system administration. Mastery of these topics enables greater confidence in real-world IT environments where Linux plays a central role.</p>
 
 </body>
 </html>
