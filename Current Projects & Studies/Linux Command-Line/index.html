@@ -121,7 +121,7 @@
     <code>whoami</code>
     <code>sudo apt update</code>
     <code>chmod 755 new_file.txt</code>
-    <code>chown user:user new_file.txt</code>
+    <code>chown user:user new_filapt - Debian Package Manager</strong> - Used to install, update, or remove software on Debian-based systems.</p>e.txt</code>
     <code>sudo useradd newuser</code>
     <code>sudo passwd newuser</code>
     <code>sudo userdel newuser</code>
@@ -130,7 +130,7 @@
     <p><strong>chmod - Change Permissions</strong> - Set who can read, write, or execute a file or directory.</p>
     <p><strong>chown - Change Owner</strong> - Assigns a new owner or group to a file or directory.</p>
     <p><strong>useradd - Create a User Account</strong> - Adds a new user account to the system.</p>
-    <p><strong>passwd - Change Password</strong> - Sets or changes a user's password</p>
+    <p><strong>passwd - Change Password</strong> - Sets or changes a user's password.</p>
     <p><strong>userdel - Delete a User Account</strong> - Removes a user account and optionally their home directory.</p>
     <img src="Images/whoami.png" alt="whoami">
     <img src="Images/newuserchown.png" alt=newuserchown">
@@ -146,6 +146,9 @@
     <code>uname -a</code>
     <p><strong>df -h - Disk Usage Overview</strong> - Displays filesystem space usage in human-readable format.</p>
     <p><strong>du -sh - Directory Size Summary</strong> - Shows that total disk space used by a specific directory.</p>
+    <p><strong>top - Real-Time Process Monitor</strong></p>
+    <p><strong>htop - Advanced Process Viewer</strong> - Like <strong>top</strong>, but with an easier interface and more interactivity.</p>
+    <p><strong>uname -a - System Dump Info</strong> - Displays full system information including kernel, architecture, and hostname.</p>
     <img src="Images/df.png" alt="df">
     <img src="Images/du.png" alt="du">
     <img src="Images/top.png" alt="top">
@@ -161,6 +164,8 @@
     <code>sudo dnf update</code>
     <code>sudo dpkg -i package.deb</code>
     <p><strong>apt - Debian Package Manager</strong> - Used to install, update, or remove software on Debian-based systems.</p>
+    <p><strong>dnf - Fedora/RHEL package Manager</strong> - Used to install, update, or remove software on Fedora and RHEL-based systems.</p>
+    <p><strong>dpkg -i - Install .deb Package</strong> - Installs a Debian software package manually.</p>
     <img src="Images/aptupdate.png" alt="aptupdate">
     <img src="Images/aptinstall.png" alt="aptinstall">
     <img src="Images/dnf.png" alt="dnf">
@@ -171,6 +176,8 @@
     <h2>8. Service and Process Management</h2>
     <code>sudo systemctl restart ssh</code>
     <code>kill -9 [PID]</code>
+    <p><strong>systemctl - System Manager</strong> - Controls system services (start, stop, enable, check status).</p>
+    <p><strong>kill - Terminate a Process</strong> - Sends a signal (usually to stop) a process using its PID. PIDs can be found with top/htop.</p>
     <img src="Images/servicestatus.png" alt="servicestatus">
     <img src="Images/systemctl.png" alt="systemctl">
     <img src="Images/kill.png" alt="kill">
@@ -180,6 +187,8 @@
     <h2>9. System Operations</h2>
     <code>sudo shutdown now</code>
     <code>sudo reboot</code>
+    <p><strong>shutdown - Power Off System</strong> - Schedules or performs a safe system shutdown.</p>
+    <p><strong>restart - Reboot System</strong> - Not a standalone command, but often aliased to <strong>sudo reboot</strong> to restart the system.</p>
     <img src="Images/shutdown.png" alt="shutdown">
     <img src="Images/reboot.png" alt="reboot">
     
@@ -189,6 +198,8 @@
     <h2>10. Network Operations and Data Retrieval</h2>
     <code>wget http://example.com/file.zip</code>
     <code>curl http://example.com/file.zip -o file.zip</code>
+    <p><strong>wget - File Downloader</strong> - Fetches files from the internet using HTTP, HTTPS, or FTP.</p>
+    <p><strong>curl - Data Transfer Tool</strong> - Transfers data from or to a server, useful for APIs, downloads, or testing.</p>
     <img src="Images/wget.png" alt="wget">
     <img src="Images/curl.png" alt="curl">
   </section>
@@ -200,6 +211,11 @@
     <code>cal</code>
     <code>time ls -la</code>
     <code>date</code>
+    <p><strong>history - Command History Viewer</strong> - Displays previously executed commands in the terminal.</p>
+    <p><strong>echo - Print Text or Variables</strong> - Outputs text to the terminal or displays the value of variables.</p>
+    <p><strong>cal - Calendar Viewer</strong> - Displays a monthly calendar in the terminal.</p>
+    <p><strong>time - Command Timer</strong> -  Measures how long a command takes to run.</p>
+    <p><strong>Current Date and Time</strong> - Displays the systems current date and time settings.</p>
     <img src="Images/history1.png" alt="history1">
     <img src="Images/history2.png" alt="histroy2">
     <img src="Images/echo.png" alt="echo">
