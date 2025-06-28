@@ -88,6 +88,8 @@ Scenarios for use: IP acquisition issues, outdated DNS cache.
     <pre>arp -a</pre>
     <p><strong>Benefits:</strong> Identify devices, troubleshoot connectivity, detect unauthorized devices.</p>
   </section>
+  <img src="Images/arp-a.PNG" alt="arp-a.PNG">
+  
 
   <section>
     <h3>3. Domain Name Resolution (DNS Lookup)</h3>
@@ -121,6 +123,11 @@ Troubleshooting scenarios: DNS misconfigurations, email delivery issues.
 Windows:
 netstat -an
 
+<img src="Images/netstat1.PNG" alt="netstat1.PNG">
+<img src="Images/netstat2.PNG" alt="netstat2.PNG">
+<img src="Images/netstat3.PNG" alt="netstat3.PNG">
+
+
 Linux:
 netstat -an
 ss -tuln
@@ -139,6 +146,11 @@ ping -n 10 google.com
 ping -t google.com
 ping -l 1500 google.com
 
+<img src="Images/ping.PNG" alt="ping.PNG">
+<img src="Images/ping2.PNG" alt="Ping2.PNG">
+<img src="Images/ping3.PNG" alt="ping3.PNG">
+    
+
 Linux:
 ping -c 4 google.com
 ping -i 0.5 google.com
@@ -153,6 +165,8 @@ ping -M do -s 1472 google.com
     <pre>
 Windows:
 tracert google.com
+<img src="Images/tracert.PNG" alt="tracert.PNG">
+    
 
 Linux:
 traceroute google.com
@@ -180,6 +194,9 @@ mtr google.com
 Windows:
 route print
 
+<img src="Images/routeprint.PNG" alt="routeprint.PNG">
+      
+
 Linux:
 route -n
 ip route
@@ -189,6 +206,8 @@ ip route
     <pre>
 Windows:
 hostname
+
+<img src="Images/hostname.PNG alt="hostname.PNG">
 
 Linux:
 hostname
