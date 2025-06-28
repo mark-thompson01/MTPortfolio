@@ -96,9 +96,9 @@ Scenarios for use: IP acquisition issues, outdated DNS cache.
     <p>Resolving domain names to IP addresses for verifying DNS records.</p>
     <pre>
 Windows:
-nslookup google.com
-nslookup -type=mx google.com
-nslookup -type=ns google.com
+nslookup example.com
+nslookup -type=mx example.com
+nslookup -type=ns example.com
 
 <img src="Images/nslookup1.PNG" alt="nslookup1.PNG">
 <img src="Images/nslookup2.PNG" alt="nslookup2.PNG">
@@ -106,11 +106,11 @@ nslookup -type=ns google.com
 
 Linux:
 host google.com
-host -t MX google.com
-host -t NS google.com
-dig google.com
-dig MX google.com
-dig NS google.com
+host -t MX example.com
+host -t NS example.com
+dig example.com
+dig MX example.com
+dig NS example.com
 
 Troubleshooting scenarios: DNS misconfigurations, email delivery issues.
     </pre>
@@ -141,10 +141,10 @@ Applicable scenarios: Unauthorized connections, port conflicts
     <p>Testing connectivity and measuring latency.</p>
     <pre>
 Windows:
-ping google.com
-ping -n 10 google.com
-ping -t google.com
-ping -l 1500 google.com
+ping example.com
+ping -n 10 example.com
+ping -t example.com
+ping -l 1500 example.com
 
 <img src="Images/ping.PNG" alt="ping.PNG">
 <img src="Images/ping2.PNG" alt="Ping2.PNG">
@@ -153,10 +153,10 @@ ping -l 1500 google.com
     
 
 Linux:
-ping -c 4 google.com
-ping -i 0.5 google.com
-ping -s 100 google.com
-ping -M do -s 1472 google.com
+ping -c 4 example.com
+ping -i 0.5 example.com
+ping -s 100 example.com
+ping -M do -s 1472 example.com
     </pre>
   </section>
 
@@ -181,13 +181,13 @@ Scenarios for use: Slow connectivity, network outages
     <p>Comprehensive analysis of latency and packet loss.</p>
     <pre>
 Windows:
-pathping
+pathping example.com
 
 <img src="Images/pathping.PNG" alt="pathping.PNG">
     
 
 Linux (using MTR):
-mtr google.com
+mtr example.com
     </pre>
   </section>
 
