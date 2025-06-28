@@ -76,7 +76,7 @@ ifconfig
 ip a
 sudo dhclient -r
 sudo dhclient
-sudo systemd-resolve --flush-caches
+sudo systemctl restart NetworkManager
 
 Scenarios for use: IP acquisition issues, outdated DNS cache.
     </pre>
