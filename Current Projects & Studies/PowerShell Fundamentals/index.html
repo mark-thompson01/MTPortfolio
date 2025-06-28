@@ -156,6 +156,9 @@ $Services = Get-Service
     <p>Variables start with <code>$</code><br>
     Data types: string, int, array, boolean, object</p>
 
+<img src="Images/BS/var.png" alt="var.png">
+
+
     <h2>Loops and Conditional Statements</h2>
     <pre><code># If-Else
 if ($Age -gt 18) {
@@ -171,16 +174,21 @@ foreach ($service in $services) {
 }
     </code></pre>
 
+<img src="Images/BS/loops.png" alt="loops.png">
+        
+
     <h2>Functions and Scripting</h2>
     <pre><code>function Greet-User {
     param ($Name)
     Write-Output "Welcome, $Name!"
 }
 
-Greet-User -Name "Mark"
+Greet-User -Name "Dave"
     </code></pre>
     <p>Create reusable code blocks<br>
     Scripts end with <code>.ps1</code> extension</p>
+
+<img src="Images/BS/function.png" alt="function.png">
 
     <h2>Permissions and Execution Policy</h2>
     <pre><code>Get-ExecutionPolicy
