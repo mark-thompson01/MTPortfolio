@@ -544,6 +544,71 @@ Set-ExecutionPolicy RemoteSigned
 
     <img src="Images/BS/file.png" alt="file.png"><br>
 
+<p>Start-Transcript:</p>
+        <pre><code>
+            # Start logging the session
+            Start-Transcript -Path "C:\Logs\debug-log.txt" -Append
+
+            Write-Host "Starting server check..."
+
+            $server = "example.com"
+
+            Write-Host "Pinging $server..."
+            if (Test-Connection -ComputerName $server -Count 1 -Quiet) {
+                Write-Host "$server is online."
+            } else {
+                Write-Host "$server is offline or unreachable."
+            }
+
+            Write-Host "Script complete."
+
+            # Stop logging
+            Stop-Transcript
+        </code></pre>
+
+    <p>Try/Catch - Basic Try/Catch Block:</p>
+    <pre><code>
+        try {
+            # This will fail if the file doesn't exist
+            Get-Content "C:\missing-file.txt"
+        }
+        catch {
+            Write-Host "An error occurred: $_"
+        }
+    </code></pre>
+
+        <p>Try/Catch with a Specific Error Action</p>
+        <pre><code>
+            try {
+                # Force PowerShell to treat the error as terminating
+                Remove-Item "C:\nonexistent.txt" -ErrorAction Stop
+            }
+            catch {
+                Write-Host "Failed to delete file: $_"
+            }
+        </code></pre>
+
+    <p>Finally:</p>
+    <p>Using Finaly to Always Run Cleanup</p>
+    <pre><code>
+        try {
+            Write-Host "Trying risky operation..."
+            Get-Content "C:\nonexistent.txt" -ErrorAction stop
+        }
+        catch {
+            Write-Host "Caught an error: $_"
+        }
+        finally {
+            Write-Host "Cleaning up... This always runs."
+        }
+    </code></pre>
+
+        <ul>
+            <li>Use <strong>try/catch</strong> to gracefully handle errors.</li>
+            <li>Use <strong>finally</strong> for cleanup tasks that must run regardless</li>
+            <li>Add <strong>-ErrorAction Stop</strong> to make sure non-terminating errors are caught</li>
+        </ul>
+
     <h2>Real-World Use Cases</h2>
     <ul>
         <li>Batch user creation in AD</li>
