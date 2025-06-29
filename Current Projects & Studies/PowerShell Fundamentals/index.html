@@ -220,6 +220,40 @@ $Services = Get-Service
 
 <img src="Images/BS/var.png" alt="var.png">
 
+ <h3>String</h3>
+<pre><code>$greeting = "Hello, world"
+    $path = 'C:\Users\Dave'
+</code></pre>
+
+<h3>Integers</h3>
+        <pre><code>$a = 10
+            $b = 5
+        </code></pre>
+
+<h3>Arrays</h3>
+        <pre><code>
+            # Creating an array of strings
+            $colors = @("Red", "Green", "Blue")
+
+            # Accessing elements by index
+            Write-Output $colors[0] # Output: Red
+            Write-Output $colors[1] # Output: Green
+            Write-Output $colors[2] # Output: Blue
+        </code></pre>
+
+        <p>Adding Items to an Array:</p>
+        <pre><code>
+            $colors += "Yellow" # Adds a new item
+            Write-Output $colors # Output: Red Green Blue Yellow
+        </code></pre>
+
+        <p>Looping Through an Array:</p>
+        <pre><code>
+            foreach ($color in $colors) {
+                Write-Output "Color: $color:
+            }
+        </code></pre>
+
 
     <h3>Loops and Conditional Statements</h3>
     <pre><code># If-Else
