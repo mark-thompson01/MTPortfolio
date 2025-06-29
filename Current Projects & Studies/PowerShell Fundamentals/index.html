@@ -202,6 +202,7 @@
             wmic bios get serialnumber
             New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any
             New-NetFirewallRule -DisplayName "Block Specific IP Outbound" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any 
+            Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion
             net user username /passworddchg:no
             net user username /passworddchg:yes
             net users
