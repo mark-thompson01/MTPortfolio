@@ -420,6 +420,69 @@ foreach ($service in $services) {
 Greet-User -Name "Dave"
     </code></pre>
         <img src="Images/BS/function.png" alt="function.png">
+
+<p>simple Function (No Parameters)</p>
+        <pre><code>
+            function Say-Hello {
+                Write-Output "Hello, world!"
+            }
+
+            # Call the function
+            Say-Hello
+        </code></pre>
+
+<p>Function with One Parameter</p>
+        <pre><code>
+            function Greet-User {
+                param($name)
+                Write-Output "Hello, $name!"
+            }
+
+            Greet-User -name "Mark"
+        </code></pre>
+
+
+<p>Function with Multiple Parameters</p>
+        <pre><code>
+            function Add-Numnbers {
+                param($a, $b)
+                $sum = $a + $b
+                Write-Output "The sum is $sum"
+            }
+
+            Add-Numbers -a 5 -b 10     # Output: The sum is 15
+        </code></pre>
+
+    <p>Function with Conditional Logic</p>
+        <pre><code>
+            function Check-Age {
+                param($age)
+
+                if ($age -ge 18) {
+                    "You're an adult."
+                } else {
+                    "You're a minor."
+                }
+        }
+
+        Check-Age -age 20
+        </code></pre>
+
+
+        <p>Function that Returns a Value</p>
+        <pre><code>
+            function Multiply {
+                param($x, $y)
+                return $x * $y
+            }
+
+            $result = Multiply -x 4 -y 6
+            Write-Output "Result: $result"
+        </code></pre>
+
+
+
+        
     <p>Create reusable code blocks</p><br>
         
     <p>Scripts end with the <strong>.ps1</strong> extension<code>.ps1</code></p><br>
