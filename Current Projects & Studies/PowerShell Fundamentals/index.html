@@ -534,6 +534,9 @@ Set-ExecutionPolicy RemoteSigned
             Test-ConnectionStatus -server "example.com"
         </code></pre>
 
+        <img src="Images/Debug/WriteHost.png" alt="WriteHost.png">
+        
+
         
 
 
@@ -573,6 +576,8 @@ Set-ExecutionPolicy RemoteSigned
             Stop-Transcript
         </code></pre>
 
+        <img src="Images/Debug/StartTranscript.png" alt="StartTranscript.png">
+
     <p><strong>Try/Catch</strong> - Basic Try/Catch Block:</p>
     <pre><code>
         try {
@@ -584,6 +589,9 @@ Set-ExecutionPolicy RemoteSigned
         }
     </code></pre>
 
+        <img src="Images/Debug/try1.png" alt="try1.png">
+        
+
         <p>Try/Catch with a Specific Error Action</p>
         <pre><code>
             try {
@@ -594,6 +602,8 @@ Set-ExecutionPolicy RemoteSigned
                 Write-Host "Failed to delete file: $_"
             }
         </code></pre>
+
+        <img src="Images/Debug/try2.png" alt="try2.png">
 
     <p><strong>Finally:</strong></p>
     <p>Using Finaly to Always Run Cleanup</p>
@@ -609,6 +619,8 @@ Set-ExecutionPolicy RemoteSigned
             Write-Host "Cleaning up... This always runs."
         }
     </code></pre>
+
+        <img src="Images/Debug/finally.png" alt="finally.png">
 
         <ul>
             <li>Use <strong>try/catch</strong> to gracefully handle errors.</li>
