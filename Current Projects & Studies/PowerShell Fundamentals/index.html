@@ -310,6 +310,17 @@ $Services = Get-Service
             }
         </code></pre>
 
+        <p>Objects:</p>
+        <pre><code>
+            $process = Get-Process notepad
+        </code></pre>
+        <p>The variable $process is now an object with properties such as Name, Id, CPU, etc.</p>
+        <p>You can access those properties like this:</p>
+        <pre><code>
+            $process.Name  # Output: Notepad
+            $process.Id    # Output: (the process ID)
+        </code></pre>
+
 
     <h3>Loops and Conditional Statements</h3>
     <pre><code># If-Else
@@ -325,6 +336,41 @@ foreach ($service in $services) {
     Write-Output $service.DisplayName
 }
     </code></pre>
+
+<p1>Checking Object Members with Get-Member:</p1>
+        <pre><code>
+            $process | Get-Member
+        </code></pre>
+
+<p>Creating a Custom Object:</p>
+        <pre><code>
+            $user = [PSCustomObject]@{
+                FirstName = "Mark"
+                LastName = "Thompson"
+                Age = 00
+            }
+
+            $user.FirstName  # Output: Mark
+            $user.Age        # Output: 00
+        </code></pre>
+
+<p>Array of Objects:</p>
+        <pre><code>
+            $users = @(
+                [PSCustomObject]@{ Name = "Alice"; Role = "Admin" },
+                [PSCustomObject]@{ Name = "Bob"; Role = "User" }
+            )
+
+            foreach ($u in $users) {
+                Write-Output "$(Su.Name) is a $($u.Role)"
+            }
+        </code></pre>
+
+<p>Object Filtering:</p>
+        <pre><code>
+            $service = Get-Service
+            $running = $services | Where-Object { $_.Status -eq "Running" }
+        </code></pre>
 
 <img src="Images/BS/loops.png" alt="loops.png">
         
