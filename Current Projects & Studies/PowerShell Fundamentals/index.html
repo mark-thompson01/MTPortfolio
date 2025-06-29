@@ -513,6 +513,28 @@ Set-ExecutionPolicy RemoteSigned
         <li><code>Start-Transcript</code> to log sessions</li>
         <li><code>Try / Catch / Finally</code> for error handling</li>
     </ul>
+
+    <p>Write-Host:</p>
+        <pre><code>
+            function Test-ConnectionStatus {
+                param($server)
+
+                Write-Host "Starting connection check..." -ForegroundColor Cyan
+
+                if (Test-Connection -ComputerName $server -Count 1 -Quiet) {
+                    Write-Host "$server is online." -ForegroundColor Green
+                } else {
+                    Write-Host "$server is offline or unreachable." -ForegroundColor Red
+                }
+
+                Write-Host "Finished connection check." -ForegroundColor Cyan
+            }
+
+            Test-ConnectionStatus -server "example.com"
+        </code>
+
+
+  <p>Write-Output:</p>
     <pre><code>try {
     Get-Item "C:\fakefile.txt"
 } catch {
