@@ -228,7 +228,7 @@ $Services = Get-Service
 
 <img src="Images/BS/var.png" alt="var.png">
 
- <h3>String</h3>
+ <h3>Strings</h3>
 <pre><code>$greeting = "Hello, world"
     $path = 'C:\Users\Dave'
 </code></pre>
@@ -260,6 +260,53 @@ $Services = Get-Service
         <pre><code>
             foreach ($color in $colors) {
                 Write-Output "Color: $color:
+            }
+        </code></pre>
+
+    <h3>Booleans</h3>
+        <pre><code>
+            $isLoggedIn = $true
+            $isAdmin = $false
+        </code></pre>
+
+    <p>Using Boolean in if statements:</p>
+        <pre><code>
+            if ($isLoggedIn) {
+                Write-Output "Access granted."
+            } else {
+                Write-Output "Access denied."
+            }
+        </code></pre>
+
+        <p>Boolean Result from a Comparison:</p>
+        <pre><code>
+            $a = 10
+            $b = 5
+
+            $isGreater = $a -gt $b  # true
+            Write-Output $isGreater # Output: True
+        </code></pre>
+
+        <p>Logical Operators:</p>
+        <pre><code>
+            $hasPermission = $true
+            $isOwner = $false
+
+            if ($hasPermission -and $isOwner) {
+                "You can delete this file."
+            } elseif ($hasPermissions -or $isOwner) {
+                "You can view the file."
+            } else {
+                "Access denied."
+            }
+        </code></pre>
+
+        <p>Using -not to Flip a Boolean:</p>
+        <pre><code>
+            $isAvailable = $false
+
+            if (-not $isAvailable) {
+                "Resource is not available."
             }
         </code></pre>
 
