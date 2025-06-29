@@ -182,6 +182,62 @@
     
         
     <h2>Exploration</h2>   
+      #  <p>Retrive PowerShell Version: $PSVersionTable.PSVersion</p>
+       # <p>List All Installed PowerShell Modules: Get-Module -ListAvailable</p>
+        #<p>List Commands to a specific PS Module: Get-Command -Module <ModuleName> </p>
+        #<p>List-Command -Module PSWindowsUpdate
+        #<p>Get-FileHash</p>
+        #<p>Get-FileHash -Algorithm SHA1 path</p>
+        #<p>Get-NetAdapter</p>
+        #<p>Get-NetAdapter | Select-Object Name, Status, LinkSpeed</p>
+        #<p>Enabling File Sharing: Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enabled True</p>
+        #<p>Check the status of File and Printer Sharing Get-NetFirewallRule -DisplayGroup "File and Printer Sharing"</p>
+        #<p>Disable Network Discovery: Set-NetFirewallRule -DisplayGroup "Network Discovery" -Enabled False</p>
+        #<p>Check the status of Network Discovery: Get-NetFirewall -DisplayGroup "Network Discovery"</p>
+        #<p>Retrieve Windows license key: (Get-WmiObject -query 'select*from SoftwareLicensingService').OA3xOriginalProductKey</p>
+        #<p>wmic bios get serialnumber</p>
+        #<p>Create New Firewall Rule: </p>
+        #<p>New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any</p>
+        #<p>New-NetFirewallRule -DisplayName "Block Specific IP Outbound" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any </p>
+        #<p>Restrict Local Windows User from resetting account password: net user <username> /passworddchg:no</p>
+        #<p>Reverse it: net user <username> /passwordchg:yes</p>
+        #<p>List Members of Local Administrator Group: Get-LocalGroupMember -Group "Administrators"</p>
+        #<p>Remove-Local Group Member from Administrator Group: Remove-LocalGroupMember -Group "Administrators" -Member "Domain Users"</p>
+        #<p>net users</p>
+        #<p>net group</p>
+        #<p>net user administrator</p>
+
+
+        <pre><code>
+            $PSVersion
+            Get-Module -ListAvailable
+            Get-Command -Module ModuleName
+            List Command -Module ModuleName
+            Get-FileHash
+            Get-FileHash -Algorithm SHA1 path
+            NetAdapter
+            Select-Object
+            NetAdapter | Select-Object Name, Status, LinkSpeed
+            Set
+            Set-NewFirewall Rule -DisplayGroup "File and Printer Sharing" -Enable True
+            Get
+            Get-NetFirewall -DisplayGroup "Network Discovery"
+            Get-WmiObject -query 'select*from SoftwareLicensingService').OA3xOriginalProductKey
+            wmic bios get serialnumber
+            New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any
+            New-NetFirewallRule -DisplayName "Block Specific IP Outbound" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any 
+            net user username /passworddchg:no
+            net user username /passworddchg:yes
+            net users
+            net groups
+            net user administrator
+            Get-LocalGroupMember -Group "Administrators"
+            Remove-LocalGroupMember -Group "Administrators" -Member "Domain Users"
+        </code></pre>
+        
+        
+        
+        
         
 
     <h2>Working with Files and Directories</h2>
