@@ -337,6 +337,17 @@ foreach ($service in $services) {
 }
     </code></pre>
 
+     <p>Objects:</p>
+        <pre><code>
+            $process = Get-Process notepad
+        </code></pre>
+        <p>The variable $process is now an object with properties such as Name, Id, CPU, etc.</p>
+        <p>You can access those properties like this:</p>
+        <pre><code>
+            $process.Name  # Output: Notepad
+            $process.Id    # Output: (the process ID)
+        </code></pre>
+
 <p1>Checking Object Members with Get-Member:</p1>
         <pre><code>
             $process | Get-Member
