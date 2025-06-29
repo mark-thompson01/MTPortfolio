@@ -515,6 +515,8 @@ Set-ExecutionPolicy RemoteSigned
     </ul>
 
     <p>Write-Host:</p>
+
+    <p>Write-Host is used to display output directly output directly to the console.</p>
         <pre><code>
             function Test-ConnectionStatus {
                 param($server)
@@ -533,8 +535,13 @@ Set-ExecutionPolicy RemoteSigned
             Test-ConnectionStatus -server "example.com"
         </code></pre>
 
+        
+
 
   <p>Write-Output:</p>
+
+  <p>Write-Output sends data to the output stream, which makes it available for further use such as
+  capturing into a variable, piping to another command, and redirecting a file.</p>
     <pre><code>try {
     Get-Item "C:\fakefile.txt"
 } catch {
