@@ -31,9 +31,9 @@
 
 <h1>Linux Basics and Fundamentals</h1>
 
-<p>This tutorial provides a foundational understanding of core Linux management concepts. It focuses on the Linux file system, handling packages on Debian-based systems, managing services with systemd, and monitoring processes. These practical areas are essential for anyone working with Linux in a system administration or support capacity.</p>
+<p>This tutorial provides a foundational understanding of core Linux management concepts. It focuses on the Linux file system, handling packages on Debian-based systems, managing services with systemd, and monitoring processes. These practical areas are essential for anyone working with Linux in a system administration or support capacity.</p><br>
 
-<hr><br>
+<hr>
 
 <h2>Linux File System Hierarchy Overview</h2>
 <p>The <strong>Linux File System Hierarchy</strong> organizes files logically within the Linux system, essential for administration, troubleshooting, and software management.</p>
@@ -52,9 +52,9 @@
   <li><strong>/dev</strong>: Hardware device files</li>
   <li><strong>/proc</strong>, <strong>/sys</strong>: Virtual filesystems for real-time system information</li>
   <li><strong>/mnt</strong>, <strong>/media</strong>: Mount points for external filesystems and removable media</li>
-</ul>
+</ul><br>
 
-<hr><br>
+<hr>
 
 <h2>Package Management on Debian-based Systems</h2>
 <p>Debian-based systems utilize <strong>APT (Advanced Package Tool)</strong>, managing software through repositories hosting pre-compiled software packages.</p>
@@ -70,7 +70,7 @@
       <li><code>apt search</code>: Search available software</li>
     </ul>
   </li>
-</ul>
+</ul><br>
 
 <p><strong><code>dpkg</code> (Debian Package)</strong>: Low-level package manager used for installing, removing, and managing <code>.deb</code> packages directly.</p>
 <ul>
@@ -80,7 +80,7 @@
   <li>List installed packages: <code>dpkg -l</code></li>
 </ul>
 
-<hr><br>
+<hr>
 
 <h2>Managing System Services</h2><br>
 <p><strong>systemd</strong> is the default initialization and service manager system in modern Linux distributions. It handles startup and management of system services through units and targets.</p>
@@ -89,9 +89,9 @@
   <li>Start/stop/restart: <code>systemctl start|stop|restart &lt;service&gt;</code></li>
   <li>Enable/disable auto-start: <code>systemctl enable|disable &lt;service&gt;</code></li>
   <li>Logs: <code>journalctl -u &lt;service&gt;</code></li>
-</ul>
+</ul><br>
 
-<hr><br>
+<hr>
 
 <h2>Process Management</h2>
 <p><strong>Processes</strong> are active executing programs managed by the Linux kernel, identified by unique PIDs, resource allocation, and scheduling.</p>
@@ -99,9 +99,9 @@
   <li>View: <code>ps</code>, <code>top</code>, <code>htop</code></li>
   <li>Terminate: <code>kill &lt;PID&gt;</code>, <code>pkill &lt;process_name&gt;</code></li>
   <li>Background/foreground: <code>bg</code>, <code>fg</code>, <code>jobs</code></li>
-</ul>
+</ul><br>
 
-<hr><br>
+<hr>
 
 <h2>System Monitoring and Logging</h2>
 <ul>
