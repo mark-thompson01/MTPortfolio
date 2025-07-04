@@ -44,11 +44,15 @@
 <body>
     <h1>Setting up Group Policy</h1>
 
-    <p>The following demonstration outlines how to set up basic GPOs and applying them to an Active Directory user account and an Active Directory computer account.</p>
+    <p>The following demonstration outlines how to set up basic GPOs and applying them to an Active Directory user account and an Active Directory computer account.</p><br>
 
     <h2>GPO Applied to AD User Account</h2>
 
-    <h3>Disable Control Panel and Settings App via Group Policy (User Account GPO)</h3>
+    <h3><strong>1.</strong> Account Lockout Policy</h3>
+    <p>One of the first GPO's that should be created upon spinning up a domain controller is setting the <strong>Active Directory User Account Lockout Policy</strong>.</p>
+    
+
+    <h3><strong>2.</strong>Disable Control Panel and Settings App via Group Policy (User Account GPO)</h3>
     <p><strong>Objective: Prevent a user from accessing the Control Panel and Settings on a Windows domain-joined computer.</strong></p><br>
 
     <p><strong>1.</strong> In Server Manager click on the <strong>Tools</strong> drop-down in the upper right, then select <strong>Group Policy Management</strong>.</p>
