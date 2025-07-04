@@ -48,22 +48,25 @@
 
     <h2>GPO Applied to AD User Account</h2>
 
-    <h3><strong>1.</strong> Account Lockout Policy via Group Policy (User Account GPO)</h3>
-    <p>One of the first GPO's that should be created upon spinning up a domain controller is setting the <strong>Active Directory User Account Lockout Policy</strong>.</p><br>
-    <p><strong>1.</strong> In <strongL>Server Manager</strong> click on the <strong>Tools</strong> drop-down in the upper right, then select <strong>Group Policy Management</strong>.</p>
-    <img src="Images/AccountL1.PNG" alt="AccountL1.PNG"><br>
-    <p><strong>2.</strong> In <strong>Group Policy Management</strong> Expand the <strong>Forest Domain</strong> on the left menu, then click <strong>Create a GPO in this domain, and link it here.</strong>.</p>
-    <img src="Images/AccountL2.PNG" alt="AccountL2.PNG"><br>
-    <p><strong>3.</strong> Name the <strong>New GPO</strong> Account Lockout Policy.</p>
-    <img src="Images/AccountL3.PNG" alt="AccountL3.PNG" style="width:550px; height:250px;"><br>
-    <p><strong>4.</strong> The new GPO will then be listed in the hierarchical structure on the left. Right-click, then select <strong>Edit</strong>.</p>
-    <img src="Images/AccountL4.PNG" alt="AccountL4.PNG"><br>
-    <p><strong>5.</strong> The <strong>Group Policy Management Editor</strong> window will come up. Navigate to <strong>Computer Configuration > Policies > Windows Settings > Account Policies > Account Lockout Policy</strong>.</p>
-    <img src="Images/AccountL5.PNG" alt="AccountL5.PNG"><br>
-    <p><strong>6.</strong> Click on <strong>Account lockout threshold</strong> to the right.</p>
-    <img src="Images/AccountL6.PNG" alt="AccountL6.PNG"><br>
-    <p><strong>7.</strong> Configure the <strong>Account lockout threshold Properties</strong>. For this example, I'm setting the duration to 3, click <strong>Apply</strong>, the <strong>Ok</strong>.</p>
-    <img src="Images/AccountL7.PNG" alt="AccountL7.PNG"><br><br><br><br>
+    <h3><strong>1.</strong> Hide the "Run" Command from Start Menu via Group Policy (User Account GPO)</h3>
+    <p><strong>Objective:</strong> Prevent users from accessing the <strong>Run</strong> dialog <strong>(Win + R)</strong>, which can limit their ability to manually launch control panels, scripts, or unauthorized apps.</p>
+    <p><strong>1.</strong> In <strong>Server Manager</strong> click on the <strong>Tools</strong> drop-down in the upper right, then select <strong>Group Policy Management</strong>.</p>
+    <img src="Images/DR1.PNG" alt="DR1.PNG"><br>
+    <p><strong>2.</strong> In <strong>Group Policy Management</strong> Expand the Forest domain.</p>
+    <img src="Images/DR2.PNG" alt="DR2.PNG"><br>
+    <p><strong>3.</strong> Right-click on the domain and select <strong>Create a GPO in this domain, and Link it here...</strong></p>
+    <img src="Images/DR3.PNG" alt="DR3.PNG"><br>
+    <p><strong>4.</strong> Enter in a name for the <strong>New GPO</strong>, then click <strong>Ok</strong>.</p>
+    <img src="Images/DR4.PNG" alt="DR4.PNG"><br>
+    <p><strong>5.</strong> Right-click on the New GPO in <strong>Group Policy Management</strong> and select <strong>Edit</strong>.</p>
+    <img src="Images/DR5.PNG" alt="DR5.PNG"><br>
+    <p><strong>6.</strong> Under <strong>User Configuration</strong> navigate to <strong> User Configuration > Policies > Administraive Templates > Start Menu and Taskbar, then select <strong>Rmove RUn menu from Start Menu</strong>.</p>
+    <img src="Images/DR6.PNG" alt="DR6.PNG"><br>
+    <p><strong>7.</strong> Select <strong>Enabled</strong>, click <strong>Apply</strong>, then <strong>Ok</strong>.</p>
+    <img src="Images/DR7.PNG" alt="DR7.PNG"><br><br><br><br>
+    
+    
+        
     
 
     <h3><strong>2.</strong>Disable Control Panel and Settings App via Group Policy (User Account GPO)</h3>
@@ -88,7 +91,27 @@
     
     
     <h2>GPO Applied to AD Computer Account</h2>
-    <h3><strong>1.</strong> Adding a Custom Logon Message to domain connnected computers App via Group Policy (User Account GPO).</h3>
+    <h3><strong>1.</strong> Account Lockout Policy via Group Policy (User Account GPO)</h3>
+    <p>One of the first GPO's that should be created upon spinning up a domain controller is setting the <strong>Active Directory User Account Lockout Policy</strong>.</p><br>
+    <p><strong>1.</strong> In <strongL>Server Manager</strong> click on the <strong>Tools</strong> drop-down in the upper right, then select <strong>Group Policy Management</strong>.</p>
+    <img src="Images/AccountL1.PNG" alt="AccountL1.PNG"><br>
+    <p><strong>2.</strong> In <strong>Group Policy Management</strong> Expand the <strong>Forest Domain</strong> on the left menu, then click <strong>Create a GPO in this domain, and link it here.</strong>.</p>
+    <img src="Images/AccountL2.PNG" alt="AccountL2.PNG"><br>
+    <p><strong>3.</strong> Name the <strong>New GPO</strong> Account Lockout Policy.</p>
+    <img src="Images/AccountL3.PNG" alt="AccountL3.PNG" style="width:550px; height:250px;"><br>
+    <p><strong>4.</strong> The new GPO will then be listed in the hierarchical structure on the left. Right-click, then select <strong>Edit</strong>.</p>
+    <img src="Images/AccountL4.PNG" alt="AccountL4.PNG"><br>
+    <p><strong>5.</strong> The <strong>Group Policy Management Editor</strong> window will come up. Navigate to <strong>Computer Configuration > Policies > Windows Settings > Account Policies > Account Lockout Policy</strong>.</p>
+    <img src="Images/AccountL5.PNG" alt="AccountL5.PNG"><br>
+    <p><strong>6.</strong> Click on <strong>Account lockout threshold</strong> to the right.</p>
+    <img src="Images/AccountL6.PNG" alt="AccountL6.PNG"><br>
+    <p><strong>7.</strong> Configure the <strong>Account lockout threshold Properties</strong>. For this example, I'm setting the duration to 3, click <strong>Apply</strong>, the <strong>Ok</strong>.</p>
+    <img src="Images/AccountL7.PNG" alt="AccountL7.PNG"><br><br><br>
+
+
+
+    
+    <h3><strong>2.</strong> Adding a Custom Logon Message to domain connnected computers App via Group Policy (User Account GPO).</h3>
     <p><strong>Objective:</strong> Setting up a Custom Logon Message</p>
 
     <p><strong>1.</strong> Go back into <strong>Server Manager > Tools</strong>, then select <strong>Group Policy Management</strong>.</p>
@@ -104,7 +127,7 @@
     <img src="Images/CL5.PNG" alt="CL5.PNG"><br>
     <p><strong>7.</strong></p></p><br><br><br>
 
-    <h3><strong>2.</strong> Disable USB Storage Devices</h3>
+    <h3><strong>3.</strong> Disable USB Storage Devices</h3>
     <p><strong>Objective:</strong> Prevent all USB mass storage devices (e.g., flash drives) from working on domain-joined computers App via Group Policy (User Account GPO).</p><br>
     <p><strong>1.</strong> In <strong>Group Policy Editor</strong> navigate to <strong>Computer Configuration > Policies > Administrative Templates > System > Removable Storage Access</strong>. Then click-on <strong>All Removeable Storage classes: Deny all access.</strong></p>
     <img src="Images/RSD1.PNG" alt="RSD1.PNG"><br>
