@@ -194,9 +194,7 @@
             NetAdapter
             Select-Object
             NetAdapter | Select-Object Name, Status, LinkSpeed
-            Set
-            Set-NewFirewall Rule -DisplayGroup "File and Printer Sharing" -Enable True
-            Get
+            Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enable True
             Get-NetFirewall -DisplayGroup "Network Discovery"
             Get-WmiObject -query 'select*from SoftwareLicensingService').OA3xOriginalProductKey
             wmic bios get serialnumber
@@ -234,7 +232,10 @@
         <p><strong>NetAdapter</strong></p>
         <img src="Images/Exploration/NetAdapter.png" alt="NetAdapter.png"><br>
         <p><strong>NetAdapter | Select-Object Name, Status, LinkSpeed</strong></p>
-        <img src="Images/Exploration/NetAdapter2.png" alt="NetAdapter2.png"><br><br><br>
+        <img src="Images/Exploration/NetAdapter2.png" alt="NetAdapter2.png"><br>
+        <p><strong>Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enable True</strong></p>
+        <img src="Images/SetNetFirewall.png" alt="SetNetFirewall.png"><br>
+        
         
         
         
