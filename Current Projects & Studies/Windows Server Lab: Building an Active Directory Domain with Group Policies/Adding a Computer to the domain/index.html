@@ -44,15 +44,25 @@
   <h1>Adding a Computer to the Domain</h1>
     <p>For this lab demonstration, I had to go into the NIC properties for the Windows host and add the Windows Server VM IP as the DNS IP to successfully connect and add the machine to the domain in the virtualized environment.</p><br>
 
-    <img src="Images/ControlPanel.png" alt="ControlPanel.png">
-    <img src="Images/Controlpanel2.png" alt="Controlpanel2.png">
-    <img src="Images/NICProperties.png" alt="NICProperties.png">
-    <img src="Images/Sysproperties.png" alt="Sysproperties.png">
+    <p><strong>1.</strong> Open <strong>Network and Sharing Center</strong> under <strong>Control Panel</strong>.</p>
+    <img src="Images/ControlPanel.png" alt="ControlPanel.png"><br>
+    <p><strong>2.</strong> Right-click on the Network Adapter you're configuring, then select <strong>Properties</strong>.</p>
+    <img src="Images/Controlpanel2.png" alt="Controlpanel2.png"><br>
+    <p><strong>3.</strong> Right-click on <strong>Internet Protocol Version 4 (TCP/IPv4)</strong>, then select <strong>Properties</strong>.</p>
+    <img src="Images/NICProperties.png" alt="NICProperties.png"><br>
+    <p><strong>4.</strong> For this example, I have a the address's set up manually. In order for this machine to be added, it's need to be able to communicate with domain controller IP set up as it's DNS server.</p>
+    <img src="Images/Sysproperties.png" alt="Sysproperties.png"><br>
+    <p><strong>5.</strong> After we have the domain controller IP setup as the DNS server for the host. We're ready to go into <strong>System Properties</strong>.</p>
     <img src="Images/Sysproperties2.png" alt="Sysproperties2.png">
-    <img src="Images/DomainAdd.png" alt="DomainAdd.png">
-    <img src="Images/Prompt.png" alt="Prompt.png">
-    <img src="Images/SuccessfulAdd.png" alt="SuccessfulAdd.png">
-    <img src="Images/RestartPrompt.png" alt="RestartPrompt.png">
+    <p><strong>6.</strong> Then under the <strong>Computer Name</strong> tab, click on the <strong>Change</strong> button.</p>
+    <img src="Images/DomainAdd.png" alt="DomainAdd.png"><br>
+    <p><strong>7.</strong> Click on the <strong>Domain</strong> check-box, and then add the domain name of the server.</p>
+    <img src="Images/Prompt.png" alt="Prompt.png"><br>
+    <p><strong>8.</strong> The host will then prompt for an administrative domain username and password to authenticate. Enter in credentials and click <strong>Ok</strong>.</p>
+    <img src="Images/SuccessfulAdd.png" alt="SuccessfulAdd.png"><br>
+    <p><strong>9.</strong> Upon successful authentication, you'll see a "Welcome to the Domain" message.</p>
+    <img src="Images/RestartPrompt.png" alt="RestartPrompt.png"><br>
+    <p><strong>10.</strong> Then prompted to restart the computer to finalize the domain add.</p>
     <img src="Images/RestartNow.png" alt='RestartNow.png">
     
     
