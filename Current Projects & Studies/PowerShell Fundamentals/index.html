@@ -739,15 +739,18 @@ Set-ExecutionPolicy RemoteSigned
         <li>Scheduled tasks and reporting</li>
     </ul><br>
     <h3>Batch user creation in AD</h3>
-        <p><strong>1.</strong> The first step is to create a CSV, for example.</p><br>
-        <pr><code>
-        FirstName,LastName,Username,Password,OU
-        John,Doe,jdoe,P@ssw0rd1,"OU=TestUsers,DC=yourdomain,DC=com"
-        Jane,Smith,jsmith,P@ssw0rd2,"OU=TestUsers,DC=yourdomain,DC=com"
-        </code></pr>
+        <p><strong>1.</strong> The first step is to create a CSV, for this example, I'm using Notepad++ to create a .csv file with the following attributes.</p>
+        <img src="Images/Batch User Creation/csv0.png" alt="csv0.png"><br>
+        <p><strong>2.</strong> Then I'm going to use this script to import the csv file to create two new user accounts in Active Directory.</p>
+        <img src="Images/Batch User Creation/ScriptCode0.png" alt="ScriptCode0.png"><br>
+        <p><strong>3.</strong> Two new user accounts in <strong>Active Directory Users and Computers</strong> in the <strong>TestUsers OU</strong>.</p>
+        <img src="Images/Batch User Creation/csv00.PNG" alt="csv00.PNG"><br>
+        
+        
+       
 
 
-        <br>
+        
 
     <h3>Automating updates</h3>
     <img src="Images/WindowsUpdate.png" alt="WindowsUpdate.png">
