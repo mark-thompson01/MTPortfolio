@@ -44,7 +44,22 @@
     <li><strong>DNS (Domain Name System)</strong> is essential for resolving domain names to IP addresses, especially within a Windows domain.</li>
     <li><strong>DHCP (Dynamic Host Configuration Protocol)</strong> automatically assigns IP addresses and other network settings to client devices.</li>
 </ul>
-<p>In this lab, we configure both on the same Windows Server that will later function as a domain controller.</p><br>
+<p>In this lab, we configure both on the same Windows Server that will later function as a domain controller.</p>
+
+<p>Active Directory depends on DNS to locate domain controllers and services. DHCP simplifies network management by assigning the correct IP and DNS settings to domain-joined computers.</p>
+
+<h3>Without DNS:</h3>
+
+    <ul>
+<li>You cannot promote the server to a domain controller.</li>
+
+<li>Clients will not be able to join the domain.</li>
+    </ul>
+    
+<h3>Without DHCP:</h3>
+    <ul>
+<li>Every client would need manual IP configuration — inefficient and error-prone.</li>
+    </ul>
 
 
 <a href="../index.html">Back to Home</a>
