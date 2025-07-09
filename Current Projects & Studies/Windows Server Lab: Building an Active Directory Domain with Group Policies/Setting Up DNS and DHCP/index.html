@@ -38,7 +38,7 @@
 <h2>Configuring Internal DNS and DHCP on Windows Server 2016</h2>
 
 <p><strong>Overview:</strong></p>
-<p>Before setting up Active Directory, two critical services must be configured: DNS and DHCP.</p><br>
+<p>Before setting up Active Directory, two critical services must be configured: DNS and DHCP.</p>
 
 <ul>
     <li><strong>DNS (Domain Name System)</strong> is essential for resolving domain names to IP addresses, especially within a Windows domain.</li>
@@ -60,6 +60,26 @@
     <ul>
 <li>Every client would need manual IP configuration — inefficient and error-prone.</li>
     </ul>
+
+<h3>Configuring DNS</h3>
+<p><strong>1. Verify DNS Installation</strong></p>
+    <ul>
+        <li>Open <strong>DNS Manager</strong> (dnsmgmt.msc</li>
+        <li>Confirm that a <strong>Forward Lookup Zone</strong> exists for your domain (e.g., Domain-1.local)</li>
+        <li>This zone contains <strong>SRV</strong> and <strong>A records</strong> used for domain authentication</li>
+    </ul><br>
+
+<p><strong>2. Configure DNS Forwarders (Optional)</strong></p>
+<p>Forwarders allow internal DNS to resolve external websites via public DNS servers.</p>
+    <ul>
+        <li>Right-click your server in <strong>DNS Manager > Properties</strong></li>
+        <li>Go to the <strong>Forwarders</strong> tab</li>
+        <li><strong>Add:</strong></li>
+        <li>8.8.8.8 (Google DNS</li>
+        <li>1.1.1.1 (Cloudflare DNS</li>
+        <li>Click <strong>OK</strong> to save</li>
+    </ul>
+
 
 
 <a href="../index.html">Back to Home</a>
