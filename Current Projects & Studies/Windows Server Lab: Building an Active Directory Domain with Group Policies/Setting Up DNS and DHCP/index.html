@@ -41,9 +41,7 @@
   </style>
 </head>
 <body>
-<h1>Setting up DNS and DHCP</h1><br>
-
-<h2>Configuring Internal DNS and DHCP on Windows Server 2016</h2>
+<h1>Setting up DNS and DHCP</h1>
 
 <p><strong>Overview:</strong></p>
 <p>Before setting up Active Directory, two critical services must be configured: DNS and DHCP.</p>
@@ -69,7 +67,7 @@
 <li>Every client would need manual IP configuration — inefficient and error-prone.</li>
     </ul>
 
-<h2>Configuring DNS</h2>
+<h3>Configuring DNS</h3>
 <p><strong>1. Verify DNS Installation</strong></p>
 <p>Typically the first step would be to install the <strong>DNS Server Role</strong>, however, in this example that is already installed. So we'll verify the installation in this step.</p>
     <ul>
@@ -89,7 +87,9 @@
         <li>Click <strong>OK</strong> to save</li>
     </ul><br>
 
-    <h2>Configuring DHCP</h2>
+    <h2>Configuring Internal DNS and DHCP on Windows Server 2016</h2>
+
+    <h3>Configuring DHCP</h3>
     <p><strong>1. Install the DHCP Server Role</strong></p>
     <img src="Images/dhcp1.PNG" alt="dhcp1.PNG">
     <img src="Images/dhcp2.PNG" alt="dhcp2.PNG">
