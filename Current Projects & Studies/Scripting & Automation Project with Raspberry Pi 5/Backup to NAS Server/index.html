@@ -44,6 +44,18 @@
 <h1>Backup to NAS Server</h1>
 <p>In this lab, I'm setting up an automated backup script to backup the Automation directory from the Raspberry Pi 5 to a Raspberry Pi 3 setup as a NAS server. For this to be successful, ssh and directory permissions will need to be explicity configured to the automated backups to be successful. After that is in place, the script will be setup to run once per week.</p><br>
 
+<p><strong>1.</strong> The first step is to generate an ssh public/private key pair.</p>
+<img src="Images/sshsetup0.png" alt="sshsetup0.png"><br>
+<p><strong>2.</strong> After the public/private key pair is generated, it can then be copied to the NAS server.</p>
+<img src="Images/sshsetup2.png" alt="sshsetup2.png"><br>
+<p><strong>3.</strong> After the ssh key file is copied over to the NAS server, it should automatically login upon initiating an ssh session..</p>
+<img src="Images/sshsetup3.png" alt="sshsetup3.png"><br>
+<p><strong>4.</strong> To further confirm, run <strong>whoami</strong>. And, we're in!</p>
+<img src="Images/sshsetup4.png" alt="sshsetup4.png">
+  
+
+
+  
 <img src="Images/Backupcode.png" alt="Backupcode.png"><br>
 <img src="Images/chmod.png" alt="chmod.png"><br>
 <img src="Images/scriptrun.png" alt="scriptrun.png"><br>
