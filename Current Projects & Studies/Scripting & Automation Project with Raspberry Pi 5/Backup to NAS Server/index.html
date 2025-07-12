@@ -52,32 +52,28 @@
 <img src="Images/sshsetup3.png" alt="sshsetup3.png"><br>
 <p><strong>4.</strong> To further confirm, run <strong>whoami</strong>. And, we're in!</p>
 <img src="Images/sshsetup4.png" alt="sshsetup4.png"><br>
-<p><strong>5.</strong> From here, I'll launch <strong>nano</strong> to start creating the script.</p>
+<p><strong>5.</strong> Here, I'm going to give the pi user account that referenced in the script access to the /mnt/nasdrive NAS server directory for the script to run without error.</p>
+<img src="Images/chown.png" alt="chown.png"><br>
+    
+<p><strong>6.</strong> From here, I'll launch <strong>nano</strong> to start creating the script.</p>
 <p>Starting with the specified variables to ensuring that user account is checked for having write permissions to the directory.</p>
 <p>The script then runs rsync with the first four variables and then redirects the results in the log file variable.</p>
 <p>The script then finalizes with the print status in a conditional statement based on the backup being successful or failing.</p>
 <img src="Images/Backupcode.png" alt="Backupcode.png"><br>
 
-<p><strong>6.</strong> Now that the script is written and saved, set the file to be executable.</p>
+<p><strong>7.</strong> Now that the script is written and saved, set the file to be executable.</p>
 <img src="Images/chmod.png" alt="chmod.png"><br>
 
-<p><strong>7.</strong> Script is ready to run.</p>
+<p><strong>8.</strong> Script is ready to run.</p>
 <img src="Images/scriptrun.png" alt="scriptrun.png"><br>
 
-<p><strong>8.</strong> On the Raspberry Pi 3 NAS server, the backup shows successful.</p> 
+<p><strong>9.</strong> On the Raspberry Pi 3 NAS server, the backup shows successful.</p> 
 <img src="Images/scriptresult.png" alt="scriptresult.png"><br>
 
-<p><strong>9.</strong> The script is all ready to go. From here I'm going to set to run once per week as a cronjob.</p>
+<p><strong>10.</strong> The script is all ready to go. From here I'm going to set to run once per week as a cronjob.</p>
 <img src="Images/crontab.png" alt="crontab.png">
 <img src="Images/cronjob2.png" alt="cronjob2.png"><br>
   
-
-
-
-
-
-
-
 
 
 
