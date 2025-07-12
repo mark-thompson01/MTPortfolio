@@ -42,8 +42,19 @@
 </head>
 <body>
 <h1>Setting up DNS and DHCP</h1>
+ <h2>Windows Server Roles</h2>
 
-<p><strong>Overview:</strong></p>
+<p><strong>Windows Server Roles</strong> are predefined sets of software features built into Windows Server that allow the server to perform specific <strong>network services and infrastructure functions</strong>. Each role defines what the server does — for example:</p>
+<ul>
+    <li><strong>Active Directory Domain Services (AD DS)</strong> makes the server a <strong>domain controller</strong> for managing users, computers, and policies.</li>
+    <li><strong>DNS Server</strong> handles the name resolution within the network.</li>
+    <li><strong>DHCP Server</strong> assigns IP addresses to client machines.</li>
+    <li><strong>File and Storage Services</strong> allow the server to host and manage shared files and storage.</li>
+</ul>
+
+<p>In a lab environment, assigning and configuring these roles lets you <strong>simulate real-world IT infrastructure</strong>, enabling hands-on learning in areas like <strong>domain management</strong>, policy enforcement, and network services deployment</strong> — all from your VirtualBox-based Windows Server instance.</p><br>
+
+<h2>Overview:</h2>
 <p>Before setting up Active Directory, two critical services must be configured: DNS and DHCP.</p>
 
 <ul>
