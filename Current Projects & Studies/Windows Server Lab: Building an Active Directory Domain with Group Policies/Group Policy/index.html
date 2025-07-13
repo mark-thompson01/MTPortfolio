@@ -175,7 +175,17 @@
     <img src="Images/SG13.PNG" alt="SG13.PNG">
     <p><strong>Result:</strong> GPO is created and linked</p><br><br>
 
-    <
+    <h3>Step 4: Apply GPO to Security Group Using Security Filtering</h3>
+    <p><strong>1.</strong> In Group Policy Management, select your new GPO</p>
+    <img src="Images/SG15.PNG" alt="SG15.PNG">
+    <p><strong>2.</strong> In the <strong>Scope</strong> tab, under <strong>Security Filtering:</strong></p>
+    <ul>
+        <li><strong>Remove</strong> Authenticated Users</li>
+        <li><strong>Add</strong> the group you created (e.g., <strong>Group_Policy_Users</strong>)</li>
+    </ul>
+    <img src="Images/SG16.PNG" alt="SG16.PNG">
+    <img src="Images/SG17.PNG" alt="SG17.PNG">
+    <p><strong>Result:</strong> The GPO will now <strong>only apply</strong> to members of that group.</p>
 
     
     
