@@ -185,9 +185,28 @@
     </ul>
     <img src="Images/SG16.PNG" alt="SG16.PNG">
     <img src="Images/SG17.PNG" alt="SG17.PNG">
-    <p><strong>Result:</strong> The GPO will now <strong>only apply</strong> to members of that group.</p>
+    <p><strong>Result:</strong> The GPO will now <strong>only apply</strong> to members of that group.</p><br>
 
-    
+    <h4>Important: Verify Group Has "Read" and "Apply Group Policy" Permissions</h4>
+    <p><strong>1.</strong> Still in GPMC, go to the <strong>Delegation</strong> tab of the GPO</p>
+    <img src="Images/SG18.PNG" alt="SG18.PNG">
+    <p><strong>2.</strong> Click <strong>Advanced</strong></p>
+    <img src="Images/SG19.PNG" alt="SG19.PNG">
+    <p><strong>3.</strong> Confirm that group has these permissions</p>
+    <ul>
+        <li><strong>Read</strong></li>
+        <li><strong>Apply group policy</strong></li>
+    </ul>
+    <img src="Images/SG20.PNG" alt="SG20.PNG"><br><br>
+
+    <h3>Step 5: Update and Test</h3>
+    <ul>
+        <li>On a client machine run, <strong>gupdate /force</strong></li>
+        <li>Log in as a user inside the group - verify the GPO applies</li>
+        <li>Log in as a user not in the group - verify the GPO does not apply</li>
+    </ul>
+
+    <p>This method provides you with the precise control over who receives the GPO, using Security Groups instead of broad OU application.l</p>
     
 
     
