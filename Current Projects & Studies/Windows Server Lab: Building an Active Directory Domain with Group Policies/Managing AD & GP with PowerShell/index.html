@@ -63,7 +63,23 @@
 <P><strong>2.</strong> Force user to change password at next logon.</P>
 <img src="Images/ps3.PNG" alt="ps3.PNG" style="width:900px; height:100px;"><br><br><br>
 
-<h2>Adding a Security Group - GPO to AD User Account</h2>
+<h2>Apply a GPO to a User via OU</h2>
+<p><strong>1.</strong> If the user account is in a specific OU, you can link an existing GPO to that OU using:</p>
+<p>THis links the <strong>Disable Control Panel</strong> GPO to the <strong>TestUsers</strong> OU, which applies to all users in that OU - unless Security Filtering is used to limit scope.</p>
+<img src="Images/GPO1.PNG" alt="GPO1.PNG"><br>
+
+<h2>Use Security Filtering to Target a Specific User</h2>
+<p><strong>1.</strong> First, grant the GPO permission to a specific user account:</p>
+<p>This gives the user <strong>Read</strong> and <strong>Apply Group Policy</strong> permissions.</p>
+<img src="Images/GPO2.PNG" alt="GPO2.PNG">
+<img src="Images/GP03.PNG" alt="GP03.PNG"><br>
+
+<p><strong>2.</strong> <strong>Optional:</strong> Remove <strong>Authenticated Users</strong> from security filtering if you want only this user to be effected.</p>\
+<p>Be careful removing Authenticated Users - only do this if you're explicitly assigned permissions to the correct scope.</p>
+<img src="Images/GPO4.PNG" alt="GPO4.PNG">
+
+
+
 
     
     
