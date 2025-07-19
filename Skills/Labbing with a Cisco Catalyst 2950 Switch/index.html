@@ -217,6 +217,20 @@ and configured a default gateway so the switch can communicate with devices outs
 
 
 <h2>Setting up a SPAN - Switch Port Analyzer</h2>
+<p>Monitoring the network traffic that is passing through the switch can be implemented for various scenarios.</p>
+<p>Whether it's monitoring and analyzing the security of the network, troubleshooting network communications, analyzing what protocols are in use across endpoints, etc.</p>
+<p>Here, I'm going to demonstrate setting up and configuring a basic <strong>SPAN - Switch Port Analyzer</strong> source and destination port on the switch.</p>
+<p>To gather the network traffic from each endpoint connected to the specified port range.</p><br>
+
+<h3>1. Configuring a SPAN (Port Mirroring) Session</h3>
+<p>Setting this up configures a <strong>SPAN session</strong>.</p>
+<p>To mirror traffic from several source interfaces to one destination interface for monitoring purposes.</p>
+<img src="Images/SPAN/span1.png" alt="span1.png"><br><br>
+
+<h3>2. Verifying SPAN Configuration</h3>
+<p>This step verifies that <strong>SPAN session 1</strong> is actively monitoring the correct source and destination interfaces.</p>
+<img src="Images/SPAN/span2.png" alt="span2.png"><br><br>
+
 
 
 
