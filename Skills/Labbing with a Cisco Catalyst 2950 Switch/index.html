@@ -107,11 +107,22 @@
 <p>Cluster Command Switching is a <strong>legacy Cisco feature</strong> that allows one switch - called the <strong>Cluster Command Switch (CCS)</strong> - to manage a group of other nearby member switches using <strong>Cisco Discovery Protcol (CDP).</strong></p>
 <p><strong>Note:</strong> Cluster management isn't often used in modern production environments and has been largely replaced by tools such as <strong>Cisco Prime Infrastructure, DNA Center,</strong> or other centralized configurations.</p>
 <p>In this example, I'm going to enter in yes and enter the specified cluster name when prompted.</p>
-<img src="Images/From Scratch/conf10.png" alt="conf10"><br><br>
+<img src="Images/From Scratch/conf10.png" alt="conf10.png"><br><br>
 
 
-<h3>7. </h3>
+<h3>7. Review the Generated Configuration Script</h3>
+<p>Once you complete the Cisco Setup Wizard, the switch presents a preview of the configuration it's about to apply based on your responses.</p>
+<p>This step is the final review before saving the configuration to NVRAM. If everything looks correct, the next prompt will ask whether you'd like to save this configuration so it's retained after a reboot.</p>
+<img src="Images/From Scratch/conf11.png" alt="conf11.png">
+<img src="Images/From Scratch/conf12.png" alt="conf12.png"><br><br>
 
+<h3>8. Save or Discard the Configuration</h3>
+<p>After previewing the full configuration script, the Cisco Setup Wizard prompts you to choose what to do next:</p>
+<p>In this example, I'm going to enter in 2 to save the configuration to NVRAM (startup-config) and exit to the command prompt.</p>
+<img src="Images/From Scratch/conf14.png" alt="conf14.png">
+<p>After choosing to save the configuration, the switch writes the configuration to NVRAM and exits the setup wizard. </p>
+<p>A message might come up that indicates the line protocol on vlan1 id down. This simplyu means that there are no physical ports assigned to VLAN 1 are currently connected or active - a normal occurrence in lab setups. Once a device is connected to a port in VLAN1, the interface will automatically come up.</p>
+<img src="Images/conf15.png" alt="conf15.png"><br><br>
 
 
 
