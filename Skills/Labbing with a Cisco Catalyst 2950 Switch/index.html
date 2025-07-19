@@ -49,9 +49,9 @@
 <p>Performing a factory reset on a Cisco Catalyst 2950 switch to reconfigure it from scratch.</p><br>
 <p><strong>1.</strong> Running factory reset commands</p>
 <pre><code>
-flash_init
-del flash:config.text
-del flash:vlan.dat
+<strong>flash_init</strong> - Initializes the flash file system to access and manipulate files (like configs or VLAN data).
+<strong>del flash:config.text</strong> - Delete the startup configuration file. 
+<strong>del flash:vlan.dat</strong> - Deletes the VLAN database file.
 </code></pre>
 <img src="Images/Factory Reset/fac4.png" alt="fac4.png"><br>
 
