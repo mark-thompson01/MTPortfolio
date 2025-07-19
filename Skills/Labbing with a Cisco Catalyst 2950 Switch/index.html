@@ -157,7 +157,29 @@
 <img src="Images/Post Initial Setup/post6.png" alt="post6.png"><br><br>
 
 
-<h3>5. </h3>
+<h3>5. Secure Console Access with a Password</h3>
+<p>Setting this configuration sets it up for anyone who connects to the switch via the console port must enter a password.</p>
+<p>It's a basic, yet essential security measure to prevent unauthorized physical access to switch settings.</p>
+<img src="Images/Post Initial Setup/post7.png" alt="post7.png">
+<p>Here, we have finalized the basic management setup of the Cisco Catalyst 2950. Securing the local (console) and remote (VTY/Telnet) acess with passwords, assigned an IP address to VLAN interface for management access, 
+and configured a default gateway so the switch can communicate with devices outside the subnet.</p>
+<img src="Images/Post Initial Setup/post8.png" alt="post8.png"><br><br>
+
+<h3>6. Configure Access Ports for Workstations</h3>
+<p>Here, I've configured the ports Fa0/1-24 as access ports for end user devices.</p>
+<p>In this example, these ports are assigned to VLAN 1 and configured with descriptions for clarity.</p>
+<p>The <strong>spanning-tree portfast</strong> is enabled to improve connection time for connected workstations</p>
+<img src="Images/Post Initial Setup/post9.png" alt="post9.png"><br><br>
+
+<h3>7. Exit, End, Write Memory</h3>
+<p>From there, type in <strong>exit</strong>, <strong>end</strong>, back to <strong>Privileged EXEC Mode</strong> and enter in <strong>write memory</strong>.</p>
+<img src="Images/Post Initial Setup/post10.png" alt="post10.png">
+<img src="Images/Post Initial Setup/post11.png" alt="post11.png"><br><br><br><br>
+
+
+<h2>Setting Up VLANs</h2>
+
+  
   
 
 
