@@ -177,7 +177,30 @@ and configured a default gateway so the switch can communicate with devices outs
 <img src="Images/Post Initial Setup/post11.png" alt="post11.png"><br><br><br><br>
 
 
-<h2>Setting Up VLANs</h2>
+<h2>Setting Up VLANs</h2><br>
+
+<h3>1. Create and Name VLANs for Logical Segmention</h3>
+<p>To get started with creating and configuring <strong>VLANs</strong> we need to first access <strong>Global Configuration Mode</strong> from <strong>Privileged EXEC Mode</strong>.</p>
+<p>In this example, two VLANS: VLAN 10 (LAB-1) and VLAN 20 (LAB-2) are created.</p>
+<p>VLANs allow you to segment the switch into multiple logical networks, even though all device are physically connected to the same hardware.</p>
+<p>Naming the VLANs helps with organization and troulbeshooting.</p>
+<img src="Images/VLANs/vlan1.png" alt="vlan1.png"><br><br>
+
+<h3>2. Assign Switch Ports to VLANs and Save the Configuration</h3>
+<p>In this step, physical switch ports to VLAN 10 and 20 using the <strong>interface range</strong> command.</p>
+<p>Descriptions are added to document their roles.</p>
+<p>After entering in the changes, save the configuration to NVRAM using <strong>write memory</strong> to make the setup persistent.</p>
+<img src="Images/VLANs/vlan2.png" alt="vlan2.png"><br><br>
+
+<h3>3. Verify VLAN Configuration</h3>
+<p>After assigning ports to VLANs and saving the configuration, the command <strong>show vlan brief</strong> is used to confirm that every is correctly set up.</p>
+<img src="Images/VLANs/vlan3.png" alt="vlan3.png"><br><br><br><br>
+
+
+<h2>Configuring Port Security</h2>
+
+  
+
 
   
   
