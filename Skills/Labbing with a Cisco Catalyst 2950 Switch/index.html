@@ -49,7 +49,12 @@
 <h2>Performing a Factory Reset</h2>
 <p>Performing a factory reset on a Cisco Catalyst 2950 switch to reconfigure it from scratch.</p><br>
 <p><strong>1.</strong> Running factory reset commands</p>
-<img src="Images/Factory Reset/fac4.png" alt="fac4.png">
+<pre><code>
+flash_init
+del flash:config.text
+del flash:vlan.dat
+</code></pre>
+<img src="Images/Factory Reset/fac4.png" alt="fac4.png"><br>
 
 
 <a href="../index.html">Back to Home</a> <!-- Link back to the homepage -->
