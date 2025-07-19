@@ -130,7 +130,26 @@
 <img src="Images/From Scratch/conf16.png" alt="conf16.png"><br><br><br><br>
 
 
-<h2>Post Initial Setup</h2>
+<h2>Post Initial Setup</h2><br>
+
+<h3>1. Enter Privileged EXEC Mode</h3>
+<p>After exiting the setup wizard and reaching the CLI, you're placed in <strong>User EXEC Mode</strong> (prompt ends in >), which provides limited read-only access.
+<p>To begin managing the switch, type <strong>enable</strong></p>
+<img src="Images/Post Initial Setup/post1.png" alt="post1.png">
+<p>This command elevates you to <strong>Privileged EXEC mode</strong> (prompt ends in #), where you can issue high-level diagnostic commands to enter configuration mode to make changes.</p><br><br>
+
+<h3>2. Enter Global Configuration Mode</h3>
+<p>Once you're in <strong>Privileged EXEC Mode</strong> (MT0#, the command <strong>configure terminal</strong> or shortcut <strong>conf t</strong> takes you into <strong>Global Configuration Mode</strong>.</p>
+<img src="Images/Post Initial Setup/post2.png" alt="post2.png">
+<img src="Images/Post Initial Setup/post3.png" alt="post3.png"><br><br>
+
+<h3>3. Change Switch Hostname</h3>
+<p>Once in <strong>Global Configuration Mode</strong>, one of the first things that can be done is changing the hostname of the switch</p>
+<p>In this example, I'll specify the new hostname to be <strong>switch1</strong>.</p>
+<img src="Images/Post Initial Setup/post4.png" alt="post4.png">
+<img src="Images/Post Initial Setup/post5.png" alt="post5.png">
+
+
 
 
 
