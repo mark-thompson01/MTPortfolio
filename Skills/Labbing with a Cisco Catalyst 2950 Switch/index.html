@@ -43,7 +43,7 @@
   </style>
 </head>
 <body>
-<h1>Labbing with a Cisco Catalyst 2950 Switch</h1><br>
+<h1>Labbing with a Cisco Catalyst 2950 Switch</h1>
 
 <h2>Performing a Factory Reset</h2>
 <p>Performing a factory reset on a Cisco Catalyst 2950 switch to reconfigure it from scratch.</p><br>
@@ -61,11 +61,13 @@
 <h3>3. Boot Up</h3>
 <p>The <strong>IOS (Internetwork Operating System</strong> image is being loaded from flash memory.</p>
 <p>The swtitch then <strong>initializes the flash file system</strong> again after loading the IOS.</p>
-<p>This prepares the switch to access the saved files (e.g., new configs, logs, VLAN database). It's one of the final steps before the switch reaches the interactive CLI or setup prompt.</p>
+<p>This prepares the switch to access the saved files (e.g., new configs, logs, VLAN database).</p>
+<p>It's one of the final steps before the switch reaches the interactive CLI or setup prompt.</p>
 <img src="Images/Factory Reset/fac6.png" alt="fac6.png"><br><br>
 
 <h3>4. Final phase of booting up</h3>
-<p>Here the switch is in the final phase of booting up after issuing the <strong>boot</strong> command. The completion of the <strong>Cisco IOS boot process</strong> after a factory reset.</p>
+<p>Here the switch is in the final phase of booting up after issuing the <strong>boot</strong> command.</p>
+<p>The completion of the <strong>Cisco IOS boot process</strong> after a factory reset.</p>
 <img src="Images/Factory Reset/fac7.png" alt="fac7.png"><br><br>
 
 <h3>5. The switch has fully rebooted</h3>
@@ -74,7 +76,7 @@
 <p>From here, the switch will prompt for different configurations to be set to set it up from scratch.</p><br><br><br><br>
 
 
-<h2>Configuring Switch from Scratch</h2><br>
+<h2>Configuring Switch from Scratch</h2>
 
 <h3>1. System Configuration Dialog (setup Wizard)</h3>
 <p>After the switch is factory reset it'll go into the <strong>System Configuration Dialog (setup Wizard)</strong> of the Cisco Catalyst 2950.</p>
@@ -82,7 +84,8 @@
 <img src="Images/From Scratch/conf1.png" alt="conf1.png"><br><br>
 
 <h3>2. Password Setup</h3>
-<p>Here, the password is being set <strong>Enable Secret</strong> prompt. This is the primary secure password for accessing <strong>privileged EXEC mode (MT0#)</strong></p>
+<p>Here, the password is being set <strong>Enable Secret</strong> prompt.</p>
+<p>This is the primary secure password for accessing <strong>privileged EXEC mode (MT0#)</strong></p>
 <p>The <strong>enable secret</strong> is stored in encrypted form in the config</p>
 <img src="Images/From Scratch/conf2.png" alt="conf2.png"><br><br>
 
@@ -94,25 +97,31 @@
 
 <h3>5. Assign a Management Interface</h3>
 <p>After reviewing the interface summary, the switch prompts you to enter the interface used for network management.</p>
-<p><strong>Important:</strong> This is not asking for a physical interface like <strong>FastEthernet0/1</strong>. Instead, it's asking you to specify a <strong>Switched Virtual Interface (SVI)</strong> - typically vlan1.</p>
-<p>This tells the switch you want to assign an IP address to <strong>VLAN 1</strong>, which is the default management VLAN used on most Cisco Layer 2 switches (like the Catalyst 2950</p>
+<p><strong>Important:</strong> This is not asking for a physical interface like <strong>FastEthernet0/1</strong>.</p>
+<p>Instead, it's asking you to specify a <strong>Switched Virtual Interface (SVI)</strong> - typically vlan1.</p>
+<p>This tells the switch you want to assign an IP address to <strong>VLAN 1</strong>.</p>
+<p>Which is the default management VLAN used on most Cisco Layer 2 switches (like the Catalyst 2950).</p>
+<p>This step is critial - it gives the switch a Layer 3 address so it can be remotely managed over the network.</p>
+<p>via Telnet, SSH, SNMP, or just to test connectivity via ping.</p>
 <img src="Images/From Scratch/conf5.png" alt="conf5.png">
 <img src="Images/From Scratch/conf6.png" alt="conf6.png">
 <img src="Images/From Scratch/conf7.png" alt="conf7.png">
-<p>This step is critial - it gives the switch a Layer 3 address so it can be remotely managed over the network via Telnet, SSH, SNMP, or just to test connectivity via ping.</p>
 <img src="Images/From Scratch/conf8.png" alt="conf8.png"><br><br>
 
 <h3>6. Enable Cluster Command Switching</h3>
 <p>After assigning an IP address to VLAN 1, the setup wizard prompts you to optionally enable <strong>cluster management</strong>:</p>
-<p>Cluster Command Switching is a <strong>legacy Cisco feature</strong> that allows one switch - called the <strong>Cluster Command Switch (CCS)</strong> - to manage a group of other nearby member switches using <strong>Cisco Discovery Protcol (CDP).</strong></p>
-<p><strong>Note:</strong> Cluster management isn't often used in modern production environments and has been largely replaced by tools such as <strong>Cisco Prime Infrastructure, DNA Center,</strong> or other centralized configurations.</p>
+<p>Cluster Command Switching is a <strong>legacy Cisco feature</strong> that allows one switch - called the <strong>Cluster Command Switch (CCS)</strong></p>,
+<p>to manage a group of other nearby member switches using <strong>Cisco Discovery Protcol (CDP).</strong></p>
+<p><strong>Note:</strong> Cluster management isn't often used in modern production environments and has been largely replaced,</P>
+<p>by tools such as <strong>Cisco Prime Infrastructure, DNA Center,</strong> or other centralized configurations.</p>
 <p>In this example, I'm going to enter in yes and enter the specified cluster name when prompted.</p>
 <img src="Images/From Scratch/conf10.png" alt="conf10.png"><br><br>
 
 
 <h3>7. Review the Generated Configuration Script</h3>
 <p>Once you complete the Cisco Setup Wizard, the switch presents a preview of the configuration it's about to apply based on your responses.</p>
-<p>This step is the final review before saving the configuration to NVRAM. If everything looks correct, the next prompt will ask whether you'd like to save this configuration so it's retained after a reboot.</p>
+<p>This step is the final review before saving the configuration to NVRAM.</p>
+<p>If everything looks correct, the next prompt will ask whether you'd like to save this configuration so it's retained after a reboot.</p>
 <img src="Images/From Scratch/conf11.png" alt="conf11.png">
 <img src="Images/From Scratch/conf12.png" alt="conf12.png"><br><br>
 
@@ -121,25 +130,30 @@
 <p>In this example, I'm going to enter in 2 to save the configuration to NVRAM (startup-config) and exit to the command prompt.</p>
 <img src="Images/From Scratch/conf14.png" alt="conf14.png">
 <p>After choosing to save the configuration, the switch writes the configuration to NVRAM and exits the setup wizard. </p>
-<p>A message might come up that indicates the line protocol on vlan1 id down. This simplyu means that there are no physical ports assigned to VLAN 1 are currently connected or active - a normal occurrence in lab setups. Once a device is connected to a port in VLAN1, the interface will automatically come up.</p>
+<p>A message might come up that indicates the line protocol on vlan1 id down.</p>
+<p>This simply means that there are no physical ports assigned to VLAN 1 are currently connected or active - a normal occurrence in lab setups.</p>
+<p>Once a device is connected to a port in VLAN1, the interface will automatically come up.</p>
 <img src="Images/From Scratch/conf15.png" alt="conf15.png"><br><br>
 
 
 <h3>9. Reboot to Switch Prompt</h3>
-<p>After the switch writes the configurations to NVRAM and reboots it'll prompt to <strong>Press RETURN to get started:</strong>. Upon pressing enter it'll show the switch prompt > followed by the hostanem of thw switch.</p>
+<p>After the switch writes the configurations to NVRAM and reboots it'll prompt to <strong>Press RETURN to get started:</strong>.</p>
+<p>Upon pressing enter it'll show the switch prompt > followed by the hostanem of thw switch.</p>
 <img src="Images/From Scratch/conf16.png" alt="conf16.png"><br><br><br><br>
 
 
-<h2>Post Initial Setup</h2><br>
+<h2>Post Initial Setup</h2>
 
 <h3>1. Enter Privileged EXEC Mode</h3>
 <p>After exiting the setup wizard and reaching the CLI, you're placed in <strong>User EXEC Mode</strong> (prompt ends in >), which provides limited read-only access.
 <p>To begin managing the switch, type <strong>enable</strong></p>
 <img src="Images/Post Initial Setup/post1.png" alt="post1.png">
-<p>This command elevates you to <strong>Privileged EXEC mode</strong> (prompt ends in #), where you can issue high-level diagnostic commands to enter configuration mode to make changes.</p><br><br>
+<p>This command elevates you to <strong>Privileged EXEC mode</strong> (prompt ends in #),</p>
+<p>where you can issue high-level diagnostic commands to enter configuration mode to make changes.</p><br><br>
 
 <h3>2. Enter Global Configuration Mode</h3>
-<p>Once you're in <strong>Privileged EXEC Mode</strong> (MT0#, the command <strong>configure terminal</strong> or shortcut <strong>conf t</strong> takes you into <strong>Global Configuration Mode</strong>.</p>
+<p>Once you're in <strong>Privileged EXEC Mode</strong>,</p>
+<p>(MT0#, the command <strong>configure terminal</strong> or shortcut <strong>conf t</strong> takes you into <strong>Global Configuration Mode</strong>.</p>
 <img src="Images/Post Initial Setup/post2.png" alt="post2.png">
 <img src="Images/Post Initial Setup/post3.png" alt="post3.png"><br><br>
 
@@ -151,7 +165,8 @@
 
 
 <h3>4. Setup MOTD Banner</h3>
-<p>Here, I'll setup and example banner to demonstrate the feature. <strong>MOTD - Message of the Day</strong> banners are used to display a login message.</p>
+<p>Here, I'll setup and example banner to demonstrate the feature.</p>
+<p><strong>MOTD - Message of the Day</strong> banners are used to display a login message.</p>
 <p>This is useful for compliance, legal disclaimers, or basic identification of the device's role on the network.</p>
 <p>In this example, I'll specify the banner as "#CENTRAL SWITCH"#</p>
 <img src="Images/Post Initial Setup/post6.png" alt="post6.png"><br><br>
@@ -161,8 +176,10 @@
 <p>Setting this configuration sets it up for anyone who connects to the switch via the console port must enter a password.</p>
 <p>It's a basic, yet essential security measure to prevent unauthorized physical access to switch settings.</p>
 <img src="Images/Post Initial Setup/post7.png" alt="post7.png">
-<p>Here, we have finalized the basic management setup of the Cisco Catalyst 2950. Securing the local (console) and remote (VTY/Telnet) acess with passwords, assigned an IP address to VLAN interface for management access, 
-and configured a default gateway so the switch can communicate with devices outside the subnet.</p>
+<p>Here, we have finalized the basic management setup of the Cisco Catalyst 2950.</p> 
+<p>Securing the local (console) and remote (VTY/Telnet) acess with passwords,</p>
+<p>assigned an IP address to VLAN interface for management access,</p>
+<p>and configured a default gateway so the switch can communicate with devices outside the subnet.</p>
 <img src="Images/Post Initial Setup/post8.png" alt="post8.png"><br><br>
 
 <h3>6. Configure Access Ports for Workstations</h3>
@@ -173,11 +190,10 @@ and configured a default gateway so the switch can communicate with devices outs
 
 <h3>7. Exit, End, Write Memory</h3>
 <p>From there, type in <strong>exit</strong>, <strong>end</strong>, back to <strong>Privileged EXEC Mode</strong> and enter in <strong>write memory</strong>.</p>
-<img src="Images/Post Initial Setup/post10.png" alt="post10.png">
 <img src="Images/Post Initial Setup/post11.png" alt="post11.png"><br><br><br><br>
 
 
-<h2>Creating & Configuring VLANs</h2><br>
+<h2>Creating & Configuring VLANs</h2>
 
 <h3>1. Create and Name VLANs for Logical Segmention</h3>
 <p>To get started with creating and configuring <strong>VLANs</strong> we need to first access <strong>Global Configuration Mode</strong> from <strong>Privileged EXEC Mode</strong>.</p>
@@ -218,8 +234,10 @@ and configured a default gateway so the switch can communicate with devices outs
 
 <h2>Setting up a SPAN - Switch Port Analyzer</h2>
 <p>Monitoring the network traffic that is passing through the switch can be implemented for various scenarios.</p>
-<p>Whether it's monitoring and analyzing the security of the network, troubleshooting network communications, analyzing what protocols are in use across endpoints, etc.</p>
-<p>Here, I'm going to demonstrate setting up and configuring a basic <strong>SPAN - Switch Port Analyzer</strong> source and destination port on the switch.</p>
+<p>Whether it's monitoring and analyzing the security of the network,</p>
+<p>troubleshooting network communications, analyzing what protocols are in use across endpoints, etc.</p>
+<p>Here, I'm going to demonstrate setting up and configuring a basic</p>
+<p><strong>SPAN - Switch Port Analyzer</strong> source and destination port on the switch.</p>
 <p>To gather the network traffic from each endpoint connected to the specified port range.</p><br>
 
 <h3>1. Configuring a SPAN (Port Mirroring) Session</h3>
