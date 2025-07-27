@@ -69,7 +69,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
         <strong>Ubuntu Linux VM:</strong> Used as the simulated target with ports 22 and 80 open.
     </blockquote>
 
-    <p>These machines are connected via a virtual network to ensure controlled and reproducible results.</p>
+    <p>These machines are connected via a virtual network to ensure controlled and reproducible results.</p><br>
 
     <h2>What is tcpdump?</h2>
     <p>
@@ -94,7 +94,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
         <code>tcpdump -i eth0 src 10.38.1.113 and dst port 22</code><br>
         Captures SSH traffic originating from the Kali VM to the Ubuntu VM.
     </li>
-</ul>
+</ul><br><br>
 
 
     <h2>Generating Network Traffic</h2>
@@ -136,13 +136,13 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <p><strong>hping data injection</strong></p>
     <img src="Images/hping%20data%20injection.PNG" alt="hping Data Injection">
     <p><strong>hping spoofed IP source</strong></p>
-    <img src="Images/hping%20spoofed%20IP%20source%20116.PNG" alt="hping Spoofed Traffic">
+    <img src="Images/hping%20spoofed%20IP%20source%20116.PNG" alt="hping Spoofed Traffic"><br><br>
 
     <h2>Saving Captures for Analysis</h2>
     <p>Use the following command to save traffic to a PCAP file:</p>
     <code>tcpdump -i eth0 -w network_capture.pcap</code>
     <p>To preserve captured traffic for analysis with Wireshark, use the -w option: tcpdump -i eth0 -w network_capture.pcap. This saves the traffic to a PCAP file, which can be loaded into Wireshark for detailed inspection.</p>
-    <img src="Images/tcpdump%20capture%20start%202.PNG" alt="tcpdump Capture Start">
+    <img src="Images/tcpdump%20capture%20start%202.PNG" alt="tcpdump Capture Start"><br><br>
 
     <h2>Analyzing Traffic with Wireshark</h2>
     <p>Wireshark allows for in-depth examination of network data:</p>
@@ -250,7 +250,7 @@ The setup consists of a small, virtualized network consisting of two virtual mac
     <p>All packets have a spoofed source IP address of 192.168.1.100. The actual system sending the traffic (Kali VM) is hiding its true IP by crafting packets with this fake source address.
 </p>
     
-    <img src="Images/Spoofed%20Traffic.png" alt="Spoofed Traffic">
+    <img src="Images/Spoofed%20Traffic.png" alt="Spoofed Traffic"><br>
 
     <h2>Real World Application</h2>
     <p>
