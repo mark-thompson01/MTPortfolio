@@ -84,25 +84,25 @@
 <p>Typically the first step would be to install the <strong>DNS Server Role</strong>, however, in this example that is already installed. So we'll verify the installation in this step.</p>
     <ul>
         <li>Open <strong>DNS Manager</strong> (dnsmgmt.msc)</li>
-        <img src="Images/DNS2/dns-1.PNG" alt="dns-1.PNG">
+        <img src="Images/DNS2/dns-1.PNG" alt="dns-1.PNG"><br>
 <h4>2. Confirm that a <strong>Forward Lookup Zone</strong> exists for your domain (e.g., Domain-1.local)</h4>
-        <img src="Images/DNS2/dns-2.PNG" alt="dns-2.PNG">
+        <img src="Images/DNS2/dns-2.PNG" alt="dns-2.PNG"><br>
         <h4>3. This zone contains <strong>A records</strong> used for domain authentication</h4>
-        <img src="Images/DNS2/dns-3.PNG" alt="dns-3.PNG">
+        <img src="Images/DNS2/dns-3.PNG" alt="dns-3.PNG"><br>
     </ul><br>
 
 <h2>Configure DNS Forwarders (Optional)</h2>
 <p><Forwarders allow internal DNS to resolve external websites via public DNS servers.</p>
     <ol>
         <li>Right-click your server in <strong>DNS Manager > Properties</strong></li>
-        <img src="Images/DNS2/dns--5.PNG" alt="dns--5.PNG" style="width:400px; height:475px;">
+        <img src="Images/DNS2/dns--5.PNG" alt="dns--5.PNG" style="width:400px; height:475px;"><br>
         <li>Go to the <strong>Forwarders</strong> tab</li>
-        <img src="Images/DNS2/dns--6.PNG" alt="dns--6.PNG">
+        <img src="Images/DNS2/dns--6.PNG" alt="dns--6.PNG"><br>
         <li><strong>Add:</strong></li>
-        <img src="Images/DNS2/dns--7.PNG" alt="dns--7.PNG">
+        <img src="Images/DNS2/dns--7.PNG" alt="dns--7.PNG"><br>
         <li>8.8.8.8 (Google DNS)</li>
         <li>1.1.1.1 (Cloudflare DNS)</li>
-        <img src="Images/DNS2/dns--8.PNG" alt="dns--8.PNG">
+        <img src="Images/DNS2/dns--8.PNG" alt="dns--8.PNG"><br>
         <li>Click <strong>OK</strong> to save</li>
     </ol><br>
 
@@ -110,19 +110,19 @@
     <h1>Configuring DHCP</h1>
     <h2>Install the DHCP Server Role</h2>
     <h4>1. Click the <strong>Add roles and features in Server Manager</strong>.</h4>
-    <img src="Images/dhcp1.PNG" alt="dhcp1.PNG" style="width:500px; height:400px;">
+    <img src="Images/dhcp1.PNG" alt="dhcp1.PNG" style="width:500px; height:400px;"><br>
     <h4>2. The installation wizard will come up to follow the prompts.</h4>
-    <img src="Images/dhcp2.PNG" alt="dhcp2.PNG">
+    <img src="Images/dhcp2.PNG" alt="dhcp2.PNG"><br>
     <h4>3. For this example, I'm selecting <strong>Role-based or feature-based</strong> installation.</h4>
-    <img src="Images/dhcp3.PNG" alt="dhcp3.PNG">
+    <img src="Images/dhcp3.PNG" alt="dhcp3.PNG"><br>
     <h4>4. Server Selection:</h4>
-    <img src="Images/dhcp3.5.PNG" alt="dhcp3.5.PNG">
+    <img src="Images/dhcp3.5.PNG" alt="dhcp3.5.PNG"><br>
     <h4>5. Check the box next to DHCP Server under Server Role selection.</h4>
-    <img src="Images/dhcp5.PNG" alt="dhcp5.PNG">
+    <img src="Images/dhcp5.PNG" alt="dhcp5.PNG"><br>
     <h4>6. Follow the prompt to <strong>Add Features</strong></h4>
-    <img src="Images/dhcp6.PNG" alt="dhcp6.PNG">
+    <img src="Images/dhcp6.PNG" alt="dhcp6.PNG"><br>
     <h4>7. Confirm installation selections, click <strong>Install</strong>.</h4>
-    <img src="Images/dhcp7.PNG" alt="dhcp7.PNG">
+    <img src="Images/dhcp7.PNG" alt="dhcp7.PNG"><br>
     <h4>8. Installation in progress</h4>
     <img src="Images/dhcp8.PNG" alt="dhcp8.PNG">
     <img src="Images/dhcp9.PNG" alt="dhcp9.PNG">
@@ -131,9 +131,9 @@
     
     <h2>DHCP Authorization</h2>
     <h4>1. After installing the DHCP server role, Server Manager will then have a notification for the Post-deployment configuration steps.</h4>
-    <img src="Images/dhcpconf1.PNG" alt="dhcpconf2.PNG" style="width:500px; height:200px;">
+    <img src="Images/dhcpconf1.PNG" alt="dhcpconf2.PNG" style="width:500px; height:200px;"><br>
     <h4>2. Upon clicking "Complete DHCP configuration", the DHCP Post-Install configuration wizard will come up to Authorize the DHCP server.</h4>
-    <img src="Images/dhcpconf2.PNG" alt="dhcpconf2.PNG">
+    <img src="Images/dhcpconf2.PNG" alt="dhcpconf2.PNG"><br>
     <h4>3. Specify the credentials to be used to authorize this DHCP server in AD DS.</h4>
     <P>In this example, I'm going to select the following user's credentials, then click <strong>Commit</strong>.</P>
     <img src="Images/dhcpconf3.PNG" alt="dhcpconf3.PNG"><br><br>
@@ -142,17 +142,17 @@
 
     <h2>Create a DHCP Scope</h2>
     <h4>1. In Server Manager > Tools, select DHCP in the drop-down tools menu.</h4>
-    <img src="Images/dhcpmgmt2.PNG" alt="dhcpmgmt2.PNG" style="width:400px; height:700px;">
+    <img src="Images/dhcpmgmt2.PNG" alt="dhcpmgmt2.PNG" style="width:400px; height:700px;"><br>
     <h4>2. DHCP Manager:</h4>
-    <img src="Images/dhcpmgmt3.PNG" alt="dhcpmgmt3.PNG" style="width:700px; height:300px;">
+    <img src="Images/dhcpmgmt3.PNG" alt="dhcpmgmt3.PNG" style="width:700px; height:300px;"><br>
     <h4>3. Expand the server/domain hierarchy.</h4>
-    <img src="Images/dhcpmgmt4.PNG" alt="dhcpmgmt4.PNG" style="width:700px; height:400px;">
+    <img src="Images/dhcpmgmt4.PNG" alt="dhcpmgmt4.PNG" style="width:700px; height:400px;"><br>
     <h4>4. Right-click on IPv4, select New Scope.</h4>
-    <img src="Images/dhcpmgmt5.PNG" alt="dhcpmgmt5.PNG">
+    <img src="Images/dhcpmgmt5.PNG" alt="dhcpmgmt5.PNG"><br>
     <h4>5. The New Scope Wizard will prompt.</h4>
-    <img src="Images/dhcpmgmt6.PNG" alt="dhcpmgmt6.PNG">
+    <img src="Images/dhcpmgmt6.PNG" alt="dhcpmgmt6.PNG"><br>
     <h4>6. In this example, I'm going to name this Scope Name "Lab Scope".</h4>
-    <img src="Images/dhcpmgmt7.PNG" alt="dhcpmgmt7.PNG">
+    <img src="Images/dhcpmgmt7.PNG" alt="dhcpmgmt7.PNG"><br>
     <h4>7. Next, configure the IP Address range.</h4>
     <ul>
         <li>Start IP Address</li>
@@ -160,31 +160,31 @@
         <li>CIDR length</li>
         <li>Subnet mask</li>
     </ul>
-    <img src="Images/dhcpmgmt8.PNG" alt="dhcpmgmt8.PNG">
+    <img src="Images/dhcpmgmt8.PNG" alt="dhcpmgmt8.PNG"><br>
 
     <h4>8. Specify the IP address range that you want to exclude, if any. </h4>
-    <img src="Images/dhcpmgmt9.PNG" alt="dhcpmgmt9.PNG">
+    <img src="Images/dhcpmgmt9.PNG" alt="dhcpmgmt9.PNG"><br>
 
     <h4>9. Set the Lease Duration:</h4>
-    <img src="Images/dhcpmgmt10.PNG" alt="dhcpmgmt10.PNG">
+    <img src="Images/dhcpmgmt10.PNG" alt="dhcpmgmt10.PNG"><br>
 
     <h4>10. Configure DHCP Options:</h4>
-    <img src="Images/dhcpmgmt11.PNG" alt="dhcpmgmt11.PNG">
+    <img src="Images/dhcpmgmt11.PNG" alt="dhcpmgmt11.PNG"><br>
 
     <h4>11. Enter the Default Gateway address of the network, for example - 192.168.1.1:</h4>
-    <img src="Images/dhcpmgmt12.PNG" alt="dhcpmgmt12.PNG">
+    <img src="Images/dhcpmgmt12.PNG" alt="dhcpmgmt12.PNG"><br>
 
     <h4>12. Set the Parent Domain name for Domain Name and DNS Servers.</h4>
-    <img src="Images/dhcpmgmt13.PNG" alt="dhcpmgmt13.PNG">
+    <img src="Images/dhcpmgmt13.PNG" alt="dhcpmgmt13.PNG"><br>
 
     <h4>13. Specify the WINS Server functionality if applicable.</h4>
-    <img src="Images/dhcpmgmt14.PNG" alt="dhcpmgmt14.PNG">
+    <img src="Images/dhcpmgmt14.PNG" alt="dhcpmgmt14.PNG"><br>
 
     <h4>14. Activate the new DHCP Scope:</h4>
-    <img src="Images/dhcpmgmt15.PNG" alt="dhcpmgmt15.PNG">
+    <img src="Images/dhcpmgmt15.PNG" alt="dhcpmgmt15.PNG"><br>
 
     <h4>15. Click Finish</h4>
-    <img src="Images/dhcpmgmt16.PNG" alt="dhcpmgmt16.PNG">
+    <img src="Images/dhcpmgmt16.PNG" alt="dhcpmgmt16.PNG"><br>
 
     <h4>16. The new scope under IPv4 of DHCP Manager.</h4>
     <img src="Images/dhcpmgmt17.PNG" alt="dhcpmgmt17.PNG"><br><br>
