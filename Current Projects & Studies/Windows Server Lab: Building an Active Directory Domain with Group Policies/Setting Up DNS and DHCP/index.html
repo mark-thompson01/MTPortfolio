@@ -80,14 +80,14 @@
 
 <h2>Configuring Internal DNS and DHCP on Windows Server 2016</h2>
 <h3>Configuring DNS</h3>
-<p><strong>1. Verify DNS Installation</strong></p>
+<h4>1. Verify DNS Installation</h4>
 <p>Typically the first step would be to install the <strong>DNS Server Role</strong>, however, in this example that is already installed. So we'll verify the installation in this step.</p>
     <ul>
         <li>Open <strong>DNS Manager</strong> (dnsmgmt.msc)</li>
         <img src="Images/DNS2/dns-1.PNG" alt="dns-1.PNG">
-<p><strong>2.</strong> Confirm that a <strong>Forward Lookup Zone</strong> exists for your domain (e.g., Domain-1.local)</p>
+<h4>2. Confirm that a <strong>Forward Lookup Zone</strong> exists for your domain (e.g., Domain-1.local)</h4>
         <img src="Images/DNS2/dns-2.PNG" alt="dns-2.PNG">
-        <p><strong>3.</strong> This zone contains <strong>A records</strong> used for domain authentication</p>
+        <h4>3. This zone contains <strong>A records</strong> used for domain authentication</h4>
         <img src="Images/DNS2/dns-3.PNG" alt="dns-3.PNG">
     </ul><br>
 
@@ -109,21 +109,21 @@
 
     <h1>Configuring DHCP</h1>
     <h2>Install the DHCP Server Role</h2>
-    <p><strong>1.</strong> Click the <strong>Add roles and features in Server Manager</strong>.</p>
+    <h4>1. Click the <strong>Add roles and features in Server Manager</strong>.</h4>
     <img src="Images/dhcp1.PNG" alt="dhcp1.PNG">
-    <p><strong>2.</strong> The installation wizard will come up to follow the prompts.</p>
+    <h4>2. The installation wizard will come up to follow the prompts.</h4>
     <img src="Images/dhcp2.PNG" alt="dhcp2.PNG">
-    <p><strong>3.</strong> For this example, I'm selecting <strong>Role-based or feature-based</strong> installation.</p>
+    <h4>3. For this example, I'm selecting <strong>Role-based or feature-based</strong> installation.</h4>
     <img src="Images/dhcp3.PNG" alt="dhcp3.PNG">
-    <p><strong>4.</strong> Server Selection:</p>
+    <h4>4. Server Selection:</h4>
     <img src="Images/dhcp3.5.PNG" alt="dhcp3.5.PNG">
-    <p><strong>5.</strong> Check the box next to DHCP Server under Server Role selection.</p>
+    <h4>5. Check the box next to DHCP Server under Server Role selection.</h4>
     <img src="Images/dhcp5.PNG" alt="dhcp5.PNG">
-    <p><strong>6.</strong> Follow the prompt to <strong>Add Features</strong></p>
+    <h4>6. Follow the prompt to <strong>Add Features</strong></h4>
     <img src="Images/dhcp6.PNG" alt="dhcp6.PNG">
-    <p><strong>7.</strong> Confirm installation selections, click <strong>Install</strong>.</p>
+    <h4>7. Confirm installation selections, click <strong>Install</strong>.</h4>
     <img src="Images/dhcp7.PNG" alt="dhcp7.PNG">
-    <p><strong>8.</strong> Installation in progress</p>
+    <h4>8. Installation in progress</h4>
     <img src="Images/dhcp8.PNG" alt="dhcp8.PNG">
     <img src="Images/dhcp9.PNG" alt="dhcp9.PNG">
     <img src="Images/dhcp10.PNG" alt="dhcp10.PNG"><br><br>
