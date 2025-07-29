@@ -258,12 +258,12 @@
 
 
 <p>To fix this vulnerability, you need to <strong>sanitize and encode user input</strong> before outputting it:</p>
-<p>The simplest way to mitigate Reflective XSS is to use <code>htmlspecialchars()</code> to sanitize and encode user input before display it.</p>
+<p>The simplest way to mitigate Reflective XSS is to use <code>htmlspecialchars()</code> to sanitize and encode user input before display it.</p><br>
 <img src="Images/XSSFix.png" alt="XSSFix.png">
 <p>This is <code>htmlspecialchars()</code> in use.</p>
 <p>This converts special characters like <code><</code> and <code>></code> into their HTML entities (<code>&lt;</code> and <code>&gt;</code>).</p>
 <p>Preventing the browser from interpreting user input as HTML or JavaScript.</p>
-<p>By treating user input as plain text, you ensure that no executable code is injected into the response.</p>
+<p>By treating user input as plain text, you ensure that no executable code is injected into the response.</p><br>
 
 <h4>Applicability and Scope:</h4>
 <ul>
