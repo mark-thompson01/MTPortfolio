@@ -174,7 +174,7 @@
 <img src="Images/Save%20Scan%20Results%20in%20File.PNG" alt="Save Scan Results in File">
 
 <p>In addition to that, <code>WhatWeb</code> can be run.</p>
-<img src="Images/WhatWeb.PNG" alt="WhatWeb">
+<img src="Images/WhatWeb.PNG" alt="WhatWeb"><br><br><br>
 
 
 <h3>Directory Busting</h3>
@@ -185,7 +185,7 @@
 <img src="Images/Dirbuster%202.PNG" alt="Dirbuster 2">
 <img src="Images/Dirbuster%203.PNG" alt="Dirbuster 3">
 <img src="Images/Dirbuster%204.PNG" alt="Dirbuster 4">
-<img src="Images/gobuster.PNG" alt="gobuster">
+<img src="Images/gobuster.PNG" alt="gobuster"><br><br><br>
 
 <h3>Active Recon with Burp Suite</h3>
 <p>Here, I'll use Burp Suite to intercept a GET request on the main web page and then send it to Repeater to further analyze the application's behavior by sending different HTTP options and analyzing the responses.</p>
@@ -217,7 +217,7 @@
 <p>Furthermore, if we navigate around the different web page or take advantage of the directory indexing that is set. The Site map in Burp Suite will build the hierarchical structure of the web application.</p>
 <img src="Images/Burp%20Suite%20Sitemap.PNG" alt="Burp Suite Sitemap">
 
-<p>These are the types of details that can be gathered when using Burp Suite to perform active reconnaissance on a web application.</p>
+<p>These are the types of details that can be gathered when using Burp Suite to perform active reconnaissance on a web application.</p><br><br><br>
 	
 
 <h2>Vulnerability Scanning</h2>
@@ -228,7 +228,7 @@
 		
 <h3>Nikto Vulnerability Scan</h3>
 <p>This screenshot illustrates a Nikto scan performed on the same target, <code>192.168.1.103</code>. Nikto detects multiple issues, including the absence of critical security headers like <code>X-Frame-Options</code> and <code>X-Content-Type-Options</code>, which leave the application vulnerable to clickjacking and MIME-based attacks. The scan also confirms that directory indexing is enabled across several paths, which can reveal sensitive information. Additionally, Nikto identifies allowed HTTP methods (e.g., <code>HEAD</code>, <code>POST</code>, <code>OPTIONS</code>) and checks for older vulnerabilities, emphasizing the importance of secure server configurations to reduce the attack surface.</p>
-<img src="Images/Nikto%20Scan%202.PNG" alt="Nikto Scan 2"> 
+<img src="Images/Nikto%20Scan%202.PNG" alt="Nikto Scan 2"><br><br>
 
 <h2>Exploitation</h2>
 <p>The primary focus of this lab is performing active reconnaissance and vulnerability scanning on a basic web application. I'll go ahead and demonstrate a couple of exploits however.</p>
@@ -249,7 +249,7 @@
 	<ul><strong>Spreading malware:</strong> An attacker could inject scripts to redirect users to malicious websites or deliver exploit kits.</ul><br>
 </o1>
 
-<p>While this lab demonstrates a basic example of Reflected XSS, these types of attacks can have severe consequences, particularly when sensitive user data or administrative actions are exposed to exploitation. Mitigating such vulnerabilities requires proper input validation and output encoding to ensure malicious scripts cannot execute.</p>
+<p>While this lab demonstrates a basic example of Reflected XSS, these types of attacks can have severe consequences, particularly when sensitive user data or administrative actions are exposed to exploitation. Mitigating such vulnerabilities requires proper input validation and output encoding to ensure malicious scripts cannot execute.</p><br><br>
 	
 <h4>How to Mitigate This Vulnerability</h4>
 <p><strong>Reflected XSS</strong> occurs when user input is directly reflected in the server's response without sanitization or encoding.</p>
@@ -273,7 +273,7 @@
 			<li><strong>Stored XSS:</strong>  Validate and sanitize input before storing it in a database.</li>
 			<li>Use proper Content Security Policies (CSP) to limit script execution.</li>
 		</ul>
-</ul>
+</ul><br>
 
 
 <h4>Broader Best Practices</h4>
@@ -286,7 +286,7 @@
 		<li><strong>Disable Unnecessary Features:</strong> Turn off features like <code>eval()</code> in JavaScript and prevent inline scripts when possible.</li><br>
 	</ol>
 
-<p>Without proper mitigation, this vulnerability could allow attackers to steal session cookies, impersonate users, or redirect them to malicious websites. Applying these techniques ensures the application remains secure.</p>
+<p>Without proper mitigation, this vulnerability could allow attackers to steal session cookies, impersonate users, or redirect them to malicious websites. Applying these techniques ensures the application remains secure.</p><br><br>
 	
 
 <h3>Exploiting WebDAV</h3>
