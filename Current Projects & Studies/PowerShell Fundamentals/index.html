@@ -458,7 +458,7 @@ foreach ($service in $services) {
             $process.Id    # Output: (the process ID)
         </code></pre>
 
-        <img src="Images/BS/objects1.png" alt="objects1.png">
+        <img src="Images/BS/objects1.png" alt="objects1.png"><br>
         
 
 <p1>Checking Object Members with Get-Member:</p1>
@@ -466,7 +466,7 @@ foreach ($service in $services) {
             $process | Get-Member
         </code></pre>
 
-    <img src="Images/BS/objects1.png" alt="objects1.png"
+    <img src="Images/BS/objects1.png" alt="objects1.png"><br>
 
 <p>Creating a Custom Object:</p>
         <pre><code>
@@ -480,7 +480,7 @@ foreach ($service in $services) {
             $user.Age        # Output: 00
         </code></pre>
 
-        <img src="Images/BS/objects3.png" alt="objects3.png">
+        <img src="Images/BS/objects3.png" alt="objects3.png"><br>
 
 <p>Array of Objects:</p>
         <pre><code>
@@ -494,7 +494,7 @@ foreach ($service in $services) {
             }
         </code></pre>
 
-        <img src="Images/BS/objects4.png" alt="objects4.png">
+        <img src="Images/BS/objects4.png" alt="objects4.png"><br>
 
 <p>Object Filtering:</p>
         <pre><code>
@@ -502,7 +502,7 @@ foreach ($service in $services) {
             $running = $services | Where-Object { $_.Status -eq "Running" }
         </code></pre>
 
-        <img src="Images/BS/objects5.png" alt="objects5.png"><br><br>
+        <img src="Images/BS/objects5.png" alt="objects5.png"><br><br><br>
         
 
     <h3>Functions</h3>
@@ -513,7 +513,7 @@ foreach ($service in $services) {
 
 Greet-User -Name "Dave"
     </code></pre>
-        <img src="Images/BS/function.png" alt="function.png">
+        <img src="Images/BS/function.png" alt="function.png"><br>
 
 <p>simple Function (No Parameters)</p>
         <pre><code>
@@ -525,7 +525,7 @@ Greet-User -Name "Dave"
             Say-Hello
         </code></pre>
 
-        <img src="Images/function1.png" alt="function1.png">
+        <img src="Images/function1.png" alt="function1.png"><br>
         
 
 <p>Function with One Parameter</p>
@@ -538,7 +538,7 @@ Greet-User -Name "Dave"
             Greet-User -name "Mark"
         </code></pre>
 
-        <img src="Images/function2.png" alt="function2.png">
+        <img src="Images/function2.png" alt="function2.png"><br>
         
 
 
@@ -553,7 +553,7 @@ Greet-User -Name "Dave"
             Add-Numbers -a 5 -b 10     # Output: The sum is 15
         </code></pre>
 
-        <img src="Images/function3.png" alt="function3.png">
+        <img src="Images/function3.png" alt="function3.png"><br>
         
 
     <p>Function with Conditional Logic</p>
@@ -571,7 +571,7 @@ Greet-User -Name "Dave"
             Check-Age -age 20
         </code></pre>
 
-        <img src="Images/fucntion4.png" alt="fucntion4.png">
+        <img src="Images/fucntion4.png" alt="fucntion4.png"><br>
 
 
         <p>Function that Returns a Value</p>
@@ -585,14 +585,14 @@ Greet-User -Name "Dave"
             Write-Output "Result: $result"
         </code></pre>
 
-        <img src="Images/function5.png" alt="function5.png">
+        <img src="Images/function5.png" alt="function5.png"><br>
 
 
 
         
     <p>Create reusable code blocks</p><br>
         
-    <p>Scripts end with the <strong>.ps1</strong> extension<code>.ps1</code></p><br>
+    <p>Scripts end with the <strong>.ps1</strong> extension<code>.ps1</code></p><br><br>
 
 
 
