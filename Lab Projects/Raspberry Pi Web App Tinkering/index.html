@@ -123,7 +123,7 @@
 <p>To get started, let's make sure WebDAV is enabled with <strong>Basic Authentication</strong> and a weak username/password.</p>
 <strong>webdav.conf</strong>
 <img src="Images/WebDAV%20BasicAuth.png" alt="WebDAV BasicAuth">
-<img src="Images/WebDAV%20WeakPassSet.png" alt="WebDAV WeakPassSet">
+<img src="Images/WebDAV%20WeakPassSet.png" alt="WebDAV WeakPassSet"><br>
 
 <h3>Directory Listings Enabled</h3>
 <p>The “directory listing” behavior in Apache is controlled by the Options directive in the Apache configuration files. Specifically, the indexes option enables directory listing. If Indexes is included in the Options directive for a directory, Apache will display a list of files within that directory when no default file (e.g., index.html, index.php) is present.</p>
@@ -132,17 +132,17 @@
 <img src="Images/Directory%20Listings%201.png" alt="Directory Listings 1">
 
 <p>This is also set for WebDAV in the <strong>webdav.conf</strong> file.</p>
-<img src="Images/Directory%20Listings%20Enabled%202.png" alt="Directory Listings Enabled 2">
+<img src="Images/Directory%20Listings%20Enabled%202.png" alt="Directory Listings Enabled 2"><br>
 
 
 <h3>Hidden Directories and Files</h3>
-<p>For the purpose of this lab, I have created some hidden and not so hidden directories and files to have something to detect for demonstration purposes. These are directories and files that are stored in the /var/ww/html of the Apache setup, making it easy to manually navigate to in a browser with directory listings enabled on the web server, along for the directory busting tools to easily detect them as well as Burp Suite.</p>
+<p>For the purpose of this lab, I have created some hidden and not so hidden directories and files to have something to detect for demonstration purposes. These are directories and files that are stored in the /var/ww/html of the Apache setup, making it easy to manually navigate to in a browser with directory listings enabled on the web server, along for the directory busting tools to easily detect them as well as Burp Suite.</p><br>
 
 <h3>Exposed Sensitive Configuration</h3>
 <p>Insecurely exposed configuration files, like <code>config.php</code> file in this example, pose a significant security risk to web applications. Such files often contain sensitive data, including data credentials, API keys, or server configurations.</p>
 <p>When left publicly accessible, such as in this example, attackers can easily retrieve these files and leverage the information go gain unauthorized access, escalate privileges, or compromise the underlying infrastructure.</p>
 <p>This vulnerability highlights the importance of securing sensitive files and following best practices for web server configuration to minimize attack surfaces.</p>
-<img src="Images/Exposed%20Sensitive%20Configuration.png" alt="Exposed Sensitive Configuration">
+<img src="Images/Exposed%20Sensitive%20Configuration.png" alt="Exposed Sensitive Configuration"><br>
 	
 
 <h3>Crafted XSS Vulnerability</h3>
