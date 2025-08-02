@@ -53,7 +53,19 @@
 <p>In this next Cisco switch lab, I'm going to take an older <strong>Cisco Catalyst 3550</strong> switch and set it up aside the main <strong>Cisco Catalyst 2950</strong> and further configure <strong>Spanning Tree Protcol - STP</strong> and a <strong>VLAN Trunk Port</strong> configuration.</p><br><br>
 
 <h2>Initiating Factory Reset</h2>
-<p>As previously demonstrated with <strong>Labbing With a Cisco Catalyst 2950 switch</strong>, I'm going to start off this lab with running the same factory reset commands on the <strong>Cisco Catalyst 3550</strong>.</p>
+<h3>1. Enter ROMMON mode</h3>
+<p>To start, I'm going to carry out the following steps on the <strong>Cisco Catalyst 3550</strong> switch to enter ROMMON mode</p>
+<ol>
+  <li>Unplug the power cable from the switch.</li>
+  <li>Press and hold the <strong>MODE</strong> button on the front panel.</li>
+  <li>While holding the <strong>MODE</strong> button, reconnect the power.</li>
+  <li>Continue holding the button until you see the <code>switch:</code> prompt appear in your console session <strong>(PuTTY</strong>.</li>
+</ol>
+<p>This procedure interrupts the normal boot process and forces the switch into the <strong>boot loader environment (ROMMON)</strong>
+<p>The f
+  
+<p>As previously demonstrated with <strong>Labbing With a Cisco Catalyst 2950 switch</strong>, I'm going to start off this lab with running the same factory reset commands starting with a flash initialization on the <strong>Cisco Catalyst 3550</strong>.</p>
+
 <img src="Images/flash_init3.png" alt="flash_init3.png">
 <img src="Images/facreset.png" alt="facresetl.png">
 <img src="Images/facreset2.png" alt="facreset2.png"><br><br>
