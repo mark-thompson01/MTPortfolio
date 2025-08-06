@@ -63,7 +63,10 @@
 
 <h2>Performing a Factory Reset</h2>
 <p>Performing a factory reset on a Cisco Catalyst 2950 switch to reconfigure it from scratch.</p>
-<h3>1. Running Factory Reset Commands</h3>
+<h3>1. Entering ROMMON mode</h3>
+<img src="Images/TheSwitchPrompt.png" alt="TheSwitchPrompt.png"><br><br>
+  
+<h3>2. Running Factory Reset Commands</h3>
 <pre><code>
 <strong>flash_init</strong> - Initializes the flash file system to access and manipulate files (like configs or VLAN data).
 <strong>del flash:config.text</strong> - Delete the startup configuration file. 
