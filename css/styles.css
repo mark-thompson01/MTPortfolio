@@ -4,9 +4,8 @@ body {
   margin: 0;
   padding: 20px;
   line-height: 1.6;
-  background-color: #2b2b2b; /* Dark grey background */
   color: #f0f0f0; /* Light grey text color for readability */
-}
+} 
 
 /* Main heading styling */
 h1 {
