@@ -39,9 +39,22 @@
       color: #ff7f50; /* Coral on hover */
       text-decoration: underline;
     }
+    .bg {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.4),
+          rgba(0, 0, 0, 0.6)
+        ),
+        url("Images/brand-bg.jpeg") center center / cover no-repeat;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
+  <div class="bg"></div>
   <h1>Blogs</h1>
   <p style="font-style: italic;"><strong>Welcome!</strong> The following are different blogs I've worked on and created based on the different projects I've worked on so far.</p>
 
