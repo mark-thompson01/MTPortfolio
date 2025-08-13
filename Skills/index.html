@@ -41,8 +41,18 @@
       color: #ff7f50; /* Coral on hover */
       text-decoration: underline;
     }
-    
-    
+    .bg {
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.4),
+          rgba(0, 0, 0, 0.6)
+        ),
+        url("Images/brand-bg.jpeg") center center / cover no-repeat;
+      z-index: -1;
+    }
   </style>
 </head>
 <body>
