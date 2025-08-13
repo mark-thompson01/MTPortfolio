@@ -40,10 +40,25 @@
       color: #ff7f50;
       text-decoration: underline;
     }
+    /* Full-screen background with overlay */
+.bg {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.6)
+    ),
+    url("Images/brand-bg.png") center center / cover no-repeat;
+  z-index: -1;
+}
   </style>
 </head>
 <body>
   <h1>Windows and Linux</h1>
+  <div class="bg"></div>
+
 
   <p>This section demonstrates my hands-on experience with both <strong>Windows</strong> and <strong>Linux</strong> operating systems.</p>
     
