@@ -42,9 +42,23 @@
       margin-top: 20px;
       display: inline-block;
     }
+    /* Full-screen background with overlay */
+.bg {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.6)
+    ),
+    url("Images/brand-bg.png") center center / cover no-repeat;
+  z-index: -1;
+}
   </style>
 </head>
 <body>
+<div class="bg"></div>
   <h1>Cybersecurity Labs</h1>
   <p>This section highlights cybersecurity labs I've built to develop a deeper understanding of network security, system hardening, and common defensive security techniques.
   These projects explore traffic analysis, log monitoring, ARP spoofing, password cracking, enumeration,
