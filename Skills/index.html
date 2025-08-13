@@ -41,9 +41,22 @@
       color: #ff7f50; /* Coral on hover */
       text-decoration: underline;
     }
+    .bg {
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.4),
+      rgba(0, 0, 0, 0.6)
+    ),
+    url("Images/brand-bg.jpeg") center center / cover no-repeat;
+  z-index: -1;
+}
   </style>
 </head>
 <body>
+<div class="bg"></div>
   <h1>Networking</h1>
   <p>This section contains hands-on labs and tutorials that demonstrate my understanding of core networking concepts, tools, and infrastructure.</p>
   <p>The projects include port and protocol scanning, command-line network diagnostics, and configuring a Cisco Catalyst switch.</p>
