@@ -62,7 +62,16 @@
 <img src="Images/Connecting/con1.png" alt="con1.png"><br><br><br><br>
 
 <h2>Performing a Factory Reset</h2>
-<p>Performing a factory reset on a Cisco Catalyst 2950 switch to reconfigure it from scratch.</p><br>
+<p>Performing a factory reset on a Cisco Catalyst 2950 switch to reconfigure it from scratch.</p>
+<p>To start, I'm going to carry out the following steps on the <strong>Cisco Catalyst 3550</strong> switch to enter ROMMON mode:</p>
+<ol>
+  <li>Unplug the power cable from the switch.</li>
+  <li>Press and hold the <strong>MODE</strong> button on the front panel.</li>
+  <li>While holding the <strong>MODE</strong> button, reconnect the power.</li>
+  <li>Continue holding the button until you see the <code>switch:</code> prompt appear in your console session <strong>(PuTTY)</strong>.</li>
+</ol>
+<p>This procedure interrupts the normal boot process and forces the switch into the <strong>boot loader environment (ROMMON):</strong></p><br>
+  
 <h3>1. Entering ROMMON mode</h3>
 <img src="Images/TheSwitchPrompt.png" alt="TheSwitchPrompt.png"><br><br>
   
