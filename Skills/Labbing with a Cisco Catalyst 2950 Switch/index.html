@@ -120,11 +120,12 @@
 <img src="Images/From Scratch/conf2.png" alt="conf2.png"><br><br>
 
 <h3>3. Security and Management Configuration</h3>
-<p>In this example, I'm going to enter in no for SNMP Network Management. Typically this would be setup in production environments.</p>
+<p>In this example, I'm going to enter in <strong>no</strong> for SNMP Network Management.</p>
+<p>Typically this would be setup in production environments.</p>
 <img src="Images/From Scratch/conf3.png" alt="conf3.png"><br><br>
 
 <h3>4. Interface Review Stage</h3>
-<p>From there we get an interface summary.</p>
+<p>From there we get an interface summary:</p>
 <img src="Images/From Scratch/conf4.png" alt="conf4.png"><br><br>
 
 <h3>5. Assign a Management Interface</h3>
@@ -177,15 +178,15 @@
 <h2>Post Initial Setup</h2>
 
 <h3>1. Enter Privileged EXEC Mode</h3>
-<p>After exiting the setup wizard and reaching the CLI, you're placed in <strong>User EXEC Mode</strong> (prompt ends in >), which provides limited read-only access.
+<p>After exiting the setup wizard and reaching the CLI, you're placed in <strong>User EXEC Mode</strong> (prompt ends in >), which provides limited read-only access:
 <p>To begin managing the switch, type <strong>enable</strong></p>
 <img src="Images/Post Initial Setup/post1.png" alt="post1.png">
 <p>This command elevates you to <strong>Privileged EXEC mode</strong> (prompt ends in #).</p>
 <p>Where you can issue high-level diagnostic commands to enter configuration mode to make changes.</p><br><br>
 
 <h3>2. Enter Global Configuration Mode</h3>
-<p>Once you're in <strong>Privileged EXEC Mode</strong>,</p>
-<p>MT0#, the command <strong>configure terminal</strong> or shortcut <strong>conf t</strong> takes you into <strong>Global Configuration Mode</strong>.</p>
+<p>Once you're in <strong>Privileged EXEC Mode</strong></p>
+<p>MT0#, the command <strong>configure terminal</strong> or shortcut <strong>conf t</strong> takes you into <strong>Global Configuration Mode</strong>:</p>
 <img src="Images/Post Initial Setup/post2.png" alt="post2.png"><br>
 <img src="Images/Post Initial Setup/post3.png" alt="post3.png"><br><br>
 
@@ -200,7 +201,7 @@
 <p>Here, I'll setup and example banner to demonstrate the feature.</p>
 <p><strong>MOTD - Message of the Day</strong> banners are used to display a login message.</p>
 <p>This is useful for compliance, legal disclaimers, or basic identification of the device's role on the network.</p>
-<p>In this example, I'll specify the banner as "#CENTRAL SWITCH"#</p>
+<p>In this example, I'll specify the banner as "#Central Switch"#</p>
 <img src="Images/Post Initial Setup/post6.png" alt="post6.png"><br><br>
 
 
@@ -210,7 +211,7 @@
 <p>It's a basic, yet essential security measure to prevent unauthorized physical access to switch settings.</p>
 <img src="Images/Post Initial Setup/post7.png" alt="post7.png">
 <p>Here, we have finalized the basic management setup of the Cisco Catalyst 2950.</p> 
-<p>Securing the local (console) and remote (VTY/Telnet) acess with passwords, assigned an IP address to VLAN interface for management access, and configured a default gateway so the switch can communicate with devices outside the subnet.</p>
+<p>Securing the local (console) and remote (VTY/Telnet) acess with passwords, assigned an IP address to the VLAN 1 interface for management access, and configured a default gateway so the switch can communicate with devices outside the subnet.</p>
 <img src="Images/Post Initial Setup/post8.png" alt="post8.png"><br><br>
 
 <h3>6. Configure Access Ports for Workstations</h3>
