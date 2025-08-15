@@ -104,13 +104,7 @@
 <h3>5. Assigning switch ports to VLANs</h3>
 <p>In this example on the second switch, port 8 is setup on vlan 10 and port 16 is setup on vlan 20.</p>
 <img src="Images/basicconfig7.png" alt="basicconfig7.png"><br>
-<h3>6. Setting up Spanning Tree and Trunking</h3>
-<img src="Images/basicconfig8.png" alt="basicconfig8.png"><br><br>
 
-<p>From <strong>Global Configuration</strong> Mode, <strong>interface fastEthernet 0/1</strong> has been set as the <strong>VLAN Trunk</strong> port, along with <strong>spanning-tree vlan 10 being set as the priority for this switch.</strong></p>
-<p>From here, the next steps would be to run <strong>show interface trunk</strong> and <strong>show spanning-tree</strong> from <strong>Privileged EXEC</strong> mode.</p>
-<p>Before I can run those commands and successfully have information output into the <strong>PuTTY</strong> terminal, both switches must be powered on, have their trunk ports configured, and be physically connected with an Ethernet cable.</p><br><br><br>
-<p>Before moving forward with those steps, I'm going to get the trunk and stp setup on the main Cisco Catalyst 2950 switch in this configuration.</p>
   
 <h2>Spanning Tree Protocol - STP and Trunk Port Configuration</h2>
 <h3>Setting up Trunk port on both switches</h3>
