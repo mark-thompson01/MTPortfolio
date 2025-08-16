@@ -107,6 +107,15 @@
 
   
 <h2>Trunk Port and Spanning Tree Protocol - STP Configuration</h2>
+<p><strong>Trunk Port:</strong></p>
+<p>A trunk port is a switch port that is configured to carry traffic for multiple VLANs across a single physical link. Instead of the port being tied to just one VLAN like an access port, a trunk port uses 802.1Q tagging to label each frame with its VLAN ID, so that the receiving switch knows which VLAN the traffic belongs to.</p>
+<p>Trunk port configurations are typically used to connect switches together or to connect a switch to a router or firewall that hanldes multiple VLANs.</p>
+<p>In this lab, trunks make sure VLAN 10 and VLAN 20 traffic can travel between the 2950 and the 3550 switches while keeping the traffic logically separated.</p><br>
+
+<p>Spanning Tree Protocol - STP:</p>
+<p>STP is a layer 2 loop-prevention functionality used in Ethernet networks. When multiple switches are interconnected, redundant paths can cause broadcast storms and network failures. STP automatically detected these loops and places some switch ports into a "blocking state" while leaving others forwarding, ensuring that there is always a single active path between devices.</p>
+<p>If the active path fails, STP recalculates and unblocks an alternate path. In this lab, STP demonstrates how one switch (the 3550) can be elected as the root bridge, controlling the logical topology of teh network.</p><br><br> 
+  
 <h3>1. Setting up Trunk port on both switches</h3>
 <p>Create VLAN 99 Native on both switches:</p>
 <p>In this example, vlan 99 is created as the <strong>trunk native VLAN</strong> and is assinged to <strong>interface fa0/24</strong> to configure the VLAN trunk port.</p>
