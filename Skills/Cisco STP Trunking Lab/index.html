@@ -113,7 +113,7 @@
 <p>In this lab, trunks make sure VLAN 10 and VLAN 20 traffic can travel between the 2950 and the 3550 switches while keeping the traffic logically separated.</p><br>
 
 <p>Spanning Tree Protocol - STP:</p>
-<p>STP is a layer 2 loop-prevention functionality used in Ethernet networks. When multiple switches are interconnected, redundant paths can cause broadcast storms and network failures. STP automatically detected these loops and places some switch ports into a "blocking state" while leaving others forwarding, ensuring that there is always a single active path between devices.</p>
+<p>STP is a layer 2 loop-prevention functionality used in Ethernet networks. When multiple switches are interconnected, redundant paths can cause broadcast storms and network failures. STP automatically detects these loops and places some switch ports into a "blocking state" while leaving others forwarding, ensuring that there is always a single active path between devices.</p>
 <p>If the active path fails, STP recalculates and unblocks an alternate path. In this lab, STP demonstrates how one switch (the 3550) can be elected as the root bridge, controlling the logical topology of teh network.</p><br><br> 
   
 <h3>1. Setting up Trunk port on both switches</h3>
