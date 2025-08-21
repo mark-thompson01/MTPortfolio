@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Essential Network Commands</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.6;
+      background-color: #2b2b2b; /* Dark background */
+      color: #f0f0f0; /* Light grey text */
+    }
+    h1, h2, h3 {
+      text-align: left;
+      color: #d3d3d3; /* Lighter grey heading */
+      margin-bottom: 10px;
+    }
+    p {
+      text-align: left;
+    }
+    ul {
+      list-style: none; /* Remove default bullets */
+      padding-left: 0;
+      text-align: left; /* Align list to the left */
+    }
+    li {
+      margin: 10px 0;
+    }
+    a {
+      color: #1e90ff; /* Blue link color */
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      color: #ff7f50; /* Coral hover color */
+      text-decoration: underline;
+    }
+    .back-link {
+      margin-top: 20px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<section id="intro">
+  <h1>Essential Network Commands</h1>
+
+  <p>
+    After previously going over the <strong>10 Essential Linux Commands</strong>, let’s build on that with some 
+    <strong>10 Essential Network Commands</strong> for both <strong>Windows</strong> and <strong>Linux</strong>.
+  </p>
+
+  <p>
+    There are various scenarios we may find ourselves in where any one of these commands can become beneficial very quickly. 
+    One of the most common is troubleshooting and diagnosing connectivity issues. Other scenarios include resolving DNS issues, 
+    addressing IP conflicts, or exploring how traffic flows through your network. The command line offers powerful tools to 
+    dive deeper into what may be going on.
+  </p>
+
+  <p>
+    This blog walks through several commonly used networking commands that help uncover useful information such as IP 
+    configurations, DNS resolution, routing, active connections, network paths, and more. It’s based on material I put together 
+    in my <strong>Cross-Platform Networking Commands</strong> tutorial, which is also available through my 
+    <a href="https://mark-thompson01.github.io/MTPortfolio/" target="_blank">GitHub Pages portfolio</a>.
+  </p>
+
+  <p>
+    The goal is to offer a practical reference — especially for those getting started in IT — by sharing real examples and tools 
+    that are helpful in both personal labs and professional environments.
+  </p><br><br><br><br>
+
+ <h3>1. <code>ping</code></h3>
+  <p>
+    <strong>Ping</strong> is your first responder on the network — it sends tiny data packets (ICMP echo requests) to a target IP or domain and waits for a reply, letting you verify that a device is reachable and measure how long the round-trip takes. Think of it as the digital equivalent of shouting "You there?" and listening for a reply.
+  </p>
+  <img src="Images/ping.PNG" alt="ping.PNG"><br><br><br>
+  
+
+  <h3>2. <code>ipconfig</code> / <code>ifconfig</code> / <code>ip a</code></h3>
+  <p>
+    These commands reveal your system’s digital identity on the network. Whether you're using <code>ipconfig</code> on Windows or <code>ifconfig</code> / <code>ip a</code> on Linux, they display your interface’s IP address, subnet, gateway, and more — essential for understanding how your machine is plugged into the network.
+  </p>
+  <h4>Windows</h4>
+  <img src="Images/ipconfig-all.PNG" alt="ipconfig-all.PNG" style="width:600px; height:400px;"><br>
+  <h4>Linux</h4>
+  <img src="Images/ifconfig.png" alt="ipconfig.png" style="width:650px; height:350px;"><br>
+  <img src="Images/ipa.png" alt="ipa.png" style="width:650px; height:350px;><br><br><br><br>
+
+  
+  <h3>3. <code>arp -a</code></h3>
+  <p>
+    The <code>arp -a</code> command lets you peek behind the scenes of local communications by listing the Address Resolution Protocol (ARP) table. It maps IP addresses to MAC addresses — like your system’s contact book for nearby devices.
+  </p>
+  <img src="Images/arp-a.PNG" alt=arp-a.PNG"><br><br><br>
+
+  <h3>4. <code>nslookup</code></h3>
+  <p>
+    <code>nslookup</code> is a DNS investigation tool — it asks a DNS server for information about domain names and IP addresses. Whether you're hunting down where a website lives or diagnosing DNS failures, this command gives you a direct line to the domain name system.
+  </p>
+  <img src="Images/nslookup1.PNG" alt="nslookup1.PNG"><br><br><br>
+
+  <h3>5. <code>host</code> / <code>dig</code></h3>
+  <p>
+    These Linux-based DNS tools go deeper than <code>nslookup</code>. <code>host</code> offers quick domain-to-IP lookups, while <code>dig</code> (Domain Information Groper) gives detailed query reports straight from DNS servers. They're like the X-ray scanners of DNS troubleshooting.
+  </p>
+  <img src="Images/host1.png" alt="host1.png" style="width:600px; height:300px;"><br>
+  <img src="Images/dig1.png" alt="dig1.png" style="width:600px; height:400px;"><br><br><br><br>
+
+  <h3>6. <code>netstat -a</code> / <code>netstat -an</code></h3>
+  <p>
+    <code>netstat</code> exposes your system’s open doors — it shows which ports are listening, which connections are active, and which processes are using them. Use it to find suspicious activity, verify services, or see who your system is “talking” to.
+  </p>
+  <img src="Images/netstat1.PNG" alt="netstat1.PNG"><br>
+  <img src="Images/netstat.png" alt="netstat.png" style="width:650px; height:450px;"><br><br><br>
+
+  <h3>7. <code>tracert</code></h3>
+  <p>
+    Short for “trace route,” this Windows command traces the path packets take to reach a destination. It lists each network hop along the way, revealing delays, outages, or routing quirks that might be slowing things down.
+  </p>
+  <img src="Images/tracert.png" tracert.png"><br><br><br>
+
+  <h3>8. <code>pathping</code></h3>
+  <p>
+    <code>pathping</code> is like <code>ping</code> and <code>tracert</code> merged into one — but with a twist. It sends pings to every hop along the path and calculates packet loss and latency at each point. It's the network path’s health report, not just its roadmap.
+  </p>
+  <img src="Images/pathping.png" alt="pathping.png"><br><br><br>
+
+  <h3>9. <code>traceroute</code></h3>
+  <p>
+    The Linux cousin to <code>tracert</code>, <code>traceroute</code> traces the journey of packets through the internet. Each hop is revealed along the route to your target, helping you visualize where things slow down, drop, or take detours in the digital world.
+  </p>
+  <img src="Images/traceroute.png" alt="traceroute.png"><br><br><br>
+
+  <h3>10. <code>route</code> / <code>route print</code></h3>
+  <p>
+    These commands unveil your system’s routing table — the rules it follows to decide where to send packets. <code>route print</code> on Windows and <code>route</code> on Linux give you a map of how traffic is directed across gateways and networks.
+  </p>
+  <h4>Windows</h4>
+  <img src="Images/routeprint.PNG" alt="routeprint.PNG" style="width:500px; height:400px:"><br>
+  <h4>Linux</h4>
+  <img src="Images/route.png" alt="route.png"  style="width:600px; height:300px;">
+</section>
+</body>
+</html>
