@@ -52,7 +52,7 @@
       --gap: 1.25rem;
       display:grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap:var(--gap);
+      gap: var(--gap);
       margin: 1rem 0 2rem 20px;
       max-width: 750px;
       justify-content: start; /* Aligns the grid to the left */
@@ -63,8 +63,8 @@
       border-radius:14px;
       overflow:hidden;
       transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      max-width: 320px;           /* Limit each card’s size */
-      margin: 0;                  /* don’t center cards */
+      max-width: 320px;  /* limits each card’s width */
+      margin: 0;
     }
     .card-link{
       display:block;
@@ -72,29 +72,36 @@
       text-decoration:none;
       height:100%;
     }
+
+    /* Global thumbnail: set a more rectangular shape (terminal-like) */
     .thumb{
       margin:0;
-      aspect-ratio:16/9;           /* default ratio */
+      aspect-ratio: 4 / 3;        /* ⬅️ wider rectangle for both cards */
       overflow:hidden;
       background:#0c0e13;
     }
     .thumb img{
       width:100%;
       height:100%;
-      object-fit:cover;            /* fill the area (may crop) */
+      object-fit:cover;            /* default: fill area (may crop) */
       display:block;
       transform:scale(1.01);
       transition:transform .25s ease;
     }
 
-    /* Network card: taller viewport + nudge crop */
-    .card.network .thumb{ aspect-ratio: 9 / 8; } /* was 16/9 */
-    .card.network .thumb img{ object-position: 60% 75%; }
+    /* Network card: show entire poster (icon + all text) */
+    .card.network .thumb img{
+      object-fit: contain;         /* ⬅️ no cropping */
+      object-position: 50% 50%;    /* center the graphic */
+      background:#0c0e13;          /* fills any empty space */
+      transform: none;             /* keep framing steady */
+    }
     .card.network:hover .thumb img{ transform: none; }
 
-    /* Linux card: match the Network card’s ratio and center nicely */
-    .card.linux .thumb{ aspect-ratio: 9 / 8; }
-    .card.linux .thumb img{ object-position: 50% 30%; }
+    /* Linux card: keep it full-bleed; optional framing tweak */
+    .card.linux .thumb img{
+      object-position: 50% 25%;    /* nudge frame if you like */
+    }
 
     .title{
       font:600 1.05rem/1.3 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
