@@ -11,36 +11,18 @@
       margin: 20px;
       line-height: 1.6;
       background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
-      text-align: left; /* Align all text to the left */
+      color: #f0f0f0;            /* Light grey text */
+      text-align: left;
     }
 
-    h1, h2 {
-      text-align: left;
-      color: #d3d3d3;
-    }
+    h1, h2 { text-align: left; color: #d3d3d3; }
+    p { text-align: left; margin-left: 20px; }
 
-    p {
-      text-align: left;
-      margin-left: 20px;
-    }
+    a { color: #1e90ff; text-decoration: none; }
+    a:hover { color: #ff7f50; text-decoration: underline; }
 
-    ul {
-      text-align: left;
-      padding-left: 40px;
-      list-style-type: none;
-    }
-    a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
     .bg {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background:
         linear-gradient(to bottom, rgba(0,0,0,.4), rgba(0,0,0,.6)),
         url("Images/brand-bg.jpeg") center center / cover no-repeat;
@@ -55,7 +37,7 @@
       gap: var(--gap);
       margin: 1rem 0 2rem 20px;
       max-width: 750px;
-      justify-content: start; /* Aligns the grid to the left */
+      justify-content: start; /* left align */
     }
     .card{
       background:#111318;
@@ -63,51 +45,38 @@
       border-radius:14px;
       overflow:hidden;
       transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      max-width: 320px;  /* limits each card’s width */
+      max-width: 320px;
       margin: 0;
     }
-    .card-link{
-      display:block;
-      color:inherit;
-      text-decoration:none;
-      height:100%;
-    }
+    .card-link{ display:block; color:inherit; text-decoration:none; height:100%; }
 
-    /* Global thumbnail: set a more rectangular shape (terminal-like) */
+    /* Wider, terminal-like thumbnail shape for both cards */
     .thumb{
       margin:0;
-      aspect-ratio: 4 / 3;        /* ⬅️ wider rectangle for both cards */
+      aspect-ratio: 4 / 3;
       overflow:hidden;
       background:#0c0e13;
     }
+
+    /* Default image behavior: show full image and fill edges with page grey */
     .thumb img{
       width:100%;
       height:100%;
-      object-fit:cover;            /* default: fill area (may crop) */
+      object-fit: contain;      /* ✅ no cropping */
+      object-position: 50% 50%;
       display:block;
-      transform:scale(1.01);
-      transition:transform .25s ease;
+      background:#2b2b2b;       /* ✅ edge fill matches page background */
+      transform:none;           /* keep framing steady */
+      transition: none;
     }
 
-    /* Network card: show entire poster (icon + all text) */
-    .card.network .thumb img{
-      object-fit: contain;         /* ⬅️ no cropping */
-      object-position: 50% 50%;    /* center the graphic */
-      background:#0c0e13;          /* fills any empty space */
-      transform: none;             /* keep framing steady */
-    }
-    .card.network:hover .thumb img{ transform: none; }
-
-    /* Linux card: keep it full-bleed; optional framing tweak */
-    .card.linux .thumb img{
-      object-position: 50% 25%;    /* nudge frame if you like */
-    }
+    /* You can still nudge framing per card if desired */
+    .card.network .thumb img{ object-position: 50% 50%; }
+    .card.linux   .thumb img{ object-position: 50% 30%; } /* slight lift for terminal */
 
     .title{
       font:600 1.05rem/1.3 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      margin:0;
-      padding:0.9rem 1rem 0 1rem;
-      color:#d3d3d3;
+      margin:0; padding:0.9rem 1rem 0 1rem; color:#d3d3d3;
     }
     .excerpt{
       color:#a9b0c3;
@@ -115,23 +84,24 @@
       margin:0.45rem 1rem 0 1rem;
     }
     .meta{
-      display:inline-block;
-      color:#7f8599;
-      font-size:.9rem;
+      display:inline-block; color:#7f8599; font-size:.9rem;
       margin:0.85rem 1rem 1rem 1rem;
     }
+
     .card:hover{
       transform:translateY(-2px);
       box-shadow:0 8px 24px rgba(0,0,0,.35);
       border-color:#2e3342;
     }
-    .card:hover .thumb img{ transform:scale(1.05); }
   </style>
 </head>
 <body>
   <div class="bg"></div>
   <h1 style="color: #9e9fb0;">Blog</h1>
-  <p style="font-style: italic;"><strong style="color: #9e9fb0;">Welcome!</strong> The following are <strong style="color: #9e9fb0;">blogs</strong> I've created based on the different <strong style="color: #9e9fb0;">projects</strong> I've worked on so far.</p>
+  <p style="font-style: italic;">
+    <strong style="color: #9e9fb0;">Welcome!</strong> The following are <strong style="color: #9e9fb0;">blogs</strong>
+    I've created based on the different <strong style="color: #9e9fb0;">projects</strong> I've worked on so far.
+  </p>
 
   <!-- Blog Cards Grid -->
   <section class="blog-grid">
@@ -139,10 +109,9 @@
     <article class="card network">
       <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/10%20Essential%20Network%20Commands">
         <figure class="thumb">
-          <img
-            src="Images/Essential%20Network%20Commands.png"
-            alt="Essential Network Commands blog cover"
-            loading="lazy">
+          <img src="Images/Essential%20Network%20Commands.png"
+               alt="Essential Network Commands blog cover"
+               loading="lazy">
         </figure>
         <h3 class="title">Essential Network Commands</h3>
         <p class="excerpt">Ping, tracert, ipconfig and more—what they show and when to use them.</p>
@@ -154,10 +123,9 @@
     <article class="card linux">
       <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/10%20Essential%20Linux%20Commands">
         <figure class="thumb">
-          <img
-            src="Images/Terminal.png"
-            alt="Linux terminal themed cover"
-            loading="lazy">
+          <img src="Images/Terminal.png"
+               alt="Linux terminal themed cover"
+               loading="lazy">
         </figure>
         <h3 class="title">Essential Linux Commands</h3>
         <p class="excerpt">Navigate, manage files, and work efficiently with core Linux commands.</p>
