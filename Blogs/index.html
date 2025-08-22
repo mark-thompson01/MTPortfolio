@@ -51,10 +51,11 @@
     .blog-grid{
       --gap: 1.25rem;
       display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap:var(--gap);
-      margin: 1rem auto 2rem auto;
+      margin: 1rem 0 2rem 20px;
       max-width: 900px;
+      justify-content: start; /* Aligns the grid to the left */
     }
     .card{
       background:#111318;
