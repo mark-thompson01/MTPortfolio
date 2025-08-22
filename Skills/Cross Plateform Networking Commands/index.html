@@ -76,8 +76,39 @@
     <p>Networking commands via the Command-Line Interface (CLI) allow IT professionals to effectively diagnose, troubleshoot, and manage network connections by offering detailed insights and real-time control over network environments.</p>
   </section><br>
 
+    <section>
+    <h3>1. Ping</h3>
+    <p><strong>Testing connectivity and measuring latency:</strong></p>
+    <pre>
+Windows:
+ping example.com
+ping -t example.com
+ping -n 10 example.com
+ping -l 1500 example.com
+
+<img src="Images/ping.PNG" alt="ping.PNG">
+<img src="Images/ping2.PNG" alt="Ping2.PNG">
+<img src="Images/ping3.PNG" alt="ping3.PNG">
+<img src="Images/[omg4.PNG" alt="[omg4.PNG">
+    
+
+Linux:
+ping -c 4 example.com
+ping -i 0.5 example.com
+ping -s 100 example.com
+ping -M do -s 1472 example.com
+
+<img src="Images/Linux/ping1.png" alt="ping1.png" style="width:700px; height:250px;">
+<img src="Images/Linux/ping2.png" alt="ping2.png" style="width:700px; height:250px;">
+<img src="Images/Linux/ping3.png" alt="ping3.png" style="width:700px; height:250px;">
+<img src="Images/Linux/ping4.png" alt="ping4.png" style="width:700px; height:250px;">
+
+
+    </pre>
+  </section>
+
   <section>
-    <h3>1. Displaying Network Configuration</h3>
+    <h3>2. Displaying Network Configuration</h3>
     <p>Quickly retrieving network interface configurations and IP details to address network connectivity and configuration issues promptly.</p>
     <pre>
 Windows:
@@ -113,7 +144,7 @@ sudo systemctl restart NetworkManager
 
 
   <section>
-    <h3>2. ARP Table Inspection</h3>
+    <h3>3. ARP Table Inspection</h3>
     <p><strong>Inspecting ARP tables to correlate IP addresses with MAC addresses:</strong></p>
     <pre>arp -a</pre>
   </section>
@@ -127,7 +158,7 @@ sudo systemctl restart NetworkManager
   
 
   <section>
-    <h3>3. Domain Name Resolution (DNS Lookup)</h3>
+    <h3>4. Domain Name Resolution (DNS Lookup)</h3>
     <p><strong>Resolving domain names to IP addresses for verifying DNS records:</strong></p>
     <pre>
 Windows:
@@ -159,7 +190,7 @@ dig NS example.com
   </section><br><br><br><br>
 
   <section>
-    <h3>4. Network Statistics and Active Connections</h3>
+    <h3>5. Network Statistics and Active Connections</h3>
     <p><strong>Monitoring current connections and ports:</strong></p>
     <pre>
 Windows:
@@ -186,37 +217,6 @@ ss -tuln
   </ul>
   </section><br><br><br>
 
-  <section>
-    <h3>5. Ping</h3>
-    <p><strong>Testing connectivity and measuring latency:</strong></p>
-    <pre>
-Windows:
-ping example.com
-ping -t example.com
-ping -n 10 example.com
-ping -l 1500 example.com
-
-<img src="Images/ping.PNG" alt="ping.PNG">
-<img src="Images/ping2.PNG" alt="Ping2.PNG">
-<img src="Images/ping3.PNG" alt="ping3.PNG">
-<img src="Images/[omg4.PNG" alt="[omg4.PNG">
-    
-
-Linux:
-ping -c 4 example.com
-ping -i 0.5 example.com
-ping -s 100 example.com
-ping -M do -s 1472 example.com
-
-<img src="Images/Linux/ping1.png" alt="ping1.png" style="width:700px; height:250px;">
-<img src="Images/Linux/ping2.png" alt="ping2.png" style="width:700px; height:250px;">
-<img src="Images/Linux/ping3.png" alt="ping3.png" style="width:700px; height:250px;">
-<img src="Images/Linux/ping4.png" alt="ping4.png" style="width:700px; height:250px;">
-
-
-      
-    </pre>
-  </section>
 
   <section>
     <h3>6. Trace Routing</h3>
