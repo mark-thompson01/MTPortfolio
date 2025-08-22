@@ -63,9 +63,8 @@
       border-radius:14px;
       overflow:hidden;
       transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      max-width: 320px; /* Limit each cards size */
-      margin: 0 auto; /* center each card in its grid call */
-      margin: 0;
+      max-width: 320px;           /* Limit each card’s size */
+      margin: 0;                  /* don’t center cards */
     }
     .card-link{
       display:block;
@@ -75,7 +74,7 @@
     }
     .thumb{
       margin:0;
-      aspect-ratio:16/9;           /* keeps card heights uniform */
+      aspect-ratio:16/9;           /* default ratio */
       overflow:hidden;
       background:#0c0e13;
     }
@@ -87,15 +86,16 @@
       transform:scale(1.01);
       transition:transform .25s ease;
     }
-    /* Give the Network card a taller vieepoint and aim the crop */
+
+    /* Network card: taller viewport + nudge crop */
     .card.network .thumb{ aspect-ratio: 9 / 8; } /* was 16/9 */
-    /* 🎯 Option A: nudge crop on the Network card so icon + heading show */
-    .card.network .thumb img{
-      object-position: 60% 75%;    /* adjust these percentages if needed */
-    }
-    .card.network:hover .thumb img{
-      transform: none;
-    }
+    .card.network .thumb img{ object-position: 60% 75%; }
+    .card.network:hover .thumb img{ transform: none; }
+
+    /* Linux card: match the Network card’s ratio and center nicely */
+    .card.linux .thumb{ aspect-ratio: 9 / 8; }
+    .card.linux .thumb img{ object-position: 50% 30%; }
+
     .title{
       font:600 1.05rem/1.3 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       margin:0;
@@ -144,7 +144,7 @@
     </article>
 
     <!-- Essential Linux Commands -->
-    <article class="card">
+    <article class="card linux">
       <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/10%20Essential%20Linux%20Commands">
         <figure class="thumb">
           <img
