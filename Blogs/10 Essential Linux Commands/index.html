@@ -159,7 +159,20 @@
 
 <h3><code>chown</code></h3>
 <h4>Change File Ownership</h4>
-<p><strong>What it does:</strong> Changes the owner or group of a file or directory.</p>
+<p>
+In this example, the command:
+<code>sudo chown root:root script.sh</code>
+does the following:
+</p>
+<ul>
+  <li><code>sudo</code> — runs the command with elevated privileges, which are required for changing ownership.</li>
+  <li><code>chown</code> — invokes the change ownership command.</li>
+  <li><code>root:root</code> — assigns ownership to the user <strong>root</strong> and the group <strong>root</strong>.</li>
+  <li><code>script.sh</code> — is the target file whose ownership is being changed.</li>
+</ul>
+<p>
+This means that after running the command, only the <code>root</code> user (and root group) will own the file <code>script.sh</code>, which may restrict access for other users.
+</p>
 <img src="Images/chown.png" alt="chown.png" style="width:650px; height:400px;"><br><br><br>
 
 <h3><code>man</code></h3>
