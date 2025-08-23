@@ -98,15 +98,20 @@
 
   <h3><code>nslookup</code></h3>
   <p>
-    <code>nslookup</code> is a Windows DNS investigation tool — it asks a DNS server for information about domain names and IP addresses. Whether you're hunting down where a website lives or diagnosing DNS failures, this command gives you a direct line to the domain name system.
+  The <code>nslookup</code> command is a Windows DNS investigation tool — it asks a DNS server for information about domain names and IP addresses. Whether you're hunting down where a website lives or diagnosing DNS failures, this command gives you a direct line to the domain name system.
   </p>
+  <p>Use this when you want to manually test if a domain resolves to the correct IP address or troubleshoot DNS server behavior. It’s a quick way to confirm whether DNS is functioning as expected.</p>
   <img src="Images/nslookup1.PNG" alt="nslookup1.PNG"><br><br><br><br><br>
 
   <h3><code>host</code> / <code>dig</code></h3>
   <p>
     These Linux-based DNS tools go deeper than <code>nslookup</code>. <code>host</code> offers quick domain-to-IP lookups, while <code>dig</code> (Domain Information Groper) gives detailed query reports straight from DNS servers. They're like the X-ray scanners of DNS troubleshooting.
-  </p>
+  </p><br>
+  <h3><code>host</code></h3>
+  <p>Use this for quick domain-to-IP lookups or reverse lookups on Linux. It’s lightweight and ideal when you need fast, simple DNS resolution results without extra verbosity.</p>
   <img src="Images/host1.png" alt="host1.png" style="width:650px; height:400px;"><br>
+  <h3><code>dig</code></h3>
+  <p>Best used when you need a deep look into DNS responses, query times, and authoritative answers. It’s the go-to tool for advanced DNS troubleshooting and validation.</p>
   <img src="Images/dig1.png" alt="dig1.png" style="width:650px; height:400px;"><br><br><br><br><br>
 
   <h3><code>netstat -a</code> / <code>netstat -an</code></h3>
