@@ -9,32 +9,32 @@
       font-family: Arial, sans-serif;
       margin: 20px;
       line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
+      background-color: #2b2b2b;
+      color: #f0f0f0;
     }
     h1, h2, h3 {
       text-align: left;
-      color: #d3d3d3; /* Lighter grey heading */
+      color: #d3d3d3;
       margin-bottom: 10px;
     }
     p {
       text-align: left;
     }
     ul {
-      list-style: none; /* Remove default bullets */
+      list-style: none;
       padding-left: 0;
-      text-align: left; /* Align list to the left */
+      text-align: left;
     }
     li {
       margin: 10px 0;
     }
     a {
-      color: #1e90ff; /* Blue link color */
+      color: #1e90ff;
       text-decoration: none;
       font-weight: bold;
     }
     a:hover {
-      color: #ff7f50; /* Coral hover color */
+      color: #ff7f50;
     }
     .back-link {
       margin-top: 20px;
@@ -43,83 +43,136 @@
   </style>
 </head>
 <body>
-<div class="blog-card">
-  <a href="blog-post.html">
-    <img src="Images/Terminal.png" alt="Terminal.png" style="width:600px; height:400px;">
-    <h3>Essential Linux Commands</h3>
-  </a>
-</div>
 
-  
-<p style="font-style: italic;">The following outlines <strong>Essential Linux Commands</strong> that form a great foundation when starting out with Linux and other Unix-based systems.</p><br>
-<p>Linux is everywhere — it powers over 70% of the world’s servers and dominates cloud infrastructure. You'll find Linux running on web servers, networking equipment, IoT devices, embedded systems, mobile phones, and more. From data centers to smart homes, Linux is at the core of modern computing.</p>
-<p>For anyone working with Linux, having a strong command-line foundation is essential, and beneficial depending on what circumstances are encountered. In this blog, I’ll share some <strong>Essential Linux Commands</strong> that are fundamental and go a long way in helping to navigate the filesystem, and work confidently in a Linux terminal.
+<h1>Essential Linux Commands</h1>
 
-</p><br><br><br>
+<p style="font-style: italic;">
+  The following outlines <strong>Essential Linux Commands</strong> that form a great foundation when starting out with Linux and other Unix-based systems.
+</p>
 
+<p>
+  Linux is everywhere — it powers over 70% of the world’s servers and dominates cloud infrastructure. You'll find Linux running on web servers, networking equipment, IoT devices, embedded systems, mobile phones, and more. From data centers to smart homes, Linux is at the core of modern computing.
+</p>
 
+<p>
+  For anyone working with Linux, having a strong command-line foundation is essential and beneficial depending on what circumstances are encountered. In this blog, I’ll share some <strong>Essential Linux Commands</strong> that are fundamental and go a long way in helping to navigate the filesystem and work confidently in a Linux terminal.
+</p>
 
+<br><br>
 
-
-  
+<!-- FILESYSTEM NAVIGATION -->
 <h3><code>pwd</code></h3>
 <h4>Print Working Directory</h4>
 <p><strong>What it does:</strong> Shows where you are in the filesystem.</p>
-<p><strong>/home/mt</strong> directory as the current working directory.</p>
-<img src="Images/pwd.png" alt=pwd.png"><br><br><br>
+<img src="Images/pwd.png" alt="pwd.png"><br><br>
+
 <h3><code>ls</code></h3>
 <h4>List Files and Directories</h4>
 <p><strong>What it does:</strong> Lists the contents of the current directory.</p>
-<p>The <strong>ls -l</strong> does a long listing of the given directory contents to display them vertically on the terminal output.</p>
-<img src="Images/ls.png" alt="ls.png"><br><br><br>
+<p>The <strong>ls -l</strong> flag provides a long listing format for detailed output.</p>
+<img src="Images/ls.png" alt="ls.png"><br><br>
+
 <h3><code>cd</code></h3>
 <h4>Change Directory</h4>
 <p><strong>What it does:</strong> Moves between directories.</p>
-<p>This example navigates from the <strong>/home/mt</strong> directory to the <strong>/var/log</strong> directory in the file system hierarchy.</p>
-<img src="Images/cd.png" alt="cd.png"><br><br><br>
+<p>This example changes from <strong>/home/mt</strong> to <strong>/var/log</strong>.</p>
+<img src="Images/cd.png" alt="cd.png"><br><br>
+
+<!-- FILE & DIRECTORY MANAGEMENT -->
 <h3><code>mkdir</code></h3>
 <h4>Make Directory</h4>
 <p><strong>What it does:</strong> Creates new folders.</p>
-<img src="Images/mkdirbackups.png" alt="mkdirbackups.png"><br><br><br>
-<h3><code>sudo</code></h3>
-<h4>Superuser Do</h4>
-<p><strong>What it does:</strong> Allows a user to run commands with <strong>root privileges</strong> without logging in as the root user.</p>
-<img src="Images/sudo1.png" alt="sudo1.png"><br>
-<img src="Images/sudo2.png" alt="sudo2.png"><br><br><br>
+<img src="Images/mkdirbackups.png" alt="mkdirbackups.png"><br><br>
+
+<h3><code>touch</code></h3>
+<h4>Create an Empty File</h4>
+<p><strong>What it does:</strong> Quickly creates a new, empty file or updates the timestamp of an existing one.</p>
+<img src="Images/touch.png" alt="touch.png"><br><br>
+
+<h3><code>cp</code></h3>
+<h4>Copy Files and Directories</h4>
+<p><strong>What it does:</strong> Copies a file or directory to another location.</p>
+<img src="Images/cp.png" alt="cp.png"><br><br>
+
+<h3><code>mv</code></h3>
+<h4>Move or Rename Files</h4>
+<p><strong>What it does:</strong> Moves or renames files or directories.</p>
+<img src="Images/mv.png" alt="mv.png"><br><br>
+
+<h3><code>rm</code></h3>
+<h4>Remove Files</h4>
+<p><strong>What it does:</strong> Deletes files from the filesystem.</p>
+<img src="Images/rm.png" alt="rm.png"><br><br>
+
+<h3><code>rm -r</code></h3>
+<h4>Remove Directories Recursively</h4>
+<p><strong>What it does:</strong> Deletes a directory and all of its contents.</p>
+<img src="Images/rm-r.png" alt="rm-r.png"><br><br>
+
+<!-- FILE INSPECTION -->
 <h3><code>cat</code></h3>
 <h4>Concatenate and Display File Contents</h4>
 <p><strong>What it does:</strong> Displays the contents of files.</p>
-<p>This example displays - <strong>concatenates</strong> the <strong>os-release</strong> information of the <strong>Linux distribution</strong>, residing in <strong>/etc/os-release</strong>.</p>
-<img src="Images/cat.png" alt="cat.png"><br><br><br>
+<p>Displays Linux distribution information using <strong>/etc/os-release</strong>.</p>
+<img src="Images/cat.png" alt="cat.png"><br><br>
+
+<h3><code>head</code></h3>
+<h4>View the Beginning of a File</h4>
+<p><strong>What it does:</strong> Displays the first 10 lines of a file.</p>
+<img src="Images/head.png" alt="head.png"><br><br>
+
+<h3><code>tail</code></h3>
+<h4>View the End of a File</h4>
+<p><strong>What it does:</strong> Displays the last 10 lines of a file.</p>
+<img src="Images/tail.png" alt="tail.png"><br><br>
+
 <h3><code>grep</code></h3>
 <h4>Search Inside Files</h4>
 <p><strong>What it does:</strong> Searches for patterns in text files.</p>
-<p>This example searches for the specified word <strong>"error"</strong> in the <strong>/var/log/syslog</strong> file.</p>
-<img src="Images/grep.png" alt="grep.png" style="width:650px; height:400px;"><br><br><br>
+<p>This example searches for <strong>"error"</strong> in <strong>/var/log/syslog</strong>.</p>
+<img src="Images/grep.png" alt="grep.png" style="width:650px; height:400px;"><br><br>
+
+<!-- PROCESS MONITORING -->
+<h3><code>ps</code></h3>
+<h4>Process Status</h4>
+<p><strong>What it does:</strong> Lists active processes running under your session.</p>
+<img src="Images/ps.png" alt="ps.png"><br><br>
+
+<h3><code>htop</code></h3>
+<h4>Interactive Process Viewer</h4>
+<p><strong>What it does:</strong> Displays a live system monitor for processes and resource usage.</p>
+<img src="Images/htop.png" alt="htop.png"><br><br>
+
+<!-- SYSTEM MANAGEMENT -->
 <h3><code>chmod</code></h3>
 <h4>Change File Permissions</h4>
-<P><Strong>What it does:</Strong> Adjusts file read/write/execute permissions.</P>
+<p><strong>What it does:</strong> Modifies read/write/execute permissions for users or groups.</p>
+<p><strong>+x</strong> makes a file executable.</p>
+<img src="Images/chmod.png" alt="chmod.png"><br><br>
 
-<p><strong>+x</strong> is the argument that instructs <strong>chmod</strong> to <strong>add</strong> <strong>(+)</strong> executable <strong>(x)</strong> permissions to the specified file.</p>
-<img src="Images/chmod.png" alt="chmod.png"><br><br><br>
 <h3><code>chown</code></h3>
 <h4>Change File Ownership</h4>
-<p><strong>What it does:</strong> Changes the user and group ownership of a file.</p>
-<img src="Images/chown.png" alt="chown.png"><br><br><br>
+<p><strong>What it does:</strong> Changes the owner or group of a file or directory.</p>
+<img src="Images/chown.png" alt="chown.png"><br><br>
+
 <h3><code>man</code></h3>
 <h4>Manual Pages</h4>
-<P><strong>What it does:</strong> Display help documentation for any command.</P>
-<p>Any command you can run on Linux comes with built-in documentation via <strong>man</strong> or <strong>manual</strong> command.</p>
-<p>This can be very useful when learning about new commands, finding options, and the pattern syntax of different commands.</p>  
+<p><strong>What it does:</strong> Displays built-in documentation for any Linux command.</p>
+<p>This is the best way to learn options, syntax, and usage examples.</p>
 <img src="Images/man.png" alt="man.png"><br>
 <img src="Images/man2.png" alt="man2.png" style="width:650px; height:400px;"><br><br>
 
+<h3><code>sudo</code></h3>
+<h4>Superuser Do</h4>
+<p><strong>What it does:</strong> Executes a command as the root user, granting elevated permissions.</p>
+<img src="Images/sudo1.png" alt="sudo1.png"><br>
+<img src="Images/sudo2.png" alt="sudo2.png"><br><br>
+
+<!-- CONCLUSION -->
 <p>Mastering these commands builds a solid foundation for working with Linux. They're usually the first tools you rely on when navigating the filesystem and handling everyday tasks.</p>
 <p style="font-style: italic;">What are some of your favorite Linux commands?</p>
 
-  
+<a href="../index.html" class="back-link">Back to Home</a>
 
-
-<a href="../index.html">Back to Home</a> <!-- Link back to the homepage -->
 </body>
 </html>
