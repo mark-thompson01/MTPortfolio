@@ -73,6 +73,7 @@
   <p>
     <strong>Ping</strong> is the first responder on the network — it sends tiny data packets (ICMP echo requests) to a target IP or domain and waits for a reply, letting you verify that a device is reachable and measure how long the round-trip takes. It can be thought of as the digital equivalent of shouting "You there?" and listening for a reply.
   </p>
+  <p>Often the first thing that is ran when you need to verify connectivity to a server or endpoint. It's one of the quickest ways to test whether a host is reachable and responding.</p>
   <img src="Images/ping.PNG" alt="ping.PNG"><br><br><br><br><br>
   
 
@@ -131,7 +132,10 @@
   <p>
     The Linux cousin to <code>tracert</code>, <code>traceroute</code> traces the journey of packets through the internet. Each hop is revealed along the route to your target, helping you visualize where things slow down, drop, or take detours in the digital world.
   </p>
-  <img src="Images/traceroute.png" alt="traceroute.png" style="width:650px; height:400px;"><br><br><br><br>
+  <img src="Images/traceroute.png" alt="traceroute.png" style="width:650px; height:400px;"><br>
+  <p><code>tracert</code>, <code>pathping</code>, and <code>traceroute</code> are often used when you suspect network slowdowns, high latency, or unreachable services. It helps identify which hop along the route is causing delays or drops.</p>
+  
+  <br><br><br><br>
 
   <h3><code>route print</code></h3>
   <h3><code>route -n</code> / <code>ip route</code></h3><br>
