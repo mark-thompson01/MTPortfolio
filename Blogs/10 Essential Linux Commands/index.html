@@ -171,7 +171,10 @@
 
 <h3><code>sudo</code></h3>
 <h4>Superuser Do</h4>
-<p><strong>What it does:</strong> Executes a command as the root user, granting elevated permissions.</p>
+<p><strong>What it does:</strong> Executes commands with elevated privileges.  
+The <code>sudo</code> command allows a regular user to run specific commands as the root user, typically with a password prompt.  
+In contrast, <code>sudo su</code> elevates the current user to a full root shell session — meaning all following commands will be executed as root until the session ends.  
+Both are essential for system-level changes and administrative tasks.</p>
 <img src="Images/sudo1.png" alt="sudo1.png" style="width:650px; height:400px;"><br>
 <img src="Images/sudo2.png" alt="sudo2.png" style="width:650px; height:400px;"><br><br><br>
 
