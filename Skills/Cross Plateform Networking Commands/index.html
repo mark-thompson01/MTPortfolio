@@ -95,16 +95,16 @@ ping -t example.com
 ping -n 10 example.com
 ping -l 1500 example.com
     </pre><br>
-<p>This sends <strong>four ICMP echo request packets</strong> to <code>example.com</code> to test if the host is reachable and how long it takes for each response.</p>
+<p>This sends <strong>four ICMP echo request packets</strong> to <code>example.com</code><br> to test if the host is reachable and how long it takes for each response.</p>
 <p><strong>Use Case:</strong> Quick connectivity test.</p>
 <img src="Images/ping.PNG" alt="ping.PNG"><br><br>
-<p>This sends <strong>continuous pings</strong> to <code>example.com</code> until manually stopped with <code>ctrl + C.</code>. It's useful for <strong>monitoring real-time connectivity</strong> or <strong>detecting intermittent packet loss</strong>.</p>
+<p>This sends <strong>continuous pings</strong> to <code>example.com</code> until manually stopped with <code>ctrl + C</code>.<br> It's useful for <strong>monitoring real-time connectivity</strong> or <strong>detecting intermittent packet loss</strong>.</p>
 <p><strong>Use Case:</strong> Ongoing monitoring for uptime and stability.</p>
 <img src="Images/ping2.PNG" alt="Ping2.PNG"><br><br>
-<p>Sends <strong>exactly 10 ping requests</strong> to <code>example.com</code>, instead of the default 4. The <code>n</code> switch allows you to specify the <strong>number of echo requests</strong> to send.</p>
+<p>Sends <strong>exactly 10 ping requests</strong> to <code>example.com</code>, instead of the default 4.<br> The <code>n</code> switch allows you to specify the <strong>number of echo requests</strong> to send.</p>
 <p><strong>Use Case:</strong> More thorough connectivity testing without going infinite.</p>      
 <img src="Images/ping3.PNG" alt="ping3.PNG"><br><br>
-<p>Sends a ping to <code>example.com</code> with a <strong>custom packet size</strong> of 1500 bytes (instead of the default 32 bytes). The <code>-l</code> option allows you to <strong>stress test the MTU</strong> and check for fragmentation.</p> 
+<p>Sends a ping to <code>example.com</code> with a <strong>custom packet size</strong> of 1500 bytes (instead of the default 32 bytes).<br> The <code>-l</code> option allows you to <strong>stress test the MTU</strong> and check for fragmentation.</p> 
 <p><strong>Use Case:</strong> MTU path discovery or testing network handling of large packets.</p>
 <img src="Images/[omg4.PNG" alt="[omg4.PNG"><br><br><br>
     
