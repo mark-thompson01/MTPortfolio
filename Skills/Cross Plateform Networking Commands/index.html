@@ -115,16 +115,16 @@ ping -c 4 example.com
 ping -i 0.5 example.com
 ping -s 10 example.com
  </pre><br>
-<p>Sends <strong>continuous ICMP echo requests</strong> to <code>example.com</code> until manually stopped (usually with <code>ctrl + c</code>. This is the <strong>default behavior</strong> on most Linux systems.</p>
+<p>Sends <strong>continuous ICMP echo requests</strong> to <code>example.com</code> until manually stopped (usually with <code>ctrl + c</code>).<br> This is the <strong>default behavior</strong> on most Linux systems.</p>
 <p><strong>Use Case:</strong> Live monitoring of reachability and response times.</p>
 <img src="Images/Linux/ping1.png" alt="ping1.png" style="width:650px; height:400px;"><br>
-<p>Sends <strong>exactly 4 ping requests</strong> to <code>example.com</code> and then stops automatically. The <code>-c</code> flag stands for <strong>"count"</strong>.</p>
+<p>Sends <strong>exactly 4 ping requests</strong> to <code>example.com</code> and then stops automatically.<br> The <code>-c</code> flag stands for <strong>"count"</strong>.</p>
 <p><strong>Use Case:</strong> Simple, quick connectivity test — very similar to Windows default ping behavior.</p>      
 <img src="Images/Linux/ping2.png" alt="ping2.png" style="width:650px; height:400px;"><br>
-<p>Sends pings to <code>example.com</code> at <strong>0.5-second intervals</strong> between each request. The <code>-i</code> flagsets the <strong>interval</strong> in seconds.</p>
+<p>Sends pings to <code>example.com</code> at <strong>0.5-second intervals</strong> between each request.<br> The <code>-i</code> flagsets the <strong>interval</strong> in seconds.</p>
 <p><strong>Use Case:</strong> Faster-than-default pinging for <strong>fine-grained timing analysis</strong> or when observing <strong>short-lived connectivity changes</strong>.</p>      
 <img src="Images/Linux/ping3.png" alt="ping3.png" style="width:650px; height:400px;"><br>
-<p>Sends pings with a <strong>custom ICMP payload size of 10 bytes</strong>, not counting the 8-byte ICMP header. Total size sent = 18 bytes.</p>
+<p>Sends pings with a <strong>custom ICMP payload size of 10 bytes</strong>, not counting the 8-byte ICMP header.<br> Total size sent = 18 bytes.</p>
 <p><strong>Use Case:</strong> Useful for <strong>testing small packet delivery</strong> or for troubleshooting <strong>fragmentation or MTU-related issues</strong>.</p>      
 <img src="Images/Linux/ping4.png" alt="ping4.png" style="width:650px; height:400px;"><br>
 
