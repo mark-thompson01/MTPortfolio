@@ -69,12 +69,12 @@
 </ol><br>
 
 
-<h2>Connecting to the Switch</h2>
+<h2 id="Connecting to the Switch">Connecting to the Switch</h2>
 <p>In this lab environment, I'm using a serial <strong>DB-9</strong> to <strong>console port</strong> cable to connect the <strong>Cisco Catalyst</strong> switches to a Windows machine, to manage them with the use of <strong>PuTTY</strong>.</p>
 <p>Here in the <strong>PuTTY</strong> interface, I'm opening a management session with the switch, via Serial connection <strong>COM1</strong>:</p>
 <img src="Images/Connecting/con1.png" alt="con1.png"><br><br><br><br>
 
-<h2>Performing a Factory Reset</h2>
+<h2 id="Performing a Factory Reset">Performing a Factory Reset</h2>
 <p>Performing a factory reset on a Cisco Catalyst 2950 switch to reconfigure it from scratch.</p>
 <p>To start, I'm going to carry out the following steps on the <strong>Cisco Catalyst 2950</strong> switch to enter <strong>ROMMON</strong> mode:</p>
 <ol>
@@ -119,7 +119,7 @@
 <p>From here, the switch will prompt for different configurations to set it up from scratch.</p><br><br><br><br>
 
 
-<h2>Configuring Switch from Scratch</h2>
+<h2 id="Configuring Switch from Scratch">Configuring Switch from Scratch</h2>
 
 <h3>1. System Configuration Dialog (setup Wizard)</h3>
 <p>After the switch is factory reset it'll go into the <strong>System Configuration Dialog (setup Wizard)</strong> of the Cisco Catalyst 2950.</p>
@@ -188,7 +188,7 @@
 <img src="Images/From Scratch/conf16.png" alt="conf16.png"><br><br><br><br>
 
 
-<h2>Post Initial Setup</h2>
+<h2 id="Post Initial Setup">Post Initial Setup</h2>
 
 <h3>1. Enter Privileged EXEC Mode</h3>
 <p>After exiting the setup wizard and reaching the CLI, you're placed in <strong>User EXEC Mode</strong> (prompt ends in >), which provides limited read-only access:
@@ -238,7 +238,7 @@
 <img src="Images/Post Initial Setup/post11.png" alt="post11.png"><br><br><br><br>
 
 
-<h2>Creating & Configuring VLANs</h2>
+<h2 id="Creating & Configuring VLANs">Creating & Configuring VLANs</h2>
 
 <h3>1. Create and Name VLANs for Logical Segmention</h3>
 <p>To get started with creating and configuring <strong>VLANs</strong> we need to first access <strong>Global Configuration Mode</strong> from <strong>Privileged EXEC Mode</strong>.</p>
@@ -258,7 +258,7 @@
 <img src="Images/VLANs/vlan3.png" alt="vlan3.png"><br><br><br><br>
 
 
-<h2>Configuring Port Security</h2>
+<h2 id="Configuring Port Security">Configuring Port Security</h2>
 <h3>1. Configure Port Security on an Access Port</h3>
 <p>In this example, port security is configured on interface<strong>fa0/30</strong> to restrict access to a single trusted device.</p>
 <p>If another device  attempts to connect, the switch will shut down the port as a security measure.</p>
@@ -277,7 +277,7 @@
 <img src="Images/portsec2.png" alt="portsec2.png"><br><br><br><br>
 
 
-<h2>Setting up a SPAN - Switch Port Analyzer</h2>
+<h2 id="Setting up a SPAN port - Switch Port Analyzer">Setting up a SPAN - Switch Port Analyzer</h2>
 <p>Monitoring the network traffic that is passing through the switch can be implemented for various scenarios.</p>
 <p>Whether it's monitoring and analyzing the security of the network, troubleshooting network communications, analyzing what protocols are in use across endpoints, etc.</p><br>
 <p>Here, I'm going to demonstrate setting up and configuring a basic</p>
