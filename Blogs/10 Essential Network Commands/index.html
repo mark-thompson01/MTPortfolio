@@ -107,14 +107,14 @@
 
 
   
-  <h3><code>arp -a</code></h3>
+  <h3 id="arp"><code>arp -a</code></h3>
   <p>
     The <code>arp -a</code> command lets you peek behind the scenes of local communications by listing the Address Resolution Protocol (ARP) table. It maps IP addresses to MAC addresses — like your system’s contact book for nearby devices.
   </p>
   <p>This command comes in handy when troubleshooting duplicate IP and MAC addresses or unauthorized devices on a network.</p>
   <img src="Images/arp-a.PNG" alt="arp-a.PNG"><br><br><br><br><br>
 
-  <h3><code>nslookup</code></h3>
+  <h3 id="nslookup"><code>nslookup</code></h3>
   <p>
   The <code>nslookup</code> command is a Windows DNS investigation tool — it asks a DNS server for information about domain names and IP addresses. Whether you're hunting down where a website lives or diagnosing DNS failures, this command gives you a direct line to the domain name system.
   </p>
@@ -125,41 +125,41 @@
   <p>
     These Linux-based DNS tools go deeper than <code>nslookup</code>. <code>host</code> offers quick domain-to-IP lookups, while <code>dig</code> (Domain Information Groper) gives detailed query reports straight from DNS servers. They're like the X-ray scanners of DNS troubleshooting.
   </p><br>
-  <h3><code>host</code></h3>
+  <h3 id="host"><code>host</code></h3>
   <p>Use this for quick domain-to-IP lookups or reverse lookups on Linux. It’s lightweight and ideal when you need fast, simple DNS resolution results without extra verbosity.</p>
   <img src="Images/host1.png" alt="host1.png" style="width:650px; height:400px;"><br>
-  <h3><code>dig</code></h3>
+  <h3 id="dig"><code>dig</code></h3>
   <p>Best used when you need a deep look into DNS responses, query times, and authoritative answers. It’s the go-to tool for advanced DNS troubleshooting and validation.</p>
   <img src="Images/dig1.png" alt="dig1.png" style="width:650px; height:400px;"><br><br><br><br><br>
 
-  <h3><code>netstat -a</code> / <code>netstat -an</code></h3>
+  <h3 id="netstat"><code>netstat -a</code> / <code>netstat -an</code></h3>
   <p>
     The <code>netstat</code> command exposes a system’s open doors — it shows which ports are listening, which connections are active, and which processes are using them. Useful for identifying suspicious activity, verifying services, or seeing what active connections a given system has.
   </p>
   <img src="Images/netstat1.PNG" alt="netstat1.PNG"><br>
   <img src="Images/netstat.png" alt="netstat.png" style="width:650px; height:400px;"><br><br><br><br><br>
 
-  <h3><code>tracert</code></h3>
+  <h3 id="tracert"><code>tracert</code></h3>
   <p>
     Short for “trace route,” this Windows command traces the path packets take to reach a destination. It lists each network hop along the way, revealing delays, outages, or routing quirks that might be slowing things down.
   </p>
   <img src="Images/tracert.png" alt="tracert.png" style="width:450px; height:145px;"><br><br><br>
 
-  <h3><code>traceroute</code></h3>
+  <h3 id="traceroute"><code>traceroute</code></h3>
   <p>
     The Linux cousin to <code>tracert</code>, <code>traceroute</code> traces the journey of packets through the internet. Each hop is revealed along the route to your target, helping you visualize where things slow down, drop, or take detours in the digital world.
   </p>
   <img src="Images/traceroute.png" alt="traceroute.png" style="width:650px; height:400px;"><br>
   <p>The <code>tracert</code>, <code>pathping</code>, and <code>traceroute</code> commands are often used when you suspect network slowdowns, high latency, or unreachable services. It helps identify which hop along the route is causing delays or drops.</p><br><br><br>
 
- <h3><code>pathping</code></h3>
+ <h3 id="pathping"><code>pathping</code></h3>
 <p>
   The <code>pathping</code> is a Windows command that is like <code>ping</code> and <code>tracert</code> merged into one — but with a twist. It sends pings to every hop along the path and calculates packet loss and latency at each point. It's the network path’s health report, not just its roadmap.
 </p>
 <img src="Images/pathping.png" alt="pathping.png"><br><br><br><br>
   
 
-  <h3><code>route print</code></h3>
+  <h3 id="route"><code>route print</code></h3>
   <h3><code>route -n</code> / <code>ip route</code></h3><br>
   <p>
     These commands unveil a system’s routing table — the rules it follows to decide where to send packets. <code>route print</code> on Windows and <code>route -n</code>, <code>ip route</code> on Linux give you a map of how traffic is directed across gateways and networks.
