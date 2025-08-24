@@ -75,10 +75,24 @@
     <h2>Understanding Networking Commands</h2>
     <p style="font-style: italic;">The following outlines some <strong>Essential Network Commands</strong> used between <strong>Windows</strong>, <strong>Linux</strong>, as well as <strong>macOS</strong>.</p>
     <p>Networking commands via the Command-Line Interface (CLI) allow IT professionals to effectively diagnose, troubleshoot, and manage network connections by offering detailed insights and real-time control over network environments.</p>
-  </section><br>
+  </section>
+
+<h2>Table of Contents</h2>
+<ul>
+  <li><a href="#ping">1. Ping</a></li>
+  <li><a href="#net-config">2. Displaying Network Configuration</a></li>
+  <li><a href="#arp">3. ARP Table Inspection</a></li>
+  <li><a href="#dns">4. Domain Name Resolution (DNS Lookup)</a></li>
+  <li><a href="#netstat">5. Network Statistics and Active Connections</a></li>
+  <li><a href="#traceroute">6. Trace Routing (tracert, traceroute, mtr)</a></li>
+  <li><a href="#pathping">7. Pathping</a></li>
+  <li><a href="#routing">8. Route (Routing Table)</a></li>
+  <li><a href="#hostname">9. Hostname</a></li>
+</ul>
+
 
     <section>
-    <h3>1. Ping</h3>
+    <h3 id="ping">1. Ping</h3>
     <p>Testing connectivity and measuring latency:</p>
     <pre>
 Windows:
@@ -108,7 +122,7 @@ ping -s 10 example.com
   </section><br><br><br>
 
   <section>
-    <h3>2. Displaying Network Configuration</h3>
+    <h3 id="net-config">2. Displaying Network Configuration</h3>
     <p>Quickly retrieving network interface configurations and IP details to address network connectivity and configuration issues promptly.</p>
     <pre>
 Windows:
@@ -145,7 +159,7 @@ sudo systemctl restart NetworkManager
 
 
   <section>
-    <h3>3. ARP Table Inspection</h3>
+    <h3 id="arp">3. ARP Table Inspection</h3>
     <p><strong>Inspecting ARP tables to correlate IP addresses with MAC addresses:</strong></p>
     <pre>arp -a</pre>
   </section>
@@ -159,7 +173,7 @@ sudo systemctl restart NetworkManager
   
 
   <section>
-    <h3>4. Domain Name Resolution (DNS Lookup)</h3>
+    <h3 id="dns">4. Domain Name Resolution (DNS Lookup)</h3>
     <p><strong>Resolving domain names to IP addresses for verifying DNS records:</strong></p>
     <pre>
 Windows:
@@ -191,7 +205,7 @@ dig NS example.com
   </section><br><br><br><br>
 
   <section>
-    <h3>5. Network Statistics and Active Connections</h3>
+    <h3 id="netstat">5. Network Statistics and Active Connections</h3>
     <p><strong>Monitoring current connections and ports:</strong></p>
     <pre>
 Windows:
@@ -220,7 +234,7 @@ ss -tuln
 
 
   <section>
-    <h3>6. Trace Routing</h3>
+    <h3 id="traceroute">6. Trace Routing</h3>
     <p>Systematically analyzing the route network packets take.</p>
     <pre>
 Windows:
@@ -255,7 +269,7 @@ mtr example.com
   </section><br><br>
 
   <section>
-    <h3>7. Pathping</h3>
+    <h3 id="pathping">7. Pathping</h3>
     <p>Comprehensive analysis of latency and packet loss.</p>
     <pre>
 Windows:
@@ -267,7 +281,7 @@ pathping example.com
 
   <section>
     <h3>Additional Useful Commands</h3>
-    <p><strong>Route (View routing tables):</strong></p>
+    <p id="routing"><strong>Route (View routing tables):</strong></p>
     <pre>
 Windows:
 route print
@@ -281,7 +295,7 @@ ip route
 <img src="Images/Linux/route.png" alt="route.png" style="width:675px; height:400px;">
     </pre>
 
-    <p><strong>Hostname (View or change hostname):</strong></p>
+    <p id="hostname"><strong>Hostname (View or change hostname):</strong></p>
     <pre>
 Windows:
 hostname
