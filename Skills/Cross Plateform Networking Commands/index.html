@@ -154,7 +154,7 @@ sudo systemctl restart NetworkManager
         <li>Identify devices</li>
         <li>Troubleshoot connectivity</li>
         <li>Detect unauthorized devices</li>
-      </ul><br><br><br>
+      </ul><br><br><br><br>
   
 
   <section>
@@ -215,7 +215,7 @@ ss -tuln
     <li>Port conflicts</li>
     <li>General curiosity of what established connections are on a given system</li>
   </ul>
-  </section><br><br><br>
+  </section><br><br><br><br>
 
 
   <section>
@@ -233,7 +233,17 @@ Linux:
 traceroute example.com
     </pre>
     
-    <img src="Images/Linux/traceroute.png" alt="traceroute.png" style="width:650px; height:400px;">
+    <img src="Images/Linux/traceroute.png" alt="traceroute.png" style="width:650px; height:400px;"><br>
+
+    <pre>
+Linux (using MTR):
+mtr example.com
+  </pre>
+<img src="Images/Linux/mtr.png" alt="mtr.png" style="width:650px; height:400px;">
+<img src="Images/Linux/mtr2.png" alt="mtr2.png" style="width:650px; height:400px;"> 
+  
+<p><strong>mtr</strong> also called <strong>(My Traceroute)</strong> in <strong>Linux</strong> is the network diagostic tool that combines<br> the functionalities of <strong>traceroute</strong> and <strong>ping</strong>.</p><br><br>
+</section>
 
    <p><strong>Scenarios for use:</strong></p>
     <ul>
@@ -251,17 +261,8 @@ Windows:
 pathping example.com
     </pre>
       <img src="Images/pathping.png" alt="pathping.png">
-      <p>The <strong>pathping</strong> command in <strong>Windows</strong> is a network diagnostic tool that combines the functionality of <strong>traceroute</strong> and <strong>ping</strong><br> to provide detailed information about network performance to be able to identify any potential issues along the path of a network route.</p><br><br>
+      <p>The <strong>pathping</strong> command in <strong>Windows</strong> is a network diagnostic tool that combines the functionality of <strong>traceroute</strong> and <strong>ping</strong><br> to provide detailed information about network performance to be able to identify any potential issues along the path of a network route.</p><br><br><br>
 
-  <pre>
-Linux (using MTR):
-mtr example.com
-  </pre>
-<img src="Images/Linux/mtr.png" alt="mtr.png" style="width:650px; height:400px;"><br>
-<img src="Images/Linux/mtr2.png" alt="mtr2.png" style="width:650px; height:400px;"> 
-  
-<p><strong>mtr</strong> also called <strong>(My Traceroute)</strong> in <strong>Linux</strong> is the network diagostic tool that combines<br> the functionalities of <strong>traceroute</strong> and <strong>ping</strong>.</p><br><br>
-</section>
 
   <section>
     <h3>Additional Useful Commands</h3>
