@@ -96,16 +96,16 @@ ping -n 10 example.com
 ping -l 1500 example.com
     </pre><br>
 <p>This sends <strong>four ICMP echo request packets</strong> to <code>example.com</code><br> to test if the host is reachable and how long it takes for each response.</p>
-<p><strong>Use Case:</strong> Quick connectivity test.</p>
+<p><strong>Use Case:</strong><br> Quick connectivity test.</p>
 <img src="Images/ping.PNG" alt="ping.PNG"><br><br>
 <p>This sends <strong>continuous pings</strong> to <code>example.com</code> until manually stopped with <code>ctrl + C</code>.<br> It's useful for <strong>monitoring real-time connectivity</strong> or <strong>detecting intermittent packet loss</strong>.</p>
-<p><strong>Use Case:</strong> Ongoing monitoring for uptime and stability.</p>
+<p><strong>Use Case:</strong><br> Ongoing monitoring for uptime and stability.</p>
 <img src="Images/ping2.PNG" alt="Ping2.PNG"><br><br>
 <p>Sends <strong>exactly 10 ping requests</strong> to <code>example.com</code>, instead of the default 4.<br> The <code>n</code> switch allows you to specify the <strong>number of echo requests</strong> to send.</p>
-<p><strong>Use Case:</strong> More thorough connectivity testing without going infinite.</p>      
+<p><strong>Use Case:</strong><br> More thorough connectivity testing without going infinite.</p>      
 <img src="Images/ping3.PNG" alt="ping3.PNG"><br><br>
 <p>Sends a ping to <code>example.com</code> with a <strong>custom packet size</strong> of 1500 bytes (instead of the default 32 bytes).<br> The <code>-l</code> option allows you to <strong>stress test the MTU</strong> and check for fragmentation.</p> 
-<p><strong>Use Case:</strong> MTU path discovery or testing network handling of large packets.</p>
+<p><strong>Use Case:</strong><br> MTU path discovery or testing network handling of large packets.</p>
 <img src="Images/[omg4.PNG" alt="[omg4.PNG"><br><br><br>
     
  <pre>
@@ -116,16 +116,16 @@ ping -i 0.5 example.com
 ping -s 10 example.com
  </pre><br>
 <p>Sends <strong>continuous ICMP echo requests</strong> to <code>example.com</code><br> until manually stopped (usually with <code>ctrl + c</code>)<br> This is the <strong>default behavior</strong> on most Linux systems.</p>
-<p><strong>Use Case:</strong> Live monitoring of reachability and response times.</p>
+<p><strong>Use Case:</strong><br> Live monitoring of reachability and response times.</p>
 <img src="Images/Linux/ping1.png" alt="ping1.png" style="width:650px; height:400px;"><br>
 <p>Sends <strong>exactly 4 ping requests</strong> to <code>example.com</code> and then stops automatically.<br> The <code>-c</code> flag stands for <strong>"count"</strong>.</p>
-<p><strong>Use Case:</strong> Simple, quick connectivity test — very similar to Windows default ping behavior.</p>      
+<p><strong>Use Case:</strong><br> Simple, quick connectivity test — very similar to Windows default ping behavior.</p>      
 <img src="Images/Linux/ping2.png" alt="ping2.png" style="width:650px; height:400px;"><br>
 <p>Sends pings to <code>example.com</code> at <strong>0.5-second intervals</strong> between each request.<br> The <code>-i</code> flagsets the <strong>interval</strong> in seconds.</p>
-<p><strong>Use Case:</strong> Faster-than-default pinging for <strong>fine-grained timing analysis</strong> or when observing <strong>short-lived connectivity changes</strong>.</p>      
+<p><strong>Use Case:</strong><br> Faster-than-default pinging for <strong>fine-grained timing analysis</strong> or when observing <strong>short-lived connectivity changes</strong>.</p>      
 <img src="Images/Linux/ping3.png" alt="ping3.png" style="width:650px; height:400px;"><br>
 <p>Sends pings with a <strong>custom ICMP payload size of 10 bytes</strong>, not counting the 8-byte ICMP header.<br> Total size sent = 18 bytes.</p>
-<p><strong>Use Case:</strong> Useful for <strong>testing small packet delivery</strong> or for troubleshooting <strong>fragmentation or MTU-related issues</strong>.</p>      
+<p><strong>Use Case:</strong><br> Useful for <strong>testing small packet delivery</strong> or for troubleshooting <strong>fragmentation or MTU-related issues</strong>.</p>      
 <img src="Images/Linux/ping4.png" alt="ping4.png" style="width:650px; height:400px;"><br>
 
 
