@@ -250,14 +250,14 @@ nslookup -type=ns example.com
 <img src="Images/nslookup3.PNG" alt="nslookup3.PNG">
     <pre><br><br>
 Linux:
-host google.com
+host example.com
 host -t MX example.com
 host -t NS example.com
 dig example.com
 dig MX example.com
 dig NS example.com
     </pre>
-<pre>host</pre>
+<pre>host example.com</pre>
 <p>The <code>host</code> command is a <strong>simple DNS lookup utility</strong> that returns DNS records for the given domain.</p>
 <ul>
   <li><code>host example.com</code> returns the <strong>A record</strong>, showing the IPv4 address of the domaoin.</li>
@@ -297,17 +297,22 @@ Windows:
 netstat -a
 netstat -an
 netstat -b
+    </pre>
+<pre>netstat -a</pre>
+<img src="Images/netstat1.PNG" alt="netstat1.PNG" style="width:550px; height:350px:"><br><br>
+<pre>netstat -an</pre>
+<img src="Images/netstat3.PNG" alt="netstat3.PNG" style="width:550px; height:400px:"><br><br>
+<pre>netstat -b</pre>
+<img src="Images/netstat-an.PNG" alt="netstat-an.PNG" style="width:550px; height:400px:"><br><br><br>
 
-<img src="Images/netstat1.PNG" alt="netstat1.PNG" style="width:550px; height:350px:"><br>
-<img src="Images/netstat3.PNG" alt="netstat3.PNG" style="width:550px; height:400px:"><br>
-<img src="Images/netstat-an.PNG" alt="netstat-an.PNG" style="width:550px; height:400px:"><br>
-
-
+   <pre>
 Linux:
 netstat -an
 ss -tuln
     </pre>
+<pre>netstat -an</pre>
 <img src="Images/Linux/netstat-an.png" alt="netstat-an.png" style="width:650px; height:400px;"><br>
+<pre>ss -tuln</pre>
 <img src="Images/Linux/ss.png" alt="ss.png" style="width:650px; height:400px;">
   <p><strong>Applicable scenarios:</strong></p>
   <ul>
