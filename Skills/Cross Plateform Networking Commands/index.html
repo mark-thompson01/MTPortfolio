@@ -396,20 +396,27 @@ ip route
    </pre>
 <p>These commands show the <strong>Linux kernel routing table</strong>, helping determine how outbound traffic is routed.</p>
 <p><strong>Use Case:</strong><br> Used for <strong>gateway verification</strong>, <strong>troubleshooting unreachable networks,</strong>, or <strong>understanding packet flow</strong> based on router properly.</p>
-<img src="Images/Linux/route.png" alt="route.png" style="width:675px; height:400px;">
+<img src="Images/Linux/route.png" alt="route.png" style="width:675px; height:400px;"><br><br>
 
     <p id="hostname"><strong>Hostname (View or change hostname):</strong></p>
+    <p>Displays the <strong>name of the current system (host)</strong> on the network.</p>
+    <p>This name identifies the machine in a LAN or DNS environment and is often used for network management and domain joining.</p>
+    <p><strong>Use Case:</strong><br>Useful for <strong>verifying system identity</strong>, and<strong>remote session awareness</strong>.</p>
     <pre>
 Windows:
 hostname
     </pre>
 
-<img src="Images/hostname.PNG" alt="hostname.PNG">
+<img src="Images/hostname.PNG" alt="hostname.PNG"><br>
+
     <pre>
 Linux:
 hostname
 sudo hostnamectl set-hostname new-hostname
     </pre>
+<p>The <code>sudo hostnamectl set-hostname new-hostname</code> command <strong>permanently changes the systems hostname</strong> on a modern Linux system using <code>systemd</code>.</p>
+<p><strong>Use Case:</strong><br> Commonly used during <strong>initial server setup</strong>, <strong>renaming machines</strong>, or <strong>customizing hosts</strong> in a lab or production environment.</p>
+<p>After running this command, the new hostname will take effect immediately.</p>
 <img src="Images/Linux/hostname.png" alt="hostname.png" style="width:675px; height:400px;">
       
   
