@@ -127,14 +127,17 @@ ping -s 10 example.com
 <p>This is the <strong>default behavior</strong> on most Linux systems:</p>
 <p><strong>Use Case:</strong><br> Live monitoring of reachability and response times.</p>
 <img src="Images/Linux/ping1.png" alt="ping1.png" style="width:650px; height:400px;"><br><br><br>
+<pre>ping -c 4 example.com</pre>
 <p>Sends <strong>exactly 4 ping requests</strong> to <code>example.com</code> and then stops automatically.</p>
 <p>The <code>-c</code> flag stands for <strong>"count"</strong>.</p>
 <p><strong>Use Case:</strong><br> Simple, quick connectivity test — very similar to Windows default ping behavior.</p>      
-<img src="Images/Linux/ping2.png" alt="ping2.png" style="width:650px; height:400px;"><br><br>
+<img src="Images/Linux/ping2.png" alt="ping2.png" style="width:650px; height:400px;"><br><br><br>
+<pre>ping -i 0.5 example.com</pre>
 <p>Sends pings to <code>example.com</code> at <strong>0.5-second intervals</strong> between each request.</p>
 <p>The <code>-i</code> flag sets the <strong>interval</strong> in seconds.</p>
 <p><strong>Use Case:</strong><br> Faster-than-default pinging for <strong>fine-grained timing analysis</strong> or when observing <strong>short-lived connectivity changes</strong>.</p>      
 <img src="Images/Linux/ping3.png" alt="ping3.png" style="width:650px; height:400px;"><br><br><br>
+<pre>ping -s 10 example.com</pre>
 <p>Sends pings with a <strong>custom ICMP payload size of 10 bytes</strong>, not counting the 8-byte ICMP header.</p>
 <p>Total size sent = 18 bytes.</p>
 <p><strong>Use Case:</strong><br> Useful for <strong>testing small packet delivery</strong> or for troubleshooting <strong>fragmentation or MTU-related issues</strong>.</p>      
