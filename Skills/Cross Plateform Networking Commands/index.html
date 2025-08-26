@@ -99,7 +99,7 @@ ping -l 1500 example.com
 <p>This sends <strong>four ICMP echo request packets</strong> to <code>example.com</code><br> to test if the host is reachable and how long it takes for each response.</p>
 <p><strong>Use Case:</strong><br> Quick connectivity test.</p>
 <img src="Images/ping.PNG" alt="ping.PNG"><br><br><br>
-<pre>ping -t</pre>
+<pre>ping -t example.com</pre>
 <p>This sends <strong>continuous pings</strong> to <code>example.com</code> until manually stopped with <code>ctrl + c</code><br> It's useful for <strong>monitoring real-time connectivity</strong> or <strong>detecting intermittent packet loss</strong>.</p>
 <p><strong>Use Case:</strong><br> Ongoing monitoring for uptime and stability.</p>
 <img src="Images/ping2.PNG" alt="Ping2.PNG"><br><br><br>
@@ -141,10 +141,10 @@ ping -s 10 example.com
 <p>Sends pings with a <strong>custom ICMP payload size of 10 bytes</strong>, not counting the 8-byte ICMP header.</p>
 <p>Total size sent = 18 bytes.</p>
 <p><strong>Use Case:</strong><br> Useful for <strong>testing small packet delivery</strong> or for troubleshooting <strong>fragmentation or MTU-related issues</strong>.</p>      
-<img src="Images/Linux/ping4.png" alt="ping4.png" style="width:650px; height:400px;"><br>
+<img src="Images/Linux/ping4.png" alt="ping4.png" style="width:650px; height:400px;">
 
 
-  </section><br><br><br>
+  </section><br><br><br><br><br>
 
   <section>
     <h3 id="net-config">2. Displaying Network Configuration</h3>
