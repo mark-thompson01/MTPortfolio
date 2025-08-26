@@ -155,23 +155,23 @@ ipconfig /all
 ipconfig /release
 ipconfig /renew
 ipconfig /flushdns
-    </pre>
+    </pre><br>
 <pre>ipconfig /all</pre>
 <p>Displays <strong>detailed network configuration</strong> for all network adaptersf on the system.</p>
 <p>Including IP addresses, MAC addresses, DNS servers, DHCP lease info, and more.</p>
 <p><strong>Use Case:</strong><br> Great for <strong>network troubleshooting</strong>, verifying DNS settings, checking DHCP status, or seeing physical (MAC) addresses.</p>
-<img src="Images/ipconfig-all.PNG" alt="ipconfig-all.PNG" style="width:650px; height:400px;"><br><br><br>
+<img src="Images/ipconfig-all.PNG" alt="ipconfig-all.PNG" style="width:650px; height:400px;"><br><br><br><br>
 <pre>ipconfig /flushdns</pre>
 <p>Clears the <strong>local DNS resolver cache</strong>, forcing the system to <strong>re-fetch DNS records</strong> the next time a domain is queried.</p>
 <p><strong>Use Case:</strong><br> Used to fix <strong>DNS resolution issues</strong>, especially when a site has changed IP addresses or DNS has become stale or corrupted.</p>
-<img src="Images/ipconfig-flushdns.PNG" alt="ipconfig-flushdns.PNG"><br><br><br>
+<img src="Images/ipconfig-flushdns.PNG" alt="ipconfig-flushdns.PNG"><br><br><br><br>
 <pre>ipconfig /release</pre>
 <p>Releases the <strong>current IP address</strong> lease from the DHCP server for all adapters (or a specific one if specified).</p>
 <p><strong>Use Case:</strong><br> Typically used to <strong>force-disconnect</strong> from a network or to troubleshoot DHCP assignment problems.</p><br>
 <pre>ipconfig /renew</pre>
 <p>Then requests a <strong>new IP address</strong> from the DHCP server for all adapters (or a specific one if specified).</p>
 <p><strong>Use Case:</strong><br> Helps <strong>reconnect to a network</strong>, especially after a release or when troubleshooting automatic IP assignment issues.</p>
-<img src="Images/ipconfig-renew-release.PNG" alt="ipconfig-renew-release.PNG" style="width:500px; height:700px;"><br><br><br>
+<img src="Images/ipconfig-renew-release.PNG" alt="ipconfig-renew-release.PNG" style="width:500px; height:700px;"><br><br><br><br>
       
     <pre>
 Linux:
@@ -180,13 +180,13 @@ ip a
 sudo dhclient -r
 sudo dhclient
 sudo systemctl restart NetworkManager
-    </pre>
+    </pre><br>
 <p>Displays the <strong>IP address, MAC address, and interface status</strong> for all active network interfaces. It's the <strong>legacy</strong> tool for interface configuration and inspection.</p>
 <p><strong>Use Case:</strong><br>Quick way to <strong> check current IPs</strong>, interface names (like <code>eth0</code>, <strong>wlan0</strong>), or bring interfaces up/down (e.g., <code>ifconfig eth0 down</code>)</p>  
-<img src="Images/Linux/ifconfig.png" alt="ifconfig.png" style="width:650px; height:400px;"><br>  
+<img src="Images/Linux/ifconfig.png" alt="ifconfig.png" style="width:650px; height:400px;"><br><br><br><br>
 <p>Displays <strong>all IP address information</strong> for each network interface, including IPv4/IPv6, loopback, and virtual interfaces. This command is part of the more modern <code>iproute2</code> suite.</p>
 <p><strong>Use Case:</strong><br> Preferred over <code>ifconfig</code> in modern systems for a <strong>more comprehensive and scriptable</strong> view of network config.</p>    
-<img src="Images/Linux/ipa.png" alt="ipa.png" style="width:650px; height:400px;"><br><br><br>
+<img src="Images/Linux/ipa.png" alt="ipa.png" style="width:650px; height:400px;"><br><br><br><br>
 <pre>sudo dhclient -r</pre>
 <p>Sends a <strong>DHCP release request</strong> to the server and removes the current IP lease from the system.</p>
 <p><strong>Use Case:</strong><br> Useful for <strong>disconnecting</strong> from the network or <strong>clearing stale DHCP settings</strong> before getting a new lease.</p>
@@ -194,7 +194,7 @@ sudo systemctl restart NetworkManager
 <pre>sudo dhclient</pre>
 <p>Requests a <strong>new IP address</strong> from the DHCP server for a network interface. If no interface is specified, it attempts on all interfaces.</p>
 <p><strong>Use Case:</strong><br> Similar to <code>ipconfig /renew</code> — used when you need to <strong>reacquire an IP address</strong> or <strong>force DHCP negotiation</strong>.</p>  
-<img src="Images/Linux/dhcp.png" alt="dhcp.png" style="width:300px; height:150px;"><br><br><br>
+<img src="Images/Linux/dhcp.png" alt="dhcp.png" style="width:300px; height:150px;"><br><br><br><br>
 <pre>sudo systemctl restart NetworkManager</pre>
 <p>Fully <strong>restarts the NetworkManager service</strong>, which manages network interfaces, DHCP leases, and DNS on many Linux distributions.</p>
 <p><strong>Use Case:</strong><br> Used when facing <strong>network misbehavior</strong> or configuration changes that didn't apply.</p>
