@@ -156,19 +156,22 @@ ipconfig /release
 ipconfig /renew
 ipconfig /flushdns
     </pre>
+<pre>ipconfig /all</pre>
 <p>Displays <strong>detailed network configuration</strong> for all network adaptersf on the system.</p>
 <p>Including IP addresses, MAC addresses, DNS servers, DHCP lease info, and more.</p>
 <p><strong>Use Case:</strong><br> Great for <strong>network troubleshooting</strong>, verifying DNS settings, checking DHCP status, or seeing physical (MAC) addresses.</p>
-<img src="Images/ipconfig-all.PNG" alt="ipconfig-all.PNG" style="width:650px; height:400px;"><br><br>
+<img src="Images/ipconfig-all.PNG" alt="ipconfig-all.PNG" style="width:650px; height:400px;"><br><br><br>
+<pre>ipconfig /flushdns</pre>
 <p>Clears the <strong>local DNS resolver cache</strong>, forcing the system to <strong>re-fetch DNS records</strong> the next time a domain is queried.</p>
 <p><strong>Use Case:</strong><br> Used to fix <strong>DNS resolution issues</strong>, especially when a site has changed IP addresses or DNS has become stale or corrupted.</p>
-<img src="Images/ipconfig-flushdns.PNG" alt="ipconfig-flushdns.PNG"><br><br>
+<img src="Images/ipconfig-flushdns.PNG" alt="ipconfig-flushdns.PNG"><br><br><br>
+<pre>ipconfig /release</pre>
+<pre>ipconfig /renew</pre>
 <p>Releases the <strong>current IP address</strong> lease from the DHCP server for all adapters (or a specific one if specified).</p>
 <p><strong>Use Case:</strong><br> Typically used to <strong>force-disconnect</strong> from a network or to troubleshoot DHCP assignment problems.</p><br>
-
 <p>Then requests a <strong>new IP address</strong> from the DHCP server for all adapters (or a specific one if specified).</p>
 <p><strong>Use Case:</strong><br> Helps <strong>reconnect to a network</strong>, especially after a release or when troubleshooting automatic IP assignment issues.</p>
-<img src="Images/ipconfig-renew-release.PNG" alt="ipconfig-renew-release.PNG" style="width:500px; height:700px;"><br><br>
+<img src="Images/ipconfig-renew-release.PNG" alt="ipconfig-renew-release.PNG" style="width:500px; height:700px;"><br><br><br>
       
     <pre>
 Linux:
