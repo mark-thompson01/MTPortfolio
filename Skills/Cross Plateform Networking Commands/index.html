@@ -298,6 +298,13 @@ netstat -a
 netstat -an
 netstat -b
     </pre>
+<p>The <code>netstat</code> command displays <strong>network connections</strong>, <strong>listening ports,</strong> and <strong>routing tables</strong>.</p>
+<ul>
+ <li><code>netstat -a</code> shows all active TCP/UDP connections and listening ports, resolving hostnames and service names.</li>
+ <li><code>netstat -an</code> displays the same data but in numeric form, skpping DNS or service name resolution for faster and more raw output.</li>
+ <li><code>netstat -b</code> shows which executable is associated with each connection or listening port (e.g., <code>chrome.exe</code> or <code>svchost.exe</code>.</li>  
+</ul>
+<p><strong>Use Case:</strong><br> Great for identifying <strong>open ports</strong>, <strong>active connections</strong>, <strong>unauthorized programs</strong>, or <strong>malicious activity</strong> tied to running processes.</p>
 <pre>netstat -a</pre>
 <img src="Images/netstat1.PNG" alt="netstat1.PNG" style="width:550px; height:350px:"><br><br>
 <pre>netstat -an</pre>
@@ -310,6 +317,8 @@ Linux:
 netstat -an
 ss -tuln
     </pre>
+<p>These commands show <strong>active</strong> and <strong>listening network sockets</strong> on a Linux system.</p>
+<p><strong>Use Case:</strong><br> Perfect for <strong>port auditing</strong>, <strong>service monitoring</strong>, or <strong>detecting unauthorized listeners.</strong></p>
 <pre>netstat -an</pre>
 <img src="Images/Linux/netstat-an.png" alt="netstat-an.png" style="width:650px; height:400px;"><br>
 <pre>ss -tuln</pre>
