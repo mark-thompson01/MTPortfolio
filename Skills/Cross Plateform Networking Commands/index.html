@@ -339,20 +339,26 @@ ss -tuln
 Windows:
 tracert google.com
     </pre>
-    
+<p>Sends <strong>ICMP echo requests</strong> to trace the <strong>network path</strong> packets take from your machine to a destination.</p>
+<p>It shows each <strong>hop</strong> along the way, along with the <strong>response time</strong> for each.</p>
+<p><strong>Use Case:</strong><br>Helps <strong>identify where delays or failures</strong> occur between your system and a remote host.</p>
+<p>Useful for diagnosing <strong>routing</strong> or <strong>latecy issues</strong>.</p>    
 <img src="Images/tracert.png" alt="tracert.png" style="width:350px; height:200px:"><br>
-    
-    <pre><br>
+    <pre>
 Linux:
 traceroute example.com
     </pre>
-    
+    <p>Simiar to <code>tracert</code> but uses <strong>UDP packets</strong> by default instead of ICMP.</p>
+    <p>It traces the route from the local system to a destination IP or domain, showing each router (hop) along the way.</p>
+    <p><strong>Use Case:</strong><br> Used to <strong>track the path of packets</strong>, and can help detect <strong>routing loops, packet loss points</strong>, or <strong>performance bottlebecks</strong> across networks.</p>
     <img src="Images/Linux/traceroute.png" alt="traceroute.png" style="width:650px; height:400px;"><br>
-
     <pre>
 Linux (using MTR):
 mtr example.com
   </pre>
+<p>Combines the functionality of both <strong>ping</strong> and <strong>traceroute</strong> into a <strong>real-time</strong>, <strong>continuously updating tool</strong>.</p>
+<p>It shows the <strong>live performance of each hop</strong>, including <strong>packet loss</strong> and <strong>latecy statistics</strong>.</p>
+<p><strong>Use Case:</strong> Excellent for <strong>ongoing network diagnostics</strong>, spotting <strong>intermittent issues</strong>, or visualzing <strong>route health over time</strong>.</p>
 <img src="Images/Linux/mtr.png" alt="mtr.png" style="width:675px; height:400px;"><br>
 <img src="Images/Linux/mtr2.png" alt="mtr2.png" style="width:675px; height:400px;"> 
   
