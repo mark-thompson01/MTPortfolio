@@ -240,6 +240,15 @@ dig example.com
 dig MX example.com
 dig NS example.com
     </pre>
+
+<p>The <code>host</code> command is a <strong>simple DNS lookup utility</strong> that returns DNS records for the given domain.</p>
+<ul>
+  <li><code>host example.com</code> returns the <strong>A record</strong>, showing the IPv4 address of the domaoin.</li>
+  <li><code>host -t mx example.com</code> queries the <strong>MX records</strong>, listing mail servers responsible for handling email for the domain.</li>
+  <li><code>host -t ns example.com</code> displays the <strong>NS records</strong>, identifying the authoritative name servers for the domain.</li>
+</ul><br>
+<p><strong>Use Case:</strong><br>ideal for <strong>quick DNS lookups</strong> when you want a fast, human readable response without the detailed output of <code>dig</code>.</p>
+<p>Perfect for verifying <strong>basic DNS, mail routing,</strong> and <strong>domain delegation</strong> settings.</p>
 <img src="Images/Linux/host.png" alt="host.png" style="width:650px; height:400px;"><br>
 <img src="Images/Linux/dig1.png" alt="dig1.png" style="width:650px; height:400px;"><br>
 <img src="Images/Linux/dig2.png" alt="dig2.png" style="width:650px; height:400px;"><br>
