@@ -224,14 +224,14 @@ nslookup -type=ns example.com
 <p>Launches an <strong>interactive DNS lookup tool</strong> that allows you to manually query DNS records.</p>
 <p>Running it by itself drops you into a prompt where you can type in domains and get their associated IP addresses.</p>
 <p><strong>Use Case:</strong><br> Useful for <strong>troubleshooting DNS resolution</strong> and verifying that a domain points to the correct IP address.</p>      
-<img src="Images/nslookup1.PNG" alt="nslookup1.PNG"><br>
+<img src="Images/nslookup1.PNG" alt="nslookup1.PNG"><br><br>
 <p>This command queries the <strong>Mail Exchange (MX) record</strong> for <code>example.com</code>, showing which mail servers are responsible for handling email for the domain.</p>
 <p><strong>Use Case:</strong><br> Helpful for <strong>email delivery diagnostics</strong>, checking <strong>mail server priorities</strong>, or verifying <strong>email infrastructure</strong>.</p>      
-<img src="Images/nslookup2.PNG" alt="nslookup2.PNG"><br>
+<img src="Images/nslookup2.PNG" alt="nslookup2.PNG"><br><br>
 <p>Retrieves the <strong>Name Server (NS) records</strong> for <code>example.com</code>, identifying which DNS servers are authorized for the domain.</p>
 <p><strong>Use Case:</strong><br> Used to <strong>validate domain delegation</strong>, ensure DNS servers are responding, or troubleshoot <strong>DNS propagation issues</strong>.</p>      
 <img src="Images/nslookup3.PNG" alt="nslookup3.PNG">
-    <pre>
+    <pre><br><br>
 Linux:
 host google.com
 host -t MX example.com
