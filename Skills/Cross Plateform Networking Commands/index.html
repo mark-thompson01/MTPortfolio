@@ -246,20 +246,20 @@ dig NS example.com
   <li><code>host example.com</code> returns the <strong>A record</strong>, showing the IPv4 address of the domaoin.</li>
   <li><code>host -t mx example.com</code> queries the <strong>MX records</strong>, listing mail servers responsible for handling email for the domain.</li>
   <li><code>host -t ns example.com</code> displays the <strong>NS records</strong>, identifying the authoritative name servers for the domain.</li>
-</ul><br>
+</ul>
 <p><strong>Use Case:</strong><br>Ideal for <strong>quick DNS lookups</strong> when you want a fast, human readable response without the detailed output of <code>dig</code>.</p>
 <p>Perfect for verifying <strong>basic DNS, mail routing,</strong> and <strong>domain delegation</strong> settings.</p>
-<img src="Images/Linux/host.png" alt="host.png" style="width:650px; height:400px;"><br><br>
+<img src="Images/Linux/host.png" alt="host.png" style="width:650px; height:400px;"><br><br><br>
 
 <p>Performs a <strong>DNS query</strong> for <code>example.com</code>, returning A records (IPv4 addresses) by default.</p>
 <p>Including a <strong>detailed breakdown</strong> of the query and response.</p>
 <p><strong>Use Case:</strong><br> Preferred tool for <strong>troubleshooting DNS issues:</strong>, seeing <strong>exact response times</strong>, and analyzing <strong>query behavior</strong>.</p>
-<img src="Images/Linux/dig1.png" alt="dig1.png" style="width:650px; height:400px;"><br><br>
+<img src="Images/Linux/dig1.png" alt="dig1.png" style="width:650px; height:400px;"><br><br><br>
 
 <p>Queries the <strong>Mail Exchange (MX) records</strong> for <code>example.com</code>:</p>
 <p>Showing the priority and hostname of each mail server used for deliverying email.</p>
 <p><strong>Use Case:</strong><br>Used to <strong>inpsect email routing setup</strong>, diagnosing <strong>mail delivery problems</strong>, of <strong>verify MX changes</strong> after DNS edits.</p>
-<img src="Images/Linux/dig2.png" alt="dig2.png" style="width:650px; height:400px;"><br>
+<img src="Images/Linux/dig2.png" alt="dig2.png" style="width:650px; height:400px;"><br><br><br>
 <p>Retrieves the <strong>Name Server (NS records</strong> for <code>example.com</code>, showing the authoritative DNS servers responsible for handling domain resolution.</p>
 <p><strong>Use Case:</strong><br> Helpful for <strong>checking domain delegation</strong>, identifying <strong>authoritative zones</strong>, and <strong>troubleshooting DNS propagation.</strong></p>     
 <img src="Images/Linux/dig3.png" alt="dig3.png" style="width:650px; height:400px;"><br>
