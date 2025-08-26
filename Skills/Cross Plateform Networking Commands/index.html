@@ -376,7 +376,7 @@ pathping example.com
     </pre>
       <img src="Images/pathping.png" alt="pathping.png">
       <p>The <strong>pathping</strong> command in <strong>Windows</strong> is a network diagnostic tool that combines the functionality of <strong>traceroute</strong> and <strong>ping</strong>.</p> 
-      <p>To provide detailed information about network performance to be able to identify any potential issues along the path of a network route.</p><br><br>
+      <p>Providing detailed information about network performance to be able to identify any potential issues along the path of a network route.</p><br><br>
 
 
   <section>
@@ -385,29 +385,34 @@ pathping example.com
     <pre>
 Windows:
 route print
-
+    </pre>
+<p>Displays the <strong>entire routing table</strong> used by Windows to determine how packets are forwarded across the network.</p>
+<p><strong>Use Case:</strong><br> Essential for <strong>diagnosing routing issues</strong>, checking the <strong>default gateway</strong>, verifying <strong>network paths</strong>, or auditing <strong>static routes</strong>.</p>
 <img src="Images/routeprint.PNG" alt="routeprint.PNG" style="width:550px; height:400px:">
-      
-
+   <pre>
 Linux:
 route -n
 ip route
+   </pre>
+<p>These commands show the <strong>Linux kernel routing table</strong>, helping determine how outbound traffic is routed.</p>
+<p><strong>Use Case:</strong><br> Used for <strong>gateway verification</strong>, <strong>troubleshooting unreachable networks,</strong>, or <strong>understanding packet flow</strong> based on router properly.</p>
 <img src="Images/Linux/route.png" alt="route.png" style="width:675px; height:400px;">
-    </pre>
 
     <p id="hostname"><strong>Hostname (View or change hostname):</strong></p>
     <pre>
 Windows:
 hostname
+    </pre>
 
 <img src="Images/hostname.PNG" alt="hostname.PNG">
-
+    <pre>
 Linux:
 hostname
 sudo hostnamectl set-hostname new-hostname
+    </pre>
 <img src="Images/Linux/hostname.png" alt="hostname.png" style="width:675px; height:400px;">
       
-    </pre>
+  
   </section>
 
     <p>Mastering these network commands significantly empowers you to diagnose, troubleshoot, and optimize network environments. This guide provided practical usage and scenarios for each command, delivering crucial insights into network performance and maintenance.</p>
