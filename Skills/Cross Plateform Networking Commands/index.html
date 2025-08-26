@@ -187,12 +187,15 @@ sudo systemctl restart NetworkManager
 <p>Displays <strong>all IP address information</strong> for each network interface, including IPv4/IPv6, loopback, and virtual interfaces. This command is part of the more modern <code>iproute2</code> suite.</p>
 <p><strong>Use Case:</strong><br> Preferred over <code>ifconfig</code> in modern systems for a <strong>more comprehensive and scriptable</strong> view of network config.</p>    
 <img src="Images/Linux/ipa.png" alt="ipa.png" style="width:650px; height:400px;"><br><br><br>
+<pre>sudo dhclient -r</pre>
 <p>Sends a <strong>DHCP release request</strong> to the server and removes the current IP lease from the system.</p>
 <p><strong>Use Case:</strong><br> Useful for <strong>disconnecting</strong> from the network or <strong>clearing stale DHCP settings</strong> before getting a new lease.</p>
 <br>
+<pre>sudo dhclient</pre>
 <p>Requests a <strong>new IP address</strong> from the DHCP server for a network interface. If no interface is specified, it attempts on all interfaces.</p>
 <p><strong>Use Case:</strong><br> Similar to <code>ipconfig /renew</code> — used when you need to <strong>reacquire an IP address</strong> or <strong>force DHCP negotiation</strong>.</p>  
 <img src="Images/Linux/dhcp.png" alt="dhcp.png" style="width:300px; height:150px;"><br><br><br>
+<pre>sudo systemctl restart NetworkManager</pre>
 <p>Fully <strong>restarts the NetworkManager service</strong>, which manages network interfaces, DHCP leases, and DNS on many Linux distributions.</p>
 <p><strong>Use Case:</strong><br> Used when facing <strong>network misbehavior</strong> or configuration changes that didn't apply.</p>
 <p>It resets network connectivity without rebooting.<br></p>
