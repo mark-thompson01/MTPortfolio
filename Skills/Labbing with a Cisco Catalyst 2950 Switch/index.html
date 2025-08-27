@@ -282,7 +282,14 @@
 <p>Whether it's monitoring and analyzing the security of the network, troubleshooting network communications, analyzing what protocols are in use across endpoints, etc.</p><br>
 <p>Here, I'm going to demonstrate setting up and configuring a basic</p>
 <p><strong>SPAN - Switch Port Analyzer</strong> source and destination port(s) on the switch.</p>
-<p>To gather the network traffic from each endpoint connected to the specified port range.</p><br>
+<p>To gather the network traffic from each endpoint connected to the specified port range.</p>
+
+<p><strong>Note:</strong> In this demonstration, SPAN is configured on 
+ports belonging to VLAN 1 for simplicity. This example is independent 
+from the VLAN 10/20 segmentation shown earlier and is meant only to 
+demonstrate how SPAN mirrors traffic from selected source ports to a 
+monitoring port.</p><br>
+
 
 <h3>1. Configuring a SPAN (Port Mirroring) Session</h3>
 <p>Setting this up configures a <strong>SPAN session</strong>.</p>
