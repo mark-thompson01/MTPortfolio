@@ -274,8 +274,8 @@ dig NS example.com
 <img src="Images/Linux/dig1.png" alt="dig1.png" style="width:650px; height:400px;"><br><br><br><br>
 <pre>dig MX example.com</pre>
 <p>Queries the <strong>Mail Exchange (MX) records</strong> for <code>example.com</code>:</p>
-<p>Showing the priority and hostname of each mail server used for deliverying email.</p>
-<p><strong>Use Case:</strong><br>Used to <strong>inpsect email routing setup</strong>, diagnosing <strong>mail delivery problems</strong>, of <strong>verify MX changes</strong> after DNS edits.</p>
+<p>Showing the priority and hostname of each mail server used for delivering email.</p>
+<p><strong>Use Case:</strong><br>Used to <strong>inspect email routing setup</strong>, diagnosing <strong>mail delivery problems</strong>, of <strong>verify MX changes</strong> after DNS edits.</p>
 <img src="Images/Linux/dig2.png" alt="dig2.png" style="width:650px; height:400px;"><br><br><br><br>
 <pre>dig NS example.com</pre>
 <p>Retrieves the <strong>Name Server (NS records</strong> for <code>example.com</code><strong>)</strong></p>
@@ -342,7 +342,7 @@ tracert google.com
 <p>Sends <strong>ICMP echo requests</strong> to trace the <strong>network path</strong> packets take from your machine to a destination.</p>
 <p>It shows each <strong>hop</strong> along the way, along with the <strong>response time</strong> for each.</p>
 <p><strong>Use Case:</strong><br>Helps <strong>identify where delays or failures</strong> occur between your system and a remote host.</p>
-<p>Useful for diagnosing <strong>routing</strong> or <strong>latecy issues</strong>.</p>    
+<p>Useful for diagnosing <strong>routing</strong> or <strong>latency issues</strong>.</p>    
 <img src="Images/tracert.png" alt="tracert.png" style="width:350px; height:200px:"><br>
     <pre>
 Linux:
@@ -386,8 +386,8 @@ pathping example.com
 
 
   <section>
-    <h3 id="Routing">8. Routing</h3>
-    <p id="routing"><strong>Route (View routing tables):</strong></p>
+    <h3 id="routing">8. Routing</h3>
+    <p><strong>Route (View routing tables):</strong></p>
     <pre>
 Windows:
 route print
@@ -401,7 +401,7 @@ route -n
 ip route
    </pre>
 <p>These commands show the <strong>Linux kernel routing table</strong>, helping determine how outbound traffic is routed.</p>
-<p><strong>Use Case:</strong><br> Used for <strong>gateway verification</strong>, <strong>troubleshooting unreachable networks,</strong>, or <strong>understanding packet flow</strong> based on router properly.</p>
+<p><strong>Use Case:</strong><br> Used for <strong>gateway verification</strong>, <strong>troubleshooting unreachable networks,</strong>, or <strong>understanding packet flow</strong> based on routing properly.</p>
 <img src="Images/Linux/route.png" alt="route.png" style="width:675px; height:400px;"><br><br><br>
 
     <h3 id="hostname">9. Hostname (View or change hostname)</h3>
