@@ -66,7 +66,7 @@
 
 
   <section>
-    <h2>Understanding Networking Commands</h2>
+    <h2>Understanding Network Commands</h2>
     <p style="font-style: italic;">The following outlines some <strong>Essential Network Commands</strong> used between <strong>Windows</strong>, <strong>Linux</strong>, as well as <strong>macOS</strong>.</p>
     <p>Network commands via the <strong>Command-Line Interface (CLI)</strong> allow you to effectively diagnose, troubleshoot, and manage network connections by offering detailed insights and real-time control over network environments.</p>
   </section><br>
@@ -120,7 +120,7 @@ ping example.com
 ping -c 4 example.com
 ping -i 0.5 example.com
 ping -s 10 example.com
- </pre><br><br>
+ </pre><br>
 <pre>ping example.com</pre>
 <p>Sends <strong>continuous ICMP echo requests</strong> to <code>example.com</code></p>
 <p>Until manually stopped (usually with <code>ctrl + c</code>)</p>
@@ -233,7 +233,7 @@ Windows:
 nslookup example.com
 nslookup -type=mx example.com
 nslookup -type=ns example.com
-    </pre>
+    </pre><br>
 <pre>nslookup example.com</pre>
 <p>The <strong>nslookup</strong> command in Windows queries the nameserver for the IP address of the given host or vice versa in performing a reverse DNS lookup.</p>
 <p>Launches an <strong>interactive DNS lookup tool</strong> that allows you to manually query DNS records.</p>
@@ -343,8 +343,8 @@ tracert google.com
 <p>It shows each <strong>hop</strong> along the way, along with the <strong>response time</strong> for each.</p>
 <p><strong>Use Case:</strong><br>Helps <strong>identify where delays or failures</strong> occur between your system and a remote host.</p>
 <p>Useful for diagnosing <strong>routing</strong> or <strong>latecy issues</strong>.</p>    
-<img src="Images/tracert.png" alt="tracert.png" style="width:350px; height:200px:"><br>
-    <pre>
+<img src="Images/tracert.png" alt="tracert.png" style="width:350px; height:200px:">
+    <pre><br>
 Linux:
 traceroute example.com
     </pre>
