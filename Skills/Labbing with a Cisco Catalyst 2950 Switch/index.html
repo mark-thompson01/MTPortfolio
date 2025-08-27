@@ -284,11 +284,7 @@
 <p><strong>SPAN - Switch Port Analyzer</strong> source and destination port(s) on the switch.</p>
 <p>To gather the network traffic from each endpoint connected to the specified port range.</p>
 
-<p><strong>Note:</strong> In this demonstration, SPAN is configured on 
-ports belonging to VLAN 1 for simplicity. This example is independent 
-from the VLAN 10/20 segmentation shown earlier and is meant only to 
-demonstrate how SPAN mirrors traffic from selected source ports to a 
-monitoring port.</p><br>
+<p><strong>Note:</strong> In this demonstration, SPAN is configured on ports belonging to VLAN 1 for simplicity. This example is independent from the VLAN 10/20 segmentation shown earlier and is meant only to demonstrate how SPAN mirrors traffic from selected source ports to a monitoring port.</p><br>
 
 
 <h3>1. Configuring a SPAN (Port Mirroring) Session</h3>
@@ -296,7 +292,7 @@ monitoring port.</p><br>
 <p>To mirror traffic from several source interfaces to one destination interface for monitoring purposes.</p>
 <p>In this example, <strong>fa0/2 -8</strong> are configured as the source ports in this SPAN configuration.</p>
 <p>The destination port is to <strong>fa0/9</strong>.</p>
-<p>A copy of all the traffic flowing through ports 32 - 35 will be sent to port 9 in the form of Ethernet frames.</p>
+<p>A copy of all the traffic flowing through ports 3 - 5 will be sent to port 9 in the form of Ethernet frames.</p>
 <p>A computer can be plugged into port 9 to run <strong>Wireshark</strong> and capture the traffic of each endpoint plugged into ports 2 through 8 on the switch.</p>
 <img src="Images/SPAN/span1.png" alt="span1.png"><br><br>
 
@@ -305,7 +301,7 @@ monitoring port.</p><br>
 <img src="Images/SPAN/span2.png" alt="span2.png"><br><br>
 
 <h3>3. Capturing the Mirrored Traffic with Wireshark</h3>
-<p>In this <strong>SPAN</strong> port configuration setup, I have two Windows PCs, connected to fa0/32 - 192.168.1.104 and fa0/35 - 192.168.1.124</p>
+<p>In this <strong>SPAN</strong> port configuration setup, I have two Windows PCs, connected to fa0/2 - 192.168.1.104 and fa0/5 - 192.168.1.124</p>
 <p>Along with another Windows PC running Wireshark plugged into the destination port fa0/9 to collect the network traffic of the devices connected to these interfaces.</p>
 <img src="Images/SPAN/wire1.png" alt="wire1.png" style="width:700px; height:400px;"><br>
 <img src="Images/SPAN/wire2.png" alt="wire2.png" style="width:800px; height:400px:"><br>
