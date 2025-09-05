@@ -1,145 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blog · Mark Thompson Portfolio</title>
+  <meta name="description" content="Short, practical posts connecting theory with real tooling and workflows." />
   <style>
-    /* Align everything to the left */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0;            /* Light grey text */
-      text-align: left;
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-
-    h1, h2 { text-align: left; color: #d3d3d3; }
-    p { text-align: left; margin-left: 20px; }
-
-    a { color: #1e90ff; text-decoration: none; }
-    a:hover { color: #9e9fb0; text-decoration: underline; }
-
-    .bg {
-      position: fixed; inset: 0;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
-        linear-gradient(to bottom, rgba(0,0,0,.4), rgba(0,0,0,.6)),
-        url("Images/brand-bg.jpeg") center center / cover no-repeat;
-      z-index: -1;
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
-    /* --- Blog Cards --- */
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Title & intro */
+    h1{margin:4px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 18px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Blog grid & cards */
     .blog-grid{
-      --gap: 1.25rem;
+      --gap: 16px;
       display:grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: var(--gap);
-      margin: 1rem 0 2rem 20px;
-      max-width: 1400px;
-      justify-content: center; /* left align */
+      margin-top:10px;
     }
+    @media (max-width:900px){ .blog-grid{grid-template-columns:1fr} }
+
     .card{
-      background:#111318;
-      border:1px solid #232631;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
       border-radius:14px;
       overflow:hidden;
       transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      max-width: 540px;
-      margin: 0;
+      box-shadow:var(--shadow);
+      display:flex; flex-direction:column;
     }
-    .card-link{ display:block; color:inherit; text-decoration:none; height:100%; }
+    .card-link{ display:flex; flex-direction:column; color:inherit; text-decoration:none; height:100% }
 
-    /* Default image box shape for cards (good for the Network poster) */
-    .thumb{
-      margin:0;
-      aspect-ratio: 4 / 3;      /* default rectangle */
-      overflow:hidden;
-      background:#0c0e13;
-    }
+    .thumb{ margin:0; aspect-ratio: 4 / 3; background:#0c0e13; overflow:hidden }
+    .thumb img{ width:100%; height:100%; object-fit:cover; object-position:50% 50%; display:block }
 
-    /* Fill the box (no letterboxing) */
-    .thumb img{
-      width:100%;
-      height:100%;
-      object-fit: cover;        /* fills; may crop */
-      object-position: 50% 50%; /* default centering */
-      display:block;
-      transform:none;
-      transition:none;
-    }
+    /* Keep “COMMANDS” visible on the poster */
+    .card.network .thumb img{ object-position:50% 40% }
 
-    /* Network card: keep 4/3 and show icon + “COMMANDS” */
-    .card.network .thumb img{
-      object-position: 50% 40%; /* nudge down until bottom word shows */
-    }
+    /* Widescreen terminal shot */
+    .card.linux .thumb{ aspect-ratio:16 / 9 }
+    .card.linux .thumb img{ object-position:50% 45% }
 
-    /* Linux card: make the box truly widescreen so the terminal fits */
-    .card.linux .thumb{
-      aspect-ratio: 16 / 9;     /* terminal screenshot shape */
-    }
-    .card.linux .thumb img{
-      object-position: 50% 45%; /* tweak 35–55% to taste */
-    }
+    .title{ font:600 1.05rem/1.3 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; margin:0; padding:0.9rem 1rem 0 1rem; color:#d3d3d3 }
+    .excerpt{ color:#a9b0c3; font:400 .95rem/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; margin:0.45rem 1rem 0 1rem }
+    .meta{ display:inline-block; color:#7f8599; font-size:.95rem; margin:0.85rem 1rem 1rem 1rem }
 
-    .title{
-      font:600 1.05rem/1.3 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      margin:0; padding:0.9rem 1rem 0 1rem; color:#d3d3d3;
-    }
-    .excerpt{
-      color:#a9b0c3;
-      font:400 .95rem/1.45 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      margin:0.45rem 1rem 0 1rem;
-    }
-    .meta{
-      display:inline-block; color:#7f8599; font-size:.9rem;
-      margin:0.85rem 1rem 1rem 1rem;
-    }
+    .card:hover{ transform:translateY(-3px); box-shadow:0 16px 40px rgba(0,0,0,.45); border-color:#3a4a67 }
 
-    .card:hover{
-      transform:translateY(-2px);
-      box-shadow:0 8px 24px rgba(0,0,0,.35);
-      border-color:#2e3342;
-    }
-    .card:hover .thumb img{ transform:none; } /* keep framing steady */
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <div class="bg"></div>
-  <h1 style="color: #9e9fb0;">Blog</h1>
-  
+  <div class="wrap">
 
-  <!-- Blog Cards Grid -->
-  <section class="blog-grid">
-    <!-- Essential Network Commands -->
-    <article class="card network">
-      <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/10%20Essential%20Network%20Commands">
-        <figure class="thumb">
-          <img src="Images/Essential%20Network%20Commands.png"
-               alt="Essential Network Commands blog cover"
-               loading="lazy">
-        </figure>
-        <h3 class="title">Essential Network Commands</h3>
-        <p class="excerpt">Ping, tracert, ipconfig and more—what they show and when to use them.</p>
-        <span class="meta">Read post →</span>
-      </a>
-    </article>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs" class="active">Blog</a>
+    </nav>
 
-    <!-- Essential Linux Commands -->
-    <article class="card linux">
-      <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/10%20Essential%20Linux%20Commands">
-        <figure class="thumb">
-          <img src="Images/Terminal.png"
-               alt="Linux terminal themed cover"
-               loading="lazy">
-        </figure>
-        <h3 class="title">Essential Linux Commands</h3>
-        <p class="excerpt">Navigate, manage files, and work efficiently with core Linux commands.</p>
-        <span class="meta">Read post →</span>
-      </a>
-    </article>
-  </section>
+    <!-- Header -->
+    <header>
+      <h1>Blog</h1>
+      <p class="lead">Short, practical posts that connect theory with real tooling and workflows.</p>
+    </header>
 
-  <a href="../index.html">Back to Home</a>
+    <!-- Blog Cards Grid -->
+    <section class="blog-grid" aria-label="Blog posts">
+      <!-- Essential Network Commands -->
+      <article class="card network">
+        <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/10%20Essential%20Network%20Commands">
+          <figure class="thumb">
+            <img src="Images/Essential%20Network%20Commands.png" alt="Essential Network Commands blog cover" loading="lazy">
+          </figure>
+          <h3 class="title">Essential Network Commands</h3>
+          <p class="excerpt">Ping, tracert, ipconfig and more—what they show and when to use them.</p>
+          <span class="meta">Read post →</span>
+        </a>
+      </article>
+
+      <!-- Essential Linux Commands -->
+      <article class="card linux">
+        <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/10%20Essential%20Linux%20Commands">
+          <figure class="thumb">
+            <img src="Images/Terminal.png" alt="Linux terminal themed cover" loading="lazy">
+          </figure>
+          <h3 class="title">Essential Linux Commands</h3>
+          <p class="excerpt">Navigate, manage files, and work efficiently with core Linux commands.</p>
+          <span class="meta">Read post →</span>
+        </a>
+      </article>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>© <span id="y">2025</span> Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
