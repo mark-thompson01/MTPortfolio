@@ -1,179 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Essential Network Commands</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Essential Network Commands · Mark Thompson Portfolio</title>
+  <meta name="description" content="Ping, ipconfig/ifconfig/ip, nslookup/host/dig, netstat, tracert/traceroute/pathping, and route—what they show and when to use them." />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2, h3 {
-      text-align: left;
-      color: #d3d3d3; /* Lighter grey heading */
-      margin-bottom: 10px;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    p {
-      text-align: left;
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Title & meta */
+    h1{margin:4px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    .lead{color:var(--muted);margin:0 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    .cover{
+      border:1px solid var(--card-border);border-radius:14px;overflow:hidden;margin:10px 0 14px;
+      background:#0c0e13
     }
-    ul {
-      list-style: none; /* Remove default bullets */
-      padding-left: 0;
-      text-align: left; /* Align list to the left */
+    .cover img{width:100%;height:auto;display:block}
+
+    .meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 18px}
+    .chip{padding:6px 10px;border:1px solid var(--card-border);border-radius:999px;background:rgba(255,255,255,.03);color:var(--muted);font-size:14px}
+
+    /* Layout blocks */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    li {
-      margin: 10px 0;
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:10px 0 6px;font-size:16px}
+    p{margin:8px 0}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* TOC */
+    .toc{padding:14px}
+    .toc ul{list-style:none;margin:6px 0 0 0;padding:0}
+    .toc li{margin:6px 0}
+    .toc a{color:var(--text);text-decoration:none}
+    .toc a:hover{color:var(--brand)}
+
+    /* Figures */
+    figure{margin:12px 0}
+    .figure{
+      border:1px solid var(--card-border);border-radius:12px;overflow:hidden;background:#0e1220
     }
-    a {
-      color: #1e90ff; /* Blue link color */
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a:hover {
-      color: #ff7f50; /* Coral hover color */
-    }
-    .back-link {
-      margin-top: 20px;
-      display: inline-block;
-    }
+    .figure img{width:100%;display:block}
+    figcaption{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Code */
+    pre{overflow:auto;background:#0e1220;border:1px solid #1f2740;border-radius:12px;padding:14px;margin:12px 0}
+    code{font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:14px}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-    <img src="Images/Essential Network Commands.png" alt="Essential Network Commands.png" style="width:600px; height:350px;">
-    <h1>Essential Network Commands</h1>
- 
+  <div class="wrap">
 
-<section id="intro">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs" class="active">Blog</a>
+    </nav>
 
-  <p style="font-style: italic;">The following outlines some <strong>Essential Network Commands</strong> used across <strong>Windows</strong>, <strong>Linux</strong>, as well as <strong>macOS</strong>.</p>
-  <p>
-    There are various scenarios we may find ourselves in where any one of these commands can become beneficial. 
-    One of the most common is troubleshooting and diagnosing connectivity issues. Other scenarios include resolving DNS issues, 
-    addressing IP conflicts, or exploring how traffic flows through your network. The command line offers powerful tools to 
-    dive deeper into what may be going on.
-  </p>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Blogs">Blog</a> · <span>Essential Network Commands</span>
+    </div>
 
-  <p>
-    This blog walks through several commonly used networking commands that help uncover useful information such as IP 
-    configurations, DNS resolution, routing, active connections, network paths, and more. It’s based on material I put together 
-    in my <strong>Cross-Platform Network Commands</strong> tutorial, which is available through my 
-    <a href="https://mark-thompson01.github.io/MTPortfolio/" target="_blank">GitHub Pages portfolio</a>.
-  </p>
+    <!-- Header -->
+    <header>
+      <div class="cover">
+        <img src="Images/Essential Network Commands.png" alt="Essential Network Commands cover" />
+      </div>
+      <h1>Essential Network Commands</h1>
+      <p class="lead">
+        The core commands I use across <b>Windows</b>, <b>Linux</b>, and <b>macOS</b> for connectivity checks, DNS troubleshooting, routing visibility, and more.
+      </p>
+      <div class="meta">
+        <span class="chip">Topic: Networking</span>
+        <span class="chip">Platforms: Windows · Linux · macOS</span>
+        <span class="chip">Focus: Troubleshooting</span>
+      </div>
+    </header>
 
-  <p>
-    The goal is to offer a practical reference — especially for those getting started in IT — by sharing real examples and tools 
-    that are helpful in both personal labs and professional environments.
-  </p><br>
+    <!-- Intro -->
+    <section class="card">
+      <h2>Overview</h2>
+      <p><i>The following outlines some <b>Essential Network Commands</b> used across <b>Windows</b>, <b>Linux</b>, as well as <b>macOS</b>.</i></p>
+      <p>There are various scenarios where these commands are helpful—from basic connectivity checks to diagnosing DNS problems, addressing IP conflicts, or exploring how traffic flows through your network. This post walks through commonly used commands for IP configuration, name resolution, routing, active connections, and path analysis. It draws from my <b>Cross-Platform Network Commands</b> tutorial in my <a href="https://mark-thompson01.github.io/MTPortfolio/" target="_blank">GitHub Pages portfolio</a>.</p>
+      <p>The goal is to offer a practical reference—especially for those getting started in IT—by sharing real examples and tools useful in both labs and professional environments.</p>
+    </section>
 
-<h2>Table of Contents</h2>
-<ul>
-  <li><a href="#ping">ping</a></li>
-  <li><a href="#ipconfig">ipconfig / ifconfig / ip a</a></li>
-  <li><a href="#arp">arp -a</a></li>
-  <li><a href="#nslookup">nslookup</a></li>
-  <li><a href="#host">host</a></li>
-  <li><a href="#dig">dig</a></li>
-  <li><a href="#netstat">netstat -a / -an</a></li>
-  <li><a href="#tracert">tracert</a></li>
-  <li><a href="#traceroute">traceroute</a></li>
-  <li><a href="#pathping">pathping</a></li>
-  <li><a href="#route">route print / route -n / ip route</a></li>
-</ul><br><br><br>
+    <!-- TOC -->
+    <aside class="card toc" aria-label="Table of contents">
+      <h2>Table of Contents</h2>
+      <ul>
+        <li><a href="#ping">ping</a></li>
+        <li><a href="#ipconfig">ipconfig / ifconfig / ip a</a></li>
+        <li><a href="#arp">arp -a</a></li>
+        <li><a href="#nslookup">nslookup</a></li>
+        <li><a href="#host">host</a></li>
+        <li><a href="#dig">dig</a></li>
+        <li><a href="#netstat">netstat -a / -an</a></li>
+        <li><a href="#tracert">tracert</a></li>
+        <li><a href="#traceroute">traceroute</a></li>
+        <li><a href="#pathping">pathping</a></li>
+        <li><a href="#route">route print / route -n / ip route</a></li>
+      </ul>
+    </aside>
 
- <h3 id="ping"><code>ping</code></h3>
-  <p>
-    <strong>Ping</strong> is the first responder on the network — it sends tiny data packets (ICMP echo requests) to a target IP or domain and waits for a reply, letting you verify that a device is reachable and measure how long the round-trip takes. It can be thought of as the digital equivalent of shouting "You there?" and listening for a reply.
-  </p>
-<p>Often the first command run when verifying connectivity...</p>
-  <img src="Images/ping.PNG" alt="ping.PNG"><br><br><br><br><br>
-  
-                                              
-                                              
-  
+    <!-- Commands -->
+    <section class="card" id="ping">
+      <h3><code>ping</code></h3>
+      <p><b>Ping</b> sends ICMP echo requests to a target and waits for replies, verifying reachability and round-trip time. It’s often the first responder for connectivity checks.</p>
+      <figure class="figure">
+        <img src="Images/ping.PNG" alt="ping output" />
+        <figcaption>Basic connectivity test using <code>ping</code>.</figcaption>
+      </figure>
+    </section>
 
-  <h3 id="ipconfig"><code>ipconfig</code> / <code>ipconfig /all</code><br>     <code>ifconfig</code> / <code>ip a</code></h3>
-  <p>
-    These commands reveal a given system’s IP configuration on the network. Whether you're using <code>ipconfig</code> on Windows or <code>ifconfig</code> / <code>ip a</code> on Linux, they display your interface’s IP address, subnet, gateway, and more — essential for understanding how your machine is plugged into the network.</p>
-  <h4>Windows</h4>
-  <img src="Images/ipconfig-all.PNG" alt="ipconfig-all.PNG" style="width:600px; height:400px;"><br>
-  <h4>Linux</h4>
-  <img src="Images/ifconfig.png" alt="ifconfig.png" style="width:650px; height:400px;"><br>
-  <img src="Images/ipa.png" alt="ipa.png" style="width:650px; height:400px;"><br>
-  <p>Use these commands when you need to check your current IP address, default gateway, subnet mask, or DNS configuration. They're essential for diagnosing local network issues or verifying that a device is properly connected to the network.</p><br><br><br><br>
+    <section class="card" id="ipconfig">
+      <h3><code>ipconfig</code> / <code>ipconfig /all</code> · <code>ifconfig</code> / <code>ip a</code></h3>
+      <p>These commands reveal a system’s IP configuration: addresses, subnets, gateways, DNS, and interfaces—core details for verifying network setup and troubleshooting.</p>
+      <h4>Windows</h4>
+      <figure class="figure">
+        <img src="Images/ipconfig-all.PNG" alt="Windows ipconfig /all output" />
+      </figure>
+      <h4>Linux</h4>
+      <figure class="figure">
+        <img src="Images/ifconfig.png" alt="Linux ifconfig output" />
+      </figure>
+      <figure class="figure">
+        <img src="Images/ipa.png" alt="Linux ip a output" />
+      </figure>
+    </section>
 
+    <section class="card" id="arp">
+      <h3><code>arp -a</code></h3>
+      <p>Lists the ARP cache mapping IP addresses to MAC addresses—useful for spotting duplicate/unauthorized hosts or validating local L2 addressing.</p>
+      <figure class="figure">
+        <img src="Images/arp-a.PNG" alt="arp -a output" />
+      </figure>
+    </section>
 
-  
-  <h3 id="arp"><code>arp -a</code></h3>
-  <p>
-    The <code>arp -a</code> command lets you peek behind the scenes of local communications by listing the Address Resolution Protocol (ARP) table. It maps IP addresses to MAC addresses — like your system’s contact book for nearby devices.
-  </p>
-  <p>This command comes in handy when troubleshooting duplicate IP and MAC addresses or unauthorized devices on a network.</p>
-  <img src="Images/arp-a.PNG" alt="arp-a.PNG"><br><br><br><br><br>
+    <section class="card" id="nslookup">
+      <h3><code>nslookup</code></h3>
+      <p>Windows DNS lookup tool for querying domain/IP info directly from DNS servers—great for testing resolution and server behavior.</p>
+      <figure class="figure">
+        <img src="Images/nslookup1.PNG" alt="nslookup output" />
+      </figure>
+    </section>
 
-  <h3 id="nslookup"><code>nslookup</code></h3>
-  <p>
-  The <code>nslookup</code> command is a Windows DNS investigation tool — it asks a DNS server for information about domain names and IP addresses. Whether you're hunting down where a website lives or diagnosing DNS failures, this command gives you a direct line to the domain name system.
-  </p>
-  <p>Use this when you want to manually test if a domain resolves to the correct IP address or troubleshoot DNS server behavior. It’s a quick way to confirm whether DNS is functioning as expected.</p>
-  <img src="Images/nslookup1.PNG" alt="nslookup1.PNG"><br><br><br><br><br>
+    <section class="card" id="host">
+      <h3><code>host</code></h3>
+      <p>Lightweight Linux tool for quick A/AAAA/PTR lookups. Ideal for fast checks without verbose output.</p>
+      <figure class="figure">
+        <img src="Images/host1.png" alt="host output" />
+      </figure>
+    </section>
 
-  <h3><code>host</code> / <code>dig</code></h3>
-  <p>
-    These Linux-based DNS tools go deeper than <code>nslookup</code>. <code>host</code> offers quick domain-to-IP lookups, while <code>dig</code> (Domain Information Groper) gives detailed query reports straight from DNS servers. They're like the X-ray scanners of DNS troubleshooting.
-  </p><br>
-  <h3 id="host"><code>host</code></h3>
-  <p>Use this for quick domain-to-IP lookups or reverse lookups on Linux. It’s lightweight and ideal when you need fast, simple DNS resolution results without extra verbosity.</p>
-  <img src="Images/host1.png" alt="host1.png" style="width:650px; height:400px;"><br>
-  <h3 id="dig"><code>dig</code></h3>
-  <p>Best used when you need a deep look into DNS responses, query times, and authoritative answers. It’s the go-to tool for advanced DNS troubleshooting and validation.</p>
-  <img src="Images/dig1.png" alt="dig1.png" style="width:650px; height:400px;"><br><br><br><br><br>
+    <section class="card" id="dig">
+      <h3><code>dig</code></h3>
+      <p>Deep-dive Linux DNS queries with detailed sections (ANSWER, AUTHORITY, ADDITIONAL). Great for validating authoritative responses and timing.</p>
+      <figure class="figure">
+        <img src="Images/dig1.png" alt="dig output" />
+      </figure>
+    </section>
 
-  <h3 id="netstat"><code>netstat -a</code> / <code>netstat -an</code></h3>
-  <p>
-    The <code>netstat</code> command exposes a system’s open doors — it shows which ports are listening, which connections are active, and which processes are using them. Useful for identifying suspicious activity, verifying services, or seeing what active connections a given system has.
-  </p>
-  <img src="Images/netstat1.PNG" alt="netstat1.PNG"><br>
-  <img src="Images/netstat.png" alt="netstat.png" style="width:650px; height:400px;"><br><br><br><br><br>
+    <section class="card" id="netstat">
+      <h3><code>netstat -a</code> / <code>-an</code></h3>
+      <p>Shows listening ports, active connections, and protocol stats—useful for spotting suspicious listeners or verifying expected services.</p>
+      <figure class="figure">
+        <img src="Images/netstat1.PNG" alt="netstat output (Windows)" />
+      </figure>
+      <figure class="figure">
+        <img src="Images/netstat.png" alt="netstat output" />
+      </figure>
+    </section>
 
-  <h3 id="tracert"><code>tracert</code></h3>
-  <p>
-    Tracert (short for "trace route") is the Windows version of traceroute that traces the path packets take to reach a destination. It lists each network hop along the way, revealing delays, outages, or routing quirks that might be slowing things down.
-  </p>
-  <img src="Images/tracert.png" alt="tracert.png" style="width:450px; height:145px;"><br><br><br>
+    <section class="card" id="tracert">
+      <h3><code>tracert</code> (Windows)</h3>
+      <p>Hops and latency on the way to a destination—handy to locate where delays or drops occur.</p>
+      <figure class="figure">
+        <img src="Images/tracert.png" alt="tracert output" />
+      </figure>
+    </section>
 
-  <h3 id="traceroute"><code>traceroute</code></h3>
-  <p>
-    The Linux cousin to <code>tracert</code>, <code>traceroute</code> traces the journey of packets through the internet. Each hop is revealed along the route to your target, helping you visualize where things slow down, drop, or take detours in the digital world.
-  </p>
-  <img src="Images/traceroute.png" alt="traceroute.png" style="width:550px; height:600px;"><br>
+    <section class="card" id="traceroute">
+      <h3><code>traceroute</code> (Linux)</h3>
+      <p>Linux equivalent of tracert. Reveals each hop in the path to the target.</p>
+      <figure class="figure">
+        <img src="Images/traceroute.png" alt="traceroute output" />
+      </figure>
+    </section>
 
- <h3 id="pathping"><code>pathping</code></h3>
-<p>
-<code>pathping</code> is a Windows command that combines <code>ping</code> and <code>tracert</code> into one — but with a twist. It sends pings to every hop along the path and calculates packet loss and latency at each point. It's the network path’s health report, not just its roadmap.
-</p>
-<img src="Images/pathping.png" alt="pathping.png">
-<p>The <code>tracert</code>, <code>traceroute</code>, and <code>pathping</code> commands are often used when you suspect network slowdowns, high latency, or unreachable services. They help identify which hop along the route is causing delays or drops.</p>
-<br><br><br><br>
- <h3 id="route"><code>route print</code><br><code>route -n</code> / <code>ip route</code></h3>
-  <p>
-    These commands unveil a system’s routing table — the rules it follows to decide where to send packets. <code>route print</code> on Windows and <code>route -n</code>, <code>ip route</code> on Linux give you a map of how traffic is directed across gateways and networks.
-  </p>
-  <h4>Windows</h4>
-  <img src="Images/routeprint.PNG" alt="routeprint.PNG" style="width:550px; height:600px;"><br>
-  <h4>Linux</h4>
-  <img src="Images/route.png" alt="route.png"  style="width:675px; height:400px;"><br>
-  <p>The <code>route print</code>, <code>route -n</code>, and <code>ip route</code> commands are useful in scenarios where you need to understand how traffic is routed on a given system or to verify the default gateway and routing rules.</p>
-  <p>These are especially useful when diagnosing issues involving multiple network interfaces or incorrect network paths.</p><br><br><br><br>
+    <section class="card" id="pathping">
+      <h3><code>pathping</code> (Windows)</h3>
+      <p>Combines ping + tracert, reporting per-hop packet loss and latency—think of it as a path health report.</p>
+      <figure class="figure">
+        <img src="Images/pathping.png" alt="pathping output" />
+      </figure>
+      <p><code>tracert</code>, <code>traceroute</code>, and <code>pathping</code> are great when you suspect slowdowns or unreachable services. They help pinpoint the hop causing issues.</p>
+    </section>
 
-  
-<p>Mastering these <strong>Essential Network Commands</strong> equips you with the tools to confidently troubleshoot, investigate, and understand what's happening on a system or network whether you're working with <strong>Windows</strong>, <strong>Linux</strong>, or <strong>macOS</strong>. From verifying connectivity with <code>ping</code>, to mapping routes with <code>tracert</code> or <code>traceroute</code>, to inspecting DNS responses to active connections, these commands are foundational for anyone in IT, cybersecurity, DevOps or system/network administration.</p>
-<p>While these tools may seem basic, they’re often the first place professionals turn when diagnosing issues — and knowing how to interpret their output can set you apart as someone who truly understands how networks function.</p>
-<p>As you continue building your technical skills, revisit these commands in different scenarios, experiment with their options, and incorporate them into your troubleshooting workflow. The command line doesn’t just tell you what’s wrong — it teaches you how systems behave under the hood.</p>
-<p>Thanks for reading — and feel free to explore the full hands-on version of this guide in my <a href="https://mark-thompson01.github.io/MTPortfolio/Skills/Cross%20Plateform%20Networking%20Commands/" target="_blank">Cross-Platform Network Commands on GitHub</a>, or visit more technical write-ups on my <a href="https://mark-thompson01.github.io/MTPortfolio/" target="_blank">GitHub Pages Portfolio</a>.</p>
-</section>
-</body>
-</html>
+    <section class="card" id="route">
+      <h3><code>route print</code> · <code>route -n</code> · <code>ip route</code></h3>
+      <p>Displays routing tables—the rules your system uses to send packets. Essential when multiple interfaces/default gateways exist or routes seem incorrect.</p>
+      <h4>Windows</h4>
+      <figure class="figure">
+        <img src="Images/routeprint.PNG" alt="route print output" />
+      </figure>
+      <h4>Linux</h4>
+      <figure class="figure">
+        <img src="Images/route.png" alt="Linux routing table output" />
+      </figure>
+    </section>
+
+    <!-- Wrap-up -->
+    <section class="card">
+      <h2>Takeaways</h2>
+      <p>Mastering these commands equips you to troubleshoot and understand what’s happening on a system or network—across <b>Windows</b>, <b>Linux</b>, and <b>macOS</b>. From verifying connectivity with <code>ping</code> to mapping routes with <code>tracert</code>/<code>traceroute</code>, to inspecting DNS and active connections, these are foundational for IT, security, and system/network administration.</p>
+      <p>Revisit them in different scenarios, explore options, and fold them into your workflow. The command line doesn’t just tell you what’s wrong—it teaches how systems behave under the hood.</p>
+      <p>Explore
