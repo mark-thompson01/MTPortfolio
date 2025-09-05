@@ -11,8 +11,7 @@
       --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
       --radius:18px;
 
-      /* easy global knobs */
-      --cover-max-h: 260px;      /* hero graphic max height */
+      /* simple knobs for figures */
       --figure-sm-max-w: 720px;  /* small screenshot max width */
       --figure-max-w: 940px;     /* regular figure max width */
     }
@@ -39,21 +38,33 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Title & meta */
+    /* Title & lead */
     h1{margin:4px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     .lead{color:var(--muted);margin:0 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cover image (top poster) */
+    /* Cover image (show full image, no cropping) */
     .cover{
-      border:1px solid var(--card-border);border-radius:14px;overflow:hidden;margin:10px 0 14px;background:#0c0e13
+      border:1px solid var(--card-border);
+      border-radius:14px;
+      overflow:hidden;
+      margin:10px 0 14px;
+      background:#0c0e13;
+      text-align:center;
     }
-    .cover img{width:100%;height:100%;display:block;object-fit:cover}
-    .cover--sm{height:min(var(--cover-max-h), 35vh)} /* keeps it compact */
+    .cover img{
+      width:100%;
+      height:auto;          /* maintain aspect ratio */
+      object-fit:contain;   /* DO NOT crop */
+      display:block;
+      max-height:420px;     /* adjust taller/shorter to taste */
+      margin:0 auto;
+    }
 
+    /* Meta chips */
     .meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 18px}
     .chip{padding:6px 10px;border:1px solid var(--card-border);border-radius:999px;background:rgba(255,255,255,.03);color:var(--muted);font-size:14px}
 
-    /* Layout blocks */
+    /* Card blocks */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
@@ -79,7 +90,7 @@
       border:1px solid var(--card-border);border-radius:12px;overflow:hidden;background:#0e1220;
       max-width:var(--figure-max-w); margin-left:auto; margin-right:auto;
     }
-    .figure.is-sm{max-width:var(--figure-sm-max-w)} /* smaller variant */
+    .figure.is-sm{max-width:var(--figure-sm-max-w)}
     .figure img{width:100%;height:auto;display:block}
     figcaption{color:var(--muted);font-size:13px;margin-top:6px}
 
@@ -108,8 +119,8 @@
 
     <!-- Header -->
     <header>
-      <div class="cover cover--sm">
-        <img src="Images/Essential Network Commands.png" alt="Essential Network Commands cover" style="max-width:1000px; heigh:auto;" />
+      <div class="cover">
+        <img src="Images/Essential Network Commands.png" alt="Essential Network Commands cover" loading="lazy" />
       </div>
       <h1>Essential Network Commands</h1>
       <p class="lead">
@@ -153,7 +164,7 @@
       <h3><code>ping</code></h3>
       <p><b>Ping</b> sends ICMP echo requests to a target and waits for replies, verifying reachability and round-trip time. It’s often the first responder for connectivity checks.</p>
       <figure class="figure is-sm">
-        <img src="Images/ping.PNG" alt="ping output" />
+        <img src="Images/ping.PNG" alt="ping output" loading="lazy" />
         <figcaption>Basic connectivity test using <code>ping</code>.</figcaption>
       </figure>
     </section>
@@ -163,14 +174,14 @@
       <p>These commands reveal a system’s IP configuration: addresses, subnets, gateways, DNS, and interfaces—core details for verifying network setup and troubleshooting.</p>
       <h4>Windows</h4>
       <figure class="figure">
-        <img src="Images/ipconfig-all.PNG" alt="Windows ipconfig /all output" />
+        <img src="Images/ipconfig-all.PNG" alt="Windows ipconfig /all output" loading="lazy" />
       </figure>
       <h4>Linux</h4>
       <figure class="figure">
-        <img src="Images/ifconfig.png" alt="Linux ifconfig output" />
+        <img src="Images/ifconfig.png" alt="Linux ifconfig output" loading="lazy" />
       </figure>
       <figure class="figure">
-        <img src="Images/ipa.png" alt="Linux ip a output" />
+        <img src="Images/ipa.png" alt="Linux ip a output" loading="lazy" />
       </figure>
     </section>
 
@@ -178,7 +189,7 @@
       <h3><code>arp -a</code></h3>
       <p>Lists the ARP cache mapping IP addresses to MAC addresses—useful for spotting duplicate/unauthorized hosts or validating local L2 addressing.</p>
       <figure class="figure is-sm">
-        <img src="Images/arp-a.PNG" alt="arp -a output" />
+        <img src="Images/arp-a.PNG" alt="arp -a output" loading="lazy" />
       </figure>
     </section>
 
@@ -186,7 +197,7 @@
       <h3><code>nslookup</code></h3>
       <p>Windows DNS lookup tool for querying domain/IP info directly from DNS servers—great for testing resolution and server behavior.</p>
       <figure class="figure is-sm">
-        <img src="Images/nslookup1.PNG" alt="nslookup output" />
+        <img src="Images/nslookup1.PNG" alt="nslookup output" loading="lazy" />
       </figure>
     </section>
 
@@ -194,7 +205,7 @@
       <h3><code>host</code></h3>
       <p>Lightweight Linux tool for quick A/AAAA/PTR lookups. Ideal for fast checks without verbose output.</p>
       <figure class="figure">
-        <img src="Images/host1.png" alt="host output" />
+        <img src="Images/host1.png" alt="host output" loading="lazy" />
       </figure>
     </section>
 
@@ -202,7 +213,7 @@
       <h3><code>dig</code></h3>
       <p>Deep-dive Linux DNS queries with detailed sections (ANSWER, AUTHORITY, ADDITIONAL). Great for validating authoritative responses and timing.</p>
       <figure class="figure">
-        <img src="Images/dig1.png" alt="dig output" />
+        <img src="Images/dig1.png" alt="dig output" loading="lazy" />
       </figure>
     </section>
 
@@ -210,10 +221,10 @@
       <h3><code>netstat -a</code> / <code>-an</code></h3>
       <p>Shows listening ports, active connections, and protocol stats—useful for spotting suspicious listeners or verifying expected services.</p>
       <figure class="figure is-sm">
-        <img src="Images/netstat1.PNG" alt="netstat output (Windows)" />
+        <img src="Images/netstat1.PNG" alt="netstat output (Windows)" loading="lazy" />
       </figure>
       <figure class="figure">
-        <img src="Images/netstat.png" alt="netstat output" />
+        <img src="Images/netstat.png" alt="netstat output" loading="lazy" />
       </figure>
     </section>
 
@@ -221,7 +232,7 @@
       <h3><code>tracert</code> (Windows)</h3>
       <p>Hops and latency on the way to a destination—handy to locate where delays or drops occur.</p>
       <figure class="figure is-sm">
-        <img src="Images/tracert.png" alt="tracert output" />
+        <img src="Images/tracert.png" alt="tracert output" loading="lazy" />
       </figure>
     </section>
 
@@ -229,7 +240,7 @@
       <h3><code>traceroute</code> (Linux)</h3>
       <p>Linux equivalent of tracert. Reveals each hop in the path to the target.</p>
       <figure class="figure">
-        <img src="Images/traceroute.png" alt="traceroute output" />
+        <img src="Images/traceroute.png" alt="traceroute output" loading="lazy" />
       </figure>
     </section>
 
@@ -237,7 +248,7 @@
       <h3><code>pathping</code> (Windows)</h3>
       <p>Combines ping + tracert, reporting per-hop packet loss and latency—think of it as a path health report.</p>
       <figure class="figure is-sm">
-        <img src="Images/pathping.png" alt="pathping output" />
+        <img src="Images/pathping.png" alt="pathping output" loading="lazy" />
       </figure>
       <p><code>tracert</code>, <code>traceroute</code>, and <code>pathping</code> are great when you suspect slowdowns or unreachable services. They help pinpoint the hop causing issues.</p>
     </section>
@@ -247,11 +258,11 @@
       <p>Displays routing tables—the rules your system uses to send packets. Essential when multiple interfaces/default gateways exist or routes seem incorrect.</p>
       <h4>Windows</h4>
       <figure class="figure is-sm">
-        <img src="Images/routeprint.PNG" alt="route print output" />
+        <img src="Images/routeprint.PNG" alt="route print output" loading="lazy" />
       </figure>
       <h4>Linux</h4>
       <figure class="figure">
-        <img src="Images/route.png" alt="Linux routing table output" />
+        <img src="Images/route.png" alt="Linux routing table output" loading="lazy" />
       </figure>
     </section>
 
