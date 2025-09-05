@@ -1,81 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab Projects</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cybersecurity · Mark Thompson Portfolio</title>
+  <meta name="description" content="Network security labs: traffic analysis, log monitoring, ARP spoofing, password cracking, enumeration, and real-world exploitation scenarios." />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1 {
-      text-align: left;
-      color: #d3d3d3; /* Lighter grey heading */
-      margin-bottom: 10px;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    p {
-      text-align: left;
-      font-style: italic;
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Title & intro */
+    h1{margin:4px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 18px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards grid */
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      transition:transform .18s,border-color .18s,box-shadow .18s;
     }
-    ul {
-      list-style: none; /* Remove default bullets */
-      padding-left: 0;
-      text-align: left; /* Align list to the left */
-    }
-    li {
-      margin: 10px 0;
-    }
-    a {
-      color: #1e90ff; /* Blue link color */
-      text-decoration: none;
-      font-weight: bold;
-    }
-    a:hover {
-      color: #ff7f50; /* Coral hover color */
-      text-decoration: underline;
-    }
-    .back-link {
-      margin-top: 20px;
-      display: inline-block;
-    }
-    /* Full-screen background with overlay */
-.bg {
-  position: fixed;
-  inset: 0;
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0.4),
-      rgba(0, 0, 0, 0.6)
-    ),
-    url("Images/brand-bg.png") center center / cover no-repeat;
-  z-index: -1;
-}
+    .card:hover{transform:translateY(-3px);border-color:#3a4a67;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+    .card a{display:block;color:var(--text);text-decoration:none}
+    .item-title{font-weight:700;font-size:18px;margin:0 0 6px}
+    .item-desc{color:var(--muted);font-size:14px;margin:0}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-<div class="bg"></div>
-  <h1 style="color: #9e9fb0;">Cybersecurity Labs</h1>
-  <p>This section highlights cybersecurity labs I've built to develop a deeper understanding of network security, system hardening, and common defensive security techniques.</p>
-  <p>These projects explore <strong style="color: #9e9fb0;">traffic analysis</strong>, <strong style="color: #9e9fb0;">log monitoring</strong>, <strong style="color: #9e9fb0;">ARP spoofing</strong>, <strong style="color: #9e9fb0;">password cracking</strong>, <strong style="color: #9e9fb0;">enumeration</strong>,
-  and real world exploitation scenarios - all designed to strengthin both <strong style="color: #9e9fb0;">offensive</strong> and <strong style="color: #9e9fb0;">defensive</strong> skill sets.</p>
+  <div class="wrap">
 
-  <ul>
-    <li><a href="Network%20Traffic%20Analysis/">Network Traffic Analysis</a></li>
-    <li><a href="Windows%20Event%20Log%20Monitoring">Windows Event Log Monitoring</a></li>
-    <li><a href="ARP%20Spoofing">ARP Spoofing</a></li>
-    <li><a href="Network%20Hash%20Capture%20and%20Cracking">Network Hash Capture and Cracking</a></li>
-    <li><a href="RDP%20Brute%20Force%20Attack%20and%20Remote%20Login">RDP Brute Force Attack and Remote Login</a></li>
-    <li><a href="Web%20Server%20Enumeration%20and%20Exploitation">Web Server Enumeration and Exploitation</a></li>
-    <li><a href="Active%20Reconnaissance">Active Reconnaissance</a></li>
-    <li><a href="Raspberry%20Pi%20Web%20App%20Tinkering">Raspberry Pi Web App Tinerking</a></li>
-    <li><a href="TrueNAS%20Attack%20&%20Defense%20Lab">NAS Security Attack & Defense Lab</a></li>
-  </ul>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <a href="../index.html" class="back-link">Back to Home</a>
+    <!-- Page header -->
+    <header>
+      <h1>Cybersecurity</h1>
+      <p class="lead">This page collects my network security labs and studies: traffic analysis, log monitoring, ARP spoofing, password cracking, enumeration, and real-world exploitation scenarios.</p>
+    </header>
+
+    <!-- Labs grid -->
+    <main class="grid" aria-label="Cybersecurity labs">
+      <article class="card">
+        <a href="Network%20Traffic%20Analysis/">
+          <div class="item-title">Network Traffic Analysis</div>
+          <p class="item-desc">Inspecting packets/flows to identify protocols, anomalies, and potential issues.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="Windows%20Event%20Log%20Monitoring">
+          <div class="item-title">Windows Event Log Monitoring</div>
+          <p class="item-desc">Using Windows logs to spot suspicious activity and support incident triage.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="ARP%20Spoofing">
+          <div class="item-title">ARP Spoofing</div>
+          <p class="item-desc">Man-in-the-middle lab demonstrating ARP poisoning, impact, and mitigations.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="Network%20Hash%20Capture%20and%20Cracking">
+          <div class="item-title">Network Hash Capture &amp; Cracking</div>
+          <p class="item-desc">Capturing authentication material and testing cracking workflows in a lab setting.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="RDP%20Brute%20Force%20Attack%20and%20Remote%20Login">
+          <div class="item-title">RDP Brute Force &amp; Remote Login</div>
+          <p class="item-desc">Ethical demonstration of attack path and hardening strategies.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="Web%20Server%20Enumeration%20and%20Exploitation">
+          <div class="item-title">Web Server Enumeration &amp; Exploitation</div>
+          <p class="item-desc">Reconnaissance, service mapping, and exploitation on a lab web stack.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="Active%20Reconnaissance">
+          <div class="item-title">Active Reconnaissance</div>
+          <p class="item-desc">Probing targets and services to build a picture of the environment.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="Raspberry%20Pi%20Web%20App%20Tinkering">
+          <div class="item-title">Raspberry Pi Web App Tinkering</div>
+          <p class="item-desc">Custom Pi-hosted web app for testing enumeration and attack/defense ideas.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="TrueNAS%20Attack%20&%20Defense%20Lab">
+          <div class="item-title">NAS Security Attack &amp; Defense Lab</div>
+          <p class="item-desc">TrueNAS lab: privilege escalation, detection, response, and hardening.</p>
+        </a>
+      </article>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div>© <span id="y">2025</span> Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
