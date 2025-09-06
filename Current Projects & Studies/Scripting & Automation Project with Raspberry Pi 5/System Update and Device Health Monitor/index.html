@@ -1,68 +1,181 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>System Update and Device Health Monitor</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>System Update and Device Health Monitor · Mark Thompson Portfolio</title>
+  <meta name="description" content="Raspberry Pi 5 scripting & automation: a Bash script that checks for system updates, installs them, and logs disk, memory, CPU, and temperature health. Includes hourly cron scheduling." />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b;
-      color: #f0f0f0;
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    h1, h2, p, ul, li, a {
-      text-align: left;
-      margin-left: 20px;
+    /* Code (if needed) */
+    pre{
+      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
+      border-radius:12px;overflow:auto;color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
+    }
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    h1, h2 {
-      color: #00ffcc;
+    /* Figures: scroll-friendly images */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
     }
+    .figure img{
+      display:block;
+      margin:0 auto;
+      width:clamp(480px, 85%, 960px);
+      max-height:70vh;
+      height:auto;
+      border-radius:10px;
+      object-fit:contain;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    ul {
-      padding-left: 40px;
-      list-style-type: none
-    }
-
-    a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
-    img {
-         display: block;
-         margin: 20px 0;
-         max-width: 75%;
-         height: auto;
-         border: 1px solid #444;
-         border-radius: 5px;
-    }
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <h1>System Update and Device Health Monitor</h1>
-  <p>The following is a bash shell script that looks for system updates and install them if available, and checks the systems health on disk, memory and CPU usage, and device temperature monitoring. </p><br>
-  <p><strong>1.</strong> Create the script using <strong>nano</strong> or a text-editor of your choice.</p>
-  <img src="Images/system_update_monitor.png" alt="system_update_monitor.png"><br>
-  <p><strong>2.</strong> Save the script and make it executable.</p>
-  <img src="Images/scriptcode.png" alt="scriptcode.png" style="width:750px; height:650px;"><br>
-  <img src="Images/chmod.png" alt="chmod.png">
-  <p><strong>3.</strong> Run the script.</p>
-  <img src="Images/script%20run.png" alt=script%20run.png"><br>
-  <p><strong>4.</strong> Concatenate the contents of the scripts results.</p>
-  <img src="Images/catlog.png" alt="catlog.png">
-  <img src="Images/LogData.png" alt="LogData.png"><br>
-  <p><strong>5.</strong> Add the script as a cronjob to execute automatically every hour.</p>
-  <img src="Images/crontab.png" alt="crontab.png">
-  <img src="Images/crontab%20add.png" alt="crontab%20add.png">
+  <div class="wrap">
 
-   <a href="../index.html">Back to Home</a>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Scripting &amp; Automation (Raspberry Pi 5)</a> · <span>System Update and Device Health Monitor</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+      <h1>System Update and Device Health Monitor</h1>
+      <p class="lead">A Bash script that checks for updates (and installs them if available) while logging disk, memory, CPU usage, and device temperature. Designed for Raspberry Pi 5 and scheduled via <code>cron</code>.</p>
+    </header>
+
+    <section class="card">
+      <p>Flow: create the script → make it executable → run and review logs → schedule it hourly. The screenshots below walk through each step.</p>
+    </section>
+
+    <section class="card" id="create">
+      <h2>1) Create the Script</h2>
+      <p>Use <b>nano</b> (or your preferred editor) to create the update & health monitor script.</p>
+      <figure class="figure">
+        <img src="Images/system_update_monitor.png" alt="Editing the system update & health monitor script in nano" loading="lazy" decoding="async">
+      </figure>
+    </section>
+
+    <section class="card" id="make-executable">
+      <h2>2) Save & Make Executable</h2>
+      <figure class="figure">
+        <img src="Images/scriptcode.png" alt="Saved script preview" loading="lazy" decoding="async">
+      </figure>
+      <figure class="figure">
+        <img src="Images/chmod.png" alt="chmod to make the script executable" loading="lazy" decoding="async">
+      </figure>
+    </section>
+
+    <section class="card" id="run">
+      <h2>3) Run the Script</h2>
+      <figure class="figure">
+        <img src="Images/script%20run.png" alt="Running the update & health monitor script" loading="lazy" decoding="async">
+      </figure>
+    </section>
+
+    <section class="card" id="logs">
+      <h2>4) Review the Logs</h2>
+      <p>Concatenate the latest log outputs to confirm update actions and resource/temperature readings.</p>
+      <figure class="figure">
+        <img src="Images/catlog.png" alt="Concatenating the script log output" loading="lazy" decoding="async">
+      </figure>
+      <figure class="figure">
+        <img src="Images/LogData.png" alt="Log data with update and device health results" loading="lazy" decoding="async">
+      </figure>
+    </section>
+
+    <section class="card" id="cron">
+      <h2>5) Schedule Hourly with Cron</h2>
+      <figure class="figure">
+        <img src="Images/crontab.png" alt="Opening crontab editor" loading="lazy" decoding="async">
+        <figcaption class="figcap">Open the crontab editor.</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="Images/crontab%20add.png" alt="Adding an hourly crontab entry" loading="lazy" decoding="async">
+        <figcaption class="figcap">Example: <code>0 * * * * /path/to/update-monitor.sh</code></figcaption>
+      </figure>
+    </section>
+
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+
+  </div>
 </body>
 </html>
