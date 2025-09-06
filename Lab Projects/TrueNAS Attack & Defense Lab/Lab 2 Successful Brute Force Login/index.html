@@ -66,7 +66,7 @@
       padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Figures – intrinsic image size (no zoom/gallery) */
+    /* Figures – intrinsic image size */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -79,6 +79,7 @@
     .figure img{
       display:block;margin:0 auto;border-radius:10px;object-fit:contain;
       width:auto; max-width:100%; height:auto;
+      cursor: zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
@@ -86,6 +87,28 @@
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
+
+    /* Zoom modal (no history changes) */
+    .zoom-modal{
+      position:fixed; inset:0; z-index:1000; display:none;
+      background:rgba(0,0,0,.85);
+    }
+    .zoom-modal[open]{display:block}
+    .zoom-content{
+      position:absolute; inset:40px; display:grid; place-items:center; overflow:auto;
+    }
+    .zoom-img{
+      max-width:95vw; max-height:95vh; width:auto; height:auto; border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      cursor: zoom-out;
+    }
+    .zoom-close{
+      position:absolute; top:14px; right:16px; width:40px; height:40px;
+      border-radius:999px; border:1px solid #3a4a67; background:#0e1220; color:var(--text);
+      display:grid; place-items:center; font-size:22px; line-height:1; cursor:pointer;
+    }
+    .zoom-close:hover{background:#121733}
+    .hide-scroll{overflow:hidden}
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
@@ -128,17 +151,17 @@
 
       <div class="pair">
         <figure class="figure">
-          <img src="Images/msf1.png" alt="Metasploit console prepared for SSH brute-force" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/msf1.png" alt="Metasploit console prepared for SSH brute-force" loading="lazy" decoding="async">
           <figcaption class="figcap">Preparing Metasploit for the SSH attack.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/ssh_login.png" alt="Metasploit auxiliary/scanner/ssh_login module options" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/ssh_login.png" alt="Metasploit auxiliary/scanner/ssh_login module options" loading="lazy" decoding="async">
           <figcaption class="figcap">Using <code>auxiliary/scanner/ssh_login</code>.</figcaption>
         </figure>
       </div>
 
       <figure class="figure">
-        <img src="Images/BruteForceSuccess.png" alt="Successful SSH login via brute-force" loading="lazy" decoding="async">
+        <img class="zoomable" src="Images/BruteForceSuccess.png" alt="Successful SSH login via brute-force" loading="lazy" decoding="async">
         <figcaption class="figcap">Credentials found — shell access obtained.</figcaption>
       </figure>
 
@@ -146,17 +169,17 @@
 
       <div class="pair">
         <figure class="figure">
-          <img src="Images/Meterpreter%20Session%20Upgrade.png" alt="Upgrading shell to Meterpreter session" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/Meterpreter%20Session%20Upgrade.png" alt="Upgrading shell to Meterpreter session" loading="lazy" decoding="async">
           <figcaption class="figcap">Upgrading shell to Meterpreter.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/In%20The%20System.png" alt="Interactive Meterpreter session on the target" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/In%20The%20System.png" alt="Interactive Meterpreter session on the target" loading="lazy" decoding="async">
           <figcaption class="figcap">Interactive Meterpreter session.</figcaption>
         </figure>
       </div>
 
       <figure class="figure">
-        <img src="Images/getuid%20sysinfo.png" alt="getuid and sysinfo confirming user and system details" loading="lazy" decoding="async">
+        <img class="zoomable" src="Images/getuid%20sysinfo.png" alt="getuid and sysinfo confirming user and system details" loading="lazy" decoding="async">
         <figcaption class="figcap"><code>getuid</code> / <code>sysinfo</code> confirm context.</figcaption>
       </figure>
     </section>
@@ -169,11 +192,11 @@
       <p>Review <code>/var/log/auth.log</code> (or platform equivalent). Look for a sequence of failures followed by a success.</p>
       <div class="pair">
         <figure class="figure">
-          <img src="Images/LogSearch.png" alt="Log view showing failed attempts leading up to success" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/LogSearch.png" alt="Log view showing failed attempts leading up to success" loading="lazy" decoding="async">
           <figcaption class="figcap">Failed attempts chained together.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/LogSearch2.png" alt="Log view highlighting the successful SSH login event" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/LogSearch2.png" alt="Log view highlighting the successful SSH login event" loading="lazy" decoding="async">
           <figcaption class="figcap">Success event identified in logs.</figcaption>
         </figure>
       </div>
@@ -182,11 +205,11 @@
       <p>Reset the compromised password and temporarily disable interactive SSH access for the account while IR proceeds.</p>
       <div class="pair">
         <figure class="figure">
-          <img src="Images/ResetPassword.png" alt="Resetting the user password on the NAS host" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/ResetPassword.png" alt="Resetting the user password on the NAS host" loading="lazy" decoding="async">
           <figcaption class="figcap">Password reset.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/Disable.png" alt="Disabling the user account or restricting login" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/Disable.png" alt="Disabling the user account or restricting login" loading="lazy" decoding="async">
           <figcaption class="figcap">Disable or restrict account logins.</figcaption>
         </figure>
       </div>
@@ -199,11 +222,11 @@
       <p>Move to key-based authentication and disable password auth for SSH to prevent brute-force success.</p>
       <div class="pair">
         <figure class="figure">
-          <img src="Images/Password%20Renable.png" alt="Server configuration snippet related to SSH password settings" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/Password%20Renable.png" alt="Server configuration snippet related to SSH password settings" loading="lazy" decoding="async">
           <figcaption class="figcap">Disable password logins; use keys only.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/SSH%20Server%20Settings%202.png" alt="SSH server settings showing keys-only configuration" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/SSH%20Server%20Settings%202.png" alt="SSH server settings showing keys-only configuration" loading="lazy" decoding="async">
           <figcaption class="figcap">Confirm SSH server settings.</figcaption>
         </figure>
       </div>
@@ -224,5 +247,56 @@
       </div>
     </footer>
   </div>
+
+  <!-- Zoom modal (built once, reused) -->
+  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <div class="zoom-content" data-close>
+      <img class="zoom-img" id="zoomImg" alt="">
+      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const modal = document.getElementById('zoom');
+      const zoomImg = document.getElementById('zoomImg');
+      const closeBtn = modal.querySelector('.zoom-close');
+
+      function openModal(src, alt){
+        zoomImg.src = src;
+        zoomImg.alt = alt || '';
+        modal.setAttribute('open', '');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('hide-scroll');
+        closeBtn.focus();
+      }
+      function closeModal(){
+        modal.removeAttribute('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('hide-scroll');
+        zoomImg.src = '';
+        zoomImg.alt = '';
+      }
+
+      // Click any image inside a .figure to zoom
+      document.addEventListener('click', (e) => {
+        const img = e.target.closest('.figure img.zoomable');
+        if (img){
+          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
+          openModal(full, img.alt);
+        }
+      });
+
+      // Close interactions
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (!modal.hasAttribute('open')) return;
+        if (e.key === 'Escape') closeModal();
+      });
+    })();
+  </script>
 </body>
 </html>
