@@ -67,7 +67,16 @@
       max-width:100%;
     }
 
-    /* Horizontal gallery */
+    /* Table */
+    table{border-collapse:collapse;width:100%;max-width:680px}
+    th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #2A3447}
+    th{font-weight:700;color:var(--text)}
+    .tag{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
+
+    /* Lists */
+    ul,ol{padding-left:22px;margin:8px 0}
+
+    /* Horizontal gallery (used from Files & Dirs and below) */
     .gallery-wrap{position:relative;margin:10px 0 6px}
     .gallery{
       display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
@@ -88,31 +97,6 @@
     .gbtn:hover{background:#121733}
     .gprev{left:-6px}
     .gnext{right:-6px}
-
-    /* Code/pre */
-    pre{
-      margin:10px 0;
-      padding:12px 14px;
-      background:#0f1424;
-      border:1px solid #202a3f;
-      border-radius:12px;
-      overflow:auto;
-      color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
-    }
-    code{
-      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-    }
-
-    /* Table */
-    table{border-collapse:collapse;width:100%;max-width:680px}
-    th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #2A3447}
-    th{font-weight:700;color:var(--text)}
-
-    /* Lists */
-    ul,ol{padding-left:22px;margin:8px 0}
 
     /* Footer */
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
@@ -230,17 +214,12 @@
         </tbody>
       </table>
 
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Cmdlet basics screenshots">
-          <article class="item"><figure class="figure"><img src="Images/GetHelp.png" alt="Get-Help screenshot"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/GetCommand.png" alt="Get-Command screenshot"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/GetProcess.png" alt="Get-Process screenshot"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/GetService.png" alt="Get-Service screenshot"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ServiceMgmt.png" alt="Service management examples"></figure></article>
-        </div>
-      </div>
+      <!-- Single figures (no gallery above this point) -->
+      <div class="figure"><img src="Images/GetHelp.png" alt="Get-Help screenshot"></div>
+      <div class="figure"><img src="Images/GetCommand.png" alt="Get-Command screenshot"></div>
+      <div class="figure"><img src="Images/GetProcess.png" alt="Get-Process screenshot"></div>
+      <div class="figure"><img src="Images/GetService.png" alt="Get-Service screenshot"></div>
+      <div class="figure"><img src="Images/ServiceMgmt.png" alt="Service management examples"></div>
     </section>
 
     <!-- Exploration -->
@@ -268,98 +247,50 @@ Get-LocalGroupMember -Group "Administrators"
 Remove-LocalGroupMember -Group "Administrators" -Member "Domain Users"</code></pre>
 
       <p><b>Get-Module -ListAvailable</b></p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Module listings">
-          <article class="item"><figure class="figure"><img src="Images/Exploration/GetModule.png" alt="Get-Module list"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/GetModules2.png" alt="Get-Module additional list"></figure></article>
-        </div>
-      </div>
+      <div class="figure"><img src="Images/Exploration/GetModule.png" alt="Get-Module list"></div>
+      <div class="figure"><img src="Images/Exploration/GetModules2.png" alt="More module listings"></div>
 
       <p><b>Command discovery across modules</b></p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Get-Command results">
-          <article class="item"><figure class="figure"><img src="Images/Exploration/GetCommand1.png" alt="WindowsUpdate commands"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/GetCommand2.png" alt="NetAdapter commands"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/GetCommand3.png" alt="NetTCPIP commands"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/GetCommand4.png" alt="TroubleshootingPack commands"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/GetCommand5.png" alt="NetworkConnectivityStatus commands"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/GetCommand6.png" alt="NetSecurity commands list"></figure></article>
-        </div>
-      </div>
+      <div class="figure"><img src="Images/Exploration/GetCommand1.png" alt="WindowsUpdate commands"></div>
+      <div class="figure"><img src="Images/Exploration/GetCommand2.png" alt="NetAdapter commands"></div>
+      <div class="figure"><img src="Images/Exploration/GetCommand3.png" alt="NetTCPIP commands"></div>
+      <div class="figure"><img src="Images/Exploration/GetCommand4.png" alt="TroubleshootingPack commands"></div>
+      <div class="figure"><img src="Images/Exploration/GetCommand5.png" alt="NetworkConnectivityStatus commands"></div>
+      <div class="figure"><img src="Images/Exploration/GetCommand6.png" alt="NetSecurity commands list"></div>
 
       <p><b>Networking & hash basics</b></p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Networking and hashes">
-          <article class="item"><figure class="figure"><img src="Images/Exploration/NetFirewall1.png" alt="NetSecurity module details"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/GetFileHash1.png" alt="Get-FileHash output"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/NetAdapter.png" alt="Get-NetAdapter output"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/NetAdapter2.png" alt="Adapter selected properties"></figure></article>
-        </div>
-      </div>
+      <div class="figure"><img src="Images/Exploration/NetFirewall1.png" alt="NetSecurity module"></div>
+      <div class="figure"><img src="Images/Exploration/GetFileHash1.png" alt="Get-FileHash output"></div>
+      <div class="figure"><img src="Images/Exploration/NetAdapter.png" alt="Get-NetAdapter output"></div>
+      <div class="figure"><img src="Images/Exploration/NetAdapter2.png" alt="Adapter selected properties"></div>
 
       <p><b>Firewall rules & discovery</b></p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Firewall rules">
-          <article class="item"><figure class="figure"><img src="Images/SetNetFirewall.png" alt="Enable File and Printer Sharing rule"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Get-NetworkFirewall.png" alt="Network Discovery rules"></figure></article>
-        </div>
-      </div>
+      <div class="figure"><img src="Images/SetNetFirewall.png" alt="Enable File and Printer Sharing rule"></div>
+      <div class="figure"><img src="Images/Get-NetworkFirewall.png" alt="Network Discovery rules"></div>
 
       <p><b>Retrieve computer serial number</b></p>
       <div class="figure"><img src="Images/Exploration/serialn.png" alt="Serial number retrieval"></div>
 
       <p><b>Block IP inbound/outbound</b></p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Block IP examples">
-          <article class="item"><figure class="figure"><img src="Images/FirewallBlock.png" alt="Inbound block rule"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/FirewallBlock2.png" alt="Outbound block rule"></figure></article>
-        </div>
-      </div>
+      <div class="figure"><img src="Images/FirewallBlock.png" alt="Inbound block rule"></div>
+      <div class="figure"><img src="Images/FirewallBlock2.png" alt="Outbound block rule"></div>
 
       <p><b>Get-ComputerInfo & selected properties</b></p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Computer info">
-          <article class="item"><figure class="figure"><img src="Images/Exploration/ComputerInfo.png" alt="ComputerInfo full"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ComputerInfo2.png" alt="Selected OS properties 1"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ComputerInfo3.png" alt="Selected OS properties 2"></figure></article>
-        </div>
-      </div>
+      <div class="figure"><img src="Images/Exploration/ComputerInfo.png" alt="ComputerInfo full"></div>
+      <div class="figure"><img src="Images/ComputerInfo2.png" alt="Selected OS properties 1"></div>
+      <div class="figure"><img src="Images/ComputerInfo3.png" alt="Selected OS properties 2"></div>
 
       <p><b>Local users & groups</b></p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Legacy user and group commands">
-          <article class="item"><figure class="figure"><img src="Images/Exploration/netuser.png" alt="net user"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/netgroup.png" alt="net group"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Exploration/netuseradmin.png" alt="net user administrator"></figure></article>
-        </div>
-      </div>
+      <div class="figure"><img src="Images/Exploration/netuser.png" alt="net user"></div>
+      <div class="figure"><img src="Images/Exploration/netgroup.png" alt="net group"></div>
+      <div class="figure"><img src="Images/Exploration/netuseradmin.png" alt="net user administrator"></div>
 
       <p><b>Modern local group cmdlets</b></p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Local group cmdlets">
-          <article class="item"><figure class="figure"><img src="Images/GetLocalGroup.png" alt="Get-LocalGroupMember"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/LocalGroup2.png" alt="Modify local group members"></figure></article>
-        </div>
-      </div>
+      <div class="figure"><img src="Images/GetLocalGroup.png" alt="Get-LocalGroupMember"></div>
+      <div class="figure"><img src="Images/LocalGroup2.png" alt="Modify local group members"></div>
     </section>
 
-    <!-- Files & Dirs -->
+    <!-- Files & Dirs (GALLERY FROM HERE DOWN) -->
     <section class="card">
       <h2>Working with Files and Directories</h2>
       <pre><code>Get-ChildItem
@@ -425,7 +356,13 @@ ls</code></pre>
       </div>
 
       <h3>Loops and Conditional Statements</h3>
-      <div class="figure"><img src="Images/BS/loops.png" alt="Loops screenshot"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Loops">
+          <article class="item"><figure class="figure"><img src="Images/BS/loops.png" alt="Loops screenshot"></figure></article>
+        </div>
+      </div>
 
       <h3>Objects</h3>
       <div class="gallery-wrap">
@@ -470,7 +407,15 @@ Greet-User -Name "Dave"</code></pre>
       <h2>Permissions and Execution Policy</h2>
       <pre><code>Get-ExecutionPolicy
 Set-ExecutionPolicy RemoteSigned</code></pre>
-      <div class="figure"><img src="Images/ExecutePolicy.png" alt="Execution policy"></div>
+
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Execution policy">
+          <article class="item"><figure class="figure"><img src="Images/ExecutePolicy.png" alt="Execution policy"></figure></article>
+        </div>
+      </div>
+
       <p><b>Policies:</b> Restricted · AllSigned · RemoteSigned · Unrestricted</p>
       <p>Administrator privileges may be required.</p>
     </section>
@@ -495,7 +440,13 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
       </div>
 
       <h3>Start-Transcript</h3>
-      <div class="figure"><img src="Images/Debug/StartTranscript.png" alt="Start-Transcript demo"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Start-Transcript">
+          <article class="item"><figure class="figure"><img src="Images/Debug/StartTranscript.png" alt="Start-Transcript demo"></figure></article>
+        </div>
+      </div>
 
       <h3>try / catch / finally</h3>
       <div class="gallery-wrap">
@@ -543,7 +494,13 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
       </div>
 
       <h3>Backing up and archiving logs</h3>
-      <div class="figure"><img src="Images/Batch%20User%20Creationi/Backup.png" alt="Backup logs with PowerShell"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Backup logs">
+          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/Backup.png" alt="Backup logs with PowerShell"></figure></article>
+        </div>
+      </div>
 
       <h3>Scheduled tasks and reporting</h3>
       <div class="gallery-wrap">
@@ -575,12 +532,12 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
         <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/mark-thompson-01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
   </div>
 
-  <!-- Gallery wheel + arrows -->
+  <!-- Gallery wheel + arrows (used only below Files & Dirs) -->
   <script>
     (function(){
       document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
