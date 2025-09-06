@@ -1,131 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab 4 - Persistence</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NAS Security Attack &amp; Defense Lab 4 · Mark Thompson Portfolio</title>
+  <meta name="description" content="Lab 4: Establishing SSH key-based persistence on a NAS host, with detection via logs, file monitoring, and immediate response/mitigation." />
+
+  <!-- THEME -->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1 {
-      text-align: left;
-      color: #d3d3d3; /* Lighter grey heading */
-      margin-bottom: 10px;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    h2 {
-      text-align: left;
-      color: #d3d3d3;
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:14px 0 6px;font-size:16px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    p {
-      text-align: left;
+
+    /* Code blocks */
+    pre{
+      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
+      border-radius:12px;overflow:auto;color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
     }
-    ul {
-      list-style: none; /* Remove default bullets */
-      padding-left: 0;
-      text-align: left; /* Align list to the left */
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
-    li {
-      margin: 10px 0;
+
+    /* Figures – intrinsic image size (no zoom/gallery) */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
     }
-    a {
-      color: #1e90ff; /* Blue link color */
-      text-decoration: none;
-      font-weight: bold;
+    .figure img{
+      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
+      width:auto; max-width:100%; height:auto;
     }
-    a:hover {
-      color: #ff7f50; /* Coral hover color */
-      text-decoration: underline;
-    }
-    .back-link {
-      color: #1E90FF;
-      text-decoration: none;
-    }
-     img {
-      width: 500px;
-      height: auto; /* Maintain aspect ratio */
-    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Side-by-side */
+    .pair{display:grid;gap:12px;margin:16px 0}
+    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
+    .pair .figure{margin:0}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
-  <h1>NAS Security Attack & Defense Lab 4</h1>
-  <h2>Persistence | Detetction & Response</h2>
-  <p>We’ve made it this far to lab 4! On the offensive side, a successful brute force attack has allowed access to be gained on the target NAS server, followed by a successful privilege escalation attack to gain root access to the compromised system. Now it’s time to establish persistence on the target NAS server.</p>
-  <h3>Offensive</h3>
-  <p>To establish persistence in this scenario I’m going to add a public SSH key to the <code>user’s ~/ .ssh/authorized_keys</code> file to be able to easily re-authenticate to the system.</p>
-  <p>To set that up I’m going to generate an SSH key pair on the Kali Linux machine, like so.</p>
-  <img src="Images/sshkeygen.png" alt="sshkeygen">
-  <p>Then copy the public key to the target system</p>
-  <img src="Images/keypairtransfer.png" alt="keypairtransfer">
-  <p>IN the <code>/tmp</code> directory on the target NAS system, verify that the <code>id_rsa.pub</code> public key file is there.</code></p>
-  <img src="Images/lslisting.png" alt="lslisting">
-  <p>I'll then the file from the <code>/tmp</code> to <code>/root</code> directory on the system.</p>
-  <img src="Images/movefromtmptoroot.png" alt="movefromtmptoroot">
-  <p>From there, I'll run the following commands to setup an <code>~/.ssh</code> directory for this keypair, as well as use the <code>echo</code> command rename the <code>id_rsa.pub</code> file to <code>authorized_keys</code>, then assign permissions to the <code>authorized_keys</code> file and <code>~/.ssh</code> directory.</p>
-  <img src="Images/sshkeygensetup3.png" alt="sshkeygensetup3">
+<body>
+  <div class="wrap wide">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <p>Then from there, it’s time to test the persistence.</p>
-  <p>And we are back in.</p>
-  <img src="Images/persistence0.png" alt=persistence0">
-  <p>In this scenario, you would still have to go through the steps of setting the TERM environment variable and exploiting the SUID bit in <code>vim</code> to escalate privileges. However, in establishing persistence, this would give you a way back into the system after a reboot.</p>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> ·
+      <a href="../">NAS Security Attack &amp; Defense Lab</a> ·
+      <span>Lab 4 — Persistence</span>
+    </div>
 
+    <!-- Header -->
+    <header>
+      <h1>Lab 4 — Persistence</h1>
+      <p class="lead">Establishing SSH key-based persistence; detecting it via logs and file changes; and responding with containment and mitigation.</p>
+    </header>
 
-  <h3>Defensive</h3>
-  <p><strong>Step 1 - Detection of SSH Key-Based Persistence</strong></p>
+    <!-- Scenario -->
+    <section class="card">
+      <h2>Scenario</h2>
+      <p>After gaining access (Lab&nbsp;2) and escalating privileges (Lab&nbsp;3), the attacker establishes persistence on the NAS server. This lab demonstrates adding an SSH public key for re-entry, then shows how to detect and respond on defense.</p>
+    </section>
 
-    <p><strong>Audit:</strong> <code>authorized_keys</code> file.</p>
-    <p>SSH key-based persistence relies on the presence of unauthorized public keys in <code>authorized_keys</code> file. Check for unusual entries.</p>
-  
-  <img src="Images/detection1png" alt=detection1png">
-  <p>Well, here we have a concatenated public key file with an @kali, that right there would indeed be very suspicious and considered an IoC to immediately respond to and investigate.</p>
+    <!-- Offensive -->
+    <section class="card">
+      <h2>Offensive</h2>
+      <p>Generate an SSH key pair on Kali and place the public key on the target NAS. Then configure <code>~/.ssh/authorized_keys</code> with proper permissions to enable key-based login.</p>
 
-    <p><strong>Step 2 - Check SSH Logs:</strong></p>
- 
-  <p>This would be another case to go through the <code>auth.log</code> as done in the previous lab examples.</p>
-  <img src="Images/authlog0.png" alt="authlog0">
-  <img src="Images/AcceptedAuth.png" alt="AcceptedAuth">
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/sshkeygen.png" alt="Generating an SSH key pair on Kali with ssh-keygen" loading="lazy" decoding="async">
+          <figcaption class="figcap">Generate SSH key pair.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/keypairtransfer.png" alt="Copying the public key to the target system" loading="lazy" decoding="async">
+          <figcaption class="figcap">Transfer public key to target.</figcaption>
+        </figure>
+      </div>
 
-  <p><strong>Step 3 - Check Recent File Modification</strong></p>
-  <p><strong>Identify Recent File Modifications</strong></p>
-  <p>Identify recently modified <code>.ssh/authorized_keys files</code></p>
-  <p>Here we have an example of using the <code>find</code> command to identify recently modified <code>authorized _keys</code> files. This command searches for any <code>authorized_keys</code> files modified within the last 7 days, a common indicator of unauthorized persistence.</p>
-  <img src="Images/recentfilemod.png" alt="recentfilemod">
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/lslisting.png" alt="Verifying id_rsa.pub exists on the NAS in /tmp" loading="lazy" decoding="async">
+          <figcaption class="figcap">Verify the key on the target.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/movefromtmptoroot.png" alt="Moving key from /tmp to /root" loading="lazy" decoding="async">
+          <figcaption class="figcap">Move key to desired location.</figcaption>
+        </figure>
+      </div>
 
-  <p><strong>Process Monitoring</strong></p>
-  <p>Use the <code>who</code> command to identify active SSH sessions.</p>
-  <p>Here we see the user account ronny making a connection from the Kali Linux IP address.</p>
-  <img src="Images/who.png" alt="who">
-  <img src="Images/terminate0.png" alt=terminate0">
+      <figure class="figure">
+        <img src="Images/sshkeygensetup3.png" alt="Creating ~/.ssh, renaming id_rsa.pub to authorized_keys, and setting permissions" loading="lazy" decoding="async">
+        <figcaption class="figcap">Create <code>~/.ssh</code>, write <code>authorized_keys</code>, set secure perms.</figcaption>
+      </figure>
 
-  <p><strong>Immediate Response</strong></p>
-  <p>Upon detecting these active malicious/suspicious connections, I would immediately terminate them.</p>
-  <p>I would start using the <code>kill</code> command with the <code>-9</code> to forcefully terminate any PID associated with the ronny user account.</p>
-  <img src="Images/kill.png" alt="kill">
+      <p>Test the persistence by reconnecting via SSH using the private key.</p>
+      <figure class="figure">
+        <img src="Images/persistence0.png" alt="Successful re-login via SSH using the key (persistence test)" loading="lazy" decoding="async">
+        <figcaption class="figcap">Re-entry confirmed with key-based auth.</figcaption>
+      </figure>
 
-  <p><strong>Mitigation of SSH Key-Based Persistence</strong></p>
+      <p>Note: You may still need to repeat environment setup/escalation steps from Lab&nbsp;3 to regain root in a new session, but the key ensures durable access post-reboot.</p>
+    </section>
 
-  <p><strong>Step 1 - Remove Unauthorized Keys</strong></p>
+    <!-- Defensive -->
+    <section class="card">
+      <h2>Defensive</h2>
 
-  <p>Manually inspect and remove unauthorized entries from <code>authorized_keys:</code></p>
-  <img src="Images/removeauthkeys.png" alt="removeauthkeys">
-  <img src="Images/removeentryfromfile.png" alt="removeentryfromfile">
-  <img src="Images/modfied.png" alt="modfied">
+      <h3>1) Detect Key-Based Persistence</h3>
+      <p>Audit <code>~/.ssh/authorized_keys</code> for unexpected entries, strange comments, or keys referencing external systems (e.g., <code>@kali</code>).</p>
+      <figure class="figure">
+        <img src="Images/detection1png" alt="Reviewing authorized_keys showing a suspicious key entry" loading="lazy" decoding="async">
+        <figcaption class="figcap">Suspicious key present in <code>authorized_keys</code>.</figcaption>
+      </figure>
 
-  <p><strong>Step 2 - Change User Passwords</strong></p>
-  <p>In case an attacker also knows the user’s password, reset it to prevent further access.</p>
-  <img src="Images/passwordreset.png" alt="passwordreset">
+      <h3>2) Review SSH Authentication Logs</h3>
+      <p>Correlate logins in <code>/var/log/auth.log</code> (or platform equivalent) for key-based acceptances from unfamiliar sources.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/authlog0.png" alt="General SSH auth log review" loading="lazy" decoding="async">
+          <figcaption class="figcap">General auth activity.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/AcceptedAuth.png" alt="Accepted public key authentication entries" loading="lazy" decoding="async">
+          <figcaption class="figcap">Accepted key-based auth detected.</figcaption>
+        </figure>
+      </div>
 
-  <h2>Conclusion</h2>
-  <p>The overall detection of this activity would indeed call for immediate response in the event of discovering an active IoC with a suspicious IP, process, and/or unusual activity from a standard user account on the server.
-  In this case and scenario, there are further mitigation options that are applicable in different circumstances depending on how the server is being used and the needs of the given environment.
-  In lab 2, password-based authentication for SSH was disabled to mitigate from SSH brute force attacks. Which is typically a recommended practice to configure SSH and utilize public-key based authentication.</p>
-  <p>Even with that in place, on the offensive side if we manage to find another way into the system, this method of persistence could still be set up.
-  In such cases, depending on the use of the server and needs of the environment, there are a few different directions for mitigation that would be applicable in different scenarios.
-  If SSH isn’t really needed – the service could simply be disabled along with SSH key usage disabled to go the extra mile. However, SSH can always be re-enabled and setup if the server is compromised through a different method. If the operating system is granular enough to setup 2FA for SSH on accounts or explicit permissions for user accounts to use SSH, that’s another avenue. If SSH is needed, an IDS/IPS or other type of monitoring tool specifically set up to alert on <code>authorized_keys</code> would be my next consideration in my aim to mitigate against this.</p><br>
+      <h3>3) Identify Recent File Modifications</h3>
+      <p>Find recently modified <code>authorized_keys</code> files (7-day window example):</p>
+      <pre><code>sudo find / -type f -name authorized_keys -mtime -7 2>/dev/null</code></pre>
+      <figure class="figure">
+        <img src="Images/recentfilemod.png" alt="Finding recently modified authorized_keys files with find" loading="lazy" decoding="async">
+        <figcaption class="figcap">Hunting recent key additions.</figcaption>
+      </figure>
 
-  <a href="../" class="back-link">Back to Labs</a>                                                                                                                                                          
+      <h3>4) Monitor Active Sessions</h3>
+      <p>Check who is currently logged in and from where, then terminate suspicious sessions.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/who.png" alt="Using who to see active sessions (ronny from Kali IP)" loading="lazy" decoding="async">
+          <figcaption class="figcap"><code>who</code> shows session origin.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/terminate0.png" alt="Terminating a suspicious session" loading="lazy" decoding="async">
+          <figcaption class="figcap">Terminate the session immediately.</figcaption>
+        </figure>
+      </div>
+
+      <h3>Immediate Response</h3>
+      <p>Kill related processes (example using <code>kill -9</code> on PIDs tied to the compromised user):</p>
+      <figure class="figure">
+        <img src="Images/kill.png" alt="Force-killing malicious processes" loading="lazy" decoding="async">
+        <figcaption class="figcap">Force-stop rogue processes.</figcaption>
+      </figure>
+
+      <h3>Mitigation</h3>
+      <h4>Remove Unauthorized Keys</h4>
+      <p>Manually inspect and remove unknown keys from <code>authorized_keys</code>; restrict permissions to minimum required.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/removeauthkeys.png" alt="Inspecting authorized_keys file" loading="lazy" decoding="async">
+          <figcaption class="figcap">Inspect the file contents.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/removeentryfromfile.png" alt="Removing the suspicious key entry" loading="lazy" decoding="async">
+          <figcaption class="figcap">Remove rogue entries.</figcaption>
+        </figure>
+      </div>
+      <figure class="figure">
+        <img src="Images/modfied.png" alt="Saved and secured authorized_keys after removal" loading="lazy" decoding="async">
+        <figcaption class="figcap">Modified and secured.</figcaption>
+      </figure>
+
+      <h4>Reset Passwords</h4>
+      <p>Reset affected user passwords in case credentials were also compromised.</p>
+      <figure class="figure">
+        <img src="Images/passwordreset.png" alt="Resetting the user password" loading="lazy" decoding="async">
+        <figcaption class="figcap">Password reset performed.</figcaption>
+      </figure>
+    </section>
+
+    <!-- Conclusion -->
+    <section class="card">
+      <h2>Conclusion</h2>
+      <p>SSH key-based persistence is effective and stealthy. Even with passwords disabled (keys-only mode), an attacker who obtains write access can add a key and regain entry after reboot. If SSH isn’t required, disable the service entirely. Otherwise, harden: monitor <code>authorized_keys</code>, restrict which users may use SSH, consider 2FA, use IDS/IPS rules for key-file changes, and alert on anomalous logins.</p>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to NAS Security Attack &amp; Defense Lab</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
