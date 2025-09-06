@@ -23,7 +23,7 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav (tabs) */
+    /* Top nav */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
     .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
@@ -41,7 +41,7 @@
     a:hover{text-decoration:underline}
     .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cards / sections */
+    /* Cards */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
@@ -60,23 +60,24 @@
       padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Figures: keep your “feel” but responsive & scroll-friendly */
+    /* Figures: scroll-friendly images */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:12px auto;
-      width:max-content;
+      margin:24px auto;
       max-width:100%;
+      text-align:center;
     }
     .figure img{
       display:block;
+      margin:0 auto;
+      width:clamp(480px, 85%, 960px);  /* flexible size */
+      max-height:70vh;                 /* prevents overly tall images */
       height:auto;
-      /* similar visual size to your original max-width:75% but responsive */
-      width:clamp(560px, 75vw, 920px);
-      max-width:100%;
-      border-radius:8px;
+      border-radius:10px;
+      object-fit:contain;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
@@ -116,7 +117,7 @@
 
     <section class="card">
       <h2>1) Create the Bash Script</h2>
-      <p>For this example, use the <b>nano</b> text editor to create the script file.</p>
+      <p>Use the <b>nano</b> text editor to create the script file.</p>
       <figure class="figure">
         <img src="Images/nanocreate.png" alt="Creating script with nano" loading="lazy" decoding="async">
       </figure>
