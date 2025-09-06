@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Linux Command‑Line · Mark Thompson Portfolio</title>
-  <meta name="description" content="Hands‑on guide to the Linux command line (Bash): navigation, files, viewing/searching, archiving, users & permissions, monitoring, packages, services, networking, utilities — with examples and screenshots." />
+  <title>Basic Bash Shell Scripting · Mark Thompson Portfolio</title>
+  <meta name="description" content="Intro to Bash scripting: why it matters, core syntax (shebang, variables, conditionals, loops, functions), and step-by-step examples. Theme-matched with scrollable screenshot galleries." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -54,7 +54,7 @@
     .figure img{display:block;height:auto;max-width:100%}
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Galleries */
+    /* Scroll galleries */
     .gallery-wrap{position:relative;margin-top:10px}
     .gallery{display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
     .gallery .item{scroll-snap-align:start}
@@ -74,7 +74,7 @@
     /* Footer */
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer a{color:var(--muted)} footer a:hover{color:#4DA3FF}
   </style>
 </head>
 <body>
@@ -91,288 +91,199 @@
 
     <!-- Breadcrumb -->
     <div class="crumbs">
-      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Linux Command‑Line</span>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Basic Bash Shell Scripting</span>
     </div>
 
     <!-- Header -->
     <header>
-      <h1>Linux Command‑Line (Bash Shell)</h1>
-      <p class="lead">The terminal + Bash give precise control over files, processes, networking, and more. Below are core commands with examples and screenshots.</p>
-      <p>Commands you type are small programs (e.g., <code>/bin/ls</code>, <code>/bin/cp</code>). The terminal sends your input to the shell, usually <b>Bash</b> (Bourne Again Shell), which parses and executes them.</p>
+      <h1>Basic Bash Shell Scripting</h1>
+      <p class="lead">Turn repetitive terminal tasks into small, reusable programs. Learn the shebang, variables, conditionals, loops, and functions—then apply them with real examples.</p>
     </header>
 
-    <!-- Flow explanation -->
-    <section class="card">
-      <h2>How a Command Runs</h2>
-      <ol>
-        <li>You type a command (e.g., <code>ls -l</code>).</li>
-        <li>The terminal forwards it to the shell (Bash).</li>
-        <li>Bash parses the command (syntax, expansions, variables).</li>
-        <li>It resolves the executable (e.g., <code>/bin/ls</code>) and runs it.</li>
-        <li>Output is printed back to the terminal.</li>
-      </ol>
+    <!-- What is Bash scripting -->
+    <section class="card" id="what">
+      <h2>What is Bash Shell Scripting?</h2>
+      <p><b>Bash</b> (Bourne Again Shell) is both a command language and a shell for Unix-like systems. <b>Bash scripting</b> means writing a sequence of commands into a file so they can run together—automating file work, user input, loops, and system admin tasks.</p>
+      <p>Bash scripting turns repeatable steps into clean, versionable scripts that manage systems and solve problems using built‑in Unix tools.</p>
     </section>
 
-    <!-- 1. Navigation -->
-    <section class="card" id="nav">
-      <h2>1) Navigating & Managing Directories</h2>
-      <pre><code>pwd
-cd /Documents
-mkdir new_folder
-rmdir new_folder
-ls -la</code></pre>
+    <!-- Why/When -->
+    <section class="card" id="why">
+      <h2>Why and When is Bash Scripting Beneficial?</h2>
       <ul>
-        <li><b>pwd</b> — print current directory path</li>
-        <li><b>cd</b> — change directories</li>
-        <li><b>mkdir / rmdir</b> — create or remove (empty) directory</li>
-        <li><b>ls</b> — list directory contents</li>
+        <li>Automate repetitive admin tasks (backups, updates).</li>
+        <li>Create quick solutions for monitoring or file manipulation.</li>
+        <li>Run a sequence of commands without human interaction.</li>
+        <li>Configure environments and software setups.</li>
+        <li>Save time and reduce errors through automation.</li>
       </ul>
+    </section>
+
+    <!-- Fundamentals -->
+    <section class="card" id="fundamentals">
+      <h2>Bash Scripting Fundamentals</h2>
+
+      <h3>Shebang & Execution</h3>
+      <pre><code>#!/bin/bash
+# file: script.sh
+
+echo "Hello from Bash"</code></pre>
+      <p>The first line <code>#!/bin/bash</code> (the <b>shebang</b>) tells the OS to run the file with Bash. Make it executable and run it:</p>
+      <pre><code>chmod +x script.sh
+./script.sh</code></pre>
+
+      <h3>Variables & Read</h3>
+      <pre><code>name="Mark"
+echo "Hi, $name!"
+
+read -p "Your favorite distro? " distro
+echo "Nice choice: $distro"</code></pre>
+
+      <h3>Conditionals</h3>
+      <pre><code>read -p "Enter a number: " n
+if [ "$n" -gt 10 ]; then
+  echo "Greater than 10"
+elif [ "$n" -eq 10 ]; then
+  echo "Exactly 10"
+else
+  echo "Less than 10"
+fi</code></pre>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
         <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-nav" class="gallery hide-scrollbar" role="region" aria-label="Navigation screenshots">
-          <article class="item"><figure class="figure"><img src="Images/cd.png" alt="cd example" loading="lazy" decoding="async" /><figcaption class="figcap">Changing directories with <code>cd</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/mkdir.png" alt="mkdir example" loading="lazy" decoding="async" /><figcaption class="figcap">Creating a directory with <code>mkdir</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/rmdir.png" alt="rmdir example" loading="lazy" decoding="async" /><figcaption class="figcap">Removing an empty directory.</figcaption></figure></article>
+        <div id="gallery-conditionals" class="gallery hide-scrollbar" role="region" aria-label="Conditional examples">
+          <article class="item"><figure class="figure"><img src="Images/Conditional.png" alt="If/else code example" loading="lazy" decoding="async" /><figcaption class="figcap">If/else structure.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ConditionalSR.png" alt="If/else output screenshot" loading="lazy" decoding="async" /><figcaption class="figcap">If/else output.</figcaption></figure></article>
         </div>
       </div>
-    </section>
 
-    <!-- 2. File creation/editing -->
-    <section class="card" id="files">
-      <h2>2) File Creation & Editing</h2>
-      <pre><code>touch new_file.txt
-file new_file.txt
-nano new_file.txt
-vi new_file.txt</code></pre>
-      <ul>
-        <li><b>touch</b> — create or update timestamp</li>
-        <li><b>file</b> — identify file type</li>
-        <li><b>nano</b> — beginner‑friendly editor</li>
-        <li><b>vi/vim</b> — powerful modal editor</li>
-      </ul>
+      <h3>Loops</h3>
+      <p><b>For</b> — when you know the iteration set; <b>While</b> — continue while condition is true.</p>
+      <pre><code># for over values
+for i in 1 2 3; do
+  echo "Number $i"
+done
+
+# for over files in a folder
+for f in *.log; do
+  echo "Found: $f"
+done
+
+# while loop
+count=0
+while [ $count -lt 3 ]; do
+  echo "Count: $count"
+  count=$((count+1))
+done</code></pre>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
         <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-files" class="gallery hide-scrollbar" role="region" aria-label="File editing screenshots">
-          <article class="item"><figure class="figure"><img src="Images/touch%20and%20file.png" alt="touch and file usage" loading="lazy" decoding="async" /><figcaption class="figcap"><code>touch</code> and <code>file</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/nano%20new_file.png" alt="nano editor" loading="lazy" decoding="async" /><figcaption class="figcap">Editing with <code>nano</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/vinew_file2.png" alt="vi editor" loading="lazy" decoding="async" /><figcaption class="figcap">Editing with <code>vi</code>/<code>vim</code>.</figcaption></figure></article>
+        <div id="gallery-loops" class="gallery hide-scrollbar" role="region" aria-label="Loop examples">
+          <article class="item"><figure class="figure"><img src="Images/forloopexample.png" alt="for loop code" loading="lazy" decoding="async" /><figcaption class="figcap">For loop.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/forloopexampleSR.png" alt="for loop output" loading="lazy" decoding="async" /><figcaption class="figcap">For loop output.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/loopoverfile.png" alt="loop over files code" loading="lazy" decoding="async" /><figcaption class="figcap">Loop over files.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/loopoverfileSR.png" alt="loop over files output" loading="lazy" decoding="async" /><figcaption class="figcap">Loop over files output.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/whileloop.png" alt="while loop code" loading="lazy" decoding="async" /><figcaption class="figcap">While loop.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/whileloopSR.png" alt="while loop output" loading="lazy" decoding="async" /><figcaption class="figcap">While loop output.</figcaption></figure></article>
         </div>
       </div>
-    </section>
 
-    <!-- 3. Viewing/searching -->
-    <section class="card" id="viewing">
-      <h2>3) Viewing & Searching File Content</h2>
-      <pre><code>cat new_file.txt
-ls -l /home/user
-tree
-grep "search_term" new_file.txt
-head -n 5 new_file.txt
-tail -n 5 new_file.txt</code></pre>
-      <ul>
-        <li><b>cat</b> — print file contents</li>
-        <li><b>ls -l</b> — long listing (perms, owner, size, date)</li>
-        <li><b>tree</b> — directory tree view</li>
-        <li><b>grep</b> — pattern search</li>
-        <li><b>head</b>/<b>tail</b> — first/last lines</li>
-      </ul>
+      <h3>Functions</h3>
+      <pre><code>greet(){
+  echo "Hello, $1!"
+}
+
+greet "Mark"</code></pre>
+      <p>Functions help you organize code, avoid repetition, and reuse logic across scripts.</p>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
         <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-view" class="gallery hide-scrollbar" role="region" aria-label="Viewing and searching screenshots">
-          <article class="item"><figure class="figure"><img src="Images/catnew_file.png" alt="cat output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>cat</code> a file.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ls-l.png" alt="ls -l" loading="lazy" decoding="async" /><figcaption class="figcap">Long listing with <code>ls -l</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/tree.png" alt="tree output" loading="lazy" decoding="async" /><figcaption class="figcap">Directory tree.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/grepnew_file.png" alt="grep results" loading="lazy" decoding="async" /><figcaption class="figcap">Searching with <code>grep</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/head+tail.png" alt="head and tail" loading="lazy" decoding="async" /><figcaption class="figcap"><code>head</code> & <code>tail</code>.</figcaption></figure></article>
+        <div id="gallery-functions" class="gallery hide-scrollbar" role="region" aria-label="Function examples">
+          <article class="item"><figure class="figure"><img src="Images/Function1.png" alt="function code" loading="lazy" decoding="async" /><figcaption class="figcap">Function definition.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/Function1SR.png" alt="function output" loading="lazy" decoding="async" /><figcaption class="figcap">Function output.</figcaption></figure></article>
         </div>
       </div>
+
+      <h3>Script Structure Tips</h3>
+      <ul>
+        <li>Start with <code>#!/bin/bash</code>, then <code>set -euo pipefail</code> for safer scripts.</li>
+        <li>Quote variables: <code>"$var"</code>. Prefer <code>$(cmd)</code> over backticks.</li>
+        <li>Use functions + <code>main()</code>; return exit codes with <code>exit</code>.</li>
+        <li>Log progress with <code>echo</code> or <code>printf</code>; use comments generously.</li>
+      </ul>
+      <pre><code>#!/bin/bash
+set -euo pipefail
+
+log(){ printf "[%s] %s\n" "$(date +%T)" "$*"; }
+main(){
+  log "Starting"
+  # work goes here
+  log "Done"
+}
+main "$@"</code></pre>
     </section>
 
-    <!-- 4. Archiving/locating -->
-    <section class="card" id="archive">
-      <h2>4) Archiving & Locating Files</h2>
-      <pre><code>tar -cvf archive.tar /home/user/documents
-locate filename.txt
-find /home -name "filename.txt"</code></pre>
-      <ul>
-        <li><b>tar</b> — create/extract archives</li>
-        <li><b>locate</b> — indexed filename search</li>
-        <li><b>find</b> — real‑time search by name/size/time/etc.</li>
-      </ul>
+    <!-- Examples gallery groups -->
+    <section class="card" id="examples">
+      <h2>Script Examples</h2>
+
+      <h3>1) Hello World</h3>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
         <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-archive" class="gallery hide-scrollbar" role="region" aria-label="Archiving and finding screenshots">
-          <article class="item"><figure class="figure"><img src="Images/tar.png" alt="tar usage" loading="lazy" decoding="async" /><figcaption class="figcap">Creating an archive with <code>tar</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/find.png" alt="find results" loading="lazy" decoding="async" /><figcaption class="figcap">Finding files with <code>find</code>.</figcaption></figure></article>
+        <div id="gallery-hello" class="gallery hide-scrollbar" role="region" aria-label="Hello world screenshots">
+          <article class="item"><figure class="figure"><img src="Images/hello.png" alt="hello world code" loading="lazy" decoding="async" /><figcaption class="figcap">Hello world script.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/helloSR.png" alt="hello world output" loading="lazy" decoding="async" /><figcaption class="figcap">Output.</figcaption></figure></article>
         </div>
       </div>
-    </section>
 
-    <!-- 5. Users/permissions -->
-    <section class="card" id="users">
-      <h2>5) Users & Permissions</h2>
-      <pre><code>whoami
-sudo apt update
-chmod 755 new_file.txt
-chown user:user new_file.txt
-sudo useradd newuser
-sudo passwd newuser
-sudo userdel newuser</code></pre>
-      <ul>
-        <li><b>whoami</b> — print current user</li>
-        <li><b>sudo</b> — run command with elevated privileges</li>
-        <li><b>chmod</b> — change permissions</li>
-        <li><b>chown</b> — change owner/group</li>
-        <li><b>useradd / passwd / userdel</b> — manage accounts</li>
-      </ul>
+      <h3>2) User Input</h3>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
         <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-users" class="gallery hide-scrollbar" role="region" aria-label="User and permission screenshots">
-          <article class="item"><figure class="figure"><img src="Images/whoami.png" alt="whoami output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>whoami</code> output.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/newuserchown.png" alt="useradd and chown" loading="lazy" decoding="async" /><figcaption class="figcap">Add user and change ownership.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/newuserdel.png" alt="userdel" loading="lazy" decoding="async" /><figcaption class="figcap">Delete a user.</figcaption></figure></article>
+        <div id="gallery-input" class="gallery hide-scrollbar" role="region" aria-label="User input screenshots">
+          <article class="item"><figure class="figure"><img src="Images/UserInput.png" alt="read user input code" loading="lazy" decoding="async" /><figcaption class="figcap">Prompt with <code>read</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/UserInputSR.png" alt="read user input output" loading="lazy" decoding="async" /><figcaption class="figcap">Echoing input.</figcaption></figure></article>
         </div>
       </div>
-    </section>
 
-    <!-- 6. Monitoring -->
-    <section class="card" id="monitor">
-      <h2>6) System Monitoring & Maintenance</h2>
-      <pre><code>df -h
-du -sh /home/user
-top
-htop
-uname -a</code></pre>
-      <ul>
-        <li><b>df -h</b> — filesystem space (human‑readable)</li>
-        <li><b>du -sh</b> — directory size summary</li>
-        <li><b>top / htop</b> — live process viewers</li>
-        <li><b>uname -a</b> — kernel/system info</li>
-      </ul>
+      <h3>3) File Existence Check</h3>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
         <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-monitor" class="gallery hide-scrollbar" role="region" aria-label="Monitoring screenshots">
-          <article class="item"><figure class="figure"><img src="Images/df.png" alt="df output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>df -h</code> usage.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/du.png" alt="du output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>du -sh</code> usage.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/top.png" alt="top" loading="lazy" decoding="async" /><figcaption class="figcap"><code>top</code> view.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/top2.png" alt="top alt screen" loading="lazy" decoding="async" /><figcaption class="figcap">Alternative <code>top</code> screen.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/htop.png" alt="htop" loading="lazy" decoding="async" /><figcaption class="figcap"><code>htop</code> overview.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/htop2.png" alt="htop details" loading="lazy" decoding="async" /><figcaption class="figcap">More <code>htop</code> details.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/uname.png" alt="uname" loading="lazy" decoding="async" /><figcaption class="figcap"><code>uname -a</code> output.</figcaption></figure></article>
+        <div id="gallery-filecheck" class="gallery hide-scrollbar" role="region" aria-label="File check screenshots">
+          <article class="item"><figure class="figure"><img src="Images/FileCheck.png" alt="file existence code" loading="lazy" decoding="async" /><figcaption class="figcap">Check with <code>-f</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/FileCheckSR.png" alt="file existence output" loading="lazy" decoding="async" /><figcaption class="figcap">Results.</figcaption></figure></article>
         </div>
       </div>
-    </section>
 
-    <!-- 7. Package management -->
-    <section class="card" id="packages">
-      <h2>7) Package Management</h2>
-      <pre><code>sudo apt install nano
-sudo dnf update
-sudo dpkg -i package.deb</code></pre>
-      <ul>
-        <li><b>apt</b> — Debian/Ubuntu package tool</li>
-        <li><b>dnf</b> — Fedora/RHEL package tool</li>
-        <li><b>dpkg</b> — low‑level .deb installer</li>
-      </ul>
+      <h3>4) For Loop</h3>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
         <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-packages" class="gallery hide-scrollbar" role="region" aria-label="Package management screenshots">
-          <article class="item"><figure class="figure"><img src="Images/aptupdate.png" alt="apt update" loading="lazy" decoding="async" /><figcaption class="figcap"><code>apt update</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/aptinstall.png" alt="apt install" loading="lazy" decoding="async" /><figcaption class="figcap"><code>apt install</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/dnf.png" alt="dnf usage" loading="lazy" decoding="async" /><figcaption class="figcap"><code>dnf</code> on Fedora/RHEL.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/dpkg.png" alt="dpkg -i" loading="lazy" decoding="async" /><figcaption class="figcap"><code>dpkg -i</code> to install a <code>.deb</code>.</figcaption></figure></article>
+        <div id="gallery-forloop" class="gallery hide-scrollbar" role="region" aria-label="For loop screenshots">
+          <article class="item"><figure class="figure"><img src="Images/ForLoop.png" alt="for loop code" loading="lazy" decoding="async" /><figcaption class="figcap">Loop over values.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ForLoopSR.png" alt="for loop output" loading="lazy" decoding="async" /><figcaption class="figcap">Output.</figcaption></figure></article>
         </div>
       </div>
-    </section>
 
-    <!-- 8. Services/processes -->
-    <section class="card" id="services">
-      <h2>8) Services & Processes</h2>
-      <pre><code>sudo systemctl restart ssh
-kill -9 &lt;PID&gt;</code></pre>
-      <ul>
-        <li><b>systemctl</b> — control system services (start/stop/enable/status)</li>
-        <li><b>kill</b> — send signals to processes by PID</li>
-      </ul>
+      <h3>5) Simple Backup Script</h3>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
         <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-services" class="gallery hide-scrollbar" role="region" aria-label="Service and process screenshots">
-          <article class="item"><figure class="figure"><img src="Images/servicestatus.png" alt="service status" loading="lazy" decoding="async" /><figcaption class="figcap">Service status via <code>systemctl</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/systemctl.png" alt="systemctl usage" loading="lazy" decoding="async" /><figcaption class="figcap">Managing services.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/kill.png" alt="kill command" loading="lazy" decoding="async" /><figcaption class="figcap">Killing a process.</figcaption></figure></article>
+        <div id="gallery-backup" class="gallery hide-scrollbar" role="region" aria-label="Backup script screenshots">
+          <article class="item"><figure class="figure"><img src="Images/Backup.png" alt="backup script code" loading="lazy" decoding="async" /><figcaption class="figcap">Compress & copy.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/BackupSR.png" alt="backup script output" loading="lazy" decoding="async" /><figcaption class="figcap">Run results.</figcaption></figure></article>
         </div>
       </div>
-    </section>
 
-    <!-- 9. System operations -->
-    <section class="card" id="ops">
-      <h2>9) System Operations</h2>
-      <pre><code>sudo shutdown now
-sudo reboot</code></pre>
-      <ul>
-        <li><b>shutdown</b> — safely power off</li>
-        <li><b>reboot</b> — restart the system</li>
-      </ul>
+      <h3>6) Function Example</h3>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
         <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-ops" class="gallery hide-scrollbar" role="region" aria-label="Shutdown and reboot screenshots">
-          <article class="item"><figure class="figure"><img src="Images/shutdown.png" alt="shutdown command" loading="lazy" decoding="async" /><figcaption class="figcap">Shutdown example.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/reboot.png" alt="reboot command" loading="lazy" decoding="async" /><figcaption class="figcap">Reboot example.</figcaption></figure></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- 10. Networking & retrieval -->
-    <section class="card" id="net">
-      <h2>10) Networking & Data Retrieval</h2>
-      <pre><code>wget http://example.com/file.zip
-curl http://example.com/file.zip -o file.zip</code></pre>
-      <ul>
-        <li><b>wget</b> — non‑interactive downloader (HTTP/HTTPS/FTP)</li>
-        <li><b>curl</b> — flexible client for transfers, APIs, tests</li>
-      </ul>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-net" class="gallery hide-scrollbar" role="region" aria-label="Networking screenshots">
-          <article class="item"><figure class="figure"><img src="Images/wget.png" alt="wget example" loading="lazy" decoding="async" /><figcaption class="figcap">Downloading with <code>wget</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/curl.png" alt="curl example" loading="lazy" decoding="async" /><figcaption class="figcap">Downloading with <code>curl</code>.</figcaption></figure></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- 11. Utilities & time -->
-    <section class="card" id="utils">
-      <h2>11) Utilities & Time</h2>
-      <pre><code>history
-echo "Hello World"
-cal
-time ls -la
-date</code></pre>
-      <ul>
-        <li><b>history</b> — list your recent commands</li>
-        <li><b>echo</b> — print text/variables</li>
-        <li><b>cal</b> — calendar</li>
-        <li><b>time</b> — measure a command's runtime</li>
-        <li><b>date</b> — current date/time</li>
-      </ul>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-utils" class="gallery hide-scrollbar" role="region" aria-label="Utilities screenshots">
-          <article class="item"><figure class="figure"><img src="Images/history1.png" alt="history output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>history</code> listing.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/history2.png" alt="history more" loading="lazy" decoding="async" /><figcaption class="figcap">More history.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/echo.png" alt="echo output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>echo</code> example.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/caldate.png" alt="calendar and date" loading="lazy" decoding="async" /><figcaption class="figcap"><code>cal</code> and <code>date</code>.</figcaption></figure></article>
+        <div id="gallery-fn" class="gallery hide-scrollbar" role="region" aria-label="Function script screenshots">
+          <article class="item"><figure class="figure"><img src="Images/Function.png" alt="function script code" loading="lazy" decoding="async" /><figcaption class="figcap">Function script.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/FunctionSR.png" alt="function script output" loading="lazy" decoding="async" /><figcaption class="figcap">Execution output.</figcaption></figure></article>
         </div>
       </div>
     </section>
@@ -380,7 +291,7 @@ date</code></pre>
     <!-- Wrap -->
     <section class="card">
       <h2>Conclusion</h2>
-      <p>The CLI isn't magic — it's a shell interpreting your input and running small programs. Mastering these commands builds a strong foundation for administration, scripting, and troubleshooting. Explore <code>man &lt;command&gt;</code> for deeper options.</p>
+      <p>We covered the essentials of Bash scripting—shebang, variables, input, conditionals, loops, and functions—then applied them in practical examples. Keep experimenting and check <code>man bash</code> for deeper options.</p>
       <p><a href="../index.html">Back to Home</a></p>
     </section>
 
@@ -395,7 +306,7 @@ date</code></pre>
 
   </div>
 
-  <!-- Minimal JS: wire up all galleries on the page -->
+  <!-- Minimal JS for galleries on this page -->
   <script>
     (function(){
       document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
