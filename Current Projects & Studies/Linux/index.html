@@ -6,17 +6,16 @@
   <title>Linux: An Introduction</title>
   <style>
     :root{
-      --bg-start:#0f172a;      /* slate-900 */
-      --bg-end:#0b1220;        /* deep navy */
-      --text:#e5e7eb;          /* light gray used across site */
-      --muted:#9ca3af;         /* secondary text */
-      --link:#60a5fa;          /* link blue */
-      --link-hover:#ff7f50;    /* coral hover */
-      --card:#0b1220cc;        /* translucent card */
-      --border:#1f2937;        /* border color */
+      --bg-start:#0f172a;      
+      --bg-end:#0b1220;        
+      --text:#e5e7eb;          
+      --muted:#9ca3af;         
+      --link:#60a5fa;          
+      --link-hover:#ff7f50;    
+      --card:#0b1220cc;        
+      --border:#1f2937;        
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0}
+    *{box-sizing:border-box;margin:0;padding:0}
     body{
       font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", sans-serif;
       color:var(--text);
@@ -25,6 +24,29 @@
                   linear-gradient(180deg, var(--bg-start), var(--bg-end));
       line-height:1.65;
     }
+    /* NAVIGATION */
+    nav {
+      display:flex;
+      justify-content:center;
+      background-color:#111827;
+      border-bottom:1px solid var(--border);
+      padding:14px 20px;
+      position:sticky;
+      top:0;
+      z-index:1000;
+    }
+    nav a {
+      color:var(--text);
+      text-decoration:none;
+      margin:0 18px;
+      font-weight:600;
+      transition:color .2s ease;
+    }
+    nav a:hover {
+      color:var(--link-hover);
+    }
+
+    /* PAGE LAYOUT */
     .page{
       max-width:900px;
       margin:0 auto;
@@ -36,14 +58,13 @@
       border-bottom:1px solid var(--border);
     }
     h1,h2{
-      color:var(--text);       /* unified heading color */
-      margin:0 0 10px;
+      color:var(--text);       
       line-height:1.25;
       letter-spacing:.2px;
     }
-    h1{font-size:clamp(28px,4.5vw,44px); font-weight:800;}
-    h2{font-size:clamp(18px,2.4vw,24px); font-weight:700; margin-top:28px}
-    p{margin:10px 0; color:var(--text)}
+    h1{font-size:clamp(28px,4.5vw,44px); font-weight:800; margin-bottom:10px;}
+    h2{font-size:clamp(18px,2.4vw,24px); font-weight:700; margin-top:28px; margin-bottom:10px;}
+    p{margin:10px 0}
     .muted{color:var(--muted)}
     section{margin:22px 0; padding:18px 20px; background:var(--card); border:1px solid var(--border); border-radius:12px}
     ul{margin:8px 0 0 18px; padding:0}
@@ -55,6 +76,15 @@
   </style>
 </head>
 <body>
+  <!-- NAVIGATION -->
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="../windows.html">Windows</a>
+    <a href="../linux.html">Linux</a>
+    <a href="../projects.html">Projects</a>
+    <a href="../about.html">About</a>
+  </nav>
+
   <div class="page">
     <header>
       <h1>Linux: An Introduction</h1>
@@ -112,7 +142,6 @@
         <li><strong>Arch Linux</strong>: Minimalist and highly customizable</li>
         <li><strong>Red Hat Enterprise Linux (RHEL)</strong>: Enterprise-grade with long-term support</li>
       </ul>
-      <p>Each distribution serves a different purpose, from casual use and learning to enterprise deployments and specialized systems.</p>
     </section>
 
     <section>
@@ -124,7 +153,7 @@
         <li><strong>File System</strong>: Linux uses a hierarchical structure starting from the root directory (<code>/</code>).</li>
         <li><strong>System Libraries</strong>: Essential shared code used by applications and services.</li>
         <li><strong>System Daemons</strong>: Background processes that handle tasks like networking, printing, and scheduling.</li>
-        <li><strong>User Interface</strong>: May include desktop environments like GNOME, KDE, or lightweight interfaces like XFCE.</li>
+        <li><strong>User Interface</strong>: May include desktop environments like GNOME, KDE, or XFCE.</li>
         <li><strong>Package Manager</strong>: Tools like <code>apt</code>, <code>yum</code>, or <code>dnf</code> manage software installation and updates.</li>
       </ul>
     </section>
