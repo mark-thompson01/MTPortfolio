@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Installing Windows Server 2016 on Oracle VirtualBox · Mark Thompson Portfolio</title>
-  <meta name="description" content="Step-by-step: create a Windows Server 2016 VM in Oracle VirtualBox and complete the installation to prepare for an AD DS lab." />
+  <meta name="description" content="Create a Windows Server 2016 VM in Oracle VirtualBox and complete the installation as the foundation for an AD DS lab." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -23,43 +23,46 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
     .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
+    /* Titles */
     h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     h2{margin:0 0 10px;font-size:22px}
     h3{margin:16px 0 8px;font-size:18px}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
+    /* Card blocks */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
       box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-
     ul,ol{padding-left:22px;margin:8px 0}
     .tight li{margin:6px 0}
 
+    /* Code blocks */
     code, pre code{
       background:#0e1220;border:1px solid var(--card-border);
       border-radius:10px;padding:8px 10px;display:block;white-space:pre-wrap;margin:8px 0;
       color:var(--text)
     }
 
-    /* Updated image sizing */
+    /* Images: scroll-friendly sizing */
     .img-wrap{margin:12px 0;text-align:center}
     .img-wrap img{
-      display:block;
-      margin:0 auto;
-      max-width:70%;   /* shrink a bit */
+      display:block;margin:0 auto;
+      max-width:70%; /* adjust to taste */
       height:auto;
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -92,11 +95,111 @@
     <!-- Header -->
     <header>
       <h1>Installing Windows Server 2016 on Oracle VirtualBox</h1>
-      <p class="lead">Create a Windows Server 2016 VM in VirtualBox and complete setup—foundation for building an AD DS lab.</p>
+      <p class="lead">The following demonstrates installing Windows Server 2016 as a VM using Oracle VirtualBox. Active Directory starts with a Windows Server installation and setting up AD DS as the origin of the Windows domain.</p>
+      <p><a href="https://github.com/mark-thompson01/windows-server-ad-lab" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Content continues exactly as in the previous version -->
-    <!-- ... all <section class="card"> blocks and <div class="img-wrap"><img ... ></div> remain the same ... -->
+    <!-- Windows Server overview -->
+    <section class="card">
+      <h2>Windows Server</h2>
+      <p><strong>Windows Server</strong> is a server-grade operating system developed by Microsoft, built to manage and support enterprise networks, applications, and services. It’s the <strong>central brain</strong> for many environments—running services like <strong>Active Directory, DNS, DHCP, Group Policy</strong>, and <strong>Hyper-V</strong> to keep operations secure and efficient.</p>
+      <h3>Key Capabilities</h3>
+      <ul>
+        <li>Hosts and manages <strong>network resources</strong> (users, devices, applications)</li>
+        <li>Supports <strong>domain-based</strong> identity and access via Active Directory</li>
+        <li>Powers <strong>virtual environments</strong> with Hyper-V</li>
+        <li>Enables <strong>remote management</strong> and automation via PowerShell</li>
+        <li>Provides built-in <strong>security features</strong> (Defender, BitLocker, JEA)</li>
+      </ul>
+      <h3>Download Windows Server 2016 (Evaluation)</h3>
+      <p>For this lab, I used the official 180-day evaluation ISO of Windows Server 2016 from Microsoft’s Evaluation Center:</p>
+      <p><a href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016" target="_blank" rel="noopener">Windows Server 2016 Evaluation (Microsoft)</a></p>
+    </section>
+
+    <!-- VirtualBox -->
+    <section class="card">
+      <h2>Oracle VirtualBox</h2>
+      <p><strong>Oracle VirtualBox</strong> is a free, open-source virtualization platform that lets you run multiple operating systems as VMs on a single machine. It’s perfect for simulating an enterprise lab—<strong>Active Directory, Group Policy, DNS, DHCP</strong>—without dedicated hardware.</p>
+      <h3>Download Oracle VirtualBox</h3>
+      <p><a href="https://www.virtualbox.org/" target="_blank" rel="noopener">Oracle VM VirtualBox (Official Site)</a></p>
+    </section>
+
+    <!-- Steps -->
+    <section class="card">
+      <h2>Windows Server 2016 Installation on Oracle VirtualBox Steps</h2>
+
+      <h3>1. Creating a new VM in Oracle VirtualBox</h3>
+      <div class="img-wrap"><img src="Images/VMCreate0.PNG" alt="Create new VM"></div>
+
+      <h3>2. Allocating System Resources</h3>
+      <ul class="tight">
+        <li>Base Memory</li>
+        <li>Processors</li>
+      </ul>
+      <p>In this example, I'm going to allocate 3460MB of base memory and 2 processors.</p>
+      <div class="img-wrap"><img src="Images/VMCreate2.PNG" alt="Set memory and CPU"></div>
+
+      <h3>3. Create a Virtual Hard Disk</h3>
+      <div class="img-wrap"><img src="Images/VMCreate3.PNG" alt="Create virtual disk"></div>
+
+      <h3>4. Configuration Summary</h3>
+      <div class="img-wrap"><img src="Images/VMCreate4.PNG" alt="VM summary"></div>
+
+      <h3>5. Adding the ISO Image to the VM</h3>
+      <div class="img-wrap"><img src="Images/VMCreate6.PNG" alt="Attach ISO - step 1"></div>
+      <div class="img-wrap"><img src="Images/VMCreate7.PNG" alt="Attach ISO - step 2"></div>
+
+      <h3>6. Starting up the VM</h3>
+      <div class="img-wrap"><img src="Images/VMCreate9.PNG" alt="Start VM"></div>
+    </section>
+
+    <section class="card">
+      <h2>Windows Server 2016 Installation</h2>
+
+      <h3>1. Install Now</h3>
+      <div class="img-wrap"><img src="Images/VMCreate11.PNG" alt="Install Now"></div>
+
+      <h3>2. Select Language, click <strong>Next</strong></h3>
+      <div class="img-wrap"><img src="Images/VMCreate10.PNG" alt="Language selection"></div>
+
+      <h3>3. Setup is starting</h3>
+      <div class="img-wrap"><img src="Images/VMCreate12.PNG" alt="Setup starting"></div>
+
+      <h3>4. Select Operating System version</h3>
+      <p>In this example, I'm going to install <strong>Windows Server 2016 Desktop Experience</strong>.</p>
+      <div class="img-wrap"><img src="Images/VMCreate13.PNG" alt="Choose edition Desktop Experience"></div>
+
+      <h3>5. Accept the license terms, click <strong>Next</strong></h3>
+      <div class="img-wrap"><img src="Images/VMCreate14.PNG" alt="License terms"></div>
+
+      <h3>6. Select the type of installation</h3>
+      <div class="img-wrap"><img src="Images/VMCreate15.PNG" alt="Installation type - step 1"></div>
+      <div class="img-wrap"><img src="Images/VMCreate16.PNG" alt="Installation type - step 2"></div>
+
+      <h3>7. Windows Installation Process</h3>
+      <div class="img-wrap"><img src="Images/VMCreate17.PNG" alt="Installing Windows"></div>
+      <div class="img-wrap"><img src="Images/VMCreate18.PNG" alt="Installation progress"></div>
+
+      <h3>8. The user's password must be changed before signing in</h3>
+      <div class="img-wrap"><img src="Images/VMCreate19PostReboot.PNG" alt="Change password prompt"></div>
+
+      <h3>9. Reset Password</h3>
+      <div class="img-wrap"><img src="Images/VMCreate20.PNG" alt="Reset password"></div>
+
+      <h3>10. Press <strong>Ctrl, Alt, Del</strong></h3>
+      <div class="img-wrap"><img src="Images/VMCreate21.PNG" alt="Ctrl Alt Del sign-in"></div>
+
+      <h3>11. Desktop Experience</h3>
+      <div class="img-wrap"><img src="Images/VMCreate22.PNG" alt="First desktop"></div>
+
+      <h3>12. Starting Server Manager</h3>
+      <div class="img-wrap"><img src="Images/VMCreate23.PNG" alt="Server Manager starting"></div>
+
+      <h3>13. Server Manager</h3>
+      <div class="img-wrap"><img src="Images/VMCreate24.PNG" alt="Server Manager dashboard"></div>
+
+      <p>This demonstration included adding and setting up a new virtual machine in Oracle VirtualBox and installing Windows Server 2016 on the new VM. From here, I'll walk through setting up the DNS and DHCP server roles on this fresh installation, then installing the AD DS server role to set up Active Directory.</p>
+    </section>
 
     <!-- Footer -->
     <footer>
