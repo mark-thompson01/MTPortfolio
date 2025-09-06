@@ -2,244 +2,418 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Linux Command-Line Lab</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Linux Command‑Line · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hands‑on guide to the Linux command line (Bash): navigation, files, viewing/searching, archiving, users & permissions, monitoring, packages, services, networking, utilities — with examples and screenshots." />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2, h3 {
-      color: #00ffcc;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: block;
-      white-space: pre-wrap;
-      margin: 0.5rem 0;
-    }
-    section {
-      margin-bottom: 2rem;
-    }
-    img {
-         display: block;
-         margin: 20px 0;
-         max-width: 75%;
-         height: auto;
-         border: 1px solid #444;
-         border-radius: 5px;
-    }
-     a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:16px}
+
+    /* Code */
+    pre{margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;border-radius:12px;overflow:auto;color:#e8eaf6;font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
+    code{background:#0f1424;border:1px solid #202a3f;border-radius:6px;padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
+
+    /* Figures */
+    .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;max-width:100%}
+    .figure img{display:block;height:auto;max-width:100%}
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Galleries */
+    .gallery-wrap{position:relative;margin-top:10px}
+    .gallery{display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+    .gallery .item{scroll-snap-align:start}
+    .gallery .item .figure{height:100%}
+    .gallery::-webkit-scrollbar{height:10px}
+    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
+    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
+    .gallery.hide-scrollbar{scrollbar-width:none}
+    .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
+    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
+    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
+    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
+    .gbtn:hover{background:#121733}
+    .gprev{left:-6px}
+    .gnext{right:-6px}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <h1>The Linux Command-Line - Bash Shell Terminal</h1>
-  <p>The <strong>Linux command line</strong> is one of the most powerful tools in a system administrator's or developer's toolkit. It allows users to interact directly with the operating system using typed commands, offering precise control over file systems, processes, networking, and more.</p>
-  <p>What many new users don't realize is that <strong>Linux commands are actually small executable programs.</strong> For example, when you type <strong>ls</strong> to list directory contents, you're not just issuing a special keyword - you're running a compact program located at <strong>/bin/ls</strong>. The same applies <strong>cp</strong>, <strong>mv</strong>, <strong>grep</strong>, and <strong>mkdir</strong>. These are self-contained utilities built to perform specific tasks.</p>
-  <p>At the heart of the command-line experience is the <strong>Linux Terminal</strong>, which serves as a user interface to the system's shell. The terminal sends your input to the <strong>shell interpreter</strong>, most commonly <strong>Bash (Bourne Again Shell</strong>. Bash is responsibile for parsing your command, interpreting it, and then executing the appropriate program or script.</p>
+  <div class="wrap">
 
-  <p>Here's a simplified flow of what happens:</p>
-  <ul>
-    <li><strong>You enter a command</strong> (e.g., <strong>ls -l)</strong> into the terminal</li>
-    <li>The <strong>terminal forwards this input to Bash,</strong> the shell interpreter.</li>
-    <li><strong>Bash parses the command,</strong> checks for syntax, variables, and expansions</ol>
-    <li>It then <strong>locates and executes the corresponding program</strong> (in this case <strong>/bin/ls</strong>) with provided arguments.</li>
-    <li>The <strong>output is returned to the terminal</strong>, where you see the results.</li>
-  </ul>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <p>Understanding this flow helps demystify the command-line environment. It’s not magic — it’s a layered process involving human-readable input, a shell that interprets it, and small programs that execute the requested actions.</p>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Linux Command‑Line</span>
+    </div>
 
-  <p>This tutorial introduces essential Linux commands and provides hands-on examples with screenshots. Whether you're a beginner or brushing up on core skills, this guide will help you build a strong foundation in working with the Linux command-line environment.</p>
-  
-  
-  <section>
-    <h2>1. Navigating and Managing Directories</h2>
-    <code>pwd</code>
-    <code>cd /Documents</code>
-    <code>mkdir new_folder</code>
-    <code>rmdir new_folder</code>
-    <p><strong>pwd - Print Working Directory</strong> - Displays the full path of your current location in the filesystem.</p>
-    <p><strong>cd - Change Directory</strong> - Moves you into a different folder or location in the filesystem.</p>
-    <p><strong>ls - List Directory Contents</strong> - Displays the names of files and directories in the current location.</p> 
-    <p><strong>mkdir - Make Directory</strong> - Creates a new empty directory (folder) with the specified name.</p>
-    <p><strong>rmdir - Remove Directory</strong> - Deletes an empty directory from the filesystem.</p>
-    <img src="Images/cd.png" alt="cd">
-    <img src="Images/mkdir.png" alt="mkdir">
-    <img src="Images/rmdir.png" alt="rmdir">
-  </section>
+    <!-- Header -->
+    <header>
+      <h1>Linux Command‑Line (Bash Shell)</h1>
+      <p class="lead">The terminal + Bash give precise control over files, processes, networking, and more. Below are core commands with examples and screenshots.</p>
+      <p>Commands you type are small programs (e.g., <code>/bin/ls</code>, <code>/bin/cp</code>). The terminal sends your input to the shell, usually <b>Bash</b> (Bourne Again Shell), which parses and executes them.</p>
+    </header>
 
-  <section>
-    <h2>2. File Creation and Editing</h2>
-    <code>touch new_file.txt</code>
-    <code>file new_file.txt</code>
-    <code>nano new_file.txt</code>
-    <code>vi new_file.txt</code>
-    <p><strong>touch - Create File or Update Timestamp</strong> - Creates an empty file or updates the timestamp of an existing one.</p>
-    <p><strong>file - File Type Checker</strong> - Reveals what kind of data a file contains (text, binary, image, ect.)</p>
-    <p><strong>nano - Beginner-Friendly Text Editor</strong> - Opens a simple text editor directly in the terminal.</p>
-    <p><strong>vi - Powerful Terminal Text Editor</strong> - Opens the <strong>vi</strong> or <strong>vim</strong> editor, favored by advanced users for its powerful features.</p>
-    <img src="Images/touch%20and%20file.png" alt="touch and file">
-    <img src="Images/nano%20new_file.png" alt="nano new_file.png">
-    <img src="Images/vinew_file2.png" alt="vinew_file2">
-  </section>
+    <!-- Flow explanation -->
+    <section class="card">
+      <h2>How a Command Runs</h2>
+      <ol>
+        <li>You type a command (e.g., <code>ls -l</code>).</li>
+        <li>The terminal forwards it to the shell (Bash).</li>
+        <li>Bash parses the command (syntax, expansions, variables).</li>
+        <li>It resolves the executable (e.g., <code>/bin/ls</code>) and runs it.</li>
+        <li>Output is printed back to the terminal.</li>
+      </ol>
+    </section>
 
-  <section>
-    <h2>3. Viewing and Searching File Content</h2>
-    <code>cat new_file.txt</code>
-    <code>ls -l /home/user</code>
-    <code>tree</code>
-    <code>grep "search_term" new_file.txt</code>
-    <code>head -n 5 new_file.txt</code>
-    <code>tail -n 5 new_file.txt</code>
-    <p><strong>cat - Concatenate and Display File</strong> - Outputs the contents of a file to the terminal.</p>
-    <p><strong>ls -l - List Files in Long Format</strong> - Displays file and directory details (permissions, owner, size, date).</p>
-    <p><strong>tree - Directory Tree Viewer</strong> - Visually displays the contents of a directory in a branching, tree-like format. It shows the folder structure and nested files, making it easier to understand the hierarchy of a given directory.</p>
-    <p><strong>grep - Pattern Search Tool</strong> - Searches for specific text patterns inside files or output.</p>
-    <p><strong>head - Show File Start</strong> - Displays the first 10 lines (default) of a file or output.</p>
-    <p><strong>tail - Show File End</strong> - Displays the last 10 lines (default) of a file or output.</p>
-    <img src="Images/catnew_file.png" alt="catnew_file">
-    <img src="Images/ls-l.png" alt="ls-l">
-    <img src="Images/tree.png" alt="tree">
-    <img src="Images/grepnew_file.png" alt="grepnew_file.png">
-    <img src="Images/head+tail.png" alt="head+tail">
-  </section>
+    <!-- 1. Navigation -->
+    <section class="card" id="nav">
+      <h2>1) Navigating & Managing Directories</h2>
+      <pre><code>pwd
+cd /Documents
+mkdir new_folder
+rmdir new_folder
+ls -la</code></pre>
+      <ul>
+        <li><b>pwd</b> — print current directory path</li>
+        <li><b>cd</b> — change directories</li>
+        <li><b>mkdir / rmdir</b> — create or remove (empty) directory</li>
+        <li><b>ls</b> — list directory contents</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-nav" class="gallery hide-scrollbar" role="region" aria-label="Navigation screenshots">
+          <article class="item"><figure class="figure"><img src="Images/cd.png" alt="cd example" loading="lazy" decoding="async" /><figcaption class="figcap">Changing directories with <code>cd</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/mkdir.png" alt="mkdir example" loading="lazy" decoding="async" /><figcaption class="figcap">Creating a directory with <code>mkdir</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/rmdir.png" alt="rmdir example" loading="lazy" decoding="async" /><figcaption class="figcap">Removing an empty directory.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>4. Archiving and Locating Files</h2>
-    <code>tar -cvf archive.tar /home/user/documents</code>
-    <code>locate filename.txt</code>
-    <code>find /home -name "filename.txt"</code>
-    <p><strong>tar - Archive Tool</strong> - Packs or unpacks multiple files into a single .tar archive.</p>
-    <p><strong>locate - Fast File Finder (indexed)</strong> - Quickly finds file paths using a system-maintained index.</p>
-    <p><strong>find - Real-Time File Search</strong> - Searches for files and directories based on name, size, time, ect.</p>
-    <img src="Images/tar.png" alt="tar">
-    <img src="Images/find.png" alt="find">
-  </section>
+    <!-- 2. File creation/editing -->
+    <section class="card" id="files">
+      <h2>2) File Creation & Editing</h2>
+      <pre><code>touch new_file.txt
+file new_file.txt
+nano new_file.txt
+vi new_file.txt</code></pre>
+      <ul>
+        <li><b>touch</b> — create or update timestamp</li>
+        <li><b>file</b> — identify file type</li>
+        <li><b>nano</b> — beginner‑friendly editor</li>
+        <li><b>vi/vim</b> — powerful modal editor</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-files" class="gallery hide-scrollbar" role="region" aria-label="File editing screenshots">
+          <article class="item"><figure class="figure"><img src="Images/touch%20and%20file.png" alt="touch and file usage" loading="lazy" decoding="async" /><figcaption class="figcap"><code>touch</code> and <code>file</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/nano%20new_file.png" alt="nano editor" loading="lazy" decoding="async" /><figcaption class="figcap">Editing with <code>nano</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/vinew_file2.png" alt="vi editor" loading="lazy" decoding="async" /><figcaption class="figcap">Editing with <code>vi</code>/<code>vim</code>.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>5. User and Permissions Management</h2>
-    <code>whoami</code>
-    <code>sudo apt update</code>
-    <code>chmod 755 new_file.txt</code>
-    <code>chown user:user new_filapt - Debian Package Manager</strong> - Used to install, update, or remove software on Debian-based systems.</p>e.txt</code>
-    <code>sudo useradd newuser</code>
-    <code>sudo passwd newuser</code>
-    <code>sudo userdel newuser</code>
-    <p><strong>whoami - Current User Check</strong> - Displays the username of the person currently logged in.</p>
-    <p><strong>sudo - Run as Admin</strong> - Executes a command with elevated (root) privileges.</p>
-    <p><strong>chmod - Change Permissions</strong> - Set who can read, write, or execute a file or directory.</p>
-    <p><strong>chown - Change Owner</strong> - Assigns a new owner or group to a file or directory.</p>
-    <p><strong>useradd - Create a User Account</strong> - Adds a new user account to the system.</p>
-    <p><strong>passwd - Change Password</strong> - Sets or changes a user's password.</p>
-    <p><strong>userdel - Delete a User Account</strong> - Removes a user account and optionally their home directory.</p>
-    <img src="Images/whoami.png" alt="whoami">
-    <img src="Images/newuserchown.png" alt=newuserchown">
-    <img src="Images/newuserdel.png" alt=newuserdel">
-  </section>
+    <!-- 3. Viewing/searching -->
+    <section class="card" id="viewing">
+      <h2>3) Viewing & Searching File Content</h2>
+      <pre><code>cat new_file.txt
+ls -l /home/user
+tree
+grep "search_term" new_file.txt
+head -n 5 new_file.txt
+tail -n 5 new_file.txt</code></pre>
+      <ul>
+        <li><b>cat</b> — print file contents</li>
+        <li><b>ls -l</b> — long listing (perms, owner, size, date)</li>
+        <li><b>tree</b> — directory tree view</li>
+        <li><b>grep</b> — pattern search</li>
+        <li><b>head</b>/<b>tail</b> — first/last lines</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-view" class="gallery hide-scrollbar" role="region" aria-label="Viewing and searching screenshots">
+          <article class="item"><figure class="figure"><img src="Images/catnew_file.png" alt="cat output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>cat</code> a file.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ls-l.png" alt="ls -l" loading="lazy" decoding="async" /><figcaption class="figcap">Long listing with <code>ls -l</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/tree.png" alt="tree output" loading="lazy" decoding="async" /><figcaption class="figcap">Directory tree.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/grepnew_file.png" alt="grep results" loading="lazy" decoding="async" /><figcaption class="figcap">Searching with <code>grep</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/head+tail.png" alt="head and tail" loading="lazy" decoding="async" /><figcaption class="figcap"><code>head</code> & <code>tail</code>.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>6. System Monitoring and Maintenance</h2>
-    <code>df -h</code>
-    <code>du -sh /home/user</code>
-    <code>top</code>
-    <code>htop</code>
-    <code>uname -a</code>
-    <p><strong>df -h - Disk Usage Overview</strong> - Displays filesystem space usage in human-readable format.</p>
-    <p><strong>du -sh - Directory Size Summary</strong> - Shows that total disk space used by a specific directory.</p>
-    <p><strong>top - Real-Time Process Monitor</strong></p>
-    <p><strong>htop - Advanced Process Viewer</strong> - Like <strong>top</strong>, but with an easier interface and more interactivity.</p>
-    <p><strong>uname -a - System Dump Info</strong> - Displays full system information including kernel, architecture, and hostname.</p>
-    <img src="Images/df.png" alt="df">
-    <img src="Images/du.png" alt="du">
-    <img src="Images/top.png" alt="top">
-    <img src="Images/top2.png" alt="top2">
-    <img src="Images/htop.png" alt="htop">
-    <img src="Images/htop2.png" alt="htop">
-    <img src="Images/uname.png" alt="uname">
-  </section>
+    <!-- 4. Archiving/locating -->
+    <section class="card" id="archive">
+      <h2>4) Archiving & Locating Files</h2>
+      <pre><code>tar -cvf archive.tar /home/user/documents
+locate filename.txt
+find /home -name "filename.txt"</code></pre>
+      <ul>
+        <li><b>tar</b> — create/extract archives</li>
+        <li><b>locate</b> — indexed filename search</li>
+        <li><b>find</b> — real‑time search by name/size/time/etc.</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-archive" class="gallery hide-scrollbar" role="region" aria-label="Archiving and finding screenshots">
+          <article class="item"><figure class="figure"><img src="Images/tar.png" alt="tar usage" loading="lazy" decoding="async" /><figcaption class="figcap">Creating an archive with <code>tar</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/find.png" alt="find results" loading="lazy" decoding="async" /><figcaption class="figcap">Finding files with <code>find</code>.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>7. Package Management</h2>
-    <code>sudo apt install nano</code>
-    <code>sudo dnf update</code>
-    <code>sudo dpkg -i package.deb</code>
-    <p><strong>apt - Debian Package Manager</strong> - Used to install, update, or remove software on Debian-based systems.</p>
-    <p><strong>dnf - Fedora/RHEL package Manager</strong> - Used to install, update, or remove software on Fedora and RHEL-based systems.</p>
-    <p><strong>dpkg -i - Install .deb Package</strong> - Installs a Debian software package manually.</p>
-    <img src="Images/aptupdate.png" alt="aptupdate">
-    <img src="Images/aptinstall.png" alt="aptinstall">
-    <img src="Images/dnf.png" alt="dnf">
-    <img src="Images/dpkg.png" alt="dkpg">
-  </section>
+    <!-- 5. Users/permissions -->
+    <section class="card" id="users">
+      <h2>5) Users & Permissions</h2>
+      <pre><code>whoami
+sudo apt update
+chmod 755 new_file.txt
+chown user:user new_file.txt
+sudo useradd newuser
+sudo passwd newuser
+sudo userdel newuser</code></pre>
+      <ul>
+        <li><b>whoami</b> — print current user</li>
+        <li><b>sudo</b> — run command with elevated privileges</li>
+        <li><b>chmod</b> — change permissions</li>
+        <li><b>chown</b> — change owner/group</li>
+        <li><b>useradd / passwd / userdel</b> — manage accounts</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-users" class="gallery hide-scrollbar" role="region" aria-label="User and permission screenshots">
+          <article class="item"><figure class="figure"><img src="Images/whoami.png" alt="whoami output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>whoami</code> output.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/newuserchown.png" alt="useradd and chown" loading="lazy" decoding="async" /><figcaption class="figcap">Add user and change ownership.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/newuserdel.png" alt="userdel" loading="lazy" decoding="async" /><figcaption class="figcap">Delete a user.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>8. Service and Process Management</h2>
-    <code>sudo systemctl restart ssh</code>
-    <code>kill -9 [PID]</code>
-    <p><strong>systemctl - System Manager</strong> - Controls system services (start, stop, enable, check status).</p>
-    <p><strong>kill - Terminate a Process</strong> - Sends a signal (usually to stop) a process using its PID. PIDs can be found with top/htop.</p>
-    <img src="Images/servicestatus.png" alt="servicestatus">
-    <img src="Images/systemctl.png" alt="systemctl">
-    <img src="Images/kill.png" alt="kill">
-  </section>
+    <!-- 6. Monitoring -->
+    <section class="card" id="monitor">
+      <h2>6) System Monitoring & Maintenance</h2>
+      <pre><code>df -h
+du -sh /home/user
+top
+htop
+uname -a</code></pre>
+      <ul>
+        <li><b>df -h</b> — filesystem space (human‑readable)</li>
+        <li><b>du -sh</b> — directory size summary</li>
+        <li><b>top / htop</b> — live process viewers</li>
+        <li><b>uname -a</b> — kernel/system info</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-monitor" class="gallery hide-scrollbar" role="region" aria-label="Monitoring screenshots">
+          <article class="item"><figure class="figure"><img src="Images/df.png" alt="df output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>df -h</code> usage.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/du.png" alt="du output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>du -sh</code> usage.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/top.png" alt="top" loading="lazy" decoding="async" /><figcaption class="figcap"><code>top</code> view.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/top2.png" alt="top alt screen" loading="lazy" decoding="async" /><figcaption class="figcap">Alternative <code>top</code> screen.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/htop.png" alt="htop" loading="lazy" decoding="async" /><figcaption class="figcap"><code>htop</code> overview.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/htop2.png" alt="htop details" loading="lazy" decoding="async" /><figcaption class="figcap">More <code>htop</code> details.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/uname.png" alt="uname" loading="lazy" decoding="async" /><figcaption class="figcap"><code>uname -a</code> output.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>9. System Operations</h2>
-    <code>sudo shutdown now</code>
-    <code>sudo reboot</code>
-    <p><strong>shutdown - Power Off System</strong> - Schedules or performs a safe system shutdown.</p>
-    <p><strong>restart - Reboot System</strong> - Not a standalone command, but often aliased to <strong>sudo reboot</strong> to restart the system.</p>
-    <img src="Images/shutdown.png" alt="shutdown">
-    <img src="Images/reboot.png" alt="reboot">
-    
-  </section>
+    <!-- 7. Package management -->
+    <section class="card" id="packages">
+      <h2>7) Package Management</h2>
+      <pre><code>sudo apt install nano
+sudo dnf update
+sudo dpkg -i package.deb</code></pre>
+      <ul>
+        <li><b>apt</b> — Debian/Ubuntu package tool</li>
+        <li><b>dnf</b> — Fedora/RHEL package tool</li>
+        <li><b>dpkg</b> — low‑level .deb installer</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-packages" class="gallery hide-scrollbar" role="region" aria-label="Package management screenshots">
+          <article class="item"><figure class="figure"><img src="Images/aptupdate.png" alt="apt update" loading="lazy" decoding="async" /><figcaption class="figcap"><code>apt update</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/aptinstall.png" alt="apt install" loading="lazy" decoding="async" /><figcaption class="figcap"><code>apt install</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/dnf.png" alt="dnf usage" loading="lazy" decoding="async" /><figcaption class="figcap"><code>dnf</code> on Fedora/RHEL.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/dpkg.png" alt="dpkg -i" loading="lazy" decoding="async" /><figcaption class="figcap"><code>dpkg -i</code> to install a <code>.deb</code>.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>10. Network Operations and Data Retrieval</h2>
-    <code>wget http://example.com/file.zip</code>
-    <code>curl http://example.com/file.zip -o file.zip</code>
-    <p><strong>wget - File Downloader</strong> - Fetches files from the internet using HTTP, HTTPS, or FTP.</p>
-    <p><strong>curl - Data Transfer Tool</strong> - Transfers data from or to a server, useful for APIs, downloads, or testing.</p>
-    <img src="Images/wget.png" alt="wget">
-    <img src="Images/curl.png" alt="curl">
-  </section>
+    <!-- 8. Services/processes -->
+    <section class="card" id="services">
+      <h2>8) Services & Processes</h2>
+      <pre><code>sudo systemctl restart ssh
+kill -9 &lt;PID&gt;</code></pre>
+      <ul>
+        <li><b>systemctl</b> — control system services (start/stop/enable/status)</li>
+        <li><b>kill</b> — send signals to processes by PID</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-services" class="gallery hide-scrollbar" role="region" aria-label="Service and process screenshots">
+          <article class="item"><figure class="figure"><img src="Images/servicestatus.png" alt="service status" loading="lazy" decoding="async" /><figcaption class="figcap">Service status via <code>systemctl</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/systemctl.png" alt="systemctl usage" loading="lazy" decoding="async" /><figcaption class="figcap">Managing services.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/kill.png" alt="kill command" loading="lazy" decoding="async" /><figcaption class="figcap">Killing a process.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <section>
-    <h2>11. Utility and Time Commands</h2>
-    <code>history</code>
-    <code>echo "Hello World"</code>
-    <code>cal</code>
-    <code>time ls -la</code>
-    <code>date</code>
-    <p><strong>history - Command History Viewer</strong> - Displays previously executed commands in the terminal.</p>
-    <p><strong>echo - Print Text or Variables</strong> - Outputs text to the terminal or displays the value of variables.</p>
-    <p><strong>cal - Calendar Viewer</strong> - Displays a monthly calendar in the terminal.</p>
-    <p><strong>date - Current Date and Time</strong> - Displays the systems current date and time settings.</p>
-    <img src="Images/history1.png" alt="history1">
-    <img src="Images/history2.png" alt="histroy2">
-    <img src="Images/echo.png" alt="echo">
-    <img src="Images/caldate.png" alt="caldate">
-  </section>
+    <!-- 9. System operations -->
+    <section class="card" id="ops">
+      <h2>9) System Operations</h2>
+      <pre><code>sudo shutdown now
+sudo reboot</code></pre>
+      <ul>
+        <li><b>shutdown</b> — safely power off</li>
+        <li><b>reboot</b> — restart the system</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-ops" class="gallery hide-scrollbar" role="region" aria-label="Shutdown and reboot screenshots">
+          <article class="item"><figure class="figure"><img src="Images/shutdown.png" alt="shutdown command" loading="lazy" decoding="async" /><figcaption class="figcap">Shutdown example.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/reboot.png" alt="reboot command" loading="lazy" decoding="async" /><figcaption class="figcap">Reboot example.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <h3>Conclusion</h3>
-  <p>The Linux command line is more than just a tool — it's a direct and powerful way to interact with the heart of the operating system. In this tutorial, we explored how each command is actually a small executable program, and how the terminal works with the Bash shell to interpret and run your instructions.</p>
+    <!-- 10. Networking & retrieval -->
+    <section class="card" id="net">
+      <h2>10) Networking & Data Retrieval</h2>
+      <pre><code>wget http://example.com/file.zip
+curl http://example.com/file.zip -o file.zip</code></pre>
+      <ul>
+        <li><b>wget</b> — non‑interactive downloader (HTTP/HTTPS/FTP)</li>
+        <li><b>curl</b> — flexible client for transfers, APIs, tests</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-net" class="gallery hide-scrollbar" role="region" aria-label="Networking screenshots">
+          <article class="item"><figure class="figure"><img src="Images/wget.png" alt="wget example" loading="lazy" decoding="async" /><figcaption class="figcap">Downloading with <code>wget</code>.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/curl.png" alt="curl example" loading="lazy" decoding="async" /><figcaption class="figcap">Downloading with <code>curl</code>.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <p>We covered a wide range of essential Linux commands — from navigating directories with <strong>cd</strong> and <strong>ls</strong>, to manipulating files with <strong>touch</strong>, <strong>cat</strong>, and <strong>chmod</strong>, to managing processes with <strong>top</strong> and <strong>kill</strong>. Each command plays a specific role, but together they form a flexible toolkit for accomplishing nearly any task on a Linux system.</p>
+    <!-- 11. Utilities & time -->
+    <section class="card" id="utils">
+      <h2>11) Utilities & Time</h2>
+      <pre><code>history
+echo "Hello World"
+cal
+time ls -la
+date</code></pre>
+      <ul>
+        <li><b>history</b> — list your recent commands</li>
+        <li><b>echo</b> — print text/variables</li>
+        <li><b>cal</b> — calendar</li>
+        <li><b>time</b> — measure a command's runtime</li>
+        <li><b>date</b> — current date/time</li>
+      </ul>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-utils" class="gallery hide-scrollbar" role="region" aria-label="Utilities screenshots">
+          <article class="item"><figure class="figure"><img src="Images/history1.png" alt="history output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>history</code> listing.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/history2.png" alt="history more" loading="lazy" decoding="async" /><figcaption class="figcap">More history.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/echo.png" alt="echo output" loading="lazy" decoding="async" /><figcaption class="figcap"><code>echo</code> example.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/caldate.png" alt="calendar and date" loading="lazy" decoding="async" /><figcaption class="figcap"><code>cal</code> and <code>date</code>.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <p>By understanding how these commands work and how to use them efficiently, you're building a strong foundation in Linux system administration and scripting. Whether you're troubleshooting, automating tasks, or simply exploring your system, the command line gives you full control with precision and speed.</p>
+    <!-- Wrap -->
+    <section class="card">
+      <h2>Conclusion</h2>
+      <p>The CLI isn't magic — it's a shell interpreting your input and running small programs. Mastering these commands builds a strong foundation for administration, scripting, and troubleshooting. Explore <code>man &lt;command&gt;</code> for deeper options.</p>
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
-  <p>Keep practicing these commands, experiment in a terminal sandbox, and don’t be afraid to explore the <strong>man</strong> pages (man command) for deeper learning on a given command. The more time you spend at the command line, the more intuitive and empowering it becomes.</p>
-  <a href="../index.html">Back to Home</a>
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Minimal JS: wire up all galleries on the page -->
+  <script>
+    (function(){
+      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
+        const scroller = wrap.querySelector('.gallery');
+        if(!scroller) return;
+        const left = wrap.querySelector('.gprev');
+        const right = wrap.querySelector('.gnext');
+        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
+        if(left) left.addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
+        if(right) right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
+        scroller.addEventListener('wheel', (e) => {
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+            e.preventDefault();
+            scroller.scrollLeft += e.deltaY; // vertical wheel → horizontal scroll
+          }
+        }, {passive:false});
+      });
+    })();
+  </script>
 </body>
 </html>
