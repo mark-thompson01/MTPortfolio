@@ -2,96 +2,168 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Network Command Automation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Backup to NAS Server · Mark Thompson Portfolio</title>
+  <meta name="description" content="Raspberry Pi 5 scripting & automation: set up SSH keys and a Bash script to rsync backups to a Raspberry Pi 3 NAS, with permissions and weekly cron scheduling." />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2 {
-      color: #00ffcc;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: inline-block;
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    section {
-      margin-bottom: 2rem;
+
+    /* Figures: keep your current sizes; only downscale for narrow screens */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:20px auto;
+      width:fit-content;         /* honors the image’s natural width */
+      max-width:100%;            /* but won’t overflow small screens */
+      text-align:center;
     }
-    ul {
-      margin-top: 0.5rem;
-      padding-left: 1.5rem;
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%;            /* responsive downscale only */
+      border-radius:10px;
     }
-    p {
-      line-height: 1.6;
-    }
-    img {
-         display: block;
-         margin: 20px 0;
-         max-width: 75%;
-         height: auto;
-         border: 1px solid #444;
-         border-radius: 5px;
-    }
-     a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-<h1>Backup to NAS Server</h1>
-<p>In this lab, I'm setting up an automated backup script to backup the Automation directory from the Raspberry Pi 5 to a Raspberry Pi 3 setup as a NAS server. For this to be successful, ssh and directory permissions will need to be explicity configured to the automated backups. After that is in place, the script will be setup to run once per week.</p><br>
+  <div class="wrap">
 
-<p><strong>1.</strong> The first step is to generate an ssh public/private key pair.</p>
-<img src="Images/sshsetup0.png" alt="sshsetup0.png"><br>
-<p><strong>2.</strong> After the public/private key pair is generated, it can then be copied to the NAS server.</p>
-<img src="Images/sshsetup2.png" alt="sshsetup2.png"><br>
-<p><strong>3.</strong> After the ssh key file is copied over to the NAS server, it should automatically login upon initiating an ssh session..</p>
-<img src="Images/sshsetup3.png" alt="sshsetup3.png"><br>
-<p><strong>4.</strong> To further confirm, run <strong>whoami</strong>. And, we're in!</p>
-<img src="Images/sshsetup4.png" alt="sshsetup4.png"><br>
-<p><strong>5.</strong> Here, I'm going to give the pi user account that is referenced in the script access to the /mnt/nasdrive NAS server directory for the script to run without error.</p>
-<img src="Images/chown.png" alt="chown.png"><br>
-    
-<p><strong>6.</strong> From here, I'll launch <strong>nano</strong> to start creating the script.</p>
-<p>Starting with the specified variables to ensuring that user account is checked for having write permissions to the directory.</p>
-<p>The script then runs rsync with the first four variables and then redirects the results in the log file variable.</p>
-<p>The script then finalizes with the print status in a conditional statement based on the backup being successful or failing.</p>
-<img src="Images/Backupcode.png" alt="Backupcode.png"><br>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-<p><strong>7.</strong> Now that the script is written and saved, set the file to be executable.</p>
-<img src="Images/chmod.png" alt="chmod.png"><br>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Scripting &amp; Automation (Raspberry Pi 5)</a> · <span>Backup to NAS Server</span>
+    </div>
 
-<p><strong>8.</strong> Script is ready to run.</p>
-<img src="Images/scriptrun.png" alt="scriptrun.png"><br>
+    <!-- Header -->
+    <header>
+      <h1>Backup to NAS Server</h1>
+      <p class="lead">Automate backups from Raspberry Pi 5 to a Raspberry Pi 3 NAS with SSH keys, proper permissions, an <code>rsync</code>-based Bash script, and weekly scheduling via <code>cron</code>.</p>
+    </header>
 
-<p><strong>9.</strong> On the Raspberry Pi 3 NAS server, the backup shows successful.</p> 
-<img src="Images/scriptresult.png" alt="scriptresult.png"><br>
+    <section class="card">
+      <p>Goal: back up the <b>Automation</b> directory from the Pi 5 to a Pi 3 NAS. Steps: generate SSH keys → copy the public key to the NAS → confirm key-based login → set directory permissions → write the backup script → make it executable → run it → verify on the NAS → schedule weekly.</p>
+    </section>
 
-<p><strong>10.</strong> The script is all ready to go. From here I'm going to set to run once per week as a cronjob.</p>
-<img src="Images/crontab.png" alt="crontab.png">
-<img src="Images/cronjob2.png" alt="cronjob2.png"><br>
-  
+    <section class="card" id="ssh-keys">
+      <h2>1) Generate SSH key pair</h2>
+      <figure class="figure"><img src="Images/sshsetup0.png" alt="Generate SSH key pair"></figure>
+    </section>
 
+    <section class="card" id="copy-key">
+      <h2>2) Copy the public key to the NAS</h2>
+      <figure class="figure"><img src="Images/sshsetup2.png" alt="Copy public key to NAS"></figure>
+    </section>
 
+    <section class="card" id="login-test">
+      <h2>3) Confirm key-based SSH login</h2>
+      <figure class="figure"><img src="Images/sshsetup3.png" alt="SSH login using key"></figure>
+      <p><b>4)</b> Verify user context with <code>whoami</code>.</p>
+      <figure class="figure"><img src="Images/sshsetup4.png" alt="whoami confirmation"></figure>
+    </section>
 
+    <section class="card" id="permissions">
+      <h2>5) Grant write permissions on NAS path</h2>
+      <p>Ensure the user referenced by the script can write to <code>/mnt/nasdrive</code> on the NAS.</p>
+      <figure class="figure"><img src="Images/chown.png" alt="Grant write access to NAS directory"></figure>
+    </section>
 
+    <section class="card" id="script">
+      <h2>6) Write the backup script</h2>
+      <p>Open <b>nano</b> and create the script: set variables, check directory access, run <code>rsync</code> with logging, and print success/fail status.</p>
+      <figure class="figure"><img src="Images/Backupcode.png" alt="Backup script code (rsync to NAS)"></figure>
+    </section>
 
+    <section class="card" id="executable">
+      <h2>7) Make the script executable</h2>
+      <figure class="figure"><img src="Images/chmod.png" alt="chmod +x on the backup script"></figure>
+    </section>
 
+    <section class="card" id="run">
+      <h2>8) Run the script</h2>
+      <figure class="figure"><img src="Images/scriptrun.png" alt="Manual run of backup script"></figure>
+    </section>
 
+    <section class="card" id="verify">
+      <h2>9) Verify on the NAS</h2>
+      <figure class="figure"><img src="Images/scriptresult.png" alt="Backup result shown on NAS"></figure>
+    </section>
 
+    <section class="card" id="schedule">
+      <h2>10) Schedule weekly via cron</h2>
+      <figure class="figure"><img src="Images/crontab.png" alt="Open crontab editor"></figure>
+      <figure class="figure"><img src="Images/cronjob2.png" alt="Add weekly cron entry"></figure>
+    </section>
 
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
-<a href="../index.html">Back to Home</a>
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+
+  </div>
 </body>
 </html>
