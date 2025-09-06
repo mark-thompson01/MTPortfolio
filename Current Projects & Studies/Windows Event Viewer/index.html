@@ -1,254 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows Event Viewer Troubleshooting Guide</title>
-   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
-      margin: 20px; 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Windows Event Viewer Guide · Mark Thompson Portfolio</title>
+  <meta name="description" content="Common Windows Event Viewer IDs for crashes, logons, updates, GPO, performance, drivers, security, and printing—where to find them and what they mean." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2, h3 {
-      color: #ADD8E6;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: block;
-      white-space: pre-wrap;
-      margin: 0.5rem 0;
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards / sections */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    .section {
-      margin-bottom: 30px;
+
+    /* Figures: keep your original inline sizes; only downscale if viewport is narrower */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;
+      max-width:100%;
     }
-    .event-id { font-weight: bold; color: #0057e7; }
-    ul { margin-bottom: 20px; }
-        img {
-         display: block;
-         margin: 20px 0;
-         width: 750px;
-         height: 550px;
-         border: 1px solid #444;
-         border-radius: 5px;
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%; /* responsive downscale only */
     }
-        a {
-      color: #1e90ff;
-      text-decoration: none;
+
+    /* Code/pre */
+    pre{
+      margin:10px 0;
+      padding:12px 14px;
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:12px;
+      overflow:auto;
+      color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
     }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
+
+    ul{padding-left:22px;margin:8px 0}
+    ol{padding-left:22px;margin:8px 0}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
-
 <body>
-    <h1>Windows Event Viewer Guide</h1>
+  <div class="wrap">
 
-    <p>
-  <a href="https://github.com/mark-thompson01/windows-event-viewer" target="_blank">
-    View this project on GitHub
-  </a>
-</p><br>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-    <div class="section">
-        <h2>1. System Crashes or Unexpected Reboots</h2>
-        <ul>
-            <li><span class="event-id">6008</span> - Unexpected shutdown</li>
-            <li><span class="event-id">41 (Kernel-Power)</span> - System rebooted without clean shutdown</li>
-        </ul>
-        <strong>Log Location:</strong> Windows Logs → System
-    </div>
-    <div class="section">
-        <strong>Other Related Event IDs:</strong>
-    <ul>
-        <li><span class="event-id">1001</span> - Bugcheck codes (BSOD details)</li>
-    </ul>
-    </div><br>
-
-
-    <h3>6008 - Unexpected Shutdown</h3>
-    <img src="Images/6008.png" alt="6008.png" style="width:800px; height:450px;">
-    <img src="Images/6008-2.png" alt="6008-2.png" style="width:550px; height:350px;"><br>
-
-    <h3>41 (Kernel-Power) - System Rebooted without Clean Shutdown</h3>
-    <img src="Images/41.png" alt="41.png"><br><br><br><br><br>
-
-  
-
-    <div class="section">
-        <h2>2. Application Crashes or Freezes</h2>
-        <ul>
-            <li><span class="event-id">1000</span> - Application Error</li>
-            <li><span class="event-id">1001</span> - Windows Error Reporting</li>
-            <li><span class="event-id">1002</span> - Application Hang</li>
-        </ul>
-        <strong>Log Location:</strong> Windows Logs → Application
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Windows Event Viewer Guide</span>
     </div>
 
-    <h3>1000 - Application Error</h3>
-    <img src="Images/1000.png" alt="1000.png">
+    <!-- Header -->
+    <header>
+      <h1>Windows Event Viewer Guide</h1>
+      <p class="lead">Common event IDs, where to find them, and how they help troubleshoot crashes, logons, updates, GPO, performance, drivers, security, and printing.</p>
+      <p>
+        <a href="https://github.com/mark-thompson-01/windows-event-viewer" target="_blank" rel="noopener">
+          View this project on GitHub
+        </a>
+      </p>
+    </header>
 
-    <h3>1001 - Windows Error Reporting</h3>
-    <img src="Images/1001.png" alt=1001.png">
-    <img src="Images/1001-2.png" alt=1001-2.png"><br>
+    <!-- Section 1 -->
+    <section class="card">
+      <h2>1. System Crashes or Unexpected Reboots</h2>
+      <ul>
+        <li><strong class="event-id">6008</strong> – Unexpected shutdown</li>
+        <li><strong class="event-id">41 (Kernel-Power)</strong> – System rebooted without clean shutdown</li>
+      </ul>
+      <p><strong>Log Location:</strong> Windows Logs → System</p>
+      <p><strong>Other Related Event IDs:</strong> <span class="event-id">1001</span> – Bugcheck codes (BSOD details)</p>
 
-    <h3>1002 - Application Hang</h3>
-    <img src="Images/1002.png" alt="1002.png"><br><br><br><br><br>
+      <h3>6008 – Unexpected Shutdown</h3>
+      <div class="figure"><img src="Images/6008.png" alt="Event 6008 example" style="width:800px; height:450px;"></div>
+      <div class="figure"><img src="Images/6008-2.png" alt="Event 6008 details" style="width:550px; height:350px;"></div>
 
-    <div class="section">
-        <h2>3. User Account Logon/Logoff Issues</h2>
-        <ul>
-            <li><span class="event-id">4624</span> - Successful logon</li>
-            <li><span class="event-id">4625</span> - Logon failure</li>
-            <li><span class="event-id">4634</span> - Logoff events</li>
-        </ul>
-        <strong>Log Location:</strong> Windows Logs → Security
-    </div>
+      <h3>41 (Kernel-Power) – Rebooted without Clean Shutdown</h3>
+      <div class="figure"><img src="Images/41.png" alt="Event 41 Kernel-Power"></div>
+    </section>
 
-    <h3>4624 - Successful Logon</h3>
-    <img src="Images/4624.png" alt="4624.png"><br>
+    <!-- Section 2 -->
+    <section class="card">
+      <h2>2. Application Crashes or Freezes</h2>
+      <ul>
+        <li><strong class="event-id">1000</strong> – Application Error</li>
+        <li><strong class="event-id">1001</strong> – Windows Error Reporting</li>
+        <li><strong class="event-id">1002</strong> – Application Hang</li>
+      </ul>
+      <p><strong>Log Location:</strong> Windows Logs → Application</p>
 
-    <h3>4625 - Logon Failure</h3>
-    <img src="Images/4625.PNG" alt="4652.PNG"><br>
+      <h3>1000 – Application Error</h3>
+      <div class="figure"><img src="Images/1000.png" alt="Event 1000 Application Error"></div>
 
-    <h3>4634 - Logoff Events</h3>
-    <img src="Images/4634.PNG" alt="4634.PNG" style="width:800px; height:200px;">
-    <img src="Images/4634-2.PNG" alt="4634-2.PNG"><br><br><br><br><br>
+      <h3>1001 – Windows Error Reporting</h3>
+      <div class="figure"><img src="Images/1001.png" alt="Event 1001 Windows Error Reporting"></div>
+      <div class="figure"><img src="Images/1001-2.png" alt="Event 1001 additional details"></div>
 
-    <div class="section">
-        <h2>4. Windows Update Problems</h2>
-        <ul>
-            <li>Failure events and error codes indicating update issues.</li>
-        </ul>
-        <strong>Log Location:</strong> Windows Logs → System, Applications and Services Logs → Microsoft → Windows → WindowsUpdateClient → Operational
-    </div>
-    <img src="Images/WU1.png" alt="WU1.png" style="width:900px; height:300px;">
-    <img src="Images/WU2.png" alt="WU2.png" style="width:600px; height:400px;"><br>
-    <img src="Images/WU3.png" alt="WU3.png" style="width:900px; height:300px;">
-    <img src="Images/WU4.png" alt="WU4.png" style="width:600px; height:400px;";"><br><br><br><br><br>
+      <h3>1002 – Application Hang</h3>
+      <div class="figure"><img src="Images/1002.png" alt="Event 1002 Application Hang"></div>
+    </section>
 
-    <div class="section">
-        <h2>5. Group Policy (GPO) Issues</h2>
-        <ul>
-            <li><span class="event-id">7017</span> - GPO client-side extension errors</li>
-            <li><span class="event-id">1129</span> - Policy processing issues at startup/logon</li>
-        </ul>
-        <strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → GroupPolicy → Operational
-    </div>
+    <!-- Section 3 -->
+    <section class="card">
+      <h2>3. User Account Logon/Logoff Issues</h2>
+      <ul>
+        <li><strong class="event-id">4624</strong> – Successful logon</li>
+        <li><strong class="event-id">4625</strong> – Logon failure</li>
+        <li><strong class="event-id">4634</strong> – Logoff events</li>
+      </ul>
+      <p><strong>Log Location:</strong> Windows Logs → Security</p>
 
-    <div class="section"><strong>Other Related Event IDs:</strong>
-        <ul>
-            <li><span class="event-id">1058, 1030</span> - Problems accessing or applying GPOs</li>
-        </ul>
-    </div><br>
+      <h3>4624 – Successful Logon</h3>
+      <div class="figure"><img src="Images/4624.png" alt="Event 4624 Successful Logon"></div>
 
-    
-    <h3>7017</h3>
-    <img src="Images/7017.png" alt="7017.png"><br>
+      <h3>4625 – Logon Failure</h3>
+      <div class="figure"><img src="Images/4625.PNG" alt="Event 4625 Logon Failure"></div>
 
-    
-    <h3>1129</h3>
-    <img src="Images/1129.png" alt="1129.png" style="width:900px; height:400px;">
-    <img src="Images/1129-2.png" alt="1129-2.png" style="width:600px; height:400px;"><br><br><br><br><br>
+      <h3>4634 – Logoff Events</h3>
+      <div class="figure"><img src="Images/4634.PNG" alt="Event 4634 Logoff summary" style="width:800px; height:200px;"></div>
+      <div class="figure"><img src="Images/4634-2.PNG" alt="Event 4634 details"></div>
+    </section>
 
-    <div class="section">
-        <h2>6. Performance Issues (Slow Boot or Login)</h2>
-        <ul>
-            <li><span class="event-id">100</span> - Boot Performance (slow boot)</li>
-            <li><span class="event-id">101</span> - Application Performance (slow app start)</li>
-            <li><span class="event-id">200</span> - Shutdown Performance (slow shutdown)</li>
-        </ul>
-        <strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → Diagnostics-Performance → Operational
-    </div>
+    <!-- Section 4 -->
+    <section class="card">
+      <h2>4. Windows Update Problems</h2>
+      <ul><li>Failure events and error codes indicating update issues.</li></ul>
+      <p><strong>Log Location:</strong> Windows Logs → System; Applications and Services Logs → Microsoft → Windows → WindowsUpdateClient → Operational</p>
+      <div class="figure"><img src="Images/WU1.png" alt="Windows Update log view" style="width:900px; height:300px;"></div>
+      <div class="figure"><img src="Images/WU2.png" alt="Windows Update error details" style="width:600px; height:400px;"></div>
+      <div class="figure"><img src="Images/WU3.png" alt="Windows Update codes" style="width:900px; height:300px;"></div>
+      <div class="figure"><img src="Images/WU4.png" alt="Windows Update Client Operational" style="width:600px; height:400px;"></div>
+    </section>
 
-    <h3>100 - Boot Performance</h3>
-    <img src="Images/100.png" alt="100.png">
-    <img src="Images/100-2.png" alt="100-2.png"><br>
+    <!-- Section 5 -->
+    <section class="card">
+      <h2>5. Group Policy (GPO) Issues</h2>
+      <ul>
+        <li><strong class="event-id">7017</strong> – GPO client-side extension errors</li>
+        <li><strong class="event-id">1129</strong> – Policy processing issues at startup/logon</li>
+      </ul>
+      <p><strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → GroupPolicy → Operational</p>
+      <p><strong>Other Related Event IDs:</strong> <span class="event-id">1058, 1030</span> – Problems accessing or applying GPOs</p>
 
-    <h3>101 - Application Performance</h3>
-    <img src="Images/101.png" alt="101.png" style="width:800px; height:559px;">
-    <img src="Images/101-2.png" alt="101-2.png"><br>
+      <h3>7017</h3>
+      <div class="figure"><img src="Images/7017.png" alt="Event 7017 GPO client-side extension"></div>
 
-    <h3>200</h3>
-    <img src="Images/200.png" alt="200.png"><br><br><br><br><br>
+      <h3>1129</h3>
+      <div class="figure"><img src="Images/1129.png" alt="Event 1129 policy processing issue" style="width:900px; height:400px;"></div>
+      <div class="figure"><img src="Images/1129-2.png" alt="Event 1129 details" style="width:600px; height:400px;"></div>
+    </section>
 
-    <div class="section">
-        <h2>7. Driver Issues or Device Failures</h2>
-        <ul>
-            <li><span class="event-id">7000, 7001</span> - Driver/service failed to start</li>
-            <li><span class="event-id">7026</span> - Driver loading failures</li>
-        </ul>
-        <strong>Log Location:</strong> Windows Logs → System
-    </div>
+    <!-- Section 6 -->
+    <section class="card">
+      <h2>6. Performance Issues (Slow Boot or Login)</h2>
+      <ul>
+        <li><strong class="event-id">100</strong> – Boot Performance (slow boot)</li>
+        <li><strong class="event-id">101</strong> – Application Performance (slow app start)</li>
+        <li><strong class="event-id">200</strong> – Shutdown Performance (slow shutdown)</li>
+      </ul>
+      <p><strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → Diagnostics-Performance → Operational</p>
 
-    <h3>7000 - Service Failed to Start</h3>
-    <img src="Images/7000.png" alt="7000.png"><br>
+      <h3>100 – Boot Performance</h3>
+      <div class="figure"><img src="Images/100.png" alt="Event 100 boot performance"></div>
+      <div class="figure"><img src="Images/100-2.png" alt="Event 100 additional details"></div>
 
+      <h3>101 – Application Performance</h3>
+      <div class="figure"><img src="Images/101.png" alt="Event 101 slow app start" style="width:800px; height:559px;"></div>
+      <div class="figure"><img src="Images/101-2.png" alt="Event 101 additional details"></div>
 
-    <h3>7026 - Driver Loading Failures</h3>
-    <img src="Images/7026.png" alt="7026.png">
-    <img src="Images/7026-2.png" alt="7026-2.png" style="width:600px; height:400px;"><br><br><br><br><br>
-    
+      <h3>200 – Shutdown Performance</h3>
+      <div class="figure"><img src="Images/200.png" alt="Event 200 slow shutdown"></div>
+    </section>
 
-    <div class="section">
-        <h2>8. Malware or Security Incidents</h2>
-        <ul>
-            <li><span class="event-id">1116, 1117</span> - Malware detection (Windows Defender)</li>
-            <li><span class="event-id">4625</span> - Multiple failed logins (possible brute force)</li>
-        </ul>
-        <strong>Log Location:</strong> Windows Logs → Security, Application, Windows Defender
-    </div>
+    <!-- Section 7 -->
+    <section class="card">
+      <h2>7. Driver Issues or Device Failures</h2>
+      <ul>
+        <li><strong class="event-id">7000, 7001</strong> – Driver/service failed to start</li>
+        <li><strong class="event-id">7026</strong> – Driver loading failures</li>
+      </ul>
+      <p><strong>Log Location:</strong> Windows Logs → System</p>
 
-    <h3>Malware Detection - Windows Defender</h3>
-    <h3>1116</h3>
-    <img src="Images/1116.png" alt="1116.png">
-    <img src="Images/1116-2.png" alt="1116-2.png" style="width:600px; height:400px;"><br>
+      <h3>7000 – Service Failed to Start</h3>
+      <div class="figure"><img src="Images/7000.png" alt="Event 7000 service failed to start"></div>
 
-    <h3>1117</h3>
-    <img src="Images/1117.png" alt="1117.png">
-    <img src="Images/1117-2.png" alt="1117-2.png" style="width:600px; height:400px;"><br>
-    
+      <h3>7026 – Driver Loading Failures</h3>
+      <div class="figure"><img src="Images/7026.png" alt="Event 7026 driver loading failure"></div>
+      <div class="figure"><img src="Images/7026-2.png" alt="Event 7026 more details" style="width:600px; height:400px;"></div>
+    </section>
 
-    <h3>4625 - Multiple Failed Login Attempts</h3>
-    <img src="Images/MFailedLA.png" alt="MFailedLA.png"><br><br><br><br><br>
+    <!-- Section 8 -->
+    <section class="card">
+      <h2>8. Malware or Security Incidents</h2>
+      <ul>
+        <li><strong class="event-id">1116, 1117</strong> – Malware detection (Windows Defender)</li>
+        <li><strong class="event-id">4625</strong> – Multiple failed logins (possible brute force)</li>
+      </ul>
+      <p><strong>Log Location:</strong> Windows Logs → Security, Application, Windows Defender</p>
 
+      <h3>Malware Detection – Windows Defender</h3>
+      <h3>1116</h3>
+      <div class="figure"><img src="Images/1116.png" alt="Event 1116 malware detected"></div>
+      <div class="figure"><img src="Images/1116-2.png" alt="Event 1116 details" style="width:600px; height:400px;"></div>
 
-        <div class="section">
-        <h2>9. Print Job Failures</h2>
-        <ul>
-            <li><span class="event-id">307, 372</span> - Print job failures or issues</li>
-            <li><span class="event-id">7031</span> - Spooler service errors</li>
-        </ul>
-        <strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → PrintService → Operational
-    </div>
+      <h3>1117</h3>
+      <div class="figure"><img src="Images/1117.png" alt="Event 1117 malware cleaned/quarantined"></div>
+      <div class="figure"><img src="Images/1117-2.png" alt="Event 1117 details" style="width:600px; height:400px;"></div>
 
-    <h3>307</h3>
-    <img src="Images/307.png" alt="307.png" style="width:900px; height:300px;">
-    <img src="Images/307-2.png" alt="307-2.png" style="width:600px; height:400px;"><br>
+      <h3>4625 – Multiple Failed Login Attempts</h3>
+      <div class="figure"><img src="Images/MFailedLA.png" alt="Event 4625 multiple failed logons"></div>
+    </section>
 
-    <h3>7031 - Spooler service errors</h3>
-    <img src="Images/7031.png" alt="7031.png" style="width:900px; height:450px">
-    <img src="Images/7031-2.png" alt="7031.png" style="width:700px; height:450px;"><br><br><br>
+    <!-- Section 9 -->
+    <section class="card">
+      <h2>9. Print Job Failures</h2>
+      <ul>
+        <li><strong class="event-id">307, 372</strong> – Print job failures or issues</li>
+        <li><strong class="event-id">7031</strong> – Spooler service errors</li>
+      </ul>
+      <p><strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → PrintService → Operational</p>
 
-    
+      <h3>307</h3>
+      <div class="figure"><img src="Images/307.png" alt="Event 307 print job failure" style="width:900px; height:300px;"></div>
+      <div class="figure"><img src="Images/307-2.png" alt="Event 307 more details" style="width:600px; height:400px;"></div>
 
-    <h2>Best Practices for Using Event Viewer</h2>
-    <ul>
+      <h3>7031 – Spooler Service Errors</h3>
+      <div class="figure"><img src="Images/7031.png" alt="Event 7031 spooler service error" style="width:900px; height:450px;"></div>
+      <div class="figure"><img src="Images/7031-2.png" alt="Event 7031 additional details" style="width:700px; height:450px;"></div>
+    </section>
+
+    <!-- Best Practices -->
+    <section class="card">
+      <h2>Best Practices for Using Event Viewer</h2>
+      <ul>
         <li>Filter logs by severity and time</li>
         <li>Correlate events across multiple logs</li>
         <li>Export logs for deeper analysis and documentation</li>
-    </ul>
+      </ul>
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
-     <a href="../index.html">Back to Home</a>
-
+    <!-- Footer (branding only) -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
-
 </html>
