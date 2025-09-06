@@ -21,7 +21,8 @@
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
       line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    /* Slightly wider content to help code screenshots */
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
@@ -61,7 +62,7 @@
       padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Figures: scroll-friendly images */
+    /* Figures: scroll-friendly default */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -79,6 +80,11 @@
       height:auto;
       border-radius:10px;
       object-fit:contain;
+    }
+    /* Larger treatment for code screenshots only */
+    .figure--code img{
+      width:clamp(640px, 92%, 1100px);
+      max-height:80vh;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
@@ -118,14 +124,14 @@
     <section class="card" id="create">
       <h2>1) Create the Script</h2>
       <p>Use <b>nano</b> (or your preferred editor) to create the update & health monitor script.</p>
-      <figure class="figure">
+      <figure class="figure figure--code">
         <img src="Images/system_update_monitor.png" alt="Editing the system update & health monitor script in nano" loading="lazy" decoding="async">
       </figure>
     </section>
 
     <section class="card" id="make-executable">
       <h2>2) Save & Make Executable</h2>
-      <figure class="figure">
+      <figure class="figure figure--code">
         <img src="Images/scriptcode.png" alt="Saved script preview" loading="lazy" decoding="async">
       </figure>
       <figure class="figure">
