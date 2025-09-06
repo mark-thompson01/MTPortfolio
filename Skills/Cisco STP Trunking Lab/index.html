@@ -1,148 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cisco Catalyst Switch Lab 2</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cisco Catalyst Switch Lab 2 · Mark Thompson Portfolio</title>
+  <meta name="description" content="Continuing from Lab 1 using a Cisco Catalyst 3550: factory reset, reconfiguration, VLANs, trunking, and STP root bridge priority." />
   <style>
-    /* Align everything to the left */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
-      text-align: left; /* Align all text to the left */
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards / sections */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    h1, h2, h3 {
-      text-align: left; /* Align headings to the left */
-      color: #B22222;
+    /* Figures: keep your original inline sizes; only downscale if viewport is narrower */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;
+      max-width:100%;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%; /* responsive downscale only */
     }
 
-    ol {
-      color: #B22222;
+    /* Code & pre */
+    pre{
+      margin:10px 0;
+      padding:12px 14px;
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:12px;
+      overflow:auto;
+      color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    p {
-      text-align: left; /* Align paragraphs to the left */
-      margin-left: 20px; /* Add slight indentation */
-    }
+    /* Lists */
+    ul{padding-left:22px;margin:8px 0}
+    ol{padding-left:22px;margin:8px 0}
 
-    ul {
-      text-align: left; /* Align list to the left */
-      padding-left: 40px; /* Add padding for bullets */
-      list-style-type: none
-    }
-
-    a {
-      color: #1e90ff; /* Blue links */
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: #ff7f50; /* Coral on hover */
-      text-decoration: underline;
-    }
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-<h1>Cisco Catalyst Switch Lab 2</h1>
-  <p>
-  <a href="https://github.com/mark-thompson01/cisco-catalyst-switch-lab--2950-3550/tree/main" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
-<p>This lab is a continuation of the previous lab with the <strong>Cisco Catalyst 2950</strong> switch in <strong>Cisco Catalyst Switch Lab 1</strong>. In that lab some basic switch configurations were demonstrated that included setting up and configuring <strong>VLANs</strong> and configuring <strong>switch port security.</strong></p>
-<p>In this next Cisco switch lab, I'm going to take an older <strong>Cisco Catalyst 3550</strong> switch and set it up aside the main <strong>Cisco Catalyst 2950</strong> and further configure <strong>Spanning Tree Protcol - STP Root Bridge Priority</strong> and a <strong>VLAN Trunk Port</strong> configuration.</p>
+  <div class="wrap">
 
-<h3>Table of Contents</h3>
-  <ol>
-    <li><a href="#initiating-factory-reset">Initiating Factory Reset</a></li>
-    <li><a href="#reconfigure-switch-from-scratch">Reconfigure Switch From Scratch</a></li>
-    <li><a href="#post-reconfigure-from-scratch">Post Reconfigure from Scratch</a></li>
-    <li><a href="#trunk-port-and-spanning-tree-protcol-stp-configuration">Trunk Port and Spanning Tree Protocol - STP Configuration</a></li>
-          
-          </ol><br><br>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills" class="active">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  
-<h2 id="initiating-factory-reset">Initiating Factory Reset</h2>
-<h3>1. Enter ROMMON mode</h3>
-<p>To start, I'm going to carry out the following steps on the <strong>Cisco Catalyst 3550</strong> switch to enter ROMMON mode:</p>
-<ol>
-  <li>Unplug the power cable from the switch.</li>
-  <li>Press and hold the <strong>MODE</strong> button on the front panel.</li>
-  <li>While holding the <strong>MODE</strong> button, reconnect the power.</li>
-  <li>Continue holding the button until you see the <code>switch:</code> prompt appear in your console session <strong>(PuTTY)</strong>.</li>
-</ol>
-<p>This procedure interrupts the normal boot process and forces the switch into the <strong>boot loader environment (ROMMON):</strong></p>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Skills">Networking</a> · <span>Cisco Catalyst Switch Lab 2</span>
+    </div>
 
-  
-<p>As previously demonstrated with <strong>Cisco Catalyst Switch Lab 1</strong>, I'm going to start off this lab with running the same factory reset commands starting with a flash initialization on the <strong>Cisco Catalyst 3550</strong>.</p>
+    <!-- Header -->
+    <header>
+      <h1>Cisco Catalyst Switch Lab 2</h1>
+      <p class="lead">Continuing from Lab 1 with a Catalyst 3550: factory reset, clean reconfiguration, VLANs, trunking, and STP root bridge priority.</p>
+      <p>
+        <a href="https://github.com/mark-thompson01/cisco-catalyst-switch-lab--2950-3550/tree/main" target="_blank" rel="noopener">
+          View this project on GitHub
+        </a>
+      </p>
+      <p>This lab builds on <strong>Cisco Catalyst Switch Lab 1</strong> (2950). Here, we add a <strong>Cisco Catalyst 3550</strong> alongside the 2950 and configure a <strong>VLAN trunk</strong> and <strong>Spanning Tree Protocol (STP) root bridge priority</strong>.</p>
+    </header>
 
-<img src="Images/flash_init3.png" alt="flash_init3.png" style="width:500px; height:200px;"><br><br>
-<img src="Images/facreset.png" alt="facresetl.png" style="width:700px; height:400px;"><br>
-<img src="Images/facreset2.png" alt="facreset2.png" style="width:700px; height:400px;"><br><br><br>
+    <!-- Intro / TOC -->
+    <section class="card">
+      <h3>Table of Contents</h3>
+      <ol>
+        <li><a href="#initiating-factory-reset">Initiating Factory Reset</a></li>
+        <li><a href="#reconfigure-switch-from-scratch">Reconfigure Switch From Scratch</a></li>
+        <li><a href="#post-reconfigure-from-scratch">Post Reconfigure from Scratch</a></li>
+        <li><a href="#trunk-port-and-stp">Trunk Port and Spanning Tree Protocol (STP)</a></li>
+      </ol>
+    </section>
 
-<h2 id="reconfigure-switch-from-scratch">Reconfigure Switch From Scratch</h2>
-<p>After factory reset of the switch is complete, I'll go through the prompts in <strong>PuTTY</strong> to reconfigure the switch as previously demonstrated with the <strong>Cisco Catalyst 2950</strong>.</p>
-<p>After I reconfigure the switch from scratch, I'm going to <strong>Press RETURN to get started</strong> in the <strong>PuTTY</strong> interface.</p>
-<img src="Images/confreturn.png" alt="confreturn.png"><br><br><br>
+    <!-- Factory Reset -->
+    <section class="card" id="initiating-factory-reset">
+      <h2>Initiating Factory Reset</h2>
+      <h3>1. Enter ROMMON mode</h3>
+      <p>To start, on the <strong>Cisco Catalyst 3550</strong> enter ROMMON mode:</p>
+      <ol>
+        <li>Unplug the power cable from the switch.</li>
+        <li>Press and hold the <strong>MODE</strong> button on the front panel.</li>
+        <li>While holding the <strong>MODE</strong> button, reconnect the power.</li>
+        <li>Continue holding until you see the <code>switch:</code> prompt in your console session (<strong>PuTTY</strong>).</li>
+      </ol>
+      <p>This interrupts normal boot and forces the switch into the <strong>boot loader environment (ROMMON)</strong>.</p>
 
-<h2 id="post-reconfigure-from-scratch">Post Reconfigure from Scratch</h2>
-<h3>1. Initial Configuration</h3>
-<p>Configuring a management IP on VLAN 1 and setting a default gateway so the switch can be managed over the network.</p>
-<img src="Images/basicconfig3.png" alt="basicconfig3.png"><br>
-<h3>2. Line console configuration</h3>
-<p>Configure the console line to use logging synchronous so system messages don't interrupt commands while working on the console.</p>
-<img src="Images/basicconfig4.png" alt=basicconfig4.png"><br>
-<h3>3. VLAN Creation</h3>
-<p>As configured on the <strong>Catalyst 2950</strong>, vlan 10 and vlan 20 under the names Lab-1 and Lab-2 will be created like so.</p>
-<img src="Images/basicconfig5.png" alt="basicconfig5.png"><br>
-<h3>4. Show vlan from privileged EXEC mode</h3>
-<p>The vlan's can be viewed via <strong>show vlan</strong> under <strong>Privileged EXEC mode</strong>.</p>
-<img src="Images/basicconfig6.png" alt="basicconfig6.png"><br>
-<h3>5. Assigning switch ports to VLANs</h3>
-<p>In this example on the second switch, port 8 is setup on vlan 10 and port 16 is setup on vlan 20.</p>
-<img src="Images/basicconfig7.png" alt="basicconfig7.png"><br><br><br><br>
+      <p>As in <strong>Lab 1</strong>, run the factory reset sequence on the 3550 (flash init, remove config, remove VLAN database).</p>
+      <div class="figure"><img src="Images/flash_init3.png" alt="flash_init3.png" style="width:500px; height:200px;"></div>
+      <div class="figure"><img src="Images/facreset.png" alt="facreset.png" style="width:700px; height:400px;"></div>
+      <div class="figure"><img src="Images/facreset2.png" alt="facreset2.png" style="width:700px; height:400px;"></div>
+    </section>
 
-  
-<h2 id="trunk-port-and-spanning-tree-protcol-stp-configuration">Trunk Port and Spanning Tree Protocol - STP Root Bridge Priority Configuration</h2>
-<p><strong>Trunk Port:</strong></p>
-<p>A trunk port is a switch port that is configured to carry traffic for multiple VLANs across a single physical link. Instead of the port being tied to just one VLAN like an access port, a trunk port uses <strong>802.1Q</strong> tagging to label each frame with its VLAN ID, so that the receiving switch knows which VLAN the traffic belongs to.</p>
-<p>Trunk port configurations are typically used to connect switches together or to connect a switch to a router or firewall that hanldes multiple VLANs.</p>
-<p>In this example, a trunk port configuration would make sure VLAN 10 and VLAN 20 traffic can travel between the 2950 and the 3550 switches while keeping the traffic logically separated.</p><br>
+    <!-- Reconfigure from scratch -->
+    <section class="card" id="reconfigure-switch-from-scratch">
+      <h2>Reconfigure Switch From Scratch</h2>
+      <p>After the factory reset completes, proceed through the setup prompts in <strong>PuTTY</strong> (similar to the 2950 in Lab 1). When ready, <strong>Press RETURN to get started</strong> in the console.</p>
+      <div class="figure"><img src="Images/confreturn.png" alt="confreturn.png"></div>
+    </section>
 
-<p>Spanning Tree Protocol - STP:</p>
-<p>STP is a layer 2 loop-prevention protocol used in Ethernet networks. When multiple switches are interconnected, redundant paths can cause broadcast storms and network failures. STP automatically detects these loops and places some switch ports into a "blocking state" while leaving others forwarding, ensuring that there is always a single active path between devices.</p>
-<p>If the active path fails, STP recalculates and unblocks an alternate path. In this lab, STP demonstrates how one switch (the 3550) can be elected as the root bridge, controlling the logical topology of teh network.</p><br><br> 
-  
-<h3>1. Setting up Trunk port on both switches</h3>
-<p>Create VLAN 99 Native on both switches:</p>
-<p>In this example, vlan 99 is created as the <strong>trunk native VLAN</strong> and is assinged to <strong>interface fa0/24</strong> to configure the VLAN trunk port.</p>
-<p><strong>Catalyst 2950:</strong></p>
-<img src="Images/2950vlan99.png" alt="2950vlan99.png" style="width:700px; height:400px;">
-<p><strong>Catalyst 3550:</strong></p>
-<img src="Images/3550vlan99.png" alt="3550vlan99.png" style="width:700px; height:400px;">
-<p>To display information about the trunk port configuration on a switch, the following command can be run in privileged EXEC mode</p>
-<p><strong>Catalyst 3550:</strong></p>
-<img src="Images/trunkconfig.png" alt="trunkconfig.png">
-<p><strong>Catalhyst 2950:</strong></p>
-<img src="Images/trunkconfig2.png" alt="trunkconfig2.png" style="width:700px; height:400px;"><br><br><br><br>
- 
+    <!-- Post reconfigure -->
+    <section class="card" id="post-reconfigure-from-scratch">
+      <h2>Post Reconfigure from Scratch</h2>
 
-<h3>2. Configuring STP Root Bridge Priority (VLAN 10 & VLAN 20)</h3>
-<p><strong>Catalyst 2950:</strong></p>
-<img src="Images/2950STP.png" alt="2950STP.png" style="width:700px; height:400px;">
-<p><strong>Catalyst 3550:</strong></p>
-<img src="Images/3550STP.png" alt="3550STP.png" style="width:700px; height:400px;">
-<p>To verify the configuration on both switches:</p>
-<p><strong>Catalyst 3550:</strong></p>
-<img src="Images/stpverifyswitch2.png" alt="stpverifyswitch2.png">
-<p><strong>Catalyst 2550:</strong></p>
-<img src="Images/stpverifyswitch1.png" alt="stpverifyswitch1.png"><br>
+      <h3>1. Initial Configuration</h3>
+      <p>Configure a management IP on VLAN 1 and set a default gateway for remote management.</p>
+      <div class="figure"><img src="Images/basicconfig3.png" alt="basicconfig3.png"></div>
 
-  
-  <a href="../index.html">Back to Home</a> <!-- Link back to the homepage -->
+      <h3>2. Line Console Configuration</h3>
+      <p>Enable logging synchronous on the console line so system messages don’t interrupt your typing.</p>
+      <div class="figure"><img src="Images/basicconfig4.png" alt="basicconfig4.png"></div>
+
+      <h3>3. VLAN Creation</h3>
+      <p>Create VLAN 10 and VLAN 20 (Lab-1 and Lab-2), matching the 2950 configuration.</p>
+      <div class="figure"><img src="Images/basicconfig5.png" alt="basicconfig5.png"></div>
+
+      <h3>4. Show VLAN (Privileged EXEC)</h3>
+      <p>Verify VLANs with <strong>show vlan</strong> from privileged EXEC mode.</p>
+      <div class="figure"><img src="Images/basicconfig6.png" alt="basicconfig6.png"></div>
+
+      <h3>5. Assign Switch Ports to VLANs</h3>
+      <p>On the second switch, for example: place port 8 in VLAN 10 and port 16 in VLAN 20.</p>
+      <div class="figure"><img src="Images/basicconfig7.png" alt="basicconfig7.png"></div>
+    </section>
+
+    <!-- Trunk & STP -->
+    <section class="card" id="trunk-port-and-stp">
+      <h2>Trunk Port and Spanning Tree Protocol (STP)</h2>
+
+      <p><strong>Trunk Port:</strong> A trunk carries multiple VLANs over a single link using <strong>802.1Q</strong> tags so the receiving switch knows each frame’s VLAN. Trunks commonly connect switches, or a switch to a router/firewall handling multiple VLANs. Here, VLAN 10 and VLAN 20 traffic must traverse between the 2950 and 3550 while remaining logically separated.</p>
+
+      <p><strong>Spanning Tree Protocol (STP):</strong> STP prevents Layer 2 loops by placing redundant links in a blocking state, ensuring a single active path. If the active path fails, STP reconverges and activates an alternate path. In this lab, we set root bridge priority so the 3550 becomes the root for VLANs 10 and 20.</p>
+
+      <h3>1. Set up the Trunk on Both Switches</h3>
+      <p>Create a native VLAN (e.g., <strong>VLAN 99</strong>) on both switches and configure the trunk (e.g., on <strong>Fa0/24</strong>).</p>
+
+      <p><strong>Catalyst 2950:</strong></p>
+      <div class="figure"><img src="Images/2950vlan99.png" alt="2950vlan99.png" style="width:700px; height:400px;"></div>
+
+      <p><strong>Catalyst 3550:</strong></p>
+      <div class="figure"><img src="Images/3550vlan99.png" alt="3550vlan99.png" style="width:700px; height:400px;"></div>
+
+      <p>Display trunk info from privileged EXEC:</p>
+      <p><strong>Catalyst 3550:</strong></p>
+      <div class="figure"><img src="Images/trunkconfig.png" alt="trunkconfig.png"></div>
+
+      <p><strong>Catalyst 2950:</strong></p>
+      <div class="figure"><img src="Images/trunkconfig2.png" alt="trunkconfig2.png" style="width:700px; height:400px;"></div>
+
+      <h3>2. Configure STP Root Bridge Priority (VLAN 10 &amp; VLAN 20)</h3>
+      <p><strong>Catalyst 2950:</strong></p>
+      <div class="figure"><img src="Images/2950STP.png" alt="2950STP.png" style="width:700px; height:400px;"></div>
+
+      <p><strong>Catalyst 3550:</strong></p>
+      <div class="figure"><img src="Images/3550STP.png" alt="3550STP.png" style="width:700px; height:400px;"></div>
+
+      <p>Verify the STP state on both switches:</p>
+      <p><strong>Catalyst 3550:</strong></p>
+      <div class="figure"><img src="Images/stpverifyswitch2.png" alt="stpverifyswitch2.png"></div>
+
+      <p><strong>Catalyst 2950:</strong></p>
+      <div class="figure"><img src="Images/stpverifyswitch1.png" alt="stpverifyswitch1.png"></div>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
+
+    <!-- Footer (branding only) -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
