@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NAS Security Attack &amp; Defense Lab 2 · Mark Thompson Portfolio</title>
-  <meta name="description" content="Lab 2: Successful SSH brute-force, log-based detection, immediate account mitigation, and hardening (keys-only SSH)." />
+  <title>NAS Security Attack &amp; Defense Lab 3 · Mark Thompson Portfolio</title>
+  <meta name="description" content="Lab 3: Privilege escalation via misconfigured SUID binary (vim), detection in logs/process list, and immediate response." />
 
   <!-- THEME -->
   <style>
@@ -66,7 +66,7 @@
       padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Figures – intrinsic image size */
+    /* Figures – intrinsic image size (no zoom/gallery) */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -79,7 +79,6 @@
     .figure img{
       display:block;margin:0 auto;border-radius:10px;object-fit:contain;
       width:auto; max-width:100%; height:auto;
-      cursor: zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
@@ -87,28 +86,6 @@
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
-
-    /* Zoom modal (no history changes) */
-    .zoom-modal{
-      position:fixed; inset:0; z-index:1000; display:none;
-      background:rgba(0,0,0,.85);
-    }
-    .zoom-modal[open]{display:block}
-    .zoom-content{
-      position:absolute; inset:40px; display:grid; place-items:center; overflow:auto;
-    }
-    .zoom-img{
-      max-width:95vw; max-height:95vh; width:auto; height:auto; border-radius:12px;
-      box-shadow:0 20px 60px rgba(0,0,0,.6);
-      cursor: zoom-out;
-    }
-    .zoom-close{
-      position:absolute; top:14px; right:16px; width:40px; height:40px;
-      border-radius:999px; border:1px solid #3a4a67; background:#0e1220; color:var(--text);
-      display:grid; place-items:center; font-size:22px; line-height:1; cursor:pointer;
-    }
-    .zoom-close:hover{background:#121733}
-    .hide-scroll{overflow:hidden}
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
@@ -130,107 +107,109 @@
     <div class="crumbs">
       <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> ·
       <a href="../">NAS Security Attack &amp; Defense Lab</a> ·
-      <span>Lab 2 — Successful Brute Force Login</span>
+      <span>Lab 3 — Privilege Escalation</span>
     </div>
 
     <!-- Header -->
     <header>
-      <h1>Lab 2 — Successful Brute Force Login</h1>
-      <p class="lead">Attack: SSH credentials cracked via Metasploit’s <code>ssh_login</code>. Defense: detect the success in logs, reset/disable, and harden SSH to keys-only.</p>
+      <h1>Lab 3 — Privilege Escalation</h1>
+      <p class="lead">Exploit: misconfigured SUID on <code>vim</code> to gain root. Detect via logs and process list; respond by killing sessions and hardening.</p>
     </header>
 
     <!-- Scenario -->
     <section class="card">
       <h2>Scenario</h2>
-      <p>Building on Lab&nbsp;1, SSH (port 22) is exposed on the NAS host. A weak user password allows a successful brute-force using Metasploit’s <code>auxiliary/scanner/ssh_login</code>. On defense, authentication logs reveal the success; the account is secured and SSH is hardened.</p>
+      <p>Following the successful SSH compromise in Lab&nbsp;2, access was upgraded from a BSD shell to a Meterpreter session. The user lacks root privileges, so the next step is privilege escalation. For this lab, the <code>vim</code> binary is intentionally misconfigured with the SUID bit to demonstrate a common escalation path.</p>
+    </section>
+
+    <!-- Notes on SUID -->
+    <section class="card">
+      <h2>SUID: What It Is</h2>
+      <p>The SUID (Set User ID) permission causes an executable to run with the file owner’s privileges, not the caller’s. It appears as an <strong>s</strong> in the owner’s execute position in <code>ls -l</code> output.</p>
+      <pre><code>-rwsr-xr-x 1 root root 12345 Dec 27 12:00 example_program</code></pre>
+      <p>When a non-root user runs <code>example_program</code>, it executes with <code>root</code> privileges. Misconfiguring SUID on powerful binaries (like editors or shells) can enable trivial escalation.</p>
     </section>
 
     <!-- Offensive -->
     <section class="card">
       <h2>Offensive</h2>
 
+      <p>From Meterpreter, spawn an interactive shell:</p>
+      <pre><code>/bin/sh -i</code></pre>
+      <figure class="figure">
+        <img src="Images/shell.png" alt="Spawning an interactive /bin/sh from Meterpreter" loading="lazy" decoding="async">
+        <figcaption class="figcap">Interactive shell obtained.</figcaption>
+      </figure>
+
+      <p>Initially, <code>vim</code> behaved oddly inside this pseudo-tty (missing editor commands). Inspecting environment variables revealed the <code>TERM</code> variable was unset.</p>
       <div class="pair">
         <figure class="figure">
-          <img class="zoomable" src="Images/msf1.png" alt="Metasploit console prepared for SSH brute-force" loading="lazy" decoding="async">
-          <figcaption class="figcap">Preparing Metasploit for the SSH attack.</figcaption>
+          <img src="Images/snv.png" alt="Environment inspection showing missing TERM variable" loading="lazy" decoding="async">
+          <figcaption class="figcap"><code>TERM</code> not set.</figcaption>
         </figure>
         <figure class="figure">
-          <img class="zoomable" src="Images/ssh_login.png" alt="Metasploit auxiliary/scanner/ssh_login module options" loading="lazy" decoding="async">
-          <figcaption class="figcap">Using <code>auxiliary/scanner/ssh_login</code>.</figcaption>
+          <img src="Images/xtermvim.png" alt="Exporting TERM=xterm so vim behaves correctly" loading="lazy" decoding="async">
+          <figcaption class="figcap">Fixing terminal with <code>export TERM=xterm</code>.</figcaption>
         </figure>
       </div>
 
-      <figure class="figure">
-        <img class="zoomable" src="Images/BruteForceSuccess.png" alt="Successful SSH login via brute-force" loading="lazy" decoding="async">
-        <figcaption class="figcap">Credentials found — shell access obtained.</figcaption>
-      </figure>
-
-      <p>With a BSD shell obtained, upgrade to Meterpreter using the post module <code>post/multi/manage/shell_to_meterpreter</code>.</p>
-
+      <p>With SUID on <code>vim</code>, invoking a shell from inside the editor yields a root shell:</p>
+      <pre><code>vim
+:!sh</code></pre>
       <div class="pair">
         <figure class="figure">
-          <img class="zoomable" src="Images/Meterpreter%20Session%20Upgrade.png" alt="Upgrading shell to Meterpreter session" loading="lazy" decoding="async">
-          <figcaption class="figcap">Upgrading shell to Meterpreter.</figcaption>
+          <img src="Images/%3A%21sh.png" alt="Using :!sh inside vim to spawn a shell" loading="lazy" decoding="async">
+          <figcaption class="figcap"><code>:!sh</code> spawns a privileged shell.</figcaption>
         </figure>
         <figure class="figure">
-          <img class="zoomable" src="Images/In%20The%20System.png" alt="Interactive Meterpreter session on the target" loading="lazy" decoding="async">
-          <figcaption class="figcap">Interactive Meterpreter session.</figcaption>
+          <img src="Images/rootaccessgained.png" alt="Proof of root after exploiting SUID vim" loading="lazy" decoding="async">
+          <figcaption class="figcap">Root access confirmed.</figcaption>
         </figure>
       </div>
-
-      <figure class="figure">
-        <img class="zoomable" src="Images/getuid%20sysinfo.png" alt="getuid and sysinfo confirming user and system details" loading="lazy" decoding="async">
-        <figcaption class="figcap"><code>getuid</code> / <code>sysinfo</code> confirm context.</figcaption>
-      </figure>
     </section>
 
     <!-- Defensive -->
     <section class="card">
       <h2>Defensive</h2>
 
-      <h3>Detect the Successful Login</h3>
-      <p>Review <code>/var/log/auth.log</code> (or platform equivalent). Look for a sequence of failures followed by a success.</p>
-      <div class="pair">
-        <figure class="figure">
-          <img class="zoomable" src="Images/LogSearch.png" alt="Log view showing failed attempts leading up to success" loading="lazy" decoding="async">
-          <figcaption class="figcap">Failed attempts chained together.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img class="zoomable" src="Images/LogSearch2.png" alt="Log view highlighting the successful SSH login event" loading="lazy" decoding="async">
-          <figcaption class="figcap">Success event identified in logs.</figcaption>
-        </figure>
-      </div>
+      <h3>Incident Detection</h3>
+      <p>Review authentication and command logs to confirm abuse of <code>vim</code> to spawn a shell:</p>
+      <figure class="figure">
+        <img src="Images/LogData.png" alt="Logs showing vim execution with -c /bin/sh and sudo attempts" loading="lazy" decoding="async">
+        <figcaption class="figcap">Log events highlight suspicious <code>vim</code> usage launching <code>/bin/sh</code>.</figcaption>
+      </figure>
 
-      <h3>Immediate Account Actions</h3>
-      <p>Reset the compromised password and temporarily disable interactive SSH access for the account while IR proceeds.</p>
-      <div class="pair">
-        <figure class="figure">
-          <img class="zoomable" src="Images/ResetPassword.png" alt="Resetting the user password on the NAS host" loading="lazy" decoding="async">
-          <figcaption class="figcap">Password reset.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img class="zoomable" src="Images/Disable.png" alt="Disabling the user account or restricting login" loading="lazy" decoding="async">
-          <figcaption class="figcap">Disable or restrict account logins.</figcaption>
-        </figure>
-      </div>
+      <p>Correlate with process listings to confirm interactive shells and ownership changes:</p>
+      <figure class="figure">
+        <img src="Images/psaux.png" alt="ps aux output showing shells under ronny and root, indicating escalation" loading="lazy" decoding="async">
+        <figcaption class="figcap">Processes show escalation from user <code>ronny</code> to <code>root</code>.</figcaption>
+      </figure>
+
+      <h3>Response</h3>
+      <p>Terminate malicious sessions and clean up. Kill processes tied to the compromised user and any suspicious root shells:</p>
+      <figure class="figure">
+        <img src="Images/processkill2.png" alt="Killing processes tied to the compromised session" loading="lazy" decoding="async">
+        <figcaption class="figcap">Stopping rogue shells and sessions.</figcaption>
+      </figure>
+
+      <p>On the attacker side, access is lost:</p>
+      <figure class="figure">
+        <img src="Images/commandterminated.png" alt="Attacker session terminated after defensive actions" loading="lazy" decoding="async">
+        <figcaption class="figcap">Command terminated after response actions.</figcaption>
+      </figure>
     </section>
 
-    <!-- Hardening -->
+    <!-- Analysis / Relevance -->
     <section class="card">
-      <h2>Hardening SSH</h2>
-      <h3>Disable Password-Based Logins</h3>
-      <p>Move to key-based authentication and disable password auth for SSH to prevent brute-force success.</p>
-      <div class="pair">
-        <figure class="figure">
-          <img class="zoomable" src="Images/Password%20Renable.png" alt="Server configuration snippet related to SSH password settings" loading="lazy" decoding="async">
-          <figcaption class="figcap">Disable password logins; use keys only.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img class="zoomable" src="Images/SSH%20Server%20Settings%202.png" alt="SSH server settings showing keys-only configuration" loading="lazy" decoding="async">
-          <figcaption class="figcap">Confirm SSH server settings.</figcaption>
-        </figure>
-      </div>
-      <p>Additional options: rate-limit via firewall, fail2ban-style lockouts, and limiting SSH to trusted management networks.</p>
+      <h2>Privilege Escalation via SUID &amp; Environment</h2>
+      <p>This lab demonstrates how a misconfigured SUID binary and an improperly configured environment (<code>TERM</code>) can be combined to achieve root. While production systems rarely ship with SUID on editors, legacy systems and ad-hoc admin changes can introduce these flaws. The workflow mirrors real assessments: identify SUID candidates, fix environment/pty issues, and pivot to a root shell.</p>
+
+      <h3>Real-World Takeaways</h3>
+      <ul>
+        <li>Audit SUID binaries regularly; remove SUID from unnecessary tools (especially editors, interpreters).</li>
+        <li>Harden shells and terminal handling in constrained environments (proper PTY, env sanitization).</li>
+        <li>Monitor for suspicious command lines (e.g., editors launching shells) and unusual root-owned interactive shells.</li>
+      </ul>
     </section>
 
     <!-- Back link -->
@@ -247,56 +226,5 @@
       </div>
     </footer>
   </div>
-
-  <!-- Zoom modal (built once, reused) -->
-  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-label="Image viewer">
-    <div class="zoom-content" data-close>
-      <img class="zoom-img" id="zoomImg" alt="">
-      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      const modal = document.getElementById('zoom');
-      const zoomImg = document.getElementById('zoomImg');
-      const closeBtn = modal.querySelector('.zoom-close');
-
-      function openModal(src, alt){
-        zoomImg.src = src;
-        zoomImg.alt = alt || '';
-        modal.setAttribute('open', '');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('hide-scroll');
-        closeBtn.focus();
-      }
-      function closeModal(){
-        modal.removeAttribute('open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('hide-scroll');
-        zoomImg.src = '';
-        zoomImg.alt = '';
-      }
-
-      // Click any image inside a .figure to zoom
-      document.addEventListener('click', (e) => {
-        const img = e.target.closest('.figure img.zoomable');
-        if (img){
-          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
-          openModal(full, img.alt);
-        }
-      });
-
-      // Close interactions
-      closeBtn.addEventListener('click', closeModal);
-      modal.addEventListener('click', (e) => {
-        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (!modal.hasAttribute('open')) return;
-        if (e.key === 'Escape') closeModal();
-      });
-    })();
-  </script>
 </body>
 </html>
