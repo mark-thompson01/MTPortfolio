@@ -1,796 +1,647 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>PowerShell Fundamentals Tutorial</title>
-</head>
-      <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PowerShell Fundamentals · Mark Thompson Portfolio</title>
+  <meta name="description" content="A practical walkthrough of PowerShell fundamentals: versions, .NET/.NET Core, cmdlets, syntax, objects, scripting basics, execution policy, debugging, and real-world use cases." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2 {
-      color: #ADD8E6;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: block;
-      white-space: pre-wrap;
-      margin: 0.5rem 0;
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:10px 0 6px;font-size:16px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards / sections */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    section {
-      margin-bottom: 2rem;
+
+    /* Figures: preserve your existing sizes, only downscale for narrow screens */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;
+      max-width:100%;
     }
-        table {
-      border-collapse: collapse;
-      width: 600px;
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%;
     }
-    th, td {
-      padding: 6px 12px;
-      text-align: left;
+
+    /* Code/pre */
+    pre{
+      margin:10px 0;
+      padding:12px 14px;
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:12px;
+      overflow:auto;
+      color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
     }
-    th {
-      font-weight: bold;
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
-    tr:not(:last-child) {
-      border-bottom: 1px solid #444;
-    }
-          img {
-         display: block;
-         margin: 20px 0;
-         max-width: 75%;
-         height: auto;
-         border: 1px solid #444;
-         border-radius: 5px;
-    }
-           a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+
+    /* Table */
+    table{border-collapse:collapse;width:100%;max-width:680px}
+    th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #2A3447}
+    th{font-weight:700;color:var(--text)}
+    .tag{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
+
+    /* Lists */
+    ul,ol{padding-left:22px;margin:8px 0}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
+</head>
 <body>
-    <h1>PowerShell Fundamentals</h1>
-    <p>
-  <a href="https://github.com/mark-thompson01/powershell-fundamentals" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
+  <div class="wrap">
 
-    <h2Introduction: What is PowerShell?</h2>
-    <p>PowerShell is a powerful command-line shell and scripting language built on .NET and .Core Frameworks depending on the version. Designed for system administrators and power users, it automates repetitive tasks, manages system configurations, and interacts with APIs, registry, and file systems. It is object-based (unlike traditional text-based shells), meaning it passes objects between commands (not just raw text), which gives it unique flexibility.</p><br>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>PowerShell Fundamentals</span>
+    </div>
 
-        
-    <h2>Getting Started with PowerShell</h2>
-    <ul>
-        <li>.NET and .Core Frameworks</li><br>
-        <li>PowerShell versions (Windows PowerShell vs PowerShell Core)</li><br>
-        <li>Cmdlets & Basic Syntax and Structure</li><br>
-        <li>Working with Files and Directories</li><br>
-        <li>PowerShell Scripting Basics</li><br>
-        <li>Real World Cases</li>
-    </ul><br><br>
+    <!-- Header -->
+    <header>
+      <h1>PowerShell Fundamentals</h1>
+      <p class="lead">A practical walkthrough of PowerShell’s object-based shell and scripting language—cmdlets, syntax, objects, scripting basics, policies, debugging, and real-world tasks.</p>
+      <p>
+        <a href="https://github.com/mark-thompson01/powershell-fundamentals" target="_blank" rel="noopener">
+          View this project on GitHub
+        </a>
+      </p>
+    </header>
 
-    <h2>.NET and .Core Frameworks</h2>
+    <!-- Intro -->
+    <section class="card">
+      <h2>Introduction: What is PowerShell?</h2>
+      <p>PowerShell is a powerful command-line shell and scripting language built on .NET (and .NET Core for cross-platform PowerShell). Designed for admins and power users, it automates tasks, manages configurations, and interacts with APIs, the registry, and the file system. Unlike traditional text-based shells, PowerShell is <b>object-based</b>—commands pass rich objects, not just text—unlocking precise filtering, formatting, and automation.</p>
+    </section>
 
-         <h3>.NET Framework</h3>
-        <p>The <strong>.NET Framework</strong> is the <strong>core powerhouse behind PowerShell's intelligence.</strong> It's not just a programming platform - it's the engine that gives PowerShell its ability to  work with complex data, interact with the Windows operating system, and control almost every part of your system with precision. When you run a cmdlet like <strong>Get-Process</strong> or manipulate objects with <strong>Select-Object</strong>, you're tapping directly into the .NET 's rich library of pre-built classes and methods.</p>
-        <p>In simple terms, the .NET Framework provides PowerShell with:</p>
+    <!-- Getting Started -->
+    <section class="card">
+      <h2>Getting Started with PowerShell</h2>
+      <ul>
+        <li>.NET and .NET Core foundations</li>
+        <li>Windows PowerShell vs PowerShell (Core)</li>
+        <li>Cmdlets, basic syntax & structure</li>
+        <li>Working with files and directories</li>
+        <li>Scripting basics (types, control flow, functions)</li>
+        <li>Real-world examples</li>
+      </ul>
+    </section>
 
-        <ul>
-            <li><strong>Access to powerful libraries</strong> that can read files, query networks, and manage Windows services</li><br>
-            <li>A<strong> runtime environment (CLR)</strong> that handles memory, execution, and error handling.</li><br>
-            <li>The ability to treat data as <strong>objects</strong>, not plain text - allowing advanced filtering, formatting, and manipulation.</li>
-        </ul>
+    <!-- .NET / .NET Core -->
+    <section class="card">
+      <h2>.NET and .NET Core Foundations</h2>
 
-        <p>PowerShell isn't just a shell - it's a scripting language deeply rooted in the .NET ecosystem, which is why it can do far more than traditional shells. Every command you run inherits the <strong>depth and structure of .NET</strong>, turning simple commands into powerful, scalable automation scripts.</p><br>
+      <h3>.NET Framework</h3>
+      <p>The <b>.NET Framework</b> provides PowerShell with the CLR runtime and vast class libraries. When you run <code>Get-Process</code>, format with <code>Select-Object</code>, or manage services, you’re leveraging .NET types and methods under the hood—enabling rich, object-first automation.</p>
+      <ul>
+        <li><b>Libraries:</b> file I/O, networking, services, UI, and more</li>
+        <li><b>CLR runtime:</b> execution, memory, exception handling</li>
+        <li><b>Objects:</b> structured data instead of flat text</li>
+      </ul>
 
-    <h3>.Core Framework</h3>
-    <p>The <strong>.NET Core Framework</strong> is the modern, cross-platform foundation behind PowerShell Core's flexibility and reach.</p>
-        <p>Unlike the tradtional .NET Framework, which is Windows-specific, the .NET Core is designed more for portability, allowing PowerShell Core to be cross-platform (Windows, Linux, macOS). It's modular, lightweight, and fast. It's built to meet the demands of modern automation.</p>
-        <p>The .NET Core Framework provides PowerShell Core with:</p>
-    <ul>
-        <li><strong>Cross-platform compatibility:</strong> Enables consistent scripting and automation across Windows, macOS, and Linux environments.</li><br>
-        <li><strong>Performance and modularity:</strong> Through a streamlined runtime and lightweight libraries that support efficient execution and scalable scripts.</li><br>
-        <li><strong>Open-source development:</strong> Giving users access to the latest features, community contributions, and rapid improvements in the PowerShell ecosystem.</li>
-    </ul>
+      <h3>.NET Core</h3>
+      <p><b>.NET Core</b> (now .NET 6/7/8+) powers cross-platform <b>PowerShell</b> (a.k.a. PowerShell Core). It’s modular, fast, and open source—ideal for modern automation across Windows, Linux, and macOS.</p>
+      <ul>
+        <li><b>Cross-platform:</b> consistent scripts on Windows/macOS/Linux</li>
+        <li><b>Performance & modularity:</b> lean runtime and libraries</li>
+        <li><b>Open source:</b> rapid improvements, community modules</li>
+      </ul>
+    </section>
 
-    <p>PowerShell Core is a foward-looking scripting solution that is built on the .NET Core foundation. Often used for diverse tasks such as managing servers, deploying containers, or scripting across different platforms, PowerShell Core with .NET Core brings the power of .NET to modern automation.</p><br><br><br><br>
-        
+    <!-- Versions -->
+    <section class="card">
+      <h2>Windows PowerShell and PowerShell (Core)</h2>
 
-    <h2>Windows PowerShell and PowerShell Core</h2>
-    <p>The differences between Windows PowerShell and PowerShell Core lie within platform support, runtime, and development direction.</p>
+      <h3>Windows PowerShell</h3>
+      <ul>
+        <li><b>Version:</b> 5.1 (final)</li>
+        <li><b>Platform:</b> Windows-only</li>
+        <li><b>Runtime:</b> .NET Framework</li>
+        <li><b>Compatibility:</b> deep Windows integration & legacy APIs</li>
+      </ul>
 
-    <h3>Platform and Version</h3>
-    <h4>Windows PowerShell</h4>
-        <p><strong>Features:</strong></p>
-        <ul>
-            <li><strong>Version:</strong> 5.1 (latest and final)</li>
-            <li><strong>Platform:</strong> Windows-only</li>
-            <li><strong>Runtime Environment:</strong> .NET Framework</li>
-            <li><strong>Compatibility:</strong> Works with older Windows APIs</li>
-        </ul>
+      <h3>PowerShell (Core)</h3>
+      <ul>
+        <li><b>Version:</b> 6.x/7.x (current is 7 line)</li>
+        <li><b>Platform:</b> cross-platform (Windows, macOS, Linux)</li>
+        <li><b>Runtime:</b> .NET Core / .NET 5+</li>
+        <li><b>Notes:</b> faster & modular; some Windows-only features differ</li>
+      </ul>
+    </section>
 
-    <h4>PowerShell Core<h4>
-        <p><strong>Features:</strong></p>
-        <ul>
-            <li><strong>Version:</strong> 6.x and 7.x (latest PowerShell 7)</li>
-            <li><strong>Platform:</strong> <strong>Cross-platform</strong> (Windows, macOS, Linux)</li>
-            <li><strong>Runtime Environment:</strong> .NET Core / .NET 5+</li>
-            <li><strong>Compatibility:</strong> Faster, modular, but lacks some Windows-only features</li>
-        </ul><br><br><br><br>
-    
-        
- 
+    <!-- Cmdlets & Syntax -->
+    <section class="card">
+      <h2>Cmdlets & Basic Syntax and Structure</h2>
+      <p><b>Cmdlets</b> are small, purpose-built commands that follow a clear <b>Verb-Noun</b> pattern and output <b>objects</b>. They’re the building blocks of PowerShell automation.</p>
 
-    <h2>Cmdlets & Basic Syntax and structure</h2>
-    <p><strong>Cmdlet</strong> = Command + Let (lightweight commands)</p>
-        <p>Cmdlets are the <strong>precision tools</strong> of PowerShell - small but powerful commands that do one job and do it well. Cmdlets can be thought of as individual <strong>building blocks</strong> in a high performance automation toolkit. Written in the .NET Framework and designed specifically for administrative tasks, each cmdlet follows a clear <strong>Verb-Noun</strong> format, making it easy to guess and intuitive to learn. Unlike traditional shell commands that output plain text, cmdlets output <strong>structured objects</strong>, allowing you to filter, sort, and manipulate data with accuracy. Whether you're  pulling system info, managing users, or stopping rogue services, cmdlets are your go-to tools for scripting control and operational mastery.</code></strong></p>
+      <h3>Naming Format</h3>
+      <table>
+        <thead>
+          <tr><th>Verb</th><th>Noun</th><th>Meaning</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Help</span></td><td>Displays help for cmdlets</td></tr>
+          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Command</span></td><td>Lists available commands</td></tr>
+          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Process</span></td><td>Show running processes</td></tr>
+          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Service</span></td><td>Show services</td></tr>
+          <tr><td><span class="tag">Start-</span></td><td><span class="tag">Service</span></td><td>Start a service</td></tr>
+          <tr><td><span class="tag">Restart-</span></td><td><span class="tag">Service</span></td><td>Restart a service</td></tr>
+          <tr><td><span class="tag">Stop-</span></td><td><span class="tag">Service</span></td><td>Stop a service</td></tr>
+        </tbody>
+      </table>
 
-    <h3>Naming Format</h3>
-        <p>Cmdlets use a <strong>Verb-Noun</strong> naming pattern for clarity and consistency:</p>
+      <div class="figure"><img src="Images/GetHelp.png" alt="Get-Help screenshot"></div>
+      <div class="figure"><img src="Images/GetCommand.png" alt="Get-Command screenshot"></div>
+      <div class="figure"><img src="Images/GetProcess.png" alt="Get-Process screenshot"></div>
+      <div class="figure"><img src="Images/GetService.png" alt="Get-Service screenshot"></div>
+      <div class="figure"><img src="Images/ServiceMgmt.png" alt="Service management examples"></div>
+    </section>
 
-         <table>
-    <thead>
-      <tr>
-        <th>Verb</th>
-        <th>Noun</th>
-        <th>Meaning</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="tag">Get-</span></td>
-        <td><span class="tag">Help</span></td>
-        <td><span class="tag">Displays help info about cmdlets</td>
-      </tr>
-      <tr>
-          <td><span class="tag">Get-</span></td>
-          <td><span class="tag">Command</span</td>
-          <td><span class="tag">Lists available cmdlets</span></td>
-      <tr>
-        <td><span class="tag">Get-</span></td>
-        <td><span class="tag">Process</span></td>
-        <td>Show running processes</td>
-      </tr>
-      <tr>
-          <td><span class="tag">Get-</span></td>
-          <td><span class="tag">Service</span></td>
-          <td>Show running services</td>
-      </tr>
-      <tr>
-        <td><span class="tag">Start-</span></td>
-        <td><span class="tag">Service</span></td>
-        <td>Start a specific service</td>
-      </tr>
-     <tr>
-         <td><span class="tag">Restart-</span></td>
-         <td><span class="tag">Service</span></td>
-         <td>Restart a specific service</td>
-     </tr>
-     <tr>
-         <td><span class="tag">Stop-</span></td>
-         <td><span class="tag">Service</span></td>
-         <td>Stop a specific service</td>
-     </tr>
-        
-    </tbody>
-  </table>
+    <!-- Exploration -->
+    <section class="card">
+      <h2>Exploration</h2>
+      <pre><code>$PSVersionTable
+Get-Module -ListAvailable
+Get-Command -Module ModuleName
+Get-FileHash
+Get-FileHash -Algorithm SHA1 path
+Get-NetAdapter
+Select-Object
+Get-NetAdapter | Select-Object Name, Status, LinkSpeed
+Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enabled True
+Get-NetFirewallRule -DisplayGroup "Network Discovery"
+(Get-WmiObject -Query 'select * from SoftwareLicensingService').OA3xOriginalProductKey
+wmic bios get serialnumber
+New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any
+New-NetFirewallRule -DisplayName "Block Specific IP Outbound" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any
+Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion
+net users
+net groups
+net user administrator
+Get-LocalGroupMember -Group "Administrators"
+Remove-LocalGroupMember -Group "Administrators" -Member "Domain Users"</code></pre>
 
-        <img src="Images/GetHelp.png" alt="GetHelp.png">
-        <img src="Images/GetCommand.png" alt="GetCommand.png">
-        <img src="Images/GetProcess.png" alt="GetProcess.png">
-        <img src="Images/GetService.png" alt="GetService.png">
-        <img src="Images/ServiceMgmt.png" alt="ServiceMgmt.png"><br><br><br><br>
-        
-    
-        
-    <h2>Exploration</h2>  
+      <p><b>Get-Module -ListAvailable</b></p>
+      <div class="figure"><img src="Images/Exploration/GetModule.png" alt="Get-Module list screenshot"></div>
+      <div class="figure"><img src="Images/Exploration/GetModules2.png" alt="More module listings"></div>
 
+      <p><b>Get-Module -ListAvailable NetSecurity</b></p>
+      <div class="figure"><img src="Images/Exploration/NetFirewall1.png" alt="NetSecurity module"></div>
 
-        <pre><code>
-            $PSVersion
-            Get-Module -ListAvailable
-            Get-Command -Module ModuleName
-            List Command -Module ModuleName
-            Get-FileHash
-            Get-FileHash -Algorithm SHA1 path
-            NetAdapter
-            Select-Object
-            NetAdapter | Select-Object Name, Status, LinkSpeed
-            Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enable True
-            Get-NetFirewall -DisplayGroup "Network Discovery"
-            Get-WmiObject -query 'select*from SoftwareLicensingService').OA3xOriginalProductKey
-            wmic bios get serialnumber
-            New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any
-            New-NetFirewallRule -DisplayName "Block Specific IP Outbound" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any 
-            Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion
-            net users
-            net groups
-            net user administrator
-            Get-LocalGroupMember -Group "Administrators"
-            Remove-LocalGroupMember -Group "Administrators" -Member "Domain Users"
-        </code></pre><br>
+      <p><b>Get-Command -Module WindowsUpdate</b></p>
+      <div class="figure"><img src="Images/Exploration/GetCommand1.png" alt="WindowsUpdate commands"></div>
 
-        <p><strong>Get-Module -ListAvailable</strong></p>
-        <img src="Images/Exploration/GetModule.png" alt="GetModule.png">
-        <img src="Images/Exploration/GetModules2.png" alt="GetModules2.png"><br>
-        <p><strong>Get-Module -ListAvailable NetSecurity</strong></p>
-          <img src="Images/Exploration/NetFirewall1.png" alt="NetFirewall1.png"><br>
-        <p><strong>Get-Command -Module WindowsUpdate</strong></p>
-        <img src="Images/Exploration/GetCommand1.png" alt="GetCommand1.png"><br>
-        <p><strong>Get-Command -Module NetAdapter</strong></p>
-        <img src="Images/Exploration/GetCommand2.png" alt="GetCommand2.png"><br>
-        <p><strong>Get-Command -Module NetTCPIP</strong></p>
-        <img src="Images/Exploration/GetCommand3.png" alt="GetCommand3.png"><br>
-        <p><strong>Get-Command -Module TroubleshootingPack</strong></p>
-        <img src="Images/Exploration/GetCommand4.png" alt="GetCommand4.png"><br>
-        <p><strong>Get-Command -Module NetworkConnectivityStatus</strong></p>
-        <img src="Images/Exploration/GetCommand5.png" alt="GetCommand5.png"><br>
-        <p><strong>Get-Command -Module NetSecurity</strong></p>
-        <img src="Images/Exploration/GetCommand6.png" alt="GetCommand6.png"><br>
-        <p><strong>Get-FileHash</strong></p>
-        <img src="Images/Exploration/GetFileHash1.png" alt="GetFileHash1.png"><br>
-        <p><strong>NetAdapter</strong></p>
-        <img src="Images/Exploration/NetAdapter.png" alt="NetAdapter.png"><br>
-        <p><strong>NetAdapter | Select-Object Name, Status, LinkSpeed</strong></p>
-        <img src="Images/Exploration/NetAdapter2.png" alt="NetAdapter2.png"><br>
-        <p><strong>Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enable True</strong></p>
-        <img src="Images/SetNetFirewall.png" alt="SetNetFirewall.png"><br>
-        <p><strong>Get-NetFirewallRule -DisplayGroup "Network Discovery"</strong></p>
-        <img src="Images/Get-NetworkFirewall.png" alt="Get-NetworkFirewall.png"><br>
-        <p><strong>Retrieve computer serial number</strong></p>
-        <img src="Images/Exploration/serialn.png" alt="serialn.png"><br>
-        <p><strong>New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any</strong></p><br>
-        <img src="Images/FirewallBlock.png" alt="FirewallBlock.png"><br>
-        <p><strong>New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any</strong></p>
-        <img src="Images/FirewallBlock2.png" alt="FirewallBlock2.png"><br>
-        <p><strong>Get-ComputerInfo</strong></p>
-        <img src="Images/Exploration/ComputerInfo.png" alt="ComputerInfo1.png"><br>
-        <p><strong>Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion</strong></p>
-        <img src="Images/ComputerInfo2.png" alt="ComputerInfo2.png">
-        <img src="Images/ComputerInfo3.png" alt="ComputerInfo3.png"><br>
-        <p><strong>net user</strong></p>
-        <img src="Images/Exploration/netuser.png" alt="netuser.png"><br>
-        <p><strong>net group</strong></p>
-        <img src="Images/Exploration/netgroup.png" alt="netgroup.png"><br>
-        <p><strong>net user administrator</strong></p>
-        <img src="Images/Exploration/netuseradmin.png" alt="netuseradmin.png"><br>
-        <p><strong>Get-LocalGroupMember -Group "Administrators"</strong></p>
-        <img src="Images/GetLocalGroup.png" alt="GetLocalGroup.png"><br>
-        <p><strong>Add and Remove Local Group Member from Administrators Group</strong></p>
-        <img src="Images/LocalGroup2.png" alt="LocalGroup2.png"><br><br><br>
-       
-        
-        
-                                                                        
-                                                            
-        
-        
-        
-        
-        
-        
-        
-        
-        
+      <p><b>Get-Command -Module NetAdapter</b></p>
+      <div class="figure"><img src="Images/Exploration/GetCommand2.png" alt="NetAdapter commands"></div>
 
-        
-        
+      <p><b>Get-Command -Module NetTCPIP</b></p>
+      <div class="figure"><img src="Images/Exploration/GetCommand3.png" alt="NetTCPIP commands"></div>
 
-    <h2>Working with Files and Directories</h2>
-    <pre><code>Get-ChildItem
+      <p><b>Get-Command -Module TroubleshootingPack</b></p>
+      <div class="figure"><img src="Images/Exploration/GetCommand4.png" alt="TroubleshootingPack commands"></div>
+
+      <p><b>Get-Command -Module NetworkConnectivityStatus</b></p>
+      <div class="figure"><img src="Images/Exploration/GetCommand5.png" alt="NetworkConnectivityStatus commands"></div>
+
+      <p><b>Get-Command -Module NetSecurity</b></p>
+      <div class="figure"><img src="Images/Exploration/GetCommand6.png" alt="NetSecurity commands list"></div>
+
+      <p><b>Get-FileHash</b></p>
+      <div class="figure"><img src="Images/Exploration/GetFileHash1.png" alt="Get-FileHash output"></div>
+
+      <p><b>Get-NetAdapter</b></p>
+      <div class="figure"><img src="Images/Exploration/NetAdapter.png" alt="Get-NetAdapter output"></div>
+
+      <p><b>Get-NetAdapter | Select-Object Name, Status, LinkSpeed</b></p>
+      <div class="figure"><img src="Images/Exploration/NetAdapter2.png" alt="Selected adapter properties"></div>
+
+      <p><b>Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enabled True</b></p>
+      <div class="figure"><img src="Images/SetNetFirewall.png" alt="Enable firewall rule"></div>
+
+      <p><b>Get-NetFirewallRule -DisplayGroup "Network Discovery"</b></p>
+      <div class="figure"><img src="Images/Get-NetworkFirewall.png" alt="Firewall rules listing"></div>
+
+      <p><b>Retrieve computer serial number</b></p>
+      <div class="figure"><img src="Images/Exploration/serialn.png" alt="Serial number retrieval"></div>
+
+      <p><b>Block IP inbound/outbound</b></p>
+      <div class="figure"><img src="Images/FirewallBlock.png" alt="Inbound block rule"></div>
+      <div class="figure"><img src="Images/FirewallBlock2.png" alt="Outbound block rule"></div>
+
+      <p><b>Get-ComputerInfo</b></p>
+      <div class="figure"><img src="Images/Exploration/ComputerInfo.png" alt="Computer info"></div>
+      <p><b>Select key OS properties</b></p>
+      <div class="figure"><img src="Images/ComputerInfo2.png" alt="Selected OS props 1"></div>
+      <div class="figure"><img src="Images/ComputerInfo3.png" alt="Selected OS props 2"></div>
+
+      <p><b>Local users & groups (legacy commands)</b></p>
+      <div class="figure"><img src="Images/Exploration/netuser.png" alt="net user"></div>
+      <div class="figure"><img src="Images/Exploration/netgroup.png" alt="net group"></div>
+      <div class="figure"><img src="Images/Exploration/netuseradmin.png" alt="net user administrator"></div>
+
+      <p><b>Modern local group cmdlets</b></p>
+      <div class="figure"><img src="Images/GetLocalGroup.png" alt="Get-LocalGroupMember"></div>
+      <p><b>Add/Remove local group members</b></p>
+      <div class="figure"><img src="Images/LocalGroup2.png" alt="Modify local group members"></div>
+    </section>
+
+    <!-- Files & Dirs -->
+    <section class="card">
+      <h2>Working with Files and Directories</h2>
+      <pre><code>Get-ChildItem
 New-Item
-Get-ChildItem
 Remove-Item
 echo
 mkdir
 Move-Item
 Copy-Item
-ls
-    </code></pre>
+ls</code></pre>
+      <p>The familiar Linux-style commands like <code>mkdir</code>, <code>echo</code>, and <code>ls</code> also work in a PowerShell session.</p>
 
-<p1>The Linux commands mkdir, echo, ls, among others can be used in a PowerShell session.</p1>
+      <div class="figure"><img src="Images/FileDir/NewItem.png" alt="New-Item examples"></div>
+      <div class="figure"><img src="Images/FileDir/GetChildItem.png" alt="Get-ChildItem examples"></div>
+      <div class="figure"><img src="Images/FileDir/RemoveItem.png" alt="Remove-Item examples"></div>
+      <div class="figure"><img src="Images/FileDir/echomkdir.png" alt="echo/mkdir examples"></div>
+      <div class="figure"><img src="Images/FileDir/Item.png" alt="Item operations"></div>
+    </section>
 
-<img src="Images/FileDir/NewItem.png" alt="NewItem.png">
-<img src="Images/FileDir/GetChildItem.png" alt="GetChildItem.png">
-<img src="Images/FileDir/RemoveItem.png" alt="RemoveItem.png">
-<img src="Images/FileDir/echomkdir.png" alt="echomkdir.png">
-<img src="Images/FileDir/Item.png" alt="Item.png"><br><br><br>
-        
+    <!-- Scripting Basics -->
+    <section class="card">
+      <h2>PowerShell Scripting Basics</h2>
+      <p>Core building blocks that underpin automation and administration with PowerShell.</p>
 
-    <h2>PowerShell Scripting Basics</h2>
-    <p>The following outlines PowerShell Scripting Basics that introduce the core building blocks of automation and system administration with the use of Microsoft's powerful command-line shell and scripting language.
+      <h3>Data Types</h3>
+      <ul>
+        <li><b>variable:</b> named storage for values used by commands/scripts</li>
+        <li><b>string:</b> text data</li>
+        <li><b>int:</b> whole numbers (positive/negative)</li>
+        <li><b>array:</b> ordered collection of values/objects</li>
+        <li><b>boolean:</b> <code>$true</code> / <code>$false</code> values</li>
+        <li><b>object:</b> structured data with properties & methods</li>
+      </ul>
 
-        
-    <p><strong>Data Types:</strong></p>
-    <ul>
-        <li><strong>variable:</strong> Variables are named storage locations used to store data that a script can reference, modify, or pass to commands.</li><br>
-        <li><strong>string:</strong> Strings represent sequence of characters in the form of text.</li><br>
-        <li><strong>int:</strong> int - integer is used to represent whole numbers that are both positive and negative.</li><br>
-        <li><strong>array:</strong> A collection of values in a single variable. It allows you to store multiple items, such as strings, numbers, as well as objects, in an ordered list.</li><br>
-        <li><strong>boolean:</strong> Booleans are used to represent truth values and are most commonly used in conditional logic, such as if statements and comparisons.</li><br>
-        <li><strong>object:</strong> An object is a structured unit of data that contains properties and methods.</li>
-    </ul><br><br>
-        
-    <h3>Variables</h3>
-    <pre><code>$Name = "Dave"
+      <h3>Variables</h3>
+      <pre><code>$Name = "Dave"
 $Age = 29
-$Services = Get-Service
-    </code></pre>
-    <p>Variables start with <code>$</code></p>
+$Services = Get-Service</code></pre>
+      <p>Variables start with <code>$</code>.</p>
+      <div class="figure"><img src="Images/BS/var.png" alt="Variables screenshot"></div>
 
-<img src="Images/BS/var.png" alt="var.png"><br><br>
+      <h3>Strings</h3>
+      <pre><code>$greeting = "Hello, world"
+$path = 'C:\Users\Dave'</code></pre>
+      <div class="figure"><img src="Images/BS/strings.png" alt="Strings screenshot"></div>
 
- <h3>Strings</h3>
-<pre><code>$greeting = "Hello, world"
-    $path = 'C:\Users\Dave'
-</code></pre>
+      <h3>Integers</h3>
+      <pre><code>$a = 10
+$b = 5</code></pre>
+      <div class="figure"><img src="Images/BS/Integers.png" alt="Integers screenshot"></div>
 
-<img src="Images/BS/strings.png" alt="strings.png"><br><br><br>
-        
+      <h3>Arrays</h3>
+      <pre><code># Creating an array of strings
+$colors = @("Red", "Green", "Blue")
 
-<h3>Integers</h3>
-        <pre><code>
-            $a = 10
-            $b = 5
-        </code></pre>
+# Accessing elements by index
+$colors[0]  # Red
+$colors[1]  # Green
+$colors[2]  # Blue</code></pre>
+      <div class="figure"><img src="Images/BS/array.png" alt="Arrays 1"></div>
 
-<img src="Images/BS/Integers.png" alt="Integers.png"><br><br><br>
-        
+      <p>Adding items to an array:</p>
+      <pre><code>$colors += "Yellow"
+$colors</code></pre>
+      <div class="figure"><img src="Images/BS/array2.png" alt="Arrays 2"></div>
 
-<h3>Arrays</h3>
-        <pre><code>
-            # Creating an array of strings
-            $colors = @("Red", "Green", "Blue")
+      <p>Looping through an array:</p>
+      <pre><code>foreach ($color in $colors) {
+  Write-Output "Color: $color"
+}</code></pre>
+      <div class="figure"><img src="Images/BS/arrays3.png" alt="Arrays 3"></div>
 
-            # Accessing elements by index
-            Write-Output $colors[0] # Output: Red
-            Write-Output $colors[1] # Output: Green
-            Write-Output $colors[2] # Output: Blue
-        </code></pre>
+      <h3>Booleans</h3>
+      <pre><code>$isLoggedIn = $true
+$isAdmin = $false</code></pre>
+      <div class="figure"><img src="Images/BS/boolean1.png" alt="Booleans 1"></div>
 
-        <img src="Images/BS/array.png" alt="array.png"><br>   
-
-        <p>Adding Items to an Array:</p>
-        <pre><code>
-            $colors += "Yellow" # Adds a new item
-            Write-Output $colors # Output: Red Green Blue Yellow
-        </code></pre>
-
-        <img src="Images/BS/array2.png" alt="array2.png"><br>
-        
-
-        <p>Looping Through an Array:</p>
-        <pre><code>
-            foreach ($color in $colors) {
-                Write-Output "Color: $color:
-            }
-        </code></pre>
-
-        <img src="Images/BS/arrays3.png" alt="arrays3.png"><br><br><br>
-
-    <h3>Booleans</h3>
-        <pre><code>
-            $isLoggedIn = $true
-            $isAdmin = $false
-        </code></pre>
-
-        <img src="Images/BS/boolean1.png" alt="boolean1.png"><br>
-        
-
-    <p>Using Boolean in if statements:</p>
-        <pre><code>
-            if ($isLoggedIn) {
-                Write-Output "Access granted."
-            } else {
-                Write-Output "Access denied."
-            }
-        </code></pre>
-
-        <img src="Images/BS/arrays3.png" alt="array3.png"><br>
-
-        <p>Boolean Result from a Comparison:</p>
-        <pre><code>
-            $a = 10
-            $b = 5
-
-            $isGreater = $a -gt $b  # true
-            Write-Output $isGreater # Output: True
-        </code></pre>
-
-        <img src="Images/BS/boolean3.png" alt="boolean3.png"><br>
-
-        <p>Logical Operators:</p>
-        <pre><code>
-            $hasPermission = $true
-            $isOwner = $false
-
-            if ($hasPermission -and $isOwner) {
-                "You can delete this file."
-            } elseif ($hasPermissions -or $isOwner) {
-                "You can view the file."
-            } else {
-                "Access denied."
-            }
-        </code></pre>
-
-        <img src="Images/BS/boolean4.png" alt="boolean4.png"><br>
-
-        <p>Using -not to Flip a Boolean:</p>
-        <pre><code>
-            $isAvailable = $false
-
-            if (-not $isAvailable) {
-                "Resource is not available."
-            }
-        </code></pre>
-
-        <img src="Images/BS/Boolean5.png" alt="Boolean5.png"><br><br><br>
-
-
-    <h3>Loops and Conditional Statements</h3>
-    <pre><code># If-Else
-if ($Age -gt 18) {
-    Write-Output "Adult"
+      <p>Using Boolean in if statements:</p>
+      <pre><code>if ($isLoggedIn) {
+  "Access granted."
 } else {
-    Write-Output "Minor"
-}
+  "Access denied."
+}</code></pre>
+      <div class="figure"><img src="Images/BS/arrays3.png" alt="Conditional example"></div>
+
+      <p>Boolean from a comparison:</p>
+      <pre><code>$a = 10; $b = 5
+$isGreater = $a -gt $b  # True</code></pre>
+      <div class="figure"><img src="Images/BS/boolean3.png" alt="Boolean comparison"></div>
+
+      <p>Logical operators:</p>
+      <pre><code>$hasPermission = $true
+$isOwner = $false
+
+if ($hasPermission -and $isOwner) {
+  "You can delete this file."
+} elseif ($hasPermission -or $isOwner) {
+  "You can view the file."
+} else {
+  "Access denied."
+}</code></pre>
+      <div class="figure"><img src="Images/BS/boolean4.png" alt="Logical operators"></div>
+
+      <p>Using <code>-not</code>:</p>
+      <pre><code>$isAvailable = $false
+if (-not $isAvailable) { "Resource is not available." }</code></pre>
+      <div class="figure"><img src="Images/BS/Boolean5.png" alt="Negation example"></div>
+
+      <h3>Loops and Conditional Statements</h3>
+      <pre><code># If-Else
+if ($Age -gt 18) { "Adult" } else { "Minor" }
 
 # ForEach Loop
 $services = Get-Service
 foreach ($service in $services) {
-    Write-Output $service.DisplayName
+  $service.DisplayName
+}</code></pre>
+      <div class="figure"><img src="Images/BS/loops.png" alt="Loops screenshot"></div>
+
+      <h3>Objects</h3>
+      <pre><code>$process = Get-Process notepad
+$process.Name
+$process.Id</code></pre>
+      <div class="figure"><img src="Images/BS/objects1.png" alt="Objects 1"></div>
+
+      <p>Check members with <code>Get-Member</code>:</p>
+      <pre><code>$process | Get-Member</code></pre>
+      <div class="figure"><img src="Images/BS/objects1.png" alt="Get-Member output"></div>
+
+      <p>Custom object:</p>
+      <pre><code>$user = [PSCustomObject]@{
+  FirstName = "Mark"
+  LastName  = "Thompson"
+  Age       = 00
 }
-    </code></pre>
+$user.FirstName
+$user.Age</code></pre>
+      <div class="figure"><img src="Images/BS/objects3.png" alt="Custom object"></div>
 
-<img src="Images/BS/loops.png" alt="loops.png"><br><br>
+      <p>Array of objects:</p>
+      <pre><code>$users = @(
+  [PSCustomObject]@{ Name = "Alice"; Role = "Admin" },
+  [PSCustomObject]@{ Name = "Bob";   Role = "User"  }
+)
 
-     <h3>Objects</h3>
-        <pre><code>
-            $process = Get-Process notepad
-        </code></pre>
-        <p>The variable $process is now an object with properties such as Name, Id, CPU, etc.</p>
-        <p>You can access those properties like this:</p>
-        <pre><code>
-            $process.Name  # Output: Notepad
-            $process.Id    # Output: (the process ID)
-        </code></pre>
+foreach ($u in $users) {
+  "$($u.Name) is a $($u.Role)"
+}</code></pre>
+      <div class="figure"><img src="Images/BS/objects4.png" alt="Array of objects"></div>
 
-        <img src="Images/BS/objects1.png" alt="objects1.png"><br>
-        
+      <p>Object filtering:</p>
+      <pre><code>$services = Get-Service
+$running  = $services | Where-Object { $_.Status -eq "Running" }</code></pre>
+      <div class="figure"><img src="Images/BS/objects5.png" alt="Object filtering"></div>
+    </section>
 
-<p1>Checking Object Members with Get-Member:</p1>
-        <pre><code>
-            $process | Get-Member
-        </code></pre>
-
-    <img src="Images/BS/objects1.png" alt="objects1.png"><br>
-
-<p>Creating a Custom Object:</p>
-        <pre><code>
-            $user = [PSCustomObject]@{
-                FirstName = "Mark"
-                LastName = "Thompson"
-                Age = 00
-            }
-
-            $user.FirstName  # Output: Mark
-            $user.Age        # Output: 00
-        </code></pre>
-
-        <img src="Images/BS/objects3.png" alt="objects3.png"><br>
-
-<p>Array of Objects:</p>
-        <pre><code>
-            $users = @(
-                [PSCustomObject]@{ Name = "Alice"; Role = "Admin" },
-                [PSCustomObject]@{ Name = "Bob"; Role = "User" }
-            )
-
-            foreach ($u in $users) {
-                Write-Output "$(Su.Name) is a $($u.Role)"
-            }
-        </code></pre>
-
-        <img src="Images/BS/objects4.png" alt="objects4.png"><br>
-
-<p>Object Filtering:</p>
-        <pre><code>
-            $service = Get-Service
-            $running = $services | Where-Object { $_.Status -eq "Running" }
-        </code></pre>
-
-        <img src="Images/BS/objects5.png" alt="objects5.png"><br><br><br>
-        
-
-    <h3>Functions</h3>
-    <pre><code>function Greet-User {
-    param ($Name)
-    Write-Output "Welcome, $Name!"
+    <!-- Functions -->
+    <section class="card">
+      <h2>Functions</h2>
+      <pre><code>function Greet-User {
+  param ($Name)
+  "Welcome, $Name!"
 }
+Greet-User -Name "Dave"</code></pre>
+      <div class="figure"><img src="Images/BS/function.png" alt="Function example"></div>
 
-Greet-User -Name "Dave"
-    </code></pre>
-        <img src="Images/BS/function.png" alt="function.png"><br>
+      <p>Simple function (no parameters)</p>
+      <pre><code>function Say-Hello { "Hello, world!" }
+Say-Hello</code></pre>
+      <div class="figure"><img src="Images/function1.png" alt="Function no params"></div>
 
-<p>simple Function (No Parameters)</p>
-        <pre><code>
-            function Say-Hello {
-                Write-Output "Hello, world!"
-            }
+      <p>Function with one parameter</p>
+      <pre><code>function Greet-User { param($name) "Hello, $name!" }
+Greet-User -name "Mark"</code></pre>
+      <div class="figure"><img src="Images/function2.png" alt="Function one param"></div>
 
-            # Call the function
-            Say-Hello
-        </code></pre>
+      <p>Function with multiple parameters</p>
+      <pre><code>function Add-Numbers { param($a, $b) "The sum is $($a + $b)" }
+Add-Numbers -a 5 -b 10</code></pre>
+      <div class="figure"><img src="Images/function3.png" alt="Function multiple params"></div>
 
-        <img src="Images/function1.png" alt="function1.png"><br>
-        
+      <p>Function with conditional logic</p>
+      <pre><code>function Check-Age { param($age)
+  if ($age -ge 18) { "You're an adult." } else { "You're a minor." }
+}
+Check-Age -age 20</code></pre>
+      <div class="figure"><img src="Images/fucntion4.png" alt="Function with logic"></div>
 
-<p>Function with One Parameter</p>
-        <pre><code>
-            function Greet-User {
-                param($name)
-                Write-Output "Hello, $name!"
-            }
+      <p>Function returning a value</p>
+      <pre><code>function Multiply { param($x, $y) return ($x * $y) }
+$result = Multiply -x 4 -y 6
+"Result: $result"</code></pre>
+      <div class="figure"><img src="Images/function5.png" alt="Return value function"></div>
 
-            Greet-User -name "Mark"
-        </code></pre>
+      <p>Scripts end with the <code>.ps1</code> extension.</p>
+    </section>
 
-        <img src="Images/function2.png" alt="function2.png"><br>
-        
+    <!-- Execution Policy -->
+    <section class="card">
+      <h2>Permissions and Execution Policy</h2>
+      <pre><code>Get-ExecutionPolicy
+Set-ExecutionPolicy RemoteSigned</code></pre>
+      <div class="figure"><img src="Images/ExecutePolicy.png" alt="Execution policy"></div>
+      <p><b>Policies:</b> Restricted · AllSigned · RemoteSigned · Unrestricted</p>
+      <p>Administrator privileges may be required.</p>
+    </section>
 
-
-<p>Function with Multiple Parameters</p>
-        <pre><code>
-            function Add-Numnbers {
-                param($a, $b)
-                $sum = $a + $b
-                Write-Output "The sum is $sum"
-            }
-
-            Add-Numbers -a 5 -b 10     # Output: The sum is 15
-        </code></pre>
-
-        <img src="Images/function3.png" alt="function3.png"><br>
-        
-
-    <p>Function with Conditional Logic</p>
-        <pre><code>
-            function Check-Age {
-                param($age)
-
-                if ($age -ge 18) {
-                    "You're an adult."
-                } else {
-                    "You're a minor."
-                }
-            }
-
-            Check-Age -age 20
-        </code></pre>
-
-        <img src="Images/fucntion4.png" alt="fucntion4.png"><br>
-
-
-        <p>Function that Returns a Value</p>
-        <pre><code>
-            function Multiply {
-                param($x, $y)
-                return $x * $y
-            }
-
-            $result = Multiply -x 4 -y 6
-            Write-Output "Result: $result"
-        </code></pre>
-
-        <img src="Images/function5.png" alt="function5.png"><br>
-
-
-
-        
-    <p>Create reusable code blocks</p><br>
-        
-    <p>Scripts end with the <strong>.ps1</strong> extension<code>.ps1</code></p><br><br>
-
-
-
-    <h3>Permissions and Execution Policy</h3>
-    <pre><code>Get-ExecutionPolicy
-Set-ExecutionPolicy RemoteSigned
-    </code></pre>
-
-<img src="Images/ExecutePolicy.png" alt="ExecutePolicy.png">
-        
-    <p><strong>Policies:</strong></p>
-    <ul>
-        <li>Restricted</li>
-        <li>AllSigned</li>
-        <li>RemoteSigned</li>
-        <li>Unrestricted</li>
-    </ul>
-        
-    <p>Might need admin privileges</p><br><br><br>
-
-
-    <h3>Useful Tools and Debugging</h3>
-    <ul>
+    <!-- Debugging / Tools -->
+    <section class="card">
+      <h2>Useful Tools and Debugging</h2>
+      <ul>
         <li><code>Write-Host</code> vs <code>Write-Output</code></li>
         <li><code>Start-Transcript</code> to log sessions</li>
-        <li><code>Try / Catch / Finally</code> for error handling</li>
-    </ul>
+        <li><code>try/catch/finally</code> for error handling</li>
+      </ul>
 
-    <p><strong>Write-Host:</strong></p>
+      <h3>Write-Host</h3>
+      <p>Writes directly to the console (not to the pipeline).</p>
+      <pre><code>function Test-ConnectionStatus {
+  param($server)
+  Write-Host "Starting connection check..." -ForegroundColor Cyan
 
-    <p>Write-Host is used to display output directly output directly to the console.</p>
-        <pre><code>
-            function Test-ConnectionStatus {
-                param($server)
+  if (Test-Connection -ComputerName $server -Count 1 -Quiet) {
+    Write-Host "$server is online." -ForegroundColor Green
+  } else {
+    Write-Host "$server is offline or unreachable." -ForegroundColor Red
+  }
 
-                Write-Host "Starting connection check..." -ForegroundColor Cyan
-
-                if (Test-Connection -ComputerName $server -Count 1 -Quiet) {
-                    Write-Host "$server is online." -ForegroundColor Green
-                } else {
-                    Write-Host "$server is offline or unreachable." -ForegroundColor Red
-                }
-
-                Write-Host "Finished connection check." -ForegroundColor Cyan
-            }
-
-            Test-ConnectionStatus -server "example.com"
-        </code></pre>
-
-        <img src="Images/Debug/WriteHost.png" alt="WriteHost.png">
-        
-
-        
-
-
-  <p><strong>Write-Output:</strong></p>
-
-  <p>Write-Output sends data to the output stream, which makes it available for further use such as
-  capturing into a variable, piping to another command, and redirecting a file.</p>
-    <pre><code>try {
-    Get-Item "C:\fakefile.txt"
-} catch {
-    Write-Output "File not found!"
+  Write-Host "Finished connection check." -ForegroundColor Cyan
 }
-    </code></pre>
+Test-ConnectionStatus -server "example.com"</code></pre>
+      <div class="figure"><img src="Images/Debug/WriteHost.png" alt="Write-Host demo"></div>
 
-    <img src="Images/BS/file.png" alt="file.png"><br>
+      <h3>Write-Output</h3>
+      <p>Sends data to the pipeline (capture, pipe, redirect).</p>
+      <pre><code>try {
+  Get-Item "C:\fakefile.txt"
+} catch {
+  Write-Output "File not found!"
+}</code></pre>
+      <div class="figure"><img src="Images/BS/file.png" alt="Write-Output demo"></div>
 
-<p><strong>Start-Transcript:</strong></p>
-<p>Start-Transcript is a built-in command that starts recording everything that happens in the PowerShell session, including the commands run, their output, errors, and messages to a log file.</p>
-        <pre><code>
-            # Start logging the session
-            Start-Transcript -Path "C:\Logs\debug-log.txt" -Append
+      <h3>Start-Transcript</h3>
+      <p>Record a session (commands, output, errors) to a log file.</p>
+      <pre><code>Start-Transcript -Path "C:\Logs\debug-log.txt" -Append
+Write-Host "Starting server check..."
+$server = "example.com"
+Write-Host "Pinging $server..."
+if (Test-Connection -ComputerName $server -Count 1 -Quiet) { "Online" } else { "Offline" }
+Write-Host "Script complete."
+Stop-Transcript</code></pre>
+      <div class="figure"><img src="Images/Debug/StartTranscript.png" alt="Start-Transcript demo"></div>
 
-            Write-Host "Starting server check..."
+      <h3>try / catch / finally</h3>
+      <pre><code>try {
+  Get-Content "C:\missing-file.txt"
+} catch {
+  Write-Host "An error occurred: $_"
+}</code></pre>
+      <div class="figure"><img src="Images/Debug/try1.png" alt="try/catch example 1"></div>
 
-            $server = "example.com"
+      <pre><code>try {
+  Remove-Item "C:\nonexistent.txt" -ErrorAction Stop
+} catch {
+  Write-Host "Failed to delete file: $_"
+}</code></pre>
+      <div class="figure"><img src="Images/Debug/try2.png" alt="try/catch example 2"></div>
 
-            Write-Host "Pinging $server..."
-            if (Test-Connection -ComputerName $server -Count 1 -Quiet) {
-                Write-Host "$server is online."
-            } else {
-                Write-Host "$server is offline or unreachable."
-            }
+      <pre><code>try {
+  Write-Host "Trying risky operation..."
+  Get-Content "C:\nonexistent.txt" -ErrorAction Stop
+} catch {
+  Write-Host "Caught an error: $_"
+} finally {
+  Write-Host "Cleaning up... This always runs."
+}</code></pre>
+      <div class="figure"><img src="Images/Debug/finallty.png" alt="finally block demo"></div>
 
-            Write-Host "Script complete."
+      <ul>
+        <li>Use <b>try/catch</b> to gracefully handle errors.</li>
+        <li>Use <b>finally</b> for cleanup that must always run.</li>
+        <li>Add <b>-ErrorAction Stop</b> to catch non-terminating errors.</li>
+      </ul>
+    </section>
 
-            # Stop logging
-            Stop-Transcript
-        </code></pre>
-
-        <img src="Images/Debug/StartTranscript.png" alt="StartTranscript.png">
-
-    <p><strong>Try/Catch</strong> - Basic Try/Catch Block:</p>
-    <pre><code>
-        try {
-            # This will fail if the file doesn't exist
-            Get-Content "C:\missing-file.txt"
-        }
-        catch {
-            Write-Host "An error occurred: $_"
-        }
-    </code></pre>
-
-        <img src="Images/Debug/try1.png" alt="try1.png">
-        
-
-        <p>Try/Catch with a Specific Error Action</p>
-        <pre><code>
-            try {
-                # Force PowerShell to treat the error as terminating
-                Remove-Item "C:\nonexistent.txt" -ErrorAction Stop
-            }
-            catch {
-                Write-Host "Failed to delete file: $_"
-            }
-        </code></pre>
-
-        <img src="Images/Debug/try2.png" alt="try2.png">
-
-    <p><strong>Finally:</strong></p>
-    <p>Using Finaly to Always Run Cleanup</p>
-    <pre><code>
-        try {
-            Write-Host "Trying risky operation..."
-            Get-Content "C:\nonexistent.txt" -ErrorAction stop
-        }
-        catch {
-            Write-Host "Caught an error: $_"
-        }
-        finally {
-            Write-Host "Cleaning up... This always runs."
-        }
-    </code></pre>
-
-        <img src="Images/Debug/finallty.png" alt="finallty.png">
-
-        <ul>
-            <li>Use <strong>try/catch</strong> to gracefully handle errors.</li>
-            <li>Use <strong>finally</strong> for cleanup tasks that must run regardless</li>
-            <li>Add <strong>-ErrorAction Stop</strong> to make sure non-terminating errors are caught</li>
-        </ul><br><br><br><br>
-
-    <h2>Real-World Use Cases</h2>
-    <ul>
+    <!-- Real-world -->
+    <section class="card">
+      <h2>Real-World Use Cases</h2>
+      <ul>
         <li>Batch user creation in AD</li>
         <li>Automating updates</li>
         <li>Backing up and archiving logs</li>
         <li>Scheduled tasks and reporting</li>
-    </ul><br>
-    <h3>Batch user creation in AD</h3>
-        <p><strong>1.</strong> The first step is to create a CSV, for this example, I'm using Notepad++ to create a .csv file with the following attributes.</p>
-        <img src="Images/Batch User Creationi/csv0.png" alt="csv0.png"><br>
-        <p><strong>2.</strong> Then I'm going to use this script to import the csv file to create two new user accounts in Active Directory.</p>
-        <img src="Images/Batch User Creationi/ScriptCode0.png" alt="ScriptCode0.png"><br>
-        <p><strong>3.</strong> Two new user accounts in <strong>Active Directory Users and Computers</strong> in the <strong>TestUsers OU</strong>.</p>
-        <img src="Images/Batch User Creationi/csv00.PNG" alt="csv00.PNG"><br><br>
-        
-        
-       
+      </ul>
 
+      <h3>Batch user creation in AD</h3>
+      <p><b>1.</b> Create a CSV with user attributes (example in Notepad++):</p>
+      <div class="figure"><img src="Images/Batch User Creationi/csv0.png" alt="AD CSV example"></div>
+      <p><b>2.</b> Import the CSV and create users via script:</p>
+      <div class="figure"><img src="Images/Batch User Creationi/ScriptCode0.png" alt="AD user creation script"></div>
+      <p><b>3.</b> New users in ADUC under <b>TestUsers</b> OU:</p>
+      <div class="figure"><img src="Images/Batch User Creationi/csv00.PNG" alt="New AD users created"></div>
 
-        
+      <h3>Automating updates</h3>
+      <div class="figure"><img src="Images/WindowsUpdate.png" alt="Windows Update 1"></div>
+      <div class="figure"><img src="Images/WindowsUpdate2.png" alt="Windows Update 2"></div>
+      <div class="figure"><img src="Images/WindowsUpdate3.png" alt="Windows Update 3"></div>
 
-    <h3>Automating updates</h3>
-    <img src="Images/WindowsUpdate.png" alt="WindowsUpdate.png">
-    <img src="Images/WindowsUpdate2.png" alt="WindowsUpdate2.png">
-    <img src="Images/WindowsUpdate3.png" alt="WindowsUpdate3.png"><br><br>
+      <h3>Backing up and archiving logs</h3>
+      <div class="figure"><img src="Images/Batch User Creationi/Backup.png" alt="Backup logs with PowerShell"></div>
 
+      <h3>Scheduled tasks and reporting</h3>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched1.png" alt="Task Scheduler 1"></div>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched2.png" alt="Task Scheduler 2"></div>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched3.png" alt="Task Scheduler 3"></div>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched4.png" alt="Task Scheduler 4"></div>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched5.png" alt="Task Scheduler 5"></div>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched6.png" alt="Task Scheduler 6"></div>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched7.png" alt="Task Scheduler 7"></div>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched8.png" alt="Task Scheduler 8"></div>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched9.png" alt="Task Scheduler 9"></div>
+      <div class="figure"><img src="Images/Batch User Creationi/tasksched10.png" alt="Task Scheduler 10"></div>
+    </section>
 
-    <h3>Backing up and archiving logs</h3>
-    <img src="Images/Batch User Creationi/Backup.png" alt="Backup.png"><br><br>
+    <!-- Wrap-up -->
+    <section class="card">
+      <p>PowerShell gives IT pros control and automation that save time, reduce errors, and improve reliability. Mastering the fundamentals is step one toward serious automation chops.</p>
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
-    <h3>Scheduled tasks and reporting</h3>
-    <img src="Images/Batch User Creationi/tasksched1.png" alt="tasksched1.png">
-    <img src="Images/Batch User Creationi/tasksched2.png" alt="tasksched2.png">
-    <img src="Images/Batch User Creationi/tasksched3.png" alt="tasksched3.png">
-    <img src="Images/Batch User Creationi/tasksched4.png" alt="tasksched4.png">
-    <img src="Images/Batch User Creationi/tasksched5.png" alt="tasksched5.png">
-    <img src="Images/Batch User Creationi/tasksched6.png" alt="tasksched6.png">
-    <img src="Images/Batch User Creationi/tasksched7.png" alt="tasksched7.png">
-    <img src="Images/Batch User Creationi/tasksched8.png" alt="tasksched8.png">
-    <img src="Images/Batch User Creationi/tasksched9.png" alt="tasksched9.png">
-    <img src="Images/Batch User Creationi/tasksched10.png" alt="tasksched10.png"><br>
-        
-
-    
-    <p>PowerShell gives IT professionals control and automation in ways that save time, reduce errors, and increase system reliability. Mastering its fundamentals is the first step to becoming a true IT automation pro.</p>
-
-         <a href="../index.html">Back to Home</a>
+    <!-- Footer (branding only) -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
-
