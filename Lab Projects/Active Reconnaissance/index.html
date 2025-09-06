@@ -1,141 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Active Reconnaissance Lab</title>
-    <style>
-            body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-                       }
-        h1, h2, h3 {
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-        code {
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-family: "Courier New", Courier, monospace;
-        }
-          blockquote {
-            background-color: #1e1e1e;
-            border-left: 5px solid #4caf50;
-            padding: 10px;
-            margin: 10px 0;
-            color: #cfcfcf;
-          }
-          img {
-            display: block;
-            margin: 20px 0;
-            max-width: 75%;
-            height: auto;
-            border: 1px solid #444;
-            border-radius: 5px;
-        }
-        ul, ol {
-            margin-left: 20px;
-        }
-        .back-link {
-            color: #1E90FF;
-            text-decoration: none
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Active Reconnaissance · Mark Thompson Portfolio</title>
+  <meta name="description" content="Host discovery, port scanning, service fingerprinting, and script-based enumeration using Nmap in a controlled lab environment." />
+
+  <!-- THEME -->
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    /* Figures – intrinsic image size */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:0; /* galleries manage spacing */
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
+      width:auto; max-width:100%; height:auto; cursor:zoom-in;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Horizontal gallery */
+    .gallery-wrap{position:relative;margin:16px 0 24px}
+    .gallery{
+      display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
+      align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;
+      scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;
+      -webkit-overflow-scrolling:touch
+    }
+    .gallery .item{scroll-snap-align:start}
+    .gallery .figure{height:100%}
+    .gallery::-webkit-scrollbar{height:10px}
+    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
+    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
+    .gallery.hide-scrollbar{scrollbar-width:none}
+    .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
+    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
+    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
+    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
+    .gbtn:hover{background:#121733}
+    .gprev{left:-6px}
+    .gnext{right:-6px}
+
+    /* JS Lightbox (no URL changes) */
+    .lightbox{
+      position:fixed; inset:0; display:none; place-items:center;
+      background:rgba(0,0,0,.85); z-index:9999; padding:20px;
+    }
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw; max-height:95vh; border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6); cursor:zoom-out;
+    }
+    .lightbox .cap{margin-top:10px; color:#cfd6e6; font-size:14px; text-align:center; max-width:92vw;}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
 </head>
 <body>
-    <h1>Active-Reconnaissance Lab</h1>
-    <p>
-  <a href="https://github.com/mark-thompson01/Active-Reconnaissance" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
+  <div class="wrap wide">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> · <span>Active Reconnaissance</span>
+    </div>
 
-    <p>This lab outlines performing host discovery, port scanning, service version detection, and vulnerability scanning and detection using Nmap. The lab was conducted in a controlled environment to demonstrate various reconnaissance techniques.</p>
+    <!-- Header -->
+    <header>
+      <h1>Active Reconnaissance</h1>
+      <p class="lead">Host discovery, port scanning, service/version detection, and script-based fingerprinting with Nmap.</p>
+      <p><a href="https://github.com/mark-thompson01/Active-Reconnaissance" target="_blank" rel="noopener">View this project on GitHub</a></p>
+    </header>
 
-    <h2>Table of Contents</h2>
-    <ul>
+    <!-- Table of Contents -->
+    <section class="card" id="toc">
+      <h2>Table of Contents</h2>
+      <ul>
         <li><a href="#introduction">Introduction</a></li>
-        <li><a href="#host-discovery">Host Discovery</a>
-            <ul>
-                <li><a href="#nmap-host-discovery">Nmap Host Discovery</a></li>
-                <li><a href="#arp-scan">ARP Scan</a></li>
-                <li><a href="#fping">FPing</a></li>
-                <li><a href="#passive-reconnaissance-with-wireshark">Passive Reconnaissance with Wireshark</a></li>
-                <li><a href="#screenshots-host-discovery">Screenshots</a></li>
-            </ul>
-        </li>
-        <li><a href="#port-scanning-and-host-fingerprinting">Port Scanning and Host Fingerprinting</a>
-            <ul>
-                <li><a href="#nmap-port-scanning">Nmap Port Scanning</a></li>
-                <li><a href="#nmap-service-version-detection">Nmap Service Version Detection</a></li>
-                <li><a href="#screenshots-port-scanning">Screenshots</a></li>
-                <li><a href="#web-server-enumeration-on-port-80">Web Server Enumeration on Port 80</a></li>
-                <li><a href="#screenshots-web-server-enumeration">Screenshots</a></li>
-            </ul>
-        </li>
+        <li><a href="#host-discovery">Host Discovery</a></li>
+        <li><a href="#port-scanning-and-host-fingerprinting">Port Scanning &amp; Host Fingerprinting</a></li>
         <li><a href="#fingerprinting-with-nmap-scripts">Fingerprinting with Nmap Scripts</a>
-            <ul>
-                <li><a href="#ftp-enumeration">FTP Enumeration</a></li>
-                <li><a href="#ssh-enumeration">SSH Enumeration</a></li>
-                <li><a href="#smb-enumeration">SMB Enumeration</a></li>
-                <li><a href="#web-server-enumeration">Web Server Enumeration</a></li>
-            </ul>
+          <ul>
+            <li><a href="#ftp-enumeration">FTP Enumeration</a></li>
+            <li><a href="#ssh-enumeration">SSH Enumeration</a></li>
+            <li><a href="#smb-enumeration">SMB Enumeration</a></li>
+            <li><a href="#web-server-enumeration">Web Server Enumeration</a></li>
+          </ul>
         </li>
-        <li><a href="#acknowledgements">Acknowledgments</a></li>
-    </ul><br>
+      </ul>
+    </section>
 
-    <h2 id="introduction">Introduction</h2>
-    <p>This document contains step-by-step guides for performing active reconnaissance using Nmap and other tools. It covers host discovery, port scanning, service version detection, and web server enumeration. All activity was performed in a virtualized contained environment with three VMs. In this example, arp-scan, nmap, and fping are all utilized to perform network host discovery while the host fingerprinting stage primarily focuses on a Metasploitable2 VM.</p><br>
+    <!-- Introduction -->
+    <section class="card" id="introduction">
+      <h2>Introduction</h2>
+      <p>This document covers active reconnaissance using Nmap and companion tools inside a contained, virtualized lab with three VMs. We perform host discovery (arp-scan, fping, and Nmap ping scan), then move into TCP/UDP scanning and service fingerprinting. Finally, we use NSE scripts to enumerate common services on a Metasploitable2 host.</p>
+    </section>
 
-    <h2 id="host-discovery">Host Discovery</h2>
-    <h3 id="arp-scan">ARP-Scan, Nmap Ping Scan, and fping ping sweep</h3>
-    <p>Perform an arp scan, nmap ping scan, and an fping scan to discover what hosts are connected to the local network.</p>
-    <img src="Images/arp-scan-nmap-sn.png" alt="ARP Scan Nmap Ping">
-    <img src="Images/fping.png" alt="Fping"><br>
+    <!-- Host Discovery -->
+    <section class="card" id="host-discovery">
+      <h2>Host Discovery</h2>
+      <p>Run ARP, ping sweeps, and Nmap discovery to identify live hosts on the local network.</p>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Host discovery screenshots">
+          <article class="item">
+            <figure class="figure">
+              <img src="Images/arp-scan-nmap-sn.png" alt="ARP scan + Nmap ping scan output" loading="lazy" decoding="async">
+              <figcaption class="figcap">arp-scan + Nmap -sn output.</figcaption>
+            </figure>
+          </article>
+          <article class="item">
+            <figure class="figure">
+              <img src="Images/fping.png" alt="fping sweep of local subnet" loading="lazy" decoding="async">
+              <figcaption class="figcap">fping sweep results.</figcaption>
+            </figure>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <h2 id="port-scanning-and-host-fingerprinting">Port Scanning and Host Fingerprinting</h2>
-    <h3 id="syn-scan">SYN scan and service version detection</h3>
-    <img src="Images/Port%20Scanning%20and%20Service%20Detection.png" alt="Port Scanning and Service Detection"><br>
+    <!-- Port Scanning & Host Fingerprinting -->
+    <section class="card" id="port-scanning-and-host-fingerprinting">
+      <h2>Port Scanning &amp; Host Fingerprinting</h2>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Port scanning and fingerprinting screenshots">
+          <article class="item">
+            <figure class="figure">
+              <img src="Images/Port%20Scanning%20and%20Service%20Detection.png" alt="SYN scan with service version detection" loading="lazy" decoding="async">
+              <figcaption class="figcap">SYN scan with -sV service detection.</figcaption>
+            </figure>
+          </article>
+          <article class="item">
+            <figure class="figure">
+              <img src="Images/Full%20Port%20Scan.png" alt="Full port scan" loading="lazy" decoding="async">
+              <figcaption class="figcap">Full port sweep against the target.</figcaption>
+            </figure>
+          </article>
+          <article class="item">
+            <figure class="figure">
+              <img src="Images/SYN-sV-sU.png" alt="SYN + service detection + UDP scan" loading="lazy" decoding="async">
+              <figcaption class="figcap">Combining TCP and UDP reconnaissance.</figcaption>
+            </figure>
+          </article>
+          <article class="item">
+            <figure class="figure">
+              <img src="Images/p1-10000.png" alt="Scan of ports 1–10000 with service detection" loading="lazy" decoding="async">
+              <figcaption class="figcap">Focused low-port scan (1–10000) with -sV.</figcaption>
+            </figure>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <h3 id="full-port-scan">Full port scan and service version detection</h3>
-    <img src="Images/Full%20Port%20Scan.png" alt="Full Port Scan"><br>
+    <!-- Fingerprinting with NSE -->
+    <section class="card" id="fingerprinting-with-nmap-scripts">
+      <h2>Fingerprinting with Nmap Scripts</h2>
+      <p>Leverage Nmap Scripting Engine to enumerate service details and potential misconfigurations.</p>
 
-    <h3 id="syn-sv-su">SYN scan, service version detection, and UDP scan</h3>
-    <img src="Images/SYN-sV-sU.png" alt="SYN-sV-sU"><br>
+      <h3 id="ftp-enumeration">FTP Enumeration</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="FTP enumeration screenshots">
+          <article class="item"><figure class="figure"><img src="Images/nmapftpanon.png" alt="Nmap FTP anonymous login script result" loading="lazy" decoding="async"><figcaption class="figcap">Anonymous FTP checks.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/nmapftp-syst.png" alt="Nmap FTP SYST response" loading="lazy" decoding="async"><figcaption class="figcap">FTP SYST / banner.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/nmapftpvuln.png" alt="Nmap FTP vulnerability scripts output" loading="lazy" decoding="async"><figcaption class="figcap">FTP vuln script output.</figcaption></figure></article>
+        </div>
+      </div>
 
-    <h3 id="port-scan-1-10000">Port scan for ports 1-10000 and service version detection:</h3>
-    <img src="Images/p1-10000.png" alt="Ports 1-10000"><br><br>
+      <h3 id="ssh-enumeration">SSH Enumeration</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="SSH enumeration screenshots">
+          <article class="item"><figure class="figure"><img src="Images/nmapssh-auth-methods.png" alt="Nmap SSH auth methods" loading="lazy" decoding="async"><figcaption class="figcap">SSH auth methods.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/nmapssh-hostkey.png" alt="Nmap SSH host key fingerprints" loading="lazy" decoding="async"><figcaption class="figcap">Host key fingerprints.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/nmapssh2-enum-algos.png" alt="Nmap SSH algorithms enumeration" loading="lazy" decoding="async"><figcaption class="figcap">Cipher/KEX algos.</figcaption></figure></article>
+        </div>
+      </div>
 
-    <h2 id="fingerprinting-with-nmap-scripts">Fingerprinting with Nmap Scripts</h2>
-    <p>Use Nmap scripts to fingerprint services and gather detailed information.</p>
+      <h3 id="smb-enumeration">SMB Enumeration</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="SMB enumeration screenshots">
+          <article class="item"><figure class="figure"><img src="Images/nmapsmb-os-discovery.png" alt="Nmap SMB OS discovery" loading="lazy" decoding="async"><figcaption class="figcap">OS discovery via SMB.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/nmapsmb-security-mode.png" alt="Nmap SMB security mode" loading="lazy" decoding="async"><figcaption class="figcap">SMB security mode.</figcaption></figure></article>
+        </div>
+      </div>
 
-    <h3 id="ftp-enumeration">FTP Enumeration</h3>
-    <img src="Images/nmapftpanon.png" alt="Nmap FTP Anonymous">
-    <img src="Images/nmapftp-syst.png" alt="Nmap FTP System">
-    <img src="Images/nmapftpvuln.png" alt="Nmap FTP Vulnerabilities"><br>
+      <h3 id="web-server-enumeration">Web Server Enumeration</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="HTTP enumeration screenshots">
+          <article class="item"><figure class="figure"><img src="Images/nmaphttp-title.png" alt="Nmap HTTP title enumeration" loading="lazy" decoding="async"><figcaption class="figcap">http-title results.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/nmapsChttp-methods.png" alt="Nmap HTTP methods enumeration" loading="lazy" decoding="async"><figcaption class="figcap">http-methods check.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/nmaphttp-headers.png" alt="Nmap HTTP headers inspection" loading="lazy" decoding="async"><figcaption class="figcap">http-headers output.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-    <h3 id="ssh-enumeration">SSH Enumeration</h3>
-    <img src="Images/nmapssh-auth-methods.png" alt="Nmap SSH Auth Methods">
-    <img src="Images/nmapssh-hostkey.png" alt="Nmap SSH Hostkey">
-    <img src="Images/nmapssh2-enum-algos.png" alt="Nmap SSH Enum Algorithms"><br>
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
-    <h3 id="smb-enumeration">SMB Enumeration</h3>
-    <img src="Images/nmapsmb-os-discovery.png" alt="Nmap SMB OS Discovery">
-    <img src="Images/nmapsmb-security-mode.png" alt="Nmap SMB Security Mode"><br>
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 
-    <h3 id="web-server-enumeration">Web Server Enumeration</h3>
-    <img src="Images/nmaphttp-title.png" alt="Nmap HTTP Title">
-    <img src="Images/nmapsChttp-methods.png" alt="Nmap HTTP Methods">
-    <img src="Images/nmaphttp-headers.png" alt="Nmap HTTP Headers"><br>
+  <!-- JS: gallery arrows + wheel-scroll + lightbox (no URL changes) -->
+  <script>
+    (function(){
+      // Horizontal gallery arrows + wheel-scroll
+      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
+        const scroller = wrap.querySelector('.gallery');
+        if(!scroller) return;
+        const left = wrap.querySelector('.gprev');
+        const right = wrap.querySelector('.gnext');
+        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
+        left  && left .addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
+        right && right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
+        scroller.addEventListener('wheel', (e) => {
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+            e.preventDefault();
+            scroller.scrollLeft += e.deltaY;
+          }
+        }, {passive:false});
+      });
 
+      // JS Lightbox (no hash -> no history issue)
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.setAttribute('role', 'dialog');
+      lb.setAttribute('aria-modal', 'true');
+      lb.setAttribute('aria-hidden', 'true');
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
 
-    <a href="../" class="back-link">Back to Lab Projects</a>
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
+
+      function openLB(src, alt, cap){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = cap || alt || '';
+        lb.classList.add('open');
+        lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLB(){
+        lb.classList.remove('open');
+        lb.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+
+      // Close on overlay click or Escape
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{
+        if(e.key === 'Escape' && lb.classList.contains('open')) closeLB();
+      });
+
+      // Make all gallery images zoomable
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        img.addEventListener('click', ()=>{
+          const caption = img.closest('.figure')?.querySelector('.figcap')?.textContent || '';
+          openLB(img.currentSrc || img.src, img.alt, caption);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
