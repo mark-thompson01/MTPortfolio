@@ -49,17 +49,7 @@
       box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    pre{
-      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
-      border-radius:12px;overflow:auto;color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
-    }
-    code{
-      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-    }
-
+    /* Figures – intrinsic image size + zoom cursor */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -71,18 +61,19 @@
     }
     .figure img{
       display:block;margin:0 auto;border-radius:10px;object-fit:contain;
-      width:clamp(480px, 85%, 960px); max-height:70vh; height:auto;
+      width:auto;           /* intrinsic width */
+      max-width:100%;       /* never overflow container */
+      height:auto;          /* preserve aspect ratio */
+      cursor:zoom-in;       /* hint that it can zoom */
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    .figure--code img{width:clamp(640px, 92%, 1100px); max-height:80vh}
-    .figure--sm   img{width:clamp(360px, 70%, 760px)}
-    .figure--lg   img{width:clamp(720px, 95%, 1200px)}
-
+    /* Layout helpers */
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
 
+    /* Horizontal gallery (kept for convenience) */
     .gallery-wrap{position:relative;margin-top:10px}
     .gallery{
       display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
@@ -103,6 +94,20 @@
     .gbtn:hover{background:#121733}
     .gprev{left:-6px}
     .gnext{right:-6px}
+
+    /* Lightbox (click-to-zoom) */
+    .lightbox{
+      position:fixed; inset:0; display:none; place-items:center;
+      background:rgba(0,0,0,.85); z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw; max-height:95vh; border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6); cursor:zoom-out;
+    }
+    .lightbox .cap{
+      margin-top:10px; color:#cfd6e6; font-size:14px; text-align:center; max-width:92vw;
+    }
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
@@ -129,10 +134,10 @@
     <header>
       <h1>Network Traffic Analysis</h1>
       <p class="lead">Generating, capturing, saving, and analyzing traffic with <code>tcpdump</code> and Wireshark across a two-VM lab (Kali + Ubuntu).</p>
-      <p><a href="https://github.com/mark-thompson01/Network-Traffic-Analysis/tree/main" target="_blank" rel="noopener">View this project on GitHub</a></p>
+      <p><a href="https://github.com/mark-thompson-01/Network-Traffic-Analysis/tree/main" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Overview -->
+    <!-- Intro -->
     <section class="card">
       <h2>Introduction</h2>
       <p>This lab demonstrates how to monitor and analyze network traffic using <code>tcpdump</code> and Wireshark. You’ll see how to generate realistic traffic (including simulated malicious activity), capture it, save it to PCAP, and perform targeted analysis.</p>
@@ -169,11 +174,11 @@
       <h3>1) Ping Sweeps and Network Scans</h3>
       <p>Run a sweep/scan from Kali using <code>arp-scan</code>, <code>fping</code>, and <code>nmap -sn</code> to find live hosts. The first three can create significant ARP traffic.</p>
       <div class="pair">
-        <figure class="figure figure--code">
+        <figure class="figure">
           <img src="Images/arp-scan%20fping%20and%20nmap%20sn.PNG" alt="ARP scan and ping sweep (nmap -sn)" loading="lazy" decoding="async">
           <figcaption class="figcap">ARP/ping discovery activity.</figcaption>
         </figure>
-        <figure class="figure figure--code">
+        <figure class="figure">
           <img src="Images/Ubuntu%20Port%20Scan.PNG" alt="Ubuntu port scan" loading="lazy" decoding="async">
           <figcaption class="figcap">Port probing against Ubuntu target.</figcaption>
         </figure>
@@ -210,7 +215,7 @@
       <h2>Saving Captures for Analysis</h2>
       <p>Write traffic to a PCAP for later analysis:</p>
       <pre><code>tcpdump -i eth0 -w network_capture.pcap</code></pre>
-      <figure class="figure figure--code">
+      <figure class="figure">
         <img src="Images/tcpdump%20capture%20start%202.PNG" alt="tcpdump capture start" loading="lazy" decoding="async">
       </figure>
     </section>
@@ -322,9 +327,10 @@
     </footer>
   </div>
 
-  <!-- gallery wheel + arrows -->
+  <!-- gallery wheel + arrows + lightbox -->
   <script>
     (function(){
+      // Horizontal gallery arrows + wheel-scroll
       document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
         const scroller = wrap.querySelector('.gallery');
         if(!scroller) return;
@@ -339,6 +345,37 @@
             scroller.scrollLeft += e.deltaY;
           }
         }, {passive:false});
+      });
+
+      // Lightbox (click-to-zoom)
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
+
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lb.classList.contains('open')) closeLB(); });
+
+      // Make all .figure img zoomable
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        img.addEventListener('click', ()=>{
+          // Prefer the original source; if <img> had a smaller srcset, use currentSrc
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
       });
     })();
   </script>
