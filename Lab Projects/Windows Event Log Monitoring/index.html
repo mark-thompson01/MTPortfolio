@@ -1,140 +1,219 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows Event Log Monitoring</title>
-   <style>
-            body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-                       }
-        h1, h2, h3 {
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-        code {
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-family: "Courier New", Courier, monospace;
-        }
-          blockquote {
-            background-color: #1e1e1e;
-            border-left: 5px solid #4caf50;
-            padding: 10px;
-            margin: 10px 0;
-            color: #cfcfcf;
-          }
-          img {
-            display: block;
-            margin: 20px 0;
-            max-width: 75%;
-            height: auto;
-            border: 1px solid #444;
-            border-radius: 5px;
-        }
-        ul, ol {
-            margin-left: 20px;
-        }
-       .back-link {
-           color: #1E90FF;
-           text-decoration: none;
-       }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Windows Event Log Monitoring · Mark Thompson Portfolio</title>
+  <meta name="description" content="Monitoring Windows event logs with Sysmon, Event Viewer, and PowerShell scripts to detect failed logons, process creation, and registry changes." />
+
+  <!-- THEME -->
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    /* Figures – intrinsic image size */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
+      width:auto; max-width:100%; height:auto;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    .pair{display:grid;gap:12px;margin:16px 0}
+    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
+    .pair .figure{margin:0}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
 </head>
 <body>
-    <h1>Windows-Event-Log-Monitoring</h1><p>
-  <a href="https://github.com/mark-thompson01/Windows-Event-Log-Monitoring" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
+  <div class="wrap wide">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> · <span>Windows Event Log Monitoring</span>
+    </div>
 
-    
+    <!-- Header -->
+    <header>
+      <h1>Windows Event Log Monitoring</h1>
+      <p class="lead">Using Sysmon, Windows Event Viewer, and PowerShell scripts to detect suspicious activity like failed logons, process creation, and registry changes.</p>
+      <p><a href="https://github.com/mark-thompson01/Windows-Event-Log-Monitoring" target="_blank" rel="noopener">View this project on GitHub</a></p>
+    </header>
 
-    <p>This lab outlines the basics of using <strong>Sysmon</strong>, <strong>Windows Event Viewer</strong>, and <strong>PowerShell</strong> scripts to monitor and analyze Windows Event Logs for security incidents.</p>
+    <!-- Overview -->
+    <section class="card">
+      <h2>Overview</h2>
+      <p>This lab demonstrates how to leverage <strong>Sysmon</strong>, <strong>Event Viewer</strong>, and <strong>PowerShell</strong> for effective log monitoring and detection on Windows systems.</p>
+      <ul>
+        <li><strong>Sysmon</strong>: Provides detailed system activity logging.</li>
+        <li><strong>Windows Event Viewer</strong>: GUI for log visualization.</li>
+        <li><strong>PowerShell</strong>: Automates querying and filtering logs.</li>
+      </ul>
+    </section>
 
-    <h2>Tools</h2>
-    <ul>
-        <li><strong>Sysmon</strong> for detailed logging of system activities.</li>
-        <li><strong>Windows Event Viewer</strong> for visualizing and analyzing event logs.</li>
-        <li><strong>PowerShell scripts</strong> for querying and processing event logs.</li>
-    </ul><br>
+    <!-- Sysmon -->
+    <section class="card">
+      <h2>Monitoring with Sysmon</h2>
+      <p>Sysmon (System Monitor) extends Windows logging by capturing events like process creation, file changes, and network connections. Below are example queries using <code>Get-WinEvent</code> in PowerShell.</p>
 
-    <h2>Monitoring with Sysmon</h2>
+      <h3>1. List All Sysmon Events</h3>
+      <figure class="figure"><img src="Images/List%20All%20Sysmon%20Events.PNG" alt="List All Sysmon Events"></figure>
 
-    <p>Sysmon (System Monitor) is a Windows system service and device driver that logs system activity of Windows operating systems to the Windows Event Log. The following goes over some basic Sysmon queries in PowerShell with the Get-WinEvent cmdlet that can be used to monitor and analyze activities on Windows systems configured with Sysmon.</p>
+      <h3>2. List All Network Connection Events</h3>
+      <figure class="figure"><img src="Images/List%20all%20network%20connection%20events.PNG" alt="List All Network Connection Events"></figure>
 
-    <h3>1. List All Sysmon Events</h3>
-    <img src="Images/List%20All%20Sysmon%20Events.PNG" alt="List All Sysmon Events"><br>
+      <h3>3. List All Process Creation Events</h3>
+      <figure class="figure"><img src="Images/List%20all%20process%20creation%20events.PNG" alt="List All Process Creation Events"></figure>
 
-    <h3>2. List All Network Connection Events</h3>
-    <img src="Images/List%20all%20network%20connection%20events.PNG" alt="List All Network Connection Events"><br>
+      <h3>4. List Events for New Files Created</h3>
+      <figure class="figure"><img src="Images/List%20new%20files%20created.PNG" alt="List Events for New Files Created"></figure>
 
-    <h3>3. List All Process Creation Events</h3>
-    <img src="Images/List%20all%20process%20creation%20events.PNG" alt="List All Process Creation Events"><br>
+      <h3>5. List Events for File Modifications</h3>
+      <figure class="figure"><img src="Images/List%20events%20for%20file%20modifications.PNG" alt="List Events for File Modifications"></figure>
 
-    <h3>4. List Events for New Files Created</h3>
-    <img src="Images/List%20new%20files%20created.PNG" alt="List Events for New Files Created"><br>
+      <h3>6. Monitor for Remote Thread Creation</h3>
+      <figure class="figure"><img src="Images/Monitor%20for%20Remote%20Thread%20Creation.PNG" alt="Monitor for Remote Thread Creation"></figure>
 
-    <h3>5. List Events for File Modifications</h3>
-    <img src="Images/List%20events%20for%20file%20modifications.PNG" alt="List Events for File Modifications"><br>
+      <h3>7. Monitor for Changes to the Registry</h3>
+      <figure class="figure"><img src="Images/Monitor%20for%20changes%20to%20the%20registry.PNG" alt="Monitor for Changes to the Registry"></figure>
 
-    <h3>6. Monitor for Remote Thread Creation</h3>
-    <img src="Images/Monitor%20for%20Remote%20Thread%20Creation.PNG" alt="Monitor for Remote Thread Creation"><br>
+      <h3>8. List Failed Logon Attempts</h3>
+      <figure class="figure"><img src="Images/Retrieve%20Failed%20Logon%20Attempts.PNG" alt="List Failed Logon Attempts"></figure>
 
-    <h3>7. Monitor for Changes to the Registry</h3>
-    <img src="Images/Monitor%20for%20changes%20to%20the%20registry.PNG" alt="Monitor for Changes to the Registry"><br>
+      <h3>9. List Successful Logon Events</h3>
+      <figure class="figure"><img src="Images/Retrieve%20Successful%20Login%20Events.PNG" alt="List Successful Logon Events"></figure>
+    </section>
 
-    <h3>8. List Failed Logon Attempts</h3>
-    <img src="Images/Retrieve%20Failed%20Logon%20Attempts.PNG" alt="List Failed Logon Attempts"><br>
+    <!-- Event Viewer -->
+    <section class="card">
+      <h2>Monitoring with Windows Event Viewer</h2>
 
-    <h3>10. List Successful Logon Events</h3>
-    <img src="Images/Retrieve%20Successful%20Login%20Events.PNG" alt="List Successful Logon Events"><br><br><br>
+      <h3>1. Failed Login Attempts</h3>
+      <div class="pair">
+        <figure class="figure"><img src="Images/EventViewer1.PNG" alt="Event Viewer failed logon 1"></figure>
+        <figure class="figure"><img src="Images/EventViewer2.PNG" alt="Event Viewer failed logon 2"></figure>
+      </div>
+      <div class="pair">
+        <figure class="figure"><img src="Images/EventViewer2.1.PNG" alt="Event Viewer failed logon 3"></figure>
+        <figure class="figure"><img src="Images/EventViewer2.2.PNG" alt="Event Viewer failed logon 4"></figure>
+      </div>
+      <figure class="figure"><img src="Images/EventViewer2.3.PNG" alt="Event Viewer failed logon 5"></figure>
 
-    <h2>Monitoring with Windows Event Viewer</h2>
+      <h3>2. Successful Logins</h3>
+      <div class="pair">
+        <figure class="figure"><img src="Images/EventViewer3.PNG" alt="Successful login 1"></figure>
+        <figure class="figure"><img src="Images/EventViewer4.PNG" alt="Successful login 2"></figure>
+      </div>
+      <div class="pair">
+        <figure class="figure"><img src="Images/EventViewer5.PNG" alt="Successful login 3"></figure>
+        <figure class="figure"><img src="Images/EventViewer5.1.PNG" alt="Successful login 4"></figure>
+      </div>
+      <div class="pair">
+        <figure class="figure"><img src="Images/EventViewer5.2.PNG" alt="Successful login 5"></figure>
+        <figure class="figure"><img src="Images/EventViewer5.3.PNG" alt="Successful login 6"></figure>
+      </div>
 
-    <h3>1. Monitor Failed Login Attempts</h3>
-    <img src="Images/EventViewer1.PNG" alt="Monitor Failed Login Attempts 1">
-    <img src="Images/EventViewer2.PNG" alt="Monitor Failed Login Attempts 2">
-    <img src="Images/EventViewer2.1.PNG" alt="Monitor Failed Login Attempts 3">
-    <img src="Images/EventViewer2.2.PNG" alt="Monitor Failed Login Attempts 4">
-    <img src="Images/EventViewer2.3.PNG" alt="Monitor Failed Login Attempts 5"><br>
+      <h3>3. Special Privileges Assigned</h3>
+      <div class="pair">
+        <figure class="figure"><img src="Images/EventViewer6.PNG" alt="Special privileges logon 1"></figure>
+        <figure class="figure"><img src="Images/EventViewer7.PNG" alt="Special privileges logon 2"></figure>
+      </div>
+      <figure class="figure"><img src="Images/EventViewer8.PNG" alt="Special privileges logon 3"></figure>
+    </section>
 
-    <h3>2. Monitor Successful Logins</h3>
-    <img src="Images/EventViewer3.PNG" alt="Monitor Successful Logins 1">
-    <img src="Images/EventViewer4.PNG" alt="Monitor Successful Logins 2">
-    <img src="Images/EventViewer5.PNG" alt="Monitor Successful Logins 3">
-    <img src="Images/EventViewer5.1.PNG" alt="Monitor Successful Logins 4">
-    <img src="Images/EventViewer5.2.PNG" alt="Monitor Successful Logins 5">
-    <img src="Images/EventViewer5.3.PNG" alt="Monitor Successful Logins 6"><br>
+    <!-- PowerShell -->
+    <section class="card">
+      <h2>Monitoring with PowerShell Scripts</h2>
 
-    <h3>3. Look for Special Privileges Assigned to New Logon</h3>
-    <img src="Images/EventViewer6.PNG" alt="Special Privileges Assigned 1">
-    <img src="Images/EventViewer7.PNG" alt="Special Privileges Assigned 2">
-    <img src="Images/EventViewer8.PNG" alt="Special Privileges Assigned 3"><br><br><br>
+      <h3>1. Failed Login Attempts</h3>
+      <div class="pair">
+        <figure class="figure"><img src="Images/FailedLoginMonitoringPSScript.PNG" alt="PowerShell failed logon script"></figure>
+        <figure class="figure"><img src="Images/RunningFailedLoginScript.PNG" alt="Running failed logon script"></figure>
+      </div>
 
-    <h2>Monitoring with PowerShell Scripts</h2>
+      <h3>2. Successful Logins</h3>
+      <div class="pair">
+        <figure class="figure"><img src="Images/SuccessfulLogins.PNG" alt="PowerShell successful logon script"></figure>
+        <figure class="figure"><img src="Images/RunningSuccessfulLoginScript.PNG" alt="Running successful logon script"></figure>
+      </div>
 
-    <h3>1. Monitor Failed Login Attempts</h3>
-    <img src="Images/FailedLoginMonitoringPSScript.PNG" alt="Monitor Failed Login Attempts Script">
-    <img src="Images/RunningFailedLoginScript.PNG" alt="Running Failed Login Script"><br>
+      <h3>3. Process Creation Events</h3>
+      <div class="pair">
+        <figure class="figure"><img src="Images/ProcessCreationEvents.PNG" alt="Process creation PowerShell script"></figure>
+        <figure class="figure"><img src="Images/ProcessCreationEventsScriptRun.PNG" alt="Running process creation script"></figure>
+      </div>
+    </section>
 
-    <h3>2. Monitor Successful Logins</h3>
-    <img src="Images/SuccessfulLogins.PNG" alt="Monitor Successful Logins Script">
-    <img src="Images/RunningSuccessfulLoginScript.PNG" alt="Running Successful Login Script"><br>
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
-    <h3>3. Monitor New Process Creation Events</h3>
-    <img src="Images/ProcessCreationEvents.PNG" alt="Process Creation Events Script">
-    <img src="Images/ProcessCreationEventsScriptRun.PNG" alt="Running Process Creation Events Script"><br>
-
-    <a href="../" class="back-link">Back to Lab Projects</a>
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
