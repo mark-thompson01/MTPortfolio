@@ -2,166 +2,263 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Installing Linux Ubuntu on Oracle VirtualBox</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Installing Ubuntu on Oracle VirtualBox · Mark Thompson Portfolio</title>
+  <meta name="description" content="Step‑by‑step guide to installing Ubuntu 24.04 LTS in Oracle VirtualBox: download ISO, create VM, allocate resources, boot ISO, complete installer, and post‑install updates. Includes scroll‑friendly galleries." />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2, h3 {
-      color: #00ffcc;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: block;
-      white-space: pre-wrap;
-      margin: 0.5rem 0;
-    }
-    section {
-      margin-bottom: 2rem;
-    }
-     a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:16px}
+
+    /* Figures */
+    .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;max-width:100%}
+    .figure img{display:block;height:auto;max-width:100%}
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Code */
+    pre{margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;border-radius:12px;overflow:auto;color:#e8eaf6;font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
+    code{background:#0f1424;border:1px solid #202a3f;border-radius:6px;padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
+
+    /* ===== Scroll‑friendly galleries ===== */
+    .gallery-wrap{position:relative;margin-top:10px}
+    .gallery{display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+    .gallery .item{scroll-snap-align:start}
+    .gallery .item .figure{height:100%}
+    .gallery::-webkit-scrollbar{height:10px}
+    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
+    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
+    .gallery.hide-scrollbar{scrollbar-width:none}
+    .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
+    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
+    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
+    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
+    .gbtn:hover{background:#121733}
+    .gprev{left:-6px}
+    .gnext{right:-6px}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-<h1>Installing Linux Ubuntu on Oracle VirtualBox</h1>
-<p style="font-style: italic;">The following outlines downloading and installing a Linux Ubuntu VM with Oracle VirtualBox.</p>
-  <p style="font-style: italic;">Ubuntu is a very popular Linux distribution and is good for starting out with Linux.</p><br>
+  <div class="wrap">
 
-<h2>Downloading Linux Ubuntu ISO</h2>
-    <p>You can download it directly from here on ubuntu.com:</p>
-         <a href="https://ubuntu.com/download/desktop" target="_blank">
-    Ubuntu Desktop</a><br><br><br>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-<h2>Creating Virtual Machine in Oracle VirtualBox</h2>
-<h3>1. Create Virtual Machine</h3>
-<p>In <strong>Oracle VirtualBox</strong>, I'm going to click on <strong>New</strong> and follow the prompts to create a new VM, starting with naming this one <strong>Ubuntu</strong>.</p>
-<img src="Images/ubuntu1.png" alt="ubuntu1.png" style="width:600px; height:400px;"><br><br><br>
-<h3>2. Allocating Resources:</h3>
-<ul>
-  <li><strong>Base Memory:</strong> 9469 MB</li>
-  <li><strong>Processors:</strong> 2</li>
-</ul>
-<img src="Images/ubuntu2.png" alt="ubuntu2.png" style="width:600px; height:400px;"><br><br><br>
-<h3>3. Create Virtual Hard Disk:</h3>
-<p>In this example, I'm going to allocate 200.00GB to the Virtual Hard Disk.</p>
-<img src="Images/ubuntu3.png" alt="ubuntu3.png" style="width:600px; height:400px;"><br><br><br>
-<h3>4. Configuration Summary:</h3>
-<img src="Images/ubuntu4.png" alt="ubuntu4.png" style="width:600px; height:400px;"><br><br><br>
-<h3>5. Setting the Virtual Disk to Boot from ISO</h3>
-<img src="Images/ubuntu5.png" alt="ubuntu5.png" style="width:550px; height:400px;"><br><br><br><br><br>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Installing Ubuntu on Oracle VirtualBox</span>
+    </div>
 
-<h2>Booting up the ISO</h2>
-<h3>1. GRUB Menu</h3>
-<p>Upon selecting the ISO image and powering on the VM, it'll boot up to the <strong>GRUB</strong> menu to select <strong>Try or Install Ubuntu</strong>.</p>
-<p>After selecting <strong>Try or Install Ubuntu</strong>, follow the prompts to carry out the Linux Ubuntu installation.</p>
-<img src="Images/ubuntu6.png" alt="ubuntu6.png"><br><br><br>
-<h3>2. Preparing Ubuntu</h3>
-<img src="Images/ubuntu7.5.png" alt="ubuntu7.5.png" style="width:650px; height:570px;"><br><br><br>
-<h3>3. Ubuntu 24.04 Splash Screen</h3>
-<img src="Images/ubuntu7.png" alt="ubuntu7.png" style="width:650px; height:570px;"><br><br><br>
-<h3>4. Choose your language</h3>
-<img src="Images/ubuntu8.png" alt="ubuntu8.png" style="width:650px; height:570px;"><br><br><br>
-<h3>5. Select keyboard layout</h3>
-<img src="Images/ubuntu9.png" alt="ubuntu9.png" style="width:650px; height:570px;"><br><br><br>
-<h3>6. Internet Connectivity</h3>
-<img src="Images/ubuntu10.png" alt="ubuntu10.png" style="width:650px; height:570px;"><br><br><br>
-<h3>7. Updates Available</h3>
-<img src="Images/ubuntu11.png" alt="ubuntu11.png" style="width:650px; height:570px;"><br><br><br>
-<h3>8. Update ready - Close Installer</h3>
-<img src="Images/ubuntu12.png" alt="ubuntu12.png" style="width:650px; height:570px;"><br><br><br>
-<h3>9. Ubuntu Desktop</h3>
-<img src="Images/ubuntu13.png" alt="ubuntu13.png" style="width:650px; height:570px;"><br><br><br><br><br>
+    <!-- Header -->
+    <header>
+      <h1>Installing Ubuntu on Oracle VirtualBox</h1>
+      <p class="lead">Download the Ubuntu 24.04 LTS ISO, create a VM in VirtualBox, allocate resources, boot the ISO, run through the installer, and finish with updates.</p>
+      <p>
+        <a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener">Ubuntu Desktop ISO</a>
+        ·
+        <a href="https://www.virtualbox.org/" target="_blank" rel="noopener">Oracle VirtualBox</a>
+      </p>
+    </header>
 
-<h2>Installing Linux Ubuntu 24.04 on VM</h2>
-<h3>1. Click on Install Ubuntu 24.04.2 LTS desktop icon</h3>
-<img src="Images/ubuntu15.png" alt="ubuntu15.png" style="width:300px; height:300px;"><br><br><br>
+    <!-- Prep -->
+    <section class="card">
+      <h2>Prerequisites & Recommendations</h2>
+      <ul>
+        <li>Enable virtualization in BIOS/UEFI (Intel VT‑x or AMD‑V).</li>
+        <li>Suggested VM resources: <b>2+ vCPU</b>, <b>8–12 GB RAM</b>, <b>40+ GB disk</b> for testing; you used <b>~9.2 GB RAM</b>, <b>2 CPUs</b>, and <b>200 GB disk</b> in this walkthrough.</li>
+        <li>Keep the ISO and a checksum handy; verify if needed.</li>
+      </ul>
+    </section>
 
-<h3>2. Choose language</h3>
-<img src="Images/ubuntu16.png" alt="ubuntu16.png" style="width:650px; height:500px;"><br><br><br>
+    <!-- Create VM -->
+    <section class="card">
+      <h2>Create a Virtual Machine</h2>
+      <ol>
+        <li>Open <b>Oracle VirtualBox</b> → click <b>New</b> and name it <b>Ubuntu</b>.</li>
+        <li>Allocate resources (RAM/CPU) and create a virtual disk.</li>
+        <li>Attach the Ubuntu ISO as the optical drive and set to boot.</li>
+      </ol>
 
-<h3>3. Select installation type</h3>
-<img src="Images/ubuntu17.png" alt="ubuntu17.png" style="width:650px; height:500px;"><br><br><br>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-create" class="gallery hide-scrollbar" role="region" aria-label="Create VM screenshots">
+          <article class="item"><figure class="figure"><img src="Images/ubuntu1.png" alt="New VM wizard" loading="lazy" decoding="async" /><figcaption class="figcap">1) New VM wizard.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu2.png" alt="Allocating memory and CPUs" loading="lazy" decoding="async" /><figcaption class="figcap">2) RAM & CPU allocation.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu3.png" alt="Create virtual hard disk" loading="lazy" decoding="async" /><figcaption class="figcap">3) Create virtual hard disk (e.g., 200 GB).</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu4.png" alt="Configuration summary" loading="lazy" decoding="async" /><figcaption class="figcap">4) Review configuration summary.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu5.png" alt="Attach ISO to optical drive" loading="lazy" decoding="async" /><figcaption class="figcap">5) Attach the ISO and set to boot.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-<h3>4. Applications Default & Extended selection</h3>
-<hp>In this example, I'm going to select Extended selection for apps.</p>
-<img src="Images/ubuntu18.png" alt="ubuntu18.png" style="width:650px; height:500px;"><br><br><br>
+    <!-- Boot ISO -->
+    <section class="card">
+      <h2>Boot the ISO</h2>
+      <p>Power on the VM. From the GRUB menu, choose <b>Try or Install Ubuntu</b> and follow the prompts.</p>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-boot" class="gallery hide-scrollbar" role="region" aria-label="Booting ISO screenshots">
+          <article class="item"><figure class="figure"><img src="Images/ubuntu6.png" alt="GRUB menu Try or Install Ubuntu" loading="lazy" decoding="async" /><figcaption class="figcap">GRUB: Try or Install Ubuntu.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu7.5.png" alt="Preparing Ubuntu" loading="lazy" decoding="async" /><figcaption class="figcap">Preparing Ubuntu.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu7.png" alt="Ubuntu 24.04 splash" loading="lazy" decoding="async" /><figcaption class="figcap">24.04 splash screen.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu8.png" alt="Choose language" loading="lazy" decoding="async" /><figcaption class="figcap">Choose language.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu9.png" alt="Select keyboard layout" loading="lazy" decoding="async" /><figcaption class="figcap">Keyboard layout.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu10.png" alt="Internet connectivity" loading="lazy" decoding="async" /><figcaption class="figcap">Connectivity.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu11.png" alt="Updates available" loading="lazy" decoding="async" /><figcaption class="figcap">Updates available.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu12.png" alt="Update ready close installer" loading="lazy" decoding="async" /><figcaption class="figcap">Update ready.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu13.png" alt="Ubuntu desktop" loading="lazy" decoding="async" /><figcaption class="figcap">Live desktop.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-<h3>5. Install recommended proprietary software</h3>
-  <p>I'm going to select both options:</p>
-  <ul>
-    <li>Install third-party software for graphics and Wi-Fi hardware</li>
-    <li>Download and install support for additional media formats</li>
-  </ul>
-<img src="Images/ubuntu19.png" alt="ubuntu19.png" style="width:650px; height:500px;"><br><br><br>
+    <!-- Install Ubuntu -->
+    <section class="card">
+      <h2>Install Ubuntu 24.04 LTS</h2>
+      <ol>
+        <li>On the desktop, click <b>Install Ubuntu 24.04.x LTS</b>.</li>
+        <li>Choose language & keyboard, select install type and applications.</li>
+        <li>Optionally enable third‑party/proprietary drivers and media codecs.</li>
+        <li>Partition the disk (guided is fine for a fresh VM) and confirm.</li>
+        <li>Create your user, set timezone, and start installation.</li>
+      </ol>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-install" class="gallery hide-scrollbar" role="region" aria-label="Installation screenshots">
+          <article class="item"><figure class="figure"><img src="Images/ubuntu15.png" alt="Install icon on desktop" loading="lazy" decoding="async" /><figcaption class="figcap">1) Start installer.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu16.png" alt="Choose language" loading="lazy" decoding="async" /><figcaption class="figcap">2) Language.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu17.png" alt="Installation type" loading="lazy" decoding="async" /><figcaption class="figcap">3) Install type.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu18.png" alt="Applications default or extended" loading="lazy" decoding="async" /><figcaption class="figcap">4) Apps: Extended.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu19.png" alt="Third party software and codecs" loading="lazy" decoding="async" /><figcaption class="figcap">5) Third‑party & codecs.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu20.png" alt="Disk setup" loading="lazy" decoding="async" /><figcaption class="figcap">6) Disk setup.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu21.png" alt="Create your account" loading="lazy" decoding="async" /><figcaption class="figcap">7) User account.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu22.png" alt="Select timezone" loading="lazy" decoding="async" /><figcaption class="figcap">8) Timezone.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu23.png" alt="Ready to install summary" loading="lazy" decoding="async" /><figcaption class="figcap">9) Confirm & install.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu24.png" alt="Copying files" loading="lazy" decoding="async" /><figcaption class="figcap">10) Copying files.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu25.png" alt="Installing system" loading="lazy" decoding="async" /><figcaption class="figcap">11) Installing system.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu28.png" alt="Setting up system" loading="lazy" decoding="async" /><figcaption class="figcap">12) Setting up.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu29.png" alt="Installation complete restart" loading="lazy" decoding="async" /><figcaption class="figcap">13) Complete: Restart.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu30.png" alt="Restarting system" loading="lazy" decoding="async" /><figcaption class="figcap">Restarting…</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-  <h3>6. Disk Setup</h3>
-  <img src="Images/ubuntu20.png" alt="ubuntu20.png" style="width:650px; height:500px;"><br><br><br>
-  <h3>7. Create your account</h3>
-  <img src="Images/ubuntu21.png" alt="ubuntu21.png" style="width:650px; height:500px;"><br><br><br>
-  <h3>8. Select your timezone</h3>
-  <img src="Images/ubuntu22.png" alt="ubuntu22.png" style="width:650px; height:500px;"><br><br><br>
-  <h3>9. Ready to install</h3>
-  <img src="Images/ubuntu23.png" alt="ubuntu23.png" style="width:650px; height:500px;"><br><br><br>
-  <h3>10. Installation in Progress - Copying files</h3>
-  <img src="Images/ubuntu24.png" alt="ubuntu24.png" style="width:650px; height:500px;"><br><br><br>
-  <h3>11. Installation in Progress - Installing the system</h3>
-  <img src="Images/ubuntu25.png" alt="ubuntu25.png" style="width:650px; height:500px;"><br><br><br>
-  <h3>12. Installation in Progress - Setting up system</h3>
-  <img src="Images/ubuntu28.png" alt="ubuntu28.png" style="width:800px; height:500px;"><br><br><br>
-  <h3>13. Installation Complete! Restart prompt</h3>
-  <img src="Images/ubuntu29.png" alt="ubuntu29.png">
-  <img src="Images/ubuntu30.png" alt="ubuntu30.png" style="width:800px; height:500px;"><br><br><br><br><br>
+    <!-- Post install -->
+    <section class="card">
+      <h2>Post‑Installation</h2>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+        <div id="gallery-post" class="gallery hide-scrollbar" role="region" aria-label="Post install screenshots">
+          <article class="item"><figure class="figure"><img src="Images/ubuntu31.png" alt="System restart after install" loading="lazy" decoding="async" /><figcaption class="figcap">Restart after install.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu32.png" alt="Login screen" loading="lazy" decoding="async" /><figcaption class="figcap">Login screen.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu33.png" alt="Welcome prompt after login" loading="lazy" decoding="async" /><figcaption class="figcap">Welcome prompt.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu34.png" alt="Ubuntu desktop environment" loading="lazy" decoding="async" /><figcaption class="figcap">Desktop environment.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu35.png" alt="Terminal demo" loading="lazy" decoding="async" /><figcaption class="figcap">Terminal.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu36.png" alt="Check for updates" loading="lazy" decoding="async" /><figcaption class="figcap">Check for updates.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ubuntu37.png" alt="Run available upgrades" loading="lazy" decoding="async" /><figcaption class="figcap">Run upgrades.</figcaption></figure></article>
+        </div>
+      </div>
 
-  <h2>Post Installation</h2>
-  <h3>1. System restart upon OS installation complete</h3>
-  <img src="Images/ubuntu31.png" alt="ubuntu31.png" style="width:800px; height:500px;"><br><br><br>
-  <h3>2. Login Screen:</h3>
-  <img src="Images/ubuntu32.png" alt="ubuntu32.png" style="width:800px; height:500px;"><br><br><br>
-  <h3>3. OS Welcome prompt upon logon</h3>
-  <img src="Images/ubuntu33.png" alt="ubuntu33.png" style="width:800px; height:500px;"><br><br><br>
-  <h3>4. Ubuntu Desktop Environment:</h3>
-  <img src="Images/ubuntu34.png" alt="ubuntu34.png" style="width:800px; height:500px;"><br><br>
-  <h3>5. The Linux Terminal:</h3>
-  <img src="Images/ubuntu35.png" alt="ubuntu35.png" style="width:800px; height:500px;"><br>
-  <h3>6. Check for Updates:</h3>
-  <img src="Images/ubuntu36.png" alt="ubuntu36.png"><br>
-  <h3>7. Run Available Upgrades:</h3>
-  <img src="Images/ubuntu37.png" alt="ubuntu37.png" style="width:800px; height:500px;"><br><br><br><br>
+      <h3>Update the system</h3>
+      <pre><code>sudo apt update
+sudo apt upgrade -y</code></pre>
 
-  <p>This walkthrough went over how to install <strong>Linux Ubuntu 24.04</strong>, with setting it up on a VM using <strong>Oracle VirtualBox</strong>. Starting out with downloading the Linux Ubuntu desktop ISO from the official Ubuntu site, to creating a new VM in Oracle VirtualBox and adding to the ISO image to boot up and install the OS.</p>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+      <h3>Optional: Install Guest Additions (better display, clipboard)</h3>
+      <ol>
+        <li>From the VM window menu: <b>Devices → Insert Guest Additions CD image…</b></li>
+        <li>In the guest OS, run:</li>
+      </ol>
+      <pre><code>sudo apt install -y build-essential dkms linux-headers-$(uname -r)
+sudo mount /dev/cdrom /mnt
+sudo /mnt/VBoxLinuxAdditions.run
+sudo reboot</code></pre>
+    </section>
 
+    <!-- Wrap -->
+    <section class="card">
+      <p>This walkthrough covered downloading the Ubuntu ISO, creating and configuring a VirtualBox VM, booting the installer, completing setup, and applying post‑install updates. You can reuse the gallery pattern above on other pages—just change the container id and image paths.</p>
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
 
-  
-<a href="../index.html">Back to Home</a>
+  </div>
+
+  <!-- Minimal JS for all galleries on this page -->
+  <script>
+    (function(){
+      // Attach controls for each gallery‑wrap block
+      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
+        const scroller = wrap.querySelector('.gallery');
+        if(!scroller) return;
+        const left = wrap.querySelector('.gprev');
+        const right = wrap.querySelector('.gnext');
+        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
+        if(left) left.addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
+        if(right) right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
+        scroller.addEventListener('wheel', (e) => {
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+            e.preventDefault();
+            scroller.scrollLeft += e.deltaY; // vertical wheel → horizontal scroll
+          }
+        }, {passive:false});
+      });
+    })();
+  </script>
 </body>
 </html>
