@@ -2,253 +2,384 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cross Platform Network Commands</title>
- <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
-        h1, h2, h3 {
-            color: #B22222;
-            margin-bottom: 10px;
-        }
-        p {
-          text-align: left; /* Align paragraphs to the left */
-        }
-        img {
-          height: auto;
-          border: none;
-        }
-        code {
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-family: "Courier New", Courier, monospace;
-        }
-        blockquote {
-            background-color: #1e1e1e;
-            border-left: 5px solid #4caf50;
-            padding: 10px;
-            margin: 10px 0;
-            color: #cfcfcf;
-        }
-        ul, ol {
-            margin-left: 20px;
-        }
-        .back-link {
-            color: #1E90FF;
-            text-decoration: none;
-        }
-           a {
-      color: #1e90ff;
-      text-decoration: none;
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cross-Platform Network Commands · Mark Thompson Portfolio</title>
+  <meta name="description" content="A practical tutorial for core Windows, Linux, and macOS network commands: ping, ipconfig/ifconfig/ip, ARP, DNS tools, netstat/ss, tracert/traceroute/mtr, pathping, routing, and hostname." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    </style>  <link rel="stylesheet" href="css/styles.css">
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:10px 0 6px;font-size:16px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards / sections */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    /* Figure wrapper that honors your inline img sizes */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;   /* shrink-wrap to image width */
+      max-width:100%;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%;      /* allow smaller on narrow screens */
+      /* no width:100% so your inline width/height stay in control */
+    }
+
+    /* Code blocks */
+    pre{
+      margin:10px 0;
+      padding:12px 14px;
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:12px;
+      overflow:auto;
+      color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    code{
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:6px;
+      padding:2px 6px;
+      font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      color:#e8eaf6;
+    }
+    blockquote{
+      background:#101522;
+      border-left:4px solid #4DA3FF;
+      padding:12px 14px;
+      margin:12px 0;
+      color:#cfd3e6;
+      border-radius:10px;
+    }
+
+    /* Lists & tables of contents */
+    .toc{padding:14px}
+    .toc ol{margin:6px 0 0 18px}
+    .toc a{color:var(--text);text-decoration:none}
+    .toc a:hover{color:var(--brand)}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
 </head>
 <body>
-  <h1>Cross-Platform Network Commands: A Practical Tutorial</h1>
+  <div class="wrap">
 
-  <p>
-  <a href="https://github.com/mark-thompson01/cross-platform-network-commands" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills" class="active">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Skills">Networking</a> · <span>Cross-Platform Network Commands</span>
+    </div>
 
-  <section>
-    <h2>Understanding Network Commands</h2>
-    <p style="font-style: italic;">The following outlines some <strong>Essential Network Commands</strong> used between <strong>Windows</strong>, <strong>Linux</strong>, as well as <strong>macOS</strong>.</p>
-    <p>Network commands via the <strong>Command-Line Interface (CLI)</strong> allow you to effectively diagnose, troubleshoot, and manage network connections by offering detailed insights and real-time control over network environments.</p>
-  </section><br>
+    <!-- Header -->
+    <header>
+      <h1>Cross-Platform Network Commands: A Practical Tutorial</h1>
+      <p class="lead">Core CLI tools to diagnose connectivity, DNS, routing, and paths across Windows, Linux, and macOS.</p>
+      <p>
+        <a href="https://github.com/mark-thompson01/cross-platform-network-commands" target="_blank" rel="noopener">
+          View this project on GitHub
+        </a>
+      </p>
+    </header>
 
-<h2>Table of Contents</h2>
-<ol>
-  <li><a href="#ping">Ping</a></li>
-  <li><a href="#net-config">Displaying Network Configuration</a></li>
-  <li><a href="#arp">ARP Table Inspection</a></li>
-  <li><a href="#dns">Domain Name Resolution (DNS Lookup)</a></li>
-  <li><a href="#netstat">Network Statistics and Active Connections</a></li>
-  <li><a href="#traceroute">Trace Routing (tracert, traceroute, mtr)</a></li>
-  <li><a href="#pathping">Pathping</a></li>
-  <li><a href="#routing">Route (Routing Table)</a></li>
-  <li><a href="#hostname">Hostname</a></li>
-</ol><br><br>
+    <!-- Intro -->
+    <section class="card">
+      <h2>Understanding Network Commands</h2>
+      <p style="font-style: italic;">The following outlines some <strong>Essential Network Commands</strong> used between <strong>Windows</strong>, <strong>Linux</strong>, as well as <strong>macOS</strong>.</p>
+      <p>Network commands via the <strong>Command-Line Interface (CLI)</strong> allow you to effectively diagnose, troubleshoot, and manage network connections by offering detailed insights and real-time control over network environments.</p>
+    </section>
 
+    <!-- TOC -->
+    <aside class="card toc" aria-label="Table of contents">
+      <h2>Table of Contents</h2>
+      <ol>
+        <li><a href="#ping">Ping</a></li>
+        <li><a href="#net-config">Displaying Network Configuration</a></li>
+        <li><a href="#arp">ARP Table Inspection</a></li>
+        <li><a href="#dns">Domain Name Resolution (DNS Lookup)</a></li>
+        <li><a href="#netstat">Network Statistics and Active Connections</a></li>
+        <li><a href="#traceroute">Trace Routing (tracert, traceroute, mtr)</a></li>
+        <li><a href="#pathping">Pathping</a></li>
+        <li><a href="#routing">Route (Routing Table)</a></li>
+        <li><a href="#hostname">Hostname</a></li>
+      </ol>
+    </aside>
 
-    <section>
-    <h3 id="ping">1. Ping</h3>
-    <p><strong>Testing connectivity and measuring latency:</strong></p>
-    <pre>
+    <!-- 1. Ping -->
+    <section class="card" id="ping">
+      <h3>1. Ping</h3>
+      <p><strong>Testing connectivity and measuring latency:</strong></p>
+      <pre>
 Windows:
 ping example.com
 ping -t example.com
 ping -n 10 example.com
 ping -l 1500 example.com
-    </pre><br>
-<pre>ping example.com</pre>
-<p>This sends <strong>four ICMP echo request packets</strong> to <code>example.com</code><br> to test if the host is reachable and how long it takes for each response.</p>
-<p><strong>Use Case:</strong><br> Quick connectivity test.</p>
-<img src="Images/ping.PNG" alt="ping.PNG"><br><br><br>
-<pre>ping -t example.com</pre>
-<p>This sends <strong>continuous pings</strong> to <code>example.com</code> until manually stopped with <code>ctrl + c</code><br> It's useful for <strong>monitoring real-time connectivity</strong> or <strong>detecting intermittent packet loss</strong>.</p>
-<p><strong>Use Case:</strong><br> Ongoing monitoring for uptime and stability.</p>
-<img src="Images/ping2.PNG" alt="Ping2.PNG"><br><br><br>
-<pre>ping -n 10 example.com</pre>
-<p>Sends <strong>exactly 10 ping requests</strong> to <code>example.com</code>, instead of the default 4.</p>
-<p>The <code>-n</code> switch allows you to specify the <strong>number of echo requests</strong> to send.</p>
-<p><strong>Use Case:</strong><br> More thorough connectivity testing without going infinite.</p>      
-<img src="Images/ping3.PNG" alt="ping3.PNG"><br><br><br>
-<pre>ping -l 1500 example.com</pre>
-<p>Sends a ping to <code>example.com</code> with a <strong>custom packet size</strong> of 1500 bytes (instead of the default 32 bytes).</p>
-<p>The <code>-l</code> option allows you to <strong>stress test the MTU</strong> and check for fragmentation.</p> 
-<p><strong>Use Case:</strong><br> MTU path discovery or testing network handling of large packets.</p>
-<img src="Images/[omg4.PNG" alt="[omg4.PNG"><br><br><br>
-    
- <pre>
+      </pre>
+
+      <pre>ping example.com</pre>
+      <p>This sends <strong>four ICMP echo request packets</strong> to <code>example.com</code><br> to test if the host is reachable and how long it takes for each response.</p>
+      <p><strong>Use Case:</strong><br> Quick connectivity test.</p>
+      <div class="figure">
+        <img src="Images/ping.PNG" alt="ping.PNG">
+      </div>
+
+      <pre>ping -t example.com</pre>
+      <p>This sends <strong>continuous pings</strong> to <code>example.com</code> until manually stopped with <code>ctrl + c</code><br> It's useful for <strong>monitoring real-time connectivity</strong> or <strong>detecting intermittent packet loss</strong>.</p>
+      <p><strong>Use Case:</strong><br> Ongoing monitoring for uptime and stability.</p>
+      <div class="figure">
+        <img src="Images/ping2.PNG" alt="Ping2.PNG">
+      </div>
+
+      <pre>ping -n 10 example.com</pre>
+      <p>Sends <strong>exactly 10 ping requests</strong> to <code>example.com</code>, instead of the default 4.</p>
+      <p>The <code>-n</code> switch allows you to specify the <strong>number of echo requests</strong> to send.</p>
+      <p><strong>Use Case:</strong><br> More thorough connectivity testing without going infinite.</p>
+      <div class="figure">
+        <img src="Images/ping3.PNG" alt="ping3.PNG">
+      </div>
+
+      <pre>ping -l 1500 example.com</pre>
+      <p>Sends a ping to <code>example.com</code> with a <strong>custom packet size</strong> of 1500 bytes (instead of the default 32 bytes).</p>
+      <p>The <code>-l</code> option allows you to <strong>stress test the MTU</strong> and check for fragmentation.</p>
+      <p><strong>Use Case:</strong><br> MTU path discovery or testing network handling of large packets.</p>
+      <div class="figure">
+        <!-- keep your sizing if you add it; also tolerate the bracketed filename if present -->
+        <img src="Images/omg4.PNG" data-fallback="Images/[omg4.PNG" alt="omg4.PNG">
+      </div>
+
+      <pre>
 Linux:
 ping example.com
 ping -c 4 example.com
 ping -i 0.5 example.com
 ping -s 10 example.com
- </pre><br>
-<pre>ping example.com</pre>
-<p>Sends <strong>continuous ICMP echo requests</strong> to <code>example.com</code></p>
-<p>Until manually stopped (usually with <code>ctrl + c</code>)</p>
-<p>This is the <strong>default behavior</strong> on most Linux systems:</p>
-<p><strong>Use Case:</strong><br> Live monitoring of reachability and response times.</p>
-<img src="Images/Linux/ping1.png" alt="ping1.png" style="width:650px; height:400px;"><br><br><br>
-<pre>ping -c 4 example.com</pre>
-<p>Sends <strong>exactly 4 ping requests</strong> to <code>example.com</code> and then stops automatically.</p>
-<p>The <code>-c</code> flag stands for <strong>"count"</strong>.</p>
-<p><strong>Use Case:</strong><br> Simple, quick connectivity test — very similar to Windows default ping behavior.</p>      
-<img src="Images/Linux/ping2.png" alt="ping2.png" style="width:650px; height:400px;"><br><br><br>
-<pre>ping -i 0.5 example.com</pre>
-<p>Sends pings to <code>example.com</code> at <strong>0.5-second intervals</strong> between each request.</p>
-<p>The <code>-i</code> flag sets the <strong>interval</strong> in seconds.</p>
-<p><strong>Use Case:</strong><br> Faster-than-default pinging for <strong>fine-grained timing analysis</strong> or when observing <strong>short-lived connectivity changes</strong>.</p>      
-<img src="Images/Linux/ping3.png" alt="ping3.png" style="width:650px; height:400px;"><br><br><br>
-<pre>ping -s 10 example.com</pre>
-<p>Sends pings with a <strong>custom ICMP payload size of 10 bytes</strong>, not counting the 8-byte ICMP header.</p>
-<p>Total size sent = 18 bytes.</p>
-<p><strong>Use Case:</strong><br> Useful for <strong>testing small packet delivery</strong> or for troubleshooting <strong>fragmentation or MTU-related issues</strong>.</p>      
-<img src="Images/Linux/ping4.png" alt="ping4.png" style="width:650px; height:400px;">
+      </pre>
 
+      <pre>ping example.com</pre>
+      <p>Sends <strong>continuous ICMP echo requests</strong> to <code>example.com</code></p>
+      <p>Until manually stopped (usually with <code>ctrl + c</code>)</p>
+      <p>This is the <strong>default behavior</strong> on most Linux systems:</p>
+      <p><strong>Use Case:</strong><br> Live monitoring of reachability and response times.</p>
+      <div class="figure">
+        <img src="Images/Linux/ping1.png" alt="ping1.png" style="width:650px; height:400px;">
+      </div>
 
-  </section><br><br><br><br>
+      <pre>ping -c 4 example.com</pre>
+      <p>Sends <strong>exactly 4 ping requests</strong> to <code>example.com</code> and then stops automatically.</p>
+      <p>The <code>-c</code> flag stands for <strong>"count"</strong>.</p>
+      <p><strong>Use Case:</strong><br> Simple, quick connectivity test — very similar to Windows default ping behavior.</p>
+      <div class="figure">
+        <img src="Images/Linux/ping2.png" alt="ping2.png" style="width:650px; height:400px;">
+      </div>
 
-  <section>
-    <h3 id="net-config">2. Displaying Network Configuration</h3>
-    <p><strong>Quickly retrieving network interface configurations and IP details<br> to address network connectivity and configuration issues promptly:</strong></p>
-    <pre>
+      <pre>ping -i 0.5 example.com</pre>
+      <p>Sends pings to <code>example.com</code> at <strong>0.5-second intervals</strong> between each request.</p>
+      <p>The <code>-i</code> flag sets the <strong>interval</strong> in seconds.</p>
+      <p><strong>Use Case:</strong><br> Faster-than-default pinging for <strong>fine-grained timing analysis</strong> or when observing <strong>short-lived connectivity changes</strong>.</p>
+      <div class="figure">
+        <img src="Images/Linux/ping3.png" alt="ping3.png" style="width:650px; height:400px;">
+      </div>
+
+      <pre>ping -s 10 example.com</pre>
+      <p>Sends pings with a <strong>custom ICMP payload size of 10 bytes</strong>, not counting the 8-byte ICMP header.</p>
+      <p>Total size sent = 18 bytes.</p>
+      <p><strong>Use Case:</strong><br> Useful for <strong>testing small packet delivery</strong> or for troubleshooting <strong>fragmentation or MTU-related issues</strong>.</p>
+      <div class="figure">
+        <img src="Images/Linux/ping4.png" alt="ping4.png" style="width:650px; height:400px;">
+      </div>
+    </section>
+
+    <!-- 2. Network Config -->
+    <section class="card" id="net-config">
+      <h3>2. Displaying Network Configuration</h3>
+      <p><strong>Quickly retrieving network interface configurations and IP details<br> to address network connectivity and configuration issues promptly:</strong></p>
+      <pre>
 Windows:
 ipconfig /all
 ipconfig /release
 ipconfig /renew
 ipconfig /flushdns
-    </pre><br>
-<pre>ipconfig /all</pre>
-<p>Displays <strong>detailed network configuration</strong> for all network adapters on the system.</p>
-<p>Including IP addresses, MAC addresses, DNS servers, DHCP lease info, and more.</p>
-<p><strong>Use Case:</strong><br> Great for <strong>network troubleshooting</strong>, verifying DNS settings, checking DHCP status, or seeing physical (MAC) addresses.</p>
-<img src="Images/ipconfig-all.PNG" alt="ipconfig-all.PNG" style="width:650px; height:400px;"><br><br><br><br>
-<pre>ipconfig /flushdns</pre>
-<p>Clears the <strong>local DNS resolver cache</strong>, forcing the system to <strong>re-fetch DNS records</strong> the next time a domain is queried.</p>
-<p><strong>Use Case:</strong><br> Used to fix <strong>DNS resolution issues</strong>, especially when a site has changed IP addresses or DNS has become stale or corrupted.</p>
-<img src="Images/ipconfig-flushdns.PNG" alt="ipconfig-flushdns.PNG"><br><br><br><br>
-<pre>ipconfig /release</pre>
-<p>Releases the <strong>current IP address</strong> lease from the DHCP server for all adapters (or a specific one if specified).</p>
-<p><strong>Use Case:</strong><br> Typically used to <strong>force-disconnect</strong> from a network or to troubleshoot DHCP assignment problems.</p><br>
-<pre>ipconfig /renew</pre>
-<p>Then requests a <strong>new IP address</strong> from the DHCP server for all adapters (or a specific one if specified).</p>
-<p><strong>Use Case:</strong><br> Helps <strong>reconnect to a network</strong>, especially after a release or when troubleshooting automatic IP assignment issues.</p>
-<img src="Images/ipconfig-renew-release.PNG" alt="ipconfig-renew-release.PNG" style="width:500px; height:700px;"><br><br><br><br>
-      
-    <pre>
+      </pre>
+
+      <pre>ipconfig /all</pre>
+      <p>Displays <strong>detailed network configuration</strong> for all network adapters on the system.</p>
+      <p>Including IP addresses, MAC addresses, DNS servers, DHCP lease info, and more.</p>
+      <p><strong>Use Case:</strong><br> Great for <strong>network troubleshooting</strong>, verifying DNS settings, checking DHCP status, or seeing physical (MAC) addresses.</p>
+      <div class="figure">
+        <img src="Images/ipconfig-all.PNG" alt="ipconfig-all.PNG" style="width:650px; height:400px;">
+      </div>
+
+      <pre>ipconfig /flushdns</pre>
+      <p>Clears the <strong>local DNS resolver cache</strong>, forcing the system to <strong>re-fetch DNS records</strong> the next time a domain is queried.</p>
+      <p><strong>Use Case:</strong><br> Used to fix <strong>DNS resolution issues</strong>, especially when a site has changed IP addresses or DNS has become stale or corrupted.</p>
+      <div class="figure">
+        <img src="Images/ipconfig-flushdns.PNG" alt="ipconfig-flushdns.PNG">
+      </div>
+
+      <pre>ipconfig /release</pre>
+      <p>Releases the <strong>current IP address</strong> lease from the DHCP server for all adapters (or a specific one if specified).</p>
+      <p><strong>Use Case:</strong><br> Typically used to <strong>force-disconnect</strong> from a network or to troubleshoot DHCP assignment problems.</p>
+
+      <pre>ipconfig /renew</pre>
+      <p>Then requests a <strong>new IP address</strong> from the DHCP server for all adapters (or a specific one if specified).</p>
+      <p><strong>Use Case:</strong><br> Helps <strong>reconnect to a network</strong>, especially after a release or when troubleshooting automatic IP assignment issues.</p>
+      <div class="figure">
+        <img src="Images/ipconfig-renew-release.PNG" alt="ipconfig-renew-release.PNG" style="width:500px; height:700px;">
+      </div>
+
+      <pre>
 Linux:
 ifconfig
 ip a
 sudo dhclient -r
 sudo dhclient
 sudo systemctl restart NetworkManager
-    </pre><br>
-<p>Displays the <strong>IP address, MAC address, and interface status</strong> for all active network interfaces. It's the <strong>legacy</strong> tool for interface configuration and inspection.</p>
-<p><strong>Use Case:</strong><br>Quick way to <strong> check current IPs</strong>, interface names (like <code>eth0</code>, <strong>wlan0</strong>), or bring interfaces up/down (e.g., <code>ifconfig eth0 down</code>)</p>  
-<img src="Images/Linux/ifconfig.png" alt="ifconfig.png" style="width:650px; height:400px;"><br><br><br><br>
-<p>Displays <strong>all IP address information</strong> for each network interface, including IPv4/IPv6, loopback, and virtual interfaces. This command is part of the more modern <code>iproute2</code> suite.</p>
-<p><strong>Use Case:</strong><br> Preferred over <code>ifconfig</code> in modern systems for a <strong>more comprehensive and scriptable</strong> view of network config.</p>    
-<img src="Images/Linux/ipa.png" alt="ipa.png" style="width:650px; height:400px;"><br><br><br><br>
-<pre>sudo dhclient -r</pre>
-<p>Sends a <strong>DHCP release request</strong> to the server and removes the current IP lease from the system.</p>
-<p><strong>Use Case:</strong><br> Useful for <strong>disconnecting</strong> from the network or <strong>clearing stale DHCP settings</strong> before getting a new lease.</p>
-<br>
-<pre>sudo dhclient</pre>
-<p>Requests a <strong>new IP address</strong> from the DHCP server for a network interface. If no interface is specified, it attempts on all interfaces.</p>
-<p><strong>Use Case:</strong><br> Similar to <code>ipconfig /renew</code> — used when you need to <strong>reacquire an IP address</strong> or <strong>force DHCP negotiation</strong>.</p>  
-<img src="Images/Linux/dhcp.png" alt="dhcp.png" style="width:300px; height:150px;"><br><br><br><br>
-<pre>sudo systemctl restart NetworkManager</pre>
-<p>Fully <strong>restarts the NetworkManager service</strong>, which manages network interfaces, DHCP leases, and DNS on many Linux distributions.</p>
-<p><strong>Use Case:</strong><br> Used when facing <strong>network misbehavior</strong> or configuration changes that didn't apply.</p>
-<p>It resets network connectivity without rebooting.<br></p>
+      </pre>
 
-<img src="Images/Linux/RestartNM.png" alt="RestartNM.png"><br>
-<p><strong>Scenarios for use:</strong></p>
-<ul>
-  <li>IP acquisition issues</li>
-  <li>Outdated DNS cache</li>
-</ul>
-  </section><br><br><br>
+      <p>Displays the <strong>IP address, MAC address, and interface status</strong> for all active network interfaces. It's the <strong>legacy</strong> tool for interface configuration and inspection.</p>
+      <p><strong>Use Case:</strong><br>Quick way to <strong>check current IPs</strong>, interface names (like <code>eth0</code>, <strong>wlan0</strong>), or bring interfaces up/down (e.g., <code>ifconfig eth0 down</code>)</p>
+      <div class="figure">
+        <img src="Images/Linux/ifconfig.png" alt="ifconfig.png" style="width:650px; height:400px;">
+      </div>
 
+      <p>Displays <strong>all IP address information</strong> for each network interface, including IPv4/IPv6, loopback, and virtual interfaces. This command is part of the more modern <code>iproute2</code> suite.</p>
+      <p><strong>Use Case:</strong><br> Preferred over <code>ifconfig</code> in modern systems for a <strong>more comprehensive and scriptable</strong> view of network config.</p>
+      <div class="figure">
+        <img src="Images/Linux/ipa.png" alt="ipa.png" style="width:650px; height:400px;">
+      </div>
 
+      <pre>sudo dhclient -r</pre>
+      <p>Sends a <strong>DHCP release request</strong> to the server and removes the current IP lease from the system.</p>
+      <p><strong>Use Case:</strong><br> Useful for <strong>disconnecting</strong> from the network or <strong>clearing stale DHCP settings</strong> before getting a new lease.</p>
 
+      <pre>sudo dhclient</pre>
+      <p>Requests a <strong>new IP address</strong> from the DHCP server for a network interface. If no interface is specified, it attempts on all interfaces.</p>
+      <p><strong>Use Case:</strong><br> Similar to <code>ipconfig /renew</code> — used when you need to <strong>reacquire an IP address</strong> or <strong>force DHCP negotiation</strong>.</p>
+      <div class="figure">
+        <img src="Images/Linux/dhcp.png" alt="dhcp.png" style="width:300px; height:150px;">
+      </div>
 
-  <section>
-    <h3 id="arp">3. ARP Table Inspection</h3>
-    <p><strong>Inspecting ARP tables to correlate IP addresses with MAC addresses:</strong></p>
-    <pre>arp -a</pre>
-  </section>
-  <img src="Images/arp-a.PNG" alt="arp-a.PNG">
-      <p><strong>Benefits:</strong>
+      <pre>sudo systemctl restart NetworkManager</pre>
+      <p>Fully <strong>restarts the NetworkManager service</strong>, which manages network interfaces, DHCP leases, and DNS on many Linux distributions.</p>
+      <p><strong>Use Case:</strong><br> Used when facing <strong>network misbehavior</strong> or configuration changes that didn't apply.</p>
+      <p>It resets network connectivity without rebooting.</p>
+      <div class="figure">
+        <img src="Images/Linux/RestartNM.png" alt="RestartNM.png">
+      </div>
+
+      <p><strong>Scenarios for use:</strong></p>
+      <ul>
+        <li>IP acquisition issues</li>
+        <li>Outdated DNS cache</li>
+      </ul>
+    </section>
+
+    <!-- 3. ARP -->
+    <section class="card" id="arp">
+      <h3>3. ARP Table Inspection</h3>
+      <p><strong>Inspecting ARP tables to correlate IP addresses with MAC addresses:</strong></p>
+      <pre>arp -a</pre>
+      <div class="figure">
+        <img src="Images/arp-a.PNG" alt="arp-a.PNG">
+      </div>
+      <p><strong>Benefits:</strong></p>
       <ul>
         <li>Identify devices</li>
         <li>Troubleshoot connectivity</li>
         <li>Detect unauthorized devices</li>
-      </ul><br><br><br>
-  
+      </ul>
+    </section>
 
-  <section>
-    <h3 id="dns">4. Domain Name Resolution (DNS Lookup)</h3>
-    <p><strong>Resolving domain names to IP addresses for verifying DNS records:</strong></p>
-    <pre>
+    <!-- 4. DNS -->
+    <section class="card" id="dns">
+      <h3>4. Domain Name Resolution (DNS Lookup)</h3>
+      <p><strong>Resolving domain names to IP addresses for verifying DNS records:</strong></p>
+      <pre>
 Windows:
 nslookup example.com
 nslookup -type=mx example.com
 nslookup -type=ns example.com
-    </pre><br>
-<pre>nslookup example.com</pre>
-<p>The <strong>nslookup</strong> command in Windows queries the nameserver for the IP address of the given host or vice versa in performing a reverse DNS lookup.</p>
-<p>Launches an <strong>interactive DNS lookup tool</strong> that allows you to manually query DNS records.</p>
-<p>Running it by itself drops you into a prompt where you can type in domains and get their associated IP addresses.</p>
-<p><strong>Use Case:</strong><br> Useful for <strong>troubleshooting DNS resolution</strong> and verifying that a domain points to the correct IP address.</p>      
-<img src="Images/nslookup1.PNG" alt="nslookup1.PNG"><br><br><br><br>
-<pre>nslookup -type=mx example.com</pre>
-<p>This command queries the <strong>Mail Exchange (MX) record</strong> for <code>example.com</code>, showing which mail servers are responsible for handling email for the domain.</p>
-<p><strong>Use Case:</strong><br> Helpful for <strong>email delivery diagnostics</strong>, checking <strong>mail server priorities</strong>, or verifying <strong>email infrastructure</strong>.</p>      
-<img src="Images/nslookup2.PNG" alt="nslookup2.PNG"><br><br><br><br>
-<pre>nslookup -type=ns example.com</pre>
-<p>Retrieves the <strong>Name Server (NS) records</strong> for <code>example.com</code>, identifying which DNS servers are authorized for the domain.</p>
-<p><strong>Use Case:</strong><br> Used to <strong>validate domain delegation</strong>, ensure DNS servers are responding, or troubleshoot <strong>DNS propagation issues</strong>.</p>      
-<img src="Images/nslookup3.PNG" alt="nslookup3.PNG">
-    <pre><br><br>
+      </pre>
+
+      <pre>nslookup example.com</pre>
+      <p>The <strong>nslookup</strong> command in Windows queries the nameserver for the IP address of the given host or vice versa in performing a reverse DNS lookup.</p>
+      <p>Launches an <strong>interactive DNS lookup tool</strong> that allows you to manually query DNS records.</p>
+      <p>Running it by itself drops you into a prompt where you can type in domains and get their associated IP addresses.</p>
+      <p><strong>Use Case:</strong><br> Useful for <strong>troubleshooting DNS resolution</strong> and verifying that a domain points to the correct IP address.</p>
+      <div class="figure">
+        <img src="Images/nslookup1.PNG" alt="nslookup1.PNG">
+      </div>
+
+      <pre>nslookup -type=mx example.com</pre>
+      <p>This command queries the <strong>Mail Exchange (MX) record</strong> for <code>example.com</code>, showing which mail servers are responsible for handling email for the domain.</p>
+      <p><strong>Use Case:</strong><br> Helpful for <strong>email delivery diagnostics</strong>, checking <strong>mail server priorities</strong>, or verifying <strong>email infrastructure</strong>.</p>
+      <div class="figure">
+        <img src="Images/nslookup2.PNG" alt="nslookup2.PNG">
+      </div>
+
+      <pre>nslookup -type=ns example.com</pre>
+      <p>Retrieves the <strong>Name Server (NS) records</strong> for <code>example.com</code>, identifying which DNS servers are authorized for the domain.</p>
+      <p><strong>Use Case:</strong><br> Used to <strong>validate domain delegation</strong>, ensure DNS servers are responding, or troubleshoot <strong>DNS propagation issues</strong>.</p>
+      <div class="figure">
+        <img src="Images/nslookup3.PNG" alt="nslookup3.PNG">
+      </div>
+
+      <pre>
 Linux:
 host example.com
 host -t MX example.com
@@ -256,181 +387,251 @@ host -t NS example.com
 dig example.com
 dig MX example.com
 dig NS example.com
-    </pre>
-<pre>host example.com</pre>
-<p>The <code>host</code> command is a <strong>simple DNS lookup utility</strong> that returns DNS records for the given domain.</p>
-<ul>
-  <li><code>host example.com</code> returns the <strong>A record</strong>, showing the IPv4 address of the domain.</li>
-  <li><code>host -t mx example.com</code> queries the <strong>MX records</strong>, listing mail servers responsible for handling email for the domain.</li>
-  <li><code>host -t ns example.com</code> displays the <strong>NS records</strong>, identifying the authoritative name servers for the domain.</li>
-</ul>
-<p><strong>Use Case:</strong><br>Ideal for <strong>quick DNS lookups</strong> when you want a fast, human readable response without the detailed output of <code>dig</code>.</p>
-<p>Perfect for verifying <strong>basic DNS, mail routing,</strong> and <strong>domain delegation</strong> settings.</p>
-<img src="Images/Linux/host.png" alt="host.png" style="width:650px; height:400px;"><br><br><br><br>
-<pre>dig example.com</pre>
-<p>Performs a <strong>DNS query</strong> for <code>example.com</code>, returning A records (IPv4 addresses) by default.</p>
-<p>Including a <strong>detailed breakdown</strong> of the query and response.</p>
-<p><strong>Use Case:</strong><br> Preferred tool for <strong>troubleshooting DNS issues:</strong>, seeing <strong>exact response times</strong>, and analyzing <strong>query behavior</strong>.</p>
-<img src="Images/Linux/dig1.png" alt="dig1.png" style="width:650px; height:400px;"><br><br><br><br>
-<pre>dig MX example.com</pre>
-<p>Queries the <strong>Mail Exchange (MX) records</strong> for <code>example.com</code>:</p>
-<p>Showing the priority and hostname of each mail server used for delivering email.</p>
-<p><strong>Use Case:</strong><br>Used to <strong>inspect email routing setup</strong>, diagnosing <strong>mail delivery problems</strong>, of <strong>verify MX changes</strong> after DNS edits.</p>
-<img src="Images/Linux/dig2.png" alt="dig2.png" style="width:650px; height:400px;"><br><br><br><br>
-<pre>dig NS example.com</pre>
-<p>Retrieves the <strong>Name Server (NS records</strong> for <code>example.com</code><strong>)</strong></p>
-<p>showing the authoritative DNS servers responsible for handling domain resolution.</p>
-<p><strong>Use Case:</strong><br> Helpful for <strong>checking domain delegation</strong>, identifying <strong>authoritative zones</strong>, and <strong>troubleshooting DNS propagation.</strong></p>     
-<img src="Images/Linux/dig3.png" alt="dig3.png" style="width:650px; height:400px;"><br><br>
-    <p><strong>Troubleshooting scenarios:</strong></p>
-    <ul>
-      <li>DNS misconfiguration</li>
-      <li>Email delivery issues</li>
-    </ul>
-  </section><br><br><br>
+      </pre>
 
-  <section>
-    <h3 id="netstat">5. Network Statistics and Active Connections</h3>
-    <p><strong>Monitoring current connections and ports:</strong></p>
-    <pre>
+      <pre>host example.com</pre>
+      <p>The <code>host</code> command is a <strong>simple DNS lookup utility</strong> that returns DNS records for the given domain.</p>
+      <ul>
+        <li><code>host example.com</code> returns the <strong>A record</strong>, showing the IPv4 address of the domain.</li>
+        <li><code>host -t mx example.com</code> queries the <strong>MX records</strong>, listing mail servers responsible for handling email for the domain.</li>
+        <li><code>host -t ns example.com</code> displays the <strong>NS records</strong>, identifying the authoritative name servers for the domain.</li>
+      </ul>
+      <p><strong>Use Case:</strong><br>Ideal for <strong>quick DNS lookups</strong> when you want a fast, human-readable response without the detailed output of <code>dig</code>. Perfect for verifying <strong>basic DNS, mail routing,</strong> and <strong>domain delegation</strong> settings.</p>
+      <div class="figure">
+        <img src="Images/Linux/host.png" alt="host.png" style="width:650px; height:400px;">
+      </div>
+
+      <pre>dig example.com</pre>
+      <p>Performs a <strong>DNS query</strong> for <code>example.com</code>, returning A records (IPv4 addresses) by default, including a <strong>detailed breakdown</strong> of the query and response.</p>
+      <p><strong>Use Case:</strong><br> Preferred tool for <strong>troubleshooting DNS issues</strong>, seeing <strong>exact response times</strong>, and analyzing <strong>query behavior</strong>.</p>
+      <div class="figure">
+        <img src="Images/Linux/dig1.png" alt="dig1.png" style="width:650px; height:400px;">
+      </div>
+
+      <pre>dig MX example.com</pre>
+      <p>Queries the <strong>Mail Exchange (MX) records</strong> for <code>example.com</code> and shows priority & hostnames.</p>
+      <p><strong>Use Case:</strong><br>Used to <strong>inspect email routing setup</strong>, diagnose <strong>mail delivery problems</strong>, or <strong>verify MX changes</strong> after DNS edits.</p>
+      <div class="figure">
+        <img src="Images/Linux/dig2.png" alt="dig2.png" style="width:650px; height:400px;">
+      </div>
+
+      <pre>dig NS example.com</pre>
+      <p>Retrieves the <strong>Name Server (NS) records</strong> for <code>example.com</code>, showing the authoritative DNS servers responsible for handling domain resolution.</p>
+      <p><strong>Use Case:</strong><br> Helpful for <strong>checking domain delegation</strong>, identifying <strong>authoritative zones</strong>, and <strong>troubleshooting DNS propagation</strong>.</p>
+      <div class="figure">
+        <img src="Images/Linux/dig3.png" alt="dig3.png" style="width:650px; height:400px;">
+      </div>
+
+      <p><strong>Troubleshooting scenarios:</strong></p>
+      <ul>
+        <li>DNS misconfiguration</li>
+        <li>Email delivery issues</li>
+      </ul>
+    </section>
+
+    <!-- 5. Netstat / ss -->
+    <section class="card" id="netstat">
+      <h3>5. Network Statistics and Active Connections</h3>
+      <p><strong>Monitoring current connections and ports:</strong></p>
+      <pre>
 Windows:
 netstat -a
 netstat -an
 netstat -b
-    </pre>
-<p>The <code>netstat</code> command displays <strong>network connections</strong>, <strong>listening ports,</strong> and <strong>routing tables</strong>.</p>
-<ul>
- <li><code>netstat -a</code> shows all active TCP/UDP connections and listening ports, resolving hostnames and service names.</li>
- <li><code>netstat -an</code> displays the same data but in numeric form, skpping DNS or service name resolution for faster and more raw output.</li>
- <li><code>netstat -b</code> shows which executable is associated with each connection or listening port (e.g., <code>chrome.exe</code> or <code>svchost.exe</code>.</li>  
-</ul>
-<p><strong>Use Case:</strong><br> Great for identifying <strong>open ports</strong>, <strong>active connections</strong>, <strong>unauthorized programs</strong>, or <strong>malicious activity</strong> tied to running processes.</p>
-<pre>netstat -a</pre>
-<img src="Images/netstat1.PNG" alt="netstat1.PNG" style="width:550px; height:350px:"><br><br>
-<pre>netstat -an</pre>
-<img src="Images/netstat3.PNG" alt="netstat3.PNG" style="width:550px; height:400px:"><br><br>
-<pre>netstat -b</pre>
-<img src="Images/netstat-an.PNG" alt="netstat-an.PNG" style="width:550px; height:400px:"><br><br><br>
+      </pre>
 
-   <pre>
+      <p>The <code>netstat</code> command displays <strong>network connections</strong>, <strong>listening ports</strong>, and <strong>routing tables</strong>.</p>
+      <ul>
+        <li><code>netstat -a</code> shows all active TCP/UDP connections and listening ports, resolving hostnames and service names.</li>
+        <li><code>netstat -an</code> displays the same data but in numeric form, skipping DNS/service name resolution for faster, raw output.</li>
+        <li><code>netstat -b</code> shows which executable is associated with each connection or listening port (e.g., <code>chrome.exe</code> or <code>svchost.exe</code>).</li>
+      </ul>
+      <p><strong>Use Case:</strong><br> Great for identifying <strong>open ports</strong>, <strong>active connections</strong>, <strong>unauthorized programs</strong>, or <strong>malicious activity</strong> tied to running processes.</p>
+
+      <pre>netstat -a</pre>
+      <div class="figure">
+        <img src="Images/netstat1.PNG" alt="netstat1.PNG" style="width:550px; height:350px;">
+      </div>
+
+      <pre>netstat -an</pre>
+      <div class="figure">
+        <img src="Images/netstat3.PNG" alt="netstat3.PNG" style="width:550px; height:400px;">
+      </div>
+
+      <pre>netstat -b</pre>
+      <div class="figure">
+        <img src="Images/netstat-an.PNG" alt="netstat-an.PNG" style="width:550px; height:400px;">
+      </div>
+
+      <pre>
 Linux:
 netstat -an
 ss -tuln
-    </pre>
-<p>These commands show <strong>active</strong> and <strong>listening network sockets</strong> on a Linux system.</p>
-<p><strong>Use Case:</strong><br> Perfect for <strong>port auditing</strong>, <strong>service monitoring</strong>, or <strong>detecting unauthorized listeners.</strong></p>
-<pre>netstat -an</pre>
-<img src="Images/Linux/netstat-an.png" alt="netstat-an.png" style="width:650px; height:400px;"><br>
-<pre>ss -tuln</pre>
-<img src="Images/Linux/ss.png" alt="ss.png" style="width:650px; height:400px;">
-  <p><strong>Applicable scenarios:</strong></p>
-  <ul>
-    <li>Unauthorized connections</li>
-    <li>Port conflicts</li>
-    <li>General curiosity of what established connections are on a given system</li>
-  </ul>
-  </section><br><br><br>
+      </pre>
+      <p>These commands show <strong>active</strong> and <strong>listening network sockets</strong> on a Linux system.</p>
+      <p><strong>Use Case:</strong><br> Perfect for <strong>port auditing</strong>, <strong>service monitoring</strong>, or <strong>detecting unauthorized listeners</strong>.</p>
 
+      <pre>netstat -an</pre>
+      <div class="figure">
+        <img src="Images/Linux/netstat-an.png" alt="netstat-an.png" style="width:650px; height:400px;">
+      </div>
 
-  <section>
-    <h3 id="traceroute">6. Trace Routing</h3>
-    <p><strong>Systematically analyzing the route network packets take:</strong></p>
-    <pre>
+      <pre>ss -tuln</pre>
+      <div class="figure">
+        <img src="Images/Linux/ss.png" alt="ss.png" style="width:650px; height:400px;">
+      </div>
+
+      <p><strong>Applicable scenarios:</strong></p>
+      <ul>
+        <li>Unauthorized connections</li>
+        <li>Port conflicts</li>
+        <li>General curiosity of what established connections are on a given system</li>
+      </ul>
+    </section>
+
+    <!-- 6. Traceroute -->
+    <section class="card" id="traceroute">
+      <h3>6. Trace Routing</h3>
+      <p><strong>Systematically analyzing the route network packets take:</strong></p>
+      <pre>
 Windows:
 tracert google.com
-    </pre>
-<p>Sends <strong>ICMP echo requests</strong> to trace the <strong>network path</strong> packets take from your machine to a destination.</p>
-<p>It shows each <strong>hop</strong> along the way, along with the <strong>response time</strong> for each.</p>
-<p><strong>Use Case:</strong><br>Helps <strong>identify where delays or failures</strong> occur between your system and a remote host.</p>
-<p>Useful for diagnosing <strong>routing</strong> or <strong>latency issues</strong>.</p>    
-<img src="Images/tracert.png" alt="tracert.png" style="width:350px; height:200px:"><br>
-    <pre>
+      </pre>
+      <p>Sends <strong>ICMP echo requests</strong> to trace the <strong>network path</strong> packets take from your machine to a destination.</p>
+      <p>It shows each <strong>hop</strong> along the way, along with the <strong>response time</strong> for each.</p>
+      <p><strong>Use Case:</strong><br>Helps <strong>identify where delays or failures</strong> occur between your system and a remote host. Useful for diagnosing <strong>routing</strong> or <strong>latency issues</strong>.</p>
+      <div class="figure">
+        <img src="Images/tracert.png" alt="tracert.png" style="width:350px; height:200px;">
+      </div>
+
+      <pre>
 Linux:
 traceroute example.com
-    </pre>
-    <p>Simiar to <code>tracert</code> but uses <strong>UDP packets</strong> by default instead of ICMP.</p>
-    <p>It traces the route from the local system to a destination IP or domain, showing each router (hop) along the way.</p>
-    <p><strong>Use Case:</strong><br> Used to <strong>track the path of packets</strong>, and can help detect <strong>routing loops, packet loss points</strong>, or <strong>performance bottlebecks</strong> across networks.</p>
-    <img src="Images/Linux/traceroute.png" alt="traceroute.png" style="width:650px; height:400px;"><br><br>
-    <pre>
+      </pre>
+      <p>Similar to <code>tracert</code> but uses <strong>UDP packets</strong> by default instead of ICMP.</p>
+      <p>It traces the route from the local system to a destination IP or domain, showing each router (hop) along the way.</p>
+      <p><strong>Use Case:</strong><br> Used to <strong>track the path of packets</strong>, and can help detect <strong>routing loops, packet loss points</strong>, or <strong>performance bottlenecks</strong> across networks.</p>
+      <div class="figure">
+        <img src="Images/Linux/traceroute.png" alt="traceroute.png" style="width:650px; height:400px;">
+      </div>
+
+      <pre>
 Linux (using MTR):
 mtr example.com
-  </pre>
-<p>Combines the functionality of both <strong>ping</strong> and <strong>traceroute</strong> into a <strong>real-time</strong>, <strong>continuously updating tool</strong>.</p>
-<p>It shows the <strong>live performance of each hop</strong>, including <strong>packet loss</strong> and <strong>latecy statistics</strong>.</p>
-<p><strong>Use Case:</strong> Excellent for <strong>ongoing network diagnostics</strong>, spotting <strong>intermittent issues</strong>, or visualzing <strong>route health over time</strong>.</p>
-<img src="Images/Linux/mtr.png" alt="mtr.png" style="width:675px; height:400px;"><br>
-<img src="Images/Linux/mtr2.png" alt="mtr2.png" style="width:675px; height:400px;"> 
-  
-<p><strong>mtr</strong> also called <strong>(My Traceroute)</strong> in <strong>Linux</strong> is the network diagostic tool that combines<br> the functionalities of <strong>traceroute</strong> and <strong>ping</strong>.</p>
-</section><br>
+      </pre>
+      <p>Combines the functionality of both <strong>ping</strong> and <strong>traceroute</strong> into a <strong>real-time</strong>, <strong>continuously updating tool</strong>.</p>
+      <p>It shows the <strong>live performance of each hop</strong>, including <strong>packet loss</strong> and <strong>latency statistics</strong>.</p>
+      <p><strong>Use Case:</strong> Excellent for <strong>ongoing network diagnostics</strong>, spotting <strong>intermittent issues</strong>, or visualizing <strong>route health over time</strong>.</p>
+      <div class="figure">
+        <img src="Images/Linux/mtr.png" alt="mtr.png" style="width:675px; height:400px;">
+      </div>
+      <div class="figure">
+        <img src="Images/Linux/mtr2.png" alt="mtr2.png" style="width:675px; height:400px;">
+      </div>
 
-   <p><strong>Scenarios for use:</strong></p>
-    <ul>
-      <li>Slow connectivity</li>
-      <li>Network outages</li>
-      <li>General curiosity of overall traffic flow</li>
-    </ul>
-  </section><br><br>
+      <p><strong>mtr</strong> (My Traceroute) in <strong>Linux</strong> is the network diagnostic tool that combines the functionalities of <strong>traceroute</strong> and <strong>ping</strong>.</p>
 
-  <section>
-    <h3 id="pathping">7. Pathping</h3>
-    <p><strong>Comprehensive analysis of latency and packet loss:</strong></p>
-    <pre>
+      <p><strong>Scenarios for use:</strong></p>
+      <ul>
+        <li>Slow connectivity</li>
+        <li>Network outages</li>
+        <li>General curiosity of overall traffic flow</li>
+      </ul>
+    </section>
+
+    <!-- 7. Pathping -->
+    <section class="card" id="pathping">
+      <h3>7. Pathping</h3>
+      <p><strong>Comprehensive analysis of latency and packet loss:</strong></p>
+      <pre>
 Windows:
 pathping example.com
-    </pre>
-      <img src="Images/pathping.png" alt="pathping.png">
-      <p>The <strong>pathping</strong> command in <strong>Windows</strong> is a network diagnostic tool that combines the functionality of <strong>traceroute</strong> and <strong>ping</strong>.</p> 
-      <p>Providing detailed information about network performance to be able to identify any potential issues along the path of a network route.</p><br><br><br>
+      </pre>
+      <div class="figure">
+        <img src="Images/pathping.png" alt="pathping.png">
+      </div>
+      <p>The <strong>pathping</strong> command in <strong>Windows</strong> is a network diagnostic tool that combines the functionality of <strong>traceroute</strong> and <strong>ping</strong>.</p>
+      <p>Providing detailed information about network performance to be able to identify any potential issues along the path of a network route.</p>
+    </section>
 
-
-  <section>
-    <h3 id="routing">8. Routing</h3>
-    <p><strong>Route (View routing tables):</strong></p>
-    <pre>
+    <!-- 8. Routing -->
+    <section class="card" id="routing">
+      <h3>8. Routing</h3>
+      <p><strong>Route (View routing tables):</strong></p>
+      <pre>
 Windows:
 route print
-    </pre>
-<p>Displays the <strong>entire routing table</strong> used by Windows to determine how packets are forwarded across the network.</p>
-<p><strong>Use Case:</strong><br> Essential for <strong>diagnosing routing issues</strong>, checking the <strong>default gateway</strong>, verifying <strong>network paths</strong>, or auditing <strong>static routes</strong>.</p>
-<img src="Images/routeprint.PNG" alt="routeprint.PNG" style="width:550px; height:400px:"><br><br>
-   <pre>
+      </pre>
+      <p>Displays the <strong>entire routing table</strong> used by Windows to determine how packets are forwarded across the network.</p>
+      <p><strong>Use Case:</strong><br> Essential for <strong>diagnosing routing issues</strong>, checking the <strong>default gateway</strong>, verifying <strong>network paths</strong>, or auditing <strong>static routes</strong>.</p>
+      <div class="figure">
+        <img src="Images/routeprint.PNG" alt="routeprint.PNG" style="width:550px; height:400px;">
+      </div>
+
+      <pre>
 Linux:
 route -n
 ip route
-   </pre>
-<p>These commands show the <strong>Linux kernel routing table</strong>, helping determine how outbound traffic is routed.</p>
-<p><strong>Use Case:</strong><br> Used for <strong>gateway verification</strong>, <strong>troubleshooting unreachable networks,</strong>, or <strong>understanding packet flow</strong> based on routing properly.</p>
-<img src="Images/Linux/route.png" alt="route.png" style="width:675px; height:400px;"><br><br><br>
+      </pre>
+      <p>These commands show the <strong>Linux kernel routing table</strong>, helping determine how outbound traffic is routed.</p>
+      <p><strong>Use Case:</strong><br> Used for <strong>gateway verification</strong>, <strong>troubleshooting unreachable networks</strong>, or understanding packet flow based on routing properly.</p>
+      <div class="figure">
+        <img src="Images/Linux/route.png" alt="route.png" style="width:675px; height:400px;">
+      </div>
+    </section>
 
-    <h3 id="hostname">9. Hostname (View or change hostname)</h3>
-    <p>Displays the <strong>name of the current system (host)</strong> on the network.</p>
-    <p>This name identifies the machine in a LAN or DNS environment and is often used for network management and domain joining.</p>
-    <p><strong>Use Case:</strong><br>Useful for <strong>verifying system identity</strong>, and<strong> remote session awareness</strong>.</p>
-    <pre>
+    <!-- 9. Hostname -->
+    <section class="card" id="hostname">
+      <h3>9. Hostname (View or change hostname)</h3>
+      <p>Displays the <strong>name of the current system (host)</strong> on the network.</p>
+      <p>This name identifies the machine in a LAN or DNS environment and is often used for network management and domain joining.</p>
+      <p><strong>Use Case:</strong><br>Useful for <strong>verifying system identity</strong>, and <strong>remote session awareness</strong>.</p>
+
+      <pre>
 Windows:
 hostname
-    </pre>
+      </pre>
+      <div class="figure">
+        <img src="Images/hostname.PNG" alt="hostname.PNG">
+      </div>
 
-<img src="Images/hostname.PNG" alt="hostname.PNG"><br><br>
-
-    <pre>
+      <pre>
 Linux:
 hostname
 sudo hostnamectl set-hostname new-hostname
-    </pre>
-<p>The <code>sudo hostnamectl set-hostname new-hostname</code> command <strong>permanently changes the systems hostname</strong> on a modern Linux system using <code>systemd</code>.</p>
-<p><strong>Use Case:</strong><br> Commonly used during <strong>initial server setup</strong>, <strong>renaming machines</strong>, or <strong>customizing hosts</strong> in a lab or production environment.</p>
-<p>After running this command, the new hostname will take effect immediately.</p>
-<img src="Images/Linux/hostname.png" alt="hostname.png" style="width:675px; height:400px;">
-      
-  
-  </section><br><br><br>
+      </pre>
+      <p>The <code>sudo hostnamectl set-hostname new-hostname</code> command <strong>permanently changes the system’s hostname</strong> on a modern Linux system using <code>systemd</code>.</p>
+      <p><strong>Use Case:</strong><br> Commonly used during <strong>initial server setup</strong>, <strong>renaming machines</strong>, or <strong>customizing hosts</strong> in a lab or production environment. After running this command, the new hostname will take effect immediately.</p>
+      <div class="figure">
+        <img src="Images/Linux/hostname.png" alt="hostname.png" style="width:675px; height:400px;">
+      </div>
+    </section>
 
-    <p>Mastering these network commands significantly empowers you to diagnose, troubleshoot, and optimize network environments. This guide provided practical usage and scenarios for each command, delivering crucial insights into network performance and maintenance.</p>
+    <!-- Outro -->
+    <section class="card">
+      <p>Mastering these network commands significantly empowers you to diagnose, troubleshoot, and optimize network environments. This guide provided practical usage and scenarios for each command, delivering crucial insights into network performance and maintenance.</p>
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
+    <!-- Footer -->
+    <footer>
+      <div>© <span id="y">2025</span> Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 
-   <a href="../index.html">Back to Home</a>
+  <!-- Tiny script: image fallback for the one filename variant & dynamic year -->
+  <script>
+    document.querySelectorAll('img[data-fallback]').forEach(img=>{
+      img.addEventListener('error', function h(){
+        const alt = img.getAttribute('data-fallback');
+        if(alt && img.src !== alt){ img.removeEventListener('error', h); img.src = alt; }
+      });
+    });
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
