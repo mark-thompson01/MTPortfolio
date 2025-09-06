@@ -1,92 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrueNAS Attack & Defense Lab</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
-        h1, h2, h3 {
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-        code {
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-family: "Courier New", Courier, monospace;
-        }
-        blockquote {
-            background-color: #1e1e1e;
-            border-left: 5px solid #4caf50;
-            padding: 10px;
-            margin: 10px 0;
-            color: #cfcfcf;
-        }
-        img {
-            display: block;
-            margin: 20px 0;
-            max-width: 75%;
-            height: auto;
-            border: 1px solid #444;
-            border-radius: 5px;
-        }
-        ul, ol {
-            margin-left: 20px;
-        }
-        .back-link {
-            color: #1E90FF;
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NAS Security Attack &amp; Defense Lab · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hands-on NAS security labs demonstrating attack techniques and matching defenses: SSH brute force, successful compromise, privilege escalation, and persistence." />
+
+  <!-- THEME -->
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    /* Buttons */
+    .btn{
+      display:inline-block;margin-top:8px;padding:8px 12px;border:1px solid var(--card-border);
+      border-radius:10px;background:rgba(255,255,255,.03);color:var(--text);text-decoration:none
+    }
+    .btn:hover{background:rgba(255,255,255,.06);border-color:#3a4a67}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
 </head>
 <body>
-    <h1>NAS Security Attack & Defense Lab</h1>
-    <p>
-  <a href="https://github.com/mark-thompson01/nas-security-attack---defense-lab/blob/main/README.md" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
+  <div class="wrap">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> · <span>NAS Security Attack &amp; Defense Lab</span>
+    </div>
 
-    <p>Welcome to the <strong>NAS Security Attack & Defense Lab</strong> demonstration. This project is designed to showcase hands-on scenarios involving both offensive and defensive cybersecurity techniques. Through four structured lab exercises, I present simulated attacks and corresponding mitigation strategies to provide a comprehensive understanding of different threats and how to counteract them effectively.</p>
-​
-    <p>This lab serves as an opportunity to demonstrate my ability to think critically, analyze security risks, and implement practical solutions. It reflects my passion for exploring both red and blue team activities, emphasizing the importance of understanding the mindset of attackers while building strong defenses.</p>
-​
-    <h2>Overview of the Labs:</h2>
-    <ul>
-        <li><strong>Lab 1: SSH Brute Force Attack</strong><br>Demonstrates a method of how attackers perform brute force attacks in attempt to compromise SSH services. Followed by steps to detect the attack in progress and implement defensive measures to harden the system against future attempts.</li><br>
-        <li><strong>Lab 2: Successful Brute Force Login</strong><br>Outlines what happens when a brute force attack succeeds in accessing a system. Followed by steps to detect unauthorized logins, respond effectively, and mitigate vulnerabilities to prevent reoccurrence.</li><br>
-        <li><strong>Lab 3: Privilege Escalation</strong><br>A purposely set misconfiguration is exploited in an executable program binary to carry out a successful privilege escalation. Followed by steps to detect and mitigate.</li><br>
-        <li><strong>Lab 4: Persistence</strong><br>One of several persistence techniques is demonstrated to maintain ease of access to the system. Followed by steps to detect and mitigate.</li>
-    </ul>
-​
-​
-​
-    <h2>Lab Objectives:</h2>
-     <ul>
-        <li><strong>Hands-on Demonstrations:</strong> Each lab goes through different attack scenarios and provides step-by-step defenses.</li><br>
-        <li><strong>Educational Insights:</strong> Clear explanations of attack methods and mitigation techniques pertaining to each scenario.</li><br>
-        <li><strong>Presentation of Findings:</strong> Writing a professional penetration tester or cybersecurity analyst report to finalize the presentation after showcasing each lab.</li>
-    </ul><br>
+    <!-- Header -->
+    <header>
+      <h1>NAS Security Attack &amp; Defense Lab</h1>
+      <p class="lead">Four hands-on labs simulating common attack paths against a NAS/Linux host and the blue-team responses to detect, contain, and harden.</p>
+      <p><a href="https://github.com/mark-thompson01/nas-security-attack---defense-lab/blob/main/README.md" target="_blank" rel="noopener">View this project on GitHub</a></p>
+    </header>
 
-    <p>The following are the detailed Attack & Defense Labs 1 through 4, along with the analysis and reporting documentation.</p>
+    <!-- Overview -->
+    <section class="card">
+      <h2>Overview</h2>
+      <p>This project showcases offensive and defensive workflows side-by-side. Each lab demonstrates an attack technique followed by practical detection and mitigation steps—highlighting both attacker mindset and defender tradecraft.</p>
+    </section>
 
+    <!-- Labs summary -->
+    <section class="card">
+      <h2>Labs</h2>
+      <ul>
+        <li><strong>Lab 1: SSH Brute Force Attack</strong> — Simulates brute forcing SSH, then detecting the attack and hardening to resist future attempts.</li>
+        <li><strong>Lab 2: Successful Brute Force Login</strong> — Examines what happens after compromise, including detection of unauthorized access and recovery steps.</li>
+        <li><strong>Lab 3: Privilege Escalation</strong> — Exploits a deliberate binary misconfiguration to escalate privileges, with detection and remediation.</li>
+        <li><strong>Lab 4: Persistence</strong> — Demonstrates one method to maintain access, plus ways to detect and evict it.</li>
+      </ul>
+    </section>
 
-    <li><a href="Lab%201%20SSH%20Brute%20Force%20Attack">Lab 1 - SSH Brute Force Attack</a></li>
-    <li><a href="Lab%202%20Successful%20Brute%20Force%20Login">Lab 2 - Successful Brute Force Login</a></li>
-    <li><a href="Lab%203%20Privilege%20Escalation">Lab 3 - Privilege Escalation</a></li>
-    <li><a href="Lab%204%20Persistence">Lab 4 - Persistence</a></li>
-    <li><a href="Analysis%20&%20Reporting">Analysis & Reporting</li><br>
+    <!-- Objectives -->
+    <section class="card">
+      <h2>Objectives</h2>
+      <ul>
+        <li><strong>Hands-on Demonstrations:</strong> Clear, step-by-step attack and defense scenarios.</li>
+        <li><strong>Educational Insights:</strong> Explanations of techniques and mitigations per lab.</li>
+        <li><strong>Presentation of Findings:</strong> Wrap-up reporting in a professional format.</li>
+      </ul>
+    </section>
 
-    <a href="../" class=back-link">Back to Lab Projects</a>
+    <!-- Launch links -->
+    <section class="card" aria-labelledby="labs-nav">
+      <h2 id="labs-nav">Open a Lab</h2>
+      <p>
+        <a class="btn" href="Lab%201%20SSH%20Brute%20Force%20Attack/">Lab 1 — SSH Brute Force Attack</a>
+      </p>
+      <p>
+        <a class="btn" href="Lab%202%20Successful%20Brute%20Force%20Login/">Lab 2 — Successful Brute Force Login</a>
+      </p>
+      <p>
+        <a class="btn" href="Lab%203%20Privilege%20Escalation/">Lab 3 — Privilege Escalation</a>
+      </p>
+      <p>
+        <a class="btn" href="Lab%204%20Persistence/">Lab 4 — Persistence</a>
+      </p>
+      <p>
+        <a class="btn" href="Analysis%20%26%20Reporting/">Analysis &amp; Reporting</a>
+      </p>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
