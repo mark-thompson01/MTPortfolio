@@ -49,19 +49,7 @@
       box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    /* Code */
-    pre{
-      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
-      border-radius:12px;overflow:auto;color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
-    }
-    code{
-      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-    }
-
-    /* Figures: scroll-friendly images */
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -79,6 +67,11 @@
       height:auto;
       border-radius:10px;
       object-fit:contain;
+    }
+    /* Bigger treatment for Smart Ping code */
+    .figure--code img{
+      width:clamp(640px, 92%, 1100px);
+      max-height:80vh;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
@@ -118,85 +111,49 @@
     <!-- Gather Basic Network Information -->
     <section class="card" id="basic-info">
       <h2>Gather Basic Network Information</h2>
-      <p>Collects <code>hostname</code>, <code>ifconfig</code>/<code>ip a</code>, <code>arp -a</code>, <code>route</code>/<code>ip route</code> in one go — useful for quick snapshots and duplicate IP triage.</p>
-      <figure class="figure">
-        <img src="Images/scriptcode.png" alt="Script code to gather basic network information" loading="lazy" decoding="async">
-      </figure>
-      <figure class="figure">
-        <img src="Images/scriptrun.png" alt="Running the basic network information script 1" loading="lazy" decoding="async">
-      </figure>
-      <figure class="figure">
-        <img src="Images/scriptrun1.png" alt="Running the basic network information script 2" loading="lazy" decoding="async">
-      </figure>
-
+      <figure class="figure"><img src="Images/scriptcode.png" alt="Script code to gather basic network information"></figure>
+      <figure class="figure"><img src="Images/scriptrun.png" alt="Running the basic network information script 1"></figure>
+      <figure class="figure"><img src="Images/scriptrun1.png" alt="Running the basic network information script 2"></figure>
       <h3>Schedule to run every hour</h3>
-      <figure class="figure">
-        <img src="Images/crontab.png" alt="Opening crontab editor" loading="lazy" decoding="async">
-        <figcaption class="figcap">Open crontab to schedule the job.</figcaption>
-      </figure>
-      <figure class="figure">
-        <img src="Images/crontab 2.png" alt="Crontab entry example for hourly run" loading="lazy" decoding="async">
-        <figcaption class="figcap">Example entry: <code>0 * * * * /path/to/net-info.sh</code></figcaption>
-      </figure>
+      <figure class="figure"><img src="Images/crontab.png" alt="Opening crontab editor"><figcaption class="figcap">Open crontab to schedule the job.</figcaption></figure>
+      <figure class="figure"><img src="Images/crontab 2.png" alt="Crontab entry example for hourly run"><figcaption class="figcap">Example entry: <code>0 * * * * /path/to/net-info.sh</code></figcaption></figure>
     </section>
 
     <!-- Listing Active Network Connections -->
     <section class="card" id="active-connections">
       <h2>Listing Active Network Connections</h2>
-      <p>Runs <code>ss -tuln</code> and <code>netstat -an</code> to view listening and established sockets — useful for spotting odd ports or verifying expected services.</p>
-      <figure class="figure">
-        <img src="Images/active_connectionscode.png" alt="Script code to list active connections" loading="lazy" decoding="async">
-      </figure>
-      <figure class="figure">
-        <img src="Images/active_connectionsrun.png" alt="Script output of active connections" loading="lazy" decoding="async">
-      </figure>
-      <figure class="figure">
-        <img src="Images/activeconnecctionsmodify1.png" alt="Refining the active connections output" loading="lazy" decoding="async">
-      </figure>
+      <figure class="figure"><img src="Images/active_connectionscode.png" alt="Script code to list active connections"></figure>
+      <figure class="figure"><img src="Images/active_connectionsrun.png" alt="Script output of active connections"></figure>
+      <figure class="figure"><img src="Images/activeconnecctionsmodify1.png" alt="Refining the active connections output"></figure>
     </section>
 
     <!-- DHCP Refresh -->
     <section class="card" id="dhcp-refresh">
       <h2>DHCP Refresh</h2>
-      <p>Quickly renews the lease and resets the interface to resolve transient network issues.</p>
-      <figure class="figure">
-        <img src="Images/dhcprefreshcode.png" alt="Script code to refresh DHCP" loading="lazy" decoding="async">
-      </figure>
-      <figure class="figure">
-        <img src="Images/dhcprefreshrun.png" alt="DHCP refresh script run output" loading="lazy" decoding="async">
-      </figure>
+      <figure class="figure"><img src="Images/dhcprefreshcode.png" alt="Script code to refresh DHCP"></figure>
+      <figure class="figure"><img src="Images/dhcprefreshrun.png" alt="DHCP refresh script run output"></figure>
     </section>
 
     <!-- DNS Troubleshooting -->
     <section class="card" id="dns">
       <h2>DNS Troubleshooting</h2>
-      <p>Combines lookups and resolution tests to validate DNS behavior for specific hosts and record types.</p>
-      <figure class="figure">
-        <img src="Images/dnsscriptcode.png" alt="Script code for DNS troubleshooting" loading="lazy" decoding="async">
-      </figure>
-      <figure class="figure">
-        <img src="Images/dnsscriptrun1.png" alt="DNS troubleshooting script run output 1" loading="lazy" decoding="async">
-      </figure>
-      <figure class="figure">
-        <img src="Images/dnsscriptrun2.png" alt="DNS troubleshooting script run output 2" loading="lazy" decoding="async">
-      </figure>
+      <figure class="figure"><img src="Images/dnsscriptcode.png" alt="Script code for DNS troubleshooting"></figure>
+      <figure class="figure"><img src="Images/dnsscriptrun1.png" alt="DNS troubleshooting script run output 1"></figure>
+      <figure class="figure"><img src="Images/dnsscriptrun2.png" alt="DNS troubleshooting script run output 2"></figure>
     </section>
 
     <!-- traceroute and mtr -->
     <section class="card" id="tracing">
       <h2>traceroute and mtr</h2>
-      <p>Path tracing and latency/packet loss visibility over time.</p>
-      <figure class="figure">
-        <img src="Images/mtrscriptcode.png" alt="Script code using traceroute and mtr" loading="lazy" decoding="async">
-      </figure>
+      <figure class="figure"><img src="Images/mtrscriptcode.png" alt="Script code using traceroute and mtr"></figure>
     </section>
 
     <!-- Smart Ping -->
     <section class="card" id="smart-ping">
       <h2>Smart Ping</h2>
       <p>A slightly smarter ping wrapper for quick health checks.</p>
-      <figure class="figure">
-        <img src="Images/smartpingcode.png" alt="Smart ping script code" loading="lazy" decoding="async">
+      <figure class="figure figure--code">
+        <img src="Images/smartpingcode.png" alt="Smart ping script code">
       </figure>
     </section>
 
