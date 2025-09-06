@@ -2,101 +2,218 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Network Command Automation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Network Command Automation · Mark Thompson Portfolio</title>
+  <meta name="description" content="Raspberry Pi 5 scripting & automation: Bash scripts to gather network info, list active connections, refresh DHCP, troubleshoot DNS, trace routes, and smart ping. Scroll-friendly screenshots." />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2 {
-      color: #00ffcc;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: inline-block;
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    section {
-      margin-bottom: 2rem;
+
+    /* Code */
+    pre{
+      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
+      border-radius:12px;overflow:auto;color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
     }
-    ul {
-      margin-top: 0.5rem;
-      padding-left: 1.5rem;
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
-    p {
-      line-height: 1.6;
+
+    /* Figures: scroll-friendly images */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
     }
-    img {
-         display: block;
-         margin: 20px 0;
-         max-width: 75%;
-         height: auto;
-         border: 1px solid #444;
-         border-radius: 5px;
+    .figure img{
+      display:block;
+      margin:0 auto;
+      width:clamp(480px, 85%, 960px);
+      max-height:70vh;
+      height:auto;
+      border-radius:10px;
+      object-fit:contain;
     }
-     a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-<h1>Network Command Automation</h1>
+  <div class="wrap">
 
-  <p>The following are some network command bash scripts I put together to be able to run on a given endpoint or host. Running multiple network commands automatically when troubleshooting network connectivity, gathering pertinent details, analyzing active connections, troubleshooting DNS issues, and tracing a connection path.</p><br>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <h2>Gather Basic Network Information</h2>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Scripting &amp; Automation (Raspberry Pi 5)</a> · <span>Network Command Automation</span>
+    </div>
 
-  <p>This script gathers basic network information with the hostname, ifconfig, ip a, arp -a, route and ip route network commands in Linux.</p>
+    <!-- Header -->
+    <header>
+      <h1>Network Command Automation</h1>
+      <p class="lead">Bash scripts to quickly gather host network data, list active connections, refresh interfaces, troubleshoot DNS, and trace paths — optimized for Raspberry Pi 5.</p>
+    </header>
 
-  <p>There are different scenarios where running any one or multiple of these commands becomes beneficial. There are cases when gathering all of this information at once can speed up the process given the circumstance. With that in mind, this script gathers a plethora of details to help in troubleshooting network connectivity, gathering ip configuration details, duplicate IP addresses, and retrieving routing information. </p>
+    <section class="card">
+      <p>These helpers let you run multiple network commands automatically for troubleshooting and audits. They’re handy for checking connectivity, IP configuration, routing, suspicious connections, DNS resolution, and path latency.</p>
+    </section>
 
-  <img src="Images/scriptcode.png" alt="scriptcode.png">
-  <img src="Images/scriptrun.png" alt="scriptrun.png">
-  <img src="Images/scriptrun1.png" alt="scriptrun1.png">
+    <!-- Gather Basic Network Information -->
+    <section class="card" id="basic-info">
+      <h2>Gather Basic Network Information</h2>
+      <p>Collects <code>hostname</code>, <code>ifconfig</code>/<code>ip a</code>, <code>arp -a</code>, <code>route</code>/<code>ip route</code> in one go — useful for quick snapshots and duplicate IP triage.</p>
+      <figure class="figure">
+        <img src="Images/scriptcode.png" alt="Script code to gather basic network information" loading="lazy" decoding="async">
+      </figure>
+      <figure class="figure">
+        <img src="Images/scriptrun.png" alt="Running the basic network information script 1" loading="lazy" decoding="async">
+      </figure>
+      <figure class="figure">
+        <img src="Images/scriptrun1.png" alt="Running the basic network information script 2" loading="lazy" decoding="async">
+      </figure>
 
-  <h3>Setting the script to run every hour:</h3>
-  <img src="Images/crontab.png" alt="crontab.png">
-  <img src="Images/crontab 2.png" alt="crontab 2.png"><br><br>
-  
+      <h3>Schedule to run every hour</h3>
+      <figure class="figure">
+        <img src="Images/crontab.png" alt="Opening crontab editor" loading="lazy" decoding="async">
+        <figcaption class="figcap">Open crontab to schedule the job.</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="Images/crontab 2.png" alt="Crontab entry example for hourly run" loading="lazy" decoding="async">
+        <figcaption class="figcap">Example entry: <code>0 * * * * /path/to/net-info.sh</code></figcaption>
+      </figure>
+    </section>
 
-  <h2>Listing Active Network Connections</h2>
+    <!-- Listing Active Network Connections -->
+    <section class="card" id="active-connections">
+      <h2>Listing Active Network Connections</h2>
+      <p>Runs <code>ss -tuln</code> and <code>netstat -an</code> to view listening and established sockets — useful for spotting odd ports or verifying expected services.</p>
+      <figure class="figure">
+        <img src="Images/active_connectionscode.png" alt="Script code to list active connections" loading="lazy" decoding="async">
+      </figure>
+      <figure class="figure">
+        <img src="Images/active_connectionsrun.png" alt="Script output of active connections" loading="lazy" decoding="async">
+      </figure>
+      <figure class="figure">
+        <img src="Images/activeconnecctionsmodify1.png" alt="Refining the active connections output" loading="lazy" decoding="async">
+      </figure>
+    </section>
 
-  <p>This script runs the commands ss -tuln and netstat -an commands together to list active network connections in two different formats.-</p>
-  <p>Useful for analyzing suspicious or questionable connections on a host, verifying connections to certain IPs, or if you're curious on what active connections there are.</p>
-  
-  <img src="Images/active_connectionscode.png" alt="active_connectioncode.png">
-  <img src="Images/active_connectionsrun.png" alt="active_connectionsrun.png">
-  <img src="Images/activeconnecctionsmodify1.png" alt="activeconnecctionsmodify1.png"><br><br>
+    <!-- DHCP Refresh -->
+    <section class="card" id="dhcp-refresh">
+      <h2>DHCP Refresh</h2>
+      <p>Quickly renews the lease and resets the interface to resolve transient network issues.</p>
+      <figure class="figure">
+        <img src="Images/dhcprefreshcode.png" alt="Script code to refresh DHCP" loading="lazy" decoding="async">
+      </figure>
+      <figure class="figure">
+        <img src="Images/dhcprefreshrun.png" alt="DHCP refresh script run output" loading="lazy" decoding="async">
+      </figure>
+    </section>
 
-  <h2>DHCP Refresh</h2>
-  <p>This script refreshes the network connection of a given host. Useful when troubleshooting connectivity issues or in circumstances of renewing a lease with a DHCP server.</p>
-  <img src="Images/dhcprefreshcode.png" alt="dhcprefreshcode.png">
-  <img src="Images/dhcprefreshrun.png" alt="dhcprefreshrun.png"><br><br>
+    <!-- DNS Troubleshooting -->
+    <section class="card" id="dns">
+      <h2>DNS Troubleshooting</h2>
+      <p>Combines lookups and resolution tests to validate DNS behavior for specific hosts and record types.</p>
+      <figure class="figure">
+        <img src="Images/dnsscriptcode.png" alt="Script code for DNS troubleshooting" loading="lazy" decoding="async">
+      </figure>
+      <figure class="figure">
+        <img src="Images/dnsscriptrun1.png" alt="DNS troubleshooting script run output 1" loading="lazy" decoding="async">
+      </figure>
+      <figure class="figure">
+        <img src="Images/dnsscriptrun2.png" alt="DNS troubleshooting script run output 2" loading="lazy" decoding="async">
+      </figure>
+    </section>
 
+    <!-- traceroute and mtr -->
+    <section class="card" id="tracing">
+      <h2>traceroute and mtr</h2>
+      <p>Path tracing and latency/packet loss visibility over time.</p>
+      <figure class="figure">
+        <img src="Images/mtrscriptcode.png" alt="Script code using traceroute and mtr" loading="lazy" decoding="async">
+      </figure>
+    </section>
 
-<h2>DNS Troubleshooting</h2>
-<img src="Images/dnsscriptcode.png" alt="dnsscriptcode.png">
-<img src="Images/dnsscriptrun1.png" alt="dnsscriptrun.1.png">
-<img src="Images/dnsscriptrun2.png" alt="dnsscriptrun.2.png"><br><br>
+    <!-- Smart Ping -->
+    <section class="card" id="smart-ping">
+      <h2>Smart Ping</h2>
+      <p>A slightly smarter ping wrapper for quick health checks.</p>
+      <figure class="figure">
+        <img src="Images/smartpingcode.png" alt="Smart ping script code" loading="lazy" decoding="async">
+      </figure>
+    </section>
 
-<h2>traceroute and mtr</h2>
-  <img src="Images/mtrscriptcode.png" alt="mtrscriptcode.png"><br><br>
+    <!-- Wrap -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
 
-<h2>Smart Ping</h2>
-  <img src="Images/smartpingcode.png" alt="smartpingcode.png">
-
- <a href="../index.html">Back to Home</a>
+  </div>
 </body>
 </html>
-
-
