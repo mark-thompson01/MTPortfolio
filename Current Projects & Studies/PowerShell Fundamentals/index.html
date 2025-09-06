@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PowerShell Fundamentals · Mark Thompson Portfolio</title>
-  <meta name="description" content="A practical walkthrough of PowerShell fundamentals: versions, .NET/.NET Core, cmdlets, syntax, objects, scripting basics, execution policy, debugging, and real-world use cases." />
+  <title>Linux: An Introduction · Mark Thompson Portfolio</title>
+  <meta name="description" content="A concise introduction to Linux: history, where it runs, kernel vs. distributions, key components, and why it matters." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -23,7 +23,7 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
+    /* Top nav (tabs) */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
     .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
@@ -38,7 +38,6 @@
     h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     h2{margin:0 0 10px;font-size:22px}
     h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:10px 0 6px;font-size:16px}
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
     .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
@@ -50,46 +49,12 @@
       box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    /* Figures: preserve your existing sizes, only downscale for narrow screens */
-    .figure{
-      border:1px solid var(--card-border);
-      border-radius:12px;
-      background:#0e1220;
-      padding:8px;
-      margin:12px auto;
-      width:max-content;
-      max-width:100%;
-    }
-    .figure img{
-      display:block;
-      height:auto;
-      max-width:100%;
-    }
-
-    /* Code/pre */
-    pre{
-      margin:10px 0;
-      padding:12px 14px;
-      background:#0f1424;
-      border:1px solid #202a3f;
-      border-radius:12px;
-      overflow:auto;
-      color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
-    }
+    /* Inline code */
     code{
       background:#0f1424;border:1px solid #202a3f;border-radius:6px;
       padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Table */
-    table{border-collapse:collapse;width:100%;max-width:680px}
-    th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #2A3447}
-    th{font-weight:700;color:var(--text)}
-    .tag{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
-
-    /* Lists */
     ul,ol{padding-left:22px;margin:8px 0}
 
     /* Footer */
@@ -112,529 +77,85 @@
 
     <!-- Breadcrumb -->
     <div class="crumbs">
-      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>PowerShell Fundamentals</span>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Linux: An Introduction</span>
     </div>
 
     <!-- Header -->
     <header>
-      <h1>PowerShell Fundamentals</h1>
-      <p class="lead">A practical walkthrough of PowerShell’s object-based shell and scripting language—cmdlets, syntax, objects, scripting basics, policies, debugging, and real-world tasks.</p>
-      <p>
-        <a href="https://github.com/mark-thompson01/powershell-fundamentals" target="_blank" rel="noopener">
-          View this project on GitHub
-        </a>
-      </p>
+      <h1>Linux: An Introduction</h1>
+      <p class="lead">What Linux is, why it’s everywhere, how the kernel differs from a distribution, and the core components that make up a Linux system.</p>
     </header>
 
-    <!-- Intro -->
+    <!-- What is Linux -->
     <section class="card">
-      <h2>Introduction: What is PowerShell?</h2>
-      <p>PowerShell is a powerful command-line shell and scripting language built on .NET (and .NET Core for cross-platform PowerShell). Designed for admins and power users, it automates tasks, manages configurations, and interacts with APIs, the registry, and the file system. Unlike traditional text-based shells, PowerShell is <b>object-based</b>—commands pass rich objects, not just text—unlocking precise filtering, formatting, and automation.</p>
+      <h2>What is Linux?</h2>
+      <p>Linux is a family of open-source operating systems built around the Linux kernel. It provides a Unix-like environment and powers everything from laptops and servers to smartphones, routers, smart TVs, and spacecraft. Thanks to its licensing (e.g., the GNU GPL), Linux is collaborative, customizable, and freely distributed.</p>
     </section>
 
-    <!-- Getting Started -->
+    <!-- History -->
     <section class="card">
-      <h2>Getting Started with PowerShell</h2>
+      <h2>A Brief History of Linux</h2>
+      <p>In 1991, Linus Torvalds released an early version of a free kernel inspired by Unix. Combined with tooling from the GNU Project (started by Richard Stallman in 1983), it grew into a complete operating system used by developers worldwide. Today, Linux is foundational to the internet, cloud platforms, Android devices, embedded systems, and supercomputers.</p>
+    </section>
+
+    <!-- Where it runs -->
+    <section class="card">
+      <h2>How Linux is Everywhere</h2>
       <ul>
-        <li>.NET and .NET Core foundations</li>
-        <li>Windows PowerShell vs PowerShell (Core)</li>
-        <li>Cmdlets, basic syntax & structure</li>
-        <li>Working with files and directories</li>
-        <li>Scripting basics (types, control flow, functions)</li>
-        <li>Real-world examples</li>
+        <li><b>Smartphones:</b> Android is based on the Linux kernel.</li>
+        <li><b>Web Servers:</b> A majority of websites run on Linux.</li>
+        <li><b>Cloud:</b> AWS, Google Cloud, and Azure rely heavily on Linux.</li>
+        <li><b>Supercomputers:</b> All of the Top500 list run Linux.</li>
+        <li><b>IoT/Embedded:</b> Routers, TVs, cars, and appliances often use Linux variants.</li>
       </ul>
     </section>
 
-    <!-- .NET / .NET Core -->
+    <!-- Kernel -->
     <section class="card">
-      <h2>.NET and .NET Core Foundations</h2>
-
-      <h3>.NET Framework</h3>
-      <p>The <b>.NET Framework</b> provides PowerShell with the CLR runtime and vast class libraries. When you run <code>Get-Process</code>, format with <code>Select-Object</code>, or manage services, you’re leveraging .NET types and methods under the hood—enabling rich, object-first automation.</p>
+      <h2>The Linux Kernel: The Heart of the System</h2>
+      <p>The term “Linux” strictly refers to the <b>kernel</b>—the component that interfaces with hardware and provides low-level services:</p>
       <ul>
-        <li><b>Libraries:</b> file I/O, networking, services, UI, and more</li>
-        <li><b>CLR runtime:</b> execution, memory, exception handling</li>
-        <li><b>Objects:</b> structured data instead of flat text</li>
+        <li><b>Process</b> and <b>memory</b> management</li>
+        <li><b>Device</b> drivers and communication</li>
+        <li><b>System calls</b> and security enforcement</li>
       </ul>
-
-      <h3>.NET Core</h3>
-      <p><b>.NET Core</b> (now .NET 6/7/8+) powers cross-platform <b>PowerShell</b> (a.k.a. PowerShell Core). It’s modular, fast, and open source—ideal for modern automation across Windows, Linux, and macOS.</p>
-      <ul>
-        <li><b>Cross-platform:</b> consistent scripts on Windows/macOS/Linux</li>
-        <li><b>Performance & modularity:</b> lean runtime and libraries</li>
-        <li><b>Open source:</b> rapid improvements, community modules</li>
-      </ul>
+      <p>What users interact with—shells, graphical desktops, and applications—comes from the surrounding software packaged by a distribution.</p>
     </section>
 
-    <!-- Versions -->
+    <!-- Distros -->
     <section class="card">
-      <h2>Windows PowerShell and PowerShell (Core)</h2>
-
-      <h3>Windows PowerShell</h3>
+      <h2>What is a Linux Distribution?</h2>
+      <p>A <b>distribution</b> (distro) bundles the kernel with system libraries, utilities, a package manager, and, optionally, a desktop environment or server stack. Popular choices include:</p>
       <ul>
-        <li><b>Version:</b> 5.1 (final)</li>
-        <li><b>Platform:</b> Windows-only</li>
-        <li><b>Runtime:</b> .NET Framework</li>
-        <li><b>Compatibility:</b> deep Windows integration & legacy APIs</li>
-      </ul>
-
-      <h3>PowerShell (Core)</h3>
-      <ul>
-        <li><b>Version:</b> 6.x/7.x (current is 7 line)</li>
-        <li><b>Platform:</b> cross-platform (Windows, macOS, Linux)</li>
-        <li><b>Runtime:</b> .NET Core / .NET 5+</li>
-        <li><b>Notes:</b> faster & modular; some Windows-only features differ</li>
+        <li><b>Ubuntu:</b> User-friendly; common on desktops and servers</li>
+        <li><b>Debian:</b> Stable, community-driven base for many distros</li>
+        <li><b>Fedora:</b> Cutting-edge features</li>
+        <li><b>Arch Linux:</b> Minimal and highly customizable</li>
+        <li><b>RHEL:</b> Enterprise-grade with long-term support</li>
       </ul>
     </section>
 
-    <!-- Cmdlets & Syntax -->
+    <!-- Components -->
     <section class="card">
-      <h2>Cmdlets & Basic Syntax and Structure</h2>
-      <p><b>Cmdlets</b> are small, purpose-built commands that follow a clear <b>Verb-Noun</b> pattern and output <b>objects</b>. They’re the building blocks of PowerShell automation.</p>
-
-      <h3>Naming Format</h3>
-      <table>
-        <thead>
-          <tr><th>Verb</th><th>Noun</th><th>Meaning</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Help</span></td><td>Displays help for cmdlets</td></tr>
-          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Command</span></td><td>Lists available commands</td></tr>
-          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Process</span></td><td>Show running processes</td></tr>
-          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Service</span></td><td>Show services</td></tr>
-          <tr><td><span class="tag">Start-</span></td><td><span class="tag">Service</span></td><td>Start a service</td></tr>
-          <tr><td><span class="tag">Restart-</span></td><td><span class="tag">Service</span></td><td>Restart a service</td></tr>
-          <tr><td><span class="tag">Stop-</span></td><td><span class="tag">Service</span></td><td>Stop a service</td></tr>
-        </tbody>
-      </table>
-
-      <div class="figure"><img src="Images/GetHelp.png" alt="Get-Help screenshot"></div>
-      <div class="figure"><img src="Images/GetCommand.png" alt="Get-Command screenshot"></div>
-      <div class="figure"><img src="Images/GetProcess.png" alt="Get-Process screenshot"></div>
-      <div class="figure"><img src="Images/GetService.png" alt="Get-Service screenshot"></div>
-      <div class="figure"><img src="Images/ServiceMgmt.png" alt="Service management examples"></div>
-    </section>
-
-    <!-- Exploration -->
-    <section class="card">
-      <h2>Exploration</h2>
-      <pre><code>$PSVersionTable
-Get-Module -ListAvailable
-Get-Command -Module ModuleName
-Get-FileHash
-Get-FileHash -Algorithm SHA1 path
-Get-NetAdapter
-Select-Object
-Get-NetAdapter | Select-Object Name, Status, LinkSpeed
-Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enabled True
-Get-NetFirewallRule -DisplayGroup "Network Discovery"
-(Get-WmiObject -Query 'select * from SoftwareLicensingService').OA3xOriginalProductKey
-wmic bios get serialnumber
-New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any
-New-NetFirewallRule -DisplayName "Block Specific IP Outbound" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any
-Get-ComputerInfo | Select-Object WindowsProductName, WindowsVersion
-net users
-net groups
-net user administrator
-Get-LocalGroupMember -Group "Administrators"
-Remove-LocalGroupMember -Group "Administrators" -Member "Domain Users"</code></pre>
-
-      <p><b>Get-Module -ListAvailable</b></p>
-      <div class="figure"><img src="Images/Exploration/GetModule.png" alt="Get-Module list screenshot"></div>
-      <div class="figure"><img src="Images/Exploration/GetModules2.png" alt="More module listings"></div>
-
-      <p><b>Get-Module -ListAvailable NetSecurity</b></p>
-      <div class="figure"><img src="Images/Exploration/NetFirewall1.png" alt="NetSecurity module"></div>
-
-      <p><b>Get-Command -Module WindowsUpdate</b></p>
-      <div class="figure"><img src="Images/Exploration/GetCommand1.png" alt="WindowsUpdate commands"></div>
-
-      <p><b>Get-Command -Module NetAdapter</b></p>
-      <div class="figure"><img src="Images/Exploration/GetCommand2.png" alt="NetAdapter commands"></div>
-
-      <p><b>Get-Command -Module NetTCPIP</b></p>
-      <div class="figure"><img src="Images/Exploration/GetCommand3.png" alt="NetTCPIP commands"></div>
-
-      <p><b>Get-Command -Module TroubleshootingPack</b></p>
-      <div class="figure"><img src="Images/Exploration/GetCommand4.png" alt="TroubleshootingPack commands"></div>
-
-      <p><b>Get-Command -Module NetworkConnectivityStatus</b></p>
-      <div class="figure"><img src="Images/Exploration/GetCommand5.png" alt="NetworkConnectivityStatus commands"></div>
-
-      <p><b>Get-Command -Module NetSecurity</b></p>
-      <div class="figure"><img src="Images/Exploration/GetCommand6.png" alt="NetSecurity commands list"></div>
-
-      <p><b>Get-FileHash</b></p>
-      <div class="figure"><img src="Images/Exploration/GetFileHash1.png" alt="Get-FileHash output"></div>
-
-      <p><b>Get-NetAdapter</b></p>
-      <div class="figure"><img src="Images/Exploration/NetAdapter.png" alt="Get-NetAdapter output"></div>
-
-      <p><b>Get-NetAdapter | Select-Object Name, Status, LinkSpeed</b></p>
-      <div class="figure"><img src="Images/Exploration/NetAdapter2.png" alt="Selected adapter properties"></div>
-
-      <p><b>Set-NetFirewallRule -DisplayGroup "File and Printer Sharing" -Enabled True</b></p>
-      <div class="figure"><img src="Images/SetNetFirewall.png" alt="Enable firewall rule"></div>
-
-      <p><b>Get-NetFirewallRule -DisplayGroup "Network Discovery"</b></p>
-      <div class="figure"><img src="Images/Get-NetworkFirewall.png" alt="Firewall rules listing"></div>
-
-      <p><b>Retrieve computer serial number</b></p>
-      <div class="figure"><img src="Images/Exploration/serialn.png" alt="Serial number retrieval"></div>
-
-      <p><b>Block IP inbound/outbound</b></p>
-      <div class="figure"><img src="Images/FirewallBlock.png" alt="Inbound block rule"></div>
-      <div class="figure"><img src="Images/FirewallBlock2.png" alt="Outbound block rule"></div>
-
-      <p><b>Get-ComputerInfo</b></p>
-      <div class="figure"><img src="Images/Exploration/ComputerInfo.png" alt="Computer info"></div>
-      <p><b>Select key OS properties</b></p>
-      <div class="figure"><img src="Images/ComputerInfo2.png" alt="Selected OS props 1"></div>
-      <div class="figure"><img src="Images/ComputerInfo3.png" alt="Selected OS props 2"></div>
-
-      <p><b>Local users & groups (legacy commands)</b></p>
-      <div class="figure"><img src="Images/Exploration/netuser.png" alt="net user"></div>
-      <div class="figure"><img src="Images/Exploration/netgroup.png" alt="net group"></div>
-      <div class="figure"><img src="Images/Exploration/netuseradmin.png" alt="net user administrator"></div>
-
-      <p><b>Modern local group cmdlets</b></p>
-      <div class="figure"><img src="Images/GetLocalGroup.png" alt="Get-LocalGroupMember"></div>
-      <p><b>Add/Remove local group members</b></p>
-      <div class="figure"><img src="Images/LocalGroup2.png" alt="Modify local group members"></div>
-    </section>
-
-    <!-- Files & Dirs -->
-    <section class="card">
-      <h2>Working with Files and Directories</h2>
-      <pre><code>Get-ChildItem
-New-Item
-Remove-Item
-echo
-mkdir
-Move-Item
-Copy-Item
-ls</code></pre>
-      <p>The familiar Linux-style commands like <code>mkdir</code>, <code>echo</code>, and <code>ls</code> also work in a PowerShell session.</p>
-
-      <div class="figure"><img src="Images/FileDir/NewItem.png" alt="New-Item examples"></div>
-      <div class="figure"><img src="Images/FileDir/GetChildItem.png" alt="Get-ChildItem examples"></div>
-      <div class="figure"><img src="Images/FileDir/RemoveItem.png" alt="Remove-Item examples"></div>
-      <div class="figure"><img src="Images/FileDir/echomkdir.png" alt="echo/mkdir examples"></div>
-      <div class="figure"><img src="Images/FileDir/Item.png" alt="Item operations"></div>
-    </section>
-
-    <!-- Scripting Basics -->
-    <section class="card">
-      <h2>PowerShell Scripting Basics</h2>
-      <p>Core building blocks that underpin automation and administration with PowerShell.</p>
-
-      <h3>Data Types</h3>
+      <h2>Important Components of a Linux System</h2>
       <ul>
-        <li><b>variable:</b> named storage for values used by commands/scripts</li>
-        <li><b>string:</b> text data</li>
-        <li><b>int:</b> whole numbers (positive/negative)</li>
-        <li><b>array:</b> ordered collection of values/objects</li>
-        <li><b>boolean:</b> <code>$true</code> / <code>$false</code> values</li>
-        <li><b>object:</b> structured data with properties & methods</li>
-      </ul>
-
-      <h3>Variables</h3>
-      <pre><code>$Name = "Dave"
-$Age = 29
-$Services = Get-Service</code></pre>
-      <p>Variables start with <code>$</code>.</p>
-      <div class="figure"><img src="Images/BS/var.png" alt="Variables screenshot"></div>
-
-      <h3>Strings</h3>
-      <pre><code>$greeting = "Hello, world"
-$path = 'C:\Users\Dave'</code></pre>
-      <div class="figure"><img src="Images/BS/strings.png" alt="Strings screenshot"></div>
-
-      <h3>Integers</h3>
-      <pre><code>$a = 10
-$b = 5</code></pre>
-      <div class="figure"><img src="Images/BS/Integers.png" alt="Integers screenshot"></div>
-
-      <h3>Arrays</h3>
-      <pre><code># Creating an array of strings
-$colors = @("Red", "Green", "Blue")
-
-# Accessing elements by index
-$colors[0]  # Red
-$colors[1]  # Green
-$colors[2]  # Blue</code></pre>
-      <div class="figure"><img src="Images/BS/array.png" alt="Arrays 1"></div>
-
-      <p>Adding items to an array:</p>
-      <pre><code>$colors += "Yellow"
-$colors</code></pre>
-      <div class="figure"><img src="Images/BS/array2.png" alt="Arrays 2"></div>
-
-      <p>Looping through an array:</p>
-      <pre><code>foreach ($color in $colors) {
-  Write-Output "Color: $color"
-}</code></pre>
-      <div class="figure"><img src="Images/BS/arrays3.png" alt="Arrays 3"></div>
-
-      <h3>Booleans</h3>
-      <pre><code>$isLoggedIn = $true
-$isAdmin = $false</code></pre>
-      <div class="figure"><img src="Images/BS/boolean1.png" alt="Booleans 1"></div>
-
-      <p>Using Boolean in if statements:</p>
-      <pre><code>if ($isLoggedIn) {
-  "Access granted."
-} else {
-  "Access denied."
-}</code></pre>
-      <div class="figure"><img src="Images/BS/arrays3.png" alt="Conditional example"></div>
-
-      <p>Boolean from a comparison:</p>
-      <pre><code>$a = 10; $b = 5
-$isGreater = $a -gt $b  # True</code></pre>
-      <div class="figure"><img src="Images/BS/boolean3.png" alt="Boolean comparison"></div>
-
-      <p>Logical operators:</p>
-      <pre><code>$hasPermission = $true
-$isOwner = $false
-
-if ($hasPermission -and $isOwner) {
-  "You can delete this file."
-} elseif ($hasPermission -or $isOwner) {
-  "You can view the file."
-} else {
-  "Access denied."
-}</code></pre>
-      <div class="figure"><img src="Images/BS/boolean4.png" alt="Logical operators"></div>
-
-      <p>Using <code>-not</code>:</p>
-      <pre><code>$isAvailable = $false
-if (-not $isAvailable) { "Resource is not available." }</code></pre>
-      <div class="figure"><img src="Images/BS/Boolean5.png" alt="Negation example"></div>
-
-      <h3>Loops and Conditional Statements</h3>
-      <pre><code># If-Else
-if ($Age -gt 18) { "Adult" } else { "Minor" }
-
-# ForEach Loop
-$services = Get-Service
-foreach ($service in $services) {
-  $service.DisplayName
-}</code></pre>
-      <div class="figure"><img src="Images/BS/loops.png" alt="Loops screenshot"></div>
-
-      <h3>Objects</h3>
-      <pre><code>$process = Get-Process notepad
-$process.Name
-$process.Id</code></pre>
-      <div class="figure"><img src="Images/BS/objects1.png" alt="Objects 1"></div>
-
-      <p>Check members with <code>Get-Member</code>:</p>
-      <pre><code>$process | Get-Member</code></pre>
-      <div class="figure"><img src="Images/BS/objects1.png" alt="Get-Member output"></div>
-
-      <p>Custom object:</p>
-      <pre><code>$user = [PSCustomObject]@{
-  FirstName = "Mark"
-  LastName  = "Thompson"
-  Age       = 00
-}
-$user.FirstName
-$user.Age</code></pre>
-      <div class="figure"><img src="Images/BS/objects3.png" alt="Custom object"></div>
-
-      <p>Array of objects:</p>
-      <pre><code>$users = @(
-  [PSCustomObject]@{ Name = "Alice"; Role = "Admin" },
-  [PSCustomObject]@{ Name = "Bob";   Role = "User"  }
-)
-
-foreach ($u in $users) {
-  "$($u.Name) is a $($u.Role)"
-}</code></pre>
-      <div class="figure"><img src="Images/BS/objects4.png" alt="Array of objects"></div>
-
-      <p>Object filtering:</p>
-      <pre><code>$services = Get-Service
-$running  = $services | Where-Object { $_.Status -eq "Running" }</code></pre>
-      <div class="figure"><img src="Images/BS/objects5.png" alt="Object filtering"></div>
-    </section>
-
-    <!-- Functions -->
-    <section class="card">
-      <h2>Functions</h2>
-      <pre><code>function Greet-User {
-  param ($Name)
-  "Welcome, $Name!"
-}
-Greet-User -Name "Dave"</code></pre>
-      <div class="figure"><img src="Images/BS/function.png" alt="Function example"></div>
-
-      <p>Simple function (no parameters)</p>
-      <pre><code>function Say-Hello { "Hello, world!" }
-Say-Hello</code></pre>
-      <div class="figure"><img src="Images/function1.png" alt="Function no params"></div>
-
-      <p>Function with one parameter</p>
-      <pre><code>function Greet-User { param($name) "Hello, $name!" }
-Greet-User -name "Mark"</code></pre>
-      <div class="figure"><img src="Images/function2.png" alt="Function one param"></div>
-
-      <p>Function with multiple parameters</p>
-      <pre><code>function Add-Numbers { param($a, $b) "The sum is $($a + $b)" }
-Add-Numbers -a 5 -b 10</code></pre>
-      <div class="figure"><img src="Images/function3.png" alt="Function multiple params"></div>
-
-      <p>Function with conditional logic</p>
-      <pre><code>function Check-Age { param($age)
-  if ($age -ge 18) { "You're an adult." } else { "You're a minor." }
-}
-Check-Age -age 20</code></pre>
-      <div class="figure"><img src="Images/fucntion4.png" alt="Function with logic"></div>
-
-      <p>Function returning a value</p>
-      <pre><code>function Multiply { param($x, $y) return ($x * $y) }
-$result = Multiply -x 4 -y 6
-"Result: $result"</code></pre>
-      <div class="figure"><img src="Images/function5.png" alt="Return value function"></div>
-
-      <p>Scripts end with the <code>.ps1</code> extension.</p>
-    </section>
-
-    <!-- Execution Policy -->
-    <section class="card">
-      <h2>Permissions and Execution Policy</h2>
-      <pre><code>Get-ExecutionPolicy
-Set-ExecutionPolicy RemoteSigned</code></pre>
-      <div class="figure"><img src="Images/ExecutePolicy.png" alt="Execution policy"></div>
-      <p><b>Policies:</b> Restricted · AllSigned · RemoteSigned · Unrestricted</p>
-      <p>Administrator privileges may be required.</p>
-    </section>
-
-    <!-- Debugging / Tools -->
-    <section class="card">
-      <h2>Useful Tools and Debugging</h2>
-      <ul>
-        <li><code>Write-Host</code> vs <code>Write-Output</code></li>
-        <li><code>Start-Transcript</code> to log sessions</li>
-        <li><code>try/catch/finally</code> for error handling</li>
-      </ul>
-
-      <h3>Write-Host</h3>
-      <p>Writes directly to the console (not to the pipeline).</p>
-      <pre><code>function Test-ConnectionStatus {
-  param($server)
-  Write-Host "Starting connection check..." -ForegroundColor Cyan
-
-  if (Test-Connection -ComputerName $server -Count 1 -Quiet) {
-    Write-Host "$server is online." -ForegroundColor Green
-  } else {
-    Write-Host "$server is offline or unreachable." -ForegroundColor Red
-  }
-
-  Write-Host "Finished connection check." -ForegroundColor Cyan
-}
-Test-ConnectionStatus -server "example.com"</code></pre>
-      <div class="figure"><img src="Images/Debug/WriteHost.png" alt="Write-Host demo"></div>
-
-      <h3>Write-Output</h3>
-      <p>Sends data to the pipeline (capture, pipe, redirect).</p>
-      <pre><code>try {
-  Get-Item "C:\fakefile.txt"
-} catch {
-  Write-Output "File not found!"
-}</code></pre>
-      <div class="figure"><img src="Images/BS/file.png" alt="Write-Output demo"></div>
-
-      <h3>Start-Transcript</h3>
-      <p>Record a session (commands, output, errors) to a log file.</p>
-      <pre><code>Start-Transcript -Path "C:\Logs\debug-log.txt" -Append
-Write-Host "Starting server check..."
-$server = "example.com"
-Write-Host "Pinging $server..."
-if (Test-Connection -ComputerName $server -Count 1 -Quiet) { "Online" } else { "Offline" }
-Write-Host "Script complete."
-Stop-Transcript</code></pre>
-      <div class="figure"><img src="Images/Debug/StartTranscript.png" alt="Start-Transcript demo"></div>
-
-      <h3>try / catch / finally</h3>
-      <pre><code>try {
-  Get-Content "C:\missing-file.txt"
-} catch {
-  Write-Host "An error occurred: $_"
-}</code></pre>
-      <div class="figure"><img src="Images/Debug/try1.png" alt="try/catch example 1"></div>
-
-      <pre><code>try {
-  Remove-Item "C:\nonexistent.txt" -ErrorAction Stop
-} catch {
-  Write-Host "Failed to delete file: $_"
-}</code></pre>
-      <div class="figure"><img src="Images/Debug/try2.png" alt="try/catch example 2"></div>
-
-      <pre><code>try {
-  Write-Host "Trying risky operation..."
-  Get-Content "C:\nonexistent.txt" -ErrorAction Stop
-} catch {
-  Write-Host "Caught an error: $_"
-} finally {
-  Write-Host "Cleaning up... This always runs."
-}</code></pre>
-      <div class="figure"><img src="Images/Debug/finallty.png" alt="finally block demo"></div>
-
-      <ul>
-        <li>Use <b>try/catch</b> to gracefully handle errors.</li>
-        <li>Use <b>finally</b> for cleanup that must always run.</li>
-        <li>Add <b>-ErrorAction Stop</b> to catch non-terminating errors.</li>
+        <li><b>Kernel:</b> Core that speaks to hardware.</li>
+        <li><b>Shell:</b> Command-line interface (e.g., <code>bash</code>, <code>zsh</code>).</li>
+        <li><b>File System:</b> Hierarchical tree starting at root <code>/</code>.</li>
+        <li><b>System Libraries:</b> Shared code used by apps and services.</li>
+        <li><b>Daemons:</b> Background services (networking, printing, scheduling).</li>
+        <li><b>User Interface:</b> Desktops like GNOME, KDE, XFCE, or server-only CLI.</li>
+        <li><b>Package Manager:</b> Tools such as <code>apt</code>, <code>dnf</code>/<code>yum</code> for software install/updates.</li>
       </ul>
     </section>
 
-    <!-- Real-world -->
+    <!-- Wrap -->
     <section class="card">
-      <h2>Real-World Use Cases</h2>
-      <ul>
-        <li>Batch user creation in AD</li>
-        <li>Automating updates</li>
-        <li>Backing up and archiving logs</li>
-        <li>Scheduled tasks and reporting</li>
-      </ul>
-
-      <h3>Batch user creation in AD</h3>
-      <p><b>1.</b> Create a CSV with user attributes (example in Notepad++):</p>
-      <div class="figure"><img src="Images/Batch User Creationi/csv0.png" alt="AD CSV example"></div>
-      <p><b>2.</b> Import the CSV and create users via script:</p>
-      <div class="figure"><img src="Images/Batch User Creationi/ScriptCode0.png" alt="AD user creation script"></div>
-      <p><b>3.</b> New users in ADUC under <b>TestUsers</b> OU:</p>
-      <div class="figure"><img src="Images/Batch User Creationi/csv00.PNG" alt="New AD users created"></div>
-
-      <h3>Automating updates</h3>
-      <div class="figure"><img src="Images/WindowsUpdate.png" alt="Windows Update 1"></div>
-      <div class="figure"><img src="Images/WindowsUpdate2.png" alt="Windows Update 2"></div>
-      <div class="figure"><img src="Images/WindowsUpdate3.png" alt="Windows Update 3"></div>
-
-      <h3>Backing up and archiving logs</h3>
-      <div class="figure"><img src="Images/Batch User Creationi/Backup.png" alt="Backup logs with PowerShell"></div>
-
-      <h3>Scheduled tasks and reporting</h3>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched1.png" alt="Task Scheduler 1"></div>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched2.png" alt="Task Scheduler 2"></div>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched3.png" alt="Task Scheduler 3"></div>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched4.png" alt="Task Scheduler 4"></div>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched5.png" alt="Task Scheduler 5"></div>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched6.png" alt="Task Scheduler 6"></div>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched7.png" alt="Task Scheduler 7"></div>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched8.png" alt="Task Scheduler 8"></div>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched9.png" alt="Task Scheduler 9"></div>
-      <div class="figure"><img src="Images/Batch User Creationi/tasksched10.png" alt="Task Scheduler 10"></div>
-    </section>
-
-    <!-- Wrap-up -->
-    <section class="card">
-      <p>PowerShell gives IT pros control and automation that save time, reduce errors, and improve reliability. Mastering the fundamentals is step one toward serious automation chops.</p>
+      <p>This intro is a launchpad. Whether you want system administration, development, or security, Linux offers the flexibility and transparency to learn deeply and build confidently.</p>
       <p><a href="../index.html">Back to Home</a></p>
     </section>
 
-    <!-- Footer (branding only) -->
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
