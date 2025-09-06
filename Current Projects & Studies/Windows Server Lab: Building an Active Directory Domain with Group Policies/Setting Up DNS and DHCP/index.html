@@ -1,212 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Concluded Basics</title>
-   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
-      margin: 20px; 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Setting Up DNS and DHCP · Mark Thompson Portfolio</title>
+  <meta name="description" content="Configure DNS and DHCP on Windows Server 2016 as the foundation for a domain controller lab." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2, h3, h4, ul, ol {
-      color: #ADD8E6;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: block;
-      white-space: pre-wrap;
-      margin: 0.5rem 0;
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumbs */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:12px 0 6px;font-size:16px;font-weight:700}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    .section {
-      margin-bottom: 30px;
+    ul,ol{padding-left:22px;margin:8px 0}
+    .tight li{margin:6px 0}
+
+    /* Code */
+    code, pre code{
+      background:#0e1220;border:1px solid var(--card-border);
+      border-radius:10px;padding:8px 10px;display:block;white-space:pre-wrap;margin:8px 0;color:var(--text)
     }
-    .event-id { font-weight: bold; color: #0057e7; }
-    ul { margin-bottom: 20px; }
-          img {
-         display: block;
-         margin: 20px 0;
-         width: 650px;
-         height: 500px;
-         border: 1px solid #444;
-         border-radius: 5px;
+
+    /* Images */
+    .img-wrap{margin:12px 0;text-align:center}
+    .img-wrap img{
+      display:block;margin:0 auto;
+      max-width:70%;
+      height:auto;
+      border:1px solid var(--card-border);
+      border-radius:12px;
     }
-        a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-<h1>Setting up DNS and DHCP</h1>
- <h2>Windows Server Roles</h2>
+  <div class="wrap">
 
-<p><strong>Windows Server Roles</strong> are predefined sets of software features built into Windows Server that allow the server to perform specific <strong>network services and infrastructure functions</strong>. Each role defines what the server does — for example:</p>
-<ul>
-    <li><strong>Active Directory Domain Services (AD DS)</strong> makes the server a <strong>domain controller</strong> for managing users, computers, and policies.</li><br>
-    
-    <li><strong>DNS Server</strong> handles the name resolution within the network.</li><br>
-    
-    <li><strong>DHCP Server</strong> assigns IP addresses to client machines.</li><br>
-    
-    <li><strong>File and Storage Services</strong> allow the server to host and manage shared files and storage.</li>
-</ul>
+    <!-- Top nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-<p>In a lab environment, assigning and configuring these roles lets you <strong>simulate real-world IT infrastructure</strong>, enabling hands-on learning in areas like <strong>domain management</strong>, policy enforcement, and network services deployment</strong> — all from your <strong>VirtualBox-based Windows Server</strong> instance.</p><br>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/">AD Domain Lab</a> ·
+      <span>Setting Up DNS and DHCP</span>
+    </div>
 
-<h2>Overview:</h2>
-<p>Before setting up Active Directory, two critical services must be configured: DNS and DHCP.</p>
+    <!-- Header -->
+    <header>
+      <h1>Setting Up DNS and DHCP</h1>
+      <p class="lead">Before promoting your server to a domain controller, configure <strong>DNS</strong> and <strong>DHCP</strong>. DNS enables name resolution and domain location; DHCP automates IP and DNS distribution to clients.</p>
+    </header>
 
-<ul>
-    <li><strong>DNS (Domain Name System)</strong> is essential for resolving domain names to IP addresses, especially within a Windows domain.</li>
-    <li><strong>DHCP (Dynamic Host Configuration Protocol)</strong> automatically assigns IP addresses and other network settings to client devices.</li>
-</ul>
-<p>This lab goes into configuring both on the same Windows Server that will later function as a domain controller.</p>
+    <!-- Windows Server Roles -->
+    <section class="card">
+      <h2>Windows Server Roles</h2>
+      <p><strong>Windows Server Roles</strong> are predefined feature sets that let a server deliver specific <strong>network services and infrastructure functions</strong>.</p>
+      <ul>
+        <li><strong>Active Directory Domain Services (AD DS)</strong> — makes the server a <strong>domain controller</strong>.</li>
+        <li><strong>DNS Server</strong> — handles name resolution inside the network.</li>
+        <li><strong>DHCP Server</strong> — assigns IP addresses and network options to clients.</li>
+        <li><strong>File and Storage Services</strong> — hosts and manages file shares and storage.</li>
+      </ul>
+      <p>In a lab, assigning and configuring these roles simulates <strong>real-world IT infrastructure</strong> for hands-on learning in domain management, policy enforcement, and network services—right from your <strong>VirtualBox</strong> Windows Server.</p>
+    </section>
 
-<p>Active Directory depends on DNS to locate domain controllers and services. DHCP simplifies network management by assigning the correct IP and DNS settings to domain-joined computers.</p>
+    <!-- Overview -->
+    <section class="card">
+      <h2>Overview</h2>
+      <p>Before setting up Active Directory, configure two critical services: <strong>DNS</strong> and <strong>DHCP</strong>.</p>
+      <ul>
+        <li><strong>DNS</strong> resolves domain names to IP addresses and allows clients to locate domain controllers.</li>
+        <li><strong>DHCP</strong> automatically assigns IP addresses and options like gateway and DNS servers.</li>
+      </ul>
+      <p>This lab configures both on the same Windows Server that will later function as a domain controller.</p>
+      <h3>Without DNS</h3>
+      <ul class="tight">
+        <li>You cannot promote the server to a domain controller.</li>
+        <li>Clients will not be able to join the domain.</li>
+      </ul>
+      <h3>Without DHCP</h3>
+      <ul class="tight">
+        <li>Every client would need manual IP configuration—inefficient and error-prone.</li>
+      </ul>
+    </section>
 
-<h3>Without DNS</h3>
+    <!-- DNS -->
+    <section class="card">
+      <h2>Configuring Internal DNS (Windows Server 2016)</h2>
+      <h3>Verify DNS Installation</h3>
+      <p>In this example the <strong>DNS Server role</strong> is already installed—so we’ll verify.</p>
+      <ul>
+        <li>Open <strong>DNS Manager</strong> (<code>dnsmgmt.msc</code>)</li>
+      </ul>
+      <div class="img-wrap"><img src="Images/DNS2/dns-1.PNG" alt="Open DNS Manager"></div>
 
-    <ul>
-<li>You cannot promote the server to a domain controller.</li>
+      <h4>Confirm a Forward Lookup Zone exists for your domain (e.g., <em>Domain-1.local</em>)</h4>
+      <div class="img-wrap"><img src="Images/DNS2/dns-2.PNG" alt="Forward Lookup Zones"></div>
 
-<li>Clients will not be able to join the domain.</li>
-    </ul>
-    
-<h3>Without DHCP</h3>
-    <ul>
-<li>Every client would need manual IP configuration — inefficient and error-prone.</li>
-    </ul><br><br>
+      <h4>Zone contains <strong>A records</strong> used for domain authentication</h4>
+      <div class="img-wrap"><img src="Images/DNS2/dns-3.PNG" alt="A records in forward lookup zone"></div>
 
-<h2>Configuring Internal DNS and DHCP on Windows Server 2016</h2>
-<h3>Configuring DNS</h3>
-<h4>1. Verify DNS Installation</h4>
-<p>Typically the first step would be to install the <strong>DNS Server Role</strong>, however, in this example that is already installed. So we'll verify the installation in this step.</p>
-    <ul>
-        <li>Open <strong>DNS Manager</strong> (dnsmgmt.msc)</li>
-        <img src="Images/DNS2/dns-1.PNG" alt="dns-1.PNG"><br>
-<h4>2. Confirm that a <strong>Forward Lookup Zone</strong> exists for your domain (e.g., Domain-1.local)</h4>
-        <img src="Images/DNS2/dns-2.PNG" alt="dns-2.PNG" style="width:700px; height:300px;"><br>
-        <h4>3. This zone contains <strong>A records</strong> used for domain authentication</h4>
-        <img src="Images/DNS2/dns-3.PNG" alt="dns-3.PNG"><br>
-    </ul><br>
-
-<h2>Configure DNS Forwarders (Optional)</h2>
-<p><Forwarders allow internal DNS to resolve external websites via public DNS servers.</p>
-    <ol>
-        <li>Right-click your server in <strong>DNS Manager > Properties</strong></li>
-        <img src="Images/DNS2/dns--5.PNG" alt="dns--5.PNG" style="width:400px; height:475px;"><br>
+      <h3>Configure DNS Forwarders (Optional)</h3>
+      <p>Forwarders allow internal DNS to resolve external names via public DNS servers.</p>
+      <ol>
+        <li>Right-click your server in <strong>DNS Manager → Properties</strong></li>
+        <div class="img-wrap"><img src="Images/DNS2/dns--5.PNG" alt="DNS server properties"></div>
         <li>Go to the <strong>Forwarders</strong> tab</li>
-        <img src="Images/DNS2/dns--6.PNG" alt="dns--6.PNG"><br>
+        <div class="img-wrap"><img src="Images/DNS2/dns--6.PNG" alt="Forwarders tab"></div>
         <li><strong>Add:</strong></li>
-        <img src="Images/DNS2/dns--7.PNG" alt="dns--7.PNG"><br>
-        <li>8.8.8.8 (Google DNS)</li>
-        <li>1.1.1.1 (Cloudflare DNS)</li>
-        <img src="Images/DNS2/dns--8.PNG" alt="dns--8.PNG"><br>
+        <div class="img-wrap"><img src="Images/DNS2/dns--7.PNG" alt="Add forwarder"></div>
+        <li>8.8.8.8 (Google DNS) &nbsp; · &nbsp; 1.1.1.1 (Cloudflare DNS)</li>
+        <div class="img-wrap"><img src="Images/DNS2/dns--8.PNG" alt="Forwarders configured"></div>
         <li>Click <strong>OK</strong> to save</li>
-    </ol><br>
+      </ol>
+    </section>
 
+    <!-- DHCP -->
+    <section class="card">
+      <h2>Configuring DHCP</h2>
+      <h3>Install the DHCP Server Role</h3>
+      <h4>1) Click <strong>Add roles and features</strong> in Server Manager</h4>
+      <div class="img-wrap"><img src="Images/dhcp1.PNG" alt="Add roles and features"></div>
 
-    <h1>Configuring DHCP</h1>
-    <h2>Install the DHCP Server Role</h2>
-    <h4>1. Click the <strong>Add roles and features in Server Manager</strong>.</h4>
-    <img src="Images/dhcp1.PNG" alt="dhcp1.PNG" style="width:500px; height:400px;"><br>
-    <h4>2. The installation wizard will come up to follow the prompts.</h4>
-    <img src="Images/dhcp2.PNG" alt="dhcp2.PNG"><br>
-    <h4>3. For this example, I'm selecting <strong>Role-based or feature-based</strong> installation.</h4>
-    <img src="Images/dhcp3.PNG" alt="dhcp3.PNG"><br>
-    <h4>4. Server Selection:</h4>
-    <img src="Images/dhcp3.5.PNG" alt="dhcp3.5.PNG"><br>
-    <h4>5. Check the box next to DHCP Server under Server Role selection.</h4>
-    <img src="Images/dhcp5.PNG" alt="dhcp5.PNG"><br>
-    <h4>6. Follow the prompt to <strong>Add Features</strong></h4>
-    <img src="Images/dhcp6.PNG" alt="dhcp6.PNG"><br>
-    <h4>7. Confirm installation selections, click <strong>Install</strong>.</h4>
-    <img src="Images/dhcp7.PNG" alt="dhcp7.PNG"><br>
-    <h4>8. Installation in progress</h4>
-    <img src="Images/dhcp8.PNG" alt="dhcp8.PNG">
-    <img src="Images/dhcp9.PNG" alt="dhcp9.PNG">
-    <img src="Images/dhcp10.PNG" alt="dhcp10.PNG"><br><br>
+      <h4>2) Follow the wizard prompts</h4>
+      <div class="img-wrap"><img src="Images/dhcp2.PNG" alt="Roles and Features wizard"></div>
 
-    
-    <h2>DHCP Authorization</h2>
-    <h4>1. After installing the DHCP server role, Server Manager will then have a notification for the Post-deployment configuration steps.</h4>
-    <img src="Images/dhcpconf1.PNG" alt="dhcpconf2.PNG" style="width:500px; height:200px;"><br>
-    <h4>2. Upon clicking "Complete DHCP configuration", the DHCP Post-Install configuration wizard will come up to Authorize the DHCP server.</h4>
-    <img src="Images/dhcpconf2.PNG" alt="dhcpconf2.PNG"><br>
-    <h4>3. Specify the credentials to be used to authorize this DHCP server in AD DS.</h4>
-    <P>In this example, I'm going to select the following user's credentials, then click <strong>Commit</strong>.</P>
-    <img src="Images/dhcpconf3.PNG" alt="dhcpconf3.PNG"><br><br>
+      <h4>3) Choose <strong>Role-based or feature-based</strong> installation</h4>
+      <div class="img-wrap"><img src="Images/dhcp3.PNG" alt="Installation type"></div>
 
-    
+      <h4>4) Server Selection</h4>
+      <div class="img-wrap"><img src="Images/dhcp3.5.PNG" alt="Server selection"></div>
 
-    <h2>Create a DHCP Scope</h2>
-    <h4>1. In Server Manager > Tools, select DHCP in the drop-down tools menu.</h4>
-    <img src="Images/dhcpmgmt2.PNG" alt="dhcpmgmt2.PNG" style="width:400px; height:700px;"><br>
-    <h4>2. DHCP Manager:</h4>
-    <img src="Images/dhcpmgmt3.PNG" alt="dhcpmgmt3.PNG" style="width:700px; height:300px;"><br>
-    <h4>3. Expand the server/domain hierarchy.</h4>
-    <img src="Images/dhcpmgmt4.PNG" alt="dhcpmgmt4.PNG" style="width:700px; height:400px;"><br>
-    <h4>4. Right-click on IPv4, select New Scope.</h4>
-    <img src="Images/dhcpmgmt5.PNG" alt="dhcpmgmt5.PNG"><br>
-    <h4>5. The New Scope Wizard will prompt.</h4>
-    <img src="Images/dhcpmgmt6.PNG" alt="dhcpmgmt6.PNG"><br>
-    <h4>6. In this example, I'm going to name this Scope Name "Lab Scope".</h4>
-    <img src="Images/dhcpmgmt7.PNG" alt="dhcpmgmt7.PNG"><br>
-    <h4>7. Next, configure the IP Address range.</h4>
-    <ul>
+      <h4>5) Check <strong>DHCP Server</strong> under Server Roles</h4>
+      <div class="img-wrap"><img src="Images/dhcp5.PNG" alt="Select DHCP Server role"></div>
+
+      <h4>6) Add Features when prompted</h4>
+      <div class="img-wrap"><img src="Images/dhcp6.PNG" alt="Add features for DHCP"></div>
+
+      <h4>7) Confirm selections → <strong>Install</strong></h4>
+      <div class="img-wrap"><img src="Images/dhcp7.PNG" alt="Confirm and install"></div>
+
+      <h4>8) Installation progress</h4>
+      <div class="img-wrap"><img src="Images/dhcp8.PNG" alt="Installation progress 1"></div>
+      <div class="img-wrap"><img src="Images/dhcp9.PNG" alt="Installation progress 2"></div>
+      <div class="img-wrap"><img src="Images/dhcp10.PNG" alt="Installation progress 3"></div>
+
+      <h3>DHCP Authorization</h3>
+      <h4>1) Post-deployment configuration notification appears</h4>
+      <div class="img-wrap"><img src="Images/dhcpconf1.PNG" alt="Post-deployment configuration notice"></div>
+
+      <h4>2) Click <strong>Complete DHCP configuration</strong> to open the wizard and authorize the server</h4>
+      <div class="img-wrap"><img src="Images/dhcpconf2.PNG" alt="Complete DHCP configuration wizard"></div>
+
+      <h4>3) Specify credentials to authorize in AD DS → <strong>Commit</strong></h4>
+      <p>In this example, I select a specified user’s credentials and commit the changes.</p>
+      <div class="img-wrap"><img src="Images/dhcpconf3.PNG" alt="Authorize DHCP server"></div>
+    </section>
+
+    <!-- DHCP Scope -->
+    <section class="card">
+      <h2>Create a DHCP Scope</h2>
+
+      <h4>1) Server Manager → Tools → <strong>DHCP</strong></h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt2.PNG" alt="Open DHCP Manager"></div>
+
+      <h4>2) DHCP Manager</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt3.PNG" alt="DHCP Manager console"></div>
+
+      <h4>3) Expand the server/domain hierarchy</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt4.PNG" alt="DHCP hierarchy"></div>
+
+      <h4>4) Right-click <strong>IPv4</strong> → <strong>New Scope…</strong></h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt5.PNG" alt="New scope action"></div>
+
+      <h4>5) New Scope Wizard</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt6.PNG" alt="Scope wizard"></div>
+
+      <h4>6) Name the scope (e.g., <em>Lab Scope</em>)</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt7.PNG" alt="Scope name"></div>
+
+      <h4>7) Configure IP address range</h4>
+      <ul class="tight">
         <li>Start IP Address</li>
         <li>End IP Address</li>
-        <li>CIDR length</li>
-        <li>Subnet mask</li>
-    </ul>
-    <img src="Images/dhcpmgmt8.PNG" alt="dhcpmgmt8.PNG"><br>
+        <li>CIDR length / Subnet mask</li>
+      </ul>
+      <div class="img-wrap"><img src="Images/dhcpmgmt8.PNG" alt="Scope IP range"></div>
 
-    <h4>8. Specify the IP address range that you want to exclude, if any. </h4>
-    <img src="Images/dhcpmgmt9.PNG" alt="dhcpmgmt9.PNG"><br>
+      <h4>8) Exclusions (optional)</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt9.PNG" alt="Exclusions"></div>
 
-    <h4>9. Set the Lease Duration:</h4>
-    <img src="Images/dhcpmgmt10.PNG" alt="dhcpmgmt10.PNG"><br>
+      <h4>9) Lease Duration</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt10.PNG" alt="Lease duration"></div>
 
-    <h4>10. Configure DHCP Options:</h4>
-    <img src="Images/dhcpmgmt11.PNG" alt="dhcpmgmt11.PNG"><br>
+      <h4>10) Configure DHCP Options</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt11.PNG" alt="Configure options"></div>
 
-    <h4>11. Enter the Default Gateway address of the network, for example - 192.168.1.1:</h4>
-    <img src="Images/dhcpmgmt12.PNG" alt="dhcpmgmt12.PNG"><br>
+      <h4>11) Default Gateway (e.g., 192.168.1.1)</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt12.PNG" alt="Default gateway"></div>
 
-    <h4>12. Set the Parent Domain name for Domain Name and DNS Servers.</h4>
-    <img src="Images/dhcpmgmt13.PNG" alt="dhcpmgmt13.PNG"><br>
+      <h4>12) Domain Name &amp; DNS Servers (use your internal domain and DNS)</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt13.PNG" alt="DNS options"></div>
 
-    <h4>13. Specify the WINS Server functionality if applicable.</h4>
-    <img src="Images/dhcpmgmt14.PNG" alt="dhcpmgmt14.PNG"><br>
+      <h4>13) WINS (if applicable)</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt14.PNG" alt="WINS options"></div>
 
-    <h4>14. Activate the new DHCP Scope:</h4>
-    <img src="Images/dhcpmgmt15.PNG" alt="dhcpmgmt15.PNG"><br>
+      <h4>14) Activate the scope</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt15.PNG" alt="Activate scope"></div>
 
-    <h4>15. Click Finish</h4>
-    <img src="Images/dhcpmgmt16.PNG" alt="dhcpmgmt16.PNG"><br>
+      <h4>15) Finish</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt16.PNG" alt="Finish scope wizard"></div>
 
-    <h4>16. The new scope under IPv4 of DHCP Manager.</h4>
-    <img src="Images/dhcpmgmt17.PNG" alt="dhcpmgmt17.PNG"><br><br>
+      <h4>16) Verify the new scope under IPv4</h4>
+      <div class="img-wrap"><img src="Images/dhcpmgmt17.PNG" alt="Scope visible in console"></div>
 
+      <p>This walkthrough configured internal <strong>DNS</strong> and <strong>DHCP</strong> on Windows Server 2016—the two key services to set before promoting to a domain controller. Next up: installing the <strong>AD DS</strong> role and standing up Active Directory.</p>
+    </section>
 
-    <p>This demonstration included configuring internal DNS and DHCP on Windows Server 2016, the two critical services that must be configured prior to setting up Active Directory. The next lab will outline the steps on installing and setting up the AD DS server role.</p>
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
 
-   
-
-
-
-<a href="../index.html">Back to Home</a>
+  </div>
 </body>
 </html>
