@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Basic Bash Shell Scripting · Mark Thompson Portfolio</title>
-  <meta name="description" content="Intro to Bash scripting: why it matters, core syntax (shebang, variables, conditionals, loops, functions), and step-by-step examples. Theme-matched with scrollable screenshot galleries." />
+  <meta name="description" content="Introduction to Bash scripting: shebang, echo, input, conditionals, loops, functions, and practical script examples with screenshots." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -20,21 +20,19 @@
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
       line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      overflow-y: scroll;
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
     .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
     h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     h2{margin:0 0 10px;font-size:22px}
     h3{margin:16px 0 8px;font-size:18px}
@@ -42,45 +40,23 @@
     a:hover{text-decoration:underline}
     .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cards */
     .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:16px}
 
-    /* Code */
     pre{margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;border-radius:12px;overflow:auto;color:#e8eaf6;font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
     code{background:#0f1424;border:1px solid #202a3f;border-radius:6px;padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
 
-    /* Figures */
     .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;max-width:100%}
     .figure img{display:block;height:auto;max-width:100%}
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Scroll galleries */
-    .gallery-wrap{position:relative;margin-top:10px}
-    .gallery{display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
-    .gallery .item{scroll-snap-align:start}
-    .gallery .item .figure{height:100%}
-    .gallery::-webkit-scrollbar{height:10px}
-    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
-    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
-    .gallery.hide-scrollbar{scrollbar-width:none}
-    .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
-    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
-    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
-    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
-    .gbtn:hover{background:#121733}
-    .gprev{left:-6px}
-    .gnext{right:-6px}
-
-    /* Footer */
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:#4DA3FF}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
 
-    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -89,213 +65,75 @@
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
 
-    <!-- Breadcrumb -->
     <div class="crumbs">
       <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Basic Bash Shell Scripting</span>
     </div>
 
-    <!-- Header -->
     <header>
       <h1>Basic Bash Shell Scripting</h1>
-      <p class="lead">Turn repetitive terminal tasks into small, reusable programs. Learn the shebang, variables, conditionals, loops, and functions—then apply them with real examples.</p>
+      <p class="lead">Automate tasks and build reusable tools with Bash: shebang, variables, conditionals, loops, functions, and example scripts.</p>
     </header>
 
-    <!-- What is Bash scripting -->
-    <section class="card" id="what">
+    <section class="card">
       <h2>What is Bash Shell Scripting?</h2>
-      <p><b>Bash</b> (Bourne Again Shell) is both a command language and a shell for Unix-like systems. <b>Bash scripting</b> means writing a sequence of commands into a file so they can run together—automating file work, user input, loops, and system admin tasks.</p>
-      <p>Bash scripting turns repeatable steps into clean, versionable scripts that manage systems and solve problems using built‑in Unix tools.</p>
+      <p><b>Bash (Bourne Again Shell)</b> is both a shell and command language. Bash scripting means writing sequences of commands in files to automate tasks, from file management to user prompts, loops, and system administration.</p>
+      <p>Think of it as turning repetitive terminal tasks into small programs that save time, reduce human error, and scale easily.</p>
     </section>
 
-    <!-- Why/When -->
-    <section class="card" id="why">
+    <section class="card">
       <h2>Why and When is Bash Scripting Beneficial?</h2>
       <ul>
-        <li>Automate repetitive admin tasks (backups, updates).</li>
-        <li>Create quick solutions for monitoring or file manipulation.</li>
-        <li>Run a sequence of commands without human interaction.</li>
-        <li>Configure environments and software setups.</li>
-        <li>Save time and reduce errors through automation.</li>
+        <li>Automating repetitive administrative tasks (backups, updates).</li>
+        <li>Creating quick solutions for system monitoring or file manipulation.</li>
+        <li>Running sequences of commands without human interaction.</li>
+        <li>Configuring environments or software setups.</li>
+        <li>Saving time and reducing mistakes through automation.</li>
       </ul>
     </section>
 
-    <!-- Fundamentals -->
-    <section class="card" id="fundamentals">
+    <section class="card">
       <h2>Bash Scripting Fundamentals</h2>
-
-      <h3>Shebang & Execution</h3>
       <pre><code>#!/bin/bash
-# file: script.sh
+# shebang line → tells the system to run this with bash
 
-echo "Hello from Bash"</code></pre>
-      <p>The first line <code>#!/bin/bash</code> (the <b>shebang</b>) tells the OS to run the file with Bash. Make it executable and run it:</p>
-      <pre><code>chmod +x script.sh
-./script.sh</code></pre>
-
-      <h3>Variables & Read</h3>
-      <pre><code>name="Mark"
-echo "Hi, $name!"
-
-read -p "Your favorite distro? " distro
-echo "Nice choice: $distro"</code></pre>
-
-      <h3>Conditionals</h3>
-      <pre><code>read -p "Enter a number: " n
-if [ "$n" -gt 10 ]; then
-  echo "Greater than 10"
-elif [ "$n" -eq 10 ]; then
-  echo "Exactly 10"
+echo "Hello"
+read name
+if [ "$name" == "Mark" ]; then
+  echo "Welcome back"
 else
-  echo "Less than 10"
+  echo "Hello $name"
 fi</code></pre>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-conditionals" class="gallery hide-scrollbar" role="region" aria-label="Conditional examples">
-          <article class="item"><figure class="figure"><img src="Images/Conditional.png" alt="If/else code example" loading="lazy" decoding="async" /><figcaption class="figcap">If/else structure.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ConditionalSR.png" alt="If/else output screenshot" loading="lazy" decoding="async" /><figcaption class="figcap">If/else output.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>Loops</h3>
-      <p><b>For</b> — when you know the iteration set; <b>While</b> — continue while condition is true.</p>
-      <pre><code># for over values
-for i in 1 2 3; do
-  echo "Number $i"
-done
-
-# for over files in a folder
-for f in *.log; do
-  echo "Found: $f"
-done
-
-# while loop
-count=0
-while [ $count -lt 3 ]; do
-  echo "Count: $count"
-  count=$((count+1))
-done</code></pre>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-loops" class="gallery hide-scrollbar" role="region" aria-label="Loop examples">
-          <article class="item"><figure class="figure"><img src="Images/forloopexample.png" alt="for loop code" loading="lazy" decoding="async" /><figcaption class="figcap">For loop.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/forloopexampleSR.png" alt="for loop output" loading="lazy" decoding="async" /><figcaption class="figcap">For loop output.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/loopoverfile.png" alt="loop over files code" loading="lazy" decoding="async" /><figcaption class="figcap">Loop over files.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/loopoverfileSR.png" alt="loop over files output" loading="lazy" decoding="async" /><figcaption class="figcap">Loop over files output.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/whileloop.png" alt="while loop code" loading="lazy" decoding="async" /><figcaption class="figcap">While loop.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/whileloopSR.png" alt="while loop output" loading="lazy" decoding="async" /><figcaption class="figcap">While loop output.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>Functions</h3>
-      <pre><code>greet(){
-  echo "Hello, $1!"
-}
-
-greet "Mark"</code></pre>
-      <p>Functions help you organize code, avoid repetition, and reuse logic across scripts.</p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-functions" class="gallery hide-scrollbar" role="region" aria-label="Function examples">
-          <article class="item"><figure class="figure"><img src="Images/Function1.png" alt="function code" loading="lazy" decoding="async" /><figcaption class="figcap">Function definition.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Function1SR.png" alt="function output" loading="lazy" decoding="async" /><figcaption class="figcap">Function output.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>Script Structure Tips</h3>
       <ul>
-        <li>Start with <code>#!/bin/bash</code>, then <code>set -euo pipefail</code> for safer scripts.</li>
-        <li>Quote variables: <code>"$var"</code>. Prefer <code>$(cmd)</code> over backticks.</li>
-        <li>Use functions + <code>main()</code>; return exit codes with <code>exit</code>.</li>
-        <li>Log progress with <code>echo</code> or <code>printf</code>; use comments generously.</li>
+        <li><b>#!/bin/bash</b> — shebang, specifies interpreter.</li>
+        <li><b>echo</b> — print text.</li>
+        <li><b>read</b> — capture user input.</li>
+        <li><b>if/else</b> — conditional logic.</li>
+        <li><b>for/while</b> — loops.</li>
+        <li><b>functions</b> — reusable blocks of code.</li>
       </ul>
-      <pre><code>#!/bin/bash
-set -euo pipefail
-
-log(){ printf "[%s] %s\n" "$(date +%T)" "$*"; }
-main(){
-  log "Starting"
-  # work goes here
-  log "Done"
-}
-main "$@"</code></pre>
+      <div class="figure"><img src="Images/Conditional.png" alt="if/else condition" loading="lazy" /><div class="figcap">Conditional example.</div></div>
+      <div class="figure"><img src="Images/forloopexample.png" alt="for loop" loading="lazy" /><div class="figcap">For loop example.</div></div>
+      <div class="figure"><img src="Images/whileloop.png" alt="while loop" loading="lazy" /><div class="figcap">While loop example.</div></div>
+      <div class="figure"><img src="Images/Function1.png" alt="function" loading="lazy" /><div class="figcap">Function example.</div></div>
     </section>
 
-    <!-- Examples gallery groups -->
-    <section class="card" id="examples">
+    <section class="card">
       <h2>Script Examples</h2>
-
-      <h3>1) Hello World</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-hello" class="gallery hide-scrollbar" role="region" aria-label="Hello world screenshots">
-          <article class="item"><figure class="figure"><img src="Images/hello.png" alt="hello world code" loading="lazy" decoding="async" /><figcaption class="figcap">Hello world script.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/helloSR.png" alt="hello world output" loading="lazy" decoding="async" /><figcaption class="figcap">Output.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>2) User Input</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-input" class="gallery hide-scrollbar" role="region" aria-label="User input screenshots">
-          <article class="item"><figure class="figure"><img src="Images/UserInput.png" alt="read user input code" loading="lazy" decoding="async" /><figcaption class="figcap">Prompt with <code>read</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/UserInputSR.png" alt="read user input output" loading="lazy" decoding="async" /><figcaption class="figcap">Echoing input.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>3) File Existence Check</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-filecheck" class="gallery hide-scrollbar" role="region" aria-label="File check screenshots">
-          <article class="item"><figure class="figure"><img src="Images/FileCheck.png" alt="file existence code" loading="lazy" decoding="async" /><figcaption class="figcap">Check with <code>-f</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/FileCheckSR.png" alt="file existence output" loading="lazy" decoding="async" /><figcaption class="figcap">Results.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>4) For Loop</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-forloop" class="gallery hide-scrollbar" role="region" aria-label="For loop screenshots">
-          <article class="item"><figure class="figure"><img src="Images/ForLoop.png" alt="for loop code" loading="lazy" decoding="async" /><figcaption class="figcap">Loop over values.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ForLoopSR.png" alt="for loop output" loading="lazy" decoding="async" /><figcaption class="figcap">Output.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>5) Simple Backup Script</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-backup" class="gallery hide-scrollbar" role="region" aria-label="Backup script screenshots">
-          <article class="item"><figure class="figure"><img src="Images/Backup.png" alt="backup script code" loading="lazy" decoding="async" /><figcaption class="figcap">Compress & copy.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BackupSR.png" alt="backup script output" loading="lazy" decoding="async" /><figcaption class="figcap">Run results.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>6) Function Example</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-fn" class="gallery hide-scrollbar" role="region" aria-label="Function script screenshots">
-          <article class="item"><figure class="figure"><img src="Images/Function.png" alt="function script code" loading="lazy" decoding="async" /><figcaption class="figcap">Function script.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/FunctionSR.png" alt="function script output" loading="lazy" decoding="async" /><figcaption class="figcap">Execution output.</figcaption></figure></article>
-        </div>
-      </div>
+      <div class="figure"><img src="Images/hello.png" alt="Hello World script" loading="lazy" /><div class="figcap">1. Hello World Script</div></div>
+      <div class="figure"><img src="Images/UserInput.png" alt="User input script" loading="lazy" /><div class="figcap">2. User Input Script</div></div>
+      <div class="figure"><img src="Images/FileCheck.png" alt="File existence check" loading="lazy" /><div class="figcap">3. File Existence Check</div></div>
+      <div class="figure"><img src="Images/ForLoop.png" alt="For loop script" loading="lazy" /><div class="figcap">4. For Loop Example</div></div>
+      <div class="figure"><img src="Images/Backup.png" alt="Backup script" loading="lazy" /><div class="figcap">5. Simple Backup Script</div></div>
+      <div class="figure"><img src="Images/Function.png" alt="Function script" loading="lazy" /><div class="figcap">6. Function Example</div></div>
     </section>
 
-    <!-- Wrap -->
     <section class="card">
       <h2>Conclusion</h2>
-      <p>We covered the essentials of Bash scripting—shebang, variables, input, conditionals, loops, and functions—then applied them in practical examples. Keep experimenting and check <code>man bash</code> for deeper options.</p>
+      <p>We covered the fundamentals of <b>Bash scripting</b>: why it’s valuable, the shebang, conditionals, loops, and functions. These building blocks let you automate repetitive tasks, improve efficiency, and maintain scalable workflows.</p>
+      <p>Through examples, you saw how to create scripts for greetings, input handling, file checks, loops, backups, and functions. Bash scripting is best learned by writing and running your own scripts — experiment, practice, and expand them.</p>
       <p><a href="../index.html">Back to Home</a></p>
     </section>
 
-    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
@@ -305,26 +143,5 @@ main "$@"</code></pre>
     </footer>
 
   </div>
-
-  <!-- Minimal JS for galleries on this page -->
-  <script>
-    (function(){
-      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
-        const scroller = wrap.querySelector('.gallery');
-        if(!scroller) return;
-        const left = wrap.querySelector('.gprev');
-        const right = wrap.querySelector('.gnext');
-        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
-        if(left) left.addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
-        if(right) right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
-        scroller.addEventListener('wheel', (e) => {
-          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
-            e.preventDefault();
-            scroller.scrollLeft += e.deltaY; // vertical wheel → horizontal scroll
-          }
-        }, {passive:false});
-      });
-    })();
-  </script>
 </body>
 </html>
