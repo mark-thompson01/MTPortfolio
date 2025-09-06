@@ -1,332 +1,381 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Network Communications Uncovered: Exploring Ports, Protocols, and Scanners in Action</title>
-      <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
-        h1, h2 {
-            color: #B22222;
-            margin-bottom: 10px;
-        }
-        h3 {
-            color: #B22222;
-            margin-bottom: 10px;
-            font-style: italic;
-        }
-        p {
-            text-align: left; /* Align paragraphs to the left */
-            margin-left: 20px; /* Add slight indentation */
-        }
-        code {
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-family: "Courier New", Courier, monospace;
-        }
-        blockquote {
-            background-color: #1e1e1e;
-            border-left: 5px solid #4caf50;
-            padding: 10px;
-            margin: 10px 0;
-            color: #cfcfcf;
-        }
-        img {
-            display: block;
-            margin: 20px 0;
-            max-width: 75%;
-            height: auto;
-            border: 1px solid #444;
-            border-radius: 5px;
-        }
-        ul, ol {
-            margin-left: 20px;
-        }
-        .back-link {
-            color: #1E90FF;
-            text-decoration: none;
-        }
-                  a {
-      color: #1e90ff;
-      text-decoration: none;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ports, Protocols, &amp; Network Scanners · Mark Thompson Portfolio</title>
+  <meta name="description" content="Network communications uncovered—ports, protocols, and scanners in action with Advanced IP Scanner, Nmap, and Zenmap." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px; --table-border:#2b3550; --table-row:#0f1424;
     }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    </style>
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:10px 0 6px;font-size:16px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards / sections */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    /* Figures honor your inline sizes */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;   /* shrink-wrap to image width */
+      max-width:100%;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%;  /* allows downscale on narrow screens */
+      /* no width:100% => your inline sizes stay in control */
+    }
+
+    /* Code + quotes */
+    pre{
+      margin:10px 0;
+      padding:12px 14px;
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:12px;
+      overflow:auto;
+      color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+    blockquote{
+      background:#101522;border-left:4px solid #4DA3FF;padding:12px 14px;
+      margin:12px 0;color:#cfd3e6;border-radius:10px;
+    }
+
+    /* Tables */
+    table{border-collapse:collapse;width:100%;max-width:100%;margin:10px 0;border:1px solid var(--table-border);border-radius:10px;overflow:hidden}
+    th,td{border-bottom:1px solid var(--table-border);padding:10px 12px;text-align:left}
+    thead th{background:#0e1322;color:#cfd3e6}
+    tbody tr{background:var(--table-row)}
+    tbody tr:nth-child(even){background:#0c1020}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
 </head>
 <body>
-    <h1>Network Communications Uncovered: Exploring Ports, Protocols, and Scanners in Action</h1>
+  <div class="wrap">
 
-    <p>
-  <a href="https://github.com/mark-thompson01/ports-protocols-and-network-scanners" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills" class="active">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Skills">Networking</a> · <span>Ports, Protocols, &amp; Network Scanners</span>
+    </div>
 
-    <h2>Introduction</h2>
-    <p>Understanding how devices communicate on a network is a cornerstone of Information Technology. At the heart of this communication are <strong>ports</strong> and <strong>protocols</strong> – the essential rules and channels that govern data flow across systems. Whether you're troubleshooting a network issue, performing a security assessment, or mapping out assets, knowing how to identify open ports, active services, and connected endpoints is critical.</p>
-    <p>This lab is designed to introduce and reinforce core concepts of ports, protocols, and network discovery through hands-on use of popular network scanning tools – including Advanced IP Scanner, Nmap, and its graphical counterpart Zenmap. By the end, you’ll not only have a strong theoretical grasp but also practical experience scanning a live network, interpreting results, and identifying potential security and infrastructure insights.</p>    
-    
-    <blockquote><strong>Note:</strong> Only run scanning tools on networks where you have explicit permission from the owner or administrator.</blockquote>
+    <!-- Header -->
+    <header>
+      <h1>Ports, Protocols, &amp; Network Scanners</h1>
+      <p class="lead">Network Communications Uncovered: Exploring Ports, Protocols, and Scanners in Action</p>
+      <p>
+        <a href="https://github.com/mark-thompson01/ports-protocols-and-network-scanners" target="_blank" rel="noopener">
+          View this project on GitHub
+        </a>
+      </p>
+    </header>
 
-    <h2>What You’ll Learn</h2>
-    <ul>
+    <!-- Intro -->
+    <section class="card">
+      <h2>Introduction</h2>
+      <p>Understanding how devices communicate on a network is a cornerstone of Information Technology. At the heart of this communication are <strong>ports</strong> and <strong>protocols</strong> – the essential rules and channels that govern data flow across systems. Whether you're troubleshooting a network issue, performing a security assessment, or mapping out assets, knowing how to identify open ports, active services, and connected endpoints is critical.</p>
+      <p>This lab is designed to introduce and reinforce core concepts of ports, protocols, and network discovery through hands-on use of popular network scanning tools – including Advanced IP Scanner, Nmap, and its graphical counterpart Zenmap. By the end, you’ll not only have a strong theoretical grasp but also practical experience scanning a live network, interpreting results, and identifying potential security and infrastructure insights.</p>
+      <blockquote><strong>Note:</strong> Only run scanning tools on networks where you have explicit permission from the owner or administrator.</blockquote>
+    </section>
+
+    <!-- What you'll learn -->
+    <section class="card">
+      <h2>What You’ll Learn</h2>
+      <ul>
         <li>The structure and function of the <strong>TCP/IP suite</strong></li>
         <li>The difference between <strong>TCP and UDP</strong>, and how <strong>port numbers</strong> relate to services</li>
         <li>How core <strong>network services</strong> like DNS, DHCP, SMTP, IMAP, and HTTP/HTTPS work</li>
         <li>Remote access protocols: <strong>RDP, SSH, and VNC</strong></li>
         <li>How to use Advanced IP Scanner, Nmap, and Zenmap to find devices and services on a network</li>
-    </ul><br><br>
+      </ul>
+    </section>
 
-    <h2>Section 1: The Foundation – TCP/IP, Ports, and Protocols</h2>
-    <h3>What is TCP/IP?</h3>
-    <p>It all starts with the <strong>TCP/IP (Transmission Control Protocol/Internet Protocol)</strong> suite. The TCP/IP Suite is the fundamental communication framework of computer networking and the Internet that allows devices to connect and communicate across the Internet and most modern networks. It is a suite of protocols that work together to transmit data between computers.</p>
-    <p>TCP/IP is comprised of two fundamental transport layer protocols to facilitate computer network communications over local and remote networks. TCP (Transmission Control Protocol) and UDP (User Datagram Protocol).</p>
-    <p>While TCP focuses on reliable, ordered communication, UDP is designed for speed and simplicity. It’s used when applications care more about performance than guaranteed delivery, for such example such as video streaming or voice/video communications.</p>
-    <ul>
+    <!-- Section 1 -->
+    <section class="card">
+      <h2>Section 1: The Foundation – TCP/IP, Ports, and Protocols</h2>
+
+      <h3>What is TCP/IP?</h3>
+      <p>It all starts with the <strong>TCP/IP (Transmission Control Protocol/Internet Protocol)</strong> suite. The TCP/IP Suite is the fundamental communication framework of computer networking and the Internet that allows devices to connect and communicate across the Internet and most modern networks. It is a suite of protocols that work together to transmit data between computers.</p>
+      <p>TCP/IP is comprised of two fundamental transport layer protocols to facilitate computer network communications over local and remote networks. TCP (Transmission Control Protocol) and UDP (User Datagram Protocol).</p>
+      <p>While TCP focuses on reliable, ordered communication, UDP is designed for speed and simplicity. It’s used when applications care more about performance than guaranteed delivery, for such example such as video streaming or voice/video communications.</p>
+      <ul>
         <li><strong>IP</strong> handles addressing and routing packets to the correct destination</li>
         <li><strong>TCP</strong> ensures reliable, ordered, error-checked delivery of packets</li>
         <li><strong>UDP</strong> offers faster, connectionless communication without guarantees</li>
-    </ul>
+      </ul>
 
-    <h3>TCP vs. UDP</h3>
-    <table border="1">
-        <tr><th>Feature</th><th>TCP</th><th>UDP</th></tr>
-        <tr><td>Type</td><td>Connection-oriented</td><td>Connectionless</td></tr>
-        <tr><td>Delivery</td><td>Reliable, ordered, checked</td><td>Unreliable, unordered</td></tr>
-        <tr><td>Speed</td><td>Slower</td><td>Faster</td></tr>
-        <tr><td>Use Case</td><td>Web, email, file transfer</td><td>Streaming, gaming, VoIP</td></tr>
-    </table><br>
+      <h3>TCP vs. UDP</h3>
+      <table>
+        <thead>
+          <tr><th>Feature</th><th>TCP</th><th>UDP</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Type</td><td>Connection-oriented</td><td>Connectionless</td></tr>
+          <tr><td>Delivery</td><td>Reliable, ordered, checked</td><td>Unreliable, unordered</td></tr>
+          <tr><td>Speed</td><td>Slower</td><td>Faster</td></tr>
+          <tr><td>Use Case</td><td>Web, email, file transfer</td><td>Streaming, gaming, VoIP</td></tr>
+        </tbody>
+      </table>
 
-    <h3>What Are Port Numbers?</h3>
-    <p>Port numbers exist at the <strong>Transport Layer</strong> of TCP/IP. They act as <strong>logical endpoints</strong>, identifying specific services or applications running on a device.</p>
-    <blockquote><strong>Analogy:</strong> If an IP address is a building's address, the port number is the apartment number.</blockquote>
+      <h3>What Are Port Numbers?</h3>
+      <p>Port numbers exist at the <strong>Transport Layer</strong> of TCP/IP. They act as <strong>logical endpoints</strong>, identifying specific services or applications running on a device.</p>
+      <blockquote><strong>Analogy:</strong> If an IP address is a building's address, the port number is the apartment number.</blockquote>
 
-    <table border="1">
-        <tr><th>Port</th><th>Protocol</th><th>Service</th><th>Description</th></tr>
-        <tr><td>20/21</td><td>TCP</td><td>FTP</td><td>File Transfer Protocol</td></tr>
-        <tr><td>22</td><td>TCP</td><td>SSH</td><td>Secure remote access</td></tr>
-        <tr><td>23</td><td>TCP</td><td>Telnet</td><td>Remote shell (unencrypted)</td></tr>
-        <tr><td>25</td><td>TCP</td><td>SMTP</td><td>Email sending</td></tr>
-        <tr><td>53</td><td>UDP/TCP</td><td>DNS</td><td>Domain name resolution</td></tr>
-        <tr><td>80</td><td>TCP</td><td>HTTP</td><td>Insecure web browsing</td></tr>
-        <tr><td>443</td><td>TCP</td><td>HTTPS</td><td>Secure web browsing</td></tr>
-        <tr><td>3389</td><td>TCP</td><td>RDP</td><td>Remote Desktop Protocol</td></tr>
-        <tr><td>445</td><td>TCP</td><td>SMB</td><td>File sharing on Windows networks</td></tr>
-    </table><br><br>
+      <table>
+        <thead>
+          <tr><th>Port</th><th>Protocol</th><th>Service</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>20/21</td><td>TCP</td><td>FTP</td><td>File Transfer Protocol</td></tr>
+          <tr><td>22</td><td>TCP</td><td>SSH</td><td>Secure remote access</td></tr>
+          <tr><td>23</td><td>TCP</td><td>Telnet</td><td>Remote shell (unencrypted)</td></tr>
+          <tr><td>25</td><td>TCP</td><td>SMTP</td><td>Email sending</td></tr>
+          <tr><td>53</td><td>UDP/TCP</td><td>DNS</td><td>Domain name resolution</td></tr>
+          <tr><td>80</td><td>TCP</td><td>HTTP</td><td>Insecure web browsing</td></tr>
+          <tr><td>443</td><td>TCP</td><td>HTTPS</td><td>Secure web browsing</td></tr>
+          <tr><td>3389</td><td>TCP</td><td>RDP</td><td>Remote Desktop Protocol</td></tr>
+          <tr><td>445</td><td>TCP</td><td>SMB</td><td>File sharing on Windows networks</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-    <h2>Section 2: Core Network Services</h2>
-    <p>These five core protocols/services play a foundational role in making our everyday digital experiences possible.</p>
-    <ul>
+    <!-- Section 2 -->
+    <section class="card">
+      <h2>Section 2: Core Network Services</h2>
+      <p>These five core protocols/services play a foundational role in making our everyday digital experiences possible.</p>
+      <ul>
         <li><strong>DNS</strong>: Translates domain names to IP addresses</li>
         <li><strong>DHCP</strong>: Automatically assigns IP configuration to devices</li>
         <li><strong>SMTP</strong>: Sends outgoing emails</li>
         <li><strong>IMAP</strong>: Syncs email messages across devices</li>
         <li><strong>HTTP/HTTPS</strong>: Transfers data between web servers and browsers</li>
-    </ul>
+      </ul>
 
-    <h3>DNS - Domain Name Service</h3>
-    <p>DNS acts as the internet's phonebook, translating human-friendly domain names (like google.com) into IP addresses (like 142.250.190.78) that computers use to identify each other on a network.  
+      <h3>DNS - Domain Name Service</h3>
+      <p>DNS acts as the internet's phonebook, translating human-friendly domain names (like google.com) into IP addresses (like 142.250.190.78) that computers use to identify each other on a network. Without DNS, you’d have to remember the exact IP address of every website or service you want to access. Every time you type a URL or click a link, DNS silently resolves it for you. It’s the first step in nearly every online interaction.</p>
 
-Without DNS, you’d have to remember the exact IP address of every website or service you want to access Every time you type a URL or click a link, DNS silently resolves it for you. It’s the first step in nearly every online interaction.</p>
+      <h3>DHCP - Dynamic Host Configuration Protocol</h3>
+      <p>DHCP automatically assigns IP addresses and network configuration details (like subnet masks, default gateways, and DNS servers) to devices on a network. Thanks to DHCP, your device connects to Wi-Fi and just works – no manual IP settings required. It allows for quick, scalable, and conflict-free connectivity across home, office, and public networks.</p>
 
-    <h3>DHCP - Dynamic Host Configuration Protocol</h3>
-    <p>DHCP automatically assigns IP addresses and network configuration details (like subnet masks, default gateways, and DNS servers) to devices on a network.  
+      <h3>SMTP - Simple Mail Transfer Protocol</h3>
+      <p>SMTP is the protocol used to send outgoing emails from a client (like Outlook or Gmail) to a mail server, or between mail servers themselves. Every time you hit “send”, SMTP handles the delivery process behind the scenes – routing your message across servers until it reaches its destination inbox.</p>
 
-Thanks to DHCP, your device connects to Wi-Fi and just works – no manual IP settings required. It allows for quick, scalable, and conflict-free connectivity across home, office, and public networks.</p>
+      <h3>IMAP - Internet Message Access Protocol</h3>
+      <p>IMAP lets your email client retrieve and sync messages from a mail server while keeping them on the server. It’s what makes email synchronization possible across multiple devices—read, delete, or organize on one device and it’s reflected everywhere.</p>
 
-    <h3>SMTP - Simple Mail Transfer Protocol</h3>
-    <p>SMTP is the protocol used to send outgoing emails from a client (like Outlook or Gmail) to a mail server, or between mail servers themselves.  
+      <h3>HTTP – HTTPS – Hypertext Transfer Protocol / Secure</h3>
+      <p>HTTP governs how browsers and servers communicate. HTTPS is the encrypted version, protecting credentials and personal data from interception. Today, HTTPS is essential for nearly every website.</p>
 
-Every time you hit “send”, SMTP handles the delivery process behind the scenes – routing your message across server until it reaches its destination inbox. Without SMTP, modern email communication wouldn’t be possible.  </p>
+      <h3>The Bigger Picture – Why These Five Are Essential</h3>
+      <p>These protocols work together to enable everything from browsing the web, sending email, and connecting to networks, to keeping your inbox in sync. They’re the invisible architecture of digital life.</p>
+      <ul>
+        <li>No <strong>DNS</strong> → no human-readable websites</li>
+        <li>No <strong>DHCP</strong> → painful manual IP setup</li>
+        <li>No <strong>SMTP/IMAP</strong> → email breaks</li>
+        <li>No <strong>HTTPS</strong> → insecure browsing</li>
+      </ul>
+    </section>
 
-    <h3>IMAP - Internet Message Access Protocol</h3>
-    <p>IMAP is a protocol that allows your email client to retrieve and sync messages from a mail server, while keeping them stored on the server itself.  
-
-IMAP is what makes email synchronizing possible across multiple devices. When you read, delete, or organize email on your phone, those changes show up instantly on your laptop too – because IMAP keeps everything in sync on the server.</p>
-
-    <h3>HTTP – HTTPS – Hypertext Transfer Protocol / Secure</h3>
-    <p>HTTP is the protocol that governs how web browsers and servers communicate, transferring web pages, images, scripts, and more. HTTPS is the secure, encrypt version of HTTP.  
-
-It’s what loads every web page you visit. HTTP ensures your data – such as login credentials, credit card info, and personal details – are encrypted and protected from prying eyes. In today’s internet, HTTPS isn’t just important – it’s essential.</p>
-
-    <h3>The Bigger Picture – Why These Five Are Essential</h3>
-    <p>These five protocols work together to enable everything from browsing the web, sending emails, and connecting to networks, and even keeping your inbox in sync. They represent the invisible architecture of digital life. Without them:</p>
-
-    <ul>
-        <li>You wouldn’t reach websites by name (DNS),</li>
-        <li>Your devices wouldn’t get online easily (DHCP),</li>
-        <li>You couldn’t send or receive emails (SMTP & IMAP),</li>
-        <li>And you couldn’t browse the web securely (HTTP/HTTPS)</li>
-    </ul>
-
-    <p>They’re the unsung heroes of the internet – working behind the scenes every second of every day.</p><br><br>
-    
-    
-    <h2>Section 3: Remote Access Protocols</h2>
-    <ul>
+    <!-- Section 3 -->
+    <section class="card">
+      <h2>Section 3: Remote Access Protocols</h2>
+      <ul>
         <li><strong>RDP (Port 3389)</strong>: Graphical remote access to Windows systems</li>
         <li><strong>SSH (Port 22)</strong>: Secure command-line remote access to Unix/Linux systems</li>
         <li><strong>VNC (Port 5900)</strong>: Platform-independent graphical remote access</li>
-    </ul>
-    <p>Each enables remote control of systems and should be secured with encryption, firewalls, and VPNs.</p>
-    <h3>RDP - Remote Desktop Protocol</h3>
-    <p>RDP is a proprietary protocol developed by Microsoft that allows users to remotely access and control a Windows computer’s graphical interface over a network connection. It transmits the full desktop environment including audio and clipboard sharing, enabling seamless remote interaction as if sitting directly at the machine. RDP typically operations over TCP port 3389 and is widely used in enterprise environments for IT support, remote administration, and virtual desktop infrastructure (VDI).  
-    </p>
+      </ul>
+      <p>Each enables remote control of systems and should be secured with encryption, firewalls, and VPNs.</p>
 
-    <h3>SSH - Secure Shell</h3>
-    <p>SSH is a cryptographic network protocol used to securely access and manage systems – primarily Unix – or Linux-based – through a command-line interface. Unlike RDP, SSH doesn’t transmit a graphical interface by default, but focuses on encrypted remote shell access, file transfers, and port forwarding. SSH operates over TCP port 22 and is commonly used by system administrators and developers for secure server management.</p>
+      <h3>RDP - Remote Desktop Protocol</h3>
+      <p>RDP lets users remotely access a Windows desktop with full GUI, clipboard, and audio redirection—commonly over TCP 3389.</p>
 
-    <h3>VNC - Virtual Network Computing</h3>
-    <p>VNC is a cross-platform remote access protocol that allows a user to remotely control another system’s graphical interface by transmitting screen updates and keyboard/mouse input over the network. Unlike RDP, VNC is platform-independent and uses Remote Framebuffer (RFB) protocol. It typically runs on TCP port 5900 and is often used for remote support, desktop sharing, and lightweight access to non-Windows systems.</p>
+      <h3>SSH - Secure Shell</h3>
+      <p>SSH provides encrypted remote shell access (and tunneling/file transfer) for Unix/Linux—commonly over TCP 22.</p>
 
-    <h3>How RDP, SSH, and VNC Are Similar</h3>
-    <p>All three protocols – <strong>RDP</strong>, <strong>SSH</strong>, and <strong>VNC</strong> – enables remote access to systems across a network, allowing administrators or users to manage machines without being physically present.  </p>
-    <p>They serve the common purpose of remote control and system interaction; though they differ in how they deliver that experience. RDP and VNC both provide graphical desktop access, while SSH provides secure command-line control.</p>
-    <p>Each uses its own communication port and encryption method, but all three can be secured through firewalls, VPNs, or tunneling to limit exposure and ensure safe remote connectivity.</p><br><br>
+      <h3>VNC - Virtual Network Computing</h3>
+      <p>VNC is cross-platform screen sharing over the RFB protocol—commonly over TCP 5900.</p>
 
-    
-    <h2>Section 4: Tool Showcase – Network Scanners</h2>
-    <h3>Advanced IP Scanner</h3>
-    <ul>
+      <h3>How RDP, SSH, and VNC Are Similar</h3>
+      <p>All three enable remote management. RDP/VNC offer GUIs; SSH is CLI-first. Harden with firewalls, VPNs, and least-exposure principles.</p>
+    </section>
+
+    <!-- Section 4 -->
+    <section class="card">
+      <h2>Section 4: Tool Showcase – Network Scanners</h2>
+
+      <h3>Advanced IP Scanner</h3>
+      <ul>
         <li>Simple tool for fast Windows network scans</li>
         <li>Finds live devices with hostname, IP, manufacturer, and MAC address</li>
-    </ul>
-    <img src="Images/AdvancedIPScanner.png" alt="AdvancedIPScanner">
-    <p>To scan for devices on a network using Advanced IP Scanner, enter the default gateway followed by the subnet CIDR (in this case, /24). Then, click <strong>"Scan"</strong> in the top-left corner to begin scanning for online devices connected to the specific network.</p>
-    <p>For each device it detects, Advanced IP Scanner will display the hostname, IP address, manufacturer, and MAC address.</p><br><br>
+      </ul>
+      <div class="figure">
+        <img src="Images/AdvancedIPScanner.png" alt="AdvancedIPScanner">
+      </div>
+      <p>To scan for devices on a network using Advanced IP Scanner, enter the default gateway followed by the subnet CIDR (in this case, /24). Then click <strong>“Scan”</strong> to begin. For each device it detects, you’ll see hostname, IP, manufacturer, and MAC address.</p>
 
-    <h3>Nmap – The Powerhouse</h3>
-    <p><strong>Nmap (Network Mapper)</strong> is a powerful, open-source network scanning tool used to discover hosts, services, and vulnerabilities on a network. It works by sending specially crafted packets to target systems and analyzing their responses.</p>
-    <p>Nmap is widely used by:</p>
-    <ul>
-        <li><strong>Network administrators</strong> to audit infrastructure</li>
-        <li><strong>Cybersecurity professionals</strong> to assess exposure</li>
-        <li><strong>Penetration testers</strong> to enumerate targets during recon</li>
-    </ul>
-    <p>Whether you're scanning a single device or mapping an entire network, Nmap provides deep insight into what's running, where it's running, and how it's communicating - making it one of the most versatile tools in the industry.</p>
-    
-    <ul>
-        <li>Deep scans for open ports, services, OS, and vulnerabilities</li>
-        <li>Scan types:
-            <ul>
-                <li><code>-sS</code>: TCP SYN scan</li>
-                <li><code>-sU</code>: UDP scan</li>
-                <li><code>-A</code>: Aggressive (OS, services, scripts)</li>
-                <li><code>--script vuln</code>: Run vulnerability detection scripts</li>
-            </ul>
-        </li>
-    </ul><br>
+      <h3>Nmap – The Powerhouse</h3>
+      <p><strong>Nmap</strong> discovers hosts, services, and potential exposures by sending crafted packets and analyzing responses.</p>
+      <ul>
+        <li><strong>Network admins</strong> audit infrastructure</li>
+        <li><strong>Security teams</strong> assess exposure</li>
+        <li><strong>Pen testers</strong> enumerate targets during recon</li>
+      </ul>
+      <p>Scan types:</p>
+      <ul>
+        <li><code>-sS</code>: TCP SYN scan</li>
+        <li><code>-sU</code>: UDP scan</li>
+        <li><code>-A</code>: Aggressive (OS, services, scripts)</li>
+        <li><code>--script vuln</code>: Run vulnerability detection scripts</li>
+      </ul>
 
-    <h4>Nmap Linux Commands</h4>
+      <h4>Nmap Linux Commands</h4>
 
-     <code>sudo nmap -sn 10.38.1.115</code>
-    <p><strong>Purpose:</strong> Perform a <strong>ping scan</strong> (aka "host discovery").</p>
-    <p><strong>What it does:</strong></p>
-    <ul>
-        <li>Checks if the host is <strong>up and responding</strong></li>
+      <pre><code>sudo nmap -sn 10.38.1.115</code></pre>
+      <p><strong>Purpose:</strong> Ping scan (host discovery).</p>
+      <ul>
+        <li>Checks if the host is up</li>
         <li>Skips port scanning</li>
-    </ul>
+      </ul>
+      <div class="figure">
+        <img src="Images/nmapsn.png" alt="nmapsn.png" style="width:700px; height:250px;">
+      </div>
+      <p>Ideal for quickly identifying live devices.</p>
 
-    <img src="Images/nmapsn.png" alt="nmapsn.png" style="width:700px; height:250px;">
-    
+      <pre><code>sudo nmap -sS 10.38.1.115</code></pre>
+      <p><strong>Purpose:</strong> TCP SYN (stealth) scan.</p>
+      <ul>
+        <li>Probes for open TCP ports without completing the handshake</li>
+      </ul>
+      <div class="figure">
+        <img src="Images/nmapsS.png" alt="nmapsS.png">
+      </div>
 
-    <p>Ideal for quickly identifying <strong>live devices</strong> on a network</p><br><br><br>
+      <pre><code>sudo nmap -sU 10.38.1.115</code></pre>
+      <p><strong>Purpose:</strong> UDP port scan.</p>
+      <ul>
+        <li>Targets UDP services (DNS, NTP, etc.)</li>
+        <li>Slower due to lack of acknowledgments</li>
+      </ul>
+      <div class="figure">
+        <img src="Images/nmapsU.png" alt="nmapsU.png">
+      </div>
 
-    
-    <code>sudo nmap -sS 10.38.1.115</code>
-    <p><strong>Purpose:</strong> Run a <strong>TCP SYN scan</strong> (stealth scan).</p>
-    <p><strong>What it does:</strong></p>
-    <ul>
-        <li>Sends TCP SYN packets to discover <strong>open TCP ports</strong></li>
-        <li>Doesn't complete the TCP handshake (hence more stealthy)</li>
-    </ul>
+      <pre><code>sudo nmap -A 10.38.1.115</code></pre>
+      <p><strong>Purpose:</strong> Aggressive scan.</p>
+      <ul>
+        <li>Open ports, service versions, OS detection</li>
+        <li>Traceroute + default scripts</li>
+      </ul>
+      <div class="figure">
+        <img src="Images/nmapA.png" alt="nmapA.png" style="width:600px; height:600px;">
+      </div>
 
-    <img src="Images/nmapsS.png" alt="nmapsS.png">
+      <pre><code>sudo nmap --script vuln 10.38.1.115</code></pre>
+      <p><strong>Purpose:</strong> Run the <code>vuln</code> script category.</p>
+      <ul>
+        <li>Uses NSE to check for known vulnerabilities</li>
+      </ul>
+      <div class="figure">
+        <img src="Images/nmapvuln.png" alt="nmapvuln.png" style="width:700px; height:400px;">
+      </div>
 
-    <p>This is Nmap's <strong>default scan type</strong> and is useful for staying low-profile during recon.</p><br><br><br>
+      <h3>Zenmap</h3>
+      <ul>
+        <li>GUI for Nmap with profiles, visuals, and easier onboarding</li>
+      </ul>
+      <div class="figure">
+        <img src="Images/Zenmap.png" alt="Zenmap">
+      </div>
+    </section>
 
-
-    <code>sudo nmap -sU 10.38.1.115</code>
-    <p><strong>Purpose:</strong> Perform a <strong>UDP port scan</strong></p>
-    <p><strong>What it does:</strong></p>
-    <ul>
-        <li>Probes <strong>UDP services</strong> like DNS, SMTP, NTP, etc.</li>
-        <li>Slower and more difficult than TCP scans due to lack of acknowledgments</li>
-    </ul>
-
-    <img src="Images/nmapsU.png" alt="nmapsU.png">
-
-    <p>Use this to identify <strong>services running over UDP,</strong> which are often overlooked but critical</p><br><br><br>
-
-    
-
-    <code>sudo nmap -A 10.38.1.115</code>
-    <p><strong>Purpose:</strong> Perform an <strong>aggressive scan</strong> on the target</p>
-    <p><strong>What it does:</strong></p>
-    <ul>
-        <li>Detects <strong>open ports</strong></li>
-        <li>Identifies <strong>service versions</strong></li>
-        <li>Attempts <strong>OS detection</strong></li>
-        <li>Performs <strong>traceroute</strong></li>
-        <li>Runs default <strong>Nmap scripts</strong></li>
-    </ul>
-
-    <img src="Images/nmapA.png" alt="nmapA.png" style="width:600px; height:600px">
-
-    <p>Great for gathering <strong>detailed recon</strong> on a single target in one go.</p><br><br><br>
-
-    <code>sudo nmap --script vuln 10.38.1.115</code>
-    <p><strong>Purpose:</strong> Run the <strong>vulnerability scanning script category.</strong></p>
-    <p><strong>What it does</strong></p>
-    <ul>
-        <li>Use Nmap's built-in <strong>NSE (Nmap Scripting Engine)</strong></li>
-        <li>Checks for <strong>known vulnerabilities</strong> using community and default scripts</li>
-    </ul>
-
-    <img src="Images/nmapvuln.png" alt="nmapvuln.png" style="width:700px; height:400px">
-
-    <p>Useful for <strong>vulnerability enumeration</strong>, but can be noisy and intrusive on live systems.</p><br><br><br><br>
-
-
-    <h3>Zenmap</h3>
-    <ul>
-        <li>GUI for Nmap with scan profiles, visual mapping, and easier learning</li>
-    </ul>
-    <img src="Images/Zenmap.png" alt="Zenmap"><br><br><br>
-
-    <h2>Section 5: Lab Walkthrough</h2>
-    <ol>
+    <!-- Section 5 -->
+    <section class="card">
+      <h2>Section 5: Lab Walkthrough</h2>
+      <ol>
         <li>Run a basic discovery scan with <strong>Advanced IP Scanner</strong></li>
-        <li>Identify 2-3 live devices</li>
+        <li>Identify 2–3 live devices</li>
         <li>Use <strong>Nmap</strong> and <strong>Zenmap</strong> to:
-            <ul>
-                <li>Identify open ports and services</li>
-                <li>Detect OS</li>
-                <li>Find exposed services (e.g., Telnet, SMB)</li>
-            </ul>
+          <ul>
+            <li>Identify open ports and services</li>
+            <li>Detect OS</li>
+            <li>Find exposed services (e.g., Telnet, SMB)</li>
+          </ul>
         </li>
         <li>Document findings</li>
-    </ol><br><br>
+      </ol>
+      <p>This lab revealed the layers of modern networking—from the <strong>TCP/IP model</strong> to port numbers and protocols like <strong>TCP/UDP</strong> and services like <strong>DNS</strong>, <strong>DHCP</strong>, <strong>SMTP</strong>, and <strong>HTTP/HTTPS</strong>. Then we moved from theory to practice using <strong>Advanced IP Scanner</strong>, <strong>Nmap</strong>, and <strong>Zenmap</strong> to uncover endpoints, services, and potential vulnerabilities.</p>
+      <blockquote><strong>Understanding what devices are on your network, what ports are open, and what services are running is essential knowledge for anyone in IT, cybersecurity, or network management.</strong></blockquote>
+      <p>This lab builds a strong foundation for network security, system administration, and vulnerability assessment.</p>
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
-    
-    <p>This lab revealed the interconnected layers of modern networking, beginning with the <strong>TCP/IP model</strong> and its role in routing and delivering data. Explored how <strong>port numbers</strong> distinguish services on a host, how <strong>protocols</strong> like <strong>TCP</strong> and <strong>UDP</strong> define transmission behavior, and how core services like <strong>DNS</strong>, <strong>DHCP</strong>, <strong>SMTP</strong>, and <strong>HTTP/HTTPS</strong> make the internet function.</p>
-    <p>Then, we transitioned from theory to practice with hands-on exploration using <strong>Advanced IP Scanner</strong>, <strong>Nmap</strong>, and <strong>Zenmap</strong> — seeing how these tools help uncover endpoints, services, and potential vulnerabilities across a network.</p>
-    <blockquote><strong>Understanding what devices are on your network, what ports are open, and what services are running is essential knowledge for anyone in IT, cybersecurity, or network management.</strong></blockquote>
-    <p>This lab focuses on building a strong foundation to support further learning in network security, system administration, and vulnerability assessment.</p>
-
- <a href="../index.html">Back to Home</a>
+    <!-- Footer (branding only, no © or year) -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
