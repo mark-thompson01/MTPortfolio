@@ -1,94 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab Projects</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NAS Security Attack &amp; Defense Lab — Analysis &amp; Reporting · Mark Thompson Portfolio</title>
+  <meta name="description" content="Summary of attack/defense labs on a NAS host: findings, detections, mitigations, key takeaways, and conclusions." />
+
+  <!-- THEME -->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1 {
-      text-align: left;
-      color: #d3d3d3; /* Lighter grey heading */
-      margin-bottom: 10px;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    p {
-      text-align: left;
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:14px 0 6px;font-size:16px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    .back-link {
-      color: #1E90FF;
-      text-decoration: none;
-    }
+
+    /* Lists inside cards */
+    ul{margin:8px 0 0 18px}
+    ol{margin:8px 0 0 18px}
+    li{margin:6px 0}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
-  <body>
-    <h2>Overview</h2>
-<p>The NAS Attack & Defense Lab was designed to simulate real-world attack scenarios and corresponding defensive measures within a controlled environment. Through four distinct lab exercises, this project demonstrates my ability to analyze and exploit system vulnerabilities while also emphasizing the importance of proactive defense and mitigation strategies, particularly with immediate response upon detecting an incident. This dual focus underscores the necessity of understanding both offensive and defensive security practices to secure modern systems effectively.</p>
+<body>
+  <div class="wrap">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-<h2>Lab Summaries</h2>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> ·
+      <a href="../">NAS Security Attack &amp; Defense Lab</a> ·
+      <span>Analysis &amp; Reporting</span>
+    </div>
 
-<h3>Lab 1: SSH Brute Force Attack</h3>
-<ul>
-    <li><strong>Attack:</strong> A brute force attack was conducted against the SSH service to simulate an attacker attempting to guess user credentials. The attack utilized a wordlist to automate login attempts.</li>
-    <li><strong>Detection:</strong> Evidence of the attack was found in authentication logs (<code>/var/log/auth.log</code>), showing repeated failed login attempts from the attacker’s IP address.</li>
-    <li><strong>Defensive Measures:</strong>
-        <ul>
-            <li>Verified pf was enabled and demonstrated blocking the attacker IP in the <code>pf.conf</code> configuration file</li>
-        </ul>
-    </li>
-</ul>
+    <!-- Header -->
+    <header>
+      <h1>Analysis &amp; Reporting</h1>
+      <p class="lead">A concise wrap-up of the NAS Attack &amp; Defense Labs—offense, detection, response, and lessons learned.</p>
+    </header>
 
-<h3>Lab 2: Successful Brute Force Login</h3>
-<ul>
-    <li><strong>Attack:</strong> A successful brute force attack was demonstrated by gaining access to a user account after discovering valid credentials.</li>
-    <li><strong>Detection:</strong> Authentication logs revealed an unauthorized login event. Process monitoring identified unusual user activity following the compromise.</li>
-    <li><strong>Defensive Measures:</strong>
-        <ul>
-            <li>Immediately reset the account password upon detection and disabled user account login</li>
-            <li>Disabled password-based authentication for SSH</li>
-        </ul>
-    </li>
-</ul>
+    <!-- Overview -->
+    <section class="card">
+      <h2>Overview</h2>
+      <p>The NAS Attack &amp; Defense Lab simulates real-world attack scenarios and corresponding defenses in a controlled environment. Across four labs, it demonstrates exploitation paths (brute force, privilege escalation, persistence) and blue-team playbooks (log analysis, process containment, hardening). The emphasis is on rapid detection, immediate response, and durable mitigation.</p>
+    </section>
 
-<h3>Lab 3: Privilege Escalation</h3>
-<ul>
-    <li><strong>Attack:</strong> Privilege escalation was achieved by exploiting a vulnerable SUID binary (<code>vim</code>) and setting the <code>TERM</code> environment variable to <code>xterm</code>. This allowed the attacker to spawn a root shell.</li>
-    <li><strong>Detection:</strong> Logs revealed the execution of <code>vim</code> with elevated privileges and unusual processes spawned by non-root users. The exploitation was also identified via process monitoring (<code>ps aux</code>) and auditing recent SUID binary changes.</li>
-    <li><strong>Defensive Measures:</strong>
-        <ul>
-            <li>Identified processes related to the user account and terminated them immediatelhy</li>
-            <li>Removed unnecessary SUID permissions from binaries.</li>
-        </ul>
-    </li>
-</ul>
+    <!-- Lab summaries -->
+    <section class="card">
+      <h2>Lab Summaries</h2>
 
-<h3>Lab 4: Persistence</h3>
-<ul>
-    <li><strong>Attack:</strong> Persistence was established by adding an attacker’s public SSH key to the root user’s <code>authorized_keys</code> file, enabling passwordless SSH access.</li>
-    <li><strong>Detection:</strong> The unauthorized modification of the <code>authorized_keys</code> file was detected using the <code>find</code> command to locate recently modified files. SSH logs also revealed public key-based logins from the attacker’s machine.</li>
-    <li><strong>Defensive Measures:</strong>
-        <ul>
-            <li>Identified and manually inspected the unauthorized SSH key that was setup in <code>~/.ssh/authorized_keys</code> for unauthorized key entries.</li>
-            <li>Removed the unauthorized entries from <code>~/.ssh/authorized_keys</code>
-            <li>Reset the user account password associated with the unauthorized key entries</li>
-        </ul>
-    </li>
-</ul>
+      <h3>Lab 1: SSH Brute Force Attack</h3>
+      <ul>
+        <li><strong>Attack:</strong> Automated wordlist brute force targeting SSH.</li>
+        <li><strong>Detection:</strong> Repeated failures in <code>/var/log/auth.log</code> tied to the attacker IP.</li>
+        <li><strong>Defense:</strong> Verified <code>pf</code> enabled; blocked attacker IP via <code>pf.conf</code> and reloaded rules.</li>
+      </ul>
 
-<h2>Key Takeaways</h2>
-<ol>
-    <li><strong>Proactive Defense is Crucial:</strong> Each attack demonstrated the importance of implementing immediate response upon detecting these attacks and layered security measures, such as disabling SSH password-based authentication, malicious process termination, and network restrictions. Regular auditing of user activity, file modifications, and system configurations can detect and prevent many attacks.</li><br>
-    <li><strong>Understanding the Attacker’s Perspective:</strong> By simulating attacks, this lab highlights how attackers exploit vulnerabilities, misconfigurations, and weak security practices. This knowledge is invaluable for developing effective defensive strategies.</li><br>
-    <li><strong>Balance Between Offensive and Defensive Practices:</strong> The ability to execute and detect attacks showcases a well-rounded understanding of both red and blue team methodologies. Combining these perspectives ensures a more robust security posture.</li><br>
-</ol>
+      <h3>Lab 2: Successful Brute Force Login</h3>
+      <ul>
+        <li><strong>Attack:</strong> Valid credentials discovered; shell access obtained (then upgraded to Meterpreter).</li>
+        <li><strong>Detection:</strong> Unauthorized login in auth logs; unusual processes and activity.</li>
+        <li><strong>Defense:</strong> Reset password; disabled user login; disabled SSH password auth (keys only).</li>
+      </ul>
 
-<h2>Conclusion</h2>
-<p>The NAS Attack & Defense Lab demonstrates a comprehensive understanding of offensive and defensive cybersecurity practices. By exploring attack techniques such as brute force, privilege escalation, and persistence, this project provides practical insights into the risks facing modern systems. The corresponding defensive measures demonstrate the importance of immediate response upon detecting these attacks and reflects the importance of proactive monitoring, strict access controls, and regular audits in mitigating these threats.</p>
-  <a href="../" class=back-link">Back to Labs</a>
-  </body>
+      <h3>Lab 3: Privilege Escalation</h3>
+      <ul>
+        <li><strong>Attack:</strong> Misconfigured SUID on <code>vim</code> + proper <code>TERM</code> led to root shell via <code>:!sh</code>.</li>
+        <li><strong>Detection:</strong> Logs show editor launching shells; <code>ps aux</code> reveals root-owned interactive shells.</li>
+        <li><strong>Defense:</strong> Killed rogue processes; removed unnecessary SUID permissions.</li>
+      </ul>
+
+      <h3>Lab 4: Persistence</h3>
+      <ul>
+        <li><strong>Attack:</strong> Added attacker public key to <code>authorized_keys</code> for passwordless SSH re-entry.</li>
+        <li><strong>Detection:</strong> Recent modification of <code>authorized_keys</code>; auth logs show key-based logins.</li>
+        <li><strong>Defense:</strong> Removed unauthorized keys, reset passwords, terminated active sessions.</li>
+      </ul>
+    </section>
+
+    <!-- Key takeaways -->
+    <section class="card">
+      <h2>Key Takeaways</h2>
+      <ol>
+        <li><strong>Proactive defense matters:</strong> Immediate containment (firewall blocks, process kills) plus layered hardening (SSH keys-only, least privilege) stop escalation.</li>
+        <li><strong>Think like an attacker:</strong> Understanding offensive paths exposes weak configurations and guides practical defenses.</li>
+        <li><strong>Balanced skillset:</strong> Blending red/blue techniques yields better detections, faster response, and more resilient systems.</li>
+      </ol>
+    </section>
+
+    <!-- Conclusion -->
+    <section class="card">
+      <h2>Conclusion</h2>
+      <p>This project demonstrates end-to-end security practice: discovering weaknesses, exploiting them in a lab, detecting the activity through logs and telemetry, and applying durable mitigations. The workflows—brute force, privilege escalation, and persistence—mirror common intrusion chains and reinforce the value of continuous monitoring, strict access controls, and regular audits.</p>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to NAS Security Attack &amp; Defense Lab</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
 </html>
