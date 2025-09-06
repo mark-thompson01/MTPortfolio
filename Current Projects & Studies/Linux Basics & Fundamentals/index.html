@@ -2,134 +2,187 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Linux Basics & Fundamentals</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Linux Basics & Fundamentals · Mark Thompson Portfolio</title>
+  <meta name="description" content="Foundational Linux concepts: filesystem hierarchy, Debian/Ubuntu package management (APT & dpkg), managing services with systemd, processes, and system monitoring/logging. Theme‑matched to MTPortfolio." />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2 {
-      color: #00ffcc;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: block;
-      white-space: pre-wrap;
-      margin: 0.5rem 0;
-    }
-    section {
-      margin-bottom: 2rem;
-    }
-     a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards / sections */
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:16px}
+
+    /* Code */
+    pre{margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;border-radius:12px;overflow:auto;color:#e8eaf6;font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
+    code{background:#0f1424;border:1px solid #202a3f;border-radius:6px;padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
+
+    /* Lists */
+    ul,ol{padding-left:22px;margin:8px 0}
+
+    /* Figures (optional screenshots) */
+    .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;max-width:100%}
+    .figure img{display:block;height:auto;max-width:100%}
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
+  <div class="wrap">
 
-<h1>Linux Basics and Fundamentals</h1>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-<p>This tutorial provides a foundational understanding of core Linux management concepts. It focuses on the Linux file system, handling packages on Debian-based systems, managing services with systemd, and monitoring processes. These practical areas are essential for anyone working with Linux in a system administration or support capacity.</p><br>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Linux Basics &amp; Fundamentals</span>
+    </div>
 
-<hr>
+    <!-- Header -->
+    <header>
+      <h1>Linux Basics &amp; Fundamentals</h1>
+      <p class="lead">Core admin skills: filesystem hierarchy, Debian/Ubuntu package management, systemd service control, processes, and essential system monitoring & logging.</p>
+    </header>
 
-<h2>Linux File System Hierarchy Overview</h2>
-<p>The <strong>Linux File System Hierarchy</strong> organizes files logically within the Linux system, essential for administration, troubleshooting, and software management.</p>
-<ul>
-  <li><strong>/</strong>: Root directory</li>
-  <li><strong>/bin</strong>: Essential user binaries</li>
-  <li><strong>/sbin</strong>: System maintenance binaries</li>
-  <li><strong>/boot</strong>: Boot loader files</li>
-  <li><strong>/etc</strong>: System-wide configuration files</li>
-  <li><strong>/home</strong>: User directories</li>
-  <li><strong>/lib</strong>, <strong>/lib64</strong>: Shared libraries</li>
-  <li><strong>/usr</strong>: User-installed applications</li>
-  <li><strong>/var</strong>: Variable data like logs and databases</li>
-  <li><strong>/tmp</strong>: Temporary files</li>
-  <li><strong>/opt</strong>: Optional third-party software</li>
-  <li><strong>/dev</strong>: Hardware device files</li>
-  <li><strong>/proc</strong>, <strong>/sys</strong>: Virtual filesystems for real-time system information</li>
-  <li><strong>/mnt</strong>, <strong>/media</strong>: Mount points for external filesystems and removable media</li>
-</ul><br>
+    <!-- Filesystem -->
+    <section class="card" id="filesystem">
+      <h2>Linux Filesystem Hierarchy Overview</h2>
+      <p>The <b>Filesystem Hierarchy</b> organizes everything as files under the root <code>/</code>. Knowing where things live helps with troubleshooting, backups, and automation.</p>
+      <ul>
+        <li><b>/</b> – Root of the filesystem</li>
+        <li><b>/bin</b> – Essential user binaries</li>
+        <li><b>/sbin</b> – System binaries (admin)</li>
+        <li><b>/boot</b> – Boot loader & kernel</li>
+        <li><b>/etc</b> – System‑wide configuration</li>
+        <li><b>/home</b> – User home directories</li>
+        <li><b>/lib</b>, <b>/lib64</b> – Shared libraries</li>
+        <li><b>/usr</b> – User‑space apps & read‑mostly data</li>
+        <li><b>/var</b> – Variable data (logs, spool, DBs)</li>
+        <li><b>/tmp</b> – Temporary files</li>
+        <li><b>/opt</b> – Optional third‑party software</li>
+        <li><b>/dev</b> – Device files</li>
+        <li><b>/proc</b>, <b>/sys</b> – Virtual kernel & device info</li>
+        <li><b>/mnt</b>, <b>/media</b> – Mount points/removable media</li>
+      </ul>
+      <!-- Optional screenshot placeholder
+      <figure class="figure">
+        <img src="Images/linux/fs-tree.png" alt="Filesystem tree from root /" loading="lazy" decoding="async" />
+        <figcaption class="figcap">A quick look at the Linux filesystem from <code>/</code>.</figcaption>
+      </figure> -->
+    </section>
 
-<hr>
+    <!-- Package management -->
+    <section class="card" id="packages">
+      <h2>Package Management on Debian‑based Systems</h2>
+      <p>Debian/Ubuntu use <b>APT (Advanced Package Tool)</b> to query, install, and update software from repositories defined in <code>/etc/apt/sources.list</code> (and files in <code>/etc/apt/sources.list.d/</code>).</p>
 
-<h2>Package Management on Debian-based Systems</h2>
-<p>Debian-based systems utilize <strong>APT (Advanced Package Tool)</strong>, managing software through repositories hosting pre-compiled software packages.</p>
-<ul>
-  <li><strong>Repositories</strong>: Managed through <code>/etc/apt/sources.list</code> and additional PPA repositories.</li>
-  <li><strong>Key APT commands</strong>:
-    <ul>
-      <li><code>apt update</code>: Refresh package lists</li>
-      <li><code>apt upgrade</code>: Upgrade installed packages</li>
-      <li><code>apt install</code>: Install new packages</li>
-      <li><code>apt remove</code>: Uninstall packages, leaving configuration files</li>
-      <li><code>apt purge</code>: Completely remove packages and configurations</li>
-      <li><code>apt search</code>: Search available software</li>
-    </ul>
-  </li>
-</ul><br>
+      <h3>Common APT commands</h3>
+      <pre><code>sudo apt update            # Refresh package lists
+sudo apt upgrade           # Upgrade installed packages
+sudo apt install &lt;pkg&gt;    # Install a package
+sudo apt remove &lt;pkg&gt;     # Remove (keep configs)
+sudo apt purge &lt;pkg&gt;      # Remove incl. configs
+apt search &lt;term&gt;         # Search available software</code></pre>
 
-<p><strong><code>dpkg</code> (Debian Package)</strong>: Low-level package manager used for installing, removing, and managing <code>.deb</code> packages directly.</p>
-<ul>
-  <li>Install: <code>dpkg -i package.deb</code></li>
-  <li>Remove: <code>dpkg -r package_name</code></li>
-  <li>Purge: <code>dpkg -P package_name</code></li>
-  <li>List installed packages: <code>dpkg -l</code></li>
-</ul>
+      <h3>Low‑level: dpkg</h3>
+      <p><code>dpkg</code> works directly with <code>.deb</code> files and the local package database.</p>
+      <pre><code>sudo dpkg -i package.deb   # Install a .deb
+sudo dpkg -r &lt;name&gt;        # Remove (keep configs)
+sudo dpkg -P &lt;name&gt;        # Purge (remove configs)
+dpkg -l                    # List installed packages</code></pre>
+    </section>
 
-<hr>
+    <!-- Services -->
+    <section class="card" id="services">
+      <h2>Managing System Services (systemd)</h2>
+      <p><b>systemd</b> is the init system & service manager on most modern distros. You interact with it using <code>systemctl</code> and view logs via <code>journalctl</code>.</p>
+      <pre><code>systemctl status &lt;service&gt;             # Check status
+sudo systemctl start|stop|restart &lt;service&gt;
+sudo systemctl enable|disable &lt;service&gt; # Manage autostart
+journalctl -u &lt;service&gt;                # Service logs</code></pre>
+    </section>
 
-<h2>Managing System Services</h2><br>
-<p><strong>systemd</strong> is the default initialization and service manager system in modern Linux distributions. It handles startup and management of system services through units and targets.</p>
-<ul>
-  <li>Status: <code>systemctl status &lt;service&gt;</code></li>
-  <li>Start/stop/restart: <code>systemctl start|stop|restart &lt;service&gt;</code></li>
-  <li>Enable/disable auto-start: <code>systemctl enable|disable &lt;service&gt;</code></li>
-  <li>Logs: <code>journalctl -u &lt;service&gt;</code></li>
-</ul><br>
+    <!-- Processes -->
+    <section class="card" id="processes">
+      <h2>Process Management</h2>
+      <p>Processes are running programs; each has a PID and consumes CPU/memory. Use these commands to inspect and control them.</p>
+      <pre><code>ps aux                      # Snapshot of processes (BSD style)
+top                         # Interactive live view
+htop                        # Nicer top (if installed)
+kill &lt;PID&gt;                  # Terminate by PID
+pkill &lt;name&gt;                # Terminate by name
+jobs; bg; fg                # Manage shell jobs</code></pre>
+    </section>
 
-<hr>
+    <!-- Monitoring & logs -->
+    <section class="card" id="monitoring">
+      <h2>System Monitoring and Logging</h2>
+      <pre><code>uname -a        # Kernel and OS info
+hostnamectl     # Hostname and chassis info
+lscpu           # CPU details
+free -h         # Memory usage
+</code></pre>
+      <p><b>Key logs</b> (Debian/Ubuntu): <code>/var/log/syslog</code>, <code>/var/log/auth.log</code>, and kernel ring buffer via <code>dmesg</code>.</p>
+    </section>
 
-<h2>Process Management</h2>
-<p><strong>Processes</strong> are active executing programs managed by the Linux kernel, identified by unique PIDs, resource allocation, and scheduling.</p>
-<ul>
-  <li>View: <code>ps</code>, <code>top</code>, <code>htop</code></li>
-  <li>Terminate: <code>kill &lt;PID&gt;</code>, <code>pkill &lt;process_name&gt;</code></li>
-  <li>Background/foreground: <code>bg</code>, <code>fg</code>, <code>jobs</code></li>
-</ul><br>
+    <!-- Wrap -->
+    <section class="card">
+      <h2>Conclusion</h2>
+      <p>These fundamentals—filesystem layout, packages, services, processes, and logs—form the day‑to‑day toolkit for Linux admins. Master them first, then layer on scripting, automation, and security hardening.</p>
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
-<hr>
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
 
-<h2>System Monitoring and Logging</h2>
-<ul>
-  <li><code>uname</code>: Kernel info</li>
-  <li><code>hostnamectl</code>: Hostname management</li>
-  <li><code>lscpu</code>: CPU info</li>
-  <li><code>free</code>: Memory usage</li>
-</ul>
-
-<p><strong>Logging Directories</strong>: <code>/var/log/syslog</code>, <code>/var/log/auth.log</code>, <code>/var/log/dmesg</code></p>
-
-<hr>
-
-
-<hr><br>
-
-<h2>Conclusion</h2>
-<p>This tutorial introduces the essential skills for managing a Linux environment. From understanding the file system hierarchy to installing packages, controlling services, handling processes, and writing shell scripts — these foundational practices are critical for effective Linux system administration. Mastery of these topics enables greater confidence in real-world IT environments where Linux plays a central role.</p>
-
-  
-  <a href="../index.html">Back to Home</a>
+  </div>
 </body>
 </html>
