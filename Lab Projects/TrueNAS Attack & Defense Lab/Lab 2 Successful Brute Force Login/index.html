@@ -1,83 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab Projects</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NAS Security Attack &amp; Defense Lab 2 · Mark Thompson Portfolio</title>
+  <meta name="description" content="Lab 2: Successful SSH brute-force, log-based detection, immediate account mitigation, and hardening (keys-only SSH)." />
+
+  <!-- THEME -->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1 {
-      text-align: left;
-      color: #d3d3d3; /* Lighter grey heading */
-      margin-bottom: 10px;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    h2 {
-      text-align: left;
-      color: #d3d3d3;
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:14px 0 6px;font-size:16px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    p {
-      text-align: left;
+
+    /* Code blocks */
+    pre{
+      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
+      border-radius:12px;overflow:auto;color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
     }
-    ul {
-      list-style: none; /* Remove default bullets */
-      padding-left: 0;
-      text-align: left; /* Align list to the left */
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
-    li {
-      margin: 10px 0;
+
+    /* Figures – intrinsic image size (no zoom/gallery) */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
     }
-    a {
-      color: #1e90ff; /* Blue link color */
-      text-decoration: none;
-      font-weight: bold;
+    .figure img{
+      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
+      width:auto; max-width:100%; height:auto;
     }
-    a:hover {
-      color: #ff7f50; /* Coral hover color */
-      text-decoration: underline;
-    }
-    .back-link {
-      color: #1E90FF;
-      text-decoration: none;
-    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Side-by-side */
+    .pair{display:grid;gap:12px;margin:16px 0}
+    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
+    .pair .figure{margin:0}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <h1>NAS Security Attack & Defense Lab 2</h1>
-  <h2>Successful Brute Force Login | Detection & Mitigation</h2>
-  <p>Gaining access to the target server via successful brute force attack through the use of the SSH service.</p>
-  <p>We know from the port scan in the previous lab that port 22 on the NAS server is open and running SSH. In this scenario, the NAS server is configured with a user account that has a weak password. Using the Metasploit auxiliary module <code>auxiliary/scanner/ssh_login</code>, a successful brute force attack is performed, leading to the compromise of the NAS server on the offensive side.</p>
-  <p>On the defensive side, the logs are reviewed to identify the successful brute force login to the server via the SSH protocol, and further mitigation procedures are implemented.</p>
+  <div class="wrap wide">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <h3>Offensive</h3>
-  <img src="Images/msf1.png" alt="msf1">
-  <img src="Images/ssh_login.png" alt="ssh_login">
-  <img src="Images/BruteForceSuccess.png" alt="BruteForceSuccess">
-  <p>Here, access has been gained with a bsd shell. I'm going to upgrade this to a Meterpreter session with the use of post exploit module <code>post/multi/manage/shell_to_meterpreter</code></p>
-  <img src="Images/Meterpreter%20Session%20Upgrade.png" alt="Meterpreter Session Upgrade">
-  <img src="Images/In%20The%20System.png" alt="In The System">
-  <img src="Images/getuid%20sysinfo.png" alt= getuid sysinfo">
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> ·
+      <a href="../">NAS Security Attack &amp; Defense Lab</a> ·
+      <span>Lab 2 — Successful Brute Force Login</span>
+    </div>
 
-  <h3>Defensive</h3>
-  <p>In reviewing the authentication logs on the server, here we see recorded failed login attempts, and the successful login on the last line.</p>
-  <img src="Images/LogSearch.png" alt=LogSearch">
-  <img src="Images/LogSearch2.png" alt=LogSearch2">
-  <p>Upon detecting this, I would immediately reset the password, disable the account from being logged into, and proceed with further incident investigation.</p>
-  <img src="Images/ResetPassword.png" alt=ResetPassword">
-  <img src="Images/Disable.png" alt=Disable">
-  <p>While the investigation and other incident response procedures are underway, I would also configure the server to mitigate brute force attacks.</p>
-  <p>For example, I would set the following configurations on the NAS server.</p>
+    <!-- Header -->
+    <header>
+      <h1>Lab 2 — Successful Brute Force Login</h1>
+      <p class="lead">Attack: SSH credentials cracked via Metasploit’s <code>ssh_login</code>. Defense: detect the success in logs, reset/disable, and harden SSH to keys-only.</p>
+    </header>
 
-  <p><strong>Disable Password-based Login for SSH</strong></p>
-  <p>I would disable SSH password-based authentication on the server and set up SSH to only use public-key based authentication for the accounts that need to connect to SSH.</p>
-  <img src="Images/Password%20Renable.png" alt="Password Renable">
-  <img src="Images/SSH%20Server%20Settings%202.png" alt=SSH Server Settings 2"><br>
-  
-<a href="../" class="back-link">Back to Labs</a>
+    <!-- Scenario -->
+    <section class="card">
+      <h2>Scenario</h2>
+      <p>Building on Lab&nbsp;1, SSH (port 22) is exposed on the NAS host. A weak user password allows a successful brute-force using Metasploit’s <code>auxiliary/scanner/ssh_login</code>. On defense, authentication logs reveal the success; the account is secured and SSH is hardened.</p>
+    </section>
+
+    <!-- Offensive -->
+    <section class="card">
+      <h2>Offensive</h2>
+
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/msf1.png" alt="Metasploit console prepared for SSH brute-force" loading="lazy" decoding="async">
+          <figcaption class="figcap">Preparing Metasploit for the SSH attack.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/ssh_login.png" alt="Metasploit auxiliary/scanner/ssh_login module options" loading="lazy" decoding="async">
+          <figcaption class="figcap">Using <code>auxiliary/scanner/ssh_login</code>.</figcaption>
+        </figure>
+      </div>
+
+      <figure class="figure">
+        <img src="Images/BruteForceSuccess.png" alt="Successful SSH login via brute-force" loading="lazy" decoding="async">
+        <figcaption class="figcap">Credentials found — shell access obtained.</figcaption>
+      </figure>
+
+      <p>With a BSD shell obtained, upgrade to Meterpreter using the post module <code>post/multi/manage/shell_to_meterpreter</code>.</p>
+
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/Meterpreter%20Session%20Upgrade.png" alt="Upgrading shell to Meterpreter session" loading="lazy" decoding="async">
+          <figcaption class="figcap">Upgrading shell to Meterpreter.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/In%20The%20System.png" alt="Interactive Meterpreter session on the target" loading="lazy" decoding="async">
+          <figcaption class="figcap">Interactive Meterpreter session.</figcaption>
+        </figure>
+      </div>
+
+      <figure class="figure">
+        <img src="Images/getuid%20sysinfo.png" alt="getuid and sysinfo confirming user and system details" loading="lazy" decoding="async">
+        <figcaption class="figcap"><code>getuid</code> / <code>sysinfo</code> confirm context.</figcaption>
+      </figure>
+    </section>
+
+    <!-- Defensive -->
+    <section class="card">
+      <h2>Defensive</h2>
+
+      <h3>Detect the Successful Login</h3>
+      <p>Review <code>/var/log/auth.log</code> (or platform equivalent). Look for a sequence of failures followed by a success.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/LogSearch.png" alt="Log view showing failed attempts leading up to success" loading="lazy" decoding="async">
+          <figcaption class="figcap">Failed attempts chained together.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/LogSearch2.png" alt="Log view highlighting the successful SSH login event" loading="lazy" decoding="async">
+          <figcaption class="figcap">Success event identified in logs.</figcaption>
+        </figure>
+      </div>
+
+      <h3>Immediate Account Actions</h3>
+      <p>Reset the compromised password and temporarily disable interactive SSH access for the account while IR proceeds.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/ResetPassword.png" alt="Resetting the user password on the NAS host" loading="lazy" decoding="async">
+          <figcaption class="figcap">Password reset.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/Disable.png" alt="Disabling the user account or restricting login" loading="lazy" decoding="async">
+          <figcaption class="figcap">Disable or restrict account logins.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Hardening -->
+    <section class="card">
+      <h2>Hardening SSH</h2>
+      <h3>Disable Password-Based Logins</h3>
+      <p>Move to key-based authentication and disable password auth for SSH to prevent brute-force success.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/Password%20Renable.png" alt="Server configuration snippet related to SSH password settings" loading="lazy" decoding="async">
+          <figcaption class="figcap">Disable password logins; use keys only.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/SSH%20Server%20Settings%202.png" alt="SSH server settings showing keys-only configuration" loading="lazy" decoding="async">
+          <figcaption class="figcap">Confirm SSH server settings.</figcaption>
+        </figure>
+      </div>
+      <p>Additional options: rate-limit via firewall, fail2ban-style lockouts, and limiting SSH to trusted management networks.</p>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to NAS Security Attack &amp; Defense Lab</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
