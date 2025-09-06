@@ -2,94 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Linux: An Introduction</title>
   <style>
     :root{
-      --bg-start:#0f172a;      
-      --bg-end:#0b1220;        
-      --text:#e5e7eb;          
-      --muted:#9ca3af;         
-      --link:#60a5fa;          
-      --link-hover:#ff7f50;    
-      --card:#0b1220cc;        
-      --border:#1f2937;        
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", sans-serif;
-      color:var(--text);
-      background: radial-gradient(1200px 600px at 10% -10%, #132035 0%, transparent 60%),
-                  radial-gradient(900px 500px at 90% -20%, #101a2d 0%, transparent 55%),
-                  linear-gradient(180deg, var(--bg-start), var(--bg-end));
-      line-height:1.65;
-    }
-    /* NAVIGATION */
-    nav {
-      display:flex;
-      justify-content:center;
-      background-color:#111827;
-      border-bottom:1px solid var(--border);
-      padding:14px 20px;
-      position:sticky;
-      top:0;
-      z-index:1000;
-    }
-    nav a {
-      color:var(--text);
-      text-decoration:none;
-      margin:0 18px;
-      font-weight:600;
-      transition:color .2s ease;
-    }
-    nav a:hover {
-      color:var(--link-hover);
+      --bg1:#0e141d;
+      --bg2:#0b111a;
+      --panel:#0f1926;
+      --text:#e7eaee;          /* same headline/body tone used elsewhere */
+      --muted:#b8c2cf;
+      --link:#1e90ff;
+      --link-hover:#ff7f50;
+      --rule: rgba(255,255,255,.06);
+      --maxw: 1100px;
     }
 
-    /* PAGE LAYOUT */
-    .page{
-      max-width:900px;
-      margin:0 auto;
-      padding:32px 20px 80px;
+    /* Page base */
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+      line-height:1.65;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 15% -10%, rgba(78,155,255,.08), transparent 60%),
+        radial-gradient(900px 500px at 85% -10%, rgba(245,186,255,.07), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
+
+    /* --- Header tabs (matches your other pages) --- */
     header{
-      margin-bottom:24px;
-      padding-bottom:12px;
-      border-bottom:1px solid var(--border);
+      background: #0f1722;
+      border-bottom: 1px solid var(--rule);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
-    h1,h2{
-      color:var(--text);       
-      line-height:1.25;
-      letter-spacing:.2px;
+    .nav{
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      gap: 56px;
+      align-items: center;
     }
-    h1{font-size:clamp(28px,4.5vw,44px); font-weight:800; margin-bottom:10px;}
-    h2{font-size:clamp(18px,2.4vw,24px); font-weight:700; margin-top:28px; margin-bottom:10px;}
-    p{margin:10px 0}
-    .muted{color:var(--muted)}
-    section{margin:22px 0; padding:18px 20px; background:var(--card); border:1px solid var(--border); border-radius:12px}
-    ul{margin:8px 0 0 18px; padding:0}
-    li{margin:6px 0}
-    code{background:#111827; padding:.15rem .4rem; border:1px solid var(--border); border-radius:6px}
+    .nav a{
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: none;
+      letter-spacing: .2px;
+      font-size: 1.25rem;
+    }
+    .nav a:hover{
+      color:#ffffff;
+      text-decoration: underline;
+      text-underline-offset: 6px;
+    }
+
+    /* Layout */
+    main{
+      max-width: var(--maxw);
+      margin: 40px auto 80px;
+      padding: 0 24px;
+    }
+
+    /* Headings (same light color as other pages) */
+    h1,h2{color:var(--text); margin:0 0 .4rem}
+    h1{font-size: clamp(2rem, 4vw, 3rem); font-weight:800; letter-spacing:.3px}
+    h2{font-size: clamp(1.25rem, 2.4vw, 1.6rem); font-weight:700; margin-top:2.2rem}
+
+    p{margin:.7rem 0}
+    ul{margin:.3rem 0 1.2rem 1.4rem}
+    li{margin:.35rem 0}
+
+    code{
+      background:#1d2633;
+      border:1px solid var(--rule);
+      border-radius:6px;
+      padding:.15rem .4rem;
+      font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono","Courier New",monospace;
+      font-size:.95em;
+    }
+
     a{color:var(--link); text-decoration:none}
     a:hover{color:var(--link-hover); text-decoration:underline}
-    .footer{margin-top:36px; border-top:1px solid var(--border); padding-top:16px}
   </style>
 </head>
 <body>
-  <!-- NAVIGATION -->
-  <nav>
-    <a href="../index.html">Home</a>
-    <a href="../windows.html">Windows</a>
-    <a href="../linux.html">Linux</a>
-    <a href="../projects.html">Projects</a>
-    <a href="../about.html">About</a>
-  </nav>
 
-  <div class="page">
-    <header>
-      <h1>Linux: An Introduction</h1>
-      <p class="muted">A concise overview of the Linux ecosystem—kernel, distributions, and the pieces that make it all work.</p>
-    </header>
+  <!-- Top tabs -->
+  <header>
+    <nav class="nav">
+      <a href="../index.html">Home</a>
+      <a href="../Windows/">Windows</a>
+      <a href="../Linux/">Linux</a>
+      <a href="../Projects/">Projects</a>
+      <a href="../About/">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Linux: An Introduction</h1>
 
     <section>
       <h2>What is Linux?</h2>
@@ -115,14 +130,14 @@
 
     <section>
       <h2>The Linux Kernel: The Heart of the System</h2>
-      <p>Many people think of Linux as an operating system, but technically, Linux refers to the <strong>kernel</strong>—the core component that interacts directly with hardware. A kernel handles crucial low-level tasks:</p>
+      <p>Technically, “Linux” refers to the <strong>kernel</strong> — the core component that interacts directly with hardware. The kernel handles:</p>
       <ul>
         <li><strong>Process management</strong></li>
         <li><strong>Memory management</strong></li>
         <li><strong>Device communication</strong></li>
         <li><strong>System calls and security enforcement</strong></li>
       </ul>
-      <p>What users typically interact with—the graphical interface, command-line tools, and software—are part of a <strong>Linux distribution</strong>, which includes the kernel and a suite of other essential software.</p>
+      <p>What users interact with — the graphical interface, command-line tools, and software — are part of a <strong>Linux distribution</strong>, which includes the kernel and a suite of other essential software.</p>
     </section>
 
     <section>
@@ -134,33 +149,27 @@
         <li>Desktop environments or server components</li>
         <li>Security updates and user interfaces</li>
       </ul>
-      <p>Some popular Linux distributions include:</p>
-      <ul>
-        <li><strong>Ubuntu</strong>: User-friendly and widely adopted in desktops and servers</li>
-        <li><strong>Debian</strong>: Stable, community-focused foundation for many other distros</li>
-        <li><strong>Fedora</strong>: Cutting-edge features and technologies</li>
-        <li><strong>Arch Linux</strong>: Minimalist and highly customizable</li>
-        <li><strong>Red Hat Enterprise Linux (RHEL)</strong>: Enterprise-grade with long-term support</li>
-      </ul>
+      <p>Some popular distributions include <strong>Ubuntu</strong>, <strong>Debian</strong>, <strong>Fedora</strong>, <strong>Arch Linux</strong>, and <strong>Red Hat Enterprise Linux (RHEL)</strong>.</p>
     </section>
 
     <section>
       <h2>Important Components of a Linux System</h2>
-      <p>To fully understand how Linux works, it's helpful to know its major components:</p>
       <ul>
         <li><strong>Kernel</strong>: The core that communicates with hardware.</li>
-        <li><strong>Shell</strong>: The command-line interpreter that lets users interact with the system.</li>
-        <li><strong>File System</strong>: Linux uses a hierarchical structure starting from the root directory (<code>/</code>).</li>
-        <li><strong>System Libraries</strong>: Essential shared code used by applications and services.</li>
-        <li><strong>System Daemons</strong>: Background processes that handle tasks like networking, printing, and scheduling.</li>
-        <li><strong>User Interface</strong>: May include desktop environments like GNOME, KDE, or XFCE.</li>
-        <li><strong>Package Manager</strong>: Tools like <code>apt</code>, <code>yum</code>, or <code>dnf</code> manage software installation and updates.</li>
+        <li><strong>Shell</strong>: The command-line interpreter.</li>
+        <li><strong>File System</strong>: Hierarchical structure starting from the root directory (<code>/</code>).</li>
+        <li><strong>System Libraries</strong>: Shared code used by applications and services.</li>
+        <li><strong>System Daemons</strong>: Background services for networking, printing, scheduling, etc.</li>
+        <li><strong>User Interface</strong>: Desktop environments like GNOME, KDE, or XFCE.</li>
+        <li><strong>Package Manager</strong>: Tools such as <code>apt</code>, <code>dnf</code>, or <code>yum</code> manage software.</li>
       </ul>
     </section>
 
-    <section class="footer">
-      <a href="../index.html">Back to Home</a>
+    <section>
+      <p>This introduction is a starting point. Whether you’re exploring system administration, programming, or cybersecurity, Linux offers the flexibility, transparency, and control to help you grow.</p>
     </section>
-  </div>
+
+    <p><a href="../index.html">Back to Home</a></p>
+  </main>
 </body>
 </html>
