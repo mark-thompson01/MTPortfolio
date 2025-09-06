@@ -51,24 +51,26 @@
     ul,ol{padding-left:22px;margin:8px 0}
     .tight li{margin:6px 0}
 
-    /* Figures: intrinsic size (downscale only) */
+    /* Figures: smaller, scroll-friendly */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:14px auto;
-      width:max-content;
+      margin:12px auto;
+      width:min(62%, 820px); /* cap width on large screens */
       max-width:100%;
       text-align:center;
     }
     .figure img{
       display:block;
-      width:auto;        /* preserve intrinsic width */
-      max-width:100%;    /* but don’t overflow */
+      width:100%;        /* fill the figure width */
       height:auto;
       border-radius:10px;
       cursor:zoom-in;
+    }
+    @media (max-width: 900px){
+      .figure{ width:92%; } /* give phones/tablets more width */
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
@@ -234,15 +236,21 @@
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
         <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/mark-thompson-01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
 
   </div>
 
-  <!-- Lightbox / zoom (no history hash; ESC/back behaves normally) -->
+  <!-- Lightbox / zoom (no history hash; ESC/back behaves normally) + lazy loading -->
   <script>
     (function(){
+      // Add lazy loading/async decoding to all figures’ images
+      document.querySelectorAll('.figure img').forEach(img=>{
+        img.loading = img.loading || 'lazy';
+        img.decoding = img.decoding || 'async';
+      });
+
       const lb = document.createElement('div');
       lb.className = 'lightbox';
       lb.innerHTML = `
@@ -261,29 +269,31 @@
       const btnPrev  = lb.querySelector('.lb-prev');
       const btnNext  = lb.querySelector('.lb-next');
 
-      // Collect all figures' images in document order
       const imgs = Array.from(document.querySelectorAll('.figure img'));
       let idx = 0;
 
-      function open(i){
-        idx = i;
-        const el = imgs[idx];
+      function render(i){
+        const el = imgs[i];
         if(!el) return;
         imgEl.src = el.currentSrc || el.src;
         imgEl.alt = el.alt || '';
         capEl.textContent = el.alt || '';
+        const multi = imgs.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
+      }
+      function open(i){
+        idx = i;
+        render(idx);
         lb.classList.add('open');
         document.body.style.overflow = 'hidden';
         btnClose.focus();
-        const multi = imgs.length > 1;
-        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
       function close(){
         lb.classList.remove('open');
         document.body.style.overflow = '';
       }
-      function prev(){ idx = (idx - 1 + imgs.length) % imgs.length; open(idx); }
-      function next(){ idx = (idx + 1) % imgs.length; open(idx); }
+      function prev(){ idx = (idx - 1 + imgs.length) % imgs.length; render(idx); }
+      function next(){ idx = (idx + 1) % imgs.length; render(idx); }
 
       imgs.forEach((img, i)=>{
         img.addEventListener('click', (e)=>{ e.preventDefault(); open(i); });
