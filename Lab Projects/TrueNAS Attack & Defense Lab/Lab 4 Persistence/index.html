@@ -66,7 +66,7 @@
       padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Figures – intrinsic image size (no zoom/gallery) */
+    /* Figures – intrinsic image size */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -79,6 +79,7 @@
     .figure img{
       display:block;margin:0 auto;border-radius:10px;object-fit:contain;
       width:auto; max-width:100%; height:auto;
+      cursor: zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
@@ -86,6 +87,28 @@
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
+
+    /* Zoom modal (no history changes) */
+    .zoom-modal{
+      position:fixed; inset:0; z-index:1000; display:none;
+      background:rgba(0,0,0,.85);
+    }
+    .zoom-modal[open]{display:block}
+    .zoom-content{
+      position:absolute; inset:40px; display:grid; place-items:center; overflow:auto;
+    }
+    .zoom-img{
+      max-width:95vw; max-height:95vh; width:auto; height:auto; border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      cursor: zoom-out;
+    }
+    .zoom-close{
+      position:absolute; top:14px; right:16px; width:40px; height:40px;
+      border-radius:999px; border:1px solid #3a4a67; background:#0e1220; color:var(--text);
+      display:grid; place-items:center; font-size:22px; line-height:1; cursor:pointer;
+    }
+    .zoom-close:hover{background:#121733}
+    .hide-scroll{overflow:hidden}
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
@@ -129,34 +152,34 @@
 
       <div class="pair">
         <figure class="figure">
-          <img src="Images/sshkeygen.png" alt="Generating an SSH key pair on Kali with ssh-keygen" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/sshkeygen.png" alt="Generating an SSH key pair on Kali with ssh-keygen" loading="lazy" decoding="async">
           <figcaption class="figcap">Generate SSH key pair.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/keypairtransfer.png" alt="Copying the public key to the target system" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/keypairtransfer.png" alt="Copying the public key to the target system" loading="lazy" decoding="async">
           <figcaption class="figcap">Transfer public key to target.</figcaption>
         </figure>
       </div>
 
       <div class="pair">
         <figure class="figure">
-          <img src="Images/lslisting.png" alt="Verifying id_rsa.pub exists on the NAS in /tmp" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/lslisting.png" alt="Verifying id_rsa.pub exists on the NAS in /tmp" loading="lazy" decoding="async">
           <figcaption class="figcap">Verify the key on the target.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/movefromtmptoroot.png" alt="Moving key from /tmp to /root" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/movefromtmptoroot.png" alt="Moving key from /tmp to /root" loading="lazy" decoding="async">
           <figcaption class="figcap">Move key to desired location.</figcaption>
         </figure>
       </div>
 
       <figure class="figure">
-        <img src="Images/sshkeygensetup3.png" alt="Creating ~/.ssh, renaming id_rsa.pub to authorized_keys, and setting permissions" loading="lazy" decoding="async">
+        <img class="zoomable" src="Images/sshkeygensetup3.png" alt="Creating ~/.ssh, writing authorized_keys, and setting permissions" loading="lazy" decoding="async">
         <figcaption class="figcap">Create <code>~/.ssh</code>, write <code>authorized_keys</code>, set secure perms.</figcaption>
       </figure>
 
       <p>Test the persistence by reconnecting via SSH using the private key.</p>
       <figure class="figure">
-        <img src="Images/persistence0.png" alt="Successful re-login via SSH using the key (persistence test)" loading="lazy" decoding="async">
+        <img class="zoomable" src="Images/persistence0.png" alt="Successful re-login via SSH using the key (persistence test)" loading="lazy" decoding="async">
         <figcaption class="figcap">Re-entry confirmed with key-based auth.</figcaption>
       </figure>
 
@@ -170,7 +193,7 @@
       <h3>1) Detect Key-Based Persistence</h3>
       <p>Audit <code>~/.ssh/authorized_keys</code> for unexpected entries, strange comments, or keys referencing external systems (e.g., <code>@kali</code>).</p>
       <figure class="figure">
-        <img src="Images/detection1png" alt="Reviewing authorized_keys showing a suspicious key entry" loading="lazy" decoding="async">
+        <img class="zoomable" src="Images/detection1png" alt="Reviewing authorized_keys showing a suspicious key entry" loading="lazy" decoding="async">
         <figcaption class="figcap">Suspicious key present in <code>authorized_keys</code>.</figcaption>
       </figure>
 
@@ -178,11 +201,11 @@
       <p>Correlate logins in <code>/var/log/auth.log</code> (or platform equivalent) for key-based acceptances from unfamiliar sources.</p>
       <div class="pair">
         <figure class="figure">
-          <img src="Images/authlog0.png" alt="General SSH auth log review" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/authlog0.png" alt="General SSH auth log review" loading="lazy" decoding="async">
           <figcaption class="figcap">General auth activity.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/AcceptedAuth.png" alt="Accepted public key authentication entries" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/AcceptedAuth.png" alt="Accepted public key authentication entries" loading="lazy" decoding="async">
           <figcaption class="figcap">Accepted key-based auth detected.</figcaption>
         </figure>
       </div>
@@ -191,7 +214,7 @@
       <p>Find recently modified <code>authorized_keys</code> files (7-day window example):</p>
       <pre><code>sudo find / -type f -name authorized_keys -mtime -7 2>/dev/null</code></pre>
       <figure class="figure">
-        <img src="Images/recentfilemod.png" alt="Finding recently modified authorized_keys files with find" loading="lazy" decoding="async">
+        <img class="zoomable" src="Images/recentfilemod.png" alt="Finding recently modified authorized_keys files with find" loading="lazy" decoding="async">
         <figcaption class="figcap">Hunting recent key additions.</figcaption>
       </figure>
 
@@ -199,11 +222,11 @@
       <p>Check who is currently logged in and from where, then terminate suspicious sessions.</p>
       <div class="pair">
         <figure class="figure">
-          <img src="Images/who.png" alt="Using who to see active sessions (ronny from Kali IP)" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/who.png" alt="Using who to see active sessions (ronny from Kali IP)" loading="lazy" decoding="async">
           <figcaption class="figcap"><code>who</code> shows session origin.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/terminate0.png" alt="Terminating a suspicious session" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/terminate0.png" alt="Terminating a suspicious session" loading="lazy" decoding="async">
           <figcaption class="figcap">Terminate the session immediately.</figcaption>
         </figure>
       </div>
@@ -211,7 +234,7 @@
       <h3>Immediate Response</h3>
       <p>Kill related processes (example using <code>kill -9</code> on PIDs tied to the compromised user):</p>
       <figure class="figure">
-        <img src="Images/kill.png" alt="Force-killing malicious processes" loading="lazy" decoding="async">
+        <img class="zoomable" src="Images/kill.png" alt="Force-killing malicious processes" loading="lazy" decoding="async">
         <figcaption class="figcap">Force-stop rogue processes.</figcaption>
       </figure>
 
@@ -220,23 +243,23 @@
       <p>Manually inspect and remove unknown keys from <code>authorized_keys</code>; restrict permissions to minimum required.</p>
       <div class="pair">
         <figure class="figure">
-          <img src="Images/removeauthkeys.png" alt="Inspecting authorized_keys file" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/removeauthkeys.png" alt="Inspecting authorized_keys file" loading="lazy" decoding="async">
           <figcaption class="figcap">Inspect the file contents.</figcaption>
         </figure>
         <figure class="figure">
-          <img src="Images/removeentryfromfile.png" alt="Removing the suspicious key entry" loading="lazy" decoding="async">
+          <img class="zoomable" src="Images/removeentryfromfile.png" alt="Removing the suspicious key entry" loading="lazy" decoding="async">
           <figcaption class="figcap">Remove rogue entries.</figcaption>
         </figure>
       </div>
       <figure class="figure">
-        <img src="Images/modfied.png" alt="Saved and secured authorized_keys after removal" loading="lazy" decoding="async">
+        <img class="zoomable" src="Images/modfied.png" alt="Saved and secured authorized_keys after removal" loading="lazy" decoding="async">
         <figcaption class="figcap">Modified and secured.</figcaption>
       </figure>
 
       <h4>Reset Passwords</h4>
       <p>Reset affected user passwords in case credentials were also compromised.</p>
       <figure class="figure">
-        <img src="Images/passwordreset.png" alt="Resetting the user password" loading="lazy" decoding="async">
+        <img class="zoomable" src="Images/passwordreset.png" alt="Resetting the user password" loading="lazy" decoding="async">
         <figcaption class="figcap">Password reset performed.</figcaption>
       </figure>
     </section>
@@ -261,5 +284,57 @@
       </div>
     </footer>
   </div>
+
+  <!-- Zoom modal (built once, reused) -->
+  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <div class="zoom-content" data-close>
+      <img class="zoom-img" id="zoomImg" alt="">
+      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const modal = document.getElementById('zoom');
+      const zoomImg = document.getElementById('zoomImg');
+      const closeBtn = modal.querySelector('.zoom-close');
+
+      function openModal(src, alt){
+        zoomImg.src = src;
+        zoomImg.alt = alt || '';
+        modal.setAttribute('open', '');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('hide-scroll');
+        closeBtn.focus();
+      }
+      function closeModal(){
+        modal.removeAttribute('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('hide-scroll');
+        zoomImg.src = '';
+        zoomImg.alt = '';
+      }
+
+      // Click any .figure img.zoomable to zoom
+      document.addEventListener('click', (e) => {
+        const img = e.target.closest('.figure img.zoomable');
+        if (img){
+          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
+          openModal(full, img.alt);
+        }
+      });
+
+      // Close interactions
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
+      });
+      zoomImg.addEventListener('click', closeModal);
+      document.addEventListener('keydown', (e) => {
+        if (!modal.hasAttribute('open')) return;
+        if (e.key === 'Escape') closeModal();
+      });
+    })();
+  </script>
 </body>
 </html>
