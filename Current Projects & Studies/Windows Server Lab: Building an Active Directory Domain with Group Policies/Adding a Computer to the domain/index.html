@@ -1,85 +1,155 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adding a Computer to the domain</title>
-   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
-      margin: 20px; 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Adding a Computer to the Domain · Mark Thompson Portfolio</title>
+  <meta name="description" content="Join a Windows client to an Active Directory domain. Includes DNS prerequisites and the full join workflow." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2  {
-      color: #ADD8E6;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: block;
-      white-space: pre-wrap;
-      margin: 0.5rem 0;
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumbs */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    .section {
-      margin-bottom: 30px;
+    ul,ol{padding-left:22px;margin:8px 0}
+    .tight li{margin:6px 0}
+
+    /* Images */
+    .img-wrap{margin:12px 0;text-align:center}
+    .img-wrap img{
+      display:block;margin:0 auto;
+      max-width:70%;
+      height:auto;
+      border:1px solid var(--card-border);
+      border-radius:12px;
     }
-    .event-id { font-weight: bold; color: #0057e7; }
-    ul { margin-bottom: 20px; }
-       img {
-         display: block;
-         margin: 20px 0;
-         max-width: 75%;
-         height: auto;
-         border: 1px solid #444;
-         border-radius: 5px;
-    }
-        a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
-    <body>
+<body>
+  <div class="wrap">
 
-  <h1>Adding a Computer to the Domain</h1>
-    <p>For this lab demonstration, I had to go into the NIC properties for the Windows host and add the Windows Server VM IP as the DNS IP to successfully connect and add the machine to the domain in this lab setup.</p><br>
+    <!-- Top nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-    <p><strong>1.</strong> Open <strong>Network and Sharing Center</strong> under <strong>Control Panel</strong>.</p>
-    <img src="Images/ControlPanel.png" alt="ControlPanel.png"><br>
-    <p><strong>2.</strong> Right-click on the Network Adapter you're configuring, then select <strong>Properties</strong>.</p>
-    <img src="Images/Controlpanel2.png" alt="Controlpanel2.png"><br>
-    <p><strong>3.</strong> Right-click on <strong>Internet Protocol Version 4 (TCP/IPv4)</strong>, then select <strong>Properties</strong>.</p>
-    <img src="Images/NICProperties.png" alt="NICProperties.png"><br>
-    <p><strong>4.</strong> For this example, I have a the address's set up manually. In order for this machine to be added, it's need to be able to communicate with domain controller IP set up as it's DNS server.</p>
-    <img src="Images/Sysproperties.png" alt="Sysproperties.png"><br>
-    <p><strong>5.</strong> After we have the domain controller IP setup as the DNS server for the host. We're ready to go into <strong>System Properties</strong>.</p>
-    <img src="Images/Sysproperties2.png" alt="Sysproperties2.png">
-    <p><strong>6.</strong> Then under the <strong>Computer Name</strong> tab, click on the <strong>Change</strong> button.</p>
-    <img src="Images/DomainAdd.png" alt="DomainAdd.png"><br>
-    <p><strong>7.</strong> Click on the <strong>Domain</strong> check-box, and then add the domain name of the server.</p>
-    <img src="Images/Prompt.png" alt="Prompt.png"><br>
-    <p><strong>8.</strong> The host will then prompt for an administrative domain username and password to authenticate. Enter in credentials and click <strong>Ok</strong>.</p>
-    <img src="Images/SuccessfulAdd.png" alt="SuccessfulAdd.png"><br>
-    <p><strong>9.</strong> Upon successful authentication, you'll see a "Welcome to the Domain" message.</p>
-    <img src="Images/RestartPrompt.png" alt="RestartPrompt.png"><br>
-    <p><strong>10.</strong> Then prompted to restart the computer to finalize the domain add.</p>
-    <img src="Images/RestartNow.png" alt="RestartNow.png">
-    
-    
-    
-    
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/">AD Domain Lab</a> ·
+      <span>Adding a Computer to the Domain</span>
+    </div>
 
- <a href="../index.html">Back to Home</a>
+    <!-- Header -->
+    <header>
+      <h1>Adding a Computer to the Domain</h1>
+      <p class="lead">Before joining, ensure the client’s <strong>DNS server</strong> points to your <strong>domain controller</strong>; domain joins rely on DNS to locate AD services.</p>
+    </header>
 
+    <!-- DNS prerequisite -->
+    <section class="card">
+      <h2>DNS Prerequisite</h2>
+      <p>In this lab, the Windows client uses the Windows Server VM’s IP as its DNS server to resolve the domain and find the domain controller.</p>
+    </section>
 
+    <!-- Steps -->
+    <section class="card">
+      <h2>Join Workflow</h2>
+
+      <h3>1) Open Network and Sharing Center</h3>
+      <p>Control Panel → <strong>Network and Sharing Center</strong>.</p>
+      <div class="img-wrap"><img src="Images/ControlPanel.png" alt="Control Panel - Network and Sharing Center"></div>
+
+      <h3>2) Adapter Properties</h3>
+      <p>Right-click your active network adapter → <strong>Properties</strong>.</p>
+      <div class="img-wrap"><img src="Images/Controlpanel2.png" alt="Network adapter list and properties"></div>
+
+      <h3>3) IPv4 Settings</h3>
+      <p>Select <strong>Internet Protocol Version 4 (TCP/IPv4)</strong> → <strong>Properties</strong>.</p>
+      <div class="img-wrap"><img src="Images/NICProperties.png" alt="IPv4 properties selection"></div>
+
+      <h3>4) Point DNS to the Domain Controller</h3>
+      <p>Set the <strong>Preferred DNS server</strong> to your DC’s IP in this lab. This enables the client to find and join the domain.</p>
+      <div class="img-wrap"><img src="Images/Sysproperties.png" alt="IPv4 properties showing manual DNS"></div>
+
+      <h3>5) Open System Properties</h3>
+      <p>System → <strong>Advanced system settings</strong> → <strong>Computer Name</strong> tab.</p>
+      <div class="img-wrap"><img src="Images/Sysproperties2.png" alt="System properties access"></div>
+
+      <h3>6) Change Computer Name/Domain</h3>
+      <p>Click <strong>Change…</strong> to join the domain.</p>
+      <div class="img-wrap"><img src="Images/DomainAdd.png" alt="Computer Name tab - Change button"></div>
+
+      <h3>7) Enter Domain Name</h3>
+      <p>Select <strong>Domain</strong> and enter the FQDN (e.g., <em>domain-1.local</em>).</p>
+      <div class="img-wrap"><img src="Images/Prompt.png" alt="Prompt for domain name and credentials"></div>
+
+      <h3>8) Provide Domain Credentials</h3>
+      <p>Enter an account with permission to join computers to the domain (typically a domain admin or delegated account).</p>
+      <div class="img-wrap"><img src="Images/SuccessfulAdd.png" alt="Domain join credential prompt"></div>
+
+      <h3>9) Welcome Prompt</h3>
+      <p>On success, you’ll receive a confirmation such as <em>Welcome to the domain</em>.</p>
+      <div class="img-wrap"><img src="Images/RestartPrompt.png" alt="Welcome to the domain dialog"></div>
+
+      <h3>10) Restart to Complete</h3>
+      <p>Click <strong>Restart Now</strong> to finalize the join.</p>
+      <div class="img-wrap"><img src="Images/RestartNow.png" alt="Restart computer prompt"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+
+  </div>
 </body>
 </html>
