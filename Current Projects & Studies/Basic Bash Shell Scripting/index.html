@@ -20,7 +20,6 @@
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
       line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-      overflow-y: scroll;
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
@@ -48,6 +47,9 @@
     .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;max-width:100%}
     .figure img{display:block;height:auto;max-width:100%}
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Side-by-side gallery grid (no arrows, vertical scroll never blocked) */
+    .grid-gallery{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));align-items:stretch}
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
@@ -111,20 +113,24 @@ fi</code></pre>
         <li><b>for/while</b> — loops.</li>
         <li><b>functions</b> — reusable blocks of code.</li>
       </ul>
-      <div class="figure"><img src="Images/Conditional.png" alt="if/else condition" loading="lazy" /><div class="figcap">Conditional example.</div></div>
-      <div class="figure"><img src="Images/forloopexample.png" alt="for loop" loading="lazy" /><div class="figcap">For loop example.</div></div>
-      <div class="figure"><img src="Images/whileloop.png" alt="while loop" loading="lazy" /><div class="figcap">While loop example.</div></div>
-      <div class="figure"><img src="Images/Function1.png" alt="function" loading="lazy" /><div class="figcap">Function example.</div></div>
+      <div class="grid-gallery">
+        <div class="figure"><img src="Images/Conditional.png" alt="if/else condition" loading="lazy" /><div class="figcap">Conditional example.</div></div>
+        <div class="figure"><img src="Images/forloopexample.png" alt="for loop" loading="lazy" /><div class="figcap">For loop example.</div></div>
+        <div class="figure"><img src="Images/whileloop.png" alt="while loop" loading="lazy" /><div class="figcap">While loop example.</div></div>
+        <div class="figure"><img src="Images/Function1.png" alt="function" loading="lazy" /><div class="figcap">Function example.</div></div>
+      </div>
     </section>
 
     <section class="card">
       <h2>Script Examples</h2>
-      <div class="figure"><img src="Images/hello.png" alt="Hello World script" loading="lazy" /><div class="figcap">1. Hello World Script</div></div>
-      <div class="figure"><img src="Images/UserInput.png" alt="User input script" loading="lazy" /><div class="figcap">2. User Input Script</div></div>
-      <div class="figure"><img src="Images/FileCheck.png" alt="File existence check" loading="lazy" /><div class="figcap">3. File Existence Check</div></div>
-      <div class="figure"><img src="Images/ForLoop.png" alt="For loop script" loading="lazy" /><div class="figcap">4. For Loop Example</div></div>
-      <div class="figure"><img src="Images/Backup.png" alt="Backup script" loading="lazy" /><div class="figcap">5. Simple Backup Script</div></div>
-      <div class="figure"><img src="Images/Function.png" alt="Function script" loading="lazy" /><div class="figcap">6. Function Example</div></div>
+      <div class="grid-gallery">
+        <div class="figure"><img src="Images/hello.png" alt="Hello World script" loading="lazy" /><div class="figcap">1. Hello World Script</div></div>
+        <div class="figure"><img src="Images/UserInput.png" alt="User input script" loading="lazy" /><div class="figcap">2. User Input Script</div></div>
+        <div class="figure"><img src="Images/FileCheck.png" alt="File existence check" loading="lazy" /><div class="figcap">3. File Existence Check</div></div>
+        <div class="figure"><img src="Images/ForLoop.png" alt="For loop script" loading="lazy" /><div class="figcap">4. For Loop Example</div></div>
+        <div class="figure"><img src="Images/Backup.png" alt="Backup script" loading="lazy" /><div class="figcap">5. Simple Backup Script</div></div>
+        <div class="figure"><img src="Images/Function.png" alt="Function script" loading="lazy" /><div class="figcap">6. Function Example</div></div>
+      </div>
     </section>
 
     <section class="card">
