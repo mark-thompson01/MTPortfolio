@@ -51,23 +51,78 @@
     ul,ol{padding-left:22px;margin:8px 0}
     .tight li{margin:6px 0}
 
-    /* Code blocks */
-    code, pre code{
-      background:#0e1220;border:1px solid var(--card-border);
-      border-radius:10px;padding:8px 10px;display:block;white-space:pre-wrap;margin:8px 0;
-      color:var(--text)
-    }
-
-    /* Images: scroll-friendly sizing */
-    .img-wrap{margin:12px 0;text-align:center}
-    .img-wrap img{
-      display:block;margin:0 auto;
-      max-width:70%; /* adjust to taste */
-      height:auto;
+    /* Figures: intrinsic size (downscale only) */
+    .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;
+      max-width:100%;
+      text-align:center;
     }
+    .figure img{
+      display:block;
+      width:auto;       /* preserve intrinsic width */
+      max-width:100%;   /* but don’t overflow */
+      height:auto;
+      border-radius:10px;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
+    /* Horizontal gallery */
+    .gallery-wrap{position:relative;margin:8px 0 4px}
+    .gallery{
+      display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
+      align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;
+      scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;
+      -webkit-overflow-scrolling:touch
+    }
+    .gallery .item{scroll-snap-align:start}
+    .gallery .figure{height:100%; margin:0}
+    .gallery::-webkit-scrollbar{height:10px}
+    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
+    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
+    .gallery.hide-scrollbar{scrollbar-width:none}
+    .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
+    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
+    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
+
+    .gbtn{
+      position:absolute;top:50%;translate:0 -50%;z-index:2;
+      border:1px solid var(--card-border);background:#0e1220;color:var(--text);
+      box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;
+      display:grid;place-items:center;cursor:pointer;user-select:none
+    }
+    .gbtn:hover{background:#121733}
+    .gprev{left:-6px}
+    .gnext{right:-6px}
+
+    /* Lightbox (zoom) */
+    .lightbox{
+      position:fixed; inset:0; display:none; place-items:center;
+      background:rgba(0,0,0,.86); z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lb-stage{position:relative; max-width:96vw; max-height:92vh}
+    .lb-img{display:block; width:auto; height:auto; max-width:96vw; max-height:92vh; border-radius:12px; box-shadow:var(--shadow)}
+    .lb-cap{color:#cfd6e6; font-size:13px; text-align:center; margin-top:8px}
+    .lb-btn{
+      position:absolute; top:10px; padding:6px 10px; border-radius:10px;
+      border:1px solid #2A3447; background:#0e1220; color:var(--text);
+      cursor:pointer; user-select:none;
+    }
+    .lb-close{right:10px}
+    .lb-prev,.lb-next{
+      top:50%; translate:0 -50%; width:44px; height:44px; display:grid; place-items:center;
+      border-radius:999px; font-size:20px; line-height:1;
+    }
+    .lb-prev{left:-58px}
+    .lb-next{right:-58px}
+    @media (max-width:700px){ .lb-prev{left:-8px} .lb-next{right:-8px} }
+
+    /* Footer */
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
     footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
@@ -129,7 +184,13 @@
       <h2>Windows Server 2016 Installation on Oracle VirtualBox Steps</h2>
 
       <h3>1. Creating a new VM in Oracle VirtualBox</h3>
-      <div class="img-wrap"><img src="Images/VMCreate0.PNG" alt="Create new VM"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Create VM">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate0.PNG" alt="Create new VM"></figure></article>
+        </div>
+      </div>
 
       <h3>2. Allocating System Resources</h3>
       <ul class="tight">
@@ -137,66 +198,174 @@
         <li>Processors</li>
       </ul>
       <p>In this example, I'm going to allocate 3460MB of base memory and 2 processors.</p>
-      <div class="img-wrap"><img src="Images/VMCreate2.PNG" alt="Set memory and CPU"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Set memory and CPU">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate2.PNG" alt="Set memory and CPU"></figure></article>
+        </div>
+      </div>
 
       <h3>3. Create a Virtual Hard Disk</h3>
-      <div class="img-wrap"><img src="Images/VMCreate3.PNG" alt="Create virtual disk"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Create virtual disk">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate3.PNG" alt="Create virtual disk"></figure></article>
+        </div>
+      </div>
 
       <h3>4. Configuration Summary</h3>
-      <div class="img-wrap"><img src="Images/VMCreate4.PNG" alt="VM summary"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="VM summary">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate4.PNG" alt="VM configuration summary"></figure></article>
+        </div>
+      </div>
 
       <h3>5. Adding the ISO Image to the VM</h3>
-      <div class="img-wrap"><img src="Images/VMCreate6.PNG" alt="Attach ISO - step 1"></div>
-      <div class="img-wrap"><img src="Images/VMCreate7.PNG" alt="Attach ISO - step 2"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Attach ISO">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate6.PNG" alt="Attach ISO - step 1"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/VMCreate7.PNG" alt="Attach ISO - step 2"></figure></article>
+        </div>
+      </div>
 
       <h3>6. Starting up the VM</h3>
-      <div class="img-wrap"><img src="Images/VMCreate9.PNG" alt="Start VM"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Start VM">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate9.PNG" alt="Start the virtual machine"></figure></article>
+        </div>
+      </div>
     </section>
 
     <section class="card">
       <h2>Windows Server 2016 Installation</h2>
 
       <h3>1. Install Now</h3>
-      <div class="img-wrap"><img src="Images/VMCreate11.PNG" alt="Install Now"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Install Now">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate11.PNG" alt="Install Now screen"></figure></article>
+        </div>
+      </div>
 
       <h3>2. Select Language, click <strong>Next</strong></h3>
-      <div class="img-wrap"><img src="Images/VMCreate10.PNG" alt="Language selection"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Language selection">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate10.PNG" alt="Language selection"></figure></article>
+        </div>
+      </div>
 
       <h3>3. Setup is starting</h3>
-      <div class="img-wrap"><img src="Images/VMCreate12.PNG" alt="Setup starting"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Setup starting">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate12.PNG" alt="Setup is starting"></figure></article>
+        </div>
+      </div>
 
       <h3>4. Select Operating System version</h3>
       <p>In this example, I'm going to install <strong>Windows Server 2016 Desktop Experience</strong>.</p>
-      <div class="img-wrap"><img src="Images/VMCreate13.PNG" alt="Choose edition Desktop Experience"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Choose edition">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate13.PNG" alt="Choose Windows Server 2016 Desktop Experience"></figure></article>
+        </div>
+      </div>
 
       <h3>5. Accept the license terms, click <strong>Next</strong></h3>
-      <div class="img-wrap"><img src="Images/VMCreate14.PNG" alt="License terms"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="License terms">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate14.PNG" alt="Accept license terms"></figure></article>
+        </div>
+      </div>
 
       <h3>6. Select the type of installation</h3>
-      <div class="img-wrap"><img src="Images/VMCreate15.PNG" alt="Installation type - step 1"></div>
-      <div class="img-wrap"><img src="Images/VMCreate16.PNG" alt="Installation type - step 2"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Choose installation type">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate15.PNG" alt="Installation type - step 1"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/VMCreate16.PNG" alt="Installation type - step 2"></figure></article>
+        </div>
+      </div>
 
       <h3>7. Windows Installation Process</h3>
-      <div class="img-wrap"><img src="Images/VMCreate17.PNG" alt="Installing Windows"></div>
-      <div class="img-wrap"><img src="Images/VMCreate18.PNG" alt="Installation progress"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Installation progress">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate17.PNG" alt="Installing Windows"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/VMCreate18.PNG" alt="Installation progress bar"></figure></article>
+        </div>
+      </div>
 
       <h3>8. The user's password must be changed before signing in</h3>
-      <div class="img-wrap"><img src="Images/VMCreate19PostReboot.PNG" alt="Change password prompt"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Change password prompt">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate19PostReboot.PNG" alt="Change password prompt"></figure></article>
+        </div>
+      </div>
 
       <h3>9. Reset Password</h3>
-      <div class="img-wrap"><img src="Images/VMCreate20.PNG" alt="Reset password"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Reset password">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate20.PNG" alt="Reset password screen"></figure></article>
+        </div>
+      </div>
 
       <h3>10. Press <strong>Ctrl, Alt, Del</strong></h3>
-      <div class="img-wrap"><img src="Images/VMCreate21.PNG" alt="Ctrl Alt Del sign-in"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Ctrl Alt Del sign-in">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate21.PNG" alt="Ctrl Alt Del sign-in"></figure></article>
+        </div>
+      </div>
 
       <h3>11. Desktop Experience</h3>
-      <div class="img-wrap"><img src="Images/VMCreate22.PNG" alt="First desktop"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="First desktop">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate22.PNG" alt="First desktop after install"></figure></article>
+        </div>
+      </div>
 
       <h3>12. Starting Server Manager</h3>
-      <div class="img-wrap"><img src="Images/VMCreate23.PNG" alt="Server Manager starting"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Server Manager starting">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate23.PNG" alt="Server Manager starting"></figure></article>
+        </div>
+      </div>
 
       <h3>13. Server Manager</h3>
-      <div class="img-wrap"><img src="Images/VMCreate24.PNG" alt="Server Manager dashboard"></div>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Server Manager dashboard">
+          <article class="item"><figure class="figure"><img src="Images/VMCreate24.PNG" alt="Server Manager dashboard"></figure></article>
+        </div>
+      </div>
 
       <p>This demonstration included adding and setting up a new virtual machine in Oracle VirtualBox and installing Windows Server 2016 on the new VM. From here, I'll walk through setting up the DNS and DHCP server roles on this fresh installation, then installing the AD DS server role to set up Active Directory.</p>
     </section>
@@ -206,10 +375,112 @@
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
         <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/mark-thompson-01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
 
   </div>
+
+  <!-- Gallery scroll controls -->
+  <script>
+    (function(){
+      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
+        const scroller = wrap.querySelector('.gallery');
+        if(!scroller) return;
+        const left = wrap.querySelector('.gprev');
+        const right = wrap.querySelector('.gnext');
+        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
+        left  && left .addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
+        right && right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
+        scroller.addEventListener('wheel', (e) => {
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+            e.preventDefault();
+            scroller.scrollLeft += e.deltaY;
+          }
+        }, {passive:false});
+      });
+    })();
+  </script>
+
+  <!-- Lightbox / zoom (no history hash; ESC/back behaves normally) -->
+  <script>
+    (function(){
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = `
+        <div class="lb-stage" role="dialog" aria-modal="true" aria-label="Image preview">
+          <button class="lb-btn lb-close" aria-label="Close (Esc)">✕</button>
+          <button class="lb-btn lb-prev" aria-label="Previous">&#10094;</button>
+          <img class="lb-img" alt="">
+          <button class="lb-btn lb-next" aria-label="Next">&#10095;</button>
+          <div class="lb-cap" aria-live="polite"></div>
+        </div>`;
+      document.body.appendChild(lb);
+
+      const imgEl = lb.querySelector('.lb-img');
+      const capEl = lb.querySelector('.lb-cap');
+      const btnClose = lb.querySelector('.lb-close');
+      const btnPrev  = lb.querySelector('.lb-prev');
+      const btnNext  = lb.querySelector('.lb-next');
+
+      let groups = new Map();
+      let current = { gid:null, idx:0 };
+
+      // Index every gallery on the page
+      let gidCounter = 0;
+      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
+        const gid = 'g' + (++gidCounter);
+        const imgs = Array.from(wrap.querySelectorAll('.gallery img'));
+        if (!imgs.length) return;
+        groups.set(gid, imgs);
+        imgs.forEach((img, i) => {
+          img.dataset.gid = gid;
+          img.dataset.gindex = i;
+          img.style.cursor = 'zoom-in';
+          img.addEventListener('click', (e)=>{
+            e.preventDefault();
+            open(gid, i);
+          });
+        });
+      });
+
+      function open(gid, idx){
+        const list = groups.get(gid);
+        if(!list) return;
+        current.gid = gid; current.idx = idx;
+        update();
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        btnClose.focus();
+      }
+      function close(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+      function update(){
+        const list = groups.get(current.gid)||[];
+        const el = list[current.idx];
+        if(!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.alt || '';
+        const multi = list.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
+      }
+      function prev(){ const list = groups.get(current.gid)||[]; if(!list.length) return; current.idx=(current.idx-1+list.length)%list.length; update(); }
+      function next(){ const list = groups.get(current.gid)||[]; if(!list.length) return; current.idx=(current.idx+1)%list.length; update(); }
+
+      btnClose.addEventListener('click', close);
+      btnPrev .addEventListener('click', prev);
+      btnNext .addEventListener('click', next);
+      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+      document.addEventListener('keydown', (e)=>{
+        if(!lb.classList.contains('open')) return;
+        if(e.key === 'Escape') close();
+        else if(e.key === 'ArrowLeft') prev();
+        else if(e.key === 'ArrowRight') next();
+      });
+    })();
+  </script>
 </body>
 </html>
