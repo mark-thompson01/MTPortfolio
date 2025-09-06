@@ -1,117 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab 3 Privilege Escalation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NAS Security Attack &amp; Defense Lab 2 · Mark Thompson Portfolio</title>
+  <meta name="description" content="Lab 2: Successful SSH brute-force, log-based detection, immediate account mitigation, and hardening (keys-only SSH)." />
+
+  <!-- THEME -->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1 {
-      text-align: left;
-      color: #d3d3d3; /* Lighter grey heading */
-      margin-bottom: 10px;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    h2 {
-      text-align: left;
-      color: #d3d3d3;
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:14px 0 6px;font-size:16px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    p {
-      text-align: left;
+
+    /* Code blocks */
+    pre{
+      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
+      border-radius:12px;overflow:auto;color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
     }
-    ul {
-      list-style: none; /* Remove default bullets */
-      padding-left: 0;
-      text-align: left; /* Align list to the left */
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
-    li {
-      margin: 10px 0;
+
+    /* Figures – intrinsic image size */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
     }
-    a {
-      color: #1e90ff; /* Blue link color */
-      text-decoration: none;
-      font-weight: bold;
+    .figure img{
+      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
+      width:auto; max-width:100%; height:auto;
+      cursor: zoom-in;
     }
-    a:hover {
-      color: #ff7f50; /* Coral hover color */
-      text-decoration: underline;
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Side-by-side */
+    .pair{display:grid;gap:12px;margin:16px 0}
+    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
+    .pair .figure{margin:0}
+
+    /* Zoom modal (no history changes) */
+    .zoom-modal{
+      position:fixed; inset:0; z-index:1000; display:none;
+      background:rgba(0,0,0,.85);
     }
-    .back-link {
-      color: #1E90FF;
-      text-decoration: none;
+    .zoom-modal[open]{display:block}
+    .zoom-content{
+      position:absolute; inset:40px; display:grid; place-items:center; overflow:auto;
     }
-     img {
-      width: 500px;
-      height: auto; /* Maintain aspect ratio */
+    .zoom-img{
+      max-width:95vw; max-height:95vh; width:auto; height:auto; border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      cursor: zoom-out;
     }
+    .zoom-close{
+      position:absolute; top:14px; right:16px; width:40px; height:40px;
+      border-radius:999px; border:1px solid #3a4a67; background:#0e1220; color:var(--text);
+      display:grid; place-items:center; font-size:22px; line-height:1; cursor:pointer;
+    }
+    .zoom-close:hover{background:#121733}
+    .hide-scroll{overflow:hidden}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <h1>NAS Security Attack & Defense Lab 3</h1>
-  <h2>Privilege Escalation | Detection & Response</h2>
-  <p>Following the successful brute-force attack via SSH in Lab 2, the offensive side gained access to the target NAS server and upgraded from a BSD shell to a Meterpreter session.</p>
-  <p>However, the account in use lacks root privileges, so privilege escalation is required to proceed further.</p>
-  <p>For demonstration purposes in this lab, I have set the SUID bit on the <code>vim</code> binary to demonstrate a privilege escalation attack using that method.</p>
-  <p>Before proceeding further, here are a few notes:</p>
-  <p><strong>SUID bit</strong></p>
-  <p>The SUID (Set User ID) bit is a special permission in Unix/Linux file systems that allow a program to run with the privileges of the file’s owner, rather than the privileges of the user who executes it. Is it represented by the s character in the file’s permission field listed using <code>ls –l</code>.</p>
-  <p>When the SUID bit is set on an executable file:</p>
-  <ul>
-    <li>If a normal user executes the file, the program runs with the effective user ID of the file's owner.</li>
-    <li>This is useful for programs that need elevated privileges to perform specific tasks, even when run by ordinary users.</li>
-  </ul>
-  <p><strong>Example:</strong></p>
-  <p>For a file owned by the root user with SUID set:</p>
-  <p><strongs>-rwsr-xr-x 1 root root 12345 Dec 27 12:00 example_program </strongs></p>
-  <p>The <strong>s</strong> in <strong>-rwsr-xr-x</strong> indicates the SUID bit is set.</p>
-  <p>If <code>example_program</code> is executed by a non-root user, it runs with root privileges.</p>
+  <div class="wrap wide">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <h2>Offensive</h2>
-  <p>Going further with the privilege escalation we have the Meterpreter session here where I’m going to spawn a shell with <code>/bin/sh -i</code>.</p>
-  <img src="Images/shell.png" alt="shell">
-  <p>In this particular scenario I found that using <code>vim</code> on a spawned shell through Meterpreter didn’t work with vim commands such as :q <Enter>, making it an obstacle to exploit this vulnerability.</p>
-  <p>I then figured out there was a particular environment variable called TERM that was not present.</p>
-  <img src="Images/snv.png" alt="snv">
-  <p>I then learned to set the variable to xterm using the <code>export TERM=xterm</code> command.</p>
-  <img src="Images/xtermvim.png" alt="xtermvim">
-  <p>Allowing the exploitation of the SUID being set to occur in <code>vim</code></p>
-  <p>Running <code>:!sh</code> will spawn a root shell, executing the <code>/bin/sh</code> (or the default shell) with root privileges because the SUID bit allows <code>vim</vim> to run as its owner (root).</p>
-  <img src="Images/:!sh.png" alt=":!sh">
-  <img src="Images/rootaccessgained.png" alt="rootaccessedgained">
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> ·
+      <a href="../">NAS Security Attack &amp; Defense Lab</a> ·
+      <span>Lab 2 — Successful Brute Force Login</span>
+    </div>
 
-  <h2>Defensive</h2>
-  <h3>Incident Detection</h3>
-  <p>In the log below, we see that the <code>ronny</code> user attempted to execute commands involving <code>vim</code> with elevated privileges (e.g., <code>sudo</code>.</p>
-  <p>The execution of <code>/usr/local/bin/vim</code> with the <code>-c /bin/sh</code> argument spawns a shell.</p>
-  <img src="Images/LogData.png" alt="LogData">
-  <p>Here we can see the processes spawned by the user account <code>ronny</code>. The <code>/bin/sh</code> and the <code>-sh</code> indicate interactive and script-based shells. Processes like <code>sh –i</code> suggest that an interactive shell was spawned, likely through <code>vim</code> exploit.</p>
-  <p>The processes owned by <code>root</code> (e.g., PID 8554 and PID 9860) indicate privilege escalation was achieved from the <code>ronny</code> user.</p>
-  <img src="Images/psaux.png" alt="psaux">
+    <!-- Header -->
+    <header>
+      <h1>Lab 2 — Successful Brute Force Login</h1>
+      <p class="lead">Attack: SSH credentials cracked via Metasploit’s <code>ssh_login</code>. Defense: detect the success in logs, reset/disable, and harden SSH to keys-only.</p>
+    </header>
 
-  <h3>Response</h3>
-  <p>Immediately kill the processes related to the ronny user account as well as other root process that indicate malicious activity.</p>
-  <img src="Images/processkill2.png" alt="processkill2">
+    <!-- Scenario -->
+    <section class="card">
+      <h2>Scenario</h2>
+      <p>Building on Lab&nbsp;1, SSH (port 22) is exposed on the NAS host. A weak user password allows a successful brute-force using Metasploit’s <code>auxiliary/scanner/ssh_login</code>. On defense, authentication logs reveal the success; the account is secured and SSH is hardened.</p>
+    </section>
 
-  <p>Back on the offensive side, access to the NAS server is lost.</p>
-  <img src="Images/commandterminated.png" alt="commandterminated">
-  <p>From here, a cybersecurity analyst would review the activity for the <code>ronny</code> user account. To trace back the sequence of actions that led to privilege escalation.</p>
+    <!-- Offensive -->
+    <section class="card">
+      <h2>Offensive</h2>
 
-  <h2>Privilege Escalation via SUID Binary and Environment Variables</h2>
-  <p>In this lab demonstration, I successfully performed privilege escalation on a TrueNAS-based system by leveraging a misconfigured SUID binary <code>vim</code> and manipulating the <code>TERM</code> environment variable. This attack highlights a critical lesson in identifying and exploiting common privilege escalation vectors in Unix-based systems.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img class="zoomable" src="Images/msf1.png" alt="Metasploit console prepared for SSH brute-force" loading="lazy" decoding="async">
+          <figcaption class="figcap">Preparing Metasploit for the SSH attack.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img class="zoomable" src="Images/ssh_login.png" alt="Metasploit auxiliary/scanner/ssh_login module options" loading="lazy" decoding="async">
+          <figcaption class="figcap">Using <code>auxiliary/scanner/ssh_login</code>.</figcaption>
+        </figure>
+      </div>
 
-  <h3>Context in Real-World Relevance</h3>
-  <p>While deliberately misconfiguring the <code>vim</code> binary to have the SUID bit set is unlikely in a production system, this scenario is designed to emulate situations where:</p>
-  <ol>
-    <li>Legacy or poorly maintained systems that have insecure configurations.</li>
-    <li>Custom or non-standard administrative actions (e.g., setting SUID on binaries for convenience) to introduce security vulnerabilities.</li>
-    <li>Environment variables, such as <code>TERM</code>, are not properly sanitized, providing opportunities for exploitation.</li>
-  </ol>
-  <p>In real-world penetration testing, identifying and exploiting misconfigured SUID binaries or unsensitized environment variables is a key skill. Although this specific attack setup is tailored for a lab environment, the methodology aligns closely with techniques to uncover and exploit similar vulnerabilities in production systems.</p><br>
-<a href="../" class="back-link">Back to Labs</a>
+      <figure class="figure">
+        <img class="zoomable" src="Images/BruteForceSuccess.png" alt="Successful SSH login via brute-force" loading="lazy" decoding="async">
+        <figcaption class="figcap">Credentials found — shell access obtained.</figcaption>
+      </figure>
+
+      <p>With a BSD shell obtained, upgrade to Meterpreter using the post module <code>post/multi/manage/shell_to_meterpreter</code>.</p>
+
+      <div class="pair">
+        <figure class="figure">
+          <img class="zoomable" src="Images/Meterpreter%20Session%20Upgrade.png" alt="Upgrading shell to Meterpreter session" loading="lazy" decoding="async">
+          <figcaption class="figcap">Upgrading shell to Meterpreter.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img class="zoomable" src="Images/In%20The%20System.png" alt="Interactive Meterpreter session on the target" loading="lazy" decoding="async">
+          <figcaption class="figcap">Interactive Meterpreter session.</figcaption>
+        </figure>
+      </div>
+
+      <figure class="figure">
+        <img class="zoomable" src="Images/getuid%20sysinfo.png" alt="getuid and sysinfo confirming user and system details" loading="lazy" decoding="async">
+        <figcaption class="figcap"><code>getuid</code> / <code>sysinfo</code> confirm context.</figcaption>
+      </figure>
+    </section>
+
+    <!-- Defensive -->
+    <section class="card">
+      <h2>Defensive</h2>
+
+      <h3>Detect the Successful Login</h3>
+      <p>Review <code>/var/log/auth.log</code> (or platform equivalent). Look for a sequence of failures followed by a success.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img class="zoomable" src="Images/LogSearch.png" alt="Log view showing failed attempts leading up to success" loading="lazy" decoding="async">
+          <figcaption class="figcap">Failed attempts chained together.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img class="zoomable" src="Images/LogSearch2.png" alt="Log view highlighting the successful SSH login event" loading="lazy" decoding="async">
+          <figcaption class="figcap">Success event identified in logs.</figcaption>
+        </figure>
+      </div>
+
+      <h3>Immediate Account Actions</h3>
+      <p>Reset the compromised password and temporarily disable interactive SSH access for the account while IR proceeds.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img class="zoomable" src="Images/ResetPassword.png" alt="Resetting the user password on the NAS host" loading="lazy" decoding="async">
+          <figcaption class="figcap">Password reset.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img class="zoomable" src="Images/Disable.png" alt="Disabling the user account or restricting login" loading="lazy" decoding="async">
+          <figcaption class="figcap">Disable or restrict account logins.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Hardening -->
+    <section class="card">
+      <h2>Hardening SSH</h2>
+      <h3>Disable Password-Based Logins</h3>
+      <p>Move to key-based authentication and disable password auth for SSH to prevent brute-force success.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img class="zoomable" src="Images/Password%20Renable.png" alt="Server configuration snippet related to SSH password settings" loading="lazy" decoding="async">
+          <figcaption class="figcap">Disable password logins; use keys only.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img class="zoomable" src="Images/SSH%20Server%20Settings%202.png" alt="SSH server settings showing keys-only configuration" loading="lazy" decoding="async">
+          <figcaption class="figcap">Confirm SSH server settings.</figcaption>
+        </figure>
+      </div>
+      <p>Additional options: rate-limit via firewall, fail2ban-style lockouts, and limiting SSH to trusted management networks.</p>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to NAS Security Attack &amp; Defense Lab</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Zoom modal (built once, reused) -->
+  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <div class="zoom-content" data-close>
+      <img class="zoom-img" id="zoomImg" alt="">
+      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const modal = document.getElementById('zoom');
+      const zoomImg = document.getElementById('zoomImg');
+      const closeBtn = modal.querySelector('.zoom-close');
+
+      function openModal(src, alt){
+        zoomImg.src = src;
+        zoomImg.alt = alt || '';
+        modal.setAttribute('open', '');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('hide-scroll');
+        closeBtn.focus();
+      }
+      function closeModal(){
+        modal.removeAttribute('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('hide-scroll');
+        zoomImg.src = '';
+        zoomImg.alt = '';
+      }
+
+      // Click any image inside a .figure to zoom
+      document.addEventListener('click', (e) => {
+        const img = e.target.closest('.figure img.zoomable');
+        if (img){
+          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
+          openModal(full, img.alt);
+        }
+      });
+
+      // Close interactions
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (!modal.hasAttribute('open')) return;
+        if (e.key === 'Escape') closeModal();
+      });
+    })();
+  </script>
 </body>
 </html>
