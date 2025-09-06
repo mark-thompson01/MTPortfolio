@@ -2,174 +2,167 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Linux: An Introduction</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Linux: An Introduction · Mark Thompson Portfolio</title>
+  <meta name="description" content="A concise introduction to Linux: history, where it runs, kernel vs. distributions, key components, and why it matters." />
   <style>
     :root{
-      --bg1:#0e141d;
-      --bg2:#0b111a;
-      --panel:#0f1926;
-      --text:#e7eaee;          /* same headline/body tone used elsewhere */
-      --muted:#b8c2cf;
-      --link:#1e90ff;
-      --link-hover:#ff7f50;
-      --rule: rgba(255,255,255,.06);
-      --maxw: 1100px;
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-
-    /* Page base */
     html,body{height:100%}
     body{
-      margin:0;
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
-      line-height:1.65;
-      color:var(--text);
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
-        radial-gradient(1200px 600px at 15% -10%, rgba(78,155,255,.08), transparent 60%),
-        radial-gradient(900px 500px at 85% -10%, rgba(245,186,255,.07), transparent 60%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav (tabs) */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards / sections */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    /* --- Header tabs (matches your other pages) --- */
-    header{
-      background: #0f1722;
-      border-bottom: 1px solid var(--rule);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .nav{
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: 18px 24px;
-      display: flex;
-      gap: 56px;
-      align-items: center;
-    }
-    .nav a{
-      color: var(--text);
-      font-weight: 700;
-      text-decoration: none;
-      letter-spacing: .2px;
-      font-size: 1.25rem;
-    }
-    .nav a:hover{
-      color:#ffffff;
-      text-decoration: underline;
-      text-underline-offset: 6px;
-    }
-
-    /* Layout */
-    main{
-      max-width: var(--maxw);
-      margin: 40px auto 80px;
-      padding: 0 24px;
-    }
-
-    /* Headings (same light color as other pages) */
-    h1,h2{color:var(--text); margin:0 0 .4rem}
-    h1{font-size: clamp(2rem, 4vw, 3rem); font-weight:800; letter-spacing:.3px}
-    h2{font-size: clamp(1.25rem, 2.4vw, 1.6rem); font-weight:700; margin-top:2.2rem}
-
-    p{margin:.7rem 0}
-    ul{margin:.3rem 0 1.2rem 1.4rem}
-    li{margin:.35rem 0}
-
+    /* Inline code */
     code{
-      background:#1d2633;
-      border:1px solid var(--rule);
-      border-radius:6px;
-      padding:.15rem .4rem;
-      font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,"Roboto Mono","Courier New",monospace;
-      font-size:.95em;
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    a{color:var(--link); text-decoration:none}
-    a:hover{color:var(--link-hover); text-decoration:underline}
+    ul,ol{padding-left:22px;margin:8px 0}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
+  <div class="wrap">
 
-  <!-- Top tabs -->
-  <header>
-    <nav class="nav">
-      <a href="../index.html">Home</a>
-      <a href="../Windows/">Windows</a>
-      <a href="../Linux/">Linux</a>
-      <a href="../Projects/">Projects</a>
-      <a href="../About/">About</a>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
-  </header>
 
-  <main>
-    <h1>Linux: An Introduction</h1>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Linux: An Introduction</span>
+    </div>
 
-    <section>
+    <!-- Header -->
+    <header>
+      <h1>Linux: An Introduction</h1>
+      <p class="lead">What Linux is, why it’s everywhere, how the kernel differs from a distribution, and the core components that make up a Linux system.</p>
+    </header>
+
+    <!-- What is Linux -->
+    <section class="card">
       <h2>What is Linux?</h2>
-      <p>Linux is a family of open-source operating systems based on the Linux kernel. It provides a Unix-like environment and powers a wide range of devices, from personal computers and servers to smartphones, routers, smart TVs, and even spacecraft. Unlike proprietary systems, Linux is collaborative, customizable, and freely distributed under licenses such as the GNU General Public License (GPL).</p>
+      <p>Linux is a family of open-source operating systems built around the Linux kernel. It provides a Unix-like environment and powers everything from laptops and servers to smartphones, routers, smart TVs, and spacecraft. Thanks to its licensing (e.g., the GNU GPL), Linux is collaborative, customizable, and freely distributed.</p>
     </section>
 
-    <section>
+    <!-- History -->
+    <section class="card">
       <h2>A Brief History of Linux</h2>
-      <p>The history of Linux begins in 1991 when Linus Torvalds, a Finnish computer science student, announced a personal project to create a free operating system kernel. Inspired by Unix and driven by a desire to learn, Torvalds released version 0.01 of the Linux kernel. As word spread, developers around the world joined the effort. Combined with components from the GNU Project (launched by Richard Stallman in 1983), Linux evolved into a full-fledged operating system.</p>
-      <p>Over time, Linux matured into a powerful and secure platform. Today, it's the backbone of the internet, the foundation of Android smartphones, and the core of countless embedded systems and supercomputers.</p>
+      <p>In 1991, Linus Torvalds released an early version of a free kernel inspired by Unix. Combined with tooling from the GNU Project (started by Richard Stallman in 1983), it grew into a complete operating system used by developers worldwide. Today, Linux is foundational to the internet, cloud platforms, Android devices, embedded systems, and supercomputers.</p>
     </section>
 
-    <section>
+    <!-- Where it runs -->
+    <section class="card">
       <h2>How Linux is Everywhere</h2>
       <ul>
-        <li><strong>Smartphones</strong>: Android, the most widely used mobile OS, is based on the Linux kernel.</li>
-        <li><strong>Web Servers</strong>: The majority of the world's websites are hosted on Linux servers.</li>
-        <li><strong>Cloud Infrastructure</strong>: Major providers like AWS, Google Cloud, and Azure rely on Linux-based systems.</li>
-        <li><strong>Supercomputers</strong>: All of the top 500 fastest supercomputers in the world run on Linux.</li>
-        <li><strong>IoT Devices</strong>: Routers, smart TVs, automotive systems, and home automation tools often run stripped-down Linux variants.</li>
+        <li><b>Smartphones:</b> Android is based on the Linux kernel.</li>
+        <li><b>Web Servers:</b> A majority of websites run on Linux.</li>
+        <li><b>Cloud:</b> AWS, Google Cloud, and Azure rely heavily on Linux.</li>
+        <li><b>Supercomputers:</b> All of the Top500 list run Linux.</li>
+        <li><b>IoT/Embedded:</b> Routers, TVs, cars, and appliances often use Linux variants.</li>
       </ul>
     </section>
 
-    <section>
+    <!-- Kernel -->
+    <section class="card">
       <h2>The Linux Kernel: The Heart of the System</h2>
-      <p>Technically, “Linux” refers to the <strong>kernel</strong> — the core component that interacts directly with hardware. The kernel handles:</p>
+      <p>The term “Linux” strictly refers to the <b>kernel</b>—the component that interfaces with hardware and provides low-level services:</p>
       <ul>
-        <li><strong>Process management</strong></li>
-        <li><strong>Memory management</strong></li>
-        <li><strong>Device communication</strong></li>
-        <li><strong>System calls and security enforcement</strong></li>
+        <li><b>Process</b> and <b>memory</b> management</li>
+        <li><b>Device</b> drivers and communication</li>
+        <li><b>System calls</b> and security enforcement</li>
       </ul>
-      <p>What users interact with — the graphical interface, command-line tools, and software — are part of a <strong>Linux distribution</strong>, which includes the kernel and a suite of other essential software.</p>
+      <p>What users interact with—shells, graphical desktops, and applications—comes from the surrounding software packaged by a distribution.</p>
     </section>
 
-    <section>
+    <!-- Distros -->
+    <section class="card">
       <h2>What is a Linux Distribution?</h2>
-      <p>A <strong>Linux distribution</strong> (or distro) is a complete operating system built around the Linux kernel. Distributions package the kernel with:</p>
+      <p>A <b>distribution</b> (distro) bundles the kernel with system libraries, utilities, a package manager, and, optionally, a desktop environment or server stack. Popular choices include:</p>
       <ul>
-        <li>System libraries and utilities</li>
-        <li>Software management tools</li>
-        <li>Desktop environments or server components</li>
-        <li>Security updates and user interfaces</li>
+        <li><b>Ubuntu:</b> User-friendly; common on desktops and servers</li>
+        <li><b>Debian:</b> Stable, community-driven base for many distros</li>
+        <li><b>Fedora:</b> Cutting-edge features</li>
+        <li><b>Arch Linux:</b> Minimal and highly customizable</li>
+        <li><b>RHEL:</b> Enterprise-grade with long-term support</li>
       </ul>
-      <p>Some popular distributions include <strong>Ubuntu</strong>, <strong>Debian</strong>, <strong>Fedora</strong>, <strong>Arch Linux</strong>, and <strong>Red Hat Enterprise Linux (RHEL)</strong>.</p>
     </section>
 
-    <section>
+    <!-- Components -->
+    <section class="card">
       <h2>Important Components of a Linux System</h2>
       <ul>
-        <li><strong>Kernel</strong>: The core that communicates with hardware.</li>
-        <li><strong>Shell</strong>: The command-line interpreter.</li>
-        <li><strong>File System</strong>: Hierarchical structure starting from the root directory (<code>/</code>).</li>
-        <li><strong>System Libraries</strong>: Shared code used by applications and services.</li>
-        <li><strong>System Daemons</strong>: Background services for networking, printing, scheduling, etc.</li>
-        <li><strong>User Interface</strong>: Desktop environments like GNOME, KDE, or XFCE.</li>
-        <li><strong>Package Manager</strong>: Tools such as <code>apt</code>, <code>dnf</code>, or <code>yum</code> manage software.</li>
+        <li><b>Kernel:</b> Core that speaks to hardware.</li>
+        <li><b>Shell:</b> Command-line interface (e.g., <code>bash</code>, <code>zsh</code>).</li>
+        <li><b>File System:</b> Hierarchical tree starting at root <code>/</code>.</li>
+        <li><b>System Libraries:</b> Shared code used by apps and services.</li>
+        <li><b>Daemons:</b> Background services (networking, printing, scheduling).</li>
+        <li><b>User Interface:</b> Desktops like GNOME, KDE, XFCE, or server-only CLI.</li>
+        <li><b>Package Manager:</b> Tools such as <code>apt</code>, <code>dnf</code>/<code>yum</code> for software install/updates.</li>
       </ul>
     </section>
 
-    <section>
-      <p>This introduction is a starting point. Whether you’re exploring system administration, programming, or cybersecurity, Linux offers the flexibility, transparency, and control to help you grow.</p>
+    <!-- Wrap -->
+    <section class="card">
+      <p>This intro is a launchpad. Whether you want system administration, development, or security, Linux offers the flexibility and transparency to learn deeply and build confidently.</p>
+      <p><a href="../index.html">Back to Home</a></p>
     </section>
 
-    <p><a href="../index.html">Back to Home</a></p>
-  </main>
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
