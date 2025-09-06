@@ -1,99 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lab Projects</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NAS Security Attack &amp; Defense Lab 1 · Mark Thompson Portfolio</title>
+  <meta name="description" content="Lab 1: SSH brute-force against a NAS host, with detection in logs and immediate response using pf firewall." />
+
+  <!-- THEME -->
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1 {
-      text-align: left;
-      color: #d3d3d3; /* Lighter grey heading */
-      margin-bottom: 10px;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    p {
-      text-align: left;
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:14px 0 6px;font-size:16px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    ul {
-      list-style: none; /* Remove default bullets */
-      padding-left: 0;
-      text-align: left; /* Align list to the left */
+
+    /* Code blocks */
+    pre{
+      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
+      border-radius:12px;overflow:auto;color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
     }
-    li {
-      margin: 10px 0;
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
-    a {
-      color: #1e90ff; /* Blue link color */
-      text-decoration: none;
-      font-weight: bold;
+
+    /* Figures – intrinsic image size (no zoom/gallery) */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
     }
-    a:hover {
-      color: #ff7f50; /* Coral hover color */
-      text-decoration: underline;
+    .figure img{
+      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
+      width:auto; max-width:100%; height:auto;
     }
-    .back-link {
-      margin-top: 20px;
-      display: inline-block;
-    }
-    img {
-      width: 500px;
-      height: auto; /* Maintain aspect ratio */
-    }
-    .small-image {
-      width: 200px;
-      height: auto
-    }
-    .back-link {
-      color: #1E90FF;
-      text-decoration: none;
-    ]
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Side-by-side */
+    .pair{display:grid;gap:12px;margin:16px 0}
+    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
+    .pair .figure{margin:0}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <h1>NAS Security Attack & Defense Lab 1</h1>
-  <h2>SSH Brute Force Attack | Detection & Response</h2>
-  <p>The following is the first set of four offensive and defense labs carried out on a customized machine running TrueNAS 13.1 in a segmented lab environment.  </p>
-  <p>In this scenario, we have a TrueNAS server and a Kali Linux machine running on the segment. Getting started with the offensive activities, the Kali machine performs an nmap port scan and discovers port 22 – SSH is open, then proceeds with a brute force attack using the ssh-brute nmap script.</p>
-  <p>On the defensive side, the attack is being identified in reviewing the logs on the server through /var/log/auth.log - and when the contents of that file are concatenated – all the brute force attempts from the different account names of the wordlist are shown along with the Kali Linux IP.</p>
+  <div class="wrap wide">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <h2>Offensive</h2>
-  <p><strong>Port 22 - SSH is open on the target system</strong></p>
-  <img src="Images/NmapSSHOpen.png" alt="NmapSSHOpen">
-  <p><strong>Brute force attack on SSH - port 22 using <code>nmap ssh-brute</code> script</strong> </p>
-  <img src="Images/NSESSHBrute.png" alt="NSESSHBrute">
-  <p><strong>Brute force attack underway</strong></p>
-  <img src="Images/Nmap%20SSH%20Brute%20Force%20In%20Action2.png" alt="Nmap SSH Brute Force In Action2">
-  
-  <h2>Defensive</h2>
-  <h3>Incident Detection</h3>
-  <p>Log analysis review on the server side.</p>
-  <img src="Images/TN%20Inves2.png" alt="TN Inves2.png" alt="small-image">
-  <p>Here we can see the brute force login attempts using the different usernames from the Kali Linux attacker machine.</p>
-  <img src="Images/TNInvest3.png" alt="TNInvest3.png" alt="small-image">
-  <img src="Images/TNInvest4.png" alt="TNInvest4.png" alt="small-image">
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> ·
+      <a href="../">NAS Security Attack &amp; Defense Lab</a> ·
+      <span>Lab 1 — SSH Brute Force Attack</span>
+    </div>
 
-  <p>Upon detecting this brute force login attempt, I would immediately check the timestamp of the last log to determine how recent the last attempt was. From there, I would proceed with the following actions.</p>
+    <!-- Header -->
+    <header>
+      <h1>Lab 1 — SSH Brute Force Attack</h1>
+      <p class="lead">Attack: SSH brute-force from Kali against a TrueNAS 13.1 host. Defense: detect in logs and block the attacker with <code>pf</code>.</p>
+    </header>
 
-  <h4>Applying Immediate Stop:</h4>
-  <p><strong>Step 1 - Enable pf (if not already enabled)</strong></p>
-  <P>Run the following to see if pf is active:</P>
-   <p>If pf is already enabled, you'll see an output indicating it's active. If not, this command enables it.</p>
-  <img src="Images/Mitigate1.png" alt="Mitigate1" alt="small-image">
+    <!-- Scenario -->
+    <section class="card">
+      <h2>Scenario</h2>
+      <p>A TrueNAS server and a Kali Linux host run on a segmented lab network. Kali performs reconnaissance, finds SSH (port&nbsp;22) open, and launches a brute-force attempt with the <code>ssh-brute</code> NSE script. On defense, the activity is detected in <code>/var/log/auth.log</code> and the source IP is immediately blocked with the system firewall.</p>
+    </section>
 
-  <p><strong>Step 2 - Edit the pf.conf Configuration File</strong></p>
-  <p>Add the following line to block the IP address. Replace <IP_TO_BLOCK> with the attacker’s IP address.</p>
-  <img src="Images/BlockingIP.png" alt="BlockingIP" alt="small-image">
-  <p><strong>Step 3 -  Apply the New Rules</strong></p>
-  <p>After editing and saving the file, reload the pf rules to apply the changes and confirm the rule is active with <code>pfctl –sr</code>.</p>
-  <img src="Images/ApplyNewRules.png" alt="ApplyNewRules" alt="small-image">
+    <!-- Offensive -->
+    <section class="card">
+      <h2>Offensive</h2>
 
-  <p>This configuration will block all incoming traffic from the specified IP. You can adjust the rule to target specific IP ports or protocols if needed. This is an example of identifying an actively underway or recent brute force attack on a server – and immediately applying mitigation by blocking the attacker IP using the pf firewall on the server. This puts the activity to a stop while it’s further investigated with further incident response procedures being carried out.</p>
-<a href="../" class=back-link">Back to Labs</a>
+      <h3>Port 22 (SSH) discovered open</h3>
+      <figure class="figure">
+        <img src="Images/NmapSSHOpen.png" alt="Nmap results showing port 22 open on the target" loading="lazy" decoding="async">
+        <figcaption class="figcap">Nmap shows SSH exposed on the target host.</figcaption>
+      </figure>
+
+      <h3>Brute-force with NSE <code>ssh-brute</code></h3>
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/NSESSHBrute.png" alt="Nmap NSE ssh-brute configuration/command" loading="lazy" decoding="async">
+          <figcaption class="figcap">Configuring the ssh-brute NSE script.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/Nmap%20SSH%20Brute%20Force%20In%20Action2.png" alt="ssh-brute attack running against the target" loading="lazy" decoding="async">
+          <figcaption class="figcap">Brute-force in progress from Kali.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Defensive -->
+    <section class="card">
+      <h2>Defensive</h2>
+
+      <h3>Incident Detection</h3>
+      <p>Review authentication logs on the server to confirm repeated failures and the source IP.</p>
+      <div class="pair">
+        <figure class="figure">
+          <img src="Images/TN%20Inves2.png" alt="Viewing /var/log/auth.log entries with repeated failures" loading="lazy" decoding="async">
+          <figcaption class="figcap">Auth log review shows repeated SSH failures.</figcaption>
+        </figure>
+        <figure class="figure">
+          <img src="Images/TNInvest3.png" alt="Additional log view showing usernames tried" loading="lazy" decoding="async">
+          <figcaption class="figcap">Usernames attempted from attacker IP.</figcaption>
+        </figure>
+      </div>
+      <figure class="figure">
+        <img src="Images/TNInvest4.png" alt="Concatenated log showing multiple brute-force attempts" loading="lazy" decoding="async">
+        <figcaption class="figcap">Concatenated view highlights the brute-force pattern.</figcaption>
+      </figure>
+
+      <h3>Immediate Containment with <code>pf</code></h3>
+      <p>Block the attacker to stop further attempts while you continue incident response.</p>
+
+      <h4>1) Ensure <code>pf</code> is enabled</h4>
+      <pre><code># enable pf (if not already)
+sudo pfctl -e
+
+# check status / rules
+sudo pfctl -sr
+</code></pre>
+      <figure class="figure">
+        <img src="Images/Mitigate1.png" alt="Verifying pf status and enabling if necessary" loading="lazy" decoding="async">
+        <figcaption class="figcap">Confirming the firewall is active.</figcaption>
+      </figure>
+
+      <h4>2) Add a block rule for the attacker IP</h4>
+      <p>Edit <code>/etc/pf.conf</code> and add a line replacing <code>ATTACKER_IP</code> with the source:</p>
+      <pre><code>block in quick from ATTACKER_IP to any</code></pre>
+      <figure class="figure">
+        <img src="Images/BlockingIP.png" alt="Editing pf.conf to block the attacker IP" loading="lazy" decoding="async">
+        <figcaption class="figcap">Blocking the attacker in <code>pf.conf</code>.</figcaption>
+      </figure>
+
+      <h4>3) Load the updated rules and verify</h4>
+      <pre><code>sudo pfctl -f /etc/pf.conf
+sudo pfctl -sr   # confirm rule is present</code></pre>
+      <figure class="figure">
+        <img src="Images/ApplyNewRules.png" alt="Reloading pf rules and listing ruleset" loading="lazy" decoding="async">
+        <figcaption class="figcap">Rules reloaded; the block is active.</figcaption>
+      </figure>
+
+      <p>This immediately cuts off the brute-force source while you proceed with standard IR: scoping, additional log review, credential hygiene, and hardening.</p>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to NAS Security Attack &amp; Defense Lab</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
