@@ -65,9 +65,27 @@
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    .pair{display:grid;gap:12px;margin:16px 0}
-    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
-    .pair .figure{margin:0}
+    /* Horizontal gallery */
+    .gallery-wrap{position:relative;margin-top:10px}
+    .gallery{
+      display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
+      align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;
+      scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;
+      -webkit-overflow-scrolling:touch
+    }
+    .gallery .item{scroll-snap-align:start}
+    .gallery .figure{height:100%; margin:0}
+    .gallery::-webkit-scrollbar{height:10px}
+    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
+    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
+    .gallery.hide-scrollbar{scrollbar-width:none}
+    .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
+    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
+    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
+    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
+    .gbtn:hover{background:#121733}
+    .gprev{left:-6px}
+    .gnext{right:-6px}
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
@@ -113,91 +131,99 @@
       <h2>Monitoring with Sysmon</h2>
       <p>Sysmon (System Monitor) extends Windows logging by capturing events like process creation, file changes, and network connections. Below are example queries using <code>Get-WinEvent</code> in PowerShell.</p>
 
-      <h3>1. List All Sysmon Events</h3>
-      <figure class="figure"><img src="Images/List%20All%20Sysmon%20Events.PNG" alt="List All Sysmon Events"></figure>
-
-      <h3>2. List All Network Connection Events</h3>
-      <figure class="figure"><img src="Images/List%20all%20network%20connection%20events.PNG" alt="List All Network Connection Events"></figure>
-
-      <h3>3. List All Process Creation Events</h3>
-      <figure class="figure"><img src="Images/List%20all%20process%20creation%20events.PNG" alt="List All Process Creation Events"></figure>
-
-      <h3>4. List Events for New Files Created</h3>
-      <figure class="figure"><img src="Images/List%20new%20files%20created.PNG" alt="List Events for New Files Created"></figure>
-
-      <h3>5. List Events for File Modifications</h3>
-      <figure class="figure"><img src="Images/List%20events%20for%20file%20modifications.PNG" alt="List Events for File Modifications"></figure>
-
-      <h3>6. Monitor for Remote Thread Creation</h3>
-      <figure class="figure"><img src="Images/Monitor%20for%20Remote%20Thread%20Creation.PNG" alt="Monitor for Remote Thread Creation"></figure>
-
-      <h3>7. Monitor for Changes to the Registry</h3>
-      <figure class="figure"><img src="Images/Monitor%20for%20changes%20to%20the%20registry.PNG" alt="Monitor for Changes to the Registry"></figure>
-
-      <h3>8. List Failed Logon Attempts</h3>
-      <figure class="figure"><img src="Images/Retrieve%20Failed%20Logon%20Attempts.PNG" alt="List Failed Logon Attempts"></figure>
-
-      <h3>9. List Successful Logon Events</h3>
-      <figure class="figure"><img src="Images/Retrieve%20Successful%20Login%20Events.PNG" alt="List Successful Logon Events"></figure>
+      <h3>Example Queries</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Sysmon screenshots">
+          <article class="item"><figure class="figure"><img src="Images/List%20All%20Sysmon%20Events.PNG" alt="List All Sysmon Events"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/List%20all%20network%20connection%20events.PNG" alt="List all network connection events"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/List%20all%20process%20creation%20events.PNG" alt="List all process creation events"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/List%20new%20files%20created.PNG" alt="List events for new files created"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/List%20events%20for%20file%20modifications.PNG" alt="List events for file modifications"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/Monitor%20for%20Remote%20Thread%20Creation.PNG" alt="Monitor for remote thread creation"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/Monitor%20for%20changes%20to%20the%20registry.PNG" alt="Monitor for registry changes"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/Retrieve%20Failed%20Logon%20Attempts.PNG" alt="List failed logon attempts"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/Retrieve%20Successful%20Login%20Events.PNG" alt="List successful logon events"></figure></article>
+        </div>
+      </div>
     </section>
 
     <!-- Event Viewer -->
     <section class="card">
       <h2>Monitoring with Windows Event Viewer</h2>
 
-      <h3>1. Failed Login Attempts</h3>
-      <div class="pair">
-        <figure class="figure"><img src="Images/EventViewer1.PNG" alt="Event Viewer failed logon 1"></figure>
-        <figure class="figure"><img src="Images/EventViewer2.PNG" alt="Event Viewer failed logon 2"></figure>
-      </div>
-      <div class="pair">
-        <figure class="figure"><img src="Images/EventViewer2.1.PNG" alt="Event Viewer failed logon 3"></figure>
-        <figure class="figure"><img src="Images/EventViewer2.2.PNG" alt="Event Viewer failed logon 4"></figure>
-      </div>
-      <figure class="figure"><img src="Images/EventViewer2.3.PNG" alt="Event Viewer failed logon 5"></figure>
-
-      <h3>2. Successful Logins</h3>
-      <div class="pair">
-        <figure class="figure"><img src="Images/EventViewer3.PNG" alt="Successful login 1"></figure>
-        <figure class="figure"><img src="Images/EventViewer4.PNG" alt="Successful login 2"></figure>
-      </div>
-      <div class="pair">
-        <figure class="figure"><img src="Images/EventViewer5.PNG" alt="Successful login 3"></figure>
-        <figure class="figure"><img src="Images/EventViewer5.1.PNG" alt="Successful login 4"></figure>
-      </div>
-      <div class="pair">
-        <figure class="figure"><img src="Images/EventViewer5.2.PNG" alt="Successful login 5"></figure>
-        <figure class="figure"><img src="Images/EventViewer5.3.PNG" alt="Successful login 6"></figure>
+      <h3>Failed Login Attempts</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Failed login screenshots">
+          <article class="item"><figure class="figure"><img src="Images/EventViewer1.PNG" alt="Failed logon 1"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer2.PNG" alt="Failed logon 2"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer2.1.PNG" alt="Failed logon 3"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer2.2.PNG" alt="Failed logon 4"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer2.3.PNG" alt="Failed logon 5"></figure></article>
+        </div>
       </div>
 
-      <h3>3. Special Privileges Assigned</h3>
-      <div class="pair">
-        <figure class="figure"><img src="Images/EventViewer6.PNG" alt="Special privileges logon 1"></figure>
-        <figure class="figure"><img src="Images/EventViewer7.PNG" alt="Special privileges logon 2"></figure>
+      <h3>Successful Logins</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Successful login screenshots">
+          <article class="item"><figure class="figure"><img src="Images/EventViewer3.PNG" alt="Successful login 1"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer4.PNG" alt="Successful login 2"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer5.PNG" alt="Successful login 3"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer5.1.PNG" alt="Successful login 4"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer5.2.PNG" alt="Successful login 5"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer5.3.PNG" alt="Successful login 6"></figure></article>
+        </div>
       </div>
-      <figure class="figure"><img src="Images/EventViewer8.PNG" alt="Special privileges logon 3"></figure>
+
+      <h3>Special Privileges Assigned to New Logon</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Special privileges screenshots">
+          <article class="item"><figure class="figure"><img src="Images/EventViewer6.PNG" alt="Special privileges 1"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer7.PNG" alt="Special privileges 2"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/EventViewer8.PNG" alt="Special privileges 3"></figure></article>
+        </div>
+      </div>
     </section>
 
     <!-- PowerShell -->
     <section class="card">
       <h2>Monitoring with PowerShell Scripts</h2>
 
-      <h3>1. Failed Login Attempts</h3>
-      <div class="pair">
-        <figure class="figure"><img src="Images/FailedLoginMonitoringPSScript.PNG" alt="PowerShell failed logon script"></figure>
-        <figure class="figure"><img src="Images/RunningFailedLoginScript.PNG" alt="Running failed logon script"></figure>
+      <h3>Failed Login Attempts</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Failed login PowerShell screenshots">
+          <article class="item"><figure class="figure"><img src="Images/FailedLoginMonitoringPSScript.PNG" alt="PowerShell failed logon script"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/RunningFailedLoginScript.PNG" alt="Running failed logon script"></figure></article>
+        </div>
       </div>
 
-      <h3>2. Successful Logins</h3>
-      <div class="pair">
-        <figure class="figure"><img src="Images/SuccessfulLogins.PNG" alt="PowerShell successful logon script"></figure>
-        <figure class="figure"><img src="Images/RunningSuccessfulLoginScript.PNG" alt="Running successful logon script"></figure>
+      <h3>Successful Logins</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Successful login PowerShell screenshots">
+          <article class="item"><figure class="figure"><img src="Images/SuccessfulLogins.PNG" alt="PowerShell successful logon script"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/RunningSuccessfulLoginScript.PNG" alt="Running successful logon script"></figure></article>
+        </div>
       </div>
 
-      <h3>3. Process Creation Events</h3>
-      <div class="pair">
-        <figure class="figure"><img src="Images/ProcessCreationEvents.PNG" alt="Process creation PowerShell script"></figure>
-        <figure class="figure"><img src="Images/ProcessCreationEventsScriptRun.PNG" alt="Running process creation script"></figure>
+      <h3>Process Creation Events</h3>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="Process creation PowerShell screenshots">
+          <article class="item"><figure class="figure"><img src="Images/ProcessCreationEvents.PNG" alt="Process creation script"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ProcessCreationEventsScriptRun.PNG" alt="Running process creation script"></figure></article>
+        </div>
       </div>
     </section>
 
@@ -215,5 +241,26 @@
       </div>
     </footer>
   </div>
+
+  <!-- gallery wheel + arrows -->
+  <script>
+    (function(){
+      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
+        const scroller = wrap.querySelector('.gallery');
+        if(!scroller) return;
+        const left = wrap.querySelector('.gprev');
+        const right = wrap.querySelector('.gnext');
+        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
+        left  && left .addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
+        right && right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
+        scroller.addEventListener('wheel', (e) => {
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+            e.preventDefault();
+            scroller.scrollLeft += e.deltaY;
+          }
+        }, {passive:false});
+      });
+    })();
+  </script>
 </body>
 </html>
