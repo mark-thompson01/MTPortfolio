@@ -1,229 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Setting up Group Policy</title>
-   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      padding: 2rem;
-      margin: 20px; 
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Setting up Group Policy · Mark Thompson Portfolio</title>
+  <meta name="description" content="Create, link, and scope Group Policy Objects (GPOs) for users and computers in Active Directory. Includes security filtering and common examples." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2, h3 {
-      color: #ADD8E6;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: block;
-      white-space: pre-wrap;
-      margin: 0.5rem 0;
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumbs */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:8px 0 10px;font-size:22px}
+    h3{margin:14px 0 8px;font-size:18px}
+    h4{margin:12px 0 6px;font-size:16px}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    .section {
-      margin-bottom: 30px;
+    ul,ol{padding-left:22px;margin:8px 0}
+    .tight li{margin:6px 0}
+
+    /* Images */
+    .img-wrap{margin:12px 0;text-align:center}
+    .img-wrap img{
+      display:block;margin:0 auto;
+      max-width:70%;
+      height:auto;
+      border:1px solid var(--card-border);
+      border-radius:12px;
     }
-    .event-id { font-weight: bold; color: #0057e7; }
-    ul { margin-bottom: 20px; }
-           img {
-         display: block;
-         margin: 20px 0;
-         width: 750px;
-         height: 550px;
-         border: 1px solid #444;
-         border-radius: 5px;
+
+    code{
+      background:#1b2233;border:1px solid #2A3447;border-radius:8px;
+      padding:10px 12px;display:block;white-space:pre-wrap;overflow-x:auto
     }
-        a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
-
 <body>
-    <h1>Setting up Group Policy</h1>
+  <div class="wrap">
 
-    <p>The following demonstration outlines how to set up basic GPOs and applying them to an Active Directory user and computer account.</p><br>
+    <!-- Top nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-    <h2>GPO Applied to AD User Account</h2>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/">AD Domain Lab</a> ·
+      <span>Setting up Group Policy</span>
+    </div>
 
-    <h3>Hide the "Run" Command from Start Menu via Group Policy (User Account GPO)</h3>
-    <p><strong>Objective:</strong> Prevent users from accessing the <strong>Run</strong> dialog <strong>(Win + R)</strong>, which can limit their ability to manually launch control panels, scripts, or unauthorized apps.</p>
-    <p><strong>1.</strong> In <strong>Server Manager</strong> click on the <strong>Tools</strong> drop-down in the upper right, then select <strong>Group Policy Management</strong>.</p>
-    <img src="Images/DR1.PNG" alt="DR1.PNG"><br>
-    <p><strong>2.</strong> In <strong>Group Policy Management</strong> Expand the Forest domain.</p>
-    <img src="Images/DR2.PNG" alt="DR2.PNG" style="width:800px; height:400px;"><br>
-    <p><strong>3.</strong> Right-click on the domain and select <strong>Create a GPO in this domain, and Link it here...</strong></p>
-    <img src="Images/DR3.PNG" alt="DR3.PNG" style="width:600px; height:400px;"><br>
-    <p><strong>4.</strong> Enter in a name for the <strong>New GPO</strong>, then click <strong>Ok</strong>.</p>
-    <img src="Images/DR4.PNG" alt="DR4.PNG" style="width:500px; height:200px;"><br>
-    <p><strong>5.</strong> Right-click on the New GPO in <strong>Group Policy Management</strong> and select <strong>Edit</strong>.</p>
-    <img src="Images/DR5.PNG" alt="DR5.PNG" style="width:600px; height:400px;"><br>
-    <p><strong>6.</strong> Under <strong>User Configuration</strong> navigate to <strong>User Configuration > Policies > Administraive Templates > Start Menu and Taskbar, then select</strong> <strong>Remove Run menu from Start Menu</strong>.</p>
-    <img src="Images/DR6.PNG" alt="DR6.PNG" style="width:600px; height:400px;"><br>
-    <p><strong>7.</strong> Select <strong>Enabled</strong>, click <strong>Apply</strong>, then <strong>Ok</strong>.</p>
-    <img src="Images/DR7.PNG" alt="DR7.PNG" style="width:600px; height:400px;"><br><br><br><br>
-    
-    
-        
-    
+    <!-- Header -->
+    <header>
+      <h1>Setting up Group Policy</h1>
+      <p class="lead">Create and link GPOs, then scope them to users or computers. These examples cover common user restrictions, security baselines, and security filtering with AD groups.</p>
+    </header>
 
-    <h3>Disable Control Panel and Settings App via Group Policy (User Account GPO)</h3>
-    <p><strong>Objective:</strong> Prevent a user from accessing the Control Panel and Settings on a Windows domain-joined computer</p>
+    <!-- Intro -->
+    <section class="card">
+      <p>The following demonstration outlines how to set up basic GPOs and apply them to Active Directory user and computer accounts.</p>
+    </section>
 
-    <p><strong>1.</strong> In Server Manager click on the <strong>Tools</strong> drop-down in the upper right, then select <strong>Group Policy Management</strong>.</p>
-    <img src="Images/GP1.PNG" alt="GP1.PNG">
-    <img src="Images/GP2.PNG" alt="GP1.PNG"><br>
-    <p><strong>2.</strong> Expand the <strong>Forest Domain</strong> on the leftt menu of Group Policy Management. Then right-click on the domain name to select "<strong>Create a GPO in this domain, and link it here.</strong></p>
-    <img src="Images/GP3.PNG" alt="GP3.PNG"><br>
-    <p><strong>3.</strong> Assign a name to the new GPO, then click <strong>Ok</strong>.</p>
-    <img src="Images/GP4.PNG" alt="GP4.PNG"><br>
-    <p><strong>4.</strong> The new GPO will then be listed in the hierarchical stucture on the left. Right-click, the select <strong>Edit</strong>.</p>
-    <img src="Images/GP5.PNG" alt="GP5.PNG" style="width:600px; height:400px;"><br>
-    <p><strong>5.</strong> The <strong>Group Policy Management Editor</strong> window will come up. Navigate <strong>User Configuration > Policies > Administrative Template Policy definitions > Control Panel.</strong></p>
-    <img src="Images/GP6.PNG" alt="GP6.PNG" style="width:600px; height:400px;"><br>
-    <p><strong>6.</strong> Click on <strong>Prohibit access to Control Panel and PC settings.</strong></p>
-    <img src="Images/GP7.PNG" alt="Images/GP7.PNG" style="width:600px; height:400px;"><br>
-    <p><strong>7.</strong> Click on <strong>Enabled</strong> to the left. Then click <strong>Ok</strong>.</p>
-    <img src="Images/GP8.PNG" alt="GP8.PNG" style="width:600px; height:400px;"><br><br><br><br><br>
-    
-    
-    
-    <h2>GPO Applied to AD Computer Account</h2>
-    <h3>Account Lockout Policy via Group Policy (User Account GPO)</h3>
-    <p>One of the first GPO's that should be created upon spinning up a domain controller is setting the <strong>Active Directory User Account Lockout Policy</strong>.</p><br>
-    <p><strong>1.</strong> In <strongL>Server Manager</strong> click on the <strong>Tools</strong> drop-down in the upper right, then select <strong>Group Policy Management</strong>.</p>
-    <img src="Images/AccountL1.PNG" alt="AccountL1.PNG"><br>
-    <p><strong>2.</strong> In <strong>Group Policy Management</strong> Expand the <strong>Forest Domain</strong> on the left menu, then click <strong>Create a GPO in this domain, and link it here.</strong>.</p>
-    <img src="Images/AccountL2.PNG" alt="AccountL2.PNG"><br>
-    <p><strong>3.</strong> Name the <strong>New GPO</strong> Account Lockout Policy.</p>
-    <img src="Images/AccountL3.PNG" alt="AccountL3.PNG" style="width:600px; height:200px;"><br>
-    <p><strong>4.</strong> The new GPO will then be listed in the hierarchical structure on the left. Right-click, then select <strong>Edit</strong>.</p>
-    <img src="Images/AccountL4.PNG" alt="AccountL4.PNG" style="width:700px; height:500px;"><br>
-    <p><strong>5.</strong> The <strong>Group Policy Management Editor</strong> window will come up. Navigate to <strong>Computer Configuration > Policies > Windows Settings > Account Policies > Account Lockout Policy</strong>.</p>
-    <img src="Images/AccountL5.PNG" alt="AccountL5.PNG" style="width:700px; height:400px;"><br>
-    <p><strong>6.</strong> Click on <strong>Account lockout threshold</strong> to the right.</p>
-    <img src="Images/AccountL6.PNG" alt="AccountL6.PNG" style="width:700px; height:500px;"><br>
-    <p><strong>7.</strong> Configure the <strong>Account lockout threshold Properties</strong>. For this example, I'm setting the duration to 3, click <strong>Apply</strong>, the <strong>Ok</strong>.</p>
-    <img src="Images/AccountL7.PNG" alt="AccountL7.PNG" style="width:700px; height:500px;"><br><br><br>
+    <!-- User GPO: Remove Run -->
+    <section class="card">
+      <h2>GPO Applied to AD User Account</h2>
+      <h3>Hide the “Run” Command from Start Menu (User GPO)</h3>
+      <p><strong>Objective:</strong> Prevent users from accessing <strong>Run</strong> (<kbd>Win</kbd>+<kbd>R</kbd>) to limit launching tools or scripts.</p>
 
+      <h4>1) Open Group Policy Management</h4>
+      <p>Server Manager → <strong>Tools</strong> → <strong>Group Policy Management</strong>.</p>
+      <div class="img-wrap"><img src="Images/DR1.PNG" alt="Open Group Policy Management from Server Manager"></div>
 
+      <h4>2) Expand the Forest/Domain</h4>
+      <div class="img-wrap"><img src="Images/DR2.PNG" alt="GPMC forest and domain view"></div>
 
-    
-    <h3>Adding a Custom Logon Message to domain connnected computers via Group Policy (User Account GPO)</h3>
-    <p><strong>Objective:</strong> Setting up a Custom Logon Message</p>
+      <h4>3) Create & Link a GPO at the Domain</h4>
+      <p>Right-click the domain → <strong>Create a GPO in this domain, and Link it here…</strong></p>
+      <div class="img-wrap"><img src="Images/DR3.PNG" alt="Create and link GPO dialog"></div>
 
-    <p><strong>1.</strong> Go back into <strong>Server Manager > Tools</strong>, then select <strong>Group Policy Management</strong>.</p>
-    <p><strong>2.</strong> Right-click on Domain.1.microsoft.com domain entry under the forest hierarchy, and select <strong>Create a GPOin this domain and link it here...</strong>.</p>
-    <img src="Images/CL1.PNG" alt="CL1.PNG"><br>
-    <p><strong>3.</strong> This one will be named <strong>Custom Logon Message</strong>, then click <strong>Ok</strong>.</p><br>
-    <img src="Images/CL2.PNG" alt="CL2.PNG"><br>
-    <p><strong>4.</strong> Right-click on the new created GPO and select <strong>Edit</strong>.</p>
-    <img src="Images/CL3.PNG" alt="CL3.PNG"><br>
-    <p><strong>5.</strong> In <strong>Group Policy Management Editor</strong>, Under <strong>Computer Configuration</strong> navigate to <strong>Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options</strong>. Then select <strong>Interactive Logon: Message Title for users attempting to log on.</strong>.</p>
-    <img src="Images/CL4.PNG" alt="CL4.PNG"><br>
-    <p><strong>6.</strong> Set up the <strong>Message Title</strong>, then click <strong>Apply</strong> then <strong>Ok</strong>.</p>
-    <img src="Images/CL5.PNG" alt="CL5.PNG"><br><br><br>
+      <h4>4) Name the GPO</h4>
+      <div class="img-wrap"><img src="Images/DR4.PNG" alt="New GPO name"></div>
 
-    <h3>Disable USB Storage Devices to domain connected computers via Group Policy (User Account GPO)</h3>
-    <p><strong>Objective:</strong> Prevent all USB mass storage devices (e.g., flash drives) from working on domain-joined computers App via Group Policy (User Account GPO).</p>
-    <p><strong>1.</strong> In <strong>Group Policy Editor</strong> navigate to <strong>Computer Configuration > Policies > Administrative Templates > System > Removable Storage Access</strong>. Then click-on <strong>All Removeable Storage classes: Deny all access.</strong></p>
-    <img src="Images/RSD1.PNG" alt="RSD1.PNG"><br>
-    <p><strong>2.</strong> Select <strong>Enabled</strong> then click <strong>Ok</strong></p>
-    <img src="Images/RSD2.PNG" alt="RSD2.PNG"><br><br><br><br>
+      <h4>5) Edit the GPO</h4>
+      <div class="img-wrap"><img src="Images/DR5.PNG" alt="Edit GPO context menu"></div>
 
-    <h2>Create a Security Group in Active Directory and link it to a GPO</h2>
-    <h3>Step 1: Create a Security Group in Active Directory</h3>
-    <p><strong>1.</strong> Open <strong>Active Directory Users and Computersd (dsa.msc)</strong></p>
-    <img src="Images/SG1.PNG" alt="SG1.PNG" style="width:400px; height:600px;"><br>
-    <p><strong>2.</strong> Navigate to the OU where you want the group stored.</p>
-    <p><strong>3.</strong> Right-click on the OU > <strong>New > Group</strong></p>
-    <img src="Images/SG2.PNG" alt="SG1.PNG">
-    <ul>
-        <li>Name it: e.g., <strong>GPO Testers</strong></li>
-        <li>Group Type:<strong>Security</strong></li>
-        <li>Scope: <strong>Global</strong> (default is fine)</li>
-    </ul>
-    <p><strong>4.</strong> Click <strong>Ok</strong></p>
-    <img src="Images/SG3.PNG" alt="SG3.PNG" style="width:500px; height:350px;">
+      <h4>6) Configure the Setting</h4>
+      <p><strong>User Configuration → Policies → Administrative Templates → Start Menu and Taskbar</strong> → <em>Remove Run menu from Start Menu</em></p>
+      <div class="img-wrap"><img src="Images/DR6.PNG" alt="Remove Run menu policy path"></div>
 
-    <p><strong>Result:</strong> There's now a New Security Group in ADUC.</p><br><br>
+      <h4>7) Enable the Policy</h4>
+      <div class="img-wrap"><img src="Images/DR7.PNG" alt="Enable Remove Run menu policy"></div>
+    </section>
 
-    <h3>Step 2: Add Users to the Group</h3>
-    <p><strong>1.</strong> Double-click the group you just created</p>
-    <p><strong>2.</strong> Go to the <strong>Members</strong> tab</p>
-    <p><strong>3.</strong> Click <strong>Add</strong>, and select the users you want the GPO to apply to</p>
-    <p><strong>4.</strong>Click <strong>Ok</strong></p>
-    <img src="Images/SG4.PNG" alt="SG4.PNG">
-    <img src="Images/SG5.PNG" alt="SG5.PNG">
-    
-    <p><strong>Result:</strong> Those users are now group members</p><br><br>
+    <!-- User GPO: Disable Control Panel -->
+    <section class="card">
+      <h3>Disable Control Panel and Settings (User GPO)</h3>
+      <p><strong>Objective:</strong> Block access to Control Panel and the Settings app on domain-joined clients.</p>
 
-    <h3>Step 3: Create and Link a new GPO</h3>
-    <p><strong>1.</strong> Open <strong>Group Policy Management (gpmc.msc)</strong></p>
-    <img src="Images/SG6.PNG" alt="SG6.PNG" style="width:400px; height:650px;"><br>
-    <p><strong>2.</strong> Right-click the OU where the users reside in and select:</p>
-    <p><strong>"Create a GPO in this domain, and Link it here..."</strong></p>
-    <img src="Images/SG8.PNG" alt="SG8.PNG">
-    <p><strong>3.</strong> Name the GPO (e.g., <strong>Disable Control Panel</strong></p>
-    <img src="Images/SG9.PNG" alt="SG9.PNG" style="width:500px; height:200px;">
-    <p><strong>4.</strong> Right-click the new GPO > <strong>Edit</strong>, and configure your desired settings.</p>
-    <img src="Images/SG10.PNG" alt="SG10.PNG">
-    <img src="Images/SG12.PNG" alt="SG12.PNG">
-    <img src="Images/SG13.PNG" alt="SG13.PNG">
-    <p><strong>Result:</strong> GPO is created and linked</p><br><br>
+      <h4>1) Open GPMC & Create GPO</h4>
+      <div class="img-wrap"><img src="Images/GP1.PNG" alt="Open GPMC"></div>
+      <div class="img-wrap"><img src="Images/GP2.PNG" alt="Domain structure in GPMC"></div>
 
-    <h3>Step 4: Apply GPO to Security Group Using Security Filtering</h3>
-    <p><strong>1.</strong> In Group Policy Management, select your new GPO</p>
-    <img src="Images/SG15.PNG" alt="SG15.PNG">
-    <p><strong>2.</strong> In the <strong>Scope</strong> tab, under <strong>Security Filtering:</strong></p>
-    <ul>
-        <li><strong>Remove</strong> Authenticated Users</li>
-        <li><strong>Add</strong> the group you created (e.g., <strong>Group_Policy_Users</strong>)</li>
-    </ul>
-    <img src="Images/SG16.PNG" alt="SG16.PNG">
-    <img src="Images/SG17.PNG" alt="SG17.PNG">
-    <p><strong>Result:</strong> The GPO will now <strong>only apply</strong> to members of that group.</p><br>
+      <h4>2) Create & Link at Domain</h4>
+      <div class="img-wrap"><img src="Images/GP3.PNG" alt="Create and link GPO"></div>
 
-    <h4>Important: Verify Group Has "Read" and "Apply Group Policy" Permissions</h4>
-    <p><strong>1.</strong> Still in GPMC, go to the <strong>Delegation</strong> tab of the GPO</p>
-    <p><strong>2.</strong> Click <strong>Advanced</strong></p>
-    <img src="Images/SG19.PNG" alt="SG19.PNG">
-    <p><strong>3.</strong> Confirm that group has these permissions</p>
-    <ul>
-        <li><strong>Read</strong></li>
-        <li><strong>Apply group policy</strong></li>
-    </ul>
-    <img src="Images/SG20.PNG" alt="SG20.PNG"><br><br>
+      <h4>3) Name the GPO</h4>
+      <div class="img-wrap"><img src="Images/GP4.PNG" alt="Name new GPO"></div>
 
-    <h3>Step 5: Update and Test</h3>
-    <ul>
-        <li>On a client machine run, <strong>gupdate /force</strong></li>
-        <li>Log in as a user inside the group - verify the GPO applies</li>
-        <li>Log in as a user not in the group - verify the GPO does not apply</li>
-    </ul>
+      <h4>4) Edit the GPO</h4>
+      <div class="img-wrap"><img src="Images/GP5.PNG" alt="Edit GPO"></div>
 
-    <p>This method provides you with the precise control over who receives the GPO, using Security Groups instead of broad OU application.</p>
-    
+      <h4>5) Configure the Setting</h4>
+      <p><strong>User Configuration → Policies → Administrative Templates → Control Panel</strong> → <em>Prohibit access to Control Panel and PC settings</em></p>
+      <div class="img-wrap"><img src="Images/GP6.PNG" alt="Control Panel policy path"></div>
 
-    
-    
-    
-    
-    
+      <h4>6) Enable the Policy</h4>
+      <div class="img-wrap"><img src="Images/GP7.PNG" alt="Policy selection"></div>
+      <div class="img-wrap"><img src="Images/GP8.PNG" alt="Enable prohibit Control Panel policy"></div>
+    </section>
 
-    
+    <!-- Computer GPO: Account Lockout -->
+    <section class="card">
+      <h2>GPO Applied to AD Computer Account</h2>
+      <h3>Account Lockout Policy (Computer GPO)</h3>
+      <p>One of the first domain security baselines: define lockout threshold/duration to mitigate brute-force attempts.</p>
 
+      <h4>1) Open GPMC</h4>
+      <div class="img-wrap"><img src="Images/AccountL1.PNG" alt="Open GPMC from Server Manager"></div>
 
-  <a href="../index.html">Back to Home</a>
+      <h4>2) Create & Link a New GPO</h4>
+      <div class="img-wrap"><img src="Images/AccountL2.PNG" alt="Create and link Account Lockout GPO"></div>
+
+      <h4>3) Name the GPO</h4>
+      <div class="img-wrap"><img src="Images/AccountL3.PNG" alt="Account Lockout Policy GPO name"></div>
+
+      <h4>4) Edit the GPO</h4>
+      <div class="img-wrap"><img src="Images/AccountL4.PNG" alt="Edit Account Lockout GPO"></div>
+
+      <h4>5) Configure Policies</h4>
+      <p><strong>Computer Configuration → Policies → Windows Settings → Security Settings → Account Policies → Account Lockout Policy</strong></p>
+      <div class="img-wrap"><img src="Images/AccountL5.PNG" alt="Account Lockout Policy path"></div>
+
+      <h4>6) Set Threshold</h4>
+      <div class="img-wrap"><img src="Images/AccountL6.PNG" alt="Open Account lockout threshold"></div>
+
+      <h4>7) Example Configuration</h4>
+      <p>Choose a threshold (e.g., <em>3 invalid attempts</em>), and define lockout duration/reset values.</p>
+      <div class="img-wrap"><img src="Images/AccountL7.PNG" alt="Configure lockout threshold"></div>
+    </section>
+
+    <!-- Computer GPO: Custom Logon Message -->
+    <section class="card">
+      <h3>Custom Logon Message (Computer GPO)</h3>
+      <p><strong>Objective:</strong> Display a legal/banner message at sign-in.</p>
+
+      <h4>1) Create & Link a New GPO</h4>
+      <p>GPMC → Right-click the domain → <strong>Create a GPO in this domain, and Link it here…</strong></p>
+      <div class="img-wrap"><img src="Images/CL1.PNG" alt="Create Custom Logon Message GPO"></div>
+
+      <h4>2) Name the GPO</h4>
+      <div class="img-wrap"><img src="Images/CL2.PNG" alt="Name Custom Logon Message GPO"></div>
+
+      <h4>3) Edit the GPO</h4>
+      <div class="img-wrap"><img src="Images/CL3.PNG" alt="Edit Custom Logon Message GPO"></div>
+
+      <h4>4) Configure Security Option</h4>
+      <p><strong>Computer Configuration → Policies → Windows Settings → Security Settings → Local Policies → Security Options</strong> → <em>Interactive logon: Message title for users attempting to log on</em> (and the accompanying <em>Message text</em>).</p>
+      <div class="img-wrap"><img src="Images/CL4.PNG" alt="Security Options path"></div>
+
+      <h4>5) Set the Message</h4>
+      <div class="img-wrap"><img src="Images/CL5.PNG" alt="Configure logon message title"></div>
+    </section>
+
+    <!-- Computer GPO: Disable USB storage -->
+    <section class="card">
+      <h3>Disable USB Storage Devices (Computer GPO)</h3>
+      <p><strong>Objective:</strong> Block USB mass-storage devices on domain-joined computers.</p>
+
+      <h4>1) Configure Removable Storage Access</h4>
+      <p><strong>Computer Configuration → Policies → Administrative Templates → System → Removable Storage Access</strong> → <em>All Removable Storage classes: Deny all access</em></p>
+      <div class="img-wrap"><img src="Images/RSD1.PNG" alt="Removable Storage Access policy path"></div>
+
+      <h4>2) Enable Policy</h4>
+      <div class="img-wrap"><img src="Images/RSD2.PNG" alt="Enable deny all access"></div>
+    </section>
+
+    <!-- Security Group + Security Filtering -->
+    <section class="card">
+      <h2>Create a Security Group and Scope a GPO with Security Filtering</h2>
+
+      <h3>Step 1: Create a Security Group in AD</h3>
+      <ol class="tight">
+        <li>Open <strong>Active Directory Users and Computers</strong> (dsa.msc).</li>
+        <li>Navigate to the desired OU → Right-click → <strong>New → Group</strong>.</li>
+        <li>Name it (e.g., <strong>GPO Testers</strong>), Type: <strong>Security</strong>, Scope: <strong>Global</strong>.</li>
+      </ol>
+      <div class="img-wrap"><img src="Images/SG1.PNG" alt="ADUC open"></div>
+      <div class="img-wrap"><img src="Images/SG2.PNG" alt="Create new group"></div>
+      <div class="img-wrap"><img src="Images/SG3.PNG" alt="Group properties"></div>
+
+      <h3>Step 2: Add Users to the Group</h3>
+      <ol class="tight">
+        <li>Open the group → <strong>Members</strong> tab → <strong>Add</strong> users → <strong>OK</strong>.</li>
+      </ol>
+      <div class="img-wrap"><img src="Images/SG4.PNG" alt="Add members to group"></div>
+      <div class="img-wrap"><img src="Images/SG5.PNG" alt="Members list"></div>
+
+      <h3>Step 3: Create & Link a New GPO</h3>
+      <ol class="tight">
+        <li>Open <strong>Group Policy Management</strong> (gpmc.msc).</li>
+        <li>Right-click the target OU → <strong>Create a GPO in this domain, and Link it here…</strong></li>
+        <li>Name it (e.g., <strong>Disable Control Panel</strong>) → <strong>Edit</strong> and configure settings.</li>
+      </ol>
+      <div class="img-wrap"><img src="Images/SG6.PNG" alt="GPMC open"></div>
+      <div class="img-wrap"><img src="Images/SG8.PNG" alt="Create and link GPO at OU"></div>
+      <div class="img-wrap"><img src="Images/SG9.PNG" alt="Name GPO"></div>
+      <div class="img-wrap"><img src="Images/SG10.PNG" alt="Edit GPO view"></div>
+      <div class="img-wrap"><img src="Images/SG12.PNG" alt="Example settings"></div>
+      <div class="img-wrap"><img src="Images/SG13.PNG" alt="Example settings 2"></div>
+
+      <h3>Step 4: Security Filtering</h3>
+      <ol class="tight">
+        <li>Select the GPO → <strong>Scope</strong> tab → Under <strong>Security Filtering</strong> remove <em>Authenticated Users</em> and add your new security group.</li>
+      </ol>
+      <div class="img-wrap"><img src="Images/SG15.PNG" alt="GPO scope tab"></div>
+      <div class="img-wrap"><img src="Images/SG16.PNG" alt="Security filtering edit"></div>
+      <div class="img-wrap"><img src="Images/SG17.PNG" alt="Group added to filtering"></div>
+
+      <h4>Verify Permissions</h4>
+      <ol class="tight">
+        <li>GPO → <strong>Delegation</strong> tab → <strong>Advanced</strong> → ensure the group has <strong>Read</strong> and <strong>Apply group policy</strong>.</li>
+      </ol>
+      <div class="img-wrap"><img src="Images/SG19.PNG" alt="Delegation tab"></div>
+      <div class="img-wrap"><img src="Images/SG20.PNG" alt="Advanced security - permissions"></div>
+
+      <h3>Step 5: Update & Test</h3>
+      <ul class="tight">
+        <li>On a client: <code>gpupdate /force</code></li>
+        <li>Sign in as a user inside the group → verify the GPO applies.</li>
+        <li>Sign in as a user not in the group → verify it does not apply.</li>
+      </ul>
+
+      <p>This approach provides precise targeting via security groups instead of broad OU application.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+
+  </div>
 </body>
 </html>
