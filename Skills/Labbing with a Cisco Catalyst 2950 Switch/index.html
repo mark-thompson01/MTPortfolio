@@ -1,333 +1,343 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cisco Catalyst Switch Lab 1</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cisco Catalyst Switch Lab 1 · Mark Thompson Portfolio</title>
+  <meta name="description" content="Foundational Cisco Catalyst 2950/3550 switch configuration: factory reset, initial setup, VLANs, port security, and SPAN." />
   <style>
-    /* Align everything to the left */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b; /* Dark background */
-      color: #f0f0f0; /* Light grey text */
-      text-align: left; /* Align all text to the left */
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards / sections */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    h1, h2, h3 {
-      text-align: left; /* Align headings to the left */
-      color: #B22222;
+    /* Figures: keep your original inline sizes; only downscale if viewport is narrower */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;
+      max-width:100%;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%; /* responsive downscale only */
+      /* no width:100% here so your inline sizes remain in control */
     }
 
-    ol {
-      color: #B22222;
+    /* Code & pre */
+    pre{
+      margin:10px 0;
+      padding:12px 14px;
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:12px;
+      overflow:auto;
+      color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    p {
-      text-align: left; /* Align paragraphs to the left */
-      margin-left: 20px; /* Add slight indentation */
-    }
+    /* Lists */
+    ul{padding-left:22px;margin:8px 0}
+    ol{padding-left:22px;margin:8px 0}
 
-    ul {
-      text-align: left; /* Align list to the left */
-      padding-left: 40px; /* Add padding for bullets */
-      list-style-type: none
-    }
-
-    a {
-      color: #1e90ff; /* Blue links */
-      text-decoration: none;
-    }
-
-    a:hover {
-      color: #ff7f50; /* Coral on hover */
-      text-decoration: underline;
-    }
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-<h1>Cisco Catalyst Switch Lab 1</h1>
-  <p>
-  <a href="https://github.com/mark-thompson01/cisco-catalyst-switch-lab--2950-3550/tree/main" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
-
-  
-<p>These next two labs demonstrate foundational switch configurations using legacy <strong>Cisco Catalyst models (2950 & 3550)</strong>. While the hardware is dated, the focus is on building an understanding of core network principales like VLANs, port security, trunking, and STP, which remain critical in modern networking environments.</p>
-
-  <h3>Table of Contents</h3>
-<ol>
-  <li><a href="#connecting-to-the-switch">Connecting to the Switch</a></li>
-  <li><a href="#performing-a-factory-reset">Performing a Facory Reset</a></li>
-  <li><a href="#configuring-switch-from-scratch">Configuring Switch from Scratch</a></li>
-  <li><a href="#post-initial-setup">Post Initial Setup</a></li>
-  <li><a href="#creating-&-configuring-vlans">Creating & Configuring VLANs</a></li>
-  <li><a href="#configuring-port-security">Configuring Port Security</a></li>
-  <li><a href="#setting-up-a-span-port">Setting up a SPAN port - Switch Port Analyzer</a></li>
-</ol><br>
-
-
-<h2 id="connecting-to-the-switch">Connecting to the Switch</h2>
-<p>In this lab environment, I'm using a serial <strong>DB-9</strong> to <strong>console port</strong> cable to connect the <strong>Cisco Catalyst</strong> switches to a Windows machine, to manage them with the use of <strong>PuTTY</strong>.</p>
-<p>Here in the <strong>PuTTY</strong> interface, I'm opening a management session with the switch, via Serial connection <strong>COM1</strong>:</p>
-<img src="Images/Connecting/con1.png" alt="con1.png"><br><br><br><br>
-
-<h2 id="performing-a-factory-reset">Performing a Factory Reset</h2>
-<p>Performing a factory reset on a Cisco Catalyst 2950 switch to reconfigure it from scratch.</p>
-<p>To start, I'm going to carry out the following steps on the <strong>Cisco Catalyst 2950</strong> switch to enter <strong>ROMMON</strong> mode:</p>
-<ol>
-  <li>Unplug the power cable from the switch.</li>
-  <li>Press and hold the <strong>MODE</strong> button on the front panel.</li>
-  <li>While holding down the <strong>MODE</strong> button, reconnect the power.</li>
-  <li>Continue holding the button until you see the <code>switch:</code> prompt appear in your console session <strong>(PuTTY)</strong>.</li>
-</ol>
-<p>This procedure interrupts the normal boot process and forces the switch into the <strong>boot loader environment (ROMMON):</strong></p><br>
-  
-<h3>1. Entering ROMMON mode</h3>
-<img src="Images/TheSwitchPrompt.png" alt="TheSwitchPrompt.png"><br><br>
-  
-<h3>2. Running Factory Reset Commands</h3>
-<p>Once the switch is in ROMMON mode, I'm going to run the following commands to initiate the factory reset.</p><br>
-<pre><code>
-<strong>flash_init</strong> - Initializes the flash file system to access and manipulate files (like configs or VLAN data).
-<strong>del flash:config.text</strong> - Delete the startup configuration file. 
-<strong>del flash:vlan.dat</strong> - Deletes the VLAN database file.
-</code></pre>
-<img src="Images/Factory Reset/fac4.png" alt="fac4.png"><br><br>
-
-<h3>2. Boot Command</h3>
-<p>Enter in the boot command to complete the factory reset.</p>
-<img src="Images/Factory Reset/fac5.png" alt="fac5.png"><br><br>
-
-<h3>3. Boot up</h3>
-<p>The <strong>IOS (Internetwork Operating System)</strong> image is being loaded from flash memory.</p>
-<p>The swtitch then <strong>initializes the flash file system</strong> again after loading the IOS.</p>
-<p>This prepares the switch to access the saved files (e.g., new configs, logs, VLAN database).</p>
-<p>It's one of the final steps before the switch reaches the interactive CLI or setup prompt.</p>
-<img src="Images/Factory Reset/fac6.png" alt="fac6.png"><br><br>
-
-<h3>4. Final Phase of Booting up</h3>
-<p>Here the switch is in the final phase of booting up after issuing the <strong>boot</strong> command.</p>
-<p>The completion of the <strong>Cisco IOS boot process</strong> after a factory reset.</p>
-<img src="Images/Factory Reset/fac7.png" alt="fac7.png"><br><br>
-
-<h3>5. The Switch Has Fully Rebooted</h3>
-<p>Here, the system info is being displayed and is now waiting for the prompt.</p>
-<img src="Images/Factory Reset/fac8.png" alt="fac8.png">
-<p>From here, the switch will prompt for different configurations to set it up from scratch.</p><br><br><br><br>
-
-
-<h2 id="configuring-switch-from-scratch">Configuring Switch from Scratch</h2>
-
-<h3>1. System Configuration Dialog (setup Wizard)</h3>
-<p>After the switch is factory reset it'll go into the <strong>System Configuration Dialog (setup Wizard)</strong> of the Cisco Catalyst 2950.</p>
-<p>Below in this example, I'm going to setup the switches hostname to MT0.</p>
-<img src="Images/From Scratch/conf1.png" alt="conf1.png"><br><br>
-
-<h3>2. Password Setup</h3>
-<p>Here, the password is being set for the <strong>Enable Secret</strong> prompt.</p>
-<p>This is the primary secure password for accessing <strong>privileged EXEC mode (MT0#)</strong></p>
-<p>The <strong>enable secret</strong> is stored in encrypted form in the config.</p>
-<img src="Images/From Scratch/conf2.png" alt="conf2.png"><br><br>
-
-<h3>3. Security and Management Configuration</h3>
-<p>In this example, I'm going to enter in <strong>no</strong> for SNMP Network Management.</p>
-<p>Typically this would be setup in production environments.</p>
-<img src="Images/From Scratch/conf3.png" alt="conf3.png"><br><br>
-
-<h3>4. Interface Review Stage</h3>
-<p>From there we get an interface summary:</p>
-<img src="Images/From Scratch/conf4.png" alt="conf4.png"><br><br>
-
-<h3>5. Assign a Management Interface</h3>
-<p>After reviewing the interface summary, the switch prompts you to enter the interface used for network management.</p>
-<p><strong>Important:</strong> This is not asking for a physical interface like <strong>FastEthernet0/1</strong>.</p>
-<p>Instead, it's asking you to specify a <strong>Switched Virtual Interface (SVI)</strong> - typically vlan1.</p>
-<p>This tells the switch you want to assign an IP address to <strong>VLAN 1</strong>.</p>
-<p>Which is the default management VLAN used on most Cisco Layer 2 switches (like the Catalyst 2950).</p>
-<p>This step is critial - it gives the switch a Layer 3 address so it can be remotely managed over the network via Telnet, SSH, SNMP, or just to test connectivity via ping.</p>
-<img src="Images/From Scratch/conf5.png" alt="conf5.png"><br>
-<img src="Images/From Scratch/conf6.png" alt="conf6.png"><br>
-<img src="Images/From Scratch/conf8.png" alt="conf8.png"><br><br>
-
-<h3>6. Enable Cluster Command Switching</h3>
-<p>After assigning an IP address to VLAN 1, the setup wizard prompts you to optionally enable <strong>cluster management</strong>:</p>
-<p>Cluster Command Switching is a <strong>legacy Cisco feature</strong> that allows one switch - called the <strong>Cluster Command Switch (CCS)</strong>:</p>
-<p>To manage a group of other nearby member switches using <strong>Cisco Discovery Protcol (CDP).</strong></p><br>
-
-  
-
-<p><strong>Note:</strong> Cluster management isn't often used in modern production environments and has been largely replaced, by tools such as <strong>Cisco Prime Infrastructure, DNA Center,</strong> or other centralized configurations.</p>
-<p>In this example, I'm going to enter in yes and enter the specified cluster name when prompted.</p>
-<img src="Images/From Scratch/conf10.png" alt="conf10.png"><br><br>
-
-
-<h3>7. Review the Generated Configuration Script</h3>
-<p>Once you complete the <strong>Cisco Setup Wizard</strong>, the switch presents a preview of the configuration it's about to apply based on your responses.</p>
-<p>This step is the final review before saving the configuration to <strong>NVRAM</strong>.</p>
-<p>If everything looks correct, the next prompt will ask whether you'd like to save this configuration so it's retained after a reboot.</p>
-<img src="Images/From Scratch/conf11.png" alt="conf11.png">
-<img src="Images/From Scratch/conf12.png" alt="conf12.png"><br><br>
-
-<h3>8. Save or Discard the Configuration</h3>
-<p>After previewing the full configuration script, the Cisco Setup Wizard prompts you to choose what to do next:</p>
-<p>In this example, I'm going to enter in 2 to save the configuration to NVRAM (startup-config) and exit to the command prompt.</p>
-<img src="Images/From Scratch/conf14.png" alt="conf14.png">
-<p>After choosing to save the configuration, the switch writes the configuration to NVRAM and exits the setup wizard. </p>
-<p>A message might come up that indicates the line protocol on vlan1 is down.</p>
-<p>This simply means that there are no physical ports assigned to VLAN 1 are currently connected or active - a normal occurrence in lab setups.</p>
-<p>Once a device is connected to a port in VLAN1, the interface will automatically come up.</p>
-<img src="Images/From Scratch/conf15.png" alt="conf15.png"><br><br>
-
-
-<h3>9. Reboot to Switch Prompt</h3>
-<p>After the switch writes the configurations to NVRAM and reboots it'll prompt to <strong>Press RETURN to get started:</strong>.</p>
-<p>Upon pressing enter it'll show the switch prompt > followed by the hostname of thw switch.</p>
-<img src="Images/From Scratch/conf16.png" alt="conf16.png"><br><br><br><br>
-
-
-<h2 id="post-initial-setup">Post Initial Setup</h2>
-
-<h3>1. Enter Privileged EXEC Mode</h3>
-<p>After exiting the setup wizard and reaching the CLI, you're placed in <strong>User EXEC Mode</strong> (prompt ends in >), which provides limited read-only access:
-<p>To begin managing the switch, type <strong>enable</strong></p>
-<img src="Images/Post Initial Setup/post1.png" alt="post1.png">
-<p>This command elevates you to <strong>Privileged EXEC mode</strong> (prompt ends in #).</p>
-<p>Where you can issue high-level diagnostic commands to enter configuration mode to make changes.</p><br><br>
-
-<h3>2. Enter Global Configuration Mode</h3>
-<p>Once you're in <strong>Privileged EXEC Mode</strong></p>
-<p>MT0#, the command <strong>configure terminal</strong> or shortcut <strong>conf t</strong> takes you into <strong>Global Configuration Mode</strong>:</p>
-<img src="Images/Post Initial Setup/post2.png" alt="post2.png"><br>
-<img src="Images/Post Initial Setup/post3.png" alt="post3.png"><br><br>
-
-<h3>3. Change Switch Hostname</h3>
-<p>Once in <strong>Global Configuration Mode</strong>, one of the first things that can be done is changing the hostname of the switch.</p>
-<p>In this example, I'll specify the new hostname to be <strong>switch1</strong>.</p>
-<img src="Images/Post Initial Setup/post4.png" alt="post4.png"><br>
-<img src="Images/Post Initial Setup/post5.png" alt="post5.png"><br><br>
-
-
-<h3>4. Setup MOTD Banner</h3>
-<p>Here, I'll setup and example banner to demonstrate the feature.</p>
-<p><strong>MOTD - Message of the Day</strong> banners are used to display a login message.</p>
-<p>This is useful for compliance, legal disclaimers, or basic identification of the device's role on the network.</p>
-<p>In this example, I'll specify the banner as "#Central Switch"#</p>
-<img src="Images/Post Initial Setup/post6.png" alt="post6.png"><br><br>
-
-
-<h3>5. Secure Console Access with a Password</h3>
-<p>Setting this configuration sets it up for anyone who connects to the switch via the console port must enter a password.</p>
-<p>This feature is intended to prevent unauthorized physical access to the switch CLI via the console port.</p>
-<p>It's a basic, yet essential security measure to prevent unauthorized physical access to switch settings.</p>
-<img src="Images/Post Initial Setup/post7.png" alt="post7.png">
-<p>Here, we have finalized the basic management setup of the Cisco Catalyst 2950.</p> 
-<p>Securing the local (console) and remote (VTY/Telnet) acess with passwords, assigned an IP address to the VLAN 1 interface for management access, and configured a default gateway so the switch can communicate with devices outside the subnet.</p>
-<img src="Images/Post Initial Setup/post8.png" alt="post8.png"><br><br>
-
-<h3>6. Configure Access Ports for Workstations</h3>
-<p>Here, I've configured the ports Fa0/40-48 as access ports for end user devices.</p>
-<p>In this example, these ports are assigned to VLAN 20 and configured with descriptions for clarity.</p>
-<p>The <strong>spanning-tree portfast</strong> is enabled to improve connection time for connected workstations.</p>
-<img src="Images/Post Initial Setup/post9.png" alt="post9.png"><br><br>
-
-<h3>7. Exit, End, Write Memory</h3>
-<p>From there, type in <strong>exit</strong>, <strong>end</strong>, back to <strong>Privileged EXEC Mode</strong> and enter in <strong>write memory</strong>.</p>
-<img src="Images/Post Initial Setup/post11.png" alt="post11.png"><br><br><br><br>
-
-
-<h2 id="creating-&-configuring-vlans">Creating & Configuring VLANs</h2>
-
-<h3>1. Create and Name VLANs for Logical Segmention</h3>
-<p>To get started with creating and configuring <strong>VLANs</strong> we need to first access <strong>Global Configuration Mode</strong> from <strong>Privileged EXEC Mode</strong>.</p>
-<p>In this example, two VLANS: VLAN 10 (Lab-1) and VLAN 20 (Lab-2) are created.</p>
-<p>VLANs allow you to segment the switch into multiple logical networks, even though all device are physically connected to the same hardware.</p>
-<p>Naming the VLANs helps with organization and troulbeshooting.</p>
-<img src="Images/VLANs/vlan1.png" alt="vlan1.png"><br><br>
-
-<h3>2. Assign Switch Ports to VLANs and Save the Configuration</h3>
-<p>In this step, physical switch ports to VLAN 10 and 20 using the <strong>interface range</strong> command.</p>
-<p>Descriptions are added to document their roles.</p>
-<p>After entering in the changes, save the configuration to NVRAM using <strong>write memory</strong> to make the setup persistent.</p>
-<img src="Images/VLANs/vlan2.png" alt="vlan2.png"><br><br>
-
-<h3>3. Verify VLAN Configuration</h3>
-<p>After assigning ports to VLANs and saving the configuration, the command <strong>show vlan brief</strong> is used to confirm that everything is correctly set up.</p>
-<img src="Images/VLANs/vlan3.png" alt="vlan3.png"><br><br><br><br>
-
-
-<h2 id="configuring-port-security">Configuring Port Security</h2>
-<h3>1. Configure Port Security on an Access Port</h3>
-<p>In this example, port security is configured on interface<strong>fa0/30</strong> to restrict access to a single trusted device.</p>
-<p>If another device  attempts to connect, the switch will shut down the port as a security measure.</p>
-<p>Enabling sticky MAC learning allows the switch to dynamically remember the allowed device.</p>
-<p>Port security is a critical feature for preventing unauthorized devices on edge ports in secure environments.</p>
-<img src="Images/portsec1.png" alt="portsec1.png"><br><br>
-
-<h3>2. Verify Port Security on the Interface</h3>
-<p>After configuring port security, you can use the following command to verify the status and behavior of a specific port:</p>
-<pre><code>
-  show port-security interface fa0/30
-</code></pre>
-<p><strong>Note:</strong> The <strong>Secure-down</strong> doesn't necessarily mean an error - it can just be <strong>nothing is plugged into the port.</strong></p>
-<p>When a device connects and a MAC is learned, this will change to <strong>Secure-up</strong>.</p>
-<p>If an unauthorized device connects, the port will be shutdown and a violation count will increment.</p>
-<img src="Images/portsec2.png" alt="portsec2.png"><br><br><br><br>
-
-
-<h2 id="setting-up-a-span-port">Setting up a SPAN - Switch Port Analyzer</h2>
-<p>Monitoring the network traffic that is passing through the switch can be implemented for various scenarios.</p>
-<p>Whether it's monitoring and analyzing the security of the network, troubleshooting network communications, analyzing what protocols are in use across endpoints, etc.</p><br>
-<p>Here, I'm going to demonstrate setting up and configuring a basic</p>
-<p><strong>SPAN - Switch Port Analyzer</strong> source and destination port(s) on the switch.</p>
-<p>To gather the network traffic from each endpoint connected to the specified port range.</p>
-
-<p><strong>Note:</strong> In this demonstration, SPAN is configured on ports belonging to VLAN 1 for simplicity. This example is independent from the VLAN 10/20 segmentation shown earlier and is meant only to demonstrate how SPAN mirrors traffic from selected source ports to a monitoring port.</p><br>
-
-
-<h3>1. Configuring a SPAN (Port Mirroring) Session</h3>
-<p>Setting this up configures a <strong>SPAN session</strong>.</p>
-<p>To mirror traffic from several source interfaces to one destination interface for monitoring purposes.</p>
-<p>In this example, <strong>fa0/2 - 8</strong> are configured as the source ports in this SPAN configuration.</p>
-<p>The destination port is to <strong>fa0/9</strong>.</p>
-<p>A copy of all the traffic flowing through ports 2 - 8 will be sent to port 9 in the form of Ethernet frames.</p>
-<p>A computer can be plugged into port 9 to run <strong>Wireshark</strong> and capture the traffic of each endpoint plugged into ports 2 through 8 on the switch.</p>
-<img src="Images/SPAN/span1.png" alt="span1.png"><br><br>
-
-<h3>2. Verifying SPAN Configuration</h3>
-<p>This step verifies that <strong>SPAN session 1</strong> is actively monitoring the correct source and destination interfaces.</p>
-<img src="Images/SPAN/span2.png" alt="span2.png"><br><br>
-
-<h3>3. Capturing the Mirrored Traffic with Wireshark</h3>
-<p>In this <strong>SPAN</strong> port configuration setup, I have two Windows PCs, connected to fa0/2 - 192.168.1.104 and fa0/5 - 192.168.1.124</p>
-<p>Along with another Windows PC running Wireshark plugged into the destination port fa0/9 to collect the network traffic of the devices connected to these interfaces.</p>
-<img src="Images/SPAN/wire1.png" alt="wire1.png" style="width:700px; height:400px;"><br>
-<img src="Images/SPAN/wire2.png" alt="wire2.png" style="width:800px; height:400px:"><br>
-<img src="Images/SPAN/wire3.png" alt="wire3.png" style="width:800px; height:400px:"><br>
-<img src="Images/SPAN/wire4.png" alt="wire4.png" style="width:800px; height:400px:"><br><br>
-  
-
-
-
-
-  
-
-
-  
-  
-
-
-
-
-
-
-
-
-  
-
-
-<a href="../index.html">Back to Home</a> <!-- Link back to the homepage -->
+  <div class="wrap">
+
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills" class="active">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Skills">Networking</a> · <span>Cisco Catalyst Switch Lab 1</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+      <h1>Cisco Catalyst Switch Lab 1</h1>
+      <p class="lead">Foundational configuration on legacy Cisco Catalyst 2950/3550: factory reset, initial setup, VLANs, port security, and SPAN.</p>
+      <p>
+        <a href="https://github.com/mark-thompson01/cisco-catalyst-switch-lab--2950-3550/tree/main" target="_blank" rel="noopener">
+          View this project on GitHub
+        </a>
+      </p>
+    </header>
+
+    <!-- Intro -->
+    <section class="card">
+      <p>These next two labs demonstrate foundational switch configurations using legacy <strong>Cisco Catalyst models (2950 &amp; 3550)</strong>. While the hardware is dated, the focus is on building an understanding of core network principles like VLANs, port security, trunking, and STP, which remain critical in modern networking environments.</p>
+
+      <h3>Table of Contents</h3>
+      <ol>
+        <li><a href="#connecting-to-the-switch">Connecting to the Switch</a></li>
+        <li><a href="#performing-a-factory-reset">Performing a Factory Reset</a></li>
+        <li><a href="#configuring-switch-from-scratch">Configuring Switch from Scratch</a></li>
+        <li><a href="#post-initial-setup">Post Initial Setup</a></li>
+        <li><a href="#creating-&-configuring-vlans">Creating &amp; Configuring VLANs</a></li>
+        <li><a href="#configuring-port-security">Configuring Port Security</a></li>
+        <li><a href="#setting-up-a-span-port">Setting up a SPAN port - Switch Port Analyzer</a></li>
+      </ol>
+    </section>
+
+    <!-- Section: Connecting -->
+    <section class="card" id="connecting-to-the-switch">
+      <h2>Connecting to the Switch</h2>
+      <p>In this lab environment, I'm using a serial <strong>DB-9</strong> to <strong>console port</strong> cable to connect the <strong>Cisco Catalyst</strong> switches to a Windows machine, managing them with <strong>PuTTY</strong>.</p>
+      <p>Here in the <strong>PuTTY</strong> interface, I'm opening a management session with the switch via Serial connection <strong>COM1</strong>:</p>
+      <div class="figure"><img src="Images/Connecting/con1.png" alt="con1.png"></div>
+    </section>
+
+    <!-- Section: Factory Reset -->
+    <section class="card" id="performing-a-factory-reset">
+      <h2>Performing a Factory Reset</h2>
+      <p>Performing a factory reset on a Cisco Catalyst 2950 switch to reconfigure it from scratch.</p>
+      <p>To start, I'm going to carry out the following steps on the <strong>Cisco Catalyst 2950</strong> to enter <strong>ROMMON</strong> mode:</p>
+      <ol>
+        <li>Unplug the power cable from the switch.</li>
+        <li>Press and hold the <strong>MODE</strong> button on the front panel.</li>
+        <li>While holding down the <strong>MODE</strong> button, reconnect the power.</li>
+        <li>Continue holding until you see the <code>switch:</code> prompt appear in your console session (<strong>PuTTY</strong>).</li>
+      </ol>
+      <p>This procedure interrupts the normal boot process and forces the switch into the <strong>boot loader environment (ROMMON)</strong>:</p>
+
+      <h3>1. Entering ROMMON mode</h3>
+      <div class="figure"><img src="Images/TheSwitchPrompt.png" alt="TheSwitchPrompt.png"></div>
+
+      <h3>2. Running Factory Reset Commands</h3>
+      <p>Once the switch is in ROMMON mode, I'm going to run the following commands to initiate the factory reset.</p>
+      <pre><code><strong>flash_init</strong>          Initializes the flash file system (access/modify files)
+<strong>del flash:config.text</strong>  Deletes the startup configuration file
+<strong>del flash:vlan.dat</strong>    Deletes the VLAN database file</code></pre>
+      <div class="figure"><img src="Images/Factory Reset/fac4.png" alt="fac4.png"></div>
+
+      <h3>2. Boot Command</h3>
+      <p>Enter the boot command to complete the factory reset.</p>
+      <div class="figure"><img src="Images/Factory Reset/fac5.png" alt="fac5.png"></div>
+
+      <h3>3. Boot up</h3>
+      <p>The <strong>IOS (Internetwork Operating System)</strong> image is loaded from flash. The switch then <strong>initializes the flash file system</strong> again after loading IOS, preparing to access saved files (e.g., configs, logs, VLAN database).</p>
+      <div class="figure"><img src="Images/Factory Reset/fac6.png" alt="fac6.png"></div>
+
+      <h3>4. Final Phase of Booting up</h3>
+      <p>Here the switch is in the final phase of booting up after issuing <strong>boot</strong>—completing the <strong>Cisco IOS</strong> process after a factory reset.</p>
+      <div class="figure"><img src="Images/Factory Reset/fac7.png" alt="fac7.png"></div>
+
+      <h3>5. The Switch Has Fully Rebooted</h3>
+      <p>System info is displayed and the system is waiting for the prompt.</p>
+      <div class="figure"><img src="Images/Factory Reset/fac8.png" alt="fac8.png"></div>
+      <p>From here, the switch will prompt for configurations to set it up from scratch.</p>
+    </section>
+
+    <!-- Section: Config from scratch -->
+    <section class="card" id="configuring-switch-from-scratch">
+      <h2>Configuring Switch from Scratch</h2>
+
+      <h3>1. System Configuration Dialog (setup Wizard)</h3>
+      <p>After the factory reset, the switch enters the <strong>System Configuration Dialog</strong> (setup wizard). Below I set the hostname to <strong>MT0</strong>.</p>
+      <div class="figure"><img src="Images/From Scratch/conf1.png" alt="conf1.png"></div>
+
+      <h3>2. Password Setup</h3>
+      <p>Setting the <strong>enable secret</strong> password (used for privileged EXEC mode, <code>MT0#</code>). It’s stored encrypted in the config.</p>
+      <div class="figure"><img src="Images/From Scratch/conf2.png" alt="conf2.png"></div>
+
+      <h3>3. Security and Management Configuration</h3>
+      <p>In this example I enter <strong>no</strong> for SNMP network management (often used in production).</p>
+      <div class="figure"><img src="Images/From Scratch/conf3.png" alt="conf3.png"></div>
+
+      <h3>4. Interface Review Stage</h3>
+      <p>Interface summary output:</p>
+      <div class="figure"><img src="Images/From Scratch/conf4.png" alt="conf4.png"></div>
+
+      <h3>5. Assign a Management Interface</h3>
+      <p>Specify a <strong>Switched Virtual Interface (SVI)</strong>—typically <strong>VLAN 1</strong>—for management. This gives the switch a Layer 3 address for remote management (Telnet/SSH/SNMP) and testing via ping.</p>
+      <div class="figure"><img src="Images/From Scratch/conf5.png" alt="conf5.png"></div>
+      <div class="figure"><img src="Images/From Scratch/conf6.png" alt="conf6.png"></div>
+      <div class="figure"><img src="Images/From Scratch/conf8.png" alt="conf8.png"></div>
+
+      <h3>6. Enable Cluster Command Switching</h3>
+      <p>Optional legacy feature allowing one switch to manage others using <strong>CDP</strong>. Modern environments typically use centralized tools.</p>
+      <p>Here I enable it and specify a cluster name:</p>
+      <div class="figure"><img src="Images/From Scratch/conf10.png" alt="conf10.png"></div>
+
+      <h3>7. Review the Generated Configuration Script</h3>
+      <p>After the wizard, preview the configuration before saving to <strong>NVRAM</strong>.</p>
+      <div class="figure"><img src="Images/From Scratch/conf11.png" alt="conf11.png"></div>
+      <div class="figure"><img src="Images/From Scratch/conf12.png" alt="conf12.png"></div>
+
+      <h3>8. Save or Discard the Configuration</h3>
+      <p>I choose option <strong>2</strong> to save to NVRAM (startup-config) and exit to the prompt.</p>
+      <div class="figure"><img src="Images/From Scratch/conf14.png" alt="conf14.png"></div>
+      <p>You may see “line protocol on vlan1 is down”—that’s normal if no active ports are in VLAN 1 yet.</p>
+      <div class="figure"><img src="Images/From Scratch/conf15.png" alt="conf15.png"></div>
+
+      <h3>9. Reboot to Switch Prompt</h3>
+      <p>After saving and rebooting, press RETURN to reach the prompt (<code>&gt;</code>), followed by the hostname.</p>
+      <div class="figure"><img src="Images/From Scratch/conf16.png" alt="conf16.png"></div>
+    </section>
+
+    <!-- Section: Post initial setup -->
+    <section class="card" id="post-initial-setup">
+      <h2>Post Initial Setup</h2>
+
+      <h3>1. Enter Privileged EXEC Mode</h3>
+      <p>From <strong>User EXEC</strong> (<code>&gt;</code>), type <strong>enable</strong> to enter <strong>Privileged EXEC</strong> (<code>#</code>).</p>
+      <div class="figure"><img src="Images/Post Initial Setup/post1.png" alt="post1.png"></div>
+
+      <h3>2. Enter Global Configuration Mode</h3>
+      <p>At <code>MT0#</code>, run <strong>configure terminal</strong> (or <strong>conf t</strong>) to enter <strong>global config</strong>.</p>
+      <div class="figure"><img src="Images/Post Initial Setup/post2.png" alt="post2.png"></div>
+      <div class="figure"><img src="Images/Post Initial Setup/post3.png" alt="post3.png"></div>
+
+      <h3>3. Change Switch Hostname</h3>
+      <p>Change hostname to <strong>switch1</strong>:</p>
+      <div class="figure"><img src="Images/Post Initial Setup/post4.png" alt="post4.png"></div>
+      <div class="figure"><img src="Images/Post Initial Setup/post5.png" alt="post5.png"></div>
+
+      <h3>4. Setup MOTD Banner</h3>
+      <p>Set a <strong>Message of the Day</strong> banner (useful for legal/compliance messaging):</p>
+      <div class="figure"><img src="Images/Post Initial Setup/post6.png" alt="post6.png"></div>
+
+      <h3>5. Secure Console Access with a Password</h3>
+      <p>Require a password on the console line to prevent unauthorized physical access.</p>
+      <div class="figure"><img src="Images/Post Initial Setup/post7.png" alt="post7.png"></div>
+      <p>We’ve now secured console/VTY access, assigned a management IP on VLAN 1, and set a default gateway.</p>
+      <div class="figure"><img src="Images/Post Initial Setup/post8.png" alt="post8.png"></div>
+
+      <h3>6. Configure Access Ports for Workstations</h3>
+      <p>Configure Fa0/40–48 as access ports in VLAN 20, add descriptions, and enable <strong>spanning-tree portfast</strong>.</p>
+      <div class="figure"><img src="Images/Post Initial Setup/post9.png" alt="post9.png"></div>
+
+      <h3>7. Exit, End, Write Memory</h3>
+      <p>Exit config mode, then <strong>write memory</strong> to save the running config.</p>
+      <div class="figure"><img src="Images/Post Initial Setup/post11.png" alt="post11.png"></div>
+    </section>
+
+    <!-- Section: VLANs -->
+    <section class="card" id="creating-&-configuring-vlans">
+      <h2>Creating &amp; Configuring VLANs</h2>
+
+      <h3>1. Create and Name VLANs for Logical Segmentation</h3>
+      <p>Create VLAN 10 (Lab-1) and VLAN 20 (Lab-2). VLANs segment the switch into multiple logical networks on shared hardware.</p>
+      <div class="figure"><img src="Images/VLANs/vlan1.png" alt="vlan1.png"></div>
+
+      <h3>2. Assign Switch Ports to VLANs and Save the Configuration</h3>
+      <p>Use <strong>interface range</strong> to assign ports to VLAN 10/20, add descriptions, and <strong>write memory</strong>.</p>
+      <div class="figure"><img src="Images/VLANs/vlan2.png" alt="vlan2.png"></div>
+
+      <h3>3. Verify VLAN Configuration</h3>
+      <p>Use <strong>show vlan brief</strong> to confirm VLAN membership.</p>
+      <div class="figure"><img src="Images/VLANs/vlan3.png" alt="vlan3.png"></div>
+    </section>
+
+    <!-- Section: Port security -->
+    <section class="card" id="configuring-port-security">
+      <h2>Configuring Port Security</h2>
+
+      <h3>1. Configure Port Security on an Access Port</h3>
+      <p>Configure <strong>fa0/30</strong> to allow a single MAC (sticky), shutting down on violation—useful for edge-port hardening.</p>
+      <div class="figure"><img src="Images/portsec1.png" alt="portsec1.png"></div>
+
+      <h3>2. Verify Port Security on the Interface</h3>
+      <p>Verify with:</p>
+      <pre><code>show port-security interface fa0/30</code></pre>
+      <p><strong>Note:</strong> <em>Secure-down</em> can simply mean nothing is plugged into the port. When a device connects and a MAC is learned, this changes to <em>Secure-up</em>. Unauthorized devices trigger shutdown and increment violations.</p>
+      <div class="figure"><img src="Images/portsec2.png" alt="portsec2.png"></div>
+    </section>
+
+    <!-- Section: SPAN -->
+    <section class="card" id="setting-up-a-span-port">
+      <h2>Setting up a SPAN - Switch Port Analyzer</h2>
+      <p>Monitoring traffic can support security analysis, troubleshooting, and protocol visibility.</p>
+      <p>Here I configure a basic <strong>SPAN</strong> session to mirror traffic from a range of source ports to a destination port.</p>
+      <p><strong>Note:</strong> In this demonstration, SPAN is configured on ports within VLAN 1 for simplicity. It’s independent from the earlier VLAN 10/20 example.</p>
+
+      <h3>1. Configuring a SPAN (Port Mirroring) Session</h3>
+      <p>Mirror traffic from <strong>Fa0/2–Fa0/8</strong> (sources) to <strong>Fa0/9</strong> (destination). Capture with Wireshark on the destination.</p>
+      <div class="figure"><img src="Images/SPAN/span1.png" alt="span1.png"></div>
+
+      <h3>2. Verifying SPAN Configuration</h3>
+      <p>Verify that session 1 is monitoring the intended source/destination interfaces:</p>
+      <div class="figure"><img src="Images/SPAN/span2.png" alt="span2.png"></div>
+
+      <h3>3. Capturing the Mirrored Traffic with Wireshark</h3>
+      <p>Two Windows PCs are connected to Fa0/2 (192.168.1.104) and Fa0/5 (192.168.1.124). A third Windows PC on Fa0/9 runs Wireshark to collect mirrored traffic.</p>
+      <div class="figure"><img src="Images/SPAN/wire1.png" alt="wire1.png" style="width:700px; height:400px;"></div>
+      <div class="figure"><img src="Images/SPAN/wire2.png" alt="wire2.png" style="width:800px; height:400px;"></div>
+      <div class="figure"><img src="Images/SPAN/wire3.png" alt="wire3.png" style="width:800px; height:400px;"></div>
+      <div class="figure"><img src="Images/SPAN/wire4.png" alt="wire4.png" style="width:800px; height:400px;"></div>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
+
+    <!-- Footer (branding only) -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
