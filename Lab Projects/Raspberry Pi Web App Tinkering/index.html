@@ -1,415 +1,363 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Raspberry Pi Web App Tinkering</title>
-<meta charset="UTF-8">
-<meta name="viewpoint" content="width=device-width, initial-scale=1.0">
-	    <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
-        h1, h2, h3, h4 {
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-        code {
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-family: "Courier New", Courier, monospace;
-        }
-        blockquote {
-            background-color: #1e1e1e;
-            border-left: 5px solid #4caf50;
-            padding: 10px;
-            margin: 10px 0;
-            color: #cfcfcf;
-        }
-        img {
-            display: block;
-            margin: 20px 0;
-            max-width: 75%;
-            height: auto;
-            border: 1px solid #444;
-            border-radius: 5px;
-        }
-        ul, ol {
-            margin-left: 20px;
-        }
-	.back-link {
-	   color: #1E90FF;
-	   text-decoration: none;
-	}
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Raspberry Pi Web App Tinkering · Mark Thompson Portfolio</title>
+  <meta name="description" content="Building a deliberately vulnerable Raspberry Pi web app, then performing active reconnaissance, vulnerability scanning, and analysis." />
+
+  <!-- THEME -->
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:14px 0 6px;font-size:16px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    /* Code styles */
+    pre{
+      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
+      border-radius:12px;overflow:auto;color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
+    }
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+
+    /* Figures – intrinsic image size (no zoom) */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
+      width:auto; max-width:100%; height:auto;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Side-by-side helper */
+    .pair{display:grid;gap:12px;margin:16px 0}
+    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
+    .pair .figure{margin:0}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
 </head>
 <body>
+  <div class="wrap wide">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-<h1>Raspberry Pi Web App Tinkering</h1>
-<p>
-  <a href="https://github.com/mark-thompson01/raspberry-pi-web-app-tinkering/blob/main/README.md" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> · <span>Raspberry Pi Web App Tinkering</span>
+    </div>
 
+    <!-- Header -->
+    <header>
+      <h1>Raspberry Pi Web App Tinkering</h1>
+      <p class="lead">Deliberately misconfigured web app on a Raspberry Pi for hands-on recon, scanning, and exploitation exercises.</p>
+      <p><a href="https://github.com/mark-thompson01/raspberry-pi-web-app-tinkering/blob/main/README.md" target="_blank" rel="noopener">View this project on GitHub</a></p>
+    </header>
 
-<p>In today’s interconnected world, web applications are at the core of modern communication, commerce, and collaboration. However, they also represent one of the most common attack surfaces for malicious actors.  </p>
-
-<p>This Raspberry Pi Web App Tinkering lab explores the fundamental methodologies used by cybersecurity professionals to assess, analyze, and secure web application infrastructure.
-</p>
-
-<p>Through this project, I aim to showcase my understanding of reconnaissance techniques, vulnerability scanning tools, and analysis processes. The lab uses a custom-built web application hosted on a Raspberry Pi running Apache, configured with Webdav for uploading files to. This application is designed to simulate real-world vulnerabilities, making it an excellent learning tool for web application security.
-</p>
-
-<h2>Purpose of the lab</h2>
-<p>This lab is both a personal learning endeavor and a demonstration of the following.</p>
-<ul>
-	<li><strong>Technical Proficiency:</strong> Building a basic web application, configuring a server, and deploying intentional misconfigurations for educational purposes.</li><br>
-
-	<li><strong>Security Mindset:</strong> Applying industry-standard tools and techniques to perform active reconnaissance and vulnerability scanning in a controlled environment.</li><br>
-
-	<li><strong>Professional Documentation:</strong> Documenting each step with clarity and precision, mirroring what a professional penetration tester or security analyst would deliver in a real-world report.</li>
-</ul><br><br>
-
-<h2>Objectives</h2>
-<ol>
-	<li><strong>Web App Configuration:</strong></li><br>
-		<ul><li>Create a customized fictional index.html web page on an installation of Apache 2.4.59 running on a Raspberry Pi 3.</ul></li><br>
-
-		<ul><li>Purposely configure the installation to be vulnerable with specific misconfigurations.</ul></li><br>
-
-	<li><strong>Active Reconnaissance:</strong></li><br>
-		<ul><li>Enumerate HTTP and service information on port 80 with the use of <strong>nmap</strong> scripts, <strong>WhatWeb</strong>, and <strong>Burp Suite</strong>. As well as perform some directory busting with the use of <code>dirb</code>, <code>dirbuster</code>, and <code>gobuster</code>.</ul></li><br>
-
-	<li><strong>Vulnerability Scanning:</strong></li><br>
-		<ul><li>Use tools such as <code>nmap</code> and <code>nikto</code> to identify web server misconfigurations, outdated software, and exploitable vulnerabilities.</ul></li><br>
-
-	<li><strong>Analysis and Reporting:</strong></li><br>
-		<ul><li>Deliver a clear and actionable summary of findings, demonstrating both technical skill and communication ability.</ul></li>
-</ol><br>
-
-<h3>Toolset</h3>
-
-<p>This lab incorporates a diverse array of tools to demonstrate my capability with industry-standard solutions:</p>
-<img src="Images/The%20Web%20Page.PNG" alt="The Web Page">
-
-<ul>
-	<li><strong>Active Recon:</strong> <code>nmap</code>, <code>whatweb</code>, <code>dirb</code>, <code>dirbuster</code>, <code>gobuster</code> and <strong>Burp Suite</strong></li><br>
-	<li><strong>Vulnerability Scanning:</strong> <code>nmap</code>, <code>nikto</code></li><br>
-	<li><strong>Analysis:</strong> Report generation that adheres to professional documenation standards.</li>
-
-<p>The customized web page for this project.</p><br><br>
-
-<h2>Configuring the Web Application</h2>
-<p>For this lab demonstration I am purposely making this customized application vulnerable with impactful misconfigurations or setups to make the web application more interesting for tools like Nmap, Nikto, or Burp Suite to discover. </p>
-<p>WebDAV has been set up on the web application for this demonstration.</p>
-
-<h3>Specific Misconfigurations for this lab</h3>
-<ol>
-	<li>Setting weak authentication for WebDAV</li>
-	<li>Directory listings enabled</li>
-	<li>Hidden directories and files</li>
-	<li>Exposed sensitive configuration</li>
-	<li>Crafted XSS vulnerability</li>
-</ol> 
-
-
-<h3>Weak Authentication for WebDAV</h3>
-<p>To get started, let's make sure WebDAV is enabled with <strong>Basic Authentication</strong> and a weak username/password.</p>
-<strong>webdav.conf</strong>
-<img src="Images/WebDAV%20BasicAuth.png" alt="WebDAV BasicAuth">
-<img src="Images/WebDAV%20WeakPassSet.png" alt="WebDAV WeakPassSet"><br>
-
-<h3>Directory Listings Enabled</h3>
-<p>The “directory listing” behavior in Apache is controlled by the Options directive in the Apache configuration files. Specifically, the indexes option enables directory listing. If Indexes is included in the Options directive for a directory, Apache will display a list of files within that directory when no default file (e.g., index.html, index.php) is present.</p>
-
-<p>Snippet of code in the <strong>/etc/apache2/apache2.conf</strong> file showing Indexes included Options directive.</p> 
-<img src="Images/Directory%20Listings%201.png" alt="Directory Listings 1">
-
-<p>This is also set for WebDAV in the <strong>webdav.conf</strong> file.</p>
-<img src="Images/Directory%20Listings%20Enabled%202.png" alt="Directory Listings Enabled 2"><br>
-
-
-<h3>Hidden Directories and Files</h3>
-<p>For the purpose of this lab, I have created some hidden and not so hidden directories and files to have something to detect for demonstration purposes. These are directories and files that are stored in the /var/ww/html of the Apache setup, making it easy to manually navigate to in a browser with directory listings enabled on the web server, along for the directory busting tools to easily detect them as well as Burp Suite.</p><br>
-
-<h3>Exposed Sensitive Configuration</h3>
-<p>Insecurely exposed configuration files, like <code>config.php</code> file in this example, pose a significant security risk to web applications. Such files often contain sensitive data, including data credentials, API keys, or server configurations.</p>
-<p>When left publicly accessible, such as in this example, attackers can easily retrieve these files and leverage the information go gain unauthorized access, escalate privileges, or compromise the underlying infrastructure.</p>
-<p>This vulnerability highlights the importance of securing sensitive files and following best practices for web server configuration to minimize attack surfaces.</p>
-<img src="Images/Exposed%20Sensitive%20Configuration.png" alt="Exposed Sensitive Configuration"><br>
-	
-
-<h3>Crafted XSS Vulnerability</h3>
-<p>To intentionally make the web application vulnerable to a <strong></strong>Cross-Site Scripting XSS</strong> attack, you need to improperly handle user input, allowing it to be rendered directly in the HTML or JavaScript of the webpage.</p>
-<p>To make the web application vulnerable to a Reflective XSS attack I'll need to make a couple of minor changes to the web application configuration.</p>
-<p></p>
-<p>First, I'll rename index.html to index.php so Apache can treat it as a PHP file.</p>
-<img src="Images/PHPFileConversion.png" alt="PHPFileConversion">
-<p>From there, I'll update the code to ensure the PHP code for the XSS vulnerability is included in the <code>index.php</code> file.</code></p>
-<img src="Images/CodeCheck.png" alt="CodeCheck">
-<p>This code snippet introduces a <strong>Reflected XSS Vulnerability</strong> because it takes user input from the URL, processes it without validation or sanitization, and reflects it directly into the web page.</p>
-<img src="Images/XSS%20Vulnerable%20Code.png" alt="XSS Vulnerable Code">
-<p>Then restart Apache to ensure it recognizes the PHP files correctly.</p>
-<img src="Images/RestartApache.png" alt="RestartApache"><br><br><br>
-	
-<h2>Active Recon</h2>
-<p><strong>Nmap:</strong> In the previous lab I did for <strong>Web Server Enumeration and Exploitation</strong>, I used a handful of nmap commands and other commands to extract web application components.</p>
-<p>In this example, I’m going to take all of the <code>nmap</code> commands that I would like to start out with and create a bash script to automate the process and run them altogether.</p>	
-<img src="Images/Bash%20Script%20Creation1.PNG" alt="Bash Script Creation 1">
-<img src="Images/Bash%20Script%20Creation2.PNG" alt="Bash Script Creation 2">
-<img src="Images/Bash%20Script%20Creation%205.PNG" alt="Bash Script Creation 5">
-<img src="Images/Bash%20Script%20Run%201.PNG" alt="Bash Script Run 1">
-<img src="Images/Bash%20Script%20Run%202.PNG" alt="Bash Script Run 2">
-<img src="Images/Bash%20Script%20Run%203.PNG" alt="Bash Script Run 3">
-<img src="Images/Bash%20Script%20Run%205.PNG" alt="Bash Script Run5">
-
-
-<p>The scan results can also be saved to a file, like so.</p>
-<img src="Images/Save%20Scan%20Results%20in%20File.PNG" alt="Save Scan Results in File">
-
-<p>In addition to that, <code>WhatWeb</code> can be run.</p>
-<img src="Images/WhatWeb.PNG" alt="WhatWeb"><br><br><br>
-
-
-<h3>Directory Busting</h3>
-<p>With some hidden and not so hidden files and directories created on the web server specifically for this lab. Let's jump into some directory busting!</p>
-
-<img src="Images/Dirb%20Run%201.PNG" alt="Dirb Run 1">
-<img src="Images/Dirbuster.PNG" alt="Dirbuster">
-<img src="Images/Dirbuster%202.PNG" alt="Dirbuster 2">
-<img src="Images/Dirbuster%203.PNG" alt="Dirbuster 3">
-<img src="Images/Dirbuster%204.PNG" alt="Dirbuster 4">
-<img src="Images/gobuster.PNG" alt="gobuster"><br><br><br>
-
-<h3>Active Recon with Burp Suite</h3>
-<p>Here, I'll use Burp Suite to intercept a GET request on the main web page and then send it to Repeater to further analyze the application's behavior by sending different HTTP options and analyzing the responses.</p>
-<p>To start, I'll set up Firefox with the proxy settings necessary to intercept web page traffic with Burp Suite.</p>
-<img src="Images/Burp%20Suite%20Browser%20Settings.PNG" alt="Burp Suite Browser Settings">
-<p>With the proxy settings in Firefox already to go, I'll go ahead and start Burp Suite.</p>
-<img src="Images/Burp%20Suite%20Start.png" alt="Burp Suite Start">
-<img src="Images/Burp%20Suite%20Start%202.png" alt="Burp Suite Start 2">
-<p>On the Proxy tab, verify Intercept is on.</p>
-<img src="Images/Burp%20Suite%20Intercept%20on.PNG" alt="Burp Suite Intercept on">
-<p>With the proxy set and intercept on - we are ready to go. I'm now going to navigate back to the web page and then refresh it.</p>
-<img src="Images/The%20Web%20Page.PNG" alt="The Web Page">
-<img src="Images/Refresh%20Firefox.PNG" alt="Refresh Firefox">
-<p>As a result, we'll capture a GET request for the web page.</p>
-<img src="Images/Burp%20Suite%20Captured%20GET%20Request.PNG" alt="Burp Suite Captured GET Request">
-<p>To further examine this GET request, let's send it to Repeater.</p>
-<img src="Images/Burp%20Suite%20Send%20to%20Repeator.png" alt="Burp Suite Send to Repeator">
-<p>From here, we can modify the GET request with different HTTP methods and analyze the responses. Depending on how the application is set up and configured, this can identify vulnerabilities, expose information, and overall provide an idea of how the application's behavior is based on these resopnses.</p>
-<p>First let's see the response details are from this GET request, often it's the html source code of the web page.</p>
-<img src="Images/Burp%20Suite%20Repeator%201%20GET%20Request.PNG" alt="Burp Suite Repeator 1 GET Request">
-<p>In place of GET, we'll modify it with the HTTP HEAD method.</p>
-<img src="Images/Burp%20Suite%20Repeator%202%20HEADRequestModify.PNG" Burp Suite Repeator 2 HEADRequestModify">
-<p>As a result, it successfully responses with the servers set HTTP headers. There is also some HTTP header information but fewer with using the HTTP OPTIONS method in the request</p>
-<img src="Images/Burp%20Suite%20Repeator%203%20OPTIONSRequestModify.PNG" alt="Burp Suite 3 OPTIONSRequestModify.PNG">
-<p>In using the HTTP PUT method, the response is now showing an HTTP 405 response code for Method Not Allowed. In addition to that the response also shows server and Apache version information.</p>
-<img src="Images/Burp%20Suite%20Repeator%204%20PUT.PNG" alt="Burp Suite Repeator 4 PUT">
-<p>Here, we have a similiar response using the HTTP POST method, but with the HTTP response code of 405.</p>
-<img src="Images/Burp%20Suite%20Repeator%205%20BadRequest.PNG" alt="Burp Suite Repeator 5 BadRequest">
-<p>Furthermore, if we navigate around the different web page or take advantage of the directory indexing that is set. The Site map in Burp Suite will build the hierarchical structure of the web application.</p>
-<img src="Images/Burp%20Suite%20Sitemap.PNG" alt="Burp Suite Sitemap">
-
-<p>These are the types of details that can be gathered when using Burp Suite to perform active reconnaissance on a web application.</p><br><br><br>
-	
-
-<h2>Vulnerability Scanning</h2>
-<h3>Nmap Vulnerability Script Scan</h3>
-<p>The screenshot showcases an Nmap scan with the <code>--script vuln</code> option targeting the web server on <code>192.168.1.103</code>. The scan checks for various vulnerabilities and provides key findings. While it couldn’t detect any DOM-based or stored XSS vulnerabilities, it flagged a potential CSRF (Cross-Site Request Forgery) vulnerability associated with the search form. The scan also identified enabled directory listings for <code>/test/</code>, <code>/hidden/</code>, and <code>/webdav/</code>, which could expose sensitive files or directories. Additionally, the scan confirms the use of Apache/2.4.59, providing valuable reconnaissance details like software versioning and potential exposure points. These results underline how attackers can identify misconfigurations or exploitable areas using automated tools like Nmap.</p>
-<img src="Images/nmap%20vuln%20scan.PNG" alt="nmap vuln scan">
-
-		
-<h3>Nikto Vulnerability Scan</h3>
-<p>This screenshot illustrates a Nikto scan performed on the same target, <code>192.168.1.103</code>. Nikto detects multiple issues, including the absence of critical security headers like <code>X-Frame-Options</code> and <code>X-Content-Type-Options</code>, which leave the application vulnerable to clickjacking and MIME-based attacks. The scan also confirms that directory indexing is enabled across several paths, which can reveal sensitive information. Additionally, Nikto identifies allowed HTTP methods (e.g., <code>HEAD</code>, <code>POST</code>, <code>OPTIONS</code>) and checks for older vulnerabilities, emphasizing the importance of secure server configurations to reduce the attack surface.</p>
-<img src="Images/Nikto%20Scan%202.PNG" alt="Nikto Scan 2"><br><br>
-
-<h2>Exploitation</h2>
-<p>The primary focus of this lab is performing active reconnaissance and vulnerability scanning on a basic web application. I'll go ahead and demonstrate a couple of exploits however.</p>
-<p>Here are some things that can be exploited based on this set up.</p>
-<h3>Exploiting Reflective XSS Vulnerability</h3>
-<p>The existing Reflective XSS Vulnerability in the index.php web page file can be exploited in the following ways.</p>
-<p>We can take advantage of the <code>$_GET['query']</code> variable set in index.php to retrieve the value of the <code>query</code> from the URL</p>
-<code>http://192.168.1.103/index.php?query=test</code>
-<img src="Images/XSSTest1.png" alt="XSSTest1">
-<img src="Images/XSSTest2.png" alt="XSSTest2">
-<img src="Images/XSSTest3.png" alt="XSSTest3">
-<img src="Images/XSSTest4.png" alt="XSSTest4">
-<p>This Reflected XSS vulnerability allows an attacker to inject and execute malicious JavaScript code in the context of the victim's browser. By crafting a malicious URL containing a JavaScript payload and tricking a victim into clicking it, the attacker could perform actions such as:</p>
-<o1>
-	<ul><strong>Strealing sensitive data:</strong> Using JavaScript, an attacker could capture cookies, session tokens, or other data stored in the browser, potentially leading to account takeover or session hijacking.</ul><br>
-	<ul><strong>Defacing a website:</strong> The attacker could inject scripts to display altered content, tricking users into thinking the page has been compromised.</ul><br>
-	<ul><strong>Phishing attacks:</strong> By injecting fake login forms or misleading messages, the attacker could deceive users into submitting their credentials or other sensitive information.</ul><br>
-	<ul><strong>Spreading malware:</strong> An attacker could inject scripts to redirect users to malicious websites or deliver exploit kits.</ul><br>
-</o1>
-
-<p>While this lab demonstrates a basic example of Reflected XSS, these types of attacks can have severe consequences, particularly when sensitive user data or administrative actions are exposed to exploitation. Mitigating such vulnerabilities requires proper input validation and output encoding to ensure malicious scripts cannot execute.</p><br><br>
-	
-<h4>How to Mitigate This Vulnerability</h4>
-<p><strong>Reflected XSS</strong> occurs when user input is directly reflected in the server's response without sanitization or encoding.</p>
-<p>Attackers can exploit this to inject malicious scripts that execute in the user's browser, leading to potential data theft, phishing, or malware delivery.</p>
-
-
-
-<p>To fix this vulnerability, you need to <strong>sanitize and encode user input</strong> before outputting it:</p>
-<p>The simplest way to mitigate Reflective XSS is to use <code>htmlspecialchars()</code> to sanitize and encode user input before display it.</p><br>
-<img src="Images/XSSFix.png" alt="XSSFix.png">
-<p>This is <code>htmlspecialchars()</code> in use.</p>
-<p>This converts special characters like <code><</code> and <code>></code> into their HTML entities (<code>&lt;</code> and <code>&gt;</code>).</p>
-<p>Preventing the browser from interpreting user input as HTML or JavaScript.</p>
-<p>By treating user input as plain text, you ensure that no executable code is injected into the response.</p><br>
-
-<h4>Applicability and Scope:</h4>
-<ul>
-	<li>This fix specifically mitigates <strong>Reflected XSS vulnerabilities</strong>, where user input is immediately reflected in the response.</li>
-	<li>Other types of XSS (e.g., <strong>Stored XSS</strong> require additional safeguards:</li>
-		<ul>
-			<li><strong>Stored XSS:</strong>  Validate and sanitize input before storing it in a database.</li>
-			<li>Use proper Content Security Policies (CSP) to limit script execution.</li>
-		</ul>
-</ul><br>
-
-
-<h4>Broader Best Practices</h4>
-<p>To prevent similiar vulnerabilities across the application:</p>
-	<ol>
-		<li><strong>Validate Input:</strong>Accept only expected input (e.g., allow only alphanumeric characters in the <code>query</code> parameter)</li><br>
-		<img src="Images/queryparamSecure.png" alt="queryparamSecure">
-		<li><strong>Use Content Security Policies (CSP):</strong>Implement CSP headers to limit where scripts can execute:</li><br>
-		<img src="Images/CSP.png" alt="CSP">
-		<li><strong>Disable Unnecessary Features:</strong> Turn off features like <code>eval()</code> in JavaScript and prevent inline scripts when possible.</li><br>
-	</ol>
-
-<p>Without proper mitigation, this vulnerability could allow attackers to steal session cookies, impersonate users, or redirect them to malicious websites. Applying these techniques ensures the application remains secure.</p><br><br>
-	
-
-<h3>Exploiting WebDAV</h3>
-<p>In this lab implementation exploiting WebDAV is a very simplistic scenario. The <code>webdav</code> directory is configured with Basic Authentication, which makes the perfect scenario to conduct a brute force attack with the use of <code>hydra</code> or the <code>http_login</code> msf auxiliary module.</p>
-<p>However in this case, the nikto scan results found the generic account set up for this lab and detected and outputted the login credentials.</p>	
-<img src="Images/Nikto%20Scan%202.PNG" alt="Nikto Scan 2">
-<p>So, with that - it's all set to be logged into.</p>
-<img src="Images/WebDAVLoginPrompt.png" alt="WebDAVLoginPrompt">
-<img src="Images/WebDAVLogin2.png" alt="WebDAVLogin2">
-<img src="Images/WebDAVLoginSuccess.png" alt="WebDAVLoginSuccess">
-<p>To make things interesting, I'll generate a PHP payload with the use of <code>mfsvenom</code> and then upload the generated php payload to the WebDAV directory using <code>cadaver</code></p>
-<img src="Images/msfvenomCadaver.png" alt="msfvenomCadaver">
-<p>In refreshing the web page, the php payload upload was successful.</p>
-<img src="Images/ShellUploadSuccess.png" alt="ShellUploadSuccess">
-<p>Before clicking on the payload within the web application to execute it, I'm going to use Metasploit to setup a listener.</p>
-<img src="Images/msflistener.png" alt="msflistener">
-<p>After executing the payload within the web browser, access to the system has been gained.</p>
-<img src="Images/meterpreter2%20(1).png" alt="meterpreter2 (1)"><br><br><br>
-	
-	
-<h2>Analysis & Reporting</h2>
-	<p>
-        The Web Application Active Recon and Vulnerability Scanning lab showcases a comprehensive approach to identifying, analyzing, and mitigating vulnerabilities in a custom-built web application. The project demonstrates the intentional creation of misconfigurations and vulnerabilities, followed by their identification using industry-standard tools and techniques. This lab highlights the critical importance of proactive security testing and showcases technical proficiency in configuring servers, identifying risks, and exploiting vulnerabilities to emphasize real-world impacts.
-    </p>
-
-    <section>
-        <h3>Methodology</h3>
-        <h4>Active Reconnaissance:</h4>
-        <ul>
-            <li>Identified HTTP methods and server details using Burp Suite's Repeater and Nmap.</li>
-            <li>Performed directory busting with Dirb, Dirbuster, and GoBuster to discover hidden files and directories.</li>
-            <li>Analyzed server responses to different HTTP methods to detect exposed information.</li>
-        </ul>
-
-        <h4>Vulnerability Scanning:</h4>
-        <ul>
-            <li>Ran Nmap’s --script vuln to identify misconfigurations such as CSRF vulnerabilities and directory indexing.</li>
-            <li>Used Nikto to identify missing security headers, outdated configurations, and accessible resources.</li>
-        </ul>
-
-        <h4>Exploitation:</h4>
-        <ul>
-            <li>Exploited a reflected XSS vulnerability to demonstrate potential for data theft, phishing, and session hijacking.</li>
-            <li>Uploaded a PHP reverse shell payload via WebDAV after bypassing weak authentication.</li>
-        </ul>
-    </section><br><br>
-
-    <section>
-        <h3>Key Findings</h3>
-        <h4>Reflected XSS Vulnerability:</h4>
-        <ul>
-            <li><strong>Impact:</strong> Could allow attackers to steal sensitive data, redirect users to malicious sites, or hijack sessions.</li>
-            <li><strong>Example:</strong> Injected malicious JavaScript via the query parameter.</li>
-        </ul>
-
-        <h4>Weak WebDAV Authentication:</h4>
-        <ul>
-            <li><strong>Impact:</strong> Allowed unauthorized access to the file upload feature, leading to arbitrary payload execution.</li>
-            <li><strong>Example:</strong> Uploaded a PHP reverse shell payload to gain system access.</li>
-        </ul>
-
-        <h4>Exposed Directory Listings:</h4>
-        <ul>
-            <li><strong>Impact:</strong> Allowed attackers to enumerate files and directories, increasing the attack surface.</li>
-            <li><strong>Examples:</strong> Discovered /test, /hidden/, and /webdav/.</li>
-        </ul>
-
-        <h4>Missing Security Headers:</h4>
-        <ul>
-            <li><strong>Impact:</strong> Increased risk of clickjacking and MIME-based attacks.</li>
-            <li><strong>Example:</strong> X-Frame-Options and X-Content-Type-Options headers were missing.</li>
-        </ul>
-    </section><br><br>
-
-    <section>
-        <h3>Exploitation Scenarios</h3>
-        <h4>XSS Exploitation:</h4>
-	    <ul>
-		<li>Provided two basic examples of exploiting a XSS attack and explained how a malicious attacker can exploit this vulnerability in different ways.</li>
-		<li>Gained full system access by uploading and executing a PHP reverse shell, highlighting the critical impact of weak authentication and directory indexing.</li>
-	    </ul>
-
-        <h4>WebDAV Exploitation:</h4>
-	    <ul>
-		<li>Gained full system access by uploading and executing a PHP reverse shell, highlighting the critical impact of weak authentication and directory indexing.</li>
-	    </ul>
+    <!-- Intro -->
+    <section class="card">
+      <h2>Overview</h2>
+      <p>Web apps are a major attack surface. This project builds a custom site on a Raspberry Pi (Apache + WebDAV) with intentional misconfigurations, then demonstrates <em>reconnaissance</em>, <em>vulnerability scanning</em>, and <em>analysis &amp; reporting</em> workflows in a safe lab.</p>
     </section>
 
-    <section>
-        <h3>Mitigation Recommendations</h3>
-        <h4>Reflected XSS:</h4>
-        <ul>
-            <li>Sanitize user input using <code>htmlspecialchars()</code> to encode special characters.</li>
-            <li>Limit Content Security Policies (CSP) to limit script execution.</li>
-        </ul>
+    <!-- Purpose & Objectives -->
+    <section class="card">
+      <h2>Purpose</h2>
+      <ul>
+        <li><strong>Technical Proficiency:</strong> Build &amp; configure a basic app; deploy intentional misconfigurations.</li>
+        <li><strong>Security Mindset:</strong> Use industry tools for active recon and scanning in a controlled environment.</li>
+        <li><strong>Professional Documentation:</strong> Clear, reproducible steps mirroring real-world reporting.</li>
+      </ul>
 
-        <h4>Weak WebDAV Authentication:</h4>
-        <ul>
-            <li>Use strong, unique credentials and enforce HTTPS for secure communication.</li>
-            <li>Restrict file types and limit HTTP methods allowed.</li>
-        </ul>
+      <h2>Objectives</h2>
+      <ol>
+        <li><strong>Web App Configuration:</strong> Custom index page on Apache 2.4.59 (Raspberry Pi 3) with purposeful weaknesses.</li>
+        <li><strong>Active Reconnaissance:</strong> Enumerate HTTP/services using <code>nmap</code>, <strong>WhatWeb</strong>, and <strong>Burp Suite</strong>; run <code>dirb</code>, <code>dirbuster</code>, <code>gobuster</code>.</li>
+        <li><strong>Vulnerability Scanning:</strong> Identify issues with <code>nmap</code> and <code>nikto</code>.</li>
+        <li><strong>Analysis &amp; Reporting:</strong> Summarize findings and mitigations.</li>
+      </ol>
+    </section>
 
-        <h4>Directory Listings:</h4>
-        <ul>
-            <li>Disable directory indexing in Apache by removing <code>Indexes</code> from the Options directive.</li>
-        </ul>
+    <!-- Toolset -->
+    <section class="card">
+      <h2>Toolset</h2>
+      <ul>
+        <li><strong>Active Recon:</strong> <code>nmap</code>, <code>whatweb</code>, <code>dirb</code>, <code>dirbuster</code>, <code>gobuster</code>, <strong>Burp Suite</strong></li>
+        <li><strong>Vulnerability Scanning:</strong> <code>nmap</code>, <code>nikto</code></li>
+        <li><strong>Analysis:</strong> Clear, professional documentation &amp; reporting</li>
+      </ul>
+      <figure class="figure">
+        <img src="Images/The%20Web%20Page.PNG" alt="Customized web page on Raspberry Pi">
+        <figcaption class="figcap">Customized web page used for testing.</figcaption>
+      </figure>
+    </section>
 
-        <h4>Missing Security Headers:</h4>
-        <ul>
-            <li>Add headers such as X-Frame-Options, Content-Security-Policy (CSP), and X-Content-Type-Options to harden the application.</li>
-        </ul>
-    </section><br><br>
+    <!-- Configuring the Web Application -->
+    <section class="card" id="config">
+      <h2>Configuring the Web Application</h2>
+      <p>Deliberate misconfigurations make the target interesting for tools like Nmap, Nikto, and Burp Suite. WebDAV is enabled for file uploads.</p>
 
-    <section>
-        <h2>Lessons Learned</h2>
-        <p>
-            This lab reinforced my understanding of web application security fundamentals, including how misconfigurations and vulnerabilities are identified, exploited, and mitigated. 
-        </p>
-        <p>
-            It also provided hands-on experience with widely used tools and techniques, improving my ability to conduct thorough security assessments and produce actionable reports.
-        </p>
-    </section><br>
-   
-  <a href="../" class="back-link">Back to Lab Projects</a>	
+      <h3>Specific Misconfigurations</h3>
+      <ol>
+        <li>Weak authentication for WebDAV</li>
+        <li>Directory listings enabled</li>
+        <li>Hidden directories and files</li>
+        <li>Exposed sensitive configuration</li>
+        <li>Crafted XSS vulnerability</li>
+      </ol>
+
+      <h3>Weak WebDAV Authentication</h3>
+      <p>Enable WebDAV with <strong>Basic Auth</strong> and intentionally weak credentials.</p>
+      <div class="pair">
+        <figure class="figure"><img src="Images/WebDAV%20BasicAuth.png" alt="webdav.conf with BasicAuth"></figure>
+        <figure class="figure"><img src="Images/WebDAV%20WeakPassSet.png" alt="Weak credentials configured for WebDAV"></figure>
+      </div>
+
+      <h3>Directory Listings Enabled</h3>
+      <p>Apache <code>Options Indexes</code> exposes directory listings when no default index is present.</p>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Directory%20Listings%201.png" alt="Indexes in apache2.conf"></figure>
+        <figure class="figure"><img src="Images/Directory%20Listings%20Enabled%202.png" alt="Indexes also enabled in webdav.conf"></figure>
+      </div>
+
+      <h3>Hidden Directories &amp; Files</h3>
+      <p>Hidden and obvious paths are created under <code>/var/www/html</code> to surface during directory busting and manual browsing.</p>
+
+      <h3>Exposed Sensitive Configuration</h3>
+      <p>Example: a public <code>config.php</code> containing sensitive information.</p>
+      <figure class="figure"><img src="Images/Exposed%20Sensitive%20Configuration.png" alt="Exposed config.php"></figure>
+
+      <h3>Crafted XSS Vulnerability</h3>
+      <p>Convert <code>index.html</code> to <code>index.php</code> and inject reflected XSS via unsanitized query parameter.</p>
+      <div class="pair">
+        <figure class="figure"><img src="Images/PHPFileConversion.png" alt="Renaming index.html to index.php"></figure>
+        <figure class="figure"><img src="Images/CodeCheck.png" alt="Verifying vulnerable PHP code presence"></figure>
+      </div>
+      <div class="pair">
+        <figure class="figure"><img src="Images/XSS%20Vulnerable%20Code.png" alt="Reflected XSS code example"></figure>
+        <figure class="figure"><img src="Images/RestartApache.png" alt="Restarting Apache to load PHP"></figure>
+      </div>
+    </section>
+
+    <!-- Active Recon -->
+    <section class="card" id="active-recon">
+      <h2>Active Recon</h2>
+      <p>Create a Bash helper script to run initial Nmap sweeps, then save results; run WhatWeb for tech fingerprinting.</p>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Bash%20Script%20Creation1.PNG" alt="Bash script creation 1"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Creation2.PNG" alt="Bash script creation 2"></figure>
+      </div>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Bash%20Script%20Creation%205.PNG" alt="Bash script creation 3"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Run%201.PNG" alt="Script run 1"></figure>
+      </div>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Bash%20Script%20Run%202.PNG" alt="Script run 2"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Run%203.PNG" alt="Script run 3"></figure>
+      </div>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Bash%20Script%20Run%205.PNG" alt="Script run 4"></figure>
+        <figure class="figure"><img src="Images/Save%20Scan%20Results%20in%20File.PNG" alt="Saving scan results to file"></figure>
+      </div>
+      <figure class="figure"><img src="Images/WhatWeb.PNG" alt="WhatWeb fingerprinting"></figure>
+    </section>
+
+    <!-- Directory Busting -->
+    <section class="card" id="dirbusting">
+      <h2>Directory Busting</h2>
+      <p>Discover hidden/interesting paths with Dirb, Dirbuster, and Gobuster.</p>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Dirb%20Run%201.PNG" alt="Dirb run"></figure>
+        <figure class="figure"><img src="Images/Dirbuster.PNG" alt="Dirbuster UI"></figure>
+      </div>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Dirbuster%202.PNG" alt="Dirbuster results 1"></figure>
+        <figure class="figure"><img src="Images/Dirbuster%203.PNG" alt="Dirbuster results 2"></figure>
+      </div>
+      <figure class="figure"><img src="Images/Dirbuster%204.PNG" alt="Dirbuster results 3"></figure>
+      <figure class="figure"><img src="Images/gobuster.PNG" alt="Gobuster results"></figure>
+    </section>
+
+    <!-- Burp Suite Recon -->
+    <section class="card" id="burp">
+      <h2>Active Recon with Burp Suite</h2>
+      <p>Intercept a <code>GET</code> request, send to Repeater, and probe different HTTP methods.</p>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Browser%20Settings.PNG" alt="Firefox proxy settings for Burp"></figure>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Burp%20Suite%20Start.png" alt="Burp start"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Start%202.png" alt="Burp start 2"></figure>
+      </div>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Intercept%20on.PNG" alt="Burp Proxy Intercept ON"></figure>
+      <div class="pair">
+        <figure class="figure"><img src="Images/The%20Web%20Page.PNG" alt="Target web page"></figure>
+        <figure class="figure"><img src="Images/Refresh%20Firefox.PNG" alt="Refreshing the page through proxy"></figure>
+      </div>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Captured%20GET%20Request.PNG" alt="Captured GET request"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Send%20to%20Repeator.png" alt="Send to Repeater"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%201%20GET%20Request.PNG" alt="GET request in Repeater"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%202%20HEADRequestModify.PNG" alt="HEAD request in Repeater"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%203%20OPTIONSRequestModify.PNG" alt="OPTIONS request in Repeater"></figure>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%204%20PUT.PNG" alt="PUT request response (405)"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%205%20BadRequest.PNG" alt="POST/Bad Request example"></figure>
+      </div>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Sitemap.PNG" alt="Burp Suite site map"></figure>
+    </section>
+
+    <!-- Vulnerability Scanning -->
+    <section class="card" id="vuln-scans">
+      <h2>Vulnerability Scanning</h2>
+      <h3>Nmap <code>--script vuln</code></h3>
+      <figure class="figure"><img src="Images/nmap%20vuln%20scan.PNG" alt="Nmap vulnerability scan results"></figure>
+
+      <h3>Nikto Scan</h3>
+      <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto scan findings"></figure>
+    </section>
+
+    <!-- Exploitation -->
+    <section class="card" id="exploitation">
+      <h2>Exploitation</h2>
+
+      <h3>Exploiting Reflected XSS</h3>
+      <p>Exploit the vulnerable <code>index.php</code> by passing a crafted <code>?query=</code> value.</p>
+      <pre><code>http://192.168.1.103/index.php?query=test</code></pre>
+      <div class="pair">
+        <figure class="figure"><img src="Images/XSSTest1.png" alt="XSS test 1"></figure>
+        <figure class="figure"><img src="Images/XSSTest2.png" alt="XSS test 2"></figure>
+      </div>
+      <div class="pair">
+        <figure class="figure"><img src="Images/XSSTest3.png" alt="XSS test 3"></figure>
+        <figure class="figure"><img src="Images/XSSTest4.png" alt="XSS test 4"></figure>
+      </div>
+
+      <h4>Mitigation</h4>
+      <p>Sanitize and encode user input before output. Example using <code>htmlspecialchars()</code>:</p>
+      <figure class="figure"><img src="Images/XSSFix.png" alt="Using htmlspecialchars() to mitigate reflected XSS"></figure>
+      <p>Also consider strict input validation and a defensive <strong>Content-Security-Policy</strong>.</p>
+      <div class="pair">
+        <figure class="figure"><img src="Images/queryparamSecure.png" alt="Restricting query parameter to safe characters"></figure>
+        <figure class="figure"><img src="Images/CSP.png" alt="Example CSP header"></figure>
+      </div>
+
+      <h3>Exploiting WebDAV</h3>
+      <p>Weak Basic Auth on <code>/webdav</code> can be brute forced—or discovered via scanning. Once credentials are known, upload a PHP payload and gain a shell.</p>
+      <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto exposing weak WebDAV auth"></figure>
+      <div class="pair">
+        <figure class="figure"><img src="Images/WebDAVLoginPrompt.png" alt="WebDAV login prompt"></figure>
+        <figure class="figure"><img src="Images/WebDAVLogin2.png" alt="Entering credentials"></figure>
+      </div>
+      <figure class="figure"><img src="Images/WebDAVLoginSuccess.png" alt="Successful WebDAV login"></figure>
+      <figure class="figure"><img src="Images/msfvenomCadaver.png" alt="Generating payload and uploading with cadaver"></figure>
+      <div class="pair">
+        <figure class="figure"><img src="Images/ShellUploadSuccess.png" alt="Payload visible on site"></figure>
+        <figure class="figure"><img src="Images/msflistener.png" alt="Metasploit reverse handler"></figure>
+      </div>
+      <figure class="figure"><img src="Images/meterpreter2%20(1).png" alt="Meterpreter session obtained"></figure>
+    </section>
+
+    <!-- Analysis & Reporting -->
+    <section class="card" id="analysis">
+      <h2>Analysis &amp; Reporting</h2>
+      <p>This lab demonstrates how misconfigurations are identified, exploited, and mitigated. It also reinforces a methodical workflow and clear documentation.</p>
+
+      <h3>Methodology</h3>
+      <ul>
+        <li>Identify HTTP methods, server details, and headers via Burp + Nmap.</li>
+        <li>Enumerate directories with Dirb/Dirbuster/Gobuster.</li>
+        <li>Probe various HTTP methods to analyze behavior and exposure.</li>
+        <li>Scan for vulnerabilities with Nmap NSE (vuln) and Nikto.</li>
+      </ul>
+
+      <h3>Key Findings</h3>
+      <ul>
+        <li><strong>Reflected XSS:</strong> Risk of data theft, phishing, session hijacking.</li>
+        <li><strong>Weak WebDAV Auth:</strong> Enabled arbitrary file upload and remote shell.</li>
+        <li><strong>Directory Listings:</strong> Exposed structure and sensitive files.</li>
+        <li><strong>Missing Security Headers:</strong> Clickjacking/MIME risks.</li>
+      </ul>
+
+      <h3>Mitigation Recommendations</h3>
+      <ul>
+        <li>Sanitize/encode output (<code>htmlspecialchars()</code>), validate input, set CSP.</li>
+        <li>Harden WebDAV: strong creds, HTTPS, restrict methods &amp; file types.</li>
+        <li>Disable <code>Indexes</code> in Apache; restrict access to sensitive files.</li>
+        <li>Add security headers: <code>X-Frame-Options</code>, <code>Content-Security-Policy</code>, <code>X-Content-Type-Options</code>.</li>
+      </ul>
+
+      <h3>Lessons Learned</h3>
+      <p>Hands-on practice with a purposely vulnerable app sharpens recon, scanning, exploitation, and remediation skills—end-to-end.</p>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
