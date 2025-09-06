@@ -21,7 +21,7 @@
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
       line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    /* Slightly wider content to help code screenshots */
+    /* Wider wrap for readability */
     .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
@@ -35,10 +35,9 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
+    /* Headings */
     h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
     .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
@@ -50,19 +49,7 @@
       box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    /* Code (if needed) */
-    pre{
-      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
-      border-radius:12px;overflow:auto;color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
-    }
-    code{
-      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-    }
-
-    /* Figures: scroll-friendly default */
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -75,16 +62,19 @@
     .figure img{
       display:block;
       margin:0 auto;
-      width:clamp(480px, 85%, 960px);
-      max-height:70vh;
-      height:auto;
       border-radius:10px;
+      height:auto;
       object-fit:contain;
     }
-    /* Larger treatment for code screenshots only */
+    /* Larger for code screenshots */
     .figure--code img{
       width:clamp(640px, 92%, 1100px);
       max-height:80vh;
+    }
+    /* Smaller for supporting terminal shots */
+    .figure--small img{
+      width:clamp(320px, 70%, 720px);
+      max-height:55vh;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
@@ -123,7 +113,6 @@
 
     <section class="card" id="create">
       <h2>1) Create the Script</h2>
-      <p>Use <b>nano</b> (or your preferred editor) to create the update & health monitor script.</p>
       <figure class="figure figure--code">
         <img src="Images/system_update_monitor.png" alt="Editing the system update & health monitor script in nano" loading="lazy" decoding="async">
       </figure>
@@ -134,36 +123,35 @@
       <figure class="figure figure--code">
         <img src="Images/scriptcode.png" alt="Saved script preview" loading="lazy" decoding="async">
       </figure>
-      <figure class="figure">
+      <figure class="figure figure--small">
         <img src="Images/chmod.png" alt="chmod to make the script executable" loading="lazy" decoding="async">
       </figure>
     </section>
 
     <section class="card" id="run">
       <h2>3) Run the Script</h2>
-      <figure class="figure">
+      <figure class="figure figure--small">
         <img src="Images/script%20run.png" alt="Running the update & health monitor script" loading="lazy" decoding="async">
       </figure>
     </section>
 
     <section class="card" id="logs">
       <h2>4) Review the Logs</h2>
-      <p>Concatenate the latest log outputs to confirm update actions and resource/temperature readings.</p>
-      <figure class="figure">
+      <figure class="figure figure--small">
         <img src="Images/catlog.png" alt="Concatenating the script log output" loading="lazy" decoding="async">
       </figure>
-      <figure class="figure">
+      <figure class="figure figure--small">
         <img src="Images/LogData.png" alt="Log data with update and device health results" loading="lazy" decoding="async">
       </figure>
     </section>
 
     <section class="card" id="cron">
       <h2>5) Schedule Hourly with Cron</h2>
-      <figure class="figure">
+      <figure class="figure figure--small">
         <img src="Images/crontab.png" alt="Opening crontab editor" loading="lazy" decoding="async">
         <figcaption class="figcap">Open the crontab editor.</figcaption>
       </figure>
-      <figure class="figure">
+      <figure class="figure figure--small">
         <img src="Images/crontab%20add.png" alt="Adding an hourly crontab entry" loading="lazy" decoding="async">
         <figcaption class="figcap">Example: <code>0 * * * * /path/to/update-monitor.sh</code></figcaption>
       </figure>
