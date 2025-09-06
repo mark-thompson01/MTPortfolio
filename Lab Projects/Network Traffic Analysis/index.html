@@ -1,268 +1,346 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Network Traffic Analysis</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-        }
-        h1, h2, h3 {
-            color: #ffffff;
-            margin-bottom: 10px;
-        }
-        code {
-            background-color: #2e2e2e;
-            color: #e0e0e0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-family: "Courier New", Courier, monospace;
-        }
-        blockquote {
-            background-color: #1e1e1e;
-            border-left: 5px solid #4caf50;
-            padding: 10px;
-            margin: 10px 0;
-            color: #cfcfcf;
-        }
-        img {
-            display: block;
-            margin: 20px 0;
-            max-width: 75%;
-            height: auto;
-            border: 1px solid #444;
-            border-radius: 5px;
-        }
-        ul, ol {
-            margin-left: 20px;
-        }
-        .back-link {
-            color: #1E90FF;
-            text-decoration: none;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Network Traffic Analysis · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hands-on lab using tcpdump and Wireshark to generate, capture, save, and analyze diverse network traffic in a controlled two-VM environment." />
+
+  <!-- THEME -->
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap.wide{max-width:1100px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    pre{
+      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
+      border-radius:12px;overflow:auto;color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
+    }
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
+      width:clamp(480px, 85%, 960px); max-height:70vh; height:auto;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    .figure--code img{width:clamp(640px, 92%, 1100px); max-height:80vh}
+    .figure--sm   img{width:clamp(360px, 70%, 760px)}
+    .figure--lg   img{width:clamp(720px, 95%, 1200px)}
+
+    .pair{display:grid;gap:12px;margin:16px 0}
+    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
+    .pair .figure{margin:0}
+
+    .gallery-wrap{position:relative;margin-top:10px}
+    .gallery{
+      display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
+      align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;
+      scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;
+      -webkit-overflow-scrolling:touch
+    }
+    .gallery .item{scroll-snap-align:start}
+    .gallery .figure{height:100%}
+    .gallery::-webkit-scrollbar{height:10px}
+    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
+    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
+    .gallery.hide-scrollbar{scrollbar-width:none}
+    .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
+    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
+    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
+    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
+    .gbtn:hover{background:#121733}
+    .gprev{left:-6px}
+    .gnext{right:-6px}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
 </head>
 <body>
-    <h1>Network Traffic Analysis</h1>
+  <div class="wrap wide">
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-    <p>
-  <a href="https://github.com/mark-thompson01/Network-Traffic-Analysis/tree/main" target="_blank">
-    View this project on GitHub
-  </a>
-</p>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> · <span>Network Traffic Analysis</span>
+    </div>
 
-    <h2>Introduction</h2>
-    <p>In the realm of network security, understanding how to monitor and analyze network traffic is a fundamental skill. This lab serves as a practical demonstration of <code>tcpdump</code> and Wireshark, two indispensable tools for network analysis. This lab is designed to showcase their capabilities through a controlled creative scenario.</p>
-    <p>The following outlines generating, capturing, saving, and analyzing network traffic, with an emphasis on how these tools apply to real-world cybersecurity challenges.</p>
-    <p>The setup consists of a small, virtualized network consisting of two virtual machines (VMs): a Kali Linux VM for generating, capturing, and analyzing traffic, and a Ubuntu Linux VM. This setup allows to simulate diverse traffic scenarios and provides meaningful data for analysis.</p>
-        
-    </p>
-    <h2>Lab Objectives</h2>
-    <ul>
-        <li>To introduce key <code>tcpdump</code> commands and demonstrate how to capture specific types of traffic.</li>
-        <li>To generate and examine diverse network traffic, including simulated malicious activity.</li>
-        <li>To save captured traffic to a .pcap file for further inspection using Wireshark.</li>
-    </ul>
-    <h2>Lab Setup</h2>
-    <blockquote>
-        <strong>Kali Linux VM:</strong> Used for generating traffic with <code>hping</code> and capturing traffic with <code>tcpdump</code> and analyzing the traffic with Wireshark..<br>
-        <strong>Ubuntu Linux VM:</strong> Used as the simulated target with ports 22 and 80 open.
-    </blockquote>
+    <!-- Header -->
+    <header>
+      <h1>Network Traffic Analysis</h1>
+      <p class="lead">Generating, capturing, saving, and analyzing traffic with <code>tcpdump</code> and Wireshark across a two-VM lab (Kali + Ubuntu).</p>
+      <p><a href="https://github.com/mark-thompson01/Network-Traffic-Analysis/tree/main" target="_blank" rel="noopener">View this project on GitHub</a></p>
+    </header>
 
-    <p>These machines are connected via a virtual network to ensure controlled and reproducible results.</p><br>
+    <!-- Overview -->
+    <section class="card">
+      <h2>Introduction</h2>
+      <p>This lab demonstrates how to monitor and analyze network traffic using <code>tcpdump</code> and Wireshark. You’ll see how to generate realistic traffic (including simulated malicious activity), capture it, save it to PCAP, and perform targeted analysis.</p>
+      <p><em>Environment:</em> Two VMs on a virtual network — Kali Linux (traffic generation, <code>tcpdump</code>, Wireshark) and Ubuntu (target with ports 22 and 80 open).</p>
+    </section>
 
-    <h2>What is tcpdump?</h2>
-    <p>
-        <code>tcpdump</code> is a command-line tool used to capture and analyze network traffic. It acts metaphorically as a powerful magnifying glass, allowing us to filter and observe data packets as they traverse through a network medium. Tcpdump is a highly customizable command and forms the backbone of many network analysis workflows, particularly in cybersecurity. It’s versatility and ability to save traffic for later analysis make it invaluable for professionals working to secure computer networks.
-    </p>
+    <section class="card">
+      <h2>Lab Objectives</h2>
+      <ul>
+        <li>Introduce key <code>tcpdump</code> commands and filtered captures.</li>
+        <li>Generate diverse traffic, including simulated malicious activity.</li>
+        <li>Save captures to <code>.pcap</code> and analyze with Wireshark.</li>
+      </ul>
+    </section>
 
-   <h2>Capturing Traffic with tcpdump</h2>
-<p>With traffic flowing, it's time to capture it using <code>tcpdump</code>:</p>
-<ul>
-    <li>
-        <strong>Basic Capture:</strong><br>
-        <code>tcpdump -i eth0</code><br>
-        Captures all traffic on the specified network interface.
-    </li>
-    <li>
-        <strong>Filter Capture:</strong><br>
-        <code>tcpdump -i eth0 port 80</code><br>
-        Captures HTTP traffic only, focusing on web interactions.
-    </li>
-    <li>
-        <strong>Advanced Filters:</strong><br>
-        <code>tcpdump -i eth0 src 10.38.1.113 and dst port 22</code><br>
-        Captures SSH traffic originating from the Kali VM to the Ubuntu VM.
-    </li>
-</ul><br><br>
+    <section class="card">
+      <h2>What is <code>tcpdump</code>?</h2>
+      <p><code>tcpdump</code> is a CLI packet capture tool. Its flexible filtering and ability to write PCAPs make it a core utility in security workflows.</p>
+    </section>
 
+    <section class="card">
+      <h2>Capturing Traffic with <code>tcpdump</code></h2>
+      <ul>
+        <li><strong>Basic capture:</strong> <code>tcpdump -i eth0</code> – capture all traffic on the interface.</li>
+        <li><strong>Port filter:</strong> <code>tcpdump -i eth0 port 80</code> – focus on HTTP.</li>
+        <li><strong>Advanced filter:</strong> <code>tcpdump -i eth0 src 10.38.1.113 and dst port 22</code> – SSH from Kali to Ubuntu.</li>
+      </ul>
+    </section>
 
-    <h2>Generating Network Traffic</h2>
-    <h3>1. Ping Sweeps and Network Scans</h3>
+    <!-- Generating Traffic -->
+    <section class="card">
+      <h2>Generating Network Traffic</h2>
 
-    <p>Conduct a ping sweep or a network scan from Kali using tools like arp-scan, pfing, and nmap -sn to identify active hosts. These first three commands will generate a very large ARP storm.</p>
+      <h3>1) Ping Sweeps and Network Scans</h3>
+      <p>Run a sweep/scan from Kali using <code>arp-scan</code>, <code>fping</code>, and <code>nmap -sn</code> to find live hosts. The first three can create significant ARP traffic.</p>
+      <div class="pair">
+        <figure class="figure figure--code">
+          <img src="Images/arp-scan%20fping%20and%20nmap%20sn.PNG" alt="ARP scan and ping sweep (nmap -sn)" loading="lazy" decoding="async">
+          <figcaption class="figcap">ARP/ping discovery activity.</figcaption>
+        </figure>
+        <figure class="figure figure--code">
+          <img src="Images/Ubuntu%20Port%20Scan.PNG" alt="Ubuntu port scan" loading="lazy" decoding="async">
+          <figcaption class="figcap">Port probing against Ubuntu target.</figcaption>
+        </figure>
+      </div>
 
-    
-    <img src="Images/arp-scan%20fping%20and%20nmap%20sn.PNG" alt="ARP Scan and Network Scan">
-    <img src="Images/Ubuntu%20Port%20Scan.PNG" alt="Ubuntu Port Scan"><br>
+      <h3>2) File Transfers via SSH</h3>
+      <p>Establish SSH from Kali to Ubuntu and use <code>scp</code> to move files.</p>
+      <div class="pair">
+        <figure class="figure"><img src="Images/SSH%20Login.PNG" alt="SSH login success" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/Test%20File%20Creation%20and%20Transfer%20to%20Ubuntu.PNG" alt="Create file and scp to Ubuntu" loading="lazy"></figure>
+      </div>
+      <figure class="figure">
+        <img src="Images/File%20Transfer%20Verification.PNG" alt="File transfer verification on Ubuntu" loading="lazy">
+        <figcaption class="figcap">Verified file presence on the destination.</figcaption>
+      </figure>
 
-    <h3>2. File Transfers via SSH</h3>
-    <p>Establish an SSH session from Kali to Ubuntu and use scp to transfer files. This simulates secure file transfer.</p>
+      <h3>3) Simulated Malicious Activity</h3>
+      <p>Use <code>hping3</code> to craft suspicious packets and floods.</p>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="hping examples">
+          <article class="item"><figure class="figure"><img src="Images/hping%20port%2080%20flood.PNG" alt="hping SYN flood on port 80" loading="lazy"><figcaption class="figcap">Port 80 flood.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/hping%20icmp%20flood%20116.PNG" alt="hping ICMP flood" loading="lazy"><figcaption class="figcap">ICMP flood.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/hping%20Fragmented%20Packets%20116.PNG" alt="hping fragmented packets" loading="lazy"><figcaption class="figcap">Fragmentation.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/hping%20data%20injection.PNG" alt="hping data injection" loading="lazy"><figcaption class="figcap">Payload injection.</figcaption></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/hping%20spoofed%20IP%20source%20116.PNG" alt="hping spoofed IP source" loading="lazy"><figcaption class="figcap">Spoofed source IP.</figcaption></figure></article>
+        </div>
+      </div>
+    </section>
 
-    <img src="Images/SSH%20Login.PNG" alt="SSH Login Successful">
+    <!-- Save PCAP -->
+    <section class="card">
+      <h2>Saving Captures for Analysis</h2>
+      <p>Write traffic to a PCAP for later analysis:</p>
+      <pre><code>tcpdump -i eth0 -w network_capture.pcap</code></pre>
+      <figure class="figure figure--code">
+        <img src="Images/tcpdump%20capture%20start%202.PNG" alt="tcpdump capture start" loading="lazy" decoding="async">
+      </figure>
+    </section>
 
-    <p>SSH connection from Kali VM to Ubuntu VM successful. Before proceeding further, I'll create a tst file on the Kali VM and then transfer it to the Ubuntu VM.</p>
+    <!-- Wireshark -->
+    <section class="card">
+      <h2>Analyzing Traffic with Wireshark</h2>
+      <ul>
+        <li><strong>Load the capture:</strong> Open <code>network_capture.pcap</code>.</li>
+        <li><strong>Apply filters:</strong> Narrow to HTTP/ICMP/SSH as needed.</li>
+        <li><strong>Identify patterns &amp; anomalies:</strong> Look for reconnaissance, floods, fragments, or unusual payloads.</li>
+      </ul>
+      <p>Below are representative findings from the capture.</p>
+    </section>
 
-    
-    <img src="Images/Test%20File%20Creation%20and%20Transfer%20to%20Ubuntu.PNG" alt="File Creation and Transfer">
+    <!-- Recon -->
+    <section class="card">
+      <h2>Reconnaissance Traffic</h2>
 
-    <p>File transfer verification on Ubuntu VM.</p>
-    
-    <img src="Images/File%20Transfer%20Verification.PNG" alt="File Transfer Verification"><br>
+      <h3>ARP-Scan Traffic</h3>
+      <p>Large bursts of ARP requests/replies reveal active hosts and MAC addresses (classic network mapping behavior).</p>
+      <div class="gallery-wrap">
+        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+        <div class="gallery hide-scrollbar" role="region" aria-label="ARP activity">
+          <article class="item"><figure class="figure"><img src="Images/Lots%20of%20ARP.PNG" alt="ARP storm" loading="lazy"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ARP%20Request.PNG" alt="ARP request" loading="lazy"></figure></article>
+          <article class="item"><figure class="figure"><img src="Images/ARP%20Reply.PNG" alt="ARP reply" loading="lazy"></figure></article>
+        </div>
+      </div>
 
-    <h3>3. Simulated Malicious Activity</h3>
+      <h3>Ping Sweep Traffic</h3>
+      <p>ICMP echo requests across ranges quickly reveal which hosts are up.</p>
+      <figure class="figure">
+        <img src="Images/ICMP.png" alt="ICMP sweep" loading="lazy">
+      </figure>
 
-    <p>Use tools like hping3 on Kali to create malformed or suspicious packets, mimicking attack patterns.</p>
+      <h3>Nmap Scan Traffic</h3>
+      <p>SYN scans probe many ports; closed ports reset, open ones reply with SYN/ACK.</p>
+      <figure class="figure"><img src="Images/Screenshot%20from%202024-12-13%2023-20-00.png" alt="Nmap SYN scan" loading="lazy"></figure>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Port%2022%20Open.png" alt="Port 22 open (SYN,ACK)" loading="lazy"><figcaption class="figcap">Port 22 open.</figcaption></figure>
+        <figure class="figure"><img src="Images/Port%2080%20Open.png" alt="Port 80 open (SYN,ACK)" loading="lazy"><figcaption class="figcap">Port 80 open.</figcaption></figure>
+      </div>
+    </section>
 
-    
-    <p>Examples of malicious traffic:</p>
+    <!-- SSH -->
+    <section class="card">
+      <h2>SSH Traffic</h2>
+      <figure class="figure">
+        <img src="Images/SSH%20Connection%20TCP%20Handshake.png" alt="SSH TCP three-way handshake" loading="lazy">
+        <figcaption class="figcap">Follow &gt; TCP Stream to view the handshake.</figcaption>
+      </figure>
+      <div class="pair">
+        <figure class="figure"><img src="Images/SSH%20Traffic%20Details%201.png" alt="SSH traffic details 1" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/SSH%20Traffic%20Details%202.png" alt="SSH traffic details 2" loading="lazy"></figure>
+      </div>
+      <figure class="figure">
+        <img src="Images/SCP%20File%20Transfer.png" alt="SCP file transfer pattern over SSH" loading="lazy">
+        <figcaption class="figcap">Encrypted SSHv2 packets; size/frequency patterns align with file transfer.</figcaption>
+      </figure>
+      <figure class="figure">
+        <img src="Images/ACK%20PSH.png" alt="ACK/PSH flags during data transfer" loading="lazy">
+        <figcaption class="figcap">ACK/PSH commonly observed during active data transfer.</figcaption>
+      </figure>
+    </section>
 
-    <p><strong>hping flood on port 80</strong></p>
-    <img src="Images/hping%20port%2080%20flood.PNG" alt="hping Port 80 Flood">
-    <p><strong>hping icmp flood</strong></p>
-    <img src="Images/hping%20icmp%20flood%20116.PNG" alt="hping ICMP Flood">
-    <p><strong>hping fragmented packets</strong></p>
-    <img src="Images/hping%20Fragmented%20Packets%20116.PNG" alt="hping Fragmented Packets">
-    <p><strong>hping data injection</strong></p>
-    <img src="Images/hping%20data%20injection.PNG" alt="hping Data Injection">
-    <p><strong>hping spoofed IP source</strong></p>
-    <img src="Images/hping%20spoofed%20IP%20source%20116.PNG" alt="hping Spoofed Traffic"><br><br>
+    <!-- Attacks -->
+    <section class="card">
+      <h2>Attack Patterns</h2>
 
-    <h2>Saving Captures for Analysis</h2>
-    <p>Use the following command to save traffic to a PCAP file:</p>
-    <code>tcpdump -i eth0 -w network_capture.pcap</code>
-    <p>To preserve captured traffic for analysis with Wireshark, use the -w option: tcpdump -i eth0 -w network_capture.pcap. This saves the traffic to a PCAP file, which can be loaded into Wireshark for detailed inspection.</p>
-    <img src="Images/tcpdump%20capture%20start%202.PNG" alt="tcpdump Capture Start"><br><br>
+      <h3>TCP SYN Flood on Port 80</h3>
+      <p>Rapid SYNs without completion create half-open connections — classic DoS symptom.</p>
+      <figure class="figure"><img src="Images/TCP%20SYN%20Flood%20on%20port%2080.png" alt="TCP SYN flood" loading="lazy"></figure>
 
-    <h2>Analyzing Traffic with Wireshark</h2>
-    <p>Wireshark allows for in-depth examination of network data:</p>
+      <h3>Malformed (Fragmented) Packets</h3>
+      <p>Deliberate fragmentation (MF flag) can stress reassembly and slip past defenses.</p>
+      <div class="pair">
+        <figure class="figure"><img src="Images/Malform0.PNG" alt="Malformed fragmented packets" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/Capture%201.PNG" alt="Fragmented packets view" loading="lazy"></figure>
+      </div>
 
-    <ul>
-        <li><strong>Load the capture:</strong> Open the network_capture.pcap file in Wireshark</li>
-        <li><strong>Apply Filters:</strong> Use Wireshark's powerful filtering capabilities to isolate specific types of traffic, such as HTTP, ICMP, or SSH.</li>
-        <li><strong>Idenify Patterns and Anomalies:</strong></li>
-            <ul>
-                <li>Examine HTTP requests and responses to analyze web activity.</li>
-                <li>Investigate SSH traffic for unauthorized access attempts.</li>
-                <li>Detect unusual packet structures indicative of malicious behavior.</li>
-            </ul>
-    </ul>
+      <h3>Custom Payload</h3>
+      <p>Example: <code>hping -S -p 443 -d 100 --data "malicious payload" 10.38.1.116</code> — target replies with <code>RST,ACK</code> indicating rejection of unexpected traffic.</p>
+      <figure class="figure"><img src="Images/Malicious.png" alt="Custom payload traffic" loading="lazy"></figure>
 
-    <p>Let's further examine the network_capture.pcap file.</p>
+      <h3>Spoofed Traffic</h3>
+      <p>Example: <code>hping3 -S -p 80 --spoof 192.168.1.100 10.38.1.116</code> — packets show forged source IP, masking origin.</p>
+      <figure class="figure"><img src="Images/Spoofed%20Traffic.png" alt="Spoofed source IP traffic" loading="lazy"></figure>
+    </section>
 
-    <p>The commands ran in this lab produce various traffic types on computer networks. In this lab, I've captured various traffic types to simulate reconnaissance, attacks, and legitimate activity. In this section, the most interesting findings will be analyzed.</p><br>
-    
-    <h3>Reconnaissance Traffic</h3>
+    <section class="card">
+      <h2>Real-World Application</h2>
+      <p><code>tcpdump</code> and Wireshark provide critical visibility for detection and troubleshooting — from spotting reconnaissance to confirming legitimate encrypted transfers — and are foundational tools for defenders.</p>
+    </section>
 
-    <ul>
-        <li><strong>ARP-Scan Traffic</strong></li>
-    </ul>
-    <P>Address Resolution Protocol - ARP is essential for mapping IP addresses to MAC addresses on a local network. However, attackers or administrators can exploit ARP to discover devices by sending a series or ARP requests to various IP addresses. This traffic demonstrates an ARP sweep, which systematically queries a range of IP addresses to identify active hosts on a local network.</P>
-    <p>This ARP storm demonstrates how attackers or network administrators might query an entire subnet to discover active hosts. The systematic ARP request (who has ?) and the corresponding replies ( is at ) reveal live devices and their MAC addresses. This behavior is typical of reconnaissance activity and highlights the importance of monitoring ARP traffic to detect and mitigate unauthorized network mapping attempts.</p>
-    <img src="Images/Lots%20of%20ARP.PNG" alt="ARP Storm">
-    <img src="Images/ARP%20Request.PNG" alt="ARP Request">
-    <img src="Images/ARP%20Reply.PNG" alt="ARP Reply">
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
 
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 
-    <ul>
-        <li><strong>Ping Sweep Traffic</strong></li>
-    </ul>    
-
-    <p>This ping sweep traffic demonstrates how attackes can use ICMP traffic to discover live hosts on a network. The systematic nature of Echo Requests (targeting multiple IPs) and the rapid sequence of packets indicate automated reconnaissance. The responses from specific hosts reveal which devices are active and reachable, providing valuable information for further attacks. This activity underscores the importance of monitoring ICMP traffic and implementing network defenses and block reconnaissance attempts.
-
-    <img src="Images/ICMP.png" alt="ICMP Traffic">
-
-    <ul>
-        <li><strong>Nmap Scan Traffic</strong></li>
-    </ul>
-    <p>    <p>This capture highlights an Nmap SYN scan, where the scanner sequentually probes multiple ports on the target system. Closed ports respond with RST, ACK packets, while open ports (e.g., SSH port port 22) sends SYN, ACK packets. This reconnaissance activity demonstrates the early stages of an attack, providing critical information about a targets network and services.
-</p>
-    <img src="Images/Screenshot%20from%202024-12-13%2023-20-00.png" alt="Nmap SYN Scan">
-
-    
-
-    <p>Port 22 SYN, ACK - Port 22 Open</p>
-    <img src="Images/Port%2022%20Open.png" alt="Port 22 Open">
-
-    <p>Port 80 SYN, ACK - Port 80 Open</p>
-    <img src="Images/Port%2080%20Open.png" alt="Port 80 Open">
-
-    <ul>
-        <li><strong>SSH Traffic</strong></li>
-    </ul>
-    <img src="Images/SSH%20Connection%20TCP%20Handshake.png" alt="SSH Handshake">
-
-    <p>If we right click on the first SSH packet and select Follow > TCP Stream, we have the TCP Threeway Handshake for the SSH connection.</p>
-    
-    <p>SSH Traffic Details</p>
-    <p>Here we the client/server communication for the key exchange. Packets we can sift through and gather meta data from.</p>
-    <img src="Images/SSH%20Traffic%20Details%201.png" alt="SSH Traffic Details 1.png">
-    <img src="Images/SSH%20Traffic%20Details%202.png" alt="SSH Traffic Details 2.png">
-
-    <p>Encrypted Traffic Related to SCP File Transfer.</p>
-
-    <p>Here we have the consistent traffic pattern of Encrypted Packet Client/Server communication over the SSHv2 protocol. The sequence and frequency of packets align with the behavior of a file transfer, where data is segmented into chucks and set over the SSH connection. The varying packet lengths (len=44, len=628, etc.) indicate data transfer activity. Larger packets suggest chucks of the file being sent, while smaller packets include control messages and acknowledgements.</p>
-
-    <img src="Images/SCP%20File%20Transfer.png" alt="SCP File Transfer">
-
-
-    <p>In addition to that the packets of this traffic have the TCP ACK and PSH flags set, which are commonly seen during active data transfer.</p>
-    <img src="Images/ACK%20PSH.png" alt="ACK PSH Flags">
-
-    
-    <ul>
-        <li><strong>TCP SYN Flood on Port 80</strong></li>
-    </ul>
-    <p>These packets represent a TCP SYN Flood attack targeting port 80 on the destination IP. The rapid rate of SYN packets with no corresponding responses indicates a deliberate attempt to exhuast the target's resources by creating half-open TCP connections. This is a classic Denial of Service (DoS) tactic, designed to disrupt services by overwhelming the target's ability to handle legitimate traffic.</p>
-    <img src="Images/TCP%20SYN%20Flood%20on%20port%2080.png" alt="TCP SYN Flood">
-
-    <ul>
-        <li><strong>Malformed (Fragmented) Packets</strong></li>
-    </ul>
-    <p>This traffic highlights the deliberate fragmentation of packets, with the More Fragments (MF) flag set. Fragmented packets, each with a small size of 54 bytes, are sent in rapid succession to overwhelm the target. This technique can evade firewalls and IDS by making reassembly difficult, demonstrating how attackers might bypass detection or consume system resources.
-    </p>
-    <img src="Images/Malform0.PNG" alt="Malformed Packets">
-    <img src="Images/Capture%201.PNG" alt="Fragmented Packets">
-
-    <ul>
-        <li><strong>Custom Payload</strong></li>
-    </ul>
-    <p>Here we have the traffic from the command "hping -S -p 443 -d 100 --data "malicious payload" 10.38.1.116"</p>
-    <p>The [RST, ACK] flags indicate that the receiving system (destination) is rejecting the connection. This is expected if the system is not configured to handle the specific payload or if it identifies the packets as malformed or suspicious. The packet length (60) matches the size of the TCP headers plus any payload. Since the -d 100 option was used, the payload adds extra bytes to the total length. The high volume of packets sequential source ports suggests that this is artificially generated traffic, consistent with hping3's behavior. The receiving system is responding with TCP Reset (RST), which occurs when a system does not expect or cannot process a connection request. This is often a sign of suspicious or malformed traffic being rejected.
-</p>
-    <img src="Images/Malicious.png" alt="Custom Payload">
-
-    <ul>
-        <li><strong>Spoofed Traffic</strong></li>
-    </ul>
-    <p>Here we can see the traffic from the command "hping3 -S -p 80 --spoof 192.168.1.100 10.38.1.116".
-</p>
-    <p>All packets have a spoofed source IP address of 192.168.1.100. The actual system sending the traffic (Kali VM) is hiding its true IP by crafting packets with this fake source address.
-</p>
-    
-    <img src="Images/Spoofed%20Traffic.png" alt="Spoofed Traffic"><br>
-
-    <h2>Real World Application</h2>
-    <p>
-        This lab demonstrates how <code>tcpdump</code> and Wireshark can monitor, diagnose, and secure network environments. From identifying potential intrusions to analyzing legitimate traffic, these tools provide cybersecurity professionals with critical visibility into network activity.
-    </p>
-
-    <a href="../" class="back-link">Back to Lab Projects</a>
+  <!-- gallery wheel + arrows -->
+  <script>
+    (function(){
+      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
+        const scroller = wrap.querySelector('.gallery');
+        if(!scroller) return;
+        const left = wrap.querySelector('.gprev');
+        const right = wrap.querySelector('.gnext');
+        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
+        left  && left .addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
+        right && right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
+        scroller.addEventListener('wheel', (e) => {
+          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+            e.preventDefault();
+            scroller.scrollLeft += e.deltaY;
+          }
+        }, {passive:false});
+      });
+    })();
+  </script>
 </body>
 </html>
