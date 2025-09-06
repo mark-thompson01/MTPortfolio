@@ -2,56 +2,146 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Linux</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Scripting &amp; Automation with Raspberry Pi 5 · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hub for Raspberry Pi 5 scripting & automation labs: hourly network scanner, network command automation, system update & device health monitor, and backup to NAS server." />
   <style>
-  body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      line-height: 1.6;
-      background-color: #2b2b2b;
-      color: #f0f0f0;
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
     }
-    h1, h2 {
-      color: #00ffcc;
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    code {
-      background-color: #333;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      display: inline-block;
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
-    section {
-      margin-bottom: 2rem;
+
+    /* Grid of project tiles */
+    .grid{display:grid;gap:14px;margin-top:10px}
+    @media (min-width:700px){ .grid{grid-template-columns:1fr 1fr} }
+    .tile{display:flex;flex-direction:column;gap:8px;padding:16px;border:1px solid var(--card-border);border-radius:14px;background:rgba(255,255,255,.02)}
+    .tile h3{margin:0;font-size:18px}
+    .tile p{margin:0;color:var(--muted)}
+    .tile .actions{margin-top:8px}
+    .btn{
+      display:inline-block;border:1px solid #3a4a67;border-radius:10px;padding:8px 12px;
+      color:var(--text);text-decoration:none;background:rgba(255,255,255,.05)
     }
-    ul {
-      padding-left: 40px;
-      list-style-type: none;
-    }
-    p {
-      line-height: 1.6;
-    }
-    a {
-      color: #1e90ff;
-      text-decoration: none;
-    }
-    a:hover {
-      color: #ff7f50;
-      text-decoration: underline;
-    }
+    .btn:hover{background:rgba(255,255,255,.09)}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
+  <div class="wrap">
 
-<h1>Scripting & Automation with Raspberry Pi 5</h1>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-<ul>
-  <li><a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Network%20Scanner">Hourly Network Scanner</a></li>
-  <li><a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Network%20Commands">Network Command Automation</a></li>
-  <li><a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/System%20Update%20and%20Device%20Health%20Monitor">System Update and Device Health Monitor</a><li>
-  <li><a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Backup%20to%20NAS%20Server">Backup to NAS Server</a></li>  
-</ul>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Scripting &amp; Automation (Raspberry Pi 5)</a> · <span>Project Hub</span>
+    </div>
 
- <a href="../index.html">Back to Home</a>
+    <!-- Header -->
+    <header>
+      <h1>Scripting &amp; Automation with Raspberry Pi 5</h1>
+      <p class="lead">A collection of Bash-driven automations for a Raspberry Pi 5: network discovery, diagnostics, patching/health checks, and backups to a NAS—each with step-by-step screenshots.</p>
+    </header>
+
+    <!-- Intro -->
+    <section class="card">
+      <h2>Projects</h2>
+      <div class="grid">
+        <article class="tile">
+          <h3>Hourly Network Scanner</h3>
+          <p>Use <code>nmap</code> to discover new hosts hourly and append results to logs via <code>cron</code>.</p>
+          <div class="actions">
+            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Network%20Scanner">Open</a>
+          </div>
+        </article>
+
+        <article class="tile">
+          <h3>Network Command Automation</h3>
+          <p>One-shot helpers for host inventory, active sockets, DHCP renewals, DNS tests, tracing, and smart ping.</p>
+          <div class="actions">
+            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Network%20Commands">Open</a>
+          </div>
+        </article>
+
+        <article class="tile">
+          <h3>System Update &amp; Device Health Monitor</h3>
+          <p>Automated updates plus disk, memory, CPU, and temperature logging—built for unattended hourly runs.</p>
+          <div class="actions">
+            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/System%20Update%20and%20Device%20Health%20Monitor">Open</a>
+          </div>
+        </article>
+
+        <article class="tile">
+          <h3>Backup to NAS Server</h3>
+          <p>Key-based SSH + <code>rsync</code> to mirror your Automation folder to a Raspberry Pi 3 NAS weekly.</p>
+          <div class="actions">
+            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Backup%20to%20NAS%20Server">Open</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Back link -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+
+  </div>
 </body>
 </html>
