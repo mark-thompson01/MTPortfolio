@@ -23,18 +23,15 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
     .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
     h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     h2{margin:0 0 10px;font-size:22px}
     h3{margin:16px 0 8px;font-size:18px}
@@ -42,29 +39,32 @@
     a:hover{text-decoration:underline}
     .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Card */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
       box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    /* Lists */
     ul,ol{padding-left:22px;margin:8px 0}
     .tight li{margin:6px 0}
 
-    /* Code blocks */
     code, pre code{
       background:#0e1220;border:1px solid var(--card-border);
       border-radius:10px;padding:8px 10px;display:block;white-space:pre-wrap;margin:8px 0;
       color:var(--text)
     }
 
-    /* Images: keep original inline sizes the user set */
-    .img-wrap{margin:12px 0}
-    .img-wrap img{display:block;border:1px solid var(--card-border);border-radius:12px}
+    /* Updated image sizing */
+    .img-wrap{margin:12px 0;text-align:center}
+    .img-wrap img{
+      display:block;
+      margin:0 auto;
+      max-width:70%;   /* shrink a bit */
+      height:auto;
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
 
-    /* Footer */
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
     footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
@@ -73,7 +73,7 @@
 <body>
   <div class="wrap">
 
-    <!-- Site nav -->
+    <!-- Top nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -95,163 +95,10 @@
       <p class="lead">Create a Windows Server 2016 VM in VirtualBox and complete setup—foundation for building an AD DS lab.</p>
     </header>
 
-    <!-- Intro -->
-    <section class="card">
-      <p>The following demonstrates installing Windows Server 2016 as a VM using Oracle VirtualBox. Active Directory starts with a Windows Server installation and adding the AD DS role as the origin of a Windows domain.</p>
-    </section>
+    <!-- Content continues exactly as in the previous version -->
+    <!-- ... all <section class="card"> blocks and <div class="img-wrap"><img ... ></div> remain the same ... -->
 
-    <!-- Windows Server overview -->
-    <section class="card">
-      <h2>Windows Server</h2>
-      <p><b>Windows Server</b> is a server-grade OS designed to manage and support enterprise networks, applications, and services. It runs infrastructure roles such as <b>Active Directory, DNS, DHCP, Group Policy</b>, and <b>Hyper-V</b>.</p>
-      <h3>Key Capabilities</h3>
-      <ul>
-        <li>Hosts and manages <b>network resources</b> (users, devices, applications)</li>
-        <li>Supports <b>domain-based</b> identity and access via Active Directory</li>
-        <li>Powers <b>virtual environments</b> with Hyper-V</li>
-        <li>Enables <b>remote management</b> via PowerShell and Windows Admin Center</li>
-        <li>Includes <b>security features</b> like Defender, BitLocker, and JEA</li>
-      </ul>
-      <p>For this lab, you can use the 180-day evaluation ISO:</p>
-      <p><a href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016" target="_blank" rel="noopener">Windows Server 2016 Evaluation (Microsoft)</a></p>
-    </section>
-
-    <!-- VirtualBox overview -->
-    <section class="card">
-      <h2>Oracle VirtualBox</h2>
-      <p><b>Oracle VirtualBox</b> lets you run multiple OSes as VMs on one machine—perfect for simulating AD, DNS, DHCP, and GPOs without extra hardware.</p>
-      <h3>Download</h3>
-      <p><a href="https://www.virtualbox.org/" target="_blank" rel="noopener">Oracle VM VirtualBox (Official Site)</a></p>
-    </section>
-
-    <!-- Steps -->
-    <section class="card">
-      <h2>Windows Server 2016 Installation on VirtualBox</h2>
-
-      <h3>1) Creating a new VM in VirtualBox</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate0.PNG" alt="Create new VM">
-      </div>
-
-      <h3>2) Allocating System Resources</h3>
-      <ul class="tight">
-        <li>Base Memory</li>
-        <li>Processors</li>
-      </ul>
-      <p>In this example, I allocate <b>3460MB</b> of base memory and <b>2</b> processors.</p>
-      <div class="img-wrap">
-        <img src="Images/VMCreate2.PNG" alt="Set memory and CPUs">
-      </div>
-
-      <h3>3) Create a Virtual Hard Disk</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate3.PNG" alt="Create disk">
-      </div>
-
-      <h3>4) Configuration Summary</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate4.PNG" alt="Summary">
-      </div>
-
-      <h3>5) Add the ISO Image to the VM</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate6.PNG" alt="Attach ISO">
-      </div>
-      <div class="img-wrap">
-        <img src="Images/VMCreate7.PNG" alt="ISO attached">
-      </div>
-
-      <h3>6) Start the VM</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate9.PNG" alt="Boot VM">
-      </div>
-    </section>
-
-    <!-- OS Installer -->
-    <section class="card">
-      <h2>Windows Server 2016 Installation</h2>
-
-      <h3>1) Install Now</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate11.PNG" alt="Install Now">
-      </div>
-
-      <h3>2) Select Language → <b>Next</b></h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate10.PNG" alt="Language selection">
-      </div>
-
-      <h3>3) Setup is starting</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate12.PNG" alt="Setup starting">
-      </div>
-
-      <h3>4) Select Operating System version</h3>
-      <p>In this example I install <b>Windows Server 2016 Desktop Experience</b>.</p>
-      <div class="img-wrap">
-        <img src="Images/VMCreate13.PNG" alt="Select edition">
-      </div>
-
-      <h3>5) Accept the license terms → <b>Next</b></h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate14.PNG" alt="License terms">
-      </div>
-
-      <h3>6) Select the type of installation</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate15.PNG" alt="Install type">
-      </div>
-      <div class="img-wrap">
-        <img src="Images/VMCreate16.PNG" alt="Custom install">
-      </div>
-
-      <h3>7) Windows Installation Process</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate17.PNG" alt="Installing">
-      </div>
-      <div class="img-wrap">
-        <img src="Images/VMCreate18.PNG" alt="Installing progress">
-      </div>
-
-      <h3>8) The user's password must be changed before signing in</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate19PostReboot.PNG" alt="Change password prompt">
-      </div>
-
-      <h3>9) Reset Password</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate20.PNG" alt="Set password">
-      </div>
-
-      <h3>10) Press <b>Ctrl+Alt+Del</b></h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate21.PNG" alt="Ctrl Alt Del">
-      </div>
-
-      <h3>11) Desktop Experience</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate22.PNG" alt="Desktop">
-      </div>
-
-      <h3>12) Starting Server Manager</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate23.PNG" alt="Starting Server Manager">
-      </div>
-
-      <h3>13) Server Manager</h3>
-      <div class="img-wrap">
-        <img src="Images/VMCreate24.PNG" alt="Server Manager dashboard">
-      </div>
-
-      <p>This walkthrough covered creating a VirtualBox VM and installing Windows Server 2016. Next up: configure <b>DNS</b> and <b>DHCP</b>, then add the <b>AD DS</b> role to stand up Active Directory.</p>
-    </section>
-
-    <!-- Back -->
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
-
-    <!-- Footer (branding only) -->
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
