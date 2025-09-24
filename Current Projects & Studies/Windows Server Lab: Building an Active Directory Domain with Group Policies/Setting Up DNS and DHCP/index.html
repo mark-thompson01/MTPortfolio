@@ -65,11 +65,40 @@
       height:auto;
       border:1px solid var(--card-border);
       border-radius:12px;
+      cursor: zoom-in; /* indicate zoomability */
     }
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
     footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+    /* Lightbox (zoom) for ALL images */
+    .lightbox{
+      position:fixed; inset:0; display:none; place-items:center;
+      background:rgba(0,0,0,.86); z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lb-stage{position:relative; max-width:96vw; max-height:92vh}
+    .lb-img{
+      display:block; width:auto; height:auto; max-width:96vw; max-height:92vh;
+      border-radius:12px; box-shadow:var(--shadow);
+    }
+    .lb-cap{color:#cfd6e6; font-size:13px; text-align:center; margin-top:8px}
+    .lb-btn{
+      position:absolute; top:10px; padding:6px 10px; border-radius:10px;
+      border:1px solid #2A3447; background:#0e1220; color:var(--text);
+      cursor:pointer; user-select:none;
+    }
+    .lb-close{right:10px}
+    .lb-prev,.lb-next{
+      top:50%; translate:0 -50%; width:44px; height:44px; display:grid; place-items:center;
+      border-radius:999px; font-size:20px; line-height:1;
+    }
+    .lb-prev{left:-58px}
+    .lb-next{right:-58px}
+    @media (max-width:700px){
+      .lb-prev{left:-8px} .lb-next{right:-8px}
+    }
   </style>
 </head>
 <body>
@@ -273,5 +302,50 @@
     </footer>
 
   </div>
+
+  <!-- Lightbox / zoom for ALL images (no markup changes required) -->
+  <script>
+    (function(){
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = `
+        <div class="lb-stage" role="dialog" aria-modal="true" aria-label="Image preview">
+          <button class="lb-btn lb-close" aria-label="Close (Esc)">✕</button>
+          <button class="lb-btn lb-prev" aria-label="Previous">&#10094;</button>
+          <img class="lb-img" alt="">
+          <button class="lb-btn lb-next" aria-label="Next">&#10095;</button>
+          <div class="lb-cap" aria-live="polite"></div>
+        </div>`;
+      document.body.appendChild(lb);
+
+      const imgEl = lb.querySelector('.lb-img');
+      const capEl = lb.querySelector('.lb-cap');
+      const btnClose = lb.querySelector('.lb-close');
+      const btnPrev  = lb.querySelector('.lb-prev');
+      const btnNext  = lb.querySelector('.lb-next');
+
+      function open(src, alt){
+        imgEl.src = src; imgEl.alt = alt || '';
+        capEl.textContent = alt || '';
+        // Standalone images only on this page → hide prev/next
+        btnPrev.style.display = btnNext.style.display = 'none';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        btnClose.focus();
+      }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+
+      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+      btnClose.addEventListener('click', close);
+      document.addEventListener('keydown', (e)=>{ if(lb.classList.contains('open') && e.key === 'Escape') close(); });
+
+      document.querySelectorAll('.img-wrap img').forEach((img)=>{
+        img.addEventListener('click', (e)=>{
+          e.preventDefault();
+          open(img.currentSrc || img.src, img.alt);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
