@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Linux Command‑Line · Mark Thompson Portfolio</title>
-  <meta name="description" content="Hands‑on guide to the Linux command line (Bash): navigation, files, viewing/searching, archiving, users & permissions, monitoring, packages, services, networking, utilities — with examples and screenshots." />
+  <title>Linux Command-Line · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hands-on guide to the Linux command line (Bash): navigation, files, viewing/searching, archiving, users & permissions, monitoring, packages, services, networking, utilities — with examples and screenshots." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -75,6 +75,22 @@
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
     footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+    /* ===== Lightbox (zoom for all images) ===== */
+    .lightbox{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.86);z-index:9999}
+    .lightbox.open{display:grid}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
+    .lb-img{display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;border-radius:12px;box-shadow:var(--shadow)}
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
+    .lb-btn{position:absolute;top:10px;padding:6px 10px;border-radius:10px;border:1px solid #2A3447;background:#0e1220;color:var(--text);cursor:pointer;user-select:none}
+    .lb-close{right:10px}
+    .lb-prev,.lb-next{top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;border-radius:999px;font-size:20px;line-height:1}
+    .lb-prev{left:-58px}
+    .lb-next{right:-58px}
+    @media (max-width:700px){
+      .lb-prev{left:-8px}
+      .lb-next{right:-8px}
+    }
   </style>
 </head>
 <body>
@@ -91,12 +107,12 @@
 
     <!-- Breadcrumb -->
     <div class="crumbs">
-      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Linux Command‑Line</span>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Linux Command-Line</span>
     </div>
 
     <!-- Header -->
     <header>
-      <h1>Linux Command‑Line (Bash Shell)</h1>
+      <h1>Linux Command-Line (Bash Shell)</h1>
       <p class="lead">The terminal + Bash give precise control over files, processes, networking, and more. Below are core commands with examples and screenshots.</p>
       <p>Commands you type are small programs (e.g., <code>/bin/ls</code>, <code>/bin/cp</code>). The terminal sends your input to the shell, usually <b>Bash</b> (Bourne Again Shell), which parses and executes them.</p>
     </header>
@@ -148,7 +164,7 @@ vi new_file.txt</code></pre>
       <ul>
         <li><b>touch</b> — create or update timestamp</li>
         <li><b>file</b> — identify file type</li>
-        <li><b>nano</b> — beginner‑friendly editor</li>
+        <li><b>nano</b> — beginner-friendly editor</li>
         <li><b>vi/vim</b> — powerful modal editor</li>
       </ul>
       <div class="gallery-wrap">
@@ -200,7 +216,7 @@ find /home -name "filename.txt"</code></pre>
       <ul>
         <li><b>tar</b> — create/extract archives</li>
         <li><b>locate</b> — indexed filename search</li>
-        <li><b>find</b> — real‑time search by name/size/time/etc.</li>
+        <li><b>find</b> — real-time search by name/size/time/etc.</li>
       </ul>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
@@ -249,7 +265,7 @@ top
 htop
 uname -a</code></pre>
       <ul>
-        <li><b>df -h</b> — filesystem space (human‑readable)</li>
+        <li><b>df -h</b> — filesystem space (human-readable)</li>
         <li><b>du -sh</b> — directory size summary</li>
         <li><b>top / htop</b> — live process viewers</li>
         <li><b>uname -a</b> — kernel/system info</li>
@@ -278,7 +294,7 @@ sudo dpkg -i package.deb</code></pre>
       <ul>
         <li><b>apt</b> — Debian/Ubuntu package tool</li>
         <li><b>dnf</b> — Fedora/RHEL package tool</li>
-        <li><b>dpkg</b> — low‑level .deb installer</li>
+        <li><b>dpkg</b> — low-level .deb installer</li>
       </ul>
       <div class="gallery-wrap">
         <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
@@ -337,7 +353,7 @@ sudo reboot</code></pre>
       <pre><code>wget http://example.com/file.zip
 curl http://example.com/file.zip -o file.zip</code></pre>
       <ul>
-        <li><b>wget</b> — non‑interactive downloader (HTTP/HTTPS/FTP)</li>
+        <li><b>wget</b> — non-interactive downloader (HTTP/HTTPS/FTP)</li>
         <li><b>curl</b> — flexible client for transfers, APIs, tests</li>
       </ul>
       <div class="gallery-wrap">
@@ -389,7 +405,7 @@ date</code></pre>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
         <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/mark-thompson-01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
 
@@ -412,6 +428,107 @@ date</code></pre>
             scroller.scrollLeft += e.deltaY; // vertical wheel → horizontal scroll
           }
         }, {passive:false});
+      });
+    })();
+  </script>
+
+  <!-- Lightbox / zoom for ALL images (galleries + standalone) -->
+  <script>
+    (function(){
+      // Build lightbox DOM
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = `
+        <div class="lb-stage" role="dialog" aria-modal="true" aria-label="Image preview">
+          <button class="lb-btn lb-close" aria-label="Close (Esc)">✕</button>
+          <button class="lb-btn lb-prev" aria-label="Previous">&#10094;</button>
+          <img class="lb-img" alt="">
+          <button class="lb-btn lb-next" aria-label="Next">&#10095;</button>
+          <div class="lb-cap" aria-live="polite"></div>
+        </div>`;
+      document.body.appendChild(lb);
+
+      const imgEl = lb.querySelector('.lb-img');
+      const capEl = lb.querySelector('.lb-cap');
+      const btnClose = lb.querySelector('.lb-close');
+      const btnPrev  = lb.querySelector('.lb-prev');
+      const btnNext  = lb.querySelector('.lb-next');
+
+      const groups = new Map(); // gid -> [img elements]
+      let current = { gid:null, idx:0 };
+
+      function getCaption(img){
+        const fig = img.closest('figure');
+        const cap = fig && fig.querySelector('.figcap');
+        return (cap && cap.textContent.trim()) || img.alt || '';
+      }
+
+      function setup(img, gid, index){
+        img.dataset.gid = gid;
+        img.dataset.gindex = index;
+        img.dataset.caption = getCaption(img);
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', (e)=>{ e.preventDefault(); open(gid, index); });
+      }
+
+      // 1) Group gallery images together
+      let gidCounter = 0;
+      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
+        const gid = 'g' + (++gidCounter);
+        const imgs = Array.from(wrap.querySelectorAll('.gallery img'));
+        if(!imgs.length) return;
+        groups.set(gid, imgs);
+        imgs.forEach((img,i)=> setup(img, gid, i));
+      });
+
+      // 2) Any remaining images (standalone) get their own single-image group
+      Array.from(document.querySelectorAll('img')).forEach((img)=>{
+        if(img.dataset.gid) return; // already grouped
+        const gid = 's' + (++gidCounter);
+        groups.set(gid, [img]);
+        setup(img, gid, 0);
+      });
+
+      function open(gid, idx){
+        const list = groups.get(gid);
+        if(!list) return;
+        current.gid = gid;
+        current.idx = idx;
+        update();
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        btnClose.focus();
+      }
+
+      function close(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        imgEl.removeAttribute('src');
+      }
+
+      function update(){
+        const list = groups.get(current.gid) || [];
+        const el = list[current.idx];
+        if(!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.dataset.caption || el.alt || '';
+        const multi = list.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
+      }
+
+      function prev(){ const list = groups.get(current.gid)||[]; if(!list.length) return; current.idx = (current.idx-1+list.length)%list.length; update(); }
+      function next(){ const list = groups.get(current.gid)||[]; if(!list.length) return; current.idx = (current.idx+1)%list.length; update(); }
+
+      btnClose.addEventListener('click', close);
+      btnPrev .addEventListener('click', prev);
+      btnNext .addEventListener('click', next);
+      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+      document.addEventListener('keydown', (e)=>{
+        if(!lb.classList.contains('open')) return;
+        if(e.key === 'Escape') close();
+        else if(e.key === 'ArrowLeft') prev();
+        else if(e.key === 'ArrowRight') next();
       });
     })();
   </script>
