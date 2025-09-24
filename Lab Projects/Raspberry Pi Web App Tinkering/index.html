@@ -62,7 +62,7 @@
       padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Figures – intrinsic image size (no zoom) */
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -86,6 +86,21 @@
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
     footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+    /* ===== Image Zoom (click-to-zoom) ===== */
+    .zoomable{cursor:zoom-in}
+    .zoom-overlay{
+      position:fixed; inset:0; display:none;
+      align-items:center; justify-content:center;
+      background:rgba(0,0,0,.8); z-index:9999; padding:24px;
+    }
+    .zoom-overlay.open{display:flex}
+    .zoom-overlay img{
+      max-width:min(1200px,94vw); max-height:90vh;
+      border-radius:12px; box-shadow:var(--shadow);
+      cursor:zoom-out;
+    }
+    body.zoom-open{overflow:hidden}
   </style>
 </head>
 <body>
@@ -144,7 +159,7 @@
         <li><strong>Analysis:</strong> Clear, professional documentation &amp; reporting</li>
       </ul>
       <figure class="figure">
-        <img src="Images/The%20Web%20Page.PNG" alt="Customized web page on Raspberry Pi">
+        <img src="Images/The%20Web%20Page.PNG" alt="Customized web page on Raspberry Pi" loading="lazy" decoding="async">
         <figcaption class="figcap">Customized web page used for testing.</figcaption>
       </figure>
     </section>
@@ -166,15 +181,15 @@
       <h3>Weak WebDAV Authentication</h3>
       <p>Enable WebDAV with <strong>Basic Auth</strong> and intentionally weak credentials.</p>
       <div class="pair">
-        <figure class="figure"><img src="Images/WebDAV%20BasicAuth.png" alt="webdav.conf with BasicAuth"></figure>
-        <figure class="figure"><img src="Images/WebDAV%20WeakPassSet.png" alt="Weak credentials configured for WebDAV"></figure>
+        <figure class="figure"><img src="Images/WebDAV%20BasicAuth.png" alt="webdav.conf with BasicAuth" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/WebDAV%20WeakPassSet.png" alt="Weak credentials configured for WebDAV" loading="lazy" decoding="async"></figure>
       </div>
 
       <h3>Directory Listings Enabled</h3>
       <p>Apache <code>Options Indexes</code> exposes directory listings when no default index is present.</p>
       <div class="pair">
-        <figure class="figure"><img src="Images/Directory%20Listings%201.png" alt="Indexes in apache2.conf"></figure>
-        <figure class="figure"><img src="Images/Directory%20Listings%20Enabled%202.png" alt="Indexes also enabled in webdav.conf"></figure>
+        <figure class="figure"><img src="Images/Directory%20Listings%201.png" alt="Indexes in apache2.conf" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Directory%20Listings%20Enabled%202.png" alt="Indexes also enabled in webdav.conf" loading="lazy" decoding="async"></figure>
       </div>
 
       <h3>Hidden Directories &amp; Files</h3>
@@ -182,17 +197,17 @@
 
       <h3>Exposed Sensitive Configuration</h3>
       <p>Example: a public <code>config.php</code> containing sensitive information.</p>
-      <figure class="figure"><img src="Images/Exposed%20Sensitive%20Configuration.png" alt="Exposed config.php"></figure>
+      <figure class="figure"><img src="Images/Exposed%20Sensitive%20Configuration.png" alt="Exposed config.php" loading="lazy" decoding="async"></figure>
 
       <h3>Crafted XSS Vulnerability</h3>
       <p>Convert <code>index.html</code> to <code>index.php</code> and inject reflected XSS via unsanitized query parameter.</p>
       <div class="pair">
-        <figure class="figure"><img src="Images/PHPFileConversion.png" alt="Renaming index.html to index.php"></figure>
-        <figure class="figure"><img src="Images/CodeCheck.png" alt="Verifying vulnerable PHP code presence"></figure>
+        <figure class="figure"><img src="Images/PHPFileConversion.png" alt="Renaming index.html to index.php" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/CodeCheck.png" alt="Verifying vulnerable PHP code presence" loading="lazy" decoding="async"></figure>
       </div>
       <div class="pair">
-        <figure class="figure"><img src="Images/XSS%20Vulnerable%20Code.png" alt="Reflected XSS code example"></figure>
-        <figure class="figure"><img src="Images/RestartApache.png" alt="Restarting Apache to load PHP"></figure>
+        <figure class="figure"><img src="Images/XSS%20Vulnerable%20Code.png" alt="Reflected XSS code example" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/RestartApache.png" alt="Restarting Apache to load PHP" loading="lazy" decoding="async"></figure>
       </div>
     </section>
 
@@ -201,22 +216,22 @@
       <h2>Active Recon</h2>
       <p>Create a Bash helper script to run initial Nmap sweeps, then save results; run WhatWeb for tech fingerprinting.</p>
       <div class="pair">
-        <figure class="figure"><img src="Images/Bash%20Script%20Creation1.PNG" alt="Bash script creation 1"></figure>
-        <figure class="figure"><img src="Images/Bash%20Script%20Creation2.PNG" alt="Bash script creation 2"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Creation1.PNG" alt="Bash script creation 1" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Creation2.PNG" alt="Bash script creation 2" loading="lazy" decoding="async"></figure>
       </div>
       <div class="pair">
-        <figure class="figure"><img src="Images/Bash%20Script%20Creation%205.PNG" alt="Bash script creation 3"></figure>
-        <figure class="figure"><img src="Images/Bash%20Script%20Run%201.PNG" alt="Script run 1"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Creation%205.PNG" alt="Bash script creation 3" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Run%201.PNG" alt="Script run 1" loading="lazy" decoding="async"></figure>
       </div>
       <div class="pair">
-        <figure class="figure"><img src="Images/Bash%20Script%20Run%202.PNG" alt="Script run 2"></figure>
-        <figure class="figure"><img src="Images/Bash%20Script%20Run%203.PNG" alt="Script run 3"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Run%202.PNG" alt="Script run 2" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Run%203.PNG" alt="Script run 3" loading="lazy" decoding="async"></figure>
       </div>
       <div class="pair">
-        <figure class="figure"><img src="Images/Bash%20Script%20Run%205.PNG" alt="Script run 4"></figure>
-        <figure class="figure"><img src="Images/Save%20Scan%20Results%20in%20File.PNG" alt="Saving scan results to file"></figure>
+        <figure class="figure"><img src="Images/Bash%20Script%20Run%205.PNG" alt="Script run 4" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Save%20Scan%20Results%20in%20File.PNG" alt="Saving scan results to file" loading="lazy" decoding="async"></figure>
       </div>
-      <figure class="figure"><img src="Images/WhatWeb.PNG" alt="WhatWeb fingerprinting"></figure>
+      <figure class="figure"><img src="Images/WhatWeb.PNG" alt="WhatWeb fingerprinting" loading="lazy" decoding="async"></figure>
     </section>
 
     <!-- Directory Busting -->
@@ -224,51 +239,51 @@
       <h2>Directory Busting</h2>
       <p>Discover hidden/interesting paths with Dirb, Dirbuster, and Gobuster.</p>
       <div class="pair">
-        <figure class="figure"><img src="Images/Dirb%20Run%201.PNG" alt="Dirb run"></figure>
-        <figure class="figure"><img src="Images/Dirbuster.PNG" alt="Dirbuster UI"></figure>
+        <figure class="figure"><img src="Images/Dirb%20Run%201.PNG" alt="Dirb run" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Dirbuster.PNG" alt="Dirbuster UI" loading="lazy" decoding="async"></figure>
       </div>
       <div class="pair">
-        <figure class="figure"><img src="Images/Dirbuster%202.PNG" alt="Dirbuster results 1"></figure>
-        <figure class="figure"><img src="Images/Dirbuster%203.PNG" alt="Dirbuster results 2"></figure>
+        <figure class="figure"><img src="Images/Dirbuster%202.PNG" alt="Dirbuster results 1" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Dirbuster%203.PNG" alt="Dirbuster results 2" loading="lazy" decoding="async"></figure>
       </div>
-      <figure class="figure"><img src="Images/Dirbuster%204.PNG" alt="Dirbuster results 3"></figure>
-      <figure class="figure"><img src="Images/gobuster.PNG" alt="Gobuster results"></figure>
+      <figure class="figure"><img src="Images/Dirbuster%204.PNG" alt="Dirbuster results 3" loading="lazy" decoding="async"></figure>
+      <figure class="figure"><img src="Images/gobuster.PNG" alt="Gobuster results" loading="lazy" decoding="async"></figure>
     </section>
 
     <!-- Burp Suite Recon -->
     <section class="card" id="burp">
       <h2>Active Recon with Burp Suite</h2>
       <p>Intercept a <code>GET</code> request, send to Repeater, and probe different HTTP methods.</p>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Browser%20Settings.PNG" alt="Firefox proxy settings for Burp"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Browser%20Settings.PNG" alt="Firefox proxy settings for Burp" loading="lazy" decoding="async"></figure>
       <div class="pair">
-        <figure class="figure"><img src="Images/Burp%20Suite%20Start.png" alt="Burp start"></figure>
-        <figure class="figure"><img src="Images/Burp%20Suite%20Start%202.png" alt="Burp start 2"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Start.png" alt="Burp start" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Start%202.png" alt="Burp start 2" loading="lazy" decoding="async"></figure>
       </div>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Intercept%20on.PNG" alt="Burp Proxy Intercept ON"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Intercept%20on.PNG" alt="Burp Proxy Intercept ON" loading="lazy" decoding="async"></figure>
       <div class="pair">
-        <figure class="figure"><img src="Images/The%20Web%20Page.PNG" alt="Target web page"></figure>
-        <figure class="figure"><img src="Images/Refresh%20Firefox.PNG" alt="Refreshing the page through proxy"></figure>
+        <figure class="figure"><img src="Images/The%20Web%20Page.PNG" alt="Target web page" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Refresh%20Firefox.PNG" alt="Refreshing the page through proxy" loading="lazy" decoding="async"></figure>
       </div>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Captured%20GET%20Request.PNG" alt="Captured GET request"></figure>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Send%20to%20Repeator.png" alt="Send to Repeater"></figure>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%201%20GET%20Request.PNG" alt="GET request in Repeater"></figure>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%202%20HEADRequestModify.PNG" alt="HEAD request in Repeater"></figure>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%203%20OPTIONSRequestModify.PNG" alt="OPTIONS request in Repeater"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Captured%20GET%20Request.PNG" alt="Captured GET request" loading="lazy" decoding="async"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Send%20to%20Repeator.png" alt="Send to Repeater" loading="lazy" decoding="async"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%201%20GET%20Request.PNG" alt="GET request in Repeater" loading="lazy" decoding="async"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%202%20HEADRequestModify.PNG" alt="HEAD request in Repeater" loading="lazy" decoding="async"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%203%20OPTIONSRequestModify.PNG" alt="OPTIONS request in Repeater" loading="lazy" decoding="async"></figure>
       <div class="pair">
-        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%204%20PUT.PNG" alt="PUT request response (405)"></figure>
-        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%205%20BadRequest.PNG" alt="POST/Bad Request example"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%204%20PUT.PNG" alt="PUT request response (405)" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%205%20BadRequest.PNG" alt="POST/Bad Request example" loading="lazy" decoding="async"></figure>
       </div>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Sitemap.PNG" alt="Burp Suite site map"></figure>
+      <figure class="figure"><img src="Images/Burp%20Suite%20Sitemap.PNG" alt="Burp Suite site map" loading="lazy" decoding="async"></figure>
     </section>
 
     <!-- Vulnerability Scanning -->
     <section class="card" id="vuln-scans">
       <h2>Vulnerability Scanning</h2>
       <h3>Nmap <code>--script vuln</code></h3>
-      <figure class="figure"><img src="Images/nmap%20vuln%20scan.PNG" alt="Nmap vulnerability scan results"></figure>
+      <figure class="figure"><img src="Images/nmap%20vuln%20scan.PNG" alt="Nmap vulnerability scan results" loading="lazy" decoding="async"></figure>
 
       <h3>Nikto Scan</h3>
-      <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto scan findings"></figure>
+      <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto scan findings" loading="lazy" decoding="async"></figure>
     </section>
 
     <!-- Exploitation -->
@@ -279,37 +294,37 @@
       <p>Exploit the vulnerable <code>index.php</code> by passing a crafted <code>?query=</code> value.</p>
       <pre><code>http://192.168.1.103/index.php?query=test</code></pre>
       <div class="pair">
-        <figure class="figure"><img src="Images/XSSTest1.png" alt="XSS test 1"></figure>
-        <figure class="figure"><img src="Images/XSSTest2.png" alt="XSS test 2"></figure>
+        <figure class="figure"><img src="Images/XSSTest1.png" alt="XSS test 1" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/XSSTest2.png" alt="XSS test 2" loading="lazy" decoding="async"></figure>
       </div>
       <div class="pair">
-        <figure class="figure"><img src="Images/XSSTest3.png" alt="XSS test 3"></figure>
-        <figure class="figure"><img src="Images/XSSTest4.png" alt="XSS test 4"></figure>
+        <figure class="figure"><img src="Images/XSSTest3.png" alt="XSS test 3" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/XSSTest4.png" alt="XSS test 4" loading="lazy" decoding="async"></figure>
       </div>
 
       <h4>Mitigation</h4>
       <p>Sanitize and encode user input before output. Example using <code>htmlspecialchars()</code>:</p>
-      <figure class="figure"><img src="Images/XSSFix.png" alt="Using htmlspecialchars() to mitigate reflected XSS"></figure>
+      <figure class="figure"><img src="Images/XSSFix.png" alt="Using htmlspecialchars() to mitigate reflected XSS" loading="lazy" decoding="async"></figure>
       <p>Also consider strict input validation and a defensive <strong>Content-Security-Policy</strong>.</p>
       <div class="pair">
-        <figure class="figure"><img src="Images/queryparamSecure.png" alt="Restricting query parameter to safe characters"></figure>
-        <figure class="figure"><img src="Images/CSP.png" alt="Example CSP header"></figure>
+        <figure class="figure"><img src="Images/queryparamSecure.png" alt="Restricting query parameter to safe characters" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/CSP.png" alt="Example CSP header" loading="lazy" decoding="async"></figure>
       </div>
 
       <h3>Exploiting WebDAV</h3>
       <p>Weak Basic Auth on <code>/webdav</code> can be brute forced—or discovered via scanning. Once credentials are known, upload a PHP payload and gain a shell.</p>
-      <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto exposing weak WebDAV auth"></figure>
+      <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto exposing weak WebDAV auth" loading="lazy" decoding="async"></figure>
       <div class="pair">
-        <figure class="figure"><img src="Images/WebDAVLoginPrompt.png" alt="WebDAV login prompt"></figure>
-        <figure class="figure"><img src="Images/WebDAVLogin2.png" alt="Entering credentials"></figure>
+        <figure class="figure"><img src="Images/WebDAVLoginPrompt.png" alt="WebDAV login prompt" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/WebDAVLogin2.png" alt="Entering credentials" loading="lazy" decoding="async"></figure>
       </div>
-      <figure class="figure"><img src="Images/WebDAVLoginSuccess.png" alt="Successful WebDAV login"></figure>
-      <figure class="figure"><img src="Images/msfvenomCadaver.png" alt="Generating payload and uploading with cadaver"></figure>
+      <figure class="figure"><img src="Images/WebDAVLoginSuccess.png" alt="Successful WebDAV login" loading="lazy" decoding="async"></figure>
+      <figure class="figure"><img src="Images/msfvenomCadaver.png" alt="Generating payload and uploading with cadaver" loading="lazy" decoding="async"></figure>
       <div class="pair">
-        <figure class="figure"><img src="Images/ShellUploadSuccess.png" alt="Payload visible on site"></figure>
-        <figure class="figure"><img src="Images/msflistener.png" alt="Metasploit reverse handler"></figure>
+        <figure class="figure"><img src="Images/ShellUploadSuccess.png" alt="Payload visible on site" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/msflistener.png" alt="Metasploit reverse handler" loading="lazy" decoding="async"></figure>
       </div>
-      <figure class="figure"><img src="Images/meterpreter2%20(1).png" alt="Meterpreter session obtained"></figure>
+      <figure class="figure"><img src="Images/meterpreter2%20(1).png" alt="Meterpreter session obtained" loading="lazy" decoding="async"></figure>
     </section>
 
     <!-- Analysis & Reporting -->
@@ -359,5 +374,39 @@
       </div>
     </footer>
   </div>
+
+  <!-- Tiny, reusable click-to-zoom for all images -->
+  <script>
+    (function(){
+      const imgs = document.querySelectorAll('.wrap img');
+      if(!imgs.length) return;
+
+      const overlay = document.createElement('div');
+      overlay.className = 'zoom-overlay';
+      overlay.innerHTML = '<img alt="">';
+      document.body.appendChild(overlay);
+      const ovImg = overlay.querySelector('img');
+
+      function closeZoom(){
+        overlay.classList.remove('open');
+        document.body.classList.remove('zoom-open');
+        ovImg.removeAttribute('src');
+        ovImg.removeAttribute('srcset');
+      }
+
+      overlay.addEventListener('click', closeZoom);
+      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeZoom(); });
+
+      imgs.forEach(img=>{
+        img.classList.add('zoomable');
+        img.addEventListener('click', ()=>{
+          ovImg.alt = img.alt || '';
+          ovImg.src = img.currentSrc || img.src;
+          overlay.classList.add('open');
+          document.body.classList.add('zoom-open');
+        }, {passive:true});
+      });
+    })();
+  </script>
 </body>
 </html>
