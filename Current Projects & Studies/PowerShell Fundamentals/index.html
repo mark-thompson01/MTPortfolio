@@ -50,7 +50,7 @@
       box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    /* Figures: intrinsic sizing (no zoom above Files & Dirs) */
+    /* Figures: intrinsic sizing */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -98,7 +98,7 @@
     .gprev{left:-6px}
     .gnext{right:-6px}
 
-    /* Lightbox (zoom) — only used for gallery images */
+    /* Lightbox (zoom) — used for ALL images now */
     .lightbox{
       position:fixed; inset:0; display:none; place-items:center;
       background:rgba(0,0,0,.86); z-index:9999;
@@ -242,7 +242,7 @@
         </tbody>
       </table>
 
-      <!-- Single figures (no gallery/zoom above this point) -->
+      <!-- Single figures (now zoom-enabled) -->
       <div class="figure"><img src="Images/GetHelp.png" alt="Get-Help screenshot"></div>
       <div class="figure"><img src="Images/GetCommand.png" alt="Get-Command screenshot"></div>
       <div class="figure"><img src="Images/GetProcess.png" alt="Get-Process screenshot"></div>
@@ -586,7 +586,7 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
     })();
   </script>
 
-  <!-- Lightbox / zoom for gallery images only (no history/hash; ESC/back behaves normally) -->
+  <!-- Lightbox / zoom for ALL images (single figures & galleries) -->
   <script>
     (function(){
       // Build lightbox
@@ -608,25 +608,33 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
       const btnPrev  = lb.querySelector('.lb-prev');
       const btnNext  = lb.querySelector('.lb-next');
 
-      let groups = new Map();           // galleryId -> [imgElements]
+      const groups = new Map();            // galleryId -> [imgElements]
+      let gidCounter = 0;
       let current = { gid:null, idx:0 };
 
-      // Index gallery images (only from .gallery-wrap sections)
-      let gidCounter = 0;
+      // 1) Index gallery images (within .gallery-wrap)
       document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
         const gid = 'g' + (++gidCounter);
         const imgs = Array.from(wrap.querySelectorAll('.gallery img'));
-        if (imgs.length === 0) return;
+        if (!imgs.length) return;
         groups.set(gid, imgs);
-        imgs.forEach((img,i)=>{
+        imgs.forEach((img, i)=>{
           img.dataset.gid = gid;
           img.dataset.gindex = i;
           img.style.cursor = 'zoom-in';
-          img.addEventListener('click', (e)=>{
-            e.preventDefault();
-            open(gid, i);
-          });
+          img.addEventListener('click', (e)=>{ e.preventDefault(); open(gid, i); });
         });
+      });
+
+      // 2) Index standalone images (any .figure img NOT already in a group)
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        if (img.dataset.gid) return; // already grouped via gallery
+        const gid = 's' + (++gidCounter);
+        groups.set(gid, [img]);
+        img.dataset.gid = gid;
+        img.dataset.gindex = 0;
+        img.style.cursor = 'zoom-in';
+        img.addEventListener('click', (e)=>{ e.preventDefault(); open(gid, 0); });
       });
 
       function open(gid, idx){
@@ -651,7 +659,7 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
         imgEl.src = el.currentSrc || el.src;
         imgEl.alt = el.alt || '';
         capEl.textContent = el.alt || '';
-        // enable/disable prev/next when single image
+        // show prev/next only when group has multiple images
         const multi = list.length > 1;
         btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
