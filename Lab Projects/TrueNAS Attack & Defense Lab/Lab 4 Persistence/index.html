@@ -108,6 +108,7 @@
       display:grid; place-items:center; font-size:22px; line-height:1; cursor:pointer;
     }
     .zoom-close:hover{background:#121733}
+    .zoom-close:focus{outline:2px solid #4DA3FF; outline-offset:2px}
     .hide-scroll{overflow:hidden}
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
@@ -116,7 +117,7 @@
   </style>
 </head>
 <body>
-  <div class="wrap wide">
+  <div class="wrap wide" id="pageRoot">
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
@@ -280,13 +281,13 @@
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
         <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/mark-thompson-01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
   </div>
 
   <!-- Zoom modal (built once, reused) -->
-  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-label="Image viewer">
+  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image viewer">
     <div class="zoom-content" data-close>
       <img class="zoom-img" id="zoomImg" alt="">
       <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
@@ -295,24 +296,35 @@
 
   <script>
     (function(){
+      const root = document.getElementById('pageRoot');
       const modal = document.getElementById('zoom');
       const zoomImg = document.getElementById('zoomImg');
       const closeBtn = modal.querySelector('.zoom-close');
+      let lastFocus = null;
+
+      // Auto-mark all figure images as zoomable (opt out by adding .no-zoom)
+      document.querySelectorAll('.figure img:not(.no-zoom)').forEach(img=>{
+        img.classList.add('zoomable');
+      });
 
       function openModal(src, alt){
+        lastFocus = document.activeElement;
         zoomImg.src = src;
         zoomImg.alt = alt || '';
         modal.setAttribute('open', '');
         modal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('hide-scroll');
+        root && root.setAttribute('aria-hidden', 'true');
         closeBtn.focus();
       }
       function closeModal(){
         modal.removeAttribute('open');
         modal.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('hide-scroll');
-        zoomImg.src = '';
+        root && root.removeAttribute('aria-hidden');
+        zoomImg.removeAttribute('src');
         zoomImg.alt = '';
+        if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
       }
 
       // Click any .figure img.zoomable to zoom
@@ -333,6 +345,8 @@
       document.addEventListener('keydown', (e) => {
         if (!modal.hasAttribute('open')) return;
         if (e.key === 'Escape') closeModal();
+        // trap focus inside the modal (single button)
+        if (e.key === 'Tab'){ e.preventDefault(); closeBtn.focus(); }
       });
     })();
   </script>
