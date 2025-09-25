@@ -10,8 +10,6 @@
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
       --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
       --radius:18px;
-      --pill-bg:#142035; --pill-bd:#2a3b5c;
-      --tip-bg:#0e1426; --tip-bd:#213056;
     }
     html,body{height:100%}
     body{
@@ -28,20 +26,20 @@
     /* Top nav */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
     .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
-    .topnav a:hover,.topnav a:focus-visible{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
     /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
-    .crumbs a:hover,.crumbs a:focus-visible{color:var(--text);text-decoration:underline}
+    .crumbs a:hover{color:var(--text)}
 
     /* Headings & links */
     h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     h2{margin:0 0 10px;font-size:22px}
     h3{margin:16px 0 8px;font-size:18px}
     a{color:var(--brand);text-decoration:none}
-    a:hover,a:focus-visible{text-decoration:underline}
+    a:hover{text-decoration:underline}
     .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
     /* Cards / sections */
@@ -51,18 +49,7 @@
       box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    /* Sticky mini TOC */
-    .toc{
-      position:sticky; top:8px; z-index:5;
-      display:flex; gap:10px; overflow:auto; padding:10px 0 4px; margin:6px 0 14px;
-    }
-    .toc a{
-      color:var(--muted); border:1px solid #25324a; background:#0e1422;
-      border-radius:999px; padding:6px 10px; white-space:nowrap; text-decoration:none;
-    }
-    .toc a:hover,.toc a:focus-visible{color:var(--text);border-color:#3a4a67}
-
-    /* Figures: keep inline sizes; downscale if viewport is narrower */
+    /* Figures: keep your original inline sizes; only downscale if viewport is narrower */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -76,43 +63,26 @@
     .figure img{
       display:block;
       height:auto;
-      max-width:100%;
+      max-width:100%; /* responsive downscale only */
+      cursor: zoom-in;
       border-radius:10px;
     }
 
-    /* Code/pre + copy button */
+    /* Code/pre */
     pre{
-      position:relative;
       margin:10px 0;
-      padding:12px 14px 14px 14px;
+      padding:12px 14px;
       background:#0f1424;
       border:1px solid #202a3f;
-      border-radius:12px; overflow:auto; color:#e8eaf6;
+      border-radius:12px;
+      overflow:auto;
+      color:#e8eaf6;
       font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
     }
     code{
       background:#0f1424;border:1px solid #202a3f;border-radius:6px;
       padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-    }
-    .copy-btn{
-      position:absolute; top:8px; right:8px;
-      padding:4px 8px; font-size:12px; color:var(--text);
-      background:#0e1220; border:1px solid #2b3a57; border-radius:8px; cursor:pointer;
-    }
-    .copy-btn:hover,.copy-btn:focus-visible{border-color:#3a4a67}
-
-    /* Pills for Event IDs */
-    .event-id{
-      display:inline-block; padding:2px 8px; border-radius:999px;
-      background:var(--pill-bg); border:1px solid var(--pill-bd); color:#d7e3ff;
-      font-weight:700;
-    }
-
-    /* Tips */
-    .tip{
-      border:1px solid var(--tip-bd); background:var(--tip-bg);
-      border-radius:10px; padding:10px 12px; color:#c9d3ea; margin:10px 0;
     }
 
     ul{padding-left:22px;margin:8px 0}
@@ -122,6 +92,15 @@
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
     footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+    /* Image zoom modal */
+    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
+    .zoom-modal[open]{display:block}
+    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
+    .zoom-img{max-width:95vw;max-height:95vh;width:auto;height:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out}
+    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;line-height:1;cursor:pointer}
+    .zoom-close:hover{background:#121733}
+    .hide-scroll{overflow:hidden}
   </style>
 </head>
 <body>
@@ -137,8 +116,8 @@
     </nav>
 
     <!-- Breadcrumb -->
-    <div class="crumbs" aria-label="Breadcrumb">
-      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span aria-current="page">Windows Event Viewer Guide</span>
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Windows Event Viewer Guide</span>
     </div>
 
     <!-- Header -->
@@ -150,224 +129,178 @@
           View this project on GitHub
         </a>
       </p>
-      <nav class="toc" aria-label="On this page">
-        <a href="#crashes">Crashes</a>
-        <a href="#app-crashes">App Crashes</a>
-        <a href="#logons">Logon/Logoff</a>
-        <a href="#updates">Windows Update</a>
-        <a href="#gpo">Group Policy</a>
-        <a href="#perf">Performance</a>
-        <a href="#drivers">Drivers</a>
-        <a href="#security">Security</a>
-        <a href="#printing">Printing</a>
-        <a href="#best-practices">Best Practices</a>
-      </nav>
     </header>
 
     <!-- Section 1 -->
-    <section class="card" id="crashes">
+    <section class="card">
       <h2>1. System Crashes or Unexpected Reboots</h2>
       <ul>
-        <li><span class="event-id">6008</span> – Unexpected shutdown</li>
-        <li><span class="event-id">41 (Kernel-Power)</span> – System rebooted without clean shutdown</li>
+        <li><strong class="event-id">6008</strong> – Unexpected shutdown</li>
+        <li><strong class="event-id">41 (Kernel-Power)</strong> – System rebooted without clean shutdown</li>
       </ul>
       <p><strong>Log Location:</strong> Windows Logs → System</p>
       <p><strong>Other Related Event IDs:</strong> <span class="event-id">1001</span> – Bugcheck codes (BSOD details)</p>
 
-      <div class="tip"><strong>PowerShell quick filter:</strong></div>
-      <pre><code>Get-WinEvent -FilterHashtable @{LogName='System'; Id=6008,41} -MaxEvents 50 |
-Select-Object TimeCreated, Id, LevelDisplayName, ProviderName, Message</code></pre>
-
       <h3>6008 – Unexpected Shutdown</h3>
-      <div class="figure"><img src="Images/6008.png" alt="Event 6008 example" loading="lazy" decoding="async" style="width:800px; height:450px;"></div>
-      <div class="figure"><img src="Images/6008-2.png" alt="Event 6008 details" loading="lazy" decoding="async" style="width:550px; height:350px;"></div>
+      <div class="figure"><img src="Images/6008.png" alt="Event 6008 example" style="width:800px; height:450px;"></div>
+      <div class="figure"><img src="Images/6008-2.png" alt="Event 6008 details" style="width:550px; height:350px;"></div>
 
       <h3>41 (Kernel-Power) – Rebooted without Clean Shutdown</h3>
-      <div class="figure"><img src="Images/41.png" alt="Event 41 Kernel-Power" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/41.png" alt="Event 41 Kernel-Power"></div>
     </section>
 
     <!-- Section 2 -->
-    <section class="card" id="app-crashes">
+    <section class="card">
       <h2>2. Application Crashes or Freezes</h2>
       <ul>
-        <li><span class="event-id">1000</span> – Application Error</li>
-        <li><span class="event-id">1001</span> – Windows Error Reporting</li>
-        <li><span class="event-id">1002</span> – Application Hang</li>
+        <li><strong class="event-id">1000</strong> – Application Error</li>
+        <li><strong class="event-id">1001</strong> – Windows Error Reporting</li>
+        <li><strong class="event-id">1002</strong> – Application Hang</li>
       </ul>
       <p><strong>Log Location:</strong> Windows Logs → Application</p>
 
-      <div class="tip"><strong>PowerShell quick filter:</strong></div>
-      <pre><code>Get-WinEvent -FilterHashtable @{LogName='Application'; Id=1000,1001,1002} -MaxEvents 50 |
-Select-Object TimeCreated, Id, LevelDisplayName, ProviderName, Message</code></pre>
-
       <h3>1000 – Application Error</h3>
-      <div class="figure"><img src="Images/1000.png" alt="Event 1000 Application Error" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/1000.png" alt="Event 1000 Application Error"></div>
 
       <h3>1001 – Windows Error Reporting</h3>
-      <div class="figure"><img src="Images/1001.png" alt="Event 1001 Windows Error Reporting" loading="lazy" decoding="async"></div>
-      <div class="figure"><img src="Images/1001-2.png" alt="Event 1001 additional details" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/1001.png" alt="Event 1001 Windows Error Reporting"></div>
+      <div class="figure"><img src="Images/1001-2.png" alt="Event 1001 additional details"></div>
 
       <h3>1002 – Application Hang</h3>
-      <div class="figure"><img src="Images/1002.png" alt="Event 1002 Application Hang" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/1002.png" alt="Event 1002 Application Hang"></div>
     </section>
 
     <!-- Section 3 -->
-    <section class="card" id="logons">
+    <section class="card">
       <h2>3. User Account Logon/Logoff Issues</h2>
       <ul>
-        <li><span class="event-id">4624</span> – Successful logon</li>
-        <li><span class="event-id">4625</span> – Logon failure</li>
-        <li><span class="event-id">4634</span> – Logoff events</li>
+        <li><strong class="event-id">4624</strong> – Successful logon</li>
+        <li><strong class="event-id">4625</strong> – Logon failure</li>
+        <li><strong class="event-id">4634</strong> – Logoff events</li>
       </ul>
       <p><strong>Log Location:</strong> Windows Logs → Security</p>
-      <div class="tip">Run PowerShell as Administrator to query the Security log.</div>
-      <pre><code>Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4624,4625,4634} -MaxEvents 50 |
-Select-Object TimeCreated, Id, LevelDisplayName, Message</code></pre>
 
       <h3>4624 – Successful Logon</h3>
-      <div class="figure"><img src="Images/4624.png" alt="Event 4624 Successful Logon" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/4624.png" alt="Event 4624 Successful Logon"></div>
 
       <h3>4625 – Logon Failure</h3>
-      <div class="figure"><img src="Images/4625.PNG" alt="Event 4625 Logon Failure" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/4625.PNG" alt="Event 4625 Logon Failure"></div>
 
       <h3>4634 – Logoff Events</h3>
-      <div class="figure"><img src="Images/4634.PNG" alt="Event 4634 Logoff summary" loading="lazy" decoding="async" style="width:800px; height:200px;"></div>
-      <div class="figure"><img src="Images/4634-2.PNG" alt="Event 4634 details" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/4634.PNG" alt="Event 4634 Logoff summary" style="width:800px; height:200px;"></div>
+      <div class="figure"><img src="Images/4634-2.PNG" alt="Event 4634 details"></div>
     </section>
 
     <!-- Section 4 -->
-    <section class="card" id="updates">
+    <section class="card">
       <h2>4. Windows Update Problems</h2>
       <ul><li>Failure events and error codes indicating update issues.</li></ul>
       <p><strong>Log Location:</strong> Windows Logs → System; Applications and Services Logs → Microsoft → Windows → WindowsUpdateClient → Operational</p>
-      <pre><code># Update Client operational log
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-WindowsUpdateClient/Operational'} -MaxEvents 100 |
-Select-Object TimeCreated, Id, Message</code></pre>
-      <div class="figure"><img src="Images/WU1.png" alt="Windows Update log view" loading="lazy" decoding="async" style="width:900px; height:300px;"></div>
-      <div class="figure"><img src="Images/WU2.png" alt="Windows Update error details" loading="lazy" decoding="async" style="width:600px; height:400px;"></div>
-      <div class="figure"><img src="Images/WU3.png" alt="Windows Update codes" loading="lazy" decoding="async" style="width:900px; height:300px;"></div>
-      <div class="figure"><img src="Images/WU4.png" alt="Windows Update Client Operational" loading="lazy" decoding="async" style="width:600px; height:400px;"></div>
+      <div class="figure"><img src="Images/WU1.png" alt="Windows Update log view" style="width:900px; height:300px;"></div>
+      <div class="figure"><img src="Images/WU2.png" alt="Windows Update error details" style="width:600px; height:400px;"></div>
+      <div class="figure"><img src="Images/WU3.png" alt="Windows Update codes" style="width:900px; height:300px;"></div>
+      <div class="figure"><img src="Images/WU4.png" alt="Windows Update Client Operational" style="width:600px; height:400px;"></div>
     </section>
 
     <!-- Section 5 -->
-    <section class="card" id="gpo">
+    <section class="card">
       <h2>5. Group Policy (GPO) Issues</h2>
       <ul>
-        <li><span class="event-id">7017</span> – GPO client-side extension errors</li>
-        <li><span class="event-id">1129</span> – Policy processing issues at startup/logon</li>
+        <li><strong class="event-id">7017</strong> – GPO client-side extension errors</li>
+        <li><strong class="event-id">1129</strong> – Policy processing issues at startup/logon</li>
       </ul>
       <p><strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → GroupPolicy → Operational</p>
       <p><strong>Other Related Event IDs:</strong> <span class="event-id">1058, 1030</span> – Problems accessing or applying GPOs</p>
-      <pre><code>Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-GroupPolicy/Operational'; Id=7017,1129,1058,1030} -MaxEvents 100 |
-Select-Object TimeCreated, Id, Message</code></pre>
 
-      <h3>7017</h3>
-      <div class="figure"><img src="Images/7017.png" alt="Event 7017 GPO client-side extension" loading="lazy" decoding="async"></div>
+        <h3>7017</h3>
+        <div class="figure"><img src="Images/7017.png" alt="Event 7017 GPO client-side extension"></div>
 
-      <h3>1129</h3>
-      <div class="figure"><img src="Images/1129.png" alt="Event 1129 policy processing issue" loading="lazy" decoding="async" style="width:900px; height:400px;"></div>
-      <div class="figure"><img src="Images/1129-2.png" alt="Event 1129 details" loading="lazy" decoding="async" style="width:600px; height:400px;"></div>
+        <h3>1129</h3>
+        <div class="figure"><img src="Images/1129.png" alt="Event 1129 policy processing issue" style="width:900px; height:400px;"></div>
+        <div class="figure"><img src="Images/1129-2.png" alt="Event 1129 details" style="width:600px; height:400px;"></div>
     </section>
 
     <!-- Section 6 -->
-    <section class="card" id="perf">
+    <section class="card">
       <h2>6. Performance Issues (Slow Boot or Login)</h2>
       <ul>
-        <li><span class="event-id">100</span> – Boot Performance (slow boot)</li>
-        <li><span class="event-id">101</span> – Application Performance (slow app start)</li>
-        <li><span class="event-id">200</span> – Shutdown Performance (slow shutdown)</li>
+        <li><strong class="event-id">100</strong> – Boot Performance (slow boot)</li>
+        <li><strong class="event-id">101</strong> – Application Performance (slow app start)</li>
+        <li><strong class="event-id">200</strong> – Shutdown Performance (slow shutdown)</li>
       </ul>
       <p><strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → Diagnostics-Performance → Operational</p>
-      <pre><code>Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Diagnostics-Performance/Operational'; Id=100,101,200} -MaxEvents 100 |
-Select-Object TimeCreated, Id, Message</code></pre>
 
       <h3>100 – Boot Performance</h3>
-      <div class="figure"><img src="Images/100.png" alt="Event 100 boot performance" loading="lazy" decoding="async"></div>
-      <div class="figure"><img src="Images/100-2.png" alt="Event 100 additional details" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/100.png" alt="Event 100 boot performance"></div>
+      <div class="figure"><img src="Images/100-2.png" alt="Event 100 additional details"></div>
 
       <h3>101 – Application Performance</h3>
-      <div class="figure"><img src="Images/101.png" alt="Event 101 slow app start" loading="lazy" decoding="async" style="width:800px; height:559px;"></div>
-      <div class="figure"><img src="Images/101-2.png" alt="Event 101 additional details" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/101.png" alt="Event 101 slow app start" style="width:800px; height:559px;"></div>
+      <div class="figure"><img src="Images/101-2.png" alt="Event 101 additional details"></div>
 
       <h3>200 – Shutdown Performance</h3>
-      <div class="figure"><img src="Images/200.png" alt="Event 200 slow shutdown" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/200.png" alt="Event 200 slow shutdown"></div>
     </section>
 
     <!-- Section 7 -->
-    <section class="card" id="drivers">
+    <section class="card">
       <h2>7. Driver Issues or Device Failures</h2>
       <ul>
-        <li><span class="event-id">7000, 7001</span> – Driver/service failed to start</li>
-        <li><span class="event-id">7026</span> – Driver loading failures</li>
+        <li><strong class="event-id">7000, 7001</strong> – Driver/service failed to start</li>
+        <li><strong class="event-id">7026</strong> – Driver loading failures</li>
       </ul>
       <p><strong>Log Location:</strong> Windows Logs → System</p>
-      <pre><code>Get-WinEvent -FilterHashtable @{LogName='System'; Id=7000,7001,7026} -MaxEvents 100 |
-Select-Object TimeCreated, Id, ProviderName, Message</code></pre>
 
       <h3>7000 – Service Failed to Start</h3>
-      <div class="figure"><img src="Images/7000.png" alt="Event 7000 service failed to start" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/7000.png" alt="Event 7000 service failed to start"></div>
 
       <h3>7026 – Driver Loading Failures</h3>
-      <div class="figure"><img src="Images/7026.png" alt="Event 7026 driver loading failure" loading="lazy" decoding="async"></div>
-      <div class="figure"><img src="Images/7026-2.png" alt="Event 7026 more details" loading="lazy" decoding="async" style="width:600px; height:400px;"></div>
+      <div class="figure"><img src="Images/7026.png" alt="Event 7026 driver loading failure"></div>
+      <div class="figure"><img src="Images/7026-2.png" alt="Event 7026 more details" style="width:600px; height:400px;"></div>
     </section>
 
     <!-- Section 8 -->
-    <section class="card" id="security">
+    <section class="card">
       <h2>8. Malware or Security Incidents</h2>
       <ul>
-        <li><span class="event-id">1116, 1117</span> – Malware detection (Windows Defender)</li>
-        <li><span class="event-id">4625</span> – Multiple failed logins (possible brute force)</li>
+        <li><strong class="event-id">1116, 1117</strong> – Malware detection (Windows Defender)</li>
+        <li><strong class="event-id">4625</strong> – Multiple failed logins (possible brute force)</li>
       </ul>
       <p><strong>Log Location:</strong> Windows Logs → Security, Application, Windows Defender</p>
-      <pre><code># Defender
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Defender/Operational'; Id=1116,1117} -MaxEvents 100 |
-Select-Object TimeCreated, Id, Message
-
-# Failed logons
-Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625} -MaxEvents 100 |
-Select-Object TimeCreated, Id, Message</code></pre>
 
       <h3>Malware Detection – Windows Defender</h3>
       <h3>1116</h3>
-      <div class="figure"><img src="Images/1116.png" alt="Event 1116 malware detected" loading="lazy" decoding="async"></div>
-      <div class="figure"><img src="Images/1116-2.png" alt="Event 1116 details" loading="lazy" decoding="async" style="width:600px; height:400px;"></div>
+      <div class="figure"><img src="Images/1116.png" alt="Event 1116 malware detected"></div>
+      <div class="figure"><img src="Images/1116-2.png" alt="Event 1116 details" style="width:600px; height:400px;"></div>
 
       <h3>1117</h3>
-      <div class="figure"><img src="Images/1117.png" alt="Event 1117 malware cleaned/quarantined" loading="lazy" decoding="async"></div>
-      <div class="figure"><img src="Images/1117-2.png" alt="Event 1117 details" loading="lazy" decoding="async" style="width:600px; height:400px;"></div>
+      <div class="figure"><img src="Images/1117.png" alt="Event 1117 malware cleaned/quarantined"></div>
+      <div class="figure"><img src="Images/1117-2.png" alt="Event 1117 details" style="width:600px; height:400px;"></div>
 
       <h3>4625 – Multiple Failed Login Attempts</h3>
-      <div class="figure"><img src="Images/MFailedLA.png" alt="Event 4625 multiple failed logons" loading="lazy" decoding="async"></div>
+      <div class="figure"><img src="Images/MFailedLA.png" alt="Event 4625 multiple failed logons"></div>
     </section>
 
     <!-- Section 9 -->
-    <section class="card" id="printing">
+    <section class="card">
       <h2>9. Print Job Failures</h2>
       <ul>
-        <li><span class="event-id">307, 372</span> – Print job failures or issues</li>
-        <li><span class="event-id">7031</span> – Spooler service errors</li>
+        <li><strong class="event-id">307, 372</strong> – Print job failures or issues</li>
+        <li><strong class="event-id">7031</strong> – Spooler service errors</li>
       </ul>
       <p><strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → PrintService → Operational</p>
-      <pre><code># PrintService
-Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PrintService/Operational'; Id=307,372} -MaxEvents 100 |
-Select-Object TimeCreated, Id, Message
-
-# Spooler (System)
-Get-WinEvent -FilterHashtable @{LogName='System'; Id=7031} -MaxEvents 50 |
-Select-Object TimeCreated, Id, ProviderName, Message</code></pre>
 
       <h3>307</h3>
-      <div class="figure"><img src="Images/307.png" alt="Event 307 print job failure" loading="lazy" decoding="async" style="width:900px; height:300px;"></div>
-      <div class="figure"><img src="Images/307-2.png" alt="Event 307 more details" loading="lazy" decoding="async" style="width:600px; height:400px;"></div>
+      <div class="figure"><img src="Images/307.png" alt="Event 307 print job failure" style="width:900px; height:300px;"></div>
+      <div class="figure"><img src="Images/307-2.png" alt="Event 307 more details" style="width:600px; height:400px;"></div>
 
       <h3>7031 – Spooler Service Errors</h3>
-      <div class="figure"><img src="Images/7031.png" alt="Event 7031 spooler service error" loading="lazy" decoding="async" style="width:900px; height:450px;"></div>
-      <div class="figure"><img src="Images/7031-2.png" alt="Event 7031 additional details" loading="lazy" decoding="async" style="width:700px; height:450px;"></div>
+      <div class="figure"><img src="Images/7031.png" alt="Event 7031 spooler service error" style="width:900px; height:450px;"></div>
+      <div class="figure"><img src="Images/7031-2.png" alt="Event 7031 additional details" style="width:700px; height:450px;"></div>
     </section>
 
     <!-- Best Practices -->
-    <section class="card" id="best-practices">
+    <section class="card">
       <h2>Best Practices for Using Event Viewer</h2>
       <ul>
         <li>Filter logs by severity and time</li>
@@ -387,36 +320,66 @@ Select-Object TimeCreated, Id, ProviderName, Message</code></pre>
     </footer>
   </div>
 
-  <script>
-    // Auto lazy/async any images missing those attrs
-    document.querySelectorAll('img').forEach(img=>{
-      if(!img.hasAttribute('loading')) img.setAttribute('loading','lazy');
-      if(!img.hasAttribute('decoding')) img.setAttribute('decoding','async');
-    });
+  <!-- Zoom modal -->
+  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <div class="zoom-content" data-close>
+      <img class="zoom-img" id="zoomImg" alt="">
+      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
+    </div>
+  </div>
 
-    // Add copy buttons to all <pre><code> blocks
-    const pres = document.querySelectorAll('pre');
-    pres.forEach(pre=>{
-      if(pre.querySelector('code')){
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'copy-btn';
-        btn.setAttribute('aria-label','Copy to clipboard');
-        btn.textContent = 'Copy';
-        btn.addEventListener('click', async () => {
-          const code = pre.querySelector('code');
-          try{
-            await navigator.clipboard.writeText(code.innerText);
-            btn.textContent = 'Copied!';
-            setTimeout(()=>btn.textContent='Copy',1200);
-          }catch(e){
-            btn.textContent = 'Error';
-            setTimeout(()=>btn.textContent='Copy',1200);
-          }
-        });
-        pre.appendChild(btn);
+  <script>
+    (function(){
+      const modal = document.getElementById('zoom');
+      const zoomImg = document.getElementById('zoomImg');
+      const closeBtn = modal.querySelector('.zoom-close');
+      let lastFocus = null;
+
+      // Make all images inside .figure zoomable (add .no-zoom to opt out)
+      document.querySelectorAll('.figure img:not(.no-zoom)').forEach(img=>{
+        img.classList.add('zoomable');
+      });
+
+      function openModal(src, alt){
+        lastFocus = document.activeElement;
+        zoomImg.src = src;
+        zoomImg.alt = alt || '';
+        modal.setAttribute('open','');
+        modal.setAttribute('aria-hidden','false');
+        document.body.classList.add('hide-scroll');
+        closeBtn.focus();
       }
-    });
+      function closeModal(){
+        modal.removeAttribute('open');
+        modal.setAttribute('aria-hidden','true');
+        document.body.classList.remove('hide-scroll');
+        zoomImg.removeAttribute('src');
+        zoomImg.alt = '';
+        if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      }
+
+      // Open on image click
+      document.addEventListener('click', (e) => {
+        const img = e.target.closest('.figure img.zoomable');
+        if (img){
+          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
+          openModal(full, img.alt);
+        }
+      });
+
+      // Close interactions
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
+      });
+      zoomImg.addEventListener('click', closeModal);
+      document.addEventListener('keydown', (e) => {
+        if (!modal.hasAttribute('open')) return;
+        if (e.key === 'Escape') closeModal();
+        // simple focus trap
+        if (e.key === 'Tab'){ e.preventDefault(); closeBtn.focus(); }
+      });
+    })();
   </script>
 </body>
 </html>
