@@ -68,6 +68,19 @@
     }
     .figure + br{display:none;}     /* tidy extra <br> after figures */
 
+    /* Zoom affordance (all images except header) */
+    .zoomable{cursor:zoom-in}
+    .zoomable:hover{filter:brightness(1.03)}
+
+    /* Lightbox overlay */
+    .zb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999}
+    .zb-overlay.is-open{display:flex}
+    .zb-stage{position:relative;max-width:95vw;max-height:92vh;overflow:hidden}
+    .zb-img{user-select:none;pointer-events:none;transform-origin:0 0;will-change:transform}
+    .zb-close{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;color:#cfd3e6;padding:8px 10px;border-radius:10px;font-size:14px}
+    .zb-close:hover{background:rgba(255,255,255,.12)}
+    .zb-hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);color:#cfd3e6;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;padding:6px 10px;border-radius:999px;font-size:12px}
+
     /* Footer */
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
@@ -91,7 +104,7 @@
       <a href="/MTPortfolio/Blogs">Blog</a> · <span>Essential Linux Commands</span>
     </div>
 
-    <!-- Header -->
+    <!-- Header (top image excluded from zoom) -->
     <header>
       <div class="figure">
         <img src="Images/Terminal.png" alt="Linux terminal themed cover" style="width:600px; height:400px;" loading="lazy" />
@@ -351,6 +364,110 @@
     </footer>
   </div>
 
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <!-- Lightbox script (applies to all images except those inside <header>) -->
+  <script>
+    // Add zoom to all images except any within the header
+    const allImgs = Array.from(document.querySelectorAll('img'));
+    const zoomImgs = allImgs.filter(img => !img.closest('header'));
+    zoomImgs.forEach(img => img.classList.add('zoomable'));
+
+    // Build overlay once
+    const overlay = document.createElement('div');
+    overlay.className = 'zb-overlay';
+    overlay.innerHTML = `
+      <button class="zb-close" type="button" aria-label="Close (Esc)">Close</button>
+      <div class="zb-stage"><img class="zb-img" alt="Zoomed image" /></div>
+      <div class="zb-hint">Scroll to zoom · Drag to pan · Click outside or press Esc to close</div>
+    `;
+    document.body.appendChild(overlay);
+
+    const stage = overlay.querySelector('.zb-stage');
+    const zimg  = overlay.querySelector('.zb-img');
+    const closeBtn = overlay.querySelector('.zb-close');
+
+    let scale = 1, minScale = 1, maxScale = 5;
+    let originX = 0, originY = 0;
+    let startX = 0, startY = 0;
+    let isPanning = false;
+
+    function openLightbox(src){
+      zimg.src = src;
+      scale = 1; originX = 0; originY = 0;
+      applyTransform();
+      overlay.classList.add('is-open');
+      zimg.style.pointerEvents = 'none';
+    }
+    function closeLightbox(){
+      overlay.classList.remove('is-open');
+      zimg.src = '';
+    }
+    function applyTransform(){
+      zimg.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+      zimg.style.maxWidth = 'none';
+      zimg.style.maxHeight = 'none';
+    }
+    function clamp(v, mn, mx){ return Math.min(mx, Math.max(mn, v)); }
+
+    // Open on click
+    zoomImgs.forEach(img => {
+      img.addEventListener('click', () => openLightbox(img.currentSrc || img.src));
+    });
+
+    // Close interactions
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeLightbox(); });
+    closeBtn.addEventListener('click', closeLightbox);
+    window.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    // Wheel zoom around cursor
+    stage.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = stage.getBoundingClientRect();
+      const mx = e.clientX - rect.left - originX;
+      const my = e.clientY - rect.top  - originY;
+      const delta = -Math.sign(e.deltaY) * 0.15;
+      const newScale = clamp(scale + delta, minScale, maxScale);
+      const scaleDelta = newScale / scale;
+      originX -= mx * (scaleDelta - 1);
+      originY -= my * (scaleDelta - 1);
+      scale = newScale;
+      applyTransform();
+    }, { passive:false });
+
+    // Drag to pan when zoomed
+    stage.addEventListener('mousedown', e => {
+      if (scale <= 1) return;
+      isPanning = true;
+      startX = e.clientX - originX;
+      startY = e.clientY - originY;
+      document.body.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', e => {
+      if (!isPanning) return;
+      originX = e.clientX - startX;
+      originY = e.clientY - startY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', () => {
+      isPanning = false;
+      document.body.style.cursor = '';
+    });
+
+    // Double-click toggle 1x/2.5x
+    stage.addEventListener('dblclick', e => {
+      const rect = stage.getBoundingClientRect();
+      const mx = e.clientX - rect.left - originX;
+      const my = e.clientY - rect.top  - originY;
+      const targetScale = (scale > 1.2) ? 1 : 2.5;
+      const scaleDelta = targetScale / scale;
+      originX -= mx * (scaleDelta - 1);
+      originY -= my * (scaleDelta - 1);
+      scale = targetScale;
+      applyTransform();
+    });
+
+    // Guard if #y doesn't exist
+    const yEl = document.getElementById('y');
+    if (yEl) yEl.textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
