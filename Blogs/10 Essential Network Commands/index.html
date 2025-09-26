@@ -42,7 +42,7 @@
     h1{margin:4px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     .lead{color:var(--muted);margin:0 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cover image (keep same size, show full image) */
+    /* Cover image (excluded from zoom) */
     .cover{
       border:1px solid var(--card-border);
       border-radius:14px;
@@ -54,9 +54,9 @@
     .cover img{
       width:100%;
       height:auto;
-      object-fit:contain;   /* no cropping */
+      object-fit:contain;
       display:block;
-      max-height:420px;     /* same banner size */
+      max-height:420px;
       margin:0 auto;
     }
 
@@ -94,6 +94,19 @@
     .figure img{width:100%;height:auto;display:block}
     figcaption{color:var(--muted);font-size:13px;margin-top:6px}
 
+    /* Zoom affordance for non-cover images */
+    .zoomable{cursor:zoom-in;}
+    .zoomable:hover{filter:brightness(1.03)}
+
+    /* Lightbox overlay */
+    .zb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999}
+    .zb-overlay.is-open{display:flex}
+    .zb-stage{position:relative;max-width:95vw;max-height:92vh;overflow:hidden}
+    .zb-img{user-select:none;pointer-events:none;transform-origin:0 0;will-change:transform}
+    .zb-close{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;color:#cfd3e6;padding:8px 10px;border-radius:10px;font-size:14px}
+    .zb-close:hover{background:rgba(255,255,255,.12)}
+    .zb-hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);color:#cfd3e6;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;padding:6px 10px;border-radius:999px;font-size:12px}
+
     /* Footer */
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
@@ -117,10 +130,9 @@
       <a href="/MTPortfolio/Blogs">Blog</a> · <span>Essential Network Commands</span>
     </div>
 
-    <!-- Header -->
+    <!-- Header (cover image excluded from zoom) -->
     <header>
       <div class="cover">
-        <!-- URL-encoded spaces + depth fallback -->
         <img src="Images/Essential%20Network%20Commands.png"
              data-fallback="../../Images/Essential%20Network%20Commands.png"
              alt="Essential Network Commands cover" loading="lazy" />
@@ -355,10 +367,11 @@
     </footer>
   </div>
 
-  <!-- Auto-fallback for image paths: tries data-fallback if primary 404s -->
+  <!-- Lightbox + image fallback script -->
   <script>
+    // Fallback: swap to data-fallback if primary 404s
     document.querySelectorAll('img[data-fallback]').forEach(img => {
-      img.addEventListener('error', function handler() {
+      img.addEventListener('error', function handler(){
         const alt = img.getAttribute('data-fallback');
         if (alt && img.src !== alt) {
           img.removeEventListener('error', handler);
@@ -366,7 +379,118 @@
         }
       });
     });
-    document.getElementById('y').textContent = new Date().getFullYear();
+
+    // Add zoom to all images except the cover
+    const imgs = Array.from(document.querySelectorAll('img'))
+      .filter(img => !img.closest('.cover'));
+    imgs.forEach(img => img.classList.add('zoomable'));
+
+    // Build overlay once
+    const overlay = document.createElement('div');
+    overlay.className = 'zb-overlay';
+    overlay.innerHTML = `
+      <button class="zb-close" type="button" aria-label="Close (Esc)">Close</button>
+      <div class="zb-stage"><img class="zb-img" alt="Zoomed image" /></div>
+      <div class="zb-hint">Scroll to zoom · Drag to pan · Click outside or press Esc to close</div>
+    `;
+    document.body.appendChild(overlay);
+
+    const stage = overlay.querySelector('.zb-stage');
+    const zimg  = overlay.querySelector('.zb-img');
+    const closeBtn = overlay.querySelector('.zb-close');
+
+    let scale = 1, minScale = 1, maxScale = 5;
+    let originX = 0, originY = 0;   // top-left translation
+    let startX = 0, startY = 0;     // drag start mouse pos
+    let isPanning = false;
+
+    function openLightbox(src){
+      zimg.src = src;
+      scale = 1; originX = 0; originY = 0;
+      applyTransform();
+      overlay.classList.add('is-open');
+      // Allow pointer-events to image only for drag logic
+      zimg.style.pointerEvents = 'none';
+    }
+
+    function closeLightbox(){
+      overlay.classList.remove('is-open');
+      zimg.src = '';
+    }
+
+    function applyTransform(){
+      zimg.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+      // Natural size vs stage: ensure the image intrinsic size is used for crisp zoom
+      zimg.style.maxWidth = 'none';
+      zimg.style.maxHeight = 'none';
+    }
+
+    function clamp(val, min, max){ return Math.min(max, Math.max(min, val)); }
+
+    // Click to open
+    imgs.forEach(img => {
+      img.addEventListener('click', () => openLightbox(img.currentSrc || img.src));
+    });
+
+    // Close actions
+    overlay.addEventListener('click', e => { if(e.target === overlay) closeLightbox(); });
+    closeBtn.addEventListener('click', closeLightbox);
+    window.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
+
+    // Wheel to zoom (center around cursor)
+    stage.addEventListener('wheel', e => {
+      e.preventDefault();
+      const rect = stage.getBoundingClientRect();
+      const mx = e.clientX - rect.left - originX; // mouse pos relative to image translation
+      const my = e.clientY - rect.top  - originY;
+
+      const delta = -Math.sign(e.deltaY) * 0.15; // zoom step
+      const newScale = clamp(scale + delta, minScale, maxScale);
+      const scaleDelta = newScale / scale;
+
+      // Adjust origin to zoom around cursor
+      originX -= mx * (scaleDelta - 1);
+      originY -= my * (scaleDelta - 1);
+
+      scale = newScale;
+      applyTransform();
+    }, { passive:false });
+
+    // Drag to pan when zoomed
+    stage.addEventListener('mousedown', e => {
+      if (scale <= 1) return; // no pan at base scale
+      isPanning = true;
+      startX = e.clientX - originX;
+      startY = e.clientY - originY;
+      document.body.style.cursor = 'grabbing';
+    });
+    window.addEventListener('mousemove', e => {
+      if (!isPanning) return;
+      originX = e.clientX - startX;
+      originY = e.clientY - startY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', () => {
+      isPanning = false;
+      document.body.style.cursor = '';
+    });
+
+    // Optional: double-click to toggle 1x/2.5x
+    stage.addEventListener('dblclick', e => {
+      const rect = stage.getBoundingClientRect();
+      const mx = e.clientX - rect.left - originX;
+      const my = e.clientY - rect.top  - originY;
+      const targetScale = (scale > 1.2) ? 1 : 2.5;
+      const scaleDelta = targetScale / scale;
+      originX -= mx * (scaleDelta - 1);
+      originY -= my * (scaleDelta - 1);
+      scale = targetScale;
+      applyTransform();
+    });
+
+    // Guard if an element with id="y" doesn't exist
+    const yEl = document.getElementById('y');
+    if (yEl) yEl.textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
