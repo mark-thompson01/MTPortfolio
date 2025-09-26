@@ -300,7 +300,9 @@ Remove-LocalGroupMember -Group "Administrators" -Member "Domain Users"</code></p
       <div class="figure"><img src="Images/Exploration/serialn.png" alt="Serial number retrieval"></div>
 
       <p><b>Block IP inbound/outbound</b></p>
+      <code>New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any</code>
       <div class="figure"><img src="Images/FirewallBlock.png" alt="Inbound block rule"></div>
+      <code>New-NetFirewallRule -DisplayName "Block Specific IP Outbound" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any</code>
       <div class="figure"><img src="Images/FirewallBlock2.png" alt="Outbound block rule"></div>
 
       <p><b>Get-ComputerInfo & selected properties</b></p>
