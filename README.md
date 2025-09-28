@@ -1,6 +1,6 @@
 # MTPortfolio — Labs, Blogs, and the Journey
 
-A living portfolio of the hands-on work I do across **Networking, Windows, Linux, and Security**.  
+A live portfolio site of hands-on projects I've worked on and tinkered around with across **Networking, system administration, scripting & automation, as well as Security**.  
 This repo powers my GitHub Pages site and contains both polished pages **and** the inevitable “in-progress” bits that come with real learning.
 
 **Live site:** https://mark-thompson01.github.io/MTPortfolio/  
@@ -23,7 +23,7 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 ## What’s inside (selected)
 - **Blogs**
   - Essential Network Commands — overview of ping, ip/ifconfig/ip, arp, nslookup/host/dig, netstat, tracert/traceroute, pathping, route.
-  - (More coming: Linux commands, Windows Event Viewer, etc.)
+  - (More coming: Esential Linux commands, Essential PowerShell Commands , etc.)
 - **Tutorials**
   - Cross-Platform Network Commands — deeper, example-rich companion to the blog (adds `ss`, `mtr`, DHCP tools, `hostname`, scenarios).
   - (WIP stubs exist for additional labs; some aren’t linked yet.)
@@ -33,8 +33,8 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 ---
 
 ## Tools & Tech I used
-**Networking:** ping, ipconfig/ifconfig/`ip a`, `arp -a`, nslookup/host/dig, netstat/`ss`, tracert/traceroute/`mtr`, pathping, route/`ip route`, hostname  
-**Platforms:** Windows, Linux (Mint/Ubuntu), macOS  
+**Networking:** ping, ipconfig/ifconfig/`ip a`, `arp -a`, nslookup/host/dig, netstat/`ss`, tracert/traceroute/`mtr`, pathping, route/`ip route`, hostname  , Cisco Catalyst switches
+**Platforms:** Windows, Linux (Mint/Ubuntu)
 **Stack:** HTML/CSS/vanilla JS, GitHub Pages  
 **Authoring:** screenshots, terminal captures, step-by-step demos
 
@@ -45,7 +45,6 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 - **Cross-platform nuance:** `netstat` vs `ss`; `tracert` (ICMP) vs `traceroute` (UDP by default) vs `mtr`.
 - **DNS tooling depth:** quick checks with `host`; detailed validation with `dig` (MX/NS, timings).
 - **Troubleshooting workflows:** DHCP renews (`ipconfig /renew`, `dhclient`), cache flushes, and reading routing tables.
-- **Front-end micro-patterns:** keyboard-accessible lightbox, lazy images, graceful **fallback paths**.
 - **Shipping mindset:** keep working URLs even if folder names aren’t perfect; document the decision instead of churning.
 
 ---
