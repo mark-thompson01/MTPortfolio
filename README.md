@@ -29,15 +29,17 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
   - Linux fundamentals and basic system management.
   - Managed network switch configuration, basic PowerShell & Bash shell scripting, network security.
   - Scripting & Automation experimentation and exploration.
-
+ 
+- **Tutorials**
+  - Cross-Platform Network Commands — deeper, example-rich companion to the blog Essential Network Commands (adds `ss`, `mtr`, DHCP tools, `hostname`, scenarios).
+  - Ports, Protocols, & Network Scanners - Network Communications Uncovered: Exploring Ports, Protocols, and Scanners in Action.
+  - PowerShell Fundamentals: Core cmdlets, scripting basics, and automation workflows on Windows platforms. 
+  - (WIP stubs exist for additional labs; some aren’t linked yet.)
 
 - **Blogs**
   - Essential Network Commands — overview of ping, ip/ifconfig/ip, arp, nslookup/host/dig, netstat, tracert/traceroute, pathping, route.
+  - Essential Linux Commands - Overview of navigating the filesystem, monitoring processes, and handling permissions from the Linux terminal. 
   - (More coming: Esential Linux commands, Essential PowerShell Commands , etc.)
-    
-- **Tutorials**
-  - Cross-Platform Network Commands — deeper, example-rich companion to the blog (adds `ss`, `mtr`, DHCP tools, `hostname`, scenarios).
-  - (WIP stubs exist for additional labs; some aren’t linked yet.)
     
 - **Shared UI**
   - Minimal dark theme, **image lightbox/zoom**, image 404 **fallbacks**, and small utility JS.
