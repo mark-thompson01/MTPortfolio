@@ -5,6 +5,7 @@ A live portfolio site of hands-on projects I've worked on and tinkered around wi
 This repo powers my GitHub Pages portfolio site and contains both polished pages **and** the inevitable “in-progress” bits that come with real learning.
 
 **Live site:** https://mark-thompson01.github.io/MTPortfolio/  
+
 **Highlights to read first:**  
 - Blog: **Essential Network Commands** → `/Blogs/Essential Network Commands/`  
 - Tutorial: **Cross-Platform Network Commands** → `/Skills/Cross Plateform Networking Commands/` _(URL uses original folder spelling; page title is corrected)_
