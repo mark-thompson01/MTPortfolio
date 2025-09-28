@@ -51,10 +51,10 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 
 ## Roadmap (ongoing)
 - Add more **labs** over the course of time. 
-- Do deeper dives in PowerShell and Bash shell scripting
-- Begin with basic Python scripting
-- Build labs based on Cisco CCNA studies
-- Prepare myself for the role of a IT System Administrator
+- Do deeper dives in PowerShell and Bash shell scripting.
+- Begin with basic Python scripting.
+- Build labs based on Cisco CCNA studies.
+- Prepare myself for the role of a IT System Administrator.
 
 ---
 
