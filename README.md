@@ -64,15 +64,6 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 -- Using PowerShell and Bash to automate tasks
 -- Hands-on projects and presentation
 
-
-
-
-
-- **Cross-platform nuance:** `netstat` vs `ss`; `tracert` (ICMP) vs `traceroute` (UDP by default) vs `mtr`.
-- **DNS tooling depth:** quick checks with `host`; detailed validation with `dig` (MX/NS, timings).
-- **Troubleshooting workflows:** DHCP renews (`ipconfig /renew`, `dhclient`), cache flushes, and reading routing tables.
-- **Shipping mindset:** keep working URLs even if folder names aren’t perfect; document the decision instead of churning.
-
 ---
 
 ## Roadmap (ongoing)
