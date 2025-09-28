@@ -18,13 +18,9 @@ The new layout was influenced by a marketing friend and led me to realize that p
 
 ---
 
-## Why this repo looks “real”
-This portfolio was built incrementally. You’ll find:
-- **Misspelled/legacy folders** that remain for working links.
-- **Unused CSS / experiments** I kept so I can revisit or compare.
-- **Hidden or not-yet-linked pages** that are prototypes for future labs.
+## Portfolio Background
 
-Rather than rewrite history (and break URLs), I’m documenting the path I took and continuing from here.
+This was a journey of mistakes, trial and error, and learning. You can see the portfolio’s evolution in the remnants throughout this repository, documenting how it became what it is today.
 
 ---
 
