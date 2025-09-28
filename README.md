@@ -39,7 +39,7 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 - **Blogs**
   - Essential Network Commands — overview of ping, ip/ifconfig/ip, arp, nslookup/host/dig, netstat, tracert/traceroute, pathping, route.
   - Essential Linux Commands - Overview of navigating the filesystem, monitoring processes, and handling permissions from the Linux terminal. 
-  - (More coming: Esential Linux commands, Essential PowerShell Commands , etc.)
+  - (More coming: Essential PowerShell Commands , etc.)
     
 - **Shared UI**
   - Minimal dark theme, **image lightbox/zoom**, image 404 **fallbacks**, and small utility JS.
