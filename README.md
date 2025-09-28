@@ -41,7 +41,33 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 ---
 
 ## What I learned (selected)
-- **Separation of formats:** Blog = approachable overview & “when to use”; Tutorial = examples, options, and scenarios.
+- **Applying Creativity:**
+-- Using resources to my advantage to independently build out web pages for content display and presentation.
+-- Creating instructional tutorials on fundamental topics.
+-- How to build and structure blogs.
+
+- **Troubleshooting workflows:**
+-- Windows Event Viewer, DHCP renews, cache flushes;
+-- Identifying network paths, active connections, and reading routing tables.
+-- Troubleshooting connectivity, DNS, IP Configuration, duplicate MAC addresses, etc.
+-- Web page edits
+-- General lab tinkering troubleshooting run into's
+
+- **Hands-on Application:**
+-- Hands on application with network security; nmap, Advanced IP Scanner, Kali Linux toolbox, etc.
+-- Applying different network commands to troubleshoot a variety of network issues across platforms.
+-- Cisco Catalyst switch configuration (Hands-on Cisco CCNA studies)
+-- Windows Domain build, Active Directory, Group Policy, DNS, and DHCP Setup and Implementation;
+---- (Configuration, Management, and Administration)
+-- PowerShell fundamentals and basic PowerShell scripting
+-- Linux fundamentals and basic Bash shell scripting
+-- Using PowerShell and Bash to automate tasks
+-- Hands-on projects and presentation
+
+
+
+
+
 - **Cross-platform nuance:** `netstat` vs `ss`; `tracert` (ICMP) vs `traceroute` (UDP by default) vs `mtr`.
 - **DNS tooling depth:** quick checks with `host`; detailed validation with `dig` (MX/NS, timings).
 - **Troubleshooting workflows:** DHCP renews (`ipconfig /renew`, `dhclient`), cache flushes, and reading routing tables.
