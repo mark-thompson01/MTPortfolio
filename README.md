@@ -23,6 +23,12 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 ---
 
 ## What’s inside (selected)
+- **Hands-on Lab Demonstration**:
+  - Command-Line Interface (CLI), scanning networks, troubleshooting w/ Windows Event Viewer, PowerShell Fundamentals.
+  - Windows Domain build; Active Directory Setup, Implementation and Management. 
+  - Managed network switch configuration, basic PowerShell & Bash shell scripting, network security.
+
+
 - **Blogs**
   - Essential Network Commands — overview of ping, ip/ifconfig/ip, arp, nslookup/host/dig, netstat, tracert/traceroute, pathping, route.
   - (More coming: Esential Linux commands, Essential PowerShell Commands , etc.)
