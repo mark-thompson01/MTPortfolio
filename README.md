@@ -37,11 +37,11 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 ## Tools & Tech I used
 **Networking**: Cisco Catalyst 2950 and 3550 managed switches, cross-platform network commands, network scanners, remote control protocols, traffic analysis tools.
 
-**Platforms**: Windows 10, Windows Server 2016 Evalation version, Active Directory, Kali Linux, Ubuntu Linux, Pi OS, Oracle VirtualBox.
+**Platforms**: Windows 10/11, Windows Server 2016 Evalation version, Active Directory, Kali Linux, Ubuntu Linux, Pi OS, Oracle VirtualBox.
 
-**Tools** Windows & Linux commands (CLI), Server Manager, PuTTY, Nmap, Advanced IP Scanner, Zenmap, Windows Event Viewer, PowerShell, RDP, VNC, SSH, Wireshark, tcpdump.
+**Tools:** Windows & Linux commands (CLI), Server Manager, PuTTY, Nmap, Advanced IP Scanner, Zenmap, Windows Event Viewer, PowerShell, RDP, VNC, SSH, Wireshark, tcpdump.
 
-**Hardware** Cisco Catalyst 2950 switch, Cisco Catalyst 3550 switch, Raspberry Pi 3, Raspberry Pi 5, Windows Desktop and Laptop configured with VMs.
+**Hardware:** Cisco Catalyst 2950 switch, Cisco Catalyst 3550 switch, Raspberry Pi 3, Raspberry Pi 5, Windows Desktop and Laptop configured with VMs.
 
 **Stack:** HTML/CSS/vanilla JS, GitHub Pages. 
 
