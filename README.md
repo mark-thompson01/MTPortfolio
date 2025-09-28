@@ -89,9 +89,10 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 
 ## Roadmap (ongoing)
 - Add more **labs** over the course of time. 
-- Do deeper dives in PowerShell and Bash shell scripting.
-- Begin with basic Python scripting.
+- Do deeper dives in PowerShell and Bash shell scripting and automation.
+- Move onto basic Python scripting.
 - Build labs based on Cisco CCNA studies.
+- Grab a keyboard and continuously develop hands-on skills across various tools and plaforms. 
 - Prepare myself for the role of an IT System Administrator.
 
 ---
