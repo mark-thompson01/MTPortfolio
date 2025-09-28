@@ -15,6 +15,11 @@ As I further explored the landscape of IT, I realized two things. That the displ
 From there, I focused on designing hands-on labs and constructing web pages 
 with detailed screen shots of diverse hands-on projects across platforms. From here, my goal is add more labs overtime and to grab a keyboard and skill up. 
 
+This portfolio has undergone a few transformations in it's time. Starting out as just a hobby to display hands-on network security projects. The original web page layouts
+were done were basic HTML and CSS, knowledge that I had applied from learning some basics from freecodecamp.org a few years ago. 
+
+The new layout was influenced by a marketing friend that led me to the realization that presentation is everything. Laying out a more neatly structured layout for project presentation. 
+
 ---
 
 ## Why this repo looks “real”
