@@ -35,8 +35,16 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 ---
 
 ## Tools & Tech I used
-**Networking:** ping, ipconfig/ifconfig/`ip a`, `arp -a`, nslookup/host/dig, netstat/`ss`, tracert/traceroute/`mtr`, pathping, route/`ip route`, hostname  , Cisco Catalyst switches
-**Platforms:** Windows, Linux (Mint/Ubuntu)
+**Networking**: Cisco Catalyst 2950 and 3550 managed switch, cross-platform network commands, network scanners, remote control protocols, traffic analysis tools.
+
+**Platforms**: Windows 10, Windows Server 2016 Evalation version, Active Directory, Kali Linux, Ubuntu Linux, Pi OS, Oracle VirtualBox.
+
+**Tools** Windows & Linux commands (CLI), Server Manager, PuTTY, Nmap, Advanced IP Scanner, Zenmap, Windows Event Viewer, PowerShell, RDP, VNC, SSH, Wireshark, tcpdump.
+
+
+
+
+
 **Stack:** HTML/CSS/vanilla JS, GitHub Pages  
 **Authoring:** screenshots, terminal captures, step-by-step demos
 
