@@ -71,7 +71,7 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 - Do deeper dives in PowerShell and Bash shell scripting.
 - Begin with basic Python scripting.
 - Build labs based on Cisco CCNA studies.
-- Prepare myself for the role of a IT System Administrator.
+- Prepare myself for the role of an IT System Administrator.
 
 ---
 
