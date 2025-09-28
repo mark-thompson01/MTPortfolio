@@ -6,19 +6,15 @@ This repo powers my GitHub Pages portfolio site and contains both polished pages
 
 **Live site:** https://mark-thompson01.github.io/MTPortfolio/  
 
-This project first started out in June of 2024. At the time, I was growing in my
-current role as an IT Support Specialist and exploring cybersecurity after earning
-the CompTIA Security+ certification. The portfolio started out as a display of the hands-on network security projects I was tinkering around with at the time.
+This project started in June 2024. At the time, I was growing in my role as an IT Support Specialist and exploring cybersecurity after earning the CompTIA Security+ certification. The portfolio began as a display of the hands-on network-security projects I was tinkering with then.
 
-As I further explored the landscape of IT, I realized two things. That the display of hands-on projects in today's job market is one of the best ways to standout. In addition to that, I realized my aspirations lie in becoming as diverse as possible across platforms, and developing the skillset of a system administrator. 
+As I explored the IT landscape further, I realized two things: first, that showcasing hands-on projects in today’s job market is one of the best ways to stand out; and second, that my aspirations lie in becoming as diverse as possible across platforms and developing the skill set of a systems administrator.
 
-From there, I focused on designing hands-on labs and constructing web pages 
-with detailed screen shots of diverse hands-on projects across platforms. From here, my goal is add more labs overtime and to grab a keyboard and skill up. 
+From there, I focused on designing hands-on labs and building web pages with detailed screenshots of diverse projects across platforms. From here, my goal is to add more labs over time and to keep grabbing the keyboard and leveling up.
 
-This portfolio has undergone a few transformations in it's time. Starting out as just a hobby to display hands-on network security projects. The original web page layouts
-were done were basic HTML and CSS, knowledge that I had applied from learning some basics from freecodecamp.org a few years ago. 
+This portfolio has undergone a few transformations in its time, starting as a hobby to display hands-on network-security projects. The original web pages were basic HTML and CSS, based on fundamentals I learned from freeCodeCamp a few years ago.
 
-The new layout was influenced by a marketing friend that led me to the realization that presentation is everything. Laying out a more neatly structured layout for project display and presentation. 
+The new layout was influenced by a marketing friend and led me to realize that presentation is everything, so I created a cleaner, more structured design for project display and presentation.
 
 ---
 
