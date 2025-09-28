@@ -1,266 +1,137 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mark Thompson Portfolio | MTPortfolio</title>
-  <meta name="description" content="Hands-on labs and tutorials in system administration, networking, scripting, and network security by Mark Thompson." />
-  <style>
-    :root{
-      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
-      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35); --radius:18px;
-    }
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
-      background: radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
-                  radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
-                  linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-    }
-    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mark Thompson Portfolio | MTPortfolio</title>
+<meta name="description" content="Hands-on labs and tutorials in system administration, networking, scripting, and network security by Mark Thompson." />
+<style>
+:root{
+--bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+--brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35); --radius:18px;
+}
+html,body{height:100%}
+body{
+margin:0; color:var(--text);
+font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+background: radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+linear-gradient(180deg, var(--bg-1), var(--bg-2));
+line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+}
+.wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
-    header{display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:center;margin-bottom:24px}
-    @media (max-width:640px){header{grid-template-columns:1fr;text-align:center}.avatar{margin:0 auto}}
+header{display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:center;margin-bottom:24px}
+@media (max-width:640px){header{grid-template-columns:1fr;text-align:center}.avatar{margin:0 auto}}
+.avatar{width:120px;height:120px;border-radius:50%;background:#000 url("Images/ME2.jpg") center/cover no-repeat;border:2px solid #2b3549;box-shadow:var(--shadow)}
+.title{margin:0 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:.2px}
+.brand-tag{font-size:clamp(12px,1.6vw,14px);color:var(--muted);margin-top:2px}
+.intro{margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+.intro b{color:#C9CBDA}
 
-    /* Avatar (click-to-zoom) */
-    .avatar{
-      width:120px;height:120px;border-radius:50%;
-      background:#000 url("Images/ME2.jpg") center/cover no-repeat;
-      border:2px solid #2b3549;box-shadow:var(--shadow);
-      cursor: zoom-in;                 /* zoom cue */
-    }
-    .avatar:hover{filter:brightness(1.03)}
+.links{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.link-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:999px;color:var(--text);text-decoration:none;font-size:15px;transition:.18s}
+.link-pill:hover{transform:translateY(-1px);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+.link-pill small{color:var(--muted)}
 
-    .title{margin:0 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:.2px}
-    .brand-tag{font-size:clamp(12px,1.6vw,14px);color:var(--muted);margin-top:2px}
-    .intro{margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
-    .intro b{color:#C9CBDA}
+.sections{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:28px 0 10px}
+@media (max-width:950px){.sections{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.sections{grid-template-columns:1fr}}
 
-    .links{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
-    .link-pill{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid var(--card-border);border-radius:999px;color:var(--text);text-decoration:none;font-size:15px;transition:.18s}
-    .link-pill:hover{transform:translateY(-1px);border-color:#3a4a67;background:rgba(255,255,255,.06)}
-    .link-pill small{color:var(--muted)}
+.card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+border:1px solid var(--card-border);border-radius:var(--radius);padding:18px 18px 20px;box-shadow:var(--shadow);
+transition:transform .18s,border-color .18s,box-shadow .18s;display:flex;flex-direction:column;gap:10px;min-height:120px}
+.card:hover{transform:translateY(-3px);border-color:#3a4a67;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+.card a{text-decoration:none;color:var(--text)}
+.card-title{font-size:18px;font-weight:700;letter-spacing:.2px}
+.card-desc{color:var(--muted);font-size:14px;line-height:1.45}
+.card-cta{margin-top:auto;font-weight:600;color:var(--brand)}
 
-    .sections{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:28px 0 10px}
-    @media (max-width:950px){.sections{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:520px){.sections{grid-template-columns:1fr}}
-
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);padding:18px 18px 20px;box-shadow:var(--shadow);
-      transition:transform .18s,border-color .18s,box-shadow .18s;display:flex;flex-direction:column;gap:10px;min-height:120px}
-    .card:hover{transform:translateY(-3px);border-color:#3a4a67;box-shadow:0 16px 40px rgba(0,0,0,.45)}
-    .card a{text-decoration:none;color:var(--text)}
-    .card-title{font-size:18px;font-weight:700;letter-spacing:.2px}
-    .card-desc{color:var(--muted);font-size:14px;line-height:1.45}
-    .card-cta{margin-top:auto;font-weight:600;color:var(--brand)}
-
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
-
-    /* ===== Lightbox styles (shared) ===== */
-    .zb-overlay{
-      position:fixed; inset:0; background:rgba(0,0,0,.85);
-      display:none; align-items:center; justify-content:center; z-index:9999;
-    }
-    .zb-overlay.is-open{display:flex}
-    .zb-stage{position:relative; max-width:95vw; max-height:92vh; overflow:hidden}
-    .zb-img{user-select:none; pointer-events:none; transform-origin:0 0; will-change:transform}
-    .zb-close{
-      position:fixed; top:14px; right:14px; background:rgba(255,255,255,.08);
-      border:1px solid #2a2f3f; color:#cfd3e6; padding:8px 10px; border-radius:10px; font-size:14px;
-    }
-    .zb-close:hover{background:rgba(255,255,255,.12)}
-    .zb-hint{
-      position:fixed; bottom:14px; left:50%; transform:translateX(-50%);
-      color:#cfd3e6; background:rgba(255,255,255,.08); border:1px solid #2a2f3f;
-      padding:6px 10px; border-radius:999px; font-size:12px;
-    }
-  </style>
+footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+footer .links{margin-top:8px}
+footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <!-- Add data-zoom-src so the script can open the background image -->
-      <div class="avatar" aria-label="Photo of Mark Thompson" data-zoom-src="Images/ME2.jpg"></div>
-      <div>
-        <h1 class="title">Mark Thompson Portfolio</h1>
-        <div class="brand-tag">MTPortfolio · System Administration · Networking · Scripting</div>
-        <p class="intro">
-          I’m <b>Mark Thompson</b>, an <b>IT professional</b> focused on continuous
-          hands-on development in <b>system administration</b>, <b>networking</b>, <b>scripting</b> and <b>beyond</b>.
-          This portfolio showcases the <b>projects</b> and <b>labs</b> I’ve built across
-          <b>Windows & Linux</b> platforms, <b>networking</b>, and <b>cybersecurity</b>.
-        </p>
-        <nav class="links" aria-label="Quick links">
-          <a class="link-pill" href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">
-            <span>LinkedIn</span> <small>linkedin.com/in/mark-thompson-9361a81a9</small>
-          </a>
-          <a class="link-pill" href="https://github.com/mark-thompson-01" target="_blank" rel="noopener">
-            <span>GitHub</span> <small>github.com/mark-thompson01</small>
-          </a>
-        </nav>
-      </div>
-    </header>
+<div class="wrap">
+<header>
+<div class="avatar" aria-label="Photo of Mark Thompson"></div>
+<div>
+<h1 class="title">Mark Thompson Portfolio</h1>
+<div class="brand-tag">MTPortfolio · System Administration · Networking · Scripting</div>
+<p class="intro">
+I’m <b>Mark Thompson</b>, an <b>IT professional</b> focused on continuous
+hands-on development in <b>system administration</b>, <b>networking</b>, <b>scripting</b> and <b>beyond</b>.
+This portfolio showcases the <b>projects</b> and <b>labs</b> I’ve built across
+<b>Windows & Linux</b> platforms, <b>networking</b>, and <b>cybersecurity</b>.
+</p>
+<nav class="links" aria-label="Quick links">
+<a class="link-pill" href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">
+<span>LinkedIn</span> <small>linkedin.com/in/mark-thompson-9361a81a9</small>
+</a>
+<a class="link-pill" href="https://github.com/mark-thompson01" target="_blank" rel="noopener">
+<span>GitHub</span> <small>github.com/mark-thompson01</small>
+</a>
+</nav>
+</div>
+</header>
 
-    <section class="sections" aria-label="Portfolio sections">
-      <article class="card">
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Skills">
-          <div class="card-title">Networking</div>
-          <div class="card-desc">
-            Cross-platform network commands, ports &amp; protocols, and scanners
-            (<b>Advanced IP Scanner</b>, <b>Nmap</b>, <b>Zenmap</b>).
-            Basic Cisco Catalyst switch configuration via <b>PuTTY</b>.
-          </div>
-          <div class="card-cta">Explore →</div>
-        </a>
-      </article>
+<section class="sections" aria-label="Portfolio sections">
+<article class="card">
+<a href="https://mark-thompson01.github.io/MTPortfolio/Skills">
+<div class="card-title">Networking</div>
+<div class="card-desc">
+Cross-platform network commands, ports &amp; protocols, and scanners
+(<b>Advanced IP Scanner</b>, <b>Nmap</b>, <b>Zenmap</b>).
+Basic Cisco Catalyst switch configuration via <b>PuTTY</b>.
+</div>
+<div class="card-cta">Explore →</div>
+</a>
+</article>
 
-      <article class="card">
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/">
-          <div class="card-title">Windows &amp; Linux</div>
-          <div class="card-desc">
-            <b>PowerShell fundamentals</b> &amp; scripting; building an
-            <b>Active Directory</b> domain with Group Policies; <b>Linux fundamentals</b>;
-            <b>Bash</b> scripting; and <b>Raspberry Pi 5</b> scripting &amp; automation.
-          </div>
-          <div class="card-cta">Explore →</div>
-        </a>
-      </article>
+<article class="card">
+<a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/">
+<div class="card-title">Windows &amp; Linux</div>
+<div class="card-desc">
+<b>PowerShell fundamentals</b> &amp; scripting; building an
+<b>Active Directory</b> domain with Group Policies; <b>Linux fundamentals</b>;
+<b>Bash</b> scripting; and <b>Raspberry Pi 5</b> scripting &amp; automation.
+</div>
+<div class="card-cta">Explore →</div>
+</a>
+</article>
 
-      <article class="card">
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Lab%20Projects">
-          <div class="card-title">Cybersecurity</div>
-          <div class="card-desc">
-            Network security studies: traffic analysis, log monitoring,
-            <b>ARP spoofing</b>, password cracking, enumeration, and
-            real-world exploitation scenarios.
-          </div>
-          <div class="card-cta">Explore →</div>
-        </a>
-      </article>
+<article class="card">
+<a href="https://mark-thompson01.github.io/MTPortfolio/Lab%20Projects">
+<div class="card-title">Cybersecurity</div>
+<div class="card-desc">
+Network security studies: traffic analysis, log monitoring,
+<b>ARP spoofing</b>, password cracking, enumeration, and
+real-world exploitation scenarios.
+</div>
+<div class="card-cta">Explore →</div>
+</a>
+</article>
 
-      <article class="card">
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Blogs">
-          <div class="card-title">Blog</div>
-          <div class="card-desc">Short, practical posts that connect theory with real tooling and workflows.</div>
-          <div class="card-cta">Read posts →</div>
-        </a>
-      </article>
-    </section>
+<article class="card">
+<a href="https://mark-thompson01.github.io/MTPortfolio/Blogs">
+<div class="card-title">Blog</div>
+<div class="card-desc">Short, practical posts that connect theory with real tooling and workflows.</div>
+<div class="card-cta">Read posts →</div>
+</a>
+</article>
+</section>
 
-    <footer>
-      <div>Mark Thompson · MTPortfolio</div>
-      <div class="links">
-        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </footer>
-  </div>
-
-  <!-- Lightbox script (applies to avatar only) -->
-  <script>
-    // Safely set year if #y exists (prevents console error)
-    (function(){ const y=document.getElementById('y'); if (y) y.textContent=new Date().getFullYear(); })();
-
-    (function(){
-      // Build overlay once
-      const overlay = document.createElement('div');
-      overlay.className = 'zb-overlay';
-      overlay.innerHTML = `
-        <button class="zb-close" type="button" aria-label="Close (Esc)">Close</button>
-        <div class="zb-stage"><img class="zb-img" alt="Zoomed image" /></div>
-        <div class="zb-hint">Scroll to zoom · Drag to pan · Click outside or press Esc to close</div>
-      `;
-      document.body.appendChild(overlay);
-
-      const stage = overlay.querySelector('.zb-stage');
-      const zimg  = overlay.querySelector('.zb-img');
-      const closeBtn = overlay.querySelector('.zb-close');
-
-      let scale = 1, minScale = 1, maxScale = 5;
-      let originX = 0, originY = 0;
-      let startX = 0, startY = 0;
-      let isPanning = false;
-
-      function applyTransform(){
-        zimg.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
-        zimg.style.maxWidth = 'none';
-        zimg.style.maxHeight = 'none';
-      }
-      function openLightbox(src){
-        zimg.src = src;
-        scale = 1; originX = 0; originY = 0;
-        applyTransform();
-        overlay.classList.add('is-open');
-      }
-      function closeLightbox(){
-        overlay.classList.remove('is-open');
-        zimg.src = '';
-      }
-      function clamp(v, mn, mx){ return Math.min(mx, Math.max(mn, v)); }
-
-      // Close controls
-      overlay.addEventListener('click', e => { if (e.target === overlay) closeLightbox(); });
-      closeBtn.addEventListener('click', closeLightbox);
-      window.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
-
-      // Wheel zoom around cursor
-      stage.addEventListener('wheel', e => {
-        e.preventDefault();
-        const rect = stage.getBoundingClientRect();
-        const mx = e.clientX - rect.left - originX;
-        const my = e.clientY - rect.top  - originY;
-        const delta = -Math.sign(e.deltaY) * 0.15;
-        const newScale = clamp(scale + delta, minScale, maxScale);
-        const scaleDelta = newScale / scale;
-        originX -= mx * (scaleDelta - 1);
-        originY -= my * (scaleDelta - 1);
-        scale = newScale;
-        applyTransform();
-      }, { passive:false });
-
-      // Drag to pan when zoomed
-      stage.addEventListener('mousedown', e => {
-        if (scale <= 1) return;
-        isPanning = true;
-        startX = e.clientX - originX;
-        startY = e.clientY - originY;
-        document.body.style.cursor = 'grabbing';
-      });
-      window.addEventListener('mousemove', e => {
-        if (!isPanning) return;
-        originX = e.clientX - startX;
-        originY = e.clientY - startY;
-        applyTransform();
-      });
-      window.addEventListener('mouseup', () => {
-        isPanning = false;
-        document.body.style.cursor = '';
-      });
-
-      // Double-click toggle 1x / 2.5x
-      stage.addEventListener('dblclick', e => {
-        const rect = stage.getBoundingClientRect();
-        const mx = e.clientX - rect.left - originX;
-        const my = e.clientY - rect.top  - originY;
-        const targetScale = (scale > 1.2) ? 1 : 2.5;
-        const scaleDelta = targetScale / scale;
-        originX -= mx * (scaleDelta - 1);
-        originY -= my * (scaleDelta - 1);
-        scale = targetScale;
-        applyTransform();
-      });
-
-      // Apply zoom to the avatar only
-      const avatar = document.querySelector('.avatar');
-      if (avatar) {
-        const src = avatar.getAttribute('data-zoom-src') || 'Images/ME2.jpg';
-        avatar.addEventListener('click', () => openLightbox(src));
-      }
-    })();
-  </script>
+<footer>
+<div>Mark Thompson · MTPortfolio</div>
+<div class="links">
+<a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+<a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+</div>
+</footer>
+</div>
+<script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
+
