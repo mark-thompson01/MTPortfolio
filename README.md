@@ -65,7 +65,7 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 - **Applying Creativity:**
 -- Using resources to my advantage to independently build out web pages for content display and presentation.
 -- Creating instructional tutorials on fundamental topics.
--- Building and structuring blogs.
+-- Building and structuring blogs
 
 - **Troubleshooting workflows:**
 -- Windows Event Viewer, DHCP renews, cache flushes;
