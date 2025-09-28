@@ -1,6 +1,7 @@
 # MTPortfolio — Labs, Blogs, and the Journey
 
 A live portfolio site of hands-on projects I've worked on and tinkered around with across **Networking, System Administration, Scripting & Automation, as well as Security**.  
+
 This repo powers my GitHub Pages site and contains both polished pages **and** the inevitable “in-progress” bits that come with real learning.
 
 **Live site:** https://mark-thompson01.github.io/MTPortfolio/  
