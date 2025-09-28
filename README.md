@@ -40,7 +40,7 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 
 ---
 
-## What I learned (selected)
+## What I learned 
 - **Applying Creativity:**
 -- Using resources to my advantage to independently build out web pages for content display and presentation.
 -- Creating instructional tutorials on fundamental topics.
