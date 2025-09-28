@@ -51,9 +51,10 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 
 ## Roadmap (ongoing)
 - Add more **labs** over the course of time. 
-- Tighten **accessibility** (color contrast audit, focus styles, skip links).
-- Light SEO polish (meta/OG/Twitter cards, canonical tags) without renaming paths.
-- Gentle cleanup **without breaking links** (commenting unused CSS, small refactors behind stable URLs).
+- Do deeper dives in PowerShell and Bash shell scripting
+- Begin with basic Python scripting
+- Build labs based on Cisco CCNA studies
+- Prepare myself for the role of a IT System Administrator
 
 ---
 
