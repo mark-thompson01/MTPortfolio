@@ -25,8 +25,10 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 ## What’s inside (selected)
 - **Hands-on Lab Demonstration**:
   - Command-Line Interface (CLI), scanning networks, troubleshooting w/ Windows Event Viewer, PowerShell Fundamentals.
-  - Windows Domain build; Active Directory Setup, Implementation and Management. 
+  - Windows Domain build; Active Directory Setup, Implementation, and Management.
+  - Linux fundamentals and basic system management.
   - Managed network switch configuration, basic PowerShell & Bash shell scripting, network security.
+  - Scripting & Automation experimentation and exploration.
 
 
 - **Blogs**
