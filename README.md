@@ -96,11 +96,9 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 
 ---
 
-## Local preview
-If you want to run this locally while editing:
-```bash
-# Option A: simple Python server
-python3 -m http.server 8080
+📄 **License**  
+This content is licensed under the [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/)
 
-# Option B (if using Jekyll later):
-# bundle exec jekyll serve
+
+
+
