@@ -18,7 +18,7 @@ with detailed screen shots of diverse hands-on projects across platforms. From h
 This portfolio has undergone a few transformations in it's time. Starting out as just a hobby to display hands-on network security projects. The original web page layouts
 were done were basic HTML and CSS, knowledge that I had applied from learning some basics from freecodecamp.org a few years ago. 
 
-The new layout was influenced by a marketing friend that led me to the realization that presentation is everything. Laying out a more neatly structured layout for project presentation. 
+The new layout was influenced by a marketing friend that led me to the realization that presentation is everything. Laying out a more neatly structured layout for project display and presentation. 
 
 ---
 
