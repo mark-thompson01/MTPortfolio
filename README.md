@@ -50,7 +50,7 @@ Rather than rewrite history (and break URLs), I’m documenting the path I took 
 ---
 
 ## Roadmap (ongoing)
-- Add more **labs** (Windows Event Viewer, PowerShell fundamentals, VLAN/STP/SPAN, Raspberry Pi automation).
+- Add more **labs** over the course of time. 
 - Tighten **accessibility** (color contrast audit, focus styles, skip links).
 - Light SEO polish (meta/OG/Twitter cards, canonical tags) without renaming paths.
 - Gentle cleanup **without breaking links** (commenting unused CSS, small refactors behind stable URLs).
