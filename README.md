@@ -6,9 +6,14 @@ This repo powers my GitHub Pages portfolio site and contains both polished pages
 
 **Live site:** https://mark-thompson01.github.io/MTPortfolio/  
 
-**Highlights to read first:**  
-- Blog: **Essential Network Commands** → `/Blogs/Essential Network Commands/`  
-- Tutorial: **Cross-Platform Network Commands** → `/Skills/Cross Plateform Networking Commands/` _(URL uses original folder spelling; page title is corrected)_
+This project first started out in June of 2024. At the time, I was growing in my
+current role as an IT Support Specialist and exploring cybersecurity after earning
+the CompTIA Security+ certification. The portfolio started out as a display of the hands-on network security projects I was tinkering around with at the time.
+
+As I further explored the landscape of IT, I realized two things. That the display of hands-on projects in today's job market is one of the best ways to standout. In addition to that, I realized my aspirations lie in becoming as diverse as possible across platforms, and developing the skillset of a system administrator. 
+
+From there, I focused on designing hands-on labs and constructing web pages 
+with detailed screen shots of diverse hands-on projects across platforms. From here, my goal is add more labs overtime and to grab a keyboard and skill up. 
 
 ---
 
