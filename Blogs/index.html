@@ -23,80 +23,56 @@
     }
     .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
     .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Title & intro */
     h1{margin:4px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:.2px}
     .lead{color:var(--muted);margin:0 0 18px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Blog grid & cards */
-    .blog-grid{
-      --gap: 16px;
-      display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: var(--gap);
-      margin-top:10px;
-    }
-    @media (max-width:900px){ .blog-grid{grid-template-columns:1fr} }
+    .blog-grid{--gap:16px;display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap);margin-top:10px}
+    @media (max-width:900px){.blog-grid{grid-template-columns:1fr}}
 
-    .card{
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);
-      border-radius:14px;
-      overflow:hidden;
-      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      box-shadow:var(--shadow);
-      display:flex; flex-direction:column;
-    }
-    .card-link{ display:flex; flex-direction:column; color:inherit; text-decoration:none; height:100% }
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:14px;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;box-shadow:var(--shadow);display:flex;flex-direction:column}
+    .card-link{display:flex;flex-direction:column;color:inherit;text-decoration:none;height:100%}
 
-    .thumb{ margin:0; aspect-ratio: 4 / 3; background:#0c0e13; overflow:hidden }
-    .thumb img{ width:100%; height:100%; object-fit:cover; object-position:50% 50%; display:block }
+    .thumb{margin:0;aspect-ratio:4/3;background:#0c0e13;overflow:hidden}
+    .thumb img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
 
-    /* Keep “COMMANDS” visible on the poster */
-    .card.network .thumb img{ object-position:50% 40% }
+    .card.network .thumb img{object-position:50% 40%}
+    .card.linux .thumb{aspect-ratio:16/9}
+    .card.linux .thumb img{object-position:50% 45%}
 
-    /* Widescreen terminal shot */
-    .card.linux .thumb{ aspect-ratio:16 / 9 }
-    .card.linux .thumb img{ object-position:50% 45% }
+    .title{font:600 1.05rem/1.3 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0;padding:0.9rem 1rem 0 1rem;color:#d3d3d3}
+    .excerpt{color:#a9b0c3;font:400 .95rem/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0.45rem 1rem 0 1rem}
+    .meta{display:inline-block;color:#7f8599;font-size:.95rem;margin:0.85rem 1rem 1rem 1rem}
 
-    .title{ font:600 1.05rem/1.3 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; margin:0; padding:0.9rem 1rem 0 1rem; color:#d3d3d3 }
-    .excerpt{ color:#a9b0c3; font:400 .95rem/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; margin:0.45rem 1rem 0 1rem }
-    .meta{ display:inline-block; color:#7f8599; font-size:.95rem; margin:0.85rem 1rem 1rem 1rem }
+    .card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.45);border-color:#3a4a67}
 
-    .card:hover{ transform:translateY(-3px); box-shadow:0 16px 40px rgba(0,0,0,.45); border-color:#3a4a67 }
-
-    /* Footer */
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer a{color:var(--muted)}footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
 
-    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
-      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a>
       <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
       <a href="/MTPortfolio/Blogs" class="active">Blog</a>
     </nav>
 
-    <!-- Header -->
     <header>
       <h1>Blog</h1>
       <p class="lead">Short, practical posts that connect theory with real tooling and workflows.</p>
     </header>
 
-    <!-- Blog Cards Grid -->
     <section class="blog-grid" aria-label="Blog posts">
-      <!-- Essential Network Commands -->
+
       <article class="card network">
         <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/10%20Essential%20Network%20Commands">
           <figure class="thumb">
@@ -108,7 +84,6 @@
         </a>
       </article>
 
-      <!-- Essential Linux Commands -->
       <article class="card linux">
         <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/10%20Essential%20Linux%20Commands">
           <figure class="thumb">
@@ -119,9 +94,20 @@
           <span class="meta">Read post →</span>
         </a>
       </article>
+
+      <article class="card reflection">
+        <a class="card-link" href="https://mark-thompson01.github.io/MTPortfolio/Blogs/Rethinking%20Cybersecurity%27s%20Cultural%20Direction">
+          <figure class="thumb">
+            <img src="Images/rethinking_cybersecurity_header.png" alt="Cybersecurity cultural reflection cover" loading="lazy">
+          </figure>
+          <h3 class="title">Reflection: Rethinking Cybersecurity’s Cultural Direction</h3>
+          <p class="excerpt">Exploring how real resilience in cybersecurity comes from understanding, not ritual.</p>
+          <span class="meta">Read post →</span>
+        </a>
+      </article>
+
     </section>
 
-    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
@@ -130,7 +116,5 @@
       </div>
     </footer>
   </div>
-
-  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
