@@ -39,7 +39,6 @@
       box-shadow:var(--shadow);padding:18px;margin-top:16px
     }
 
-    /* Figure styling */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -51,7 +50,6 @@
     }
     .figure img{display:block;height:auto;max-width:100%;border-radius:10px}
 
-    /* Table of contents */
     .toc{
       background:rgba(255,255,255,.02);
       border:1px solid var(--card-border);
@@ -72,7 +70,6 @@
 <body>
   <div class="wrap">
 
-    <!-- Top navigation -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -81,20 +78,17 @@
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
 
-    <!-- Header -->
     <header>
       <h1>Cybersecurity Best Practices</h1>
       <p class="lead">Foundational Principles for Building a Strong Security Posture</p>
     </header>
 
-    <!-- Introduction -->
     <section class="card" id="intro">
       <p>Cybersecurity is a broad and continuously evolving field that has gained significant attention and even a level of glorification over the years. As a result, it has inspired a wide range of interpretations—each with different approaches, implementations, and cultural perspectives on what “security” truly means.</p>
       <p>Through my own journey studying cybersecurity as an IT professional, I’ve learned that what’s effective in one environment may not be suitable in another. Factors such as an organization’s mission, what it’s trying to protect, its risk appetite, and overall priorities ultimately shape how cybersecurity is applied.</p>
       <p>That said, there are universal best practices that serve as essential building blocks for establishing a strong security posture in any environment. The following list highlights some of these foundational cybersecurity principles.</p>
     </section>
 
-    <!-- Table of Contents -->
     <section class="toc">
       <h2>Table of Contents</h2>
       <ol>
@@ -106,102 +100,112 @@
         <li><a href="#patch">Effective Patch Management</a></li>
         <li><a href="#encrypt">Encrypt Sensitive Data</a></li>
         <li><a href="#backup">Backup Data Regularly</a></li>
-        <li><a href="#logs">Conduct Event Log Analysis & Vulnerability Scans</a></li>
+        <li><a href="#logs">Conduct Event Log Analysis and Vulnerability Scans</a></li>
         <li><a href="#phishing">Implement Phishing Simulation Training</a></li>
-        <li><a href="#awareness">Conduct Cybersecurity Awareness Training</a></li>
-        <li><a href="#policies">Continuous Improvement of Security Policies</a></li>
+        <li><a href="#awareness">Conduct Annual Cybersecurity Awareness Training</a></li>
+        <li><a href="#policies">Continuous Improvement and Review of Security Policies</a></li>
       </ol>
     </section>
 
-    <!-- 1 -->
+    <!-- Password Complexity -->
     <section class="card" id="password">
       <h3>1. Implement Password Complexity Requirements</h3>
       <p>Passwords are the longstanding gatekeeper that serves as an account’s first line of defense. Through the use of system policies, password complexity requirements can be configured to ensure end users create strong, hard-to-guess passwords by setting rules for minimum length, character variety, and blocking weak or breached passwords.</p>
       <p>This helps prevent the reuse of common passwords and mitigates unauthorized access attempts. It also reduces the success rate of brute-force and dictionary attacks while strengthening overall account security.</p>
-      <div class="figure"><img src="Images/1passwordcomplexity.png" alt="Password Complexity Requirements" width="650" loading="lazy"></div>
+      <div class="figure"><img src="Images/1passwordcomplexity.png" alt="Password Complexity Requirements" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 2 -->
+    <!-- MFA -->
     <section class="card" id="mfa">
       <h3>2. Enable Multi-Factor Authentication (MFA)</h3>
-      <p>Multi-Factor Authentication (MFA) adds an extra layer of protection by requiring users to verify their identity through multiple factors: something they know (password), something they have (authentication app, token, or code), or something they are (biometric data).</p>
+      <p>Enabling Multi-Factor Authentication (MFA) adds an extra layer of protection by requiring users to verify their identity through multiple factors: something they know (password), something they have (authentication app, token, or code), or something they are (biometric data).</p>
       <p>By combining these factors, MFA significantly reduces the risk of unauthorized access caused by stolen or compromised credentials. Implementing MFA across all critical systems, cloud services, and administrative accounts is one of the most effective ways to strengthen authentication security.</p>
-      <div class="figure"><img src="Images/2MFA.png" alt="Enable MFA" width="650" loading="lazy"></div>
+      <div class="figure"><img src="Images/2MFA.png" alt="Enable MFA" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 3 -->
+    <!-- Least Privilege -->
     <section class="card" id="leastprivilege">
       <h3>3. Limit Access and Apply Least Privilege</h3>
       <p>Limiting access and applying the principle of least privilege ensures that users, applications, and systems only have the minimum level of access necessary to perform their specific tasks. This helps minimize the potential impact of compromised accounts or insider misuse by reducing unnecessary permissions and attack surfaces.</p>
-      <div class="figure"><img src="Images/3LeastPrivilege.png" alt="Least Privilege" width="650" loading="lazy"></div>
+      <p>Implementing least privilege involves regularly reviewing user roles, access rights, and administrative privileges to ensure they align with current job responsibilities and organizational needs. This approach strengthens overall security posture and prevents unauthorized access to critical systems and sensitive data.</p>
+      <div class="figure"><img src="Images/3LeastPrivilege.png" alt="Least Privilege" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 4 -->
+    <!-- Defense-in-Depth -->
     <section class="card" id="did">
       <h3>4. Implement a Defense-in-Depth Strategy</h3>
-      <p>Implementing a defense-in-depth strategy involves layering multiple security controls throughout an organization’s technology stack to provide redundancy and reduce the likelihood of a single point of failure.</p>
-      <div class="figure"><img src="Images/4DID.png" alt="Defense-in-Depth Strategy" width="650" loading="lazy"></div>
+      <p>Implementing a defense-in-depth strategy involves layering multiple security controls throughout an organization's technology stack to provide redundancy and reduce the likelihood of a single point of failure. This ensures that if one layer is bypassed, others remain to detect, delay, or block an attack.</p>
+      <p>A defense-in-depth strategy typically combines preventive, detective, and responsive measures—such as firewalls, endpoint protection, network segmentation, intrusion detection systems, and user awareness training—to create a comprehensive and resilient security posture.</p>
+      <div class="figure"><img src="Images/4DID.png" alt="Defense-in-Depth Strategy" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 5 -->
+    <!-- Hardening -->
     <section class="card" id="hardening">
       <h3>5. Infrastructure and Systems Hardening</h3>
-      <p>Infrastructure and systems hardening secures servers, networks, endpoints, and applications by reducing their attack surface. It includes disabling unused services, accounts, and ports, applying secure configurations, enforcing strong authentication, and keeping systems patched.</p>
-      <div class="figure"><img src="Images/5SystemHardening.png" alt="System Hardening" width="650" loading="lazy"></div>
+      <p>Infrastructure and systems hardening is the process of securing servers, networks, endpoints, and applications by reducing their attack surface and eliminating unnecessary vulnerabilities. This includes disabling unused services, accounts, and ports; applying secure configurations; enforcing strong authentication; and keeping systems updated with the latest patches.</p>
+      <p>The goal is to create a stable, resilient environment that resists exploitation and ensures each component of the IT infrastructure operates with minimal exposure to threats while maintaining necessary functionality.</p>
+      <div class="figure"><img src="Images/5SystemHardening.png" alt="System Hardening" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 6 -->
+    <!-- Patch -->
     <section class="card" id="patch">
       <h3>6. Effective Patch Management to Reduce Attack Surface</h3>
-      <p>Keeping systems, servers, and endpoints up to date with the latest security patches helps minimize exploitable weaknesses. A strong patch management process includes maintaining an asset inventory, prioritizing updates by risk, and verifying successful deployments.</p>
-      <div class="figure"><img src="Images/6PatchManagement.png" alt="Patch Management" width="650" loading="lazy"></div>
+      <p>Keeping systems, servers, infrastructure, and endpoints up to date with the latest security patches helps minimize exploitable weaknesses. A strong patch management process includes maintaining an accurate asset inventory, prioritizing updates based on risk, and verifying successful deployments.</p>
+      <p>This proactive approach is essential for preventing threat actors from exploiting known vulnerabilities and maintaining a secure infrastructure across all organizational layers.</p>
+      <div class="figure"><img src="Images/6PatchManagement.png" alt="Patch Management" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 7 -->
+    <!-- Encrypt -->
     <section class="card" id="encrypt">
       <h3>7. Encrypt Sensitive Data</h3>
-      <p>Encrypting sensitive data ensures confidentiality by converting information into an unreadable format that can only be decrypted with the correct key. This protects data both at rest and in transit from unauthorized access or interception.</p>
-      <div class="figure"><img src="Images/7EncryptData.png.png" alt="Encrypt Sensitive Data" width="600" loading="lazy"></div>
+      <p>Encrypting sensitive data ensures confidentiality by converting information into an unreadable format that can only be decrypted with the proper key. This protects data both at rest (stored on servers or devices) and in transit (transferred across networks) from unauthorized access or interception.</p>
+      <p>Implementing strong encryption standards—such as AES-256 for storage and TLS for communication—helps safeguard personal, financial, and proprietary information. Proper key management practices, including secure storage and regular rotation, maintain data integrity and confidentiality.</p>
+      <div class="figure"><img src="Images/7EncryptData.png" alt="Encrypt Sensitive Data" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 8 -->
+    <!-- Backup -->
     <section class="card" id="backup">
       <h3>8. Backup Data Regularly</h3>
-      <p>Regular data backups ensure critical information can be restored in the event of data loss, corruption, ransomware, or hardware failure. Following the 3-2-1 rule helps ensure resilience and availability.</p>
-      <div class="figure"><img src="Images/8BackupData.png" alt="Backup Data Regularly" width="600" loading="lazy"></div>
+      <p>Regular data backups ensure critical information can be restored in the event of data loss, corruption, ransomware, or hardware failure. A reliable backup strategy follows the 3-2-1 rule—keeping three copies of data, stored on two different media types, with one copy kept offsite or in the cloud.</p>
+      <p>Effective backup management includes encrypting backup files, scheduling routine backups, and testing restoration processes regularly to ensure data integrity and availability when it’s needed most.</p>
+      <div class="figure"><img src="Images/8BackupData.png" alt="Backup Data Regularly" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 9 -->
+    <!-- Logs -->
     <section class="card" id="logs">
       <h3>9. Conduct Frequent Event Log Analysis and Vulnerability Scans</h3>
-      <p>Analyzing logs and running vulnerability scans maintains visibility into system activity and helps detect anomalies or weaknesses before they’re exploited.</p>
-      <div class="figure"><img src="Images/9EventLogVuln.png" alt="Event Log Analysis" width="650" loading="lazy"></div>
+      <p>Conducting frequent event log analysis and vulnerability scans maintains visibility into system activity and helps identify potential weaknesses before they are exploited. Event log analysis detects suspicious behavior or anomalies, while vulnerability scans identify outdated software, misconfigurations, and exploitable flaws.</p>
+      <p>Together, these practices provide early warning indicators of compromise, support faster incident response, and help ensure systems remain aligned with security baselines and compliance requirements.</p>
+      <div class="figure"><img src="Images/9EventLogVuln.png" alt="Event Log Analysis and Vulnerability Scans" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 10 -->
+    <!-- Phishing -->
     <section class="card" id="phishing">
       <h3>10. Implement Phishing Simulation Training</h3>
-      <p>Phishing simulation training strengthens an organization’s human firewall by teaching employees to recognize and respond to phishing attempts through safe simulations and follow-up learning.</p>
-      <div class="figure"><img src="Images/10PhishingSimulation.png" alt="Phishing Simulation" width="650" loading="lazy"></div>
+      <p>Phishing simulation training strengthens an organization’s human firewall by teaching employees how to recognize and properly respond to phishing attempts. Safe, simulated phishing emails mimic real-world attacks to test user awareness and identify areas for improvement.</p>
+      <p>Analyzing results and providing targeted follow-up training reduces the likelihood of credential theft, malware infections, and data breaches. Regular simulations promote accountability and ongoing cybersecurity awareness across the organization.</p>
+      <div class="figure"><img src="Images/10PhishingSimulation.png" alt="Phishing Simulation Training" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 11 -->
+    <!-- Awareness -->
     <section class="card" id="awareness">
       <h3>11. Conduct Mandatory Annual Cybersecurity Awareness Training</h3>
-      <p>Annual training ensures employees remain informed and vigilant about evolving threats, fostering a culture of shared responsibility and proactive security awareness.</p>
-      <div class="figure"><img src="Images/11AwarenessTraining.png" alt="Awareness Training" width="650" loading="lazy"></div>
+      <p>Annual cybersecurity awareness training ensures that employees remain informed, vigilant, and capable of recognizing threats that target human behavior. It reinforces key topics such as password hygiene, phishing prevention, data handling, and incident reporting.</p>
+      <p>Updating employees each year on emerging threats and evolving security policies strengthens the human defense layer and fosters a culture of shared responsibility for protecting organizational assets.</p>
+      <div class="figure"><img src="Images/11AwarenessTraining.png" alt="Cybersecurity Awareness Training" width="500" loading="lazy"></div>
     </section>
 
-    <!-- 12 -->
+    <!-- Policies -->
     <section class="card" id="policies">
       <h3>12. Continuous Improvement and Review of Security Policies</h3>
-      <p>Regularly reviewing and refining security policies ensures alignment with changing technologies, risks, and organizational goals while maintaining a resilient cybersecurity posture.</p>
-      <div class="figure"><img src="Images/12securitypolicyimprove.png" alt="Continuous Policy Review" width="650" loading="lazy"></div>
+      <p>Continuous improvement and review of security policies ensure that an organization’s cybersecurity framework remains effective and aligned with evolving threats, technologies, and business goals. This involves regularly evaluating existing controls, updating procedures, and incorporating lessons learned from audits and incidents.</p>
+      <p>By continually refining policies, organizations close security gaps, adapt to new requirements, and reinforce a culture of resilience. This approach transforms cybersecurity from a static task into an adaptive, ongoing discipline that supports long-term risk management.</p>
+      <div class="figure"><img src="Images/12securitypolicyimprove.png" alt="Continuous Improvement and Review of Security Policies" width="500" loading="lazy"></div>
     </section>
 
-    <!-- Conclusion -->
     <section class="card">
-      <p>Cybersecurity best practices form the backbone of a resilient digital environment. Together, they create a layered defense that adapts to evolving threats and protects systems, users, and data effectively.</p>
+      <p>Cybersecurity best practices serve as the foundation for building a secure, resilient, and adaptive digital environment. While technology continues to evolve, these principles remain timeless—focusing on layered defense, proactive monitoring, and continuous education. Each practice works together to create a stronger security posture that protects systems, users, and organizational data from an ever-changing threat landscape.</p>
+      <p>Implementing and maintaining these practices demonstrates not only technical discipline but also a commitment to responsible information security management—an essential mindset for professionals in today’s interconnected world.</p>
     </section>
 
     <p><a href="../index.html">Back to Home</a></p>
