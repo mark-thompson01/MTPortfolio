@@ -127,6 +127,7 @@
     <!-- Prepare environment -->
     <section class="card">
       <h2>Preparing the PowerShell Environment</h2>
+      <code>Import-Module ActiveDirectory</code>
       <p>Import the <strong>ActiveDirectory</strong> module to manage AD DS and LDS from PowerShell.</p>
       <div class="img-wrap"><img src="Images/ps1.PNG" alt="Importing the Active Directory PowerShell module" /></div>
     </section>
@@ -157,7 +158,9 @@
       <h2>Reset a User’s Password</h2>
       <ol class="tight">
         <li>Use <code>Set-ADAccountPassword</code> to reset.</li>
+        <code>Set-ADAccountPassword -Identity "BTest" -NewPassword (ConvertTo-SecureString "summer2025!" -AsPlainText -Force ) -Reset</code>
         <li>Optionally enforce password change at next logon.</li>
+        <code>Set-ADUser -Identity "BTest" -ChangePasswordAtLogon $true</code>
       </ol>
       <div class="img-wrap"><img src="Images/ps2.PNG" alt="Reset user password using PowerShell" /></div>
       <div class="img-wrap"><img src="Images/ps3.PNG" alt="Force user to change password at next logon" /></div>
@@ -166,6 +169,7 @@
     <!-- Link GPO to OU -->
     <section class="card">
       <h2>Apply a GPO to Users via OU Link</h2>
+      <code>New-GPLink -Name "Disable Control Panel" -Target "OU=TestUsers,DC=Domain-1,DC=local"</code>
       <p>Link an existing GPO to an OU to target all user objects within (unless further constrained by security filtering).</p>
       <div class="img-wrap"><img src="Images/GPO1.PNG" alt="PowerShell command to link a GPO to an OU" /></div>
     </section>
@@ -178,8 +182,10 @@
         <li><strong>Optional:</strong> Remove <em>Authenticated Users</em> from Security Filtering if you want exclusive targeting.</li>
         <li>Be cautious—ensure the correct principals retain required rights.</li>
       </ol>
+      <code>Set-GPPermission -Name "Disable Control Panel" -TargetName "DRicks" -PermissionLevel GpoApply</code>
       <div class="img-wrap"><img src="Images/GPO2.PNG" alt="Grant GPO permissions for a specific user or group" /></div>
       <div class="img-wrap"><img src="Images/GPO3.PNG" alt="Apply Group Policy and Read permissions in GPMC" /></div>
+      <code>Set-GPPermissions -Name "Disable Control Panel" -TargetName "Authenticated Users" -TargetType Group -PermissionLevel None</code>
       <div class="img-wrap"><img src="Images/GPO4.PNG" alt="Security filtering edit example" /></div>
     </section>
 
