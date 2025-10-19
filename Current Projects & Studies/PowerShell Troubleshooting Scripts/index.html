@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Windows PowerShell Troubleshooting Scripts · Mark Thompson Portfolio</title>
-  <meta name="description" content="Collection of PowerShell troubleshooting scripts for network connectivity, disk health, Windows services, user profiles, event logs, and Windows updates." />
+  <title>Windows & Linux · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hands-on labs and tutorials in Windows & Linux: Event Viewer, PowerShell, Active Directory, Bash scripting, Raspberry Pi automation." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -19,78 +19,60 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
     .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
-    .crumbs a{color:var(--muted);text-decoration:none}
-    .crumbs a:hover{color:var(--text)}
+    /* Title & intro */
+    h1{margin:4px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 18px;font-size:clamp(16px,2.2vw,18px)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    a{color:var(--brand);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Section titles */
+    h2{margin:26px 0 14px;font-size:clamp(22px,3vw,28px)}
 
+    /* Cards grid */
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    @media (max-width:720px){.grid{grid-template-columns:1fr}}
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
-    }
-
-    .figure{
       border:1px solid var(--card-border);
-      border-radius:12px;
-      background:#0e1220;
-      padding:8px;
-      margin:12px auto;
-      width:max-content;
-      max-width:100%;
-      text-align:center;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:14px;
+      transition:transform .18s,border-color .18s,box-shadow .18s;
     }
-    .figure img{
-      display:block;
-      height:auto;
-      max-width:100%;
-      cursor:zoom-in;
-      border-radius:10px;
+    .card:hover{transform:translateY(-3px);border-color:#3a4a67;box-shadow:0 16px 40px rgba(0,0,0,.45)}
+    .card a{display:block;color:var(--text);text-decoration:none}
+
+    /* Images smaller and consistent */
+    .card img{
+      width:100%;
+      max-height:130px;          /* smaller image size */
+      object-fit:cover;
+      border-radius:12px;
+      margin-bottom:10px;
+      box-shadow:0 6px 18px rgba(0,0,0,.3);
     }
 
-    pre{
-      margin:10px 0;
-      padding:12px 14px;
-      background:#0f1424;
-      border:1px solid #202a3f;
-      border-radius:12px;
-      overflow:auto;
-      color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
-    }
+    .item-title{font-weight:700;font-size:17px;margin:0 0 6px}
+    .item-desc{color:var(--muted);font-size:14px;margin:0}
 
+    /* Footer */
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
     footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
-
-    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
-    .zoom-modal[open]{display:block}
-    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
-    .zoom-img{max-width:95vw;max-height:95vh;width:auto;height:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out}
-    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;cursor:pointer}
-    .zoom-close:hover{background:#121733}
-    .hide-scroll{overflow:hidden}
   </style>
 </head>
 <body>
   <div class="wrap">
 
+    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -99,72 +81,108 @@
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
 
-    <div class="crumbs">
-      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Windows PowerShell Troubleshooting Scripts</span>
-    </div>
-
+    <!-- Page header -->
     <header>
-      <h1>Windows PowerShell Troubleshooting Scripts</h1>
-      <p class="lead">A collection of PowerShell scripts developed to automate system troubleshooting across network connectivity, disk health, event logs, services, user profiles, and Windows updates.</p>
-      <p>
-        <a href="https://github.com/mark-thompson01/PowerShell-Troubleshooting" target="_blank" rel="noopener">
-          View this project on GitHub
-        </a>
-      </p>
+      <h1>Windows &amp; Linux</h1>
+      <p class="lead">Hands-on labs and tutorials showcasing system administration, scripting, automation, and cross-platform fundamentals.</p>
     </header>
 
-    <!-- Section 1 -->
-    <section class="card">
-      <h2>1. Network Connectivity Troubleshooting Script</h2>
-      <p>This script tests network adapters, gateway reachability, and DNS resolution while generating a full connectivity report.</p>
-      <div class="figure"><img src="Images/networktroubleshooting1.png" alt="PowerShell ISE showing network troubleshooting script"></div>
-      <div class="figure"><img src="Images/networktroubleshooting2.png" alt="Network troubleshooting PowerShell log output"></div>
-    </section>
+    <!-- Windows Section -->
+    <h2>Windows</h2>
+    <div class="grid">
+      <article class="card">
+        <a href="...">
+          <img src="Images/eventviewer.jpg" alt="Windows Event Viewer">
+          <div class="item-title">Windows Event Viewer</div>
+          <p class="item-desc">Exploring system logs and monitoring for troubleshooting insights.</p>
+        </a>
+      </article>
 
-    <!-- Section 2 -->
-    <section class="card">
-      <h2>2. Disk Space and Drive Health Check</h2>
-      <p>Checks available disk space and identifies drives with less than 15% free capacity. Exports low-space results to CSV.</p>
-      <div class="figure"><img src="Images/DiskCheck.png" alt="PowerShell ISE disk space health check script"></div>
-    </section>
+      <article class="card">
+        <a href="...">
+          <img src="Images/powershellfundamentals.jpg" alt="PowerShell Fundamentals">
+          <div class="item-title">PowerShell Fundamentals</div>
+          <p class="item-desc">Core cmdlets, scripting basics, and automation workflows in Windows.</p>
+        </a>
+      </article>
 
-    <!-- Section 3 -->
-    <section class="card">
-      <h2>3. Windows Service Status Troubleshooter</h2>
-      <p>Verifies essential Windows services like BITS, Spooler, WinRM, and W32Time. Automatically restarts any that are stopped and logs the results.</p>
-      <div class="figure"><img src="Images/servicestatus.png" alt="PowerShell ISE service status troubleshooter script"></div>
-    </section>
+      <article class="card">
+        <a href="...">
+          <img src="Images/activedirectory.jpg" alt="Active Directory Lab">
+          <div class="item-title">Active Directory Domain with Group Policies</div>
+          <p class="item-desc">Deploying a Windows Server domain, creating OUs, and applying GPOs for management.</p>
+        </a>
+      </article>
 
-    <!-- Section 4 -->
-    <section class="card">
-      <h2>4. Event Log Error Scanner</h2>
-      <p>Scans for critical System event errors from the last 24 hours and exports them to CSV for easier analysis.</p>
-      <div class="figure"><img src="Images/eventlogscanner.png" alt="PowerShell ISE event log scanner script"></div>
-      <div class="figure"><img src="Images/eventlogscannerrun.png" alt="Event log error scan output view"></div>
-    </section>
+      <article class="card">
+        <a href="...">
+          <img src="Images/powershellscripts.jpg" alt="PowerShell Troubleshooting Scripts">
+          <div class="item-title">PowerShell Troubleshooting Scripts</div>
+          <p class="item-desc">Windows PowerShell troubleshooting scripts for diagnostics and recovery automation.</p>
+        </a>
+      </article>
+    </div>
 
-    <!-- Section 5 -->
-    <section class="card">
-      <h2>5. User Profile or Login Issue Troubleshooter</h2>
-      <p>Detects corrupted user profiles and `.bak` registry entries that may cause login problems. Results are exported to a CSV for inspection.</p>
-      <div class="figure"><img src="Images/loginissuetroubleshooter.png" alt="PowerShell ISE user profile troubleshooter script"></div>
-      <div class="figure"><img src="Images/userprofiletroubleshooting.png" alt="PowerShell user profile CSV output"></div>
-    </section>
+    <!-- Linux Section -->
+    <h2>Linux</h2>
+    <div class="grid">
+      <article class="card">
+        <a href="...">
+          <img src="Images/linuxintro.jpg" alt="Linux Introduction">
+          <div class="item-title">Linux: An Introduction</div>
+          <p class="item-desc">Getting started with Linux concepts, distributions, and important system components.</p>
+        </a>
+      </article>
 
-    <!-- Section 6 -->
-    <section class="card">
-      <h2>6. Windows Update and Compliance Check</h2>
-      <p>Lists installed updates, identifies failed ones (Event ID 20), triggers a scan, and logs results for update compliance.</p>
-      <div class="figure"><img src="Images/windowsupdate.png" alt="Windows update compliance check script"></div>
-      <div class="figure"><img src="Images/windowsupdate2.png" alt="PowerShell Windows update log output"></div>
-    </section>
+      <article class="card">
+        <a href="...">
+          <img src="Images/linuxbasics.jpg" alt="Linux Basics and Fundamentals">
+          <div class="item-title">Linux Basics & Fundamentals</div>
+          <p class="item-desc">Exploring the Linux filesystem, package management, system services, processes, and logging.</p>
+        </a>
+      </article>
 
-    <section class="card">
-      <h2>Summary</h2>
-      <p>Together, these scripts streamline troubleshooting and reduce manual effort across a Windows environment. Each script includes exportable logs, allowing IT professionals to review historical data or automate routine checks across multiple systems.</p>
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+      <article class="card">
+        <a href="...">
+          <img src="Images/virtualbox.jpg" alt="Installing Linux on VirtualBox">
+          <div class="item-title">Installing Linux on VirtualBox</div>
+          <p class="item-desc">Step-by-step guide to running Ubuntu Linux inside Oracle VirtualBox.</p>
+        </a>
+      </article>
 
+      <article class="card">
+        <a href="...">
+          <img src="Images/commandline.jpg" alt="Linux Command Line">
+          <div class="item-title">Linux Command-Line</div>
+          <p class="item-desc">Hands-on with essential commands and navigation inside the Linux shell.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="...">
+          <img src="Images/bashscripting.jpg" alt="Basic Bash Shell Scripting">
+          <div class="item-title">Basic Bash Shell Scripting</div>
+          <p class="item-desc">Exploring fundamental Bash scripting concepts and commands.</p>
+        </a>
+      </article>
+
+      <article class="card">
+        <a href="...">
+          <img src="Images/raspberrypi5.jpg" alt="Raspberry Pi 5 Automation">
+          <div class="item-title">Raspberry Pi 5 Automation</div>
+          <p class="item-desc">Ongoing project exploring scripting and automation on a Raspberry Pi 5.</p>
+        </a>
+      </article>
+    </div>
+
+    <!-- GitHub link -->
+    <p style="margin-top:22px">
+      <a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" style="color:var(--brand);font-weight:600">
+        View this project on GitHub →
+      </a>
+    </p>
+
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
@@ -173,30 +191,5 @@
       </div>
     </footer>
   </div>
-
-  <!-- Zoom modal -->
-  <div class="zoom-modal" id="zoom" aria-hidden="true">
-    <div class="zoom-content" data-close>
-      <img class="zoom-img" id="zoomImg" alt="">
-      <button class="zoom-close" type="button">&times;</button>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      const modal=document.getElementById('zoom');
-      const zoomImg=document.getElementById('zoomImg');
-      const closeBtn=modal.querySelector('.zoom-close');
-      let lastFocus=null;
-      document.querySelectorAll('.figure img').forEach(img=>img.classList.add('zoomable'));
-      function openModal(src,alt){lastFocus=document.activeElement;zoomImg.src=src;zoomImg.alt=alt||'';modal.setAttribute('open','');document.body.classList.add('hide-scroll');closeBtn.focus();}
-      function closeModal(){modal.removeAttribute('open');document.body.classList.remove('hide-scroll');zoomImg.removeAttribute('src');if(lastFocus)lastFocus.focus();}
-      document.addEventListener('click',e=>{const img=e.target.closest('.figure img.zoomable');if(img){openModal(img.src,img.alt);}});
-      closeBtn.addEventListener('click',closeModal);
-      modal.addEventListener('click',e=>{if(e.target.hasAttribute('data-close')||e.target===modal)closeModal();});
-      zoomImg.addEventListener('click',closeModal);
-      document.addEventListener('keydown',e=>{if(!modal.hasAttribute('open'))return;if(e.key==='Escape')closeModal();});
-    })();
-  </script>
 </body>
 </html>
