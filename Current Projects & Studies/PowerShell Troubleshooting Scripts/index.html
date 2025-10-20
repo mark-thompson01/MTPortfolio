@@ -64,6 +64,12 @@
       margin:auto;
     }
 
+    .figcaption{
+      margin-top:6px;
+      font-size:14px;
+      color:var(--muted);
+    }
+
     pre{
       margin:10px 0;
       padding:12px 14px;
@@ -114,70 +120,76 @@
       </p>
     </header>
 
-    <!-- Script Sections -->
+    <!-- Section 1 -->
     <section class="card">
       <h2>1. Network Connectivity Troubleshooting Script</h2>
       <p>Tests adapters, gateway reachability, and DNS resolution, logging all results to a report file.</p>
-      <div class="figure"><img src="Images/networktroubleshooting1.png" alt="Network troubleshooting script in PowerShell ISE"></div>
-      <div class="figure"><img src="Images/networktroubleshooting2.png" alt="Network troubleshooting PowerShell log output"></div>
+      <div class="figure"><img src="Images/networktroubleshooting1.png" alt="Network troubleshooting script in PowerShell ISE"><div class="figcaption">Network Troubleshooting Script</div></div>
+      <div class="figure"><img src="Images/networktroubleshooting2.png" alt="Network troubleshooting PowerShell log output"><div class="figcaption">Network Troubleshooting Output</div></div>
       <h3>Automation</h3>
-      <p>This script was automated using PowerShell Scheduled Jobs to run daily at 9:00 AM.</p>
-      <div class="figure"><img src="Images/NetConnectTroubleshootScript.png" alt="Network troubleshooting scheduled job"></div>
+      <p>This script is scheduled using a PowerShell Scheduled Job that runs daily at 9:00 AM.</p>
+      <div class="figure"><img src="Images/NetConnectTroubleshootScript.png" alt="Network Connectivity Troubleshooter Scheduled Job"><div class="figcaption">Network Connectivity Troubleshooter Scheduled Job</div></div>
     </section>
 
+    <!-- Section 2 -->
     <section class="card">
       <h2>2. Disk Space and Drive Health Check</h2>
       <p>Checks all local drives for free space and exports low-space results to CSV for documentation.</p>
-      <div class="figure"><img src="Images/DiskCheck.png" alt="Disk health check script in PowerShell ISE"></div>
+      <div class="figure"><img src="Images/DiskCheck.png" alt="Disk health check script in PowerShell ISE"><div class="figcaption">Disk Space and Drive Health Script</div></div>
       <h3>Automation</h3>
-      <p>Automated through PowerShell Scheduled Jobs to ensure daily monitoring of disk health.</p>
-      <div class="figure"><img src="Images/diskhealthchecksched.png" alt="Disk health check scheduled job"></div>
+      <p>Automated using a PowerShell Scheduled Job that performs daily disk health checks.</p>
+      <div class="figure"><img src="Images/diskhealthchecksched.png" alt="Disk Health Check Scheduled Job"><div class="figcaption">Disk Health Check Scheduled Job</div></div>
     </section>
 
+    <!-- Section 3 -->
     <section class="card">
       <h2>3. Windows Service Status Troubleshooter</h2>
-      <p>Monitors and restarts critical Windows services like Spooler, WinRM, and BITS, saving results to a log.</p>
-      <div class="figure"><img src="Images/servicestatus.png" alt="Service status troubleshooter PowerShell script"></div>
+      <p>Monitors and restarts critical Windows services like Spooler, WinRM, and BITS, saving results to a log file.</p>
+      <div class="figure"><img src="Images/servicestatus.png" alt="Windows Service Troubleshooter script"><div class="figcaption">Windows Service Troubleshooter Script</div></div>
       <h3>Automation</h3>
-      <p>This scheduled job automatically checks service health and restarts them if needed.</p>
-      <div class="figure"><img src="Images/servicestatustroubleshootsched.png" alt="Service status troubleshooting scheduled job"></div>
+      <p>Scheduled as a daily PowerShell job that automatically checks and restores essential Windows services.</p>
+      <div class="figure"><img src="Images/servicestatustroubleshootsched.png" alt="Windows Service Troubleshooter Scheduled Job"><div class="figcaption">Windows Service Status Troubleshooter Scheduled Job</div></div>
     </section>
 
+    <!-- Section 4 -->
     <section class="card">
       <h2>4. Event Log Error Scanner</h2>
-      <p>Scans system event logs for errors from the past 24 hours, exporting results for analysis.</p>
-      <div class="figure"><img src="Images/eventlogscanner.png" alt="Event log scanner script"></div>
-      <div class="figure"><img src="Images/eventlogscannerrun.png" alt="Event log scan output example"></div>
+      <p>Scans the System event log for errors within the last 24 hours and exports results for analysis.</p>
+      <div class="figure"><img src="Images/eventlogscanner.png" alt="PowerShell event log scanner script"><div class="figcaption">Event Log Scanner Script</div></div>
+      <div class="figure"><img src="Images/eventlogscannerrun.png" alt="Event log scanner results"><div class="figcaption">Event Log Scan Results</div></div>
       <h3>Automation</h3>
-      <p>Configured to scan event logs daily through a PowerShell Scheduled Job for proactive monitoring.</p>
-      <div class="figure"><img src="Images/eventlogerrorscannersched.png" alt="Event log error scanner scheduled job"></div>
+      <p>Automated through a PowerShell Scheduled Job that runs each morning to capture and log error events.</p>
+      <div class="figure"><img src="Images/eventlogerrorscannersched.png" alt="Event Log Error Scanner Scheduled Job"><div class="figcaption">Event Log Error Scanner Scheduled Job</div></div>
     </section>
 
+    <!-- Section 5 -->
     <section class="card">
       <h2>5. User Profile or Login Issue Troubleshooter</h2>
-      <p>Finds corrupted or missing user profiles and checks for registry entries with .bak suffixes.</p>
-      <div class="figure"><img src="Images/loginissuetroubleshooter.png" alt="User profile troubleshooter script in PowerShell"></div>
-      <div class="figure"><img src="Images/userprofiletroubleshooting.png" alt="User profile troubleshooting output log"></div>
+      <p>Finds corrupted or missing user profile paths and detects registry entries with .bak suffixes.</p>
+      <div class="figure"><img src="Images/loginissuetroubleshooter.png" alt="PowerShell user profile troubleshooter"><div class="figcaption">User Profile Troubleshooter Script</div></div>
+      <div class="figure"><img src="Images/userprofiletroubleshooting.png" alt="User profile troubleshooting PowerShell output"><div class="figcaption">User Profile Troubleshooter Output</div></div>
       <h3>Automation</h3>
-      <p>This scheduled job runs daily to detect and report user profile issues automatically.</p>
-      <div class="figure"><img src="Images/userprofiletroubleshootsched.png" alt="User profile troubleshooter scheduled job"></div>
+      <p>Scheduled daily using PowerShell Scheduled Jobs to automatically identify and log user profile issues.</p>
+      <div class="figure"><img src="Images/userprofiletroubleshootsched.png" alt="User Profile Troubleshooter Scheduled Job"><div class="figcaption">User Profile or Login Issue Troubleshooter Scheduled Job</div></div>
     </section>
 
+    <!-- Section 6 -->
     <section class="card">
       <h2>6. Windows Update and Compliance Check</h2>
       <p>Lists installed updates, identifies failed patches, triggers scans, and logs compliance reports.</p>
-      <div class="figure"><img src="Images/windowsupdate.png" alt="Windows update compliance script in PowerShell"></div>
-      <div class="figure"><img src="Images/windowsupdate2.png" alt="Windows update PowerShell log example"></div>
+      <div class="figure"><img src="Images/windowsupdate.png" alt="Windows Update PowerShell script"><div class="figcaption">Windows Update Compliance Script</div></div>
+      <div class="figure"><img src="Images/windowsupdate2.png" alt="Windows update log output example"><div class="figcaption">Windows Update Log Output</div></div>
       <h3>Automation</h3>
-      <p>Automated to perform daily update compliance scans and generate system status logs.</p>
-      <div class="figure"><img src="Images/windowsupdatesched.png" alt="Windows update compliance scheduled job"></div>
+      <p>Configured to run automatically through a PowerShell Scheduled Job that performs daily update scans and logs system status.</p>
+      <div class="figure"><img src="Images/windowsupdatesched.png" alt="Windows Update Compliance Check Scheduled Job"><div class="figcaption">Windows Update and Compliance Check Scheduled Job</div></div>
     </section>
 
+    <!-- Summary -->
     <section class="card">
       <h2>Automation Summary</h2>
-      <p>Each troubleshooting script is automated using <strong>PowerShell Scheduled Jobs</strong>, running daily at 9:00 AM.  
-      This setup ensures continuous system monitoring and log generation without relying on Task Scheduler.</p>
-      <div class="figure"><img src="Images/download.png" alt="List of all registered PowerShell scheduled jobs"></div>
+      <p>All troubleshooting scripts are automated using <strong>PowerShell Scheduled Jobs</strong>, each configured to run daily at 9:00 AM.  
+      This ensures proactive system monitoring, regular logging, and simplified maintenance without using Task Scheduler.</p>
+      <div class="figure"><img src="Images/download.png" alt="List of all registered PowerShell scheduled jobs"><div class="figcaption">Overview of All PowerShell Scheduled Jobs</div></div>
       <p><a href="../index.html">Back to Home</a></p>
     </section>
 
