@@ -1,1 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PowerShell in Action · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hands-on PowerShell examples that demonstrate real workflows, from core cmdlets to pipelines, data access, scripting, OS interaction, and cross-platform use." />
+  <style>
+    :root {
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:10px 0 8px;font-size:22px;color:var(--brand)}
+    p.lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+      margin-top:20px;
+    }
+
+    .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;width:max-content;max-width:100%}
+    .figure img{display:block;height:auto;max-width:100%;border-radius:8px}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs" class="active">Blog</a>
+    </nav>
+
+    <div class="crumbs">
+      <a href="/MTPortfolio/Blogs">Blog</a> · <span>PowerShell in Action</span>
+    </div>
+
+    <header>
+      <div class="figure">
+        <img src="Images/PowerShellInActionBanner.png" alt="PowerShell in Action blog header showing PowerShell examples" style="width:600px; height:auto;" loading="lazy" />
+      </div>
+      <h1>PowerShell in Action: Hands-on Examples That Change How You Work</h1>
+      <p class="lead">A hands-on continuation of my previous PowerShell blog — this post dives into real examples that demonstrate how PowerShell simplifies automation, data access, and cross-platform workflows.</p>
+    </header>
+
+    <!-- 1. Core Cmdlets -->
+    <section class="card">
+      <h2>1. Getting Started with PowerShell Core Cmdlets</h2>
+      <p>These are the foundational cmdlets that introduce you to PowerShell’s logic and object-based design — commands like <strong>Get-Help</strong>, <strong>Get-Command</strong>, <strong>Get-Process</strong>, <strong>Get-Service</strong>, and <strong>Get-EventLog</strong>.</p>
+      <div class="figure"><img src="Images/Core Cmdlets/Get-Help.png" alt="Get-Help example" /></div>
+      <div class="figure"><img src="Images/Core Cmdlets/Get-Command.png" alt="Get-Command example" /></div>
+      <div class="figure"><img src="Images/Core Cmdlets/Get-Process.png" alt="Get-Process example" /></div>
+      <div class="figure"><img src="Images/Core Cmdlets/Get-Service.png" alt="Get-Service example" /></div>
+      <div class="figure"><img src="Images/Core Cmdlets/Get-EventLog1.png" alt="Get-EventLog example 1" /></div>
+    </section>
+
+    <!-- 2. Pipelines -->
+    <section class="card">
+      <h2>2. Working with Pipelines</h2>
+      <p>PowerShell’s pipeline is object-based, allowing you to filter, sort, and process data without losing structure. Here are examples demonstrating real-world pipeline chains.</p>
+      <div class="figure"><img src="Images/Piping Examples/PipeExample1.png" alt="Pipeline example 1" /></div>
+      <div class="figure"><img src="Images/Piping Examples/PipeExample2.png" alt="Pipeline example 2" /></div>
+    </section>
+
+    <!-- 3. Accessing Data -->
+    <section class="card">
+      <h2>3. Accessing Data the Easy Way (No String Parsing Needed)</h2>
+      <p>Unlike traditional shells that rely on text parsing, PowerShell interacts with structured data directly. These examples show how you can access data from local system objects cleanly and efficiently.</p>
+      <div class="figure"><img src="Images/Access Data without String Parsing/AccessDataEx2.png" alt="Access data example 1" /></div>
+      <div class="figure"><img src="Images/Access Data without String Parsing/QuerySysInfo.png" alt="Query system info example" /></div>
+      <div class="figure"><img src="Images/Access Data without String Parsing/scspooler.png" alt="Service query example" /></div>
+      <div class="figure"><img src="Images/Access Data without String Parsing/pslinux.png" alt="Linux data access example" /></div>
+    </section>
+
+    <!-- 4. Scripting -->
+    <section class="card">
+      <h2>4. Simple Scripts to Save Time</h2>
+      <p>Automation begins with small wins — these scripts automate common technician tasks like disk checks, service monitoring, and updates, freeing you from repetitive manual work.</p>
+      <div class="figure"><img src="Images/Scripting Examples/ScriptEx1.png" alt="Script example 1" /></div>
+      <div class="figure"><img src="Images/Scripting Examples/ScriptEx2.png" alt="Script example 2" /></div>
+    </section>
+
+    <!-- 5. OS Interaction -->
+    <section class="card">
+      <h2>5. Interacting with the Operating System</h2>
+      <p>From managing files and network adapters to controlling system services, PowerShell gives you unified control of the operating system — all from one console.</p>
+      <div class="figure"><img src="Images/OS Interaction Examples/Get-ComputerInfo.png" alt="Get computer info example" /></div>
+      <div class="figure"><img src="Images/OS Interaction Examples/Get-NetAdapter.png" alt="Network adapter example" /></div>
+      <div class="figure"><img src="Images/OS Interaction Examples/Stop-Service.png" alt="Stop service example" /></div>
+      <div class="figure"><img src="Images/OS Interaction Examples/New-Item2.png" alt="New item example" /></div>
+    </section>
+
+    <!-- 6. Cross Platform -->
+    <section class="card">
+      <h2>6. Running PowerShell on Linux Ubuntu</h2>
+      <p>PowerShell isn’t limited to Windows anymore — these examples showcase PowerShell commands running natively on Linux, proving it’s a truly cross-platform automation tool.</p>
+      <div class="figure"><img src="Images/Cross-Platform Examples/aptupdate.png" alt="apt update example" /></div>
+      <div class="figure"><img src="Images/Cross-Platform Examples/CrossPExample.png" alt="Cross-platform example" /></div>
+    </section>
+
+    <p><a href="../index.html">Back to Home</a></p>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
