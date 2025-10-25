@@ -47,45 +47,14 @@
       margin-top:20px;
     }
 
-    /* Clean figure styling - no borders or boxes */
-    .figure {
-      margin:18px auto;
-      width:90%;
-      max-width:700px;
-      transition:transform 0.25s ease, box-shadow 0.25s ease;
-    }
+    .figure {margin:18px auto; width:90%; max-width:700px; transition:transform 0.25s ease, box-shadow 0.25s ease;}
+    .figure img {display:block; height:auto; width:100%; border-radius:8px; transition:transform 0.3s ease;}
+    .zoom img:hover {transform:scale(1.07); box-shadow:0 0 25px rgba(77,163,255,.25); cursor:zoom-in;}
+    .full img {width:auto; max-width:100%;}
 
-    .figure img {
-      display:block;
-      height:auto;
-      width:100%;
-      border-radius:8px;
-      transition:transform 0.3s ease;
-    }
-
-    /* Zoom effect */
-    .zoom img:hover {
-      transform:scale(1.07);
-      box-shadow:0 0 25px rgba(77,163,255,.25);
-      cursor:zoom-in;
-    }
-
-    /* Full-size images for aptupdate and upgrade-y */
-    .full img {
-      width:auto;
-      max-width:100%;
-    }
-
-    footer {
-      margin-top:36px;
-      padding-top:20px;
-      border-top:1px solid #232a3a;
-      color:var(--muted);
-      font-size:14px;
-    }
+    footer {margin-top:36px; padding-top:20px; border-top:1px solid #232a3a; color:var(--muted); font-size:14px;}
     footer .links {margin-top:8px}
-    footer a {color:var(--muted)}
-    footer a:hover {color:var(--brand)}
+    footer a {color:var(--muted)} footer a:hover {color:var(--brand)}
   </style>
 </head>
 <body>
@@ -105,21 +74,26 @@
 
     <header>
       <div class="figure">
-        <img src="Images/PowerShellInAction.png" alt="PowerShell in Action blog header showing PowerShell examples" style="width:600px; height:auto;" loading="lazy" />
+        <img src="Images/PowerShellInAction.png" alt="PowerShell in Action blog header" style="width:600px; height:auto;" loading="lazy" />
       </div>
       <h1>PowerShell in Action: Hands-on Examples That Change How You Work</h1>
-      <p class="lead">A hands-on continuation of my previous PowerShell blog — this post dives into real examples that demonstrate how PowerShell simplifies automation, data access, and cross-platform workflows.</p>
+      <p class="lead">In this post, I take a practical approach to showing how PowerShell changes the way you interact with your system. These are not theoretical examples — they are real commands that simplify everyday work for IT professionals, technicians, and system administrators alike.</p>
     </header>
 
     <!-- 1. Core Cmdlets -->
     <section class="card">
       <h2>1. Getting Started with PowerShell Core Cmdlets</h2>
-      <p>These are the foundational cmdlets that introduce you to PowerShell’s logic and object-based design — commands like <strong>Get-Help</strong>, <strong>Get-Command</strong>, <strong>Get-Process</strong>, <strong>Get-Service</strong>, and <strong>Get-EventLog</strong>.</p>
+      <p>The foundation of PowerShell lies in its <strong>cmdlets</strong> — small, task-specific commands that perform powerful actions. Unlike traditional command-line utilities, PowerShell cmdlets output rich objects, not plain text. This difference allows for cleaner automation and easier data manipulation.</p>
+      <p>For instance, <strong>Get-Help</strong> and <strong>Get-Command</strong> are two of the most valuable tools when learning PowerShell. They provide instant access to documentation and available commands directly from your terminal, reducing the need for constant web searches.</p>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Help.png" alt="Get-Help example" /></div>
-      <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Help-Cmdlet1.png" alt="Get-Help-Cmdlet1" /></div>
+      <p>The <strong>Get-Help</strong> cmdlet displays built-in documentation for commands. You can view syntax, parameters, and even full examples of usage without leaving your shell — which makes it a great teaching tool for technicians exploring automation.</p>
+      <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Help-Cmdlet1.png" alt="Get-Help detailed example" /></div>
+      <p><strong>Get-Command</strong> provides a list of every available command or function on your system, making it easy to discover what PowerShell can do in your current environment.</p>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Command.png" alt="Get-Command example" /></div>
+      <p>Next, cmdlets like <strong>Get-Process</strong> and <strong>Get-Service</strong> let you monitor system performance and service health without using Task Manager or Services.msc. This shift alone saves time and integrates perfectly into scripts or automated reports.</p>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Process.png" alt="Get-Process example" /></div>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Service.png" alt="Get-Service example" /></div>
+      <p>Finally, <strong>Get-EventLog</strong> gives access to the Windows Event Logs directly from PowerShell — a massive advantage for troubleshooting or generating log summaries. You can query event data with filters to pinpoint issues much faster than manually scanning logs.</p>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-EventLog1.png" alt="Get-EventLog example 1" /></div>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-EventLog2.png" alt="Get-EventLog example 2" /></div>
     </section>
@@ -127,58 +101,69 @@
     <!-- 2. Pipelines -->
     <section class="card">
       <h2>2. Working with Pipelines</h2>
-      <p>PowerShell’s pipeline is object-based, allowing you to filter, sort, and process data without losing structure. Here are examples demonstrating real-world pipeline chains.</p>
+      <p>The <strong>pipeline</strong> is one of PowerShell’s greatest strengths. Instead of passing plain text between commands, PowerShell pipelines pass entire objects — complete with properties and methods. This makes filtering, sorting, and transforming data extremely efficient.</p>
+      <p>In this example, you’ll see how to chain multiple cmdlets together to pull data from one source, filter it, and output clean results. Once you get comfortable with pipelines, your workflow changes entirely — repetitive data filtering and log parsing tasks become quick one-liners.</p>
       <div class="figure zoom"><img src="Images/Piping Examples/PipeExample1.png" alt="Pipeline example 1" /></div>
       <div class="figure zoom"><img src="Images/Piping Examples/PipeExample2.png" alt="Pipeline example 2" /></div>
+      <p>Here, PowerShell takes raw process data and refines it through filtering and sorting stages — something that would require complex loops or string parsing in older scripting languages.</p>
     </section>
 
     <!-- 3. Accessing Data -->
     <section class="card">
       <h2>3. Accessing Data the Easy Way (No String Parsing Needed)</h2>
-      <p>Unlike traditional shells that rely on text parsing, PowerShell interacts with structured data directly. These examples show how you can access data from local system objects cleanly and efficiently.</p>
+      <p>In traditional shells like CMD or Bash, data is returned as plain text. This means you often need to use string parsing — slicing lines, cutting columns, and guessing at spacing — to extract information. PowerShell eliminates that problem by returning structured objects with accessible properties.</p>
+      <p>For example, when you query system or network information, you don’t need to rely on fragile text manipulation. Instead, you can directly call object properties such as <code>.Status</code>, <code>.Name</code>, or <code>.CPU</code>.</p>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/AccessDataEx2.png" alt="Access data example 2" /></div>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/AccessDataEx3.png" alt="Access data example 3" /></div>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/DataAccessEx4.png" alt="Access data example 4" /></div>
-      <div class="figure zoom"><img src="Images/Access Data Without String Parsing/QuerySysInfo.png" alt="Query system info example" /></div><br>
-      <h3>String Parsing Comparison</h3>
-      <p>CMD String Parsing Example:</p>
+      <div class="figure zoom"><img src="Images/Access Data Without String Parsing/QuerySysInfo.png" alt="Query system info example" /></div>
+      <p>Below is a comparison showing how PowerShell replaces traditional text parsing logic. In CMD, you’d typically run a command like <code>sc query spooler</code> and then manually parse through text output to find the status.</p>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/scspooler.png" alt="Service query example" /></div>
-      <p>Accessing Data Directly in PowerShell:</p>
+      <p>In PowerShell, that same task is simplified with <code>Get-Service spooler</code>, which outputs a structured object you can query directly — no parsing, no regex, no confusion.</p>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/PSSpooler.png" alt="PowerShell data access example" /></div>
     </section>
 
     <!-- 4. Scripting -->
     <section class="card">
       <h2>4. Simple Scripts to Save Time</h2>
-      <p>Automation begins with small wins — these scripts automate common technician tasks like disk checks, service monitoring, and updates, freeing you from repetitive manual work.</p>
+      <p>Once you’ve mastered cmdlets and pipelines, the next step is automation. PowerShell scripting takes repetitive tasks — like monitoring disk space or verifying service status — and turns them into reusable workflows. Even short scripts can make a huge difference in day-to-day IT operations.</p>
+      <p>The examples below demonstrate simple yet practical scripts designed to automate common technician workflows. These are the kinds of scripts you can build into scheduled jobs or share with teammates for consistency and efficiency.</p>
       <div class="figure zoom"><img src="Images/Scripting Examples/ScriptEx1.png" alt="Script example 1" /></div>
       <div class="figure zoom"><img src="Images/Scripting Examples/ScriptEx2.png" alt="Script example 2" /></div>
+      <p>What makes PowerShell special here is that every script can be modular — meaning you can break down logic into functions, reuse variables, and scale these scripts into larger automation frameworks over time.</p>
     </section>
 
     <!-- 5. OS Interaction -->
     <section class="card">
       <h2>5. Interacting with the Operating System</h2>
-      <p>From managing files and network adapters to controlling system services, PowerShell gives you unified control of the operating system — all from one console.</p>
+      <p>PowerShell provides a unified way to manage nearly every aspect of your operating system. Whether you’re creating directories, copying files, managing services, or inspecting network adapters, PowerShell gives you full control through a single consistent syntax.</p>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Stop-Service.png" alt="Stop service example" /></div>
-      <div class="figure zoom"><img src="Images/OS Interaction Examples/New-Item.png" alt="New item 1" /></div>
-      <div class="figure zoom"><img src="Images/OS Interaction Examples/New-Item2.png" alt="New item 2" /></div>
+      <p>With <strong>Stop-Service</strong>, you can stop a running service directly without opening the Services console — perfect for quick troubleshooting or scripting service restarts.</p>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/New-Item.png" alt="New item example 1" /></div>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/New-Item2.png" alt="New item example 2" /></div>
+      <p>Using <strong>New-Item</strong>, you can create files, directories, or registry entries instantly. When combined with condition checks and loops, it becomes a core part of any automation toolkit.</p>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Get-Help-Copy-Item.png" alt="Get-help for copy item" /></div>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Copy-ItemEx.png" alt="Copy item example" /></div>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Remove-Item.png" alt="Remove item example" /></div>
+      <p>Commands like <strong>Copy-Item</strong> and <strong>Remove-Item</strong> provide complete control over your filesystem. Together, they form the backbone of automated deployment, cleanup, and configuration scripts.</p>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Get-NetAdapter.png" alt="Network adapter example" /></div>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Get-ComputerInfo.png" alt="Get computer info example" /></div>
+      <p>And with <strong>Get-NetAdapter</strong> and <strong>Get-ComputerInfo</strong>, you can instantly gather network and system details for inventory, troubleshooting, or reporting — all without clicking through a single GUI.</p>
     </section>
 
     <!-- 6. Cross Platform -->
     <section class="card">
       <h2>6. Running PowerShell on Linux Ubuntu</h2>
-      <p>PowerShell isn’t limited to Windows anymore — these examples showcase PowerShell commands running natively on Linux, proving it’s a truly cross-platform automation tool.</p>
+      <p>One of the most exciting developments in recent years is PowerShell’s expansion into Linux. It’s no longer a Windows-only tool — you can now use the same commands and scripts across different operating systems, making PowerShell truly cross-platform.</p>
+      <p>In this section, I walk through installing PowerShell on Ubuntu and running a few simple commands to confirm functionality. These screenshots represent the process from package updates to the final PowerShell installation.</p>
       <div class="figure full"><img src="Images/Cross-Platform Examples/aptupdate.png" alt="apt update example" /></div>
       <div class="figure full"><img src="Images/Cross-Platform Examples/upgrade-y.png" alt="apt upgrade -y" /></div>
       <div class="figure zoom"><img src="Images/Cross-Platform Examples/requiredpackages.png" alt="Required packages" /></div>
+      <p>Here we install dependencies like <code>wget</code>, <code>apt-transport-https</code>, and <code>software-properties-common</code> — essential tools that ensure PowerShell can be securely downloaded and managed.</p>
       <div class="figure zoom"><img src="Images/Cross-Platform Examples/MSGPGKeyImport.png" alt="MSGPG Key Import" /></div>
       <div class="figure zoom"><img src="Images/Cross-Platform Examples/aptupdateagain.png" alt="apt update again" /></div>
       <div class="figure zoom"><img src="Images/Cross-Platform Examples/installps.png" alt="Install PowerShell" /></div>
+      <p>Once installed, PowerShell runs seamlessly on Linux, giving you access to familiar commands and automation workflows in a completely different environment. It’s a clear example of how far PowerShell has come as a cross-platform management framework.</p>
       <div class="figure zoom"><img src="Images/Cross-Platform Examples/CrossPExample.png" alt="Cross-platform example" /></div>
     </section>
 
