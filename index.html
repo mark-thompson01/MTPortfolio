@@ -35,6 +35,18 @@ position:relative;
   transform: scale(1.05);
 }
 
+/* Responsive scaling */
+@media (max-width:1200px) {
+  .logo-top-left {
+    width: 150px;
+  }
+}
+@media (max-width:900px) {
+  .logo-top-left {
+    display: none;
+  }
+}
+
 .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
 header{display:grid;grid-template-columns:120px 1fr;gap:24px;align-items:center;margin-bottom:24px}
