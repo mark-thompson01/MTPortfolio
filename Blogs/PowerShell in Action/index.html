@@ -47,10 +47,37 @@
       margin-top:20px;
     }
 
-    .figure {margin:18px auto; width:90%; max-width:700px; transition:transform 0.25s ease, box-shadow 0.25s ease;}
+    .figure {margin:18px auto; width:90%; max-width:700px;}
     .figure img {display:block; height:auto; width:100%; border-radius:8px; transition:transform 0.3s ease;}
-    .zoom img:hover {transform:scale(1.07); box-shadow:0 0 25px rgba(77,163,255,.25); cursor:zoom-in;}
+    .zoom img:hover {transform:scale(1.03); cursor:zoom-in;}
     .full img {width:auto; max-width:100%;}
+
+    /* Modal Zoom Styles */
+    .modal {
+      display:none;
+      position:fixed;
+      z-index:9999;
+      left:0; top:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.9);
+      backdrop-filter:blur(4px);
+      justify-content:center;
+      align-items:center;
+      cursor:zoom-out;
+      animation:fadeIn .25s ease;
+    }
+
+    @keyframes fadeIn {from {opacity:0;} to {opacity:1;}}
+
+    .modal img {
+      max-width:95%;
+      max-height:90%;
+      border-radius:10px;
+      box-shadow:0 0 40px rgba(77,163,255,.4);
+      animation:zoomIn .3s ease;
+    }
+
+    @keyframes zoomIn {from {transform:scale(0.85); opacity:0;} to {transform:scale(1); opacity:1;}}
 
     footer {margin-top:36px; padding-top:20px; border-top:1px solid #232a3a; color:var(--muted); font-size:14px;}
     footer .links {margin-top:8px}
@@ -94,7 +121,7 @@
       <p>The cmdlets <strong>Get-Process</strong> and <strong>Get-Service</strong> provide the ability to monitor system performance and service health without relying on tools like Task Manager or Services.msc. This shift alone saves time and integrates perfectly into scripts or automated reports.</p>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Process.png" alt="Get-Process example" /></div>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Service.png" alt="Get-Service example" /></div>
-      <p>Finally, the <strong>Get-EventLog</strong> cmdlet gives access to the Windows Event Logs directly from PowerShell. A massive advantage for troubleshooting or generating log summaries. You can query event data with filters to pinpoint issues much faster than manually scanning logs.</p>
+      <p>Finally, the <strong>Get-EventLog</strong> cmdlet gives access to the Windows Event Logs directly from PowerShell — a massive advantage for troubleshooting or generating log summaries. You can query event data with filters to pinpoint issues much faster than manually scanning logs.</p>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-EventLog1.png" alt="Get-EventLog example 1" /></div>
       <div class="figure zoom"><img src="Images/Core Cmdlets/Get-EventLog2.png" alt="Get-EventLog example 2" /></div>
     </section>
@@ -103,8 +130,7 @@
     <section class="card">
       <h2>2. Working with Pipelines</h2>
       <p>The pipeline is one of PowerShell’s greatest strengths and advantages. Instead of passing plain text between commands, PowerShell pipelines pass entire objects, complete with properties and methods. This makes filtering, sorting, and transforming data extremely efficient.</p>
-      <p>The examples below chain multiple cmdlets together to pull data from one source, filter it, and output clean results. Once you become more comfortable using pipelines, your workflow starts to evolve, repetitive data filtering and log parsing tasks become quick one-liners.</p>
-      <p>Here, PowerShell takes raw process data and refines it through filtering and sorting stages, something that would require complex loops or string parsing in older scripting languages.</p>
+      <p>The examples below chain multiple cmdlets together to pull data from one source, filter it, and output clean results. Once you become more comfortable using pipelines, your workflow starts to evolve — repetitive data filtering and log parsing tasks become quick one-liners.</p>
       <div class="figure zoom"><img src="Images/Piping Examples/PipeExample1.png" alt="Pipeline example 1" /></div>
       <div class="figure zoom"><img src="Images/Piping Examples/PipeExample2.png" alt="Pipeline example 2" /></div>
     </section>
@@ -127,7 +153,7 @@
     <!-- 4. Scripting -->
     <section class="card">
       <h2>4. Simple Scripts to Save Time</h2>
-      <p>PowerShell scripting takes repetitive tasks, such as monitoring disk space or verifying service status and turns them into reusable workflows where automation can be applied. Even short scripts can make a huge difference in day-to-day IT operations.</p>
+      <p>PowerShell scripting takes repetitive tasks, such as monitoring disk space or verifying service status, and turns them into reusable workflows where automation can be applied. Even short scripts can make a huge difference in day-to-day IT operations.</p>
       <p>What makes PowerShell stand out here is that every script can be modular, meaning you can break down logic into functions, reuse variables, and scale these scripts into larger automation frameworks over time.</p>
       <div class="figure zoom"><img src="Images/Scripting Examples/ScriptEx1.png" alt="Script example 1" /></div>
       <div class="figure zoom"><img src="Images/Scripting Examples/ScriptEx2.png" alt="Script example 2" /></div>
@@ -137,7 +163,7 @@
     <section class="card">
       <h2>5. Interacting with the Operating System</h2>
       <p>PowerShell allows you to control nearly every aspect of the operating system. Whether it’s creating directories, copying files, managing services and processes, or inspecting network adapters, PowerShell gives you full control through a single, consistent syntax.</p>
-      <p>With the <strong>Stop-Service</strong> cmdlet, you can stop a running service directly without opening the Services console. Perfect for quick troubleshooting or scripting service restarts.</p>
+      <p>With the <strong>Stop-Service</strong> cmdlet, you can stop a running service directly without opening the Services console — perfect for quick troubleshooting or scripting service restarts.</p>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Stop-Service.png" alt="Stop service example" /></div>
       <p>Using <strong>New-Item</strong>, you can instantly create files, directories, or registry entries.</p>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/New-Item.png" alt="New item 1" /></div>
@@ -146,7 +172,7 @@
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Get-Help-Copy-Item.png" alt="Get-help for copy item" /></div>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Copy-ItemEx.png" alt="Copy item example" /></div>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Remove-Item.png" alt="Remove item example" /></div>
-      <p>Finally, with <strong>Get-NetAdapter</strong> and <strong>Get-ComputerInfo</strong>, you can instantly gather network and system details for inventory, troubleshooting, or reporting. All without clicking through a single GUI.</p>
+      <p>Finally, with <strong>Get-NetAdapter</strong> and <strong>Get-ComputerInfo</strong>, you can instantly gather network and system details for inventory, troubleshooting, or reporting — all without clicking through a single GUI.</p>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Get-NetAdapter.png" alt="Network adapter example" /></div>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Get-ComputerInfo.png" alt="Get computer info example" /></div>
     </section>
@@ -154,7 +180,7 @@
     <!-- 6. Cross Platform -->
     <section class="card">
       <h2>6. Running PowerShell on Linux Ubuntu</h2>
-      <p>One of the most exciting developments in recent years with .NET Core is PowerShell’s expansion into Linux. It’s no longer a Windows-only tool! You can now use the same commands and scripts across different operating systems, making PowerShell truly cross-platform.</p>
+      <p>One of the most exciting developments in recent years with .NET Core is PowerShell’s expansion into Linux. It’s no longer a Windows-only tool — you can now use the same commands and scripts across different operating systems, making PowerShell truly cross-platform.</p>
       <p>In this section, I walk through installing PowerShell on Linux Ubuntu Desktop and running a few simple commands to confirm functionality. These screenshots represent the process from package updates to the final PowerShell installation.</p>
       <div class="figure full"><img src="Images/Cross-Platform Examples/aptupdate.png" alt="apt update example" /></div>
       <div class="figure full"><img src="Images/Cross-Platform Examples/upgrade-y.png" alt="apt upgrade -y" /></div>
@@ -173,9 +199,6 @@
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
         <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
-      </div>
-    </footer>
-  </div>
-</body>
-</html>
+       
+
+      
