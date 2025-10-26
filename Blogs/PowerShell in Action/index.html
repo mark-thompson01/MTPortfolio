@@ -122,13 +122,87 @@
       <p>Kicking things off with core cmdlets, followed by examples of working with pipelines, accessing data without string parsing, running simple scripts to save time, interacting with the operating system, and a step-by-step example of setting up and running PowerShell on Linux Ubuntu Desktop.</p>
     </header>
 
-    <!-- Sections (same as before) -->
-    [All your existing sections 1–6 remain here, unchanged]
+    <!-- 1. Core Cmdlets -->
+    <section class="card">
+      <h2>1. Getting Started with PowerShell Core Cmdlets</h2>
+      <p>The foundation of PowerShell lies in its cmdlets. Cmdlets are small, task-specific commands that perform a variety of powerful actions. Traditional command-line utilities such as CMD or Bash output data as plain text, whereas PowerShell cmdlets output rich objects. This difference enables cleaner automation and makes data manipulation easier and more intuitive.</p>
+      <p>The <strong>Get-Help</strong> and <strong>Get-Command</strong> cmdlets are two of the most valuable tools when learning PowerShell. These cmdlets provide instant access to documentation and available commands directly from the terminal, reducing the need for constant web searches.</p>
+      <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Help.png" alt="Get-Help example" /></div>
+      <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Help-Cmdlet1.png" alt="Get-Help Cmdlet Example" /></div>
+      <p>The <strong>Get-Command</strong> cmdlet lists every available cmdlet or function on a given system, making it easy to discover what PowerShell can do in the current environment.</p>
+      <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Command.png" alt="Get-Command example" /></div>
+      <p>The cmdlets <strong>Get-Process</strong> and <strong>Get-Service</strong> provide the ability to monitor system performance and service health without relying on tools like Task Manager or Services.msc. This shift alone saves time and integrates perfectly into scripts or automated reports.</p>
+      <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Process.png" alt="Get-Process example" /></div>
+      <div class="figure zoom"><img src="Images/Core Cmdlets/Get-Service.png" alt="Get-Service example" /></div>
+      <p>Finally, the <strong>Get-EventLog</strong> cmdlet gives access to Windows Event Logs directly from PowerShell, a massive advantage for troubleshooting or generating log summaries.</p>
+      <div class="figure zoom"><img src="Images/Core Cmdlets/Get-EventLog1.png" alt="Get-EventLog example 1" /></div>
+      <div class="figure zoom"><img src="Images/Core Cmdlets/Get-EventLog2.png" alt="Get-EventLog example 2" /></div>
+    </section>
 
-    <!-- 7. Closing -->
+    <!-- 2. Pipelines -->
+    <section class="card">
+      <h2>2. Working with Pipelines</h2>
+      <p>The pipeline is one of PowerShell’s greatest strengths and advantages. Instead of passing plain text between commands, PowerShell pipelines pass entire objects, complete with properties and methods. This makes filtering, sorting, and transforming data extremely efficient.</p>
+      <div class="figure zoom"><img src="Images/Piping Examples/PipeExample1.png" alt="Pipeline example 1" /></div>
+      <div class="figure zoom"><img src="Images/Piping Examples/PipeExample2.png" alt="Pipeline example 2" /></div>
+    </section>
+
+    <!-- 3. Accessing Data -->
+    <section class="card">
+      <h2>3. Accessing Data the Easy Way (No String Parsing Needed)</h2>
+      <p>In traditional shells like CMD and Bash, data is returned as plain text. This often requires string parsing to extract the information you need. PowerShell eliminates that limitation entirely by returning structured objects with accessible properties.</p>
+      <div class="figure zoom"><img src="Images/Access Data Without String Parsing/scspooler.png" alt="CMD service query example" /></div>
+      <div class="figure zoom"><img src="Images/Access Data Without String Parsing/PSSpooler.png" alt="PowerShell Get-Service example" /></div>
+      <div class="figure zoom"><img src="Images/Access Data Without String Parsing/AccessDataEx2.png" alt="Access data example 2" /></div>
+      <div class="figure zoom"><img src="Images/Access Data Without String Parsing/AccessDataEx3.png" alt="Access data example 3" /></div>
+      <div class="figure zoom"><img src="Images/Access Data Without String Parsing/DataAccessEx4.png" alt="Access data example 4" /></div>
+      <div class="figure zoom"><img src="Images/Access Data Without String Parsing/QuerySysInfo.png" alt="Query system info example" /></div>
+    </section>
+
+    <!-- 4. Scripting -->
+    <section class="card">
+      <h2>4. Simple Scripts to Save Time</h2>
+      <p>PowerShell scripting takes repetitive tasks, such as monitoring disk space or verifying service status, and turns them into reusable workflows where automation can be applied. Even short scripts can make a huge difference in day-to-day IT operations.</p>
+      <div class="figure zoom"><img src="Images/Scripting Examples/ScriptEx1.png" alt="Script example 1" /></div>
+      <div class="figure zoom"><img src="Images/Scripting Examples/ScriptEx2.png" alt="Script example 2" /></div>
+    </section>
+
+    <!-- 5. OS Interaction -->
+    <section class="card">
+      <h2>5. Interacting with the Operating System</h2>
+      <p>PowerShell allows you to control nearly every aspect of the operating system. Whether it’s creating directories, copying files, managing services and processes, or inspecting network adapters, PowerShell gives you full control through a single, consistent syntax.</p>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/Stop-Service.png" alt="Stop service example" /></div>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/New-Item.png" alt="New item example 1" /></div>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/New-Item2.png" alt="New item example 2" /></div>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/Get-Help-Copy-Item.png" alt="Get-Help Copy-Item" /></div>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/Copy-ItemEx.png" alt="Copy item example" /></div>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/Remove-Item.png" alt="Remove item example" /></div>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/Get-NetAdapter.png" alt="Get-NetAdapter example" /></div>
+      <div class="figure zoom"><img src="Images/OS Interaction Examples/Get-ComputerInfo.png" alt="Get-ComputerInfo example" /></div>
+    </section>
+
+    <!-- 6. Cross Platform -->
+    <section class="card">
+      <h2>6. Running PowerShell on Linux Ubuntu</h2>
+      <p>With .NET Core, PowerShell has expanded into Linux, becoming a true cross-platform tool. You can now use the same commands and scripts across different operating systems.</p>
+      <p><strong>Step 1:</strong> Update package lists</p>
+      <div class="figure full"><img src="Images/Cross-Platform Examples/aptupdate.png" alt="apt update example" /></div>
+      <div class="figure full"><img src="Images/Cross-Platform Examples/upgrade-y.png" alt="apt upgrade -y example" /></div>
+      <p><strong>Step 2:</strong> Install prerequisites</p>
+      <div class="figure zoom"><img src="Images/Cross-Platform Examples/requiredpackages.png" alt="Required packages" /></div>
+      <p><strong>Step 3:</strong> Import Microsoft GPG Key</p>
+      <div class="figure zoom"><img src="Images/Cross-Platform Examples/MSGPGKeyImport.png" alt="MSGPG key import" /></div>
+      <p><strong>Step 4:</strong> Install PowerShell</p>
+      <div class="figure zoom"><img src="Images/Cross-Platform Examples/aptupdateagain.png" alt="apt update again" /></div>
+      <div class="figure zoom"><img src="Images/Cross-Platform Examples/installps.png" alt="Install PowerShell" /></div>
+      <p><strong>Step 5:</strong> Launch PowerShell</p>
+      <div class="figure zoom"><img src="Images/Cross-Platform Examples/CrossPExample.png" alt="Cross-platform example" /></div>
+    </section>
+
+    <!-- 7. Conclusion -->
     <section class="card">
       <h2>Conclusion</h2>
-      <p>Building these examples reminded me why I enjoy PowerShell so much. It is not just about commands; it is about efficiency, creativity, and control. Once you start to see data as objects and not just text, your entire workflow begins to change.</p>
+      <p>Building these examples reminded me why I enjoy PowerShell so much, it is not just about commands, it is about efficiency, creativity, and control. Once you start to see data as objects and not just text, your entire workflow begins to change.</p>
       <p>Whether you are maintaining servers, automating reports, or experimenting in your own environment, PowerShell gives you the tools to truly shape how you work and to approach every task with a mindset focused on precision and automation.</p>
     </section>
 
@@ -170,58 +244,4 @@
       overlay.classList.add('is-open');
     }
     function close() {
-      overlay.classList.remove('is-open');
-      zimg.src = '';
-    }
-
-    imgs.forEach(img => img.addEventListener('click', () => open(img.src)));
-    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-    closeBtn.addEventListener('click', close);
-    window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-
-    stage.addEventListener('wheel', e => {
-      e.preventDefault();
-      const rect = stage.getBoundingClientRect();
-      const mx = e.clientX - rect.left - originX;
-      const my = e.clientY - rect.top - originY;
-      const delta = -Math.sign(e.deltaY) * 0.15;
-      const newScale = Math.min(5, Math.max(1, scale + delta));
-      const factor = newScale / scale;
-      originX -= mx * (factor - 1);
-      originY -= my * (factor - 1);
-      scale = newScale;
-      applyTransform();
-    }, { passive:false });
-
-    stage.addEventListener('mousedown', e => {
-      if (scale <= 1) return;
-      isPanning = true;
-      startX = e.clientX - originX;
-      startY = e.clientY - originY;
-      document.body.style.cursor = 'grabbing';
-    });
-    window.addEventListener('mousemove', e => {
-      if (!isPanning) return;
-      originX = e.clientX - startX;
-      originY = e.clientY - startY;
-      applyTransform();
-    });
-    window.addEventListener('mouseup', () => {
-      isPanning = false;
-      document.body.style.cursor = '';
-    });
-
-    stage.addEventListener('dblclick', e => {
-      const rect = stage.getBoundingClientRect();
-      const mx = e.clientX - rect.left - originX;
-      const my = e.clientY - rect.top - originY;
-      const targetScale = scale > 1 ? 1 : 2.5;
-      const factor = targetScale / scale;
-      originX -= mx * (factor - 1);
-      originY -= my * (factor - 1);
-      scale = targetScale;
-      applyTransform();
-    });
-  </script>
-</body>
-</html>
+     
