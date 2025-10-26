@@ -157,6 +157,7 @@
       <p>For example, when you query system or network information, you don’t need to rely on text manipulation. Instead, you can directly call object properties such as <code>.Status</code>, <code>.Name</code>, or <code>.CPU</code>.</p>
       <p>The comparison below shows how PowerShell replaces traditional string parsing logic. In CMD, you’d typically run a command like <code>sc query spooler</code> and then manually parse the output to find the service status.</p>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/scspooler.png" alt="CMD service query example" /></div>
+      <p>In PowerShell, that same task is simplified with <code>Get-Service spooler</code>, which outputs a structured object you can query directly, no parsing required.</p>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/PSSpooler.png" alt="PowerShell Get-Service example" /></div>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/AccessDataEx2.png" alt="Access data example 2" /></div>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/AccessDataEx3.png" alt="Access data example 3" /></div>
