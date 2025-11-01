@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Raspberry Pi 5 DNS Server Lab · Mark Thompson Portfolio</title>
+  <meta name="description" content="Full Raspberry Pi 5 DNS Server Lab — configuring both dnsmasq and BIND9 DNS implementations with installation, setup, testing, and verification." />
+  <style>
+    :root {
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html, body {height:100%}
+    body {
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    h1{font-size:clamp(28px,4vw,40px);font-weight:800;margin:8px 0 6px}
+    h2{margin:0 0 10px;font-size:22px}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    .figure {
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;
+      max-width:100%;
+    }
+    .figure img {
+      display:block;
+      height:auto;
+      max-width:100%;
+    }
+
+    .zoomable{cursor:zoom-in}
+    .zoom-overlay{
+      position:fixed; inset:0; display:none;
+      align-items:center; justify-content:center;
+      background:rgba(0,0,0,.8); z-index:9999; padding:24px;
+    }
+    .zoom-overlay.open{display:flex}
+    .zoom-overlay img{
+      max-width:min(1200px,94vw); max-height:90vh;
+      border-radius:12px; box-shadow:var(--shadow);
+      cursor:zoom-out;
+    }
+    body.zoom-open{overflow:hidden}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Raspberry Pi 5 DNS Server Lab</h1>
+    <p class="lead">This lab demonstrates two different methods for turning a Raspberry Pi 5 into a fully functional DNS server: first with <strong>dnsmasq</strong> and then with <strong>BIND9</strong>. Each implementation showcases configuration, validation, and verification from both the Pi and a Windows client.</p>
+
+    <!-- PART 1: DNSMASQ -->
+    <section class="card">
+      <h2>Part 1: Raspberry Pi 5 DNS Server using dnsmasq</h2>
+      <p>dnsmasq provides a lightweight DNS and DHCP service ideal for small networks or embedded systems. In this setup, it serves as a caching DNS server using Cloudflare’s DNS as upstream resolvers.</p>
+
+      <div class="figure"><img src="Images/rpdns1.png" alt="dnsmasq configuration"></div>
+      <div class="figure"><img src="Images/rpdns2.png" alt="Uncommenting no-resolv"></div>
+      <div class="figure"><img src="Images/rpdns3.png" alt="Adding servers"></div>
+      <div class="figure"><img src="Images/rpdns4.png" alt="Setting Cloudflare DNS"></div>
+      <div class="figure"><img src="Images/rpdns5.png" alt="Search for cache-size"></div>
+      <div class="figure"><img src="Images/rpdns6.png" alt="Increasing cache size"></div>
+      <div class="figure"><img src="Images/rpdns7.png" alt="Restarting dnsmasq"></div>
+      <div class="figure"><img src="Images/rpdns8.png" alt="Windows DNS settings"></div>
+      <div class="figure"><img src="Images/rpdns9.png" alt="Testing DNS lookup"></div>
+      <div class="figure"><img src="Images/rpdns10.png" alt="Verifying service logs"></div>
+
+      <p>This configuration ensures local caching and faster lookups while maintaining reliability by forwarding unresolved queries to Cloudflare’s DNS.</p>
+    </section>
+
+    <!-- PART 2: BIND9 SETUP -->
+    <section class="card">
+      <h2>Part 2: Raspberry Pi 5 DNS Server using BIND9</h2>
+      <p>BIND9 provides a more advanced and customizable DNS solution. In this configuration, the Raspberry Pi acts as an authoritative DNS server for the local <code>home.lan</code> domain and also performs recursive lookups for external addresses.</p>
+
+      <div class="figure"><img src="Images/2IdentifyService.png" alt="Checking NetworkManager"></div>
+      <div class="figure"><img src="Images/3nmcliconshow.png" alt="Network connection list"></div>
+      <div class="figure"><img src="Images/4hostname.png" alt="Checking IP addresses"></div>
+      <div class="figure"><img src="Images/5InspectSettings.png" alt="Inspecting auto settings"></div>
+      <div class="figure"><img src="Images/6ApplyStatic.png" alt="Applying static IP"></div>
+      <div class="figure"><img src="Images/7verify1.png" alt="Verifying IP configuration"></div>
+      <div class="figure"><img src="Images/7verify2.png" alt="Verifying network details"></div>
+      <div class="figure"><img src="Images/7verify3.png" alt="IPv6 verification"></div>
+      <div class="figure"><img src="Images/7verify4.png" alt="Additional verification"></div>
+      <div class="figure"><img src="Images/checkOSVersion.png" alt="Checking OS version"></div>
+
+      <div class="figure"><img src="Images/Part2-1.png" alt="Installing BIND9"></div>
+      <div class="figure"><img src="Images/Part2-2.png" alt="Editing named.conf.local"></div>
+      <div class="figure"><img src="Images/Part2-3.png" alt="Zone definitions"></div>
+      <div class="figure"><img src="Images/Part2-4.png" alt="Forward zone configuration"></div>
+      <div class="figure"><img src="Images/Part2-5.png" alt="Reverse zone file"></div>
+      <div class="figure"><img src="Images/Part2-6.png" alt="PTR record definitions"></div>
+      <div class="figure"><img src="Images/Part2-7.png" alt="Editing named.conf.options"></div>
+      <div class="figure"><img src="Images/Part2-8.png" alt="Adding DNS forwarders"></div>
+      <div class="figure"><img src="Images/Part2-9.png" alt="Restarting BIND9"></div>
+      <div class="figure"><img src="Images/Part2-10.png" alt="Confirming restart"></div>
+      <div class="figure"><img src="Images/Part2-11.png" alt="Checking BIND9 status"></div>
+      <div class="figure"><img src="Images/Part2-12.png" alt="Testing DNS with dig"></div>
+
+      <p>This BIND9 setup provides local name resolution for the home network, reverse lookups, and recursive resolution for all other domains through Cloudflare DNS.</p>
+    </section>
+
+    <!-- PART 3: RESULTS AND CONCLUSION -->
+    <section class="card">
+      <h2>Part 3: Results and Key Takeaways</h2>
+      <p><strong>dnsmasq</strong> offers simplicity and speed — perfect for caching or lightweight DNS deployments. <strong>BIND9</strong>, on the other hand, is a full-fledged DNS server capable of authoritative, recursive, and zone-based operations.</p>
+      <ul>
+        <li><strong>dnsmasq:</strong> Easy setup, low resource usage, ideal for local caching.</li>
+        <li><strong>BIND9:</strong> Enterprise-grade flexibility, supports zone management and fine-grained DNS control.</li>
+      </ul>
+      <p>By running both, this lab demonstrates the versatility of the Raspberry Pi 5 as a DNS server — capable of handling both lightweight and advanced network services in small to medium environments.</p>
+    </section>
+
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson-01" target="_blank">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function(){
+      const imgs=document.querySelectorAll('.wrap img');
+      if(!imgs.length)return;
+      const overlay=document.createElement('div');
+      overlay.className='zoom-overlay';
+      overlay.setAttribute('aria-hidden','true');
+      overlay.innerHTML='<img alt="">';
+      document.body.appendChild(overlay);
+      const ovImg=overlay.querySelector('img');
+      function closeZoom(){overlay.classList.remove('open');document.body.classList.remove('zoom-open');ovImg.removeAttribute('src');}
+      overlay.addEventListener('click',closeZoom);
+      document.addEventListener('keydown',e=>{if(e.key==='Escape')closeZoom()});
+      imgs.forEach(img=>{img.classList.add('zoomable');img.addEventListener('click',()=>{ovImg.src=img.currentSrc||img.src;overlay.classList.add('open');document.body.classList.add('zoom-open');},{passive:true});});
+    })();
+  </script>
+</body>
+</html>
