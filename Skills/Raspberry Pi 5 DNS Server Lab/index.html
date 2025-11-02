@@ -167,10 +167,21 @@ the internet.</p>
       <div class="figure"><img src="Images/Part2-6.png" alt="PTR records"></div>
       <p><strong>Options:</strong></p>
       <div class="figure"><img src="Images/Part2-7.png" alt="Configuring named.conf.options"></div>
+      <p>Here, I'm going to set the Forwarders to two of Cloudflare's DNS servers.</p>
+      <p>With a DNS server now setup on the Raspberry Pi, the Raspberry Pi device now functions as a cache
+      of DNS queries. As soon as the device queries a successful name resolution, that entry remains saved
+      on the Raspberry Pi DNS server.</p>
+      <p>In this setup the DNS queries are still being forwarded to another DNS server.</p>
+      <p>The DNS server IP can be modified in the <strong>/etc/bind/named.conf.options</strong>
+      by opening the file and changing the IP address in the <strong>Forwarders</strong> entry.</p>
       <div class="figure"><img src="Images/Part2-8.png" alt="Adding forwarders"></div>
       <div class="figure"><img src="Images/Part2-9.png" alt="Restart BIND9 service"></div>
+      <p>And this is how you setup a DNS server with <strong>BIND</strong> on a Raspberry Pi 5.</p>
+      <p>For the configuration changes to take effect, restart <strong>bind9</strong> like so 
+      after verifying the configuration.</p>
       <div class="figure"><img src="Images/Part2-10.png" alt="Verify forwarders configuration"></div>
       <div class="figure"><img src="Images/Part2-11.png" alt="BIND9 status"></div>
+      <p><strong>Verification:</strong></p>
       <div class="figure"><img src="Images/Part2-12.png" alt="Testing with dig"></div>
 
       <p>The BIND9 configuration includes both forward and reverse zone definitions, along with Cloudflare’s DNS for external resolution. Successful testing with <code>dig</code> confirms the DNS server’s proper function.</p>
