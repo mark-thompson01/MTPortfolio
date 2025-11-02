@@ -150,14 +150,13 @@ the internet.</p>
       <p>Now that the Raspberry Pi is configured with a Static IP address, we can install BIND.</p>
       <p>In this example, I'm installing the program <strong>bind9</strong> and <strong>bind9utils</strong>.</p>
       <p>The <strong>bind9utils</strong> is not required, but does contain some useful tools for managing the DNS server.</p>
-
-      <p><strong>2. Specify Configuration Settings</strong></p>
       <div class="figure"><img src="Images/Part2-1.png" alt="Installing BIND9"></div>
 
       <p>Here, I'm setting up a <strong>forward lookup</strong> and <strong>reverse lookup</strong> zone.</p>
       <div class="figure"><img src="Images/Part2-2.png" alt="Opening named.conf.local"></div>
       <div class="figure"><img src="Images/Part2-3.png" alt="Zone configuration"></div>
 
+      <p><strong>2. Specify Configuration Settings</strong></p>
       <p>The zones are specified in the <strong>/etc/bind/named.conf.local</strong> file.</p>
       <p>With the zones set in the configuration file, the individual zone files need to be created like so.</p>
       <div class="figure"><img src="Images/db.home.lan.png" alt="Creatting db.home.lan 1"></div>
