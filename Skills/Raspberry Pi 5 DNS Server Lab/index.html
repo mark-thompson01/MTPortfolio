@@ -26,6 +26,27 @@
     h1{font-size:clamp(28px,4vw,40px);font-weight:800;margin:8px 0 6px}
     h2{margin:0 0 10px;font-size:22px}
     .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Updated hyperlink styling */
+    a {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px dotted var(--muted);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    a:hover {
+      color: var(--brand);
+      border-color: var(--brand);
+      text-decoration: none;
+    }
+    footer a {
+      color: var(--muted);
+      border-bottom: none;
+    }
+    footer a:hover {
+      color: var(--brand);
+    }
+
     .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;width:max-content;max-width:100%}
     .figure img{display:block;height:auto;max-width:100%}
     .zoomable{cursor:zoom-in}
@@ -44,7 +65,7 @@ computers and devices to locate and communicate with one another across a networ
 the internet.</p> 
     <p class="lead">This lab demonstrates how to configure a Raspberry Pi 5 as a DNS server using both <strong>DNSMasq</strong> and <strong>BIND9</strong>. Each implementation is documented step-by-step, including setup, configuration, and validation.</p>
 
-    <a href="https://github.com/mark-thompson01/raspberry-pi-5-dns-server-lab/blob/main" target="_blank" rel="nonpener">
+    <a href="https://github.com/mark-thompson01/raspberry-pi-5-dns-server-lab/blob/main" target="_blank" rel="noopener">
       View this project on GitHub
     </a>
     
@@ -169,7 +190,7 @@ the internet.</p>
       <p>The zones are specified in the <strong>/etc/bind/named.conf.local</strong> file.</p>
       <p>With the zones set in the configuration file, the individual zone files need to be created like so.</p>
       <p><strong>Forward Lookup Zone:</strong></p>
-      <div class="figure"><img src="Images/db.home.lan.png" alt="Creatting db.home.lan 1"></div>
+      <div class="figure"><img src="Images/db.home.lan.png" alt="Creating db.home.lan 1"></div>
       <div class="figure"><img src="Images/Part2-4.png" alt="Creating db.home.lan 2"></div>
       <p><strong>Reverse Lookup Zone:</strong></p>
       <div class="figure"><img src="Images/Part2-5.png" alt="Editing reverse zone"></div>
@@ -185,7 +206,7 @@ the internet.</p>
       by opening the file and changing the IP address in the <strong>Forwarders</strong> entry.</p>
       <div class="figure"><img src="Images/Part2-8.png" alt="Adding forwarders"></div>
       <div class="figure"><img src="Images/Part2-9.png" alt="Restart BIND9 service"></div>
-      <p><strong>3. Restart bind9 service & verify functionality</strong>
+      <p><strong>3. Restart bind9 service & verify functionality</strong></p>
       <p>And this is how you setup a DNS server with <strong>BIND</strong> on a Raspberry Pi 5.</p>
       <p>For the configuration changes to take effect, restart <strong>bind9</strong> like so 
       after verifying the configuration.</p>
