@@ -97,32 +97,35 @@ the internet.</p>
       <p>Setting this up will ensure the Raspberry Pi retains the same IP address after rebooting, enabling reliable DNS, SSH, and other network services. </p>
 
       <!-- Static IP and environment setup -->
-      <p><strong>1. Identify the OS Version:</strong> Learn which networking framework the OS uses.</p>
+      <p><strong>1. Identify the OS Version</strong></p>
+      <p>Learn which networking framework the OS uses.</p>
       <p>Here we see the OS Version Raspberry Pi OS Bookworm. This OS Version uses <strong>NetworkManager</strong> as the networking framework.</p>
       <div class="figure"><img src="Images/checkOSVersion.png" alt="Check OS version"></div>
 
-      <p><strong>2. Verify Which Network Service Is Active:</strong> Confirm that <strong>NetworkManager</strong> is indeed running and controlling interfaces.</p>
+      <p><strong>2. Verify Which Network Service Is Active</strong></p>
+      <p>Confirm that <strong>NetworkManager</strong> is indeed running and controlling interfaces.</p>
       <p>If it wasn't active, the configuration file <strong>/etc/dhcpcd.conf</strong> would be modified instead.</p>
       <p>This prevents misconfigurations caused by editing the wrong files.</p>
       <div class="figure"><img src="Images/2IdentifyService.png" alt="Identify service"></div>
       
-      <p><strong>3. List Active Network Connections:</strong> Discover the connection profile (e.g., "Wired Connection 1" or "WLAN connection 1").</p>
+      <p><strong>3. List Active Network Connections</strong></p>
+      <p>Discover the connection profile (e.g., "Wired Connection 1" or "WLAN connection 1").</p>
       <p>You must know this name before modifying or applying static IP settings.</p>
       <div class="figure"><img src="Images/3nmcliconshow.png" alt="NetworkManager connections"></div>
 
-      <p><strong>4. Check Current Network Interface and IP:</strong></p>
+      <p><strong>4. Check Current Network Interface and IP</strong></p>
       <p>To confirm which interface (e.g., eth0, wlan0) is active and what IP/subnet the Pi currently uses.</p>
       <p>This ensures your static IP stays in the same valid range and avoids conflicts.</p>
       <p>In this example, I'm only using the command hostname -I, in other caeses running ip a would be necessary.</p>
       <div class="figure"><img src="Images/4hostname.png" alt="Check hostname"></div>
 
-      <p><strong>5. Inspect Connection Settings:</strong></p>
+      <p><strong>5. Inspect Connection Settings</strong></p>
       <p>Verify whether the current IPv4 method is <strong>auto</strong> (DHCP).</p>
       <p>You need to switch it to <strong>manual</strong> before applying a static address.</p>
       <p>This step validates your assumptions before changing configuration.</p>
       <div class="figure"><img src="Images/5InspectSettings.png" alt="Inspect network settings"></div>
 
-      <p><strong>6. Apply Static IP Configuration:</strong></p>
+      <p><strong>6. Apply Static IP Configuration</strong></p>
       <p>To explicitly define:</p>
       <ul>
         <li>The Pi's static IP (IPv4.addresses)</li>
@@ -133,7 +136,9 @@ the internet.</p>
       <p>This makes the Pi use a fixed IP address that won't change after reboots - critical for consistent DNS, SSH, or web service operations.</p>
       <div class="figure"><img src="Images/6ApplyStatic.png" alt="Apply static IP"></div>
 
-      <p><strong>7. Verify Connectivity and Persistence:</strong></p>
+      <p><strong>7. Verify Connectivity and Persistence</strong></p>
+      <p>Confirm that the Pi is reachable at its new static IP and still has internet access through the gateway.</p>
+      <p>This validation ensures that the configuration was applied correctly and is functioning as expected.</p>
       <div class="figure"><img src="Images/7verify1.png" alt="Verify IP config 1"></div>
       <div class="figure"><img src="Images/7verify2.png" alt="Verify IP config 2"></div>
       <div class="figure"><img src="Images/7verify3.png" alt="Verify IP config 3"></div>
