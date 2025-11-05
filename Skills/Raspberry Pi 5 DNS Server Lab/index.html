@@ -33,6 +33,43 @@
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+        /* Cards / sections */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    /* Figures: keep your original inline sizes; only downscale if viewport is narrower */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;
+      max-width:100%;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%; /* responsive downscale only */
+      /* no width:100% here so your inline sizes remain in control */
+    }
+
+    /* Code & pre */
+    pre{
+      margin:10px 0;
+      padding:12px 14px;
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:12px;
+      overflow:auto;
+      color:#e8eaf6;
+      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+
     /* Updated hyperlink styling */
     a {
       color: var(--brand);
