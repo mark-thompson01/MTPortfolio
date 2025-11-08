@@ -1,1 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How Linux Revolutionized Computing · Mark Thompson Portfolio</title>
+  <meta name="description" content="A reflection on how the Linux kernel evolved from Linus Torvalds’s 1991 hobby project into the foundation of modern computing." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Title & lead */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:10px 0 6px;font-size:16px}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Card blocks */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:22px;margin-top:16px
+    }
+
+    /* Image wrapper */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;
+      max-width:100%;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%;
+    }
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs" class="active">Blog</a>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Blogs">Blog</a> · <span>How Linux Revolutionized Computing</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+      <div class="figure">
+        <img src="Images/LinuxRev.png" alt="How Linux Revolutionized Computing blog cover" style="width:600px; height:350px;" loading="lazy" />
+      </div>
+      <h1>How Linux Revolutionized Computing</h1>
+      <p class="lead">
+        A reflection on how Linus Torvalds’s small 1991 hobby project evolved into the backbone of modern computing, shaping open-source innovation and global technology.
+      </p>
+    </header>
+
+    <!-- Blog body -->
+    <section class="card">
+      <p>In the year 1991, Linus Torvalds created something that would go on to revolutionize computing. The Linux kernel was born. Since then, Linux has become a significant part of everyday life.</p>
+
+      <p>There are many who, when they think of Linux, think that Linux is an operating system. However, Linux itself is a kernel, not a full operating system.</p>
+
+      <p>The Linux kernel makes up the core component that manages the hardware resources of a machine and provides the interface between hardware and software.</p>
+
+      <p>The Linux kernel is the core component of a distro — a Linux operating system. A Linux distro (distribution) is a complete Linux operating system that packages together the Linux kernel with all the additional software needed to make it usable.</p>
+
+      <p>Metaphorically, the Linux kernel can be thought of as an engine, and a Linux distribution can be thought of as a whole car. There are hundreds of active Linux distributions and even more discontinued ones. Different distros serve various intended purposes.</p>
+
+      <p>For general desktop use, Ubuntu is one of the most popular. There’s also Linux Mint, Fedora Workstation, and Pop!_OS. A more advanced distro would be Arch Linux. There are also some popular Linux server distributions such as Debian, CentOS, and Red Hat Enterprise Linux. Ubuntu also has a server version. Additionally, there are specialized versions such as Kali Linux, Parrot OS, and Raspberry Pi OS.</p>
+
+      <p>The Linux kernel truly revolutionized the world of computing. But this didn’t happen overnight — it evolved through a chain reaction that reshaped how operating systems, servers, and eventually the entire internet functioned.</p>
+
+      <p>It revolutionized computing by starting out as an open-source collaboration. This allowed computing practitioners and hobbyists worldwide to develop and collaborate, which further led to the rise of free and open operating systems. Now, most of the modern internet today is powered by Linux.</p>
+
+      <p>It runs over 70% of the world’s servers, dominates cloud infrastructure, and essentially runs everything from supercomputers to smartphones, from Raspberry Pis to self-driving cars. It’s now the dominant OS in embedded systems, networking gear, and IoT devices.</p>
+
+      <p>Because it was free and open, students, researchers, and startups could experiment without licensing costs, leading to explosive innovation in computing, networking, and security.</p>
+
+      <p>What began as Linus’s “hobby project” led to:</p>
+      <ul>
+        <li>The core of the open-source movement</li>
+        <li>The foundation of Android</li>
+        <li>The standard OS for servers, supercomputers, and cloud environments</li>
+        <li>A symbol of global collaboration and freedom in technology</li>
+      </ul>
+
+      <p>When Linus Torvalds created the Linux kernel in 1991, it went on to revolutionize computing — not by dominating desktops, but by quietly becoming the invisible backbone of the modern digital world.</p>
+    </section>
+
+    <p><a href="../index.html">Back to Home</a></p>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
