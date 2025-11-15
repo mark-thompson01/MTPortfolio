@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hyper-V Overview · Mark Thompson Portfolio</title>
+  <meta name="description" content="A technical overview of Microsoft's Hyper-V virtualization platform and its architecture, including hypervisor operations, partitions, and system behavior." />
+
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-top:16px;
+    }
+
+    ul {margin:8px 0 8px 20px}
+    li {margin-bottom:6px}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} 
+    footer a:hover{color:var(--brand)}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- NAVIGATION -->
+  <nav class="topnav" aria-label="Sections">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs">Blog</a>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="crumbs">
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · 
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> · 
+    <span>Hyper-V Overview</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Hyper-V Overview</h1>
+    <p class="lead">
+      A structured breakdown of what Hyper-V is, how the hypervisor works, and how enabling it fundamentally transforms Windows into a root partition under a Type-1 virtualization framework.
+    </p>
+  </header>
+
+  <!-- SECTION 1: WHAT IS HYPER-V -->
+  <section class="card">
+    <h2>What is Hyper-V?</h2>
+    <p>
+      Hyper-V is Microsoft’s built-in virtualization platform that allows the creation and management of virtual machines (VMs) in Windows environments.  
+      It is similar in concept to VMware or Oracle VirtualBox, but uniquely integrated into the Windows operating system itself.
+    </p>
+    <p>
+      Hyper-V is included in:
+    </p>
+    <ul>
+      <li>Windows Server</li>
+      <li>Windows 11 Pro</li>
+      <li>Windows 11 Enterprise</li>
+      <li>Windows 11 Education</li>
+    </ul>
+    <p>
+      The Hyper-V technology is the <strong>hypervisor</strong> that powers the virtual infrastructure.
+    </p>
+  </section>
+
+  <!-- SECTION 2: HYPERV = HYPERVISOR -->
+  <section class="card">
+    <h2>Hyper-V = Hypervisor</h2>
+    <p>
+      A hypervisor is a lightweight software layer that allows multiple operating systems to run simultaneously on the same physical hardware.  
+      This includes Windows, Linux, BSD, pfSense, and many more.
+    </p>
+    <p>
+      Hyper-V is always a <strong>Type 1 (bare-metal) hypervisor</strong> — even when installed on a laptop.
+    </p>
+    <p>
+      Whether installed on:
+    </p>
+    <ul>
+      <li>A Dell or HP enterprise rack server</li>
+      <li>A Lenovo ThinkPad running Windows 11</li>
+    </ul>
+    <p>
+      Hyper-V runs directly on the hardware layer, not inside the Windows operating system.
+    </p>
+  </section>
+
+  <!-- SECTION 3: WINDOWS BECOMES THE ROOT PARTITION -->
+  <section class="card">
+    <h2>Windows Becomes the Root Partition</h2>
+    <p>
+      Once Hyper-V is enabled and the machine reboots, Windows is no longer the base operating system.  
+      It becomes the <strong>Root Partition</strong> (also called the <strong>Parent Partition</strong>).
+    </p>
+    <p>The root partition:</p>
+    <ul>
+      <li>Has direct access to hardware drivers</li>
+      <li>Manages storage and networking</li>
+      <li>Controls all child VMs</li>
+      <li>Runs Hyper-V Manager / PowerShell virtualization modules</li>
+      <li>Hosts virtual disk files (.vhdx)</li>
+      <li>Creates, deletes, and manages VMs</li>
+      <li>Owns the Virtual Switch Manager</li>
+    </ul>
+    <p>
+      Therefore, Windows serves as the management OS for the hypervisor, not the execution layer for the VMs.
+    </p>
+  </section>
+
+  <!-- SECTION 4: CHILD PARTITIONS -->
+  <section class="card">
+    <h2>VMs = Child Partitions</h2>
+    <p>
+      Each VM runs inside a <strong>Child Partition</strong> — an isolated execution environment controlled by the hypervisor.
+    </p>
+    <p>Child partitions:</p>
+    <ul>
+      <li>Do not have direct access to hardware</li>
+      <li>Must use the hypervisor for CPU, memory, storage, and I/O</li>
+      <li>Use synthetic drivers provided by the root partition</li>
+      <li>Are strictly managed by the hypervisor + root partition</li>
+    </ul>
+    <p>
+      Operating systems such as:
+    </p>
+    <ul>
+      <li>pfSense</li>
+      <li>Ubuntu</li>
+      <li>Windows Server</li>
+      <li>Kali Linux</li>
+      <li>Arch Linux</li>
+    </ul>
+    <p>
+      …all run inside child partitions.
+    </p>
+    <p>
+      Microsoft uses the term “partition” instead of “VM” because the architecture is container-based at the hypervisor level.
+    </p>
+  </section>
+
+  <!-- SECTION 5: WHAT CHANGES WHEN HYPER-V IS ENABLED -->
+  <section class="card">
+    <h2>How Hyper-V Changes System Architecture</h2>
+    <p>
+      Before enabling Hyper-V, a Windows machine operates normally:
+    </p>
+    <p><strong>Hardware → Windows → Applications</strong></p>
+
+    <p>
+      When Hyper-V is enabled, the boot process changes dramatically:
+    </p>
+    <p><strong>Hardware → Hyper-V Hypervisor → Windows (Root Partition)</strong></p>
+
+    <p>
+      Hyper-V takes over the virtualization extensions of the CPU and becomes the true base layer of the machine.
+    </p>
+
+    <h3>During boot:</h3>
+    <ul>
+      <li>The system reboots</li>
+      <li>The Windows bootloader loads <strong>hvboot.sys</strong></li>
+      <li>The hypervisor initializes and takes control over hardware virtualization</li>
+      <li>Windows starts as a privileged partition</li>
+    </ul>
+  </section>
+
+  <!-- SECTION 6: WHY VMWARE/VIRTUALBOX BREAK -->
+  <section class="card">
+    <h2>Why VMware and VirtualBox Stop Working</h2>
+    <p>
+      Hyper-V “owns” the CPU virtualization extensions (Intel VT-x / AMD-V).  
+      Because it's a Type-1 hypervisor, it does not allow other hypervisors to run beneath it.
+    </p>
+    <p>
+      This is why VMware Workstation and VirtualBox often fail to start once Hyper-V is enabled.
+    </p>
+  </section>
+
+  <!-- SECTION 7: LAB CONTEXT -->
+  <section class="card">
+    <h2>Lab Context</h2>
+    <p>
+      In this lab, Hyper-V is enabled and configured on a Lenovo ThinkPad running Windows 11 Professional.  
+      Enabling the feature transforms Windows into a root partition operating under the Hyper-V hypervisor.  
+      All virtual machines used in this lab run as child partitions.
+    </p>
+  </section>
+
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
