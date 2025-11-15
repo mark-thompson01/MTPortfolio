@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hyper-V Lab · Mark Thompson Portfolio</title>
+  <meta name="description" content="Introduction to the Hyper-V Lab project, exploring Microsoft's virtualization platform and hands-on system administration practice." />
+  
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-top:16px;
+    }
+
+    ul {margin:8px 0 8px 20px}
+    li {margin-bottom:6px}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} 
+    footer a:hover{color:var(--brand)}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <nav class="topnav" aria-label="Sections">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs">Blog</a>
+  </nav>
+
+  <div class="crumbs">
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Hyper-V Lab</span>
+  </div>
+
+  <header>
+    <h1>Hyper-V Lab</h1>
+    <p class="lead">
+      A hands-on, continuously expanding Hyper-V learning environment built to develop real systems administration experience through experimentation, research, and practical implementation.
+    </p>
+  </header>
+
+  <!-- INTRO CARD -->
+  <section class="card">
+    <h2>Introduction</h2>
+    <p>
+      As someone who is passionate about systems administration, the objective of this project is to explore, experiment, tinker, research, learn, and ultimately have fun while continuously building out my skillset.  
+    </p>
+    <p>
+      This lab was created from a desire to learn Microsoft’s virtualization platform, <strong>Hyper-V</strong>, and gain direct hands-on experience by setting up a customized environment from scratch.  
+      The primary system used for this project is a <strong>Lenovo ThinkPad E15 Gen 2</strong> running <strong>Windows 11 Professional</strong>.
+    </p>
+    <p>
+      Hyper-V is built into both <strong>Windows Server</strong> editions and <strong>Windows Pro / Enterprise</strong> editions, allowing systems that meet the minimum hardware specifications to create and manage virtual machines (VMs).  
+    </p>
+  </section>
+
+  <!-- HYPERV EXPLANATION -->
+  <section class="card">
+    <h2>What Hyper-V Actually Is</h2>
+    <p>
+      Hyper-V is a <strong>type-1 (bare-metal) hypervisor</strong> — regardless of whether it is installed on enterprise server hardware or a standard laptop.  
+      The hypervisor layer runs directly on the physical hardware and introduces a lightweight virtualization layer that sits between the hardware and the operating system.
+    </p>
+    <p>
+      When Hyper-V is enabled, Windows transitions into what is known as the <strong>root partition</strong>, and all virtual machines run inside isolated <strong>child partitions</strong>.  
+      This structure allows multiple VMs to share the same physical resources (CPU, memory, storage, network) while maintaining isolation and stability across all workloads.
+    </p>
+  </section>
+
+  <!-- LAB PURPOSE -->
+  <section class="card">
+    <h2>Lab Purpose</h2>
+    <p>
+      This lab will serve as the foundation for many future projects involving Windows Server, Linux, networking, virtualization, and enterprise-style network environments.  
+      It begins with understanding Hyper-V itself and will expand into additional labs over time.
+    </p>
+  </section>
+
+  <!-- LAB STRUCTURE -->
+  <section class="card">
+    <h2>Lab Structure</h2>
+    <p>The Hyper-V lab is organized into multiple sections, each with its own dedicated page:</p>
+
+    <ul>
+      <li><strong>Hyper-V Overview</strong></li>
+      <li><strong>Hyper-V Setup & Hardware Requirements</strong></li>
+      <li><strong>Hyper-V Manager</strong></li>
+      <li><strong>Virtual Switch Configuration</strong></li>
+      <li><strong>Creating Virtual Machines</strong></li>
+      <li><strong>Operating System Installations</strong></li>
+      <li><strong>Configuring VMs with a Virtual Switch</strong></li>
+    </ul>
+
+    <p>Future sections will be added as the environment grows.</p>
+  </section>
+
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
