@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hyper-V Setups & Hardware Specs · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hardware requirements, real-world setups, and enterprise-grade specifications for configuring Microsoft's Hyper-V virtualization platform." />
+
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-top:16px;
+    }
+
+    ul{margin:8px 0 8px 22px}
+    li{margin-bottom:6px}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="topnav" aria-label="Sections">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs">Blog</a>
+  </nav>
+
+  <!-- BREADCRUMBS -->
+  <div class="crumbs">
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · 
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> · 
+    <span>Hyper-V Setups & Hardware Specs</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Hyper-V Setups & Hardware Specs</h1>
+    <p class="lead">
+      A breakdown of how Hyper-V is deployed across enterprise datacenters, home labs, and workstation environments — along with minimum and recommended hardware specifications.
+    </p>
+  </header>
+
+  <!-- ENTERPRISE CONTEXT -->
+  <section class="card">
+    <h2>Enterprise Hyper-V Deployments</h2>
+    <p>
+      Historically, Hyper-V has been deployed primarily in enterprise environments.  
+      It is commonly installed on Dell, HP, and Lenovo rack-mounted server hardware in datacenters and production clusters.
+    </p>
+    <p>
+      Hyper-V was designed from the ground up to compete with VMware ESXi in virtualization-heavy environments.  
+      It remains a core component in:
+    </p>
+    <ul>
+      <li>Corporate datacenters</li>
+      <li>Enterprise server rooms</li>
+      <li>Virtualized infrastructure for production workloads</li>
+      <li>Failover clusters running hundreds of VMs</li>
+      <li>Organizations moving away from VMware due to licensing changes</li>
+    </ul>
+    <p>
+      While many users only see Hyper-V as a “Windows laptop VM tool,”  
+      it is in reality a full enterprise-grade Type-1 hypervisor.
+    </p>
+  </section>
+
+  <!-- LAB CONTEXT -->
+  <section class="card">
+    <h2>Lab Setup Context</h2>
+    <p>
+      In this lab, Hyper-V is configured on a Lenovo ThinkPad running Windows 11 Professional.  
+      Despite running on consumer hardware, the hypervisor engine is identical to what powers massive production clusters.
+    </p>
+    <p>
+      Hyper-V does not scale itself down depending on hardware.  
+      It runs the same hypervisor code everywhere — laptop, desktop, or enterprise host.
+    </p>
+  </section>
+
+  <!-- MINIMUM HARDWARE SPECS -->
+  <section class="card">
+    <h2>Minimum Hardware Requirements (Microsoft Baseline)</h2>
+    <p>These are the minimum requirements Microsoft defines for enabling Hyper-V:</p>
+
+    <h3>CPU Requirements</h3>
+    <ul>
+      <li>64-bit CPU with virtualization support</li>
+      <li>Intel VT-x or AMD-V</li>
+      <li>Second Level Address Translation (SLAT)</li>
+      <li>Intel EPT or AMD RVI/NPT</li>
+    </ul>
+    <p><strong>Note:</strong> Windows 11 requires SLAT. This is mandatory.</p>
+
+    <h3>Memory</h3>
+    <ul><li>4 GB RAM minimum</li></ul>
+    <p>
+      Technically enough to run Hyper-V…  
+      but not enough to run multiple VMs comfortably.
+    </p>
+
+    <h3>Operating System</h3>
+    <ul>
+      <li>Windows 11 Pro</li>
+      <li>Windows 11 Enterprise</li>
+      <li>Windows 11 Education</li>
+    </ul>
+    <p>Hyper-V is not available on Windows Home.</p>
+
+    <h3>Security Requirements</h3>
+    <ul>
+      <li>Data Execution Prevention (DEP)</li>
+      <li>Intel XD-bit / AMD NX-bit</li>
+    </ul>
+    <p>Required for secure virtualization.</p>
+  </section>
+
+  <!-- RECOMMENDED HARDWARE SPECS -->
+  <section class="card">
+    <h2>Recommended Specs for Practical Lab Environments</h2>
+    <p>
+      For comfortable performance in a home lab or workstation environment, these specs are realistic:
+    </p>
+
+    <h3>CPU</h3>
+    <ul>
+      <li>4–8 cores minimum</li>
+      <li>Intel i5/i7/i9 or AMD Ryzen 5/7/9</li>
+      <li>SLAT-enabled (most modern CPUs support this)</li>
+    </ul>
+
+    <h3>Memory (Most Important)</h3>
+    <ul>
+      <li>16 GB minimum (small labs)</li>
+      <li>32 GB recommended (multiple VMs)</li>
+      <li>64 GB+ for enterprise simulations</li>
+    </ul>
+    <p><strong>RAM is the #1 bottleneck in virtualization.</strong></p>
+
+    <h3>Storage</h3>
+    <ul>
+      <li>SSD required</li>
+      <li>NVMe strongly recommended</li>
+      <li>512 GB minimum</li>
+      <li>1–2 TB recommended (VMs consume space quickly)</li>
+    </ul>
+
+    <h3>Networking</h3>
+    <ul>
+      <li>One NIC is enough for basic labs</li>
+      <li>Two NICs are ideal for:</li>
+      <ul>
+        <li>pfSense networking labs</li>
+        <li>VLAN testing</li>
+        <li>Network segmentation</li>
+        <li>Internal + external switches</li>
+      </ul>
+    </ul>
+  </section>
+
+  <!-- ENTERPRISE-GRADE HARDWARE -->
+  <section class="card">
+    <h2>Enterprise-Grade Hyper-V Hardware</h2>
+    <p>
+      In production environments, Hyper-V typically runs on high-end server hardware with significant compute, memory, and storage capacity.
+    </p>
+
+    <h3>CPU</h3>
+    <ul>
+      <li>Dual Intel Xeon Scalable CPUs (12–56 cores each)</li>
+      <li>AMD EPYC platforms (32–128 cores)</li>
+    </ul>
+
+    <h3>Memory</h3>
+    <ul>
+      <li>128 GB – 1 TB for small clusters</li>
+      <li>1–4 TB+ for enterprise workloads</li>
+      <li>ECC memory (standard in servers)</li>
+    </ul>
+
+    <h3>Storage</h3>
+    <ul>
+      <li>SAS or NVMe storage</li>
+      <li>Hardware RAID controllers</li>
+      <li>SAN or iSCSI storage arrays</li>
+      <li>Cluster Shared Volumes (CSV)</li>
+    </ul>
+
+    <h3>Networking</h3>
+    <ul>
+      <li>4–8 NICs per host</li>
+      <li>10GbE or 40GbE networking for clustering and live migration</li>
+      <li>Redundant switches and uplinks</li>
+      <li>iDRAC / iLO for remote out-of-band management</li>
+    </ul>
+
+    <p>This is the environment Hyper-V was originally designed for.</p>
+  </section>
+
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
