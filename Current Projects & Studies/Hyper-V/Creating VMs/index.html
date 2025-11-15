@@ -1,1 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creating Virtual Machines in Hyper-V</title>
+
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --text: #e6edf3;
+            --accent: #58a6ff;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 {
+            color: var(--accent);
+        }
+
+        .section {
+            padding: 40px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .gallery img {
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.03);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            padding-top: 70px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.85);
+        }
+
+        .modal img {
+            display: block;
+            margin: auto;
+            max-width: 90%;
+            max-height: 85%;
+        }
+
+        .close {
+            position: fixed;
+            top: 20px;
+            right: 35px;
+            font-size: 40px;
+            color: white;
+            cursor: pointer;
+        }
+
+        hr {
+            margin: 60px 0;
+            border: 1px solid #30363d;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="section">
+    <h1>Creating Virtual Machines in Hyper-V</h1>
+    <p>(Intro VM example will be added later.)</p>
+</div>
+
+<hr>
+
+<!-- WINDOWS SERVER SECTION -->
+<div class="section">
+    <h2>Windows Server VM — Installation & Setup</h2>
+    <p>This gallery shows the complete creation and installation process for a Windows Server virtual machine in Hyper-V.</p>
+
+    <div class="gallery">
+        <!-- Windows Server Images -->
+        <img src="Images/Windows Server/MS1.png">
+        <img src="Images/Windows Server/MS2.png">
+        <img src="Images/Windows Server/MS3.png">
+        <img src="Images/Windows Server/MS4.png">
+        <img src="Images/Windows Server/MS5.png">
+        <img src="Images/Windows Server/MS6.png">
+        <img src="Images/Windows Server/MS7.png">
+        <img src="Images/Windows Server/MS8.png">
+        <img src="Images/Windows Server/MS9.png">
+        <img src="Images/Windows Server/MS10.png">
+        <img src="Images/Windows Server/MS11.png">
+        <img src="Images/Windows Server/MS12.png">
+        <img src="Images/Windows Server/MS13.png">
+        <img src="Images/Windows Server/MS14.png">
+        <img src="Images/Windows Server/MS15.png">
+        <img src="Images/Windows Server/MS16.png">
+        <img src="Images/Windows Server/MS17.png">
+        <img src="Images/Windows Server/MS18.png">
+        <img src="Images/Windows Server/MS19.png">
+        <img src="Images/Windows Server/MS20.png">
+        <img src="Images/Windows Server/MS21.png">
+        <img src="Images/Windows Server/MS22.png">
+        <img src="Images/Windows Server/MS23.png">
+        <img src="Images/Windows Server/MS24.png">
+        <img src="Images/Windows Server/MS25.png">
+        <img src="Images/Windows Server/MS26.png">
+        <img src="Images/Windows Server/MS27.png">
+        <img src="Images/Windows Server/MS28.png">
+        <img src="Images/Windows Server/MS29.png">
+        <img src="Images/Windows Server/MS30.png">
+    </div>
+</div>
+
+<hr>
+
+
+  <div class="section">
+    <h2>Ubuntu Server VM — Installation & Setup</h2>
+    <p>This gallery walks through creating an Ubuntu Server VM and installing the operating system inside Hyper-V.</p>
+
+    <div class="gallery">
+        <!-- Ubuntu Server Images -->
+        <img src="Images/Ubuntu Server/UbuntuServer1.png">
+        <img src="Images/Ubuntu Server/UbuntuServer2.png">
+        <img src="Images/Ubuntu Server/UbuntuServer3.png">
+        <img src="Images/Ubuntu Server/UbuntuServer10.png">
+        <img src="Images/Ubuntu Server/UbuntuServer11.png">
+        <img src="Images/Ubuntu Server/UbuntuServer12.png">
+        <img src="Images/Ubuntu Server/UbuntuServer13.png">
+        <img src="Images/Ubuntu Server/UbuntuServer14.png">
+        <img src="Images/Ubuntu Server/UbuntuServer15.png">
+        <img src="Images/Ubuntu Server/UbuntuServer16.png">
+        <img src="Images/Ubuntu Server/UbuntuServer17.png">
+        <img src="Images/Ubuntu Server/UbuntuServer18.png">
+        <img src="Images/Ubuntu Server/UbuntuServer19.png">
+        <img src="Images/Ubuntu Server/UbuntuServer20.png">
+        <img src="Images/Ubuntu Server/UbuntuServer21.png">
+        <img src="Images/Ubuntu Server/UbuntuServer22.png">
+        <img src="Images/Ubuntu Server/UbuntuServer23.png">
+        <img src="Images/Ubuntu Server/UbuntuServer24.png">
+        <img src="Images/Ubuntu Server/UbuntuServer25.png">
+        <img src="Images/Ubuntu Server/UbuntuServer26.png">
+        <img src="Images/Ubuntu Server/UbuntuServer27.png">
+        <img src="Images/Ubuntu Server/UbuntuServer28.png">
+        <img src="Images/Ubuntu Server/UbuntuServer29.png">
+        <img src="Images/Ubuntu Server/UbuntuServer30.png">
+        <img src="Images/Ubuntu Server/UbuntuServer31.png">
+        <img src="Images/Ubuntu Server/UbuntuServer32.png">
+        <img src="Images/Ubuntu Server/UbuntuServer33.png">
+        <img src="Images/Ubuntu Server/UbuntuServer34.png">
+        <img src="Images/Ubuntu Server/UbuntuServer35.png">
+        <img src="Images/Ubuntu Server/UbuntuServer36.png">
+    </div>
+</div>
+
+<hr>
+
+
+  
+<div class="section">
+    <h2>pfSense VM — VM Setup</h2>
+    <p>This section shows the VM setup and configuration before installation of pfSense.</p>
+
+    <div class="gallery">
+        <img src="Images/pfSense/VM Setup/pf1.png">
+        <img src="Images/pfSense/VM Setup/pf2.png">
+        <img src="Images/pfSense/VM Setup/pf3.png">
+        <img src="Images/pfSense/VM Setup/pf4.png">
+        <img src="Images/pfSense/VM Setup/pf5.png">
+        <img src="Images/pfSense/VM Setup/pf6.png">
+        <img src="Images/pfSense/VM Setup/pf7.png">
+        <img src="Images/pfSense/VM Setup/pf8.png">
+        <img src="Images/pfSense/VM Setup/pf9.png">
+        <img src="Images/pfSense/VM Setup/pf10.png">
+        <img src="Images/pfSense/VM Setup/pf11.png">
+        <img src="Images/pfSense/VM Setup/pf12.png">
+    </div>
+</div>
+
+<hr>
+
+<div class="section">
+    <h2>pfSense VM — Initial Startup</h2>
+    <p>These images show pfSense booting for the first time after VM creation.</p>
+
+    <div class="gallery">
+        <img src="Images/pfSense/Start/start1.png">
+        <img src="Images/pfSense/Start/start2.png">
+        <img src="Images/pfSense/Start/start3.png">
+        <img src="Images/pfSense/Start/start4.png">
+        <img src="Images/pfSense/Start/start5.png">
+    </div>
+</div>
+
+<hr>
+
+<div class="section">
+    <h2>pfSense VM — Installer Setup</h2>
+    <p>This section shows the pfSense installer configuration workflow.</p>
+
+    <div class="gallery">
+        <img src="Images/pfSense/Installer Setup/IS1.png">
+        <img src="Images/pfSense/Installer Setup/IS2.png">
+        <img src="Images/pfSense/Installer Setup/IS3.png">
+        <img src="Images/pfSense/Installer Setup/IS4.png">
+        <img src="Images/pfSense/Installer Setup/IS5.png">
+        <img src="Images/pfSense/Installer Setup/IS6.png">
+        <img src="Images/pfSense/Installer Setup/IS7.png">
+        <img src="Images/pfSense/Installer Setup/IS8.png">
+        <img src="Images/pfSense/Installer Setup/IS9.png">
+        <img src="Images/pfSense/Installer Setup/IS10.png">
+    </div>
+</div>
+
+<hr>
+
+<div class="section">
+    <h2>pfSense VM — Final Configuration</h2>
+    <p>These images show the final pfSense system configuration steps following installation.</p>
+
+    <div class="gallery">
+        <img src="Images/pfSense/Setup/setup3.png">
+        <img src="Images/pfSense/Setup/setup4.png">
+        <img src="Images/pfSense/Setup/setup5.png">
+        <img src="Images/pfSense/Setup/setup6.png">
+        <img src="Images/pfSense/Setup/setup7.png">
+        <img src="Images/pfSense/Setup/setup8.png">
+        <img src="Images/pfSense/Setup/setup9.png">
+        <img src="Images/pfSense/Setup/setup10.png">
+        <img src="Images/pfSense/Setup/setup11.png">
+        <img src="Images/pfSense/Setup/setup12.png">
+        <img src="Images/pfSense/Setup/setup13.png">
+        <img src="Images/pfSense/Setup/setup14.png">
+        <img src="Images/pfSense/Setup/setup15.png">
+        <img src="Images/pfSense/Setup/setup16.png">
+        <img src="Images/pfSense/Setup/setup17.png">
+        <img src="Images/pfSense/Setup/setup18.png">
+        <img src="Images/pfSense/Setup/setup19.png">
+        <img src="Images/pfSense/Setup/setup20.png">
+    </div>
+</div>
+
+<!-- MODAL SCRIPT -->
+<div id="modal" class="modal">
+    <span class="close" onclick="document.getElementById('modal').style.display='none'">&times;</span>
+    <img id="modal-img">
+</div>
+
+<script>
+    const images = document.querySelectorAll(".gallery img");
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modal-img");
+
+    images.forEach(img => {
+        img.addEventListener("click", () => {
+            modal.style.display = "block";
+            modalImg.src = img.src;
+        });
+    });
+
+    modal.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+</script>
+
+</body>
+</html>
 
