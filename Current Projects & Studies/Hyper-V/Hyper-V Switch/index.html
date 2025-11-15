@@ -1,1 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Virtual Switch Setup · Mark Thompson Portfolio</title>
+  <meta name="description" content="Step-by-step configuration of virtual switches in Hyper-V, with screenshots and detailed setup workflow." />
+
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-top:16px;
+    }
+
+    /* Figure styling */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:14px auto;
+      width:max-content;
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:85%;
+      cursor:zoom-in;
+      border-radius:10px;
+      margin:auto;
+    }
+    .figcaption{
+      margin-top:6px;
+      font-size:14px;
+      color:var(--muted);
+    }
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+    /* Zoom modal */
+    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
+    .zoom-modal[open]{display:block}
+    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
+    .zoom-img{max-width:95vw;max-height:95vh;width:auto;height:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out}
+    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;cursor:pointer}
+    .zoom-close:hover{background:#121733}
+    .hide-scroll{overflow:hidden}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="topnav" aria-label="Sections">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs">Blog</a>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="crumbs">
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> ·
+    <span>Virtual Switch Setup</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Virtual Switch Setup</h1>
+    <p class="lead">
+      A step-by-step walkthrough of creating and configuring Virtual Switches in Hyper-V using Hyper-V Manager.  
+      All screenshots below follow the exact order of the setup process.
+    </p>
+  </header>
+
+  <!-- SECTION 1 -->
+  <section class="card">
+    <h2>Virtual Switch Configuration Workflow</h2>
+    <p>
+      The following screenshots demonstrate the complete workflow for creating a new virtual switch in Hyper-V,
+      including selecting network adapters, configuring switch types, and applying settings.
+    </p>
+
+    <!-- IMAGE 1 -->
+    <div class="figure">
+      <img src="Images/vswitch1.png" alt="Virtual Switch Setup Step 1">
+      <div class="figcaption">Step 1</div>
+    </div>
+
+    <!-- IMAGE 2 -->
+    <div class="figure">
+      <img src="Images/vswitch2.png" alt="Virtual Switch Setup Step 2">
+      <div class="figcaption">Step 2</div>
+    </div>
+
+    <!-- IMAGE 3 -->
+    <div class="figure">
+      <img src="Images/vswitch3.png" alt="Virtual Switch Setup Step 3">
+      <div class="figcaption">Step 3</div>
+    </div>
+
+    <!-- IMAGE 4 -->
+    <div class="figure">
+      <img src="Images/vswitch4.png" alt="Virtual Switch Setup Step 4">
+      <div class="figcaption">Step 4</div>
+    </div>
+
+    <!-- IMAGE 5 -->
+    <div class="figure">
+      <img src="Images/vswitch5.png" alt="Virtual Switch Setup Step 5">
+      <div class="figcaption">Step 5</div>
+    </div>
+
+    <!-- IMAGE 6 -->
+    <div class="figure">
+      <img src="Images/vswitch6.png" alt="Virtual Switch Setup Step 6">
+      <div class="figcaption">Step 6</div>
+    </div>
+
+    <!-- IMAGE 7 -->
+    <div class="figure">
+      <img src="Images/vswitch7.png" alt="Virtual Switch Setup Step 7">
+      <div class="figcaption">Step 7</div>
+    </div>
+
+    <!-- IMAGE 8 -->
+    <div class="figure">
+      <img src="Images/vswitch8.png" alt="Virtual Switch Setup Step 8">
+      <div class="figcaption">Step 8</div>
+    </div>
+
+  </section>
+
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ZOOM MODAL -->
+<div class="zoom-modal" id="zoom" aria-hidden="true">
+  <div class="zoom-content" data-close>
+    <img class="zoom-img" id="zoomImg" alt="">
+    <button class="zoom-close" type="button">&times;</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const modal=document.getElementById('zoom');
+  const zoomImg=document.getElementById('zoomImg');
+  const closeBtn=modal.querySelector('.zoom-close');
+  let lastFocus=null;
+
+  document.querySelectorAll('.figure img').forEach(img=>img.classList.add('zoomable'));
+
+  function openModal(src,alt){
+    lastFocus=document.activeElement;
+    zoomImg.src=src;
+    zoomImg.alt=alt||'';
+    modal.setAttribute('open','');
+    document.body.classList.add('hide-scroll');
+    closeBtn.focus();
+  }
+  function closeModal(){
+    modal.removeAttribute('open');
+    document.body.classList.remove('hide-scroll');
+    zoomImg.removeAttribute('src');
+    if(lastFocus) lastFocus.focus();
+  }
+
+  document.addEventListener('click',e=>{
+    const img=e.target.closest('.figure img.zoomable');
+    if(img){ openModal(img.src,img.alt); }
+  });
+  closeBtn.addEventListener('click',closeModal);
+  modal.addEventListener('click',e=>{
+    if(e.target.hasAttribute('data-close')||e.target===modal) closeModal();
+  });
+  zoomImg.addEventListener('click',closeModal);
+  document.addEventListener('keydown',e=>{
+    if(!modal.hasAttribute('open')) return;
+    if(e.key==='Escape') closeModal();
+  });
+})();
+</script>
+
+</body>
+</html>
 
