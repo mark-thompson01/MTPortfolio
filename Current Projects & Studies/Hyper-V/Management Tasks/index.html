@@ -1,1 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hyper-V Administrative Tasks · Mark Thompson Portfolio</title>
+  <meta name="description" content="A visual walkthrough of common administrative tasks performed inside Hyper-V Manager, including VM operations and hardware resource configuration." />
 
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-top:16px;
+    }
+
+    ul{margin:8px 0 8px 22px}
+    li{margin-bottom:6px}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+    img {max-width:100%; border-radius:12px; margin-top:10px;}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="topnav" aria-label="Sections">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs">Blog</a>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="crumbs">
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> ·
+    <span>Hyper-V Administrative Tasks</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Hyper-V Administrative Tasks</h1>
+    <p class="lead">
+      This page provides a visual walkthrough of common administrative tasks performed inside Hyper-V Manager, including VM operations and hardware resource configuration.
+      These screenshots demonstrate practical, real-world workflows used by system administrators on a Hyper-V host.
+    </p>
+  </header>
+
+  <!-- SECTION 1 -->
+  <section class="card">
+    <h2>1. General Administrative Tasks (Do Things)</h2>
+    <p>This section demonstrates common administrative actions performed through Hyper-V Manager.</p>
+
+    <!-- IMAGES FROM Images/Do%20Things -->
+    <img src="Images/Do%20Things/0Hyper-VManager.png" alt="">
+    <img src="Images/Do%20Things/00Hyper-VManager2.png" alt="">
+    <img src="Images/Do%20Things/1CreateNewVM.png" alt="">
+    <img src="Images/Do%20Things/2VirtualSwitchManager.png" alt="">
+    <img src="Images/Do%20Things/3CreatevSwitch.png" alt="">
+    <img src="Images/Do%20Things/4ConfigVM1.png" alt="">
+    <img src="Images/Do%20Things/5ConfigVM2.png" alt="">
+    <img src="Images/Do%20Things/6CheckPoint.png" alt="">
+    <img src="Images/Do%20Things/7vSwitchConfig.png" alt="">
+    <img src="Images/Do%20Things/8ExportLocation.png" alt="">
+    <img src="Images/Do%20Things/9Export.png" alt="">
+    <img src="Images/Do%20Things/10Export.png" alt="">
+    <img src="Images/Do%20Things/11Export.png" alt="">
+    <img src="Images/Do%20Things/12Export.png" alt="">
+    <img src="Images/Do%20Things/13Export.png" alt="">
+    <img src="Images/Do%20Things/14AddNetAdapt.png" alt="">
+  </section>
+
+  <!-- SECTION 2 -->
+  <section class="card">
+    <h2>2. Hardware Resources — Ubuntu VM</h2>
+    <p>This section displays the hardware resource configuration for an Ubuntu Server virtual machine.</p>
+
+    <!-- Images/Hardware%20Resources/Ubuntu -->
+    <img src="Images/Hardware%20Resources/Ubuntu/1SettingsU.png" alt="">
+    <img src="Images/Hardware%20Resources/Ubuntu/2Core.U.png" alt="">
+    <img src="Images/Hardware%20Resources/Ubuntu/3MemU.png" alt="">
+  </section>
+
+  <!-- SECTION 3 -->
+  <section class="card">
+    <h2>3. Hardware Resources — Windows Server VM</h2>
+    <p>This section displays hardware settings for a Windows Server VM.</p>
+
+    <!-- Images/Hardware%20Resources/Windows -->
+    <img src="Images/Hardware%20Resources/Windows/1SettingsW.png" alt="">
+    <img src="Images/Hardware%20Resources/Windows/2CoreW.png" alt="">
+    <img src="Images/Hardware%20Resources/Windows/3MemW.png" alt="">
+  </section>
+
+  <!-- SECTION 4 -->
+  <section class="card">
+    <h2>4. Hardware Resources — pfSense VM</h2>
+    <p>This section demonstrates CPU and memory configuration for your pfSense router VM.</p>
+
+    <!-- Images/Hardware%20Resources/pfSense -->
+    <img src="Images/Hardware%20Resources/pfSense/1Settingspf.png" alt="">
+    <img src="Images/Hardware%20Resources/pfSense/2FourCorespf.png" alt="">
+    <img src="Images/Hardware%20Resources/pfSense/3OneCorepf.png" alt="">
+    <img src="Images/Hardware%20Resources/pfSense/4RAMpf.png" alt="">
+  </section>
+
+  <section>
+    <p><a href="../index.html">Back to Home</a></p>
+  </section>
+
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+</body>
+</html>
