@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Enabling Hyper-V in Windows 11 · Mark Thompson Portfolio</title>
-  <meta name="description" content="Step-by-step guide to enabling Hyper-V on Windows 11, including required features and visual walkthrough with screenshots." />
+  <meta name="description" content="Step-by-step guide to enabling Hyper-V on Windows 11 with GUI, PowerShell, and DISM examples. Includes screenshots and zoom-enabled image gallery." />
 
   <style>
     :root{
@@ -50,6 +50,7 @@
       margin-top:16px;
     }
 
+    /* Figure styling */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -101,7 +102,7 @@
     <a href="/MTPortfolio/Blogs">Blog</a>
   </nav>
 
-  <!-- BREADCRUMBS -->
+  <!-- BREADCRUMB -->
   <div class="crumbs">
     <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
     <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> ·
@@ -112,69 +113,103 @@
   <header>
     <h1>Enabling Hyper-V in Windows 11</h1>
     <p class="lead">
-      A visual walkthrough of enabling Hyper-V on Windows 11 using the built-in Windows Features dialog.
-      These screenshots demonstrate the full process from start to finish.
+      Hyper-V can be enabled through Windows Features, PowerShell, or DISM.  
+      This page demonstrates all three methods with screenshots and zoom-enabled visuals.
     </p>
   </header>
 
-  <!-- CARD -->
+  <!-- GUI WORKFLOW -->
   <section class="card">
-    <h2>Hyper-V Enablement Workflow</h2>
+    <h2>Enable Hyper-V Using the Windows Features GUI</h2>
     <p>
-      Hyper-V can be enabled through Windows Features, PowerShell, or DISM.
-      This page focuses on the GUI-based process using *Turn Windows features on or off*.
+      The most common method is enabling Hyper-V through the built-in GUI utility:
+      <strong>Turn Windows features on or off</strong>.
     </p>
 
-    <!-- IMAGE 0 -->
     <div class="figure">
-      <img src="Images/Hyper-V0.png" alt="Hyper-V0.png">
-      <div class="figcaption">Step 1</div>
+      <img src="Images/Hyper-V0.png" alt="">
+      <div class="figcaption">Step 1 — Opening Windows Features</div>
     </div>
 
-    <!-- IMAGE 1-1 -->
     <div class="figure">
-      <img src="Images/Hyper-V1-1.png" alt="Hyper-V1-1.png">
-      <div class="figcaption">Step 2</div>
+      <img src="Images/Hyper-V1-1.png" alt="">
+      <div class="figcaption">Step 2 — Locating the Hyper-V Feature</div>
     </div>
 
-    <!-- IMAGE 1 -->
     <div class="figure">
-      <img src="Images/Hyper-V1.png" alt="Hyper-V1.png">
-      <div class="figcaption">Step 3</div>
+      <img src="Images/Hyper-V1.png" alt="">
+      <div class="figcaption">Step 3 — Enabling All Hyper-V Components</div>
     </div>
 
-    <!-- IMAGE 2 -->
     <div class="figure">
-      <img src="Images/Hyper-V2.png" alt="Hyper-V2.png">
-      <div class="figcaption">Step 4</div>
+      <img src="Images/Hyper-V2.png" alt="">
+      <div class="figcaption">Step 4 — Applying the Requested Changes</div>
     </div>
 
-    <!-- IMAGE 3 -->
     <div class="figure">
-      <img src="Images/Hyper-V3.png" alt="Hyper-V3.png">
-      <div class="figcaption">Step 5</div>
+      <img src="Images/Hyper-V3.png" alt="">
+      <div class="figcaption">Step 5 — Windows Applies Hyper-V Feature Installation</div>
     </div>
 
-    <!-- IMAGE 4 -->
     <div class="figure">
-      <img src="Images/Hyper-V4.png" alt="Hyper-V4.png">
-      <div class="figcaption">Step 6</div>
+      <img src="Images/Hyper-V4.png" alt="">
+      <div class="figcaption">Step 6 — Restart Required to Complete Installation</div>
     </div>
-  </section><br>
+  </section>
 
-  <h1>Using PowerShell to Enable Hyper-V</h1>
-  <img src="Images/PowerShell/EnablePS1.png" alt="EnablePS1.png">
-  <img src="Images/PowerShell/EnablePS2.png" alt="EnablePS2.png">
-  <img src="Images/PowerShell/EnablePS3.png" alt="EnablePS3.png"><br>
 
-  <h1>Using DISM to Enable Hyper-V</h1>
-  <img src="Images/DISM/DISM1.png" alt="DISM1.png">
-  <img src="Images/DISM/DISM2.png" alt="DISM2.png">
+  <!-- POWERSHELL METHOD -->
+  <section class="card">
+    <h2>Enable Hyper-V Using PowerShell</h2>
+    <p>
+      PowerShell provides a fast, scriptable way to enable Hyper-V across multiple systems.  
+      The required command is:
+      <br><code>Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All</code>
+    </p>
+
+    <div class="figure">
+      <img src="Images/PowerShell/EnablePS1.png" alt="">
+      <div class="figcaption">PowerShell Step 1 — Running the Enable-WindowsOptionalFeature Command</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/PowerShell/EnablePS2.png" alt="">
+      <div class="figcaption">PowerShell Step 2 — Hyper-V Components Installing</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/PowerShell/EnablePS3.png" alt="">
+      <div class="figcaption">PowerShell Step 3 — Restart Prompt After Installation</div>
+    </div>
+  </section>
+
+
+  <!-- DISM METHOD -->
+  <section class="card">
+    <h2>Enable Hyper-V Using DISM</h2>
+    <p>
+      DISM (Deployment Image Servicing and Management) is another command-line method for enabling Windows optional features.
+      This method is commonly used in automation and imaging workflows.
+      <br>The command is:
+      <br><code>dism.exe /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V</code>
+    </p>
+
+    <div class="figure">
+      <img src="Images/DISM/DISM1.png" alt="">
+      <div class="figcaption">DISM Step 1 — Running DISM to Enable Hyper-V</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/DISM/DISM2.png" alt="">
+      <div class="figcaption">DISM Step 2 — Hyper-V Enabled Successfully</div>
+    </div>
+  </section>
+
 
   <section>
     <p><a href="../index.html">Back to Home</a></p>
   </section>
-  
+
   <footer>
     <div>Mark Thompson · MTPortfolio</div>
     <div class="links">
@@ -235,4 +270,3 @@
 
 </body>
 </html>
-
