@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hyper-V Administrative Tasks · Mark Thompson Portfolio</title>
-  <meta name="description" content="A visual walkthrough of common administrative tasks performed inside Hyper-V Manager, including VM operations and hardware resource configuration." />
+  <meta name="description" content="A visual walkthrough of common administrative tasks performed in Hyper-V Manager, including VM operations and hardware resource configuration." />
 
   <style>
     :root{
@@ -50,14 +50,44 @@
       margin-top:16px;
     }
 
-    ul{margin:8px 0 8px 22px}
-    li{margin-bottom:6px}
+    /* Figure styling */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:14px auto;
+      width:max-content;
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:85%;
+      cursor:zoom-in;
+      border-radius:10px;
+      margin:auto;
+    }
+    .figcaption{
+      margin-top:6px;
+      font-size:14px;
+      color:var(--muted);
+      text-align:center;
+    }
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
     footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
 
-    img {max-width:100%; border-radius:12px; margin-top:10px;}
+    /* Zoom modal */
+    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
+    .zoom-modal[open]{display:block}
+    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
+    .zoom-img{max-width:95vw;max-height:95vh;width:auto;height:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out}
+    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;cursor:pointer}
+    .zoom-close:hover{background:#121733}
+    .hide-scroll{overflow:hidden}
   </style>
 </head>
 
@@ -84,67 +114,164 @@
   <header>
     <h1>Hyper-V Administrative Tasks</h1>
     <p class="lead">
-      This page provides a visual walkthrough of common administrative tasks performed inside Hyper-V Manager, including VM operations and hardware resource configuration.
-      These screenshots demonstrate practical, real-world workflows used by system administrators on a Hyper-V host.
+      These screenshots highlight core administrative workflows inside Hyper-V Manager—covering virtual machine operations,
+      CPU and memory configuration, and system resource management across Ubuntu, Windows, and pfSense VMs.
     </p>
   </header>
 
   <!-- SECTION 1 -->
   <section class="card">
-    <h2>1. General Administrative Tasks (Do Things)</h2>
-    <p>This section demonstrates common administrative actions performed through Hyper-V Manager.</p>
+    <h2>1. General Administrative Tasks</h2>
+    <p>Common day-to-day tasks you perform as a systems administrator inside Hyper-V Manager.</p>
 
-    <!-- IMAGES FROM Images/Do%20Things -->
-    <img src="Images/Do%20Things/0Hyper-VManager.png" alt="">
-    <img src="Images/Do%20Things/00Hyper-VManager2.png" alt="">
-    <img src="Images/Do%20Things/1CreateNewVM.png" alt="">
-    <img src="Images/Do%20Things/2VirtualSwitchManager.png" alt="">
-    <img src="Images/Do%20Things/3CreatevSwitch.png" alt="">
-    <img src="Images/Do%20Things/4ConfigVM1.png" alt="">
-    <img src="Images/Do%20Things/5ConfigVM2.png" alt="">
-    <img src="Images/Do%20Things/6CheckPoint.png" alt="">
-    <img src="Images/Do%20Things/7vSwitchConfig.png" alt="">
-    <img src="Images/Do%20Things/8ExportLocation.png" alt="">
-    <img src="Images/Do%20Things/9Export.png" alt="">
-    <img src="Images/Do%20Things/10Export.png" alt="">
-    <img src="Images/Do%20Things/11Export.png" alt="">
-    <img src="Images/Do%20Things/12Export.png" alt="">
-    <img src="Images/Do%20Things/13Export.png" alt="">
-    <img src="Images/Do%20Things/14AddNetAdapt.png" alt="">
+    <!-- All images from Images/Do Things -->
+    <div class="figure">
+      <img src="Images/Do%20Things/0Hyper-VManager.png" alt="">
+      <div class="figcaption">Hyper-V Manager Home Screen</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/00Hyper-VManager2.png" alt="">
+      <div class="figcaption">Hyper-V Manager — Alternate View</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/1CreateNewVM.png" alt="">
+      <div class="figcaption">Starting the Create New Virtual Machine Wizard</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/2VirtualSwitchManager.png" alt="">
+      <div class="figcaption">Opening the Virtual Switch Manager</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/3CreatevSwitch.png" alt="">
+      <div class="figcaption">Creating a New Virtual Switch</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/4ConfigVM1.png" alt="">
+      <div class="figcaption">Configuring VM Settings — Part 1</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/5ConfigVM2.png" alt="">
+      <div class="figcaption">Configuring VM Settings — Part 2</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/6CheckPoint.png" alt="">
+      <div class="figcaption">Managing VM Checkpoints</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/7vSwitchConfig.png" alt="">
+      <div class="figcaption">Virtual Switch Configuration Screen</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/8ExportLocation.png" alt="">
+      <div class="figcaption">Selecting Export Location for a VM</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/9Export.png" alt="">
+      <div class="figcaption">Exporting a Virtual Machine — Step 1</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/10Export.png" alt="">
+      <div class="figcaption">Exporting a Virtual Machine — Step 2</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/11Export.png" alt="">
+      <div class="figcaption">Exporting a Virtual Machine — Step 3</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/12Export.png" alt="">
+      <div class="figcaption">Exporting a Virtual Machine — Step 4</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/13Export.png" alt="">
+      <div class="figcaption">Exporting a Virtual Machine — Step 5</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Do%20Things/14AddNetAdapt.png" alt="">
+      <div class="figcaption">Adding a Network Adapter to a VM</div>
+    </div>
   </section>
 
   <!-- SECTION 2 -->
   <section class="card">
     <h2>2. Hardware Resources — Ubuntu VM</h2>
-    <p>This section displays the hardware resource configuration for an Ubuntu Server virtual machine.</p>
+    <p>Processor and memory configuration for an Ubuntu Server virtual machine.</p>
 
-    <!-- Images/Hardware%20Resources/Ubuntu -->
-    <img src="Images/Hardware%20Resources/Ubuntu/1SettingsU.png" alt="">
-    <img src="Images/Hardware%20Resources/Ubuntu/2Core.U.png" alt="">
-    <img src="Images/Hardware%20Resources/Ubuntu/3MemU.png" alt="">
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/Ubuntu/1SettingsU.png" alt="">
+      <div class="figcaption">Ubuntu VM — General Settings</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/Ubuntu/2Core.U.png" alt="">
+      <div class="figcaption">Ubuntu VM — Processor Core Allocation</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/Ubuntu/3MemU.png" alt="">
+      <div class="figcaption">Ubuntu VM — Memory Assignment</div>
+    </div>
   </section>
 
   <!-- SECTION 3 -->
   <section class="card">
     <h2>3. Hardware Resources — Windows Server VM</h2>
-    <p>This section displays hardware settings for a Windows Server VM.</p>
+    <p>Resource allocation and configuration for a Windows Server VM.</p>
 
-    <!-- Images/Hardware%20Resources/Windows -->
-    <img src="Images/Hardware%20Resources/Windows/1SettingsW.png" alt="">
-    <img src="Images/Hardware%20Resources/Windows/2CoreW.png" alt="">
-    <img src="Images/Hardware%20Resources/Windows/3MemW.png" alt="">
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/Windows/1SettingsW.png" alt="">
+      <div class="figcaption">Windows Server VM — General Settings</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/Windows/2CoreW.png" alt="">
+      <div class="figcaption">Windows Server VM — Processor Core Allocation</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/Windows/3MemW.png" alt="">
+      <div class="figcaption">Windows Server VM — Memory Assignment</div>
+    </div>
   </section>
 
   <!-- SECTION 4 -->
   <section class="card">
     <h2>4. Hardware Resources — pfSense VM</h2>
-    <p>This section demonstrates CPU and memory configuration for your pfSense router VM.</p>
+    <p>CPU and memory configuration workflow for a pfSense router VM.</p>
 
-    <!-- Images/Hardware%20Resources/pfSense -->
-    <img src="Images/Hardware%20Resources/pfSense/1Settingspf.png" alt="">
-    <img src="Images/Hardware%20Resources/pfSense/2FourCorespf.png" alt="">
-    <img src="Images/Hardware%20Resources/pfSense/3OneCorepf.png" alt="">
-    <img src="Images/Hardware%20Resources/pfSense/4RAMpf.png" alt="">
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/pfSense/1Settingspf.png" alt="">
+      <div class="figcaption">pfSense VM — General Settings</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/pfSense/2FourCorespf.png" alt="">
+      <div class="figcaption">pfSense VM — 4-Core CPU Configuration</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/pfSense/3OneCorepf.png" alt="">
+      <div class="figcaption">pfSense VM — 1-Core CPU Configuration</div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hardware%20Resources/pfSense/4RAMpf.png" alt="">
+      <div class="figcaption">pfSense VM — Memory Allocation</div>
+    </div>
   </section>
 
   <section>
@@ -160,5 +287,54 @@
   </footer>
 
 </div>
+
+<!-- ZOOM MODAL -->
+<div class="zoom-modal" id="zoom" aria-hidden="true">
+  <div class="zoom-content" data-close>
+    <img class="zoom-img" id="zoomImg" alt="">
+    <button class="zoom-close" type="button">&times;</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const modal=document.getElementById('zoom');
+  const zoomImg=document.getElementById('zoomImg');
+  const closeBtn=modal.querySelector('.zoom-close');
+  let lastFocus=null;
+
+  document.querySelectorAll('.figure img').forEach(img=>img.classList.add('zoomable'));
+
+  function openModal(src,alt){
+    lastFocus=document.activeElement;
+    zoomImg.src=src;
+    zoomImg.alt=alt||'';
+    modal.setAttribute('open','');
+    document.body.classList.add('hide-scroll');
+    closeBtn.focus();
+  }
+  function closeModal(){
+    modal.removeAttribute('open');
+    document.body.classList.remove('hide-scroll');
+    zoomImg.removeAttribute('src');
+    if(lastFocus) lastFocus.focus();
+  }
+
+  document.addEventListener('click',e=>{
+    const img=e.target.closest('.figure img.zoomable');
+    if(img){ openModal(img.src,img.alt); }
+  });
+  closeBtn.addEventListener('click',closeModal);
+  modal.addEventListener('click',e=>{
+    if(e.target.hasAttribute('data-close')||e.target===modal) closeModal();
+  });
+  zoomImg.addEventListener('click',closeModal);
+  document.addEventListener('keydown',e=>{
+    if(!modal.hasAttribute('open')) return;
+    if(e.key==='Escape') closeModal();
+  });
+})();
+</script>
+
 </body>
 </html>
