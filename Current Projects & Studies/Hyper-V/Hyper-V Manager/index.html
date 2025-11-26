@@ -20,7 +20,7 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.6; -webkit-font-smoothing:antialiased;
     }
 
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
@@ -50,30 +50,62 @@
       margin-top:16px;
     }
 
-    ul{margin:8px 0 8px 22px}
-    li{margin-bottom:6px}
+    /* Image Figure Wrapper */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:16px auto;
+      width:max-content;
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:75%;    /* SMALLER IMAGE SIZE */
+      cursor:zoom-in;
+      border-radius:10px;
+      margin:auto;
+    }
+    .figcaption{
+      margin-top:6px;
+      font-size:14px;
+      color:var(--muted);
+    }
 
     footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
     footer .links{margin-top:8px}
     footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+    /* Zoom modal */
+    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
+    .zoom-modal[open]{display:block}
+    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
+    .zoom-img{max-width:95vw;max-height:95vh;border-radius:12px;cursor:zoom-out;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;cursor:pointer}
+    .zoom-close:hover{background:#121733}
+    .hide-scroll{overflow:hidden}
   </style>
 </head>
 
 <body>
+
 <div class="wrap">
 
   <!-- NAV -->
-  <nav class="topnav" aria-label="Sections">
+  <nav class="topnav">
     <a href="/MTPortfolio/">Home</a>
     <a href="/MTPortfolio/Skills">Networking</a>
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows & Linux</a>
     <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
     <a href="/MTPortfolio/Blogs">Blog</a>
   </nav>
 
   <!-- BREADCRUMB -->
   <div class="crumbs">
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a> ·
     <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> ·
     <span>Hyper-V Manager</span>
   </div>
@@ -82,76 +114,61 @@
   <header>
     <h1>Hyper-V Manager</h1>
     <p class="lead">
-      Hyper-V Manager is the graphical management console used to configure, control, and monitor virtual machines and virtual switches on a Hyper-V host.
-      While Hyper-V is the hypervisor running beneath the OS, Hyper-V Manager serves as the interface used to operate it.
+      Hyper-V Manager is the graphical management console used to configure, control, and monitor virtual machines
+      and virtual switches on a Hyper-V host.
     </p>
   </header>
 
-  <img src="Images/Hyper-V4.png" alt="Hyper-V4.png">
+  <!-- MAIN IMAGE -->
+  <div class="figure">
+    <img src="Images/Hyper-V4.png" alt="Hyper-V Manager Home Screen">
+    <div class="figcaption">Hyper-V Manager Interface</div>
+  </div>
 
   <!-- SECTION 1 -->
   <section class="card">
     <h2>What Hyper-V Manager Is (and Isn’t)</h2>
-    <p>
-      Hyper-V Manager is <strong>not</strong> the hypervisor.  
-      It is a graphical management tool built into Windows that interacts with the Hyper-V hypervisor through the root partition.
-    </p>
-    <p>
-      Think of it this way:
-    </p>
+    <p>Hyper-V Manager is <strong>not</strong> the hypervisor. It is a graphical tool that communicates with Hyper-V through the root partition.</p>
+    <p>Think of it this way:</p>
     <ul>
-      <li><strong>Hyper-V (the hypervisor)</strong> = the engine</li>
-      <li><strong>Hyper-V Manager</strong> = the dashboard or control panel</li>
-      <li><strong>Windows (root partition)</strong> = the operator sitting in the driver seat</li>
+      <li><strong>Hyper-V (hypervisor):</strong> the engine</li>
+      <li><strong>Hyper-V Manager:</strong> the dashboard</li>
+      <li><strong>Windows (root partition):</strong> the operator</li>
     </ul>
-    <p>
-      Hyper-V Manager simply issues commands.  
-      Hyper-V executes all virtualization tasks beneath the surface.
-    </p>
+    <p>Hyper-V Manager issues commands; Hyper-V performs the actual virtualization tasks under the hood.</p>
   </section>
 
   <!-- SECTION 2 -->
   <section class="card">
     <h2>What Hyper-V Manager Allows You to Do</h2>
-    <p>
-      Hyper-V Manager provides the graphical interface for all core virtualization tasks, including:
-    </p>
+    <p>Hyper-V Manager provides GUI access to the most important virtualization tasks:</p>
     <ul>
       <li>Create and delete virtual machines</li>
-      <li>Modify VM settings (CPU, RAM, disks, NICs)</li>
-      <li>Create, modify, and delete virtual switches</li>
+      <li>Modify VM settings (CPU, RAM, disks, and NICs)</li>
+      <li>Create and manage virtual switches</li>
       <li>Manage checkpoints (snapshots)</li>
-      <li>Start, stop, pause, save, or connect to VMs</li>
-      <li>Manage VM storage and .vhdx virtual disks</li>
-      <li>Connect remotely to other Hyper-V hosts</li>
-      <li>Use Enhanced Session Mode for GUI-based OS interactions</li>
+      <li>Start, stop, pause, save, and connect to VMs</li>
+      <li>Manage .vhdx virtual disks</li>
+      <li>Connect to remote Hyper-V hosts</li>
+      <li>Use Enhanced Session Mode</li>
     </ul>
-    <p>
-      The actual virtualization work is still handled by Hyper-V itself, not the Manager application.
-    </p>
+    <p>The hypervisor does the work; Hyper-V Manager is simply the interface.</p>
   </section>
 
   <!-- SECTION 3 -->
   <section class="card">
     <h2>Hyper-V Manager Administrative Tasks</h2>
-    <p>
-      As a systems administrator, the following tasks are commonly performed inside Hyper-V Manager:
-    </p>
+    <p>As a systems administrator, you may perform tasks such as:</p>
     <ul>
-      <li>Creating and configuring new VMs</li>
-      <li>Setting CPU, memory, and resource limits</li>
-      <li>Creating and managing virtual switches</li>
-      <li>Attaching and managing virtual hard disks</li>
-      <li>Using checkpoints (snapshots) safely and properly</li>
-      <li>Monitoring VM state and performance</li>
-      <li>Importing or exporting entire VM environments</li>
-      <li>Managing VM networking and NIC configurations</li>
-      <li>Configuring Integration Services (for older OS versions)</li>
-      <li>Connecting to VMs using enhanced console features</li>
+      <li>Creating new VMs</li>
+      <li>Configuring CPU and memory allocations</li>
+      <li>Managing virtual network switches</li>
+      <li>Attaching or managing virtual hard disks</li>
+      <li>Monitoring VM health and performance</li>
+      <li>Importing or exporting VM environments</li>
+      <li>Managing network adapters and integration services</li>
+      <li>Interacting with VM consoles</li>
     </ul>
-    <p>
-      These tasks form the core skillset for managing virtualization workloads in Hyper-V.
-    </p>
   </section>
 
   <section>
@@ -161,11 +178,60 @@
   <footer>
     <div>Mark Thompson · MTPortfolio</div>
     <div class="links">
-      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank">GitHub</a>
     </div>
   </footer>
 
 </div>
+
+<!-- ZOOM MODAL -->
+<div class="zoom-modal" id="zoom">
+  <div class="zoom-content" data-close>
+    <img class="zoom-img" id="zoomImg" alt="">
+    <button class="zoom-close" type="button">&times;</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const modal=document.getElementById('zoom');
+  const zoomImg=document.getElementById('zoomImg');
+  const closeBtn=modal.querySelector('.zoom-close');
+  let lastFocus=null;
+
+  document.querySelectorAll('.figure img').forEach(img=>img.classList.add('zoomable'));
+
+  function openModal(src,alt){
+    lastFocus=document.activeElement;
+    zoomImg.src=src;
+    zoomImg.alt=alt||'';
+    modal.setAttribute('open','');
+    document.body.classList.add('hide-scroll');
+    closeBtn.focus();
+  }
+  function closeModal(){
+    modal.removeAttribute('open');
+    document.body.classList.remove('hide-scroll');
+    zoomImg.removeAttribute('src');
+    if(lastFocus) lastFocus.focus();
+  }
+
+  document.addEventListener('click',e=>{
+    const img=e.target.closest('.figure img.zoomable');
+    if(img){ openModal(img.src,img.alt); }
+  });
+  closeBtn.addEventListener('click',closeModal);
+  modal.addEventListener('click',e=>{
+    if(e.target.hasAttribute('data-close')||e.target===modal) closeModal();
+  });
+  zoomImg.addEventListener('click',closeModal);
+  document.addEventListener('keydown',e=>{
+    if(!modal.hasAttribute('open')) return;
+    if(e.key==='Escape') closeModal();
+  });
+})();
+</script>
+
 </body>
 </html>
