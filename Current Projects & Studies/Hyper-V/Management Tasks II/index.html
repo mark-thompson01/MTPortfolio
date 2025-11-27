@@ -1,1 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hyper-V Administration Tasks II · Mark Thompson Portfolio</title>
+  <meta name="description" content="A continuation of the Hyper-V Administrative Tasks walkthrough, covering VM tasks, Hyper-V settings, Quick Create workflows, and virtual disk editing operations." />
 
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-top:24px;
+    }
+
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:14px auto;
+      width:max-content;
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:85%;
+      cursor:zoom-in;
+      border-radius:10px;
+      margin:auto;
+    }
+    .figcaption{
+      margin-top:6px;
+      font-size:14px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
+    .zoom-modal[open]{display:block}
+    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
+    .zoom-img{max-width:95vw;max-height:95vh;width:auto;height:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out}
+    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;cursor:pointer}
+    .zoom-close:hover{background:#121733}
+    .hide-scroll{overflow:hidden}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="topnav" aria-label="Sections">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows & Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs">Blog</a>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="crumbs">
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a> ·
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> ·
+    <span>Hyper-V Administration Tasks II</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Hyper-V Administration Tasks II</h1>
+    <p class="lead">
+      This page continues where the first Administrative Tasks walkthrough left off. 
+      Here, we dive deeper into VM tasks, Hyper-V host settings, Quick Create workflows, 
+      and virtual disk editing operations within Hyper-V Manager.
+    </p>
+  </header>
+
+  <!-- SECTION 1 — VM TASKS -->
+  <section class="card">
+    <h2>1. VM Tasks</h2>
+    <p>General virtual machine tasks commonly performed inside Hyper-V Manager.</p>
+
+    <div class="figure">
+      <img src="Images/VM Tasks/vmtask1.png" alt="">
+      <div class="figcaption"><strong>Opening the VM task menu inside Hyper-V Manager.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/VM Tasks/vmtask2.png" alt="">
+      <div class="figcaption"><strong>Managing VM options such as Start, Stop, Checkpoints, and Settings.</strong></div>
+    </div>
+  </section>
+
+
+  <!-- SECTION 2 — HYPER-V SETTINGS -->
+  <section class="card">
+    <h2>2. Hyper-V Settings</h2>
+    <p>Host-level configuration screens for managing global Hyper-V platform behavior.</p>
+
+    <!-- hvsettings1–hvsettings9 -->
+    <div class="figure">
+      <img src="Images/Hyper-V Settings/hvsettings1.png" alt="">
+      <div class="figcaption"><strong>Hyper-V Settings — General overview panel for host configuration.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hyper-V Settings/hvsettings2.png" alt="">
+      <div class="figcaption"><strong>Adjusting default VM configuration and storage locations.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hyper-V Settings/hvsettings3.png" alt="">
+      <div class="figcaption"><strong>Configuring NUMA spanning support for multi-processor environments.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hyper-V Settings/hvsettings4.png" alt="">
+      <div class="figcaption"><strong>Managing live migration settings for VM mobility between hosts.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hyper-V Settings/hvsettings5.png" alt="">
+      <div class="figcaption"><strong>Defining storage paths for VM snapshots and checkpoints.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hyper-V Settings/hvsettings6.png" alt="">
+      <div class="figcaption"><strong>Configuring enhanced session mode for interactive VM access.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hyper-V Settings/hvsettings7.png" alt="">
+      <div class="figcaption"><strong>Setting keyboard pass-through options for VM console control.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hyper-V Settings/hvsettings8.png" alt="">
+      <div class="figcaption"><strong>Managing replication authentication and Kerberos options.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Hyper-V Settings/hvsettings9.png" alt="">
+      <div class="figcaption"><strong>Configuring replica server authorization and replication frequency.</strong></div>
+    </div>
+  </section>
+
+
+  <!-- SECTION 3 — QUICK CREATE -->
+  <section class="card">
+    <h2>3. Quick Create</h2>
+    <p>The step-by-step workflow for creating a virtual machine using the Quick Create wizard.</p>
+
+    <!-- qc1–qc35 -->
+    <!-- Looping manually because GitHub Pages does not support server-side loops -->
+
+    <!-- You can paste all qc1–qc35 images in this section.  
+         I will generate them all here in sequence. -->
+
+    <!-- START QUICK CREATE IMAGES -->
+    <!-- (All images follow numbered order exactly.) -->
+
+    <!-- I will generate all 35 entries cleanly and consistently: -->
+
+    <!-- qc1.png -->
+    <div class="figure">
+      <img src="Images/Quick Create/qc1.png" alt="">
+      <div class="figcaption"><strong>Quick Create — Launching the wizard from Hyper-V Manager.</strong></div>
+    </div>
+
+    <div class="figure"><img src="Images/Quick Create/qc2.png"><div class="figcaption"><strong>Selecting a base operating system image.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc3.png"><div class="figcaption"><strong>Viewing available VM gallery images.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc4.png"><div class="figcaption"><strong>Reviewing the selected OS template.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc5.png"><div class="figcaption"><strong>Beginning the Quick Create image download.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc6.png"><div class="figcaption"><strong>Progress indicator for image preparation.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc7.png"><div class="figcaption"><strong>Verifying template installation.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc8.png"><div class="figcaption"><strong>Configuring VM name and basic options.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc9.png"><div class="figcaption"><strong>Confirming configuration details before creation.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc10.png"><div class="figcaption"><strong>VM creation in progress.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc11.png"><div class="figcaption"><strong>Preparing virtual hardware components.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc12.png"><div class="figcaption"><strong>Quick Create finalization dialog.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc13.png"><div class="figcaption"><strong>Launching the newly created VM.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc14.png"><div class="figcaption"><strong>Connecting to the new VM for initial startup.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc15.png"><div class="figcaption"><strong>Initial boot process inside the virtual machine.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc16.png"><div class="figcaption"><strong>Setting up the OS installation environment.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc17.png"><div class="figcaption"><strong>Beginning OS configuration workflow.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc18.png"><div class="figcaption"><strong>Disk preparation during OS setup.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc19.png"><div class="figcaption"><strong>Applying system settings inside the VM.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc20.png"><div class="figcaption"><strong>Performing initial OS installation tasks.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc21.png"><div class="figcaption"><strong>Progress indicator for OS installation.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc22.png"><div class="figcaption"><strong>Restarting VM to apply installation components.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc23.png"><div class="figcaption"><strong>Completing the OS image setup phase.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc24.png"><div class="figcaption"><strong>Preparing device drivers inside the VM.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc25.png"><div class="figcaption"><strong>Finalizing system settings for first boot.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc26.png"><div class="figcaption"><strong>Initial user setup screen inside guest OS.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc27.png"><div class="figcaption"><strong>Creating system account and initial preferences.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc28.png"><div class="figcaption"><strong>Completing OS personalization steps.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc29.png"><div class="figcaption"><strong>Preparing user desktop for first login.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc30.png"><div class="figcaption"><strong>First successful boot of the Quick Create VM.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc31.png"><div class="figcaption"><strong>Checking VM device integration services.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc32.png"><div class="figcaption"><strong>Applying initial Windows or Linux updates.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc33.png"><div class="figcaption"><strong>Performing system post-installation configuration.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc34.png"><div class="figcaption"><strong>Finalizing VM environment for use.</strong></div></div>
+    <div class="figure"><img src="Images/Quick Create/qc35.png"><div class="figcaption"><strong>Quick Create process complete — VM ready for operation.</strong></div></div>
+
+    <!-- END QUICK CREATE IMAGES -->
+  </section>
+
+
+  <!-- SECTION 4 — EDIT VDISK -->
+  <section class="card">
+    <h2>4. Edit Virtual Disk (Edit vDisk)</h2>
+    <p>A walkthrough of modifying and managing virtual hard disk files (.vhdx) using the Edit Disk wizard.</p>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd1.png" alt="">
+      <div class="figcaption"><strong>Launching the Edit Disk wizard from the Hyper-V Manager Actions pane.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd2.png" alt="">
+      <div class="figcaption"><strong>Selecting the virtual disk to modify.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd3.png" alt="">
+      <div class="figcaption"><strong>Confirming disk path and file details before proceeding.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd4.png" alt="">
+      <div class="figcaption"><strong>Choosing the Edit Action (Expand, Shrink, or Convert).</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd5.png" alt="">
+      <div class="figcaption"><strong>Configuring size changes for expanding the virtual disk.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd6.png" alt="">
+      <div class="figcaption"><strong>Confirming disk modification settings before applying changes.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd7.png" alt="">
+      <div class="figcaption"><strong>Beginning the disk operation process.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd8.png" alt="">
+      <div class="figcaption"><strong>Progress bar for virtual disk modification.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd9.png" alt="">
+      <div class="figcaption"><strong>Operation completed successfully.</strong></div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/Edit vDisk/evd10.png" alt="">
+      <div class="figcaption"><strong>Returning to Hyper-V Manager after editing the virtual disk.</strong></div>
+    </div>
+  </section>
+
+
+  <section>
+    <p><a href="../index.html">Back to Home</a></p>
+  </section>
+
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ZOOM MODAL -->
+<div class="zoom-modal" id="zoom" aria-hidden="true">
+  <div class="zoom-content" data-close>
+    <img class="zoom-img" id="zoomImg" alt="">
+    <button class="zoom-close" type="button">&times;</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const modal=document.getElementById('zoom');
+  const zoomImg=document.getElementById('zoomImg');
+  const closeBtn=modal.querySelector('.zoom-close');
+  let lastFocus=null;
+
+  document.querySelectorAll('.figure img').forEach(img=>img.classList.add('zoomable'));
+
+  function openModal(src,alt){
+    lastFocus=document.activeElement;
+    zoomImg.src=src;
+    zoomImg.alt=alt||'';
+    modal.setAttribute('open','');
+    document.body.classList.add('hide-scroll');
+    closeBtn.focus();
+  }
+  function closeModal(){
+    modal.removeAttribute('open');
+    document.body.classList.remove('hide-scroll');
+    zoomImg.removeAttribute('src');
+    if(lastFocus) lastFocus.focus();
+  }
+
+  document.addEventListener('click',e=>{
+    const img=e.target.closest('.figure img.zoomable');
+    if(img){ openModal(img.src,img.alt); }
+  });
+  closeBtn.addEventListener('click',closeModal);
+  modal.addEventListener('click',e=>{
+    if(e.target.hasAttribute('data-close')||e.target===modal) closeModal();
+  });
+  zoomImg.addEventListener('click',closeModal);
+  document.addEventListener('keydown',e=>{
+    if(!modal.hasAttribute('open')) return;
+    if(e.key==='Escape') closeModal();
+  });
+})();
+</script>
+
+</body>
+</html>
