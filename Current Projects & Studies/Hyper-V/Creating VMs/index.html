@@ -1,43 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Creating Virtual Machines in Hyper-V</title>
-
-    <style>
-        :root {
-            --bg: #0d1117;
-            --card: #161b22;
-            --text: #e6edf3;
-            --accent: #58a6ff;
-        }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1, h2, h3 {
-            color: var(--accent);
-        }
-
-        .section {
-            padding: 40px;
-            max-width: 1200px;
-            margin: auto;
-        }
-
-        .gallery {<!DOCTYPE html>
-<html lang="en">
-<head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Creating VMs & OS Installations · Hyper-V Lab</title>
+  <title>Creating Virtual Machines in Hyper-V · Mark Thompson Portfolio</title>
+  <meta name="description" content="Step-by-step walkthrough for creating Windows Server, Ubuntu Server, and pfSense virtual machines in Microsoft Hyper-V, including VM setup, installation, and configuration." />
 
   <style>
     :root{
@@ -55,99 +22,94 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.6; 
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
     }
 
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
+    /* ===== Top Navigation ===== */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
     .topnav a{
-      color:var(--muted);text-decoration:none;padding:6px 10px;
-      border-radius:10px;border:1px solid transparent
+      color:var(--muted);text-decoration:none;
+      padding:6px 10px;border-radius:10px;border:1px solid transparent
     }
     .topnav a:hover{
-      color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)
+      color:var(--text);border-color:#2a3447;
+      background:rgba(255,255,255,.04)
     }
     .topnav a.active{
-      color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)
+      color:var(--text);
+      border-color:#3a4a67;
+      background:rgba(255,255,255,.06)
     }
 
-    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    /* ===== Breadcrumbs ===== */
+    .crumbs{
+      color:var(--muted);font-size:14px;
+      margin:2px 0 8px
+    }
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    /* ===== Headings ===== */
+    h1{
+      margin:8px 0 6px;
+      font-size:clamp(28px,4vw,40px);
+      font-weight:800;
+    }
     h2{margin:0 0 10px;font-size:22px}
     h3{margin:16px 0 8px;font-size:18px}
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    .lead{
+      color:var(--muted);
+      margin:8px 0 14px;
+      font-size:clamp(16px,2.2vw,18px)
+    }
 
+    /* ===== Cards ===== */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:18px;margin-top:16px
+      padding:18px;
+      margin-top:16px;
     }
 
-    .figure{
-      border:1px solid var(--card-border);
-      border-radius:12px;
-      background:#0e1220;
-      padding:8px;
-      margin:12px auto;
-      max-width:100%;
-      position:relative;
-    }
-
-    .figure img{
-      display:block;
-      height:auto;
-      max-width:100%;
-      cursor:zoom-in;
-    }
-
-    .zoom-icon{
-      position:absolute;
-      right:10px;
-      bottom:10px;
-      background:rgba(0,0,0,0.55);
-      padding:4px 8px;
-      border-radius:6px;
-      font-size:12px;
-      color:#fff;
-      pointer-events:none;
-      opacity:0;
-      transition:opacity .2s ease;
-    }
-    .figure:hover .zoom-icon{opacity:1}
-
-    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
-
-    .gallery-wrap{position:relative;margin-top:12px}
+    /* ===== Galleries (horizontal scroll) ===== */
+    .gallery-wrap{position:relative;margin-top:10px}
     .gallery{
-      display:grid;gap:12px;
+      display:grid;
+      gap:12px;
       grid-auto-flow:column;
       grid-auto-columns:80%;
       align-items:stretch;
-      overflow-x:auto;overflow-y:hidden;
+      overflow-x:auto;
+      overflow-y:hidden;
       padding:8px 6px 12px;
       scroll-snap-type:x mandatory;
       scroll-behavior:smooth;
       overscroll-behavior-x:contain;
-      -webkit-overflow-scrolling:touch
+      -webkit-overflow-scrolling:touch;
     }
-
     .gallery .item{scroll-snap-align:start}
-    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
-    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
+    .gallery .item .figure{height:100%}
 
     .gallery::-webkit-scrollbar{height:10px}
-    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
-    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
+    .gallery::-webkit-scrollbar-track{
+      background:#0e1220;border-radius:999px
+    }
+    .gallery::-webkit-scrollbar-thumb{
+      background:#2A3447;border-radius:999px
+    }
     .gallery.hide-scrollbar{scrollbar-width:none}
     .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
+
+    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
+    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
 
     .gbtn{
       position:absolute;
@@ -160,14 +122,33 @@
       border-radius:999px;
       width:40px;height:40px;
       display:grid;place-items:center;
-      cursor:pointer;user-select:none
+      cursor:pointer;user-select:none;
     }
     .gbtn:hover{background:#121733}
     .gprev{left:-6px}
     .gnext{right:-6px}
 
+    /* ===== Figures ===== */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      max-width:100%;
+      position:relative;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%;
+      cursor:zoom-in;
+    }
+
+    /* ===== Lightbox ===== */
     .lightbox{
-      position:fixed;inset:0;
+      position:fixed;
+      inset:0;
       display:none;
       place-items:center;
       background:rgba(0,0,0,.86);
@@ -177,31 +158,17 @@
 
     .lb-stage{position:relative;max-width:96vw;max-height:92vh}
     .lb-img{
-      display:block;
-      width:auto;height:auto;
+      display:block;width:auto;height:auto;
       max-width:96vw;max-height:92vh;
-      border-radius:12px;
-      box-shadow:var(--shadow);
+      border-radius:12px;box-shadow:var(--shadow);
     }
-    .lb-cap{
-      color:#cfd6e6;
-      font-size:13px;
-      text-align:center;
-      margin-top:8px;
-    }
-
     .lb-btn{
-      position:absolute;
-      top:10px;
-      padding:6px 10px;
-      border-radius:10px;
-      border:1px solid #2A3447;
-      background:#0e1220;
-      color:var(--text);
-      cursor:pointer;user-select:none
+      position:absolute;top:10px;
+      padding:6px 10px;border-radius:10px;
+      border:1px solid #2A3447;background:#0e1220;
+      color:var(--text);cursor:pointer;user-select:none
     }
     .lb-close{right:10px}
-
     .lb-prev,.lb-next{
       top:50%;translate:0 -50%;
       width:44px;height:44px;
@@ -216,6 +183,7 @@
       .lb-next{right:-8px}
     }
 
+    /* Footer */
     footer{
       margin-top:36px;padding-top:20px;
       border-top:1px solid #232a3a;
@@ -230,6 +198,7 @@
 <body>
 <div class="wrap">
 
+  <!-- Navigation -->
   <nav class="topnav" aria-label="Sections">
     <a href="/MTPortfolio/">Home</a>
     <a href="/MTPortfolio/Skills">Networking</a>
@@ -238,511 +207,394 @@
     <a href="/MTPortfolio/Blogs">Blog</a>
   </nav>
 
+  <!-- Breadcrumb -->
   <div class="crumbs">
     <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · 
     <span>Hyper-V Lab · Creating Virtual Machines</span>
   </div>
 
+  <!-- Header -->
   <header>
-    <h1>Creating VMs & OS Installations</h1>
+    <h1>Creating Virtual Machines in Hyper-V</h1>
     <p class="lead">
-      A full walkthrough of creating Windows Server, Ubuntu Server, and pfSense virtual machines in Microsoft Hyper-V — including VM setup, operating system installation, and initial configuration steps.
+      A complete walkthrough of creating Windows Server, Ubuntu Server, and pfSense virtual machines in Microsoft Hyper-V — including VM creation, OS installation, and initial configuration.
     </p>
   </header>
 
-  <!-- WINDOWS SERVER -->
+  <!-- WINDOWS SERVER VM SECTION -->
   <section class="card">
     <h2>Windows Server VM — Installation & Setup</h2>
-    <p>Complete creation and installation process for a Windows Server virtual machine.</p>
+    <p>
+      This section demonstrates the complete Hyper-V virtual machine creation process
+      and the full installation of Windows Server.
+    </p>
 
     <div class="gallery-wrap">
-      <button class="gbtn gprev">&#10094;</button>
-      <button class="gbtn gnext">&#10095;</button>
-      <div class="gallery hide-scrollbar">
-        <!-- 30 images -->
-        <!-- I will include the pattern, you replace/add/delete images as needed -->
-        <article class="item"><figure class="figure"><img src="Images/Windows%20Server/MS1.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/Windows%20Server/MS2.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/Windows%20Server/MS3.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/Windows%20Server/MS4.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/Windows%20Server/MS5.png"><div class="zoom-icon">zoom</div></figure></article>
-        <!-- Continue MS6 → MS30 -->
-        <!-- (I am not repeating all 30 blocks to avoid message clipping.
-             You simply copy/paste the pattern above for MS6–MS30 exactly as needed.) -->
+      <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+      <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+
+      <div class="gallery hide-scrollbar" role="region" aria-label="Windows Server VM installation screenshots">
+
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS1.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS2.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS3.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS4.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS5.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS6.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS7.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS8.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS9.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS10.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS11.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS12.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS13.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS14.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS15.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS16.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS17.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS18.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS19.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS20.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS21.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS22.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS23.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS24.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS25.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS26.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS27.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS28.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS29.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Windows Server/MS30.png" loading="lazy" decoding="async"></figure></article>
+
       </div>
     </div>
   </section>
 
-  <!-- UBUNTU SERVER -->
+
+  <!-- UBUNTU SERVER VM SECTION -->
   <section class="card">
     <h2>Ubuntu Server VM — Installation & Setup</h2>
-    <p>Full creation and OS installation process for Ubuntu Server.</p>
+    <p>
+      This section walks through creating an Ubuntu Server VM in Hyper-V and
+      completing the full installation of the operating system.
+    </p>
 
     <div class="gallery-wrap">
-      <button class="gbtn gprev">&#10094;</button>
-      <button class="gbtn gnext">&#10095;</button>
-      <div class="gallery hide-scrollbar">
-        <article class="item"><figure class="figure"><img src="Images/Ubuntu%20Server/UbuntuServer1.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/Ubuntu%20Server/UbuntuServer2.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/Ubuntu%20Server/UbuntuServer3.png"><div class="zoom-icon">zoom</div></figure></article>
+      <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+      <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
 
-        <!-- Continue UbuntuServer10 → UbuntuServer36 in the same pattern -->
+      <div class="gallery hide-scrollbar" role="region" aria-label="Ubuntu Server VM installation screenshots">
+
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer1.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer2.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer3.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer10.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer11.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer12.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer13.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer14.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer15.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer16.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer17.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer18.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer19.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer20.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer21.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer22.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer23.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer24.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer25.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer26.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer27.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer28.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer29.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer30.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer31.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer32.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer33.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer34.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer35.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/Ubuntu Server/UbuntuServer36.png" loading="lazy" decoding="async"></figure></article>
+
       </div>
     </div>
   </section>
 
-  <!-- pfSense VM Setup -->
+
+  <!-- PFSENSE — VM SETUP -->
   <section class="card">
     <h2>pfSense VM — VM Setup</h2>
-    <p>Configuration of a pfSense virtual machine before installation.</p>
+    <p>
+      This section shows the pfSense VM configuration inside Hyper-V before running the installer.
+    </p>
 
     <div class="gallery-wrap">
-      <button class="gbtn gprev">&#10094;</button>
-      <button class="gbtn gnext">&#10095;</button>
-      <div class="gallery hide-scrollbar">
-        <article class="item"><figure class="figure"><img src="Images/pfSense/VM%20Setup/pf1.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/pfSense/VM%20Setup/pf2.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/pfSense/VM%20Setup/pf3.png"><div class="zoom-icon">zoom</div></figure></article>
-        <!-- pf4 → pf12 follow the exact pattern -->
+      <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+      <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+
+      <div class="gallery hide-scrollbar" role="region" aria-label="pfSense VM Setup screenshots">
+
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf1.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf2.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf3.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf4.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf5.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf6.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf7.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf8.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf9.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf10.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf11.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/VM Setup/pf12.png" loading="lazy" decoding="async"></figure></article>
+
       </div>
     </div>
   </section>
 
-  <!-- pfSense Startup -->
+
+  <!-- PFSENSE — INITIAL STARTUP -->
   <section class="card">
     <h2>pfSense VM — Initial Startup</h2>
-    <p>Startup sequence as pfSense boots for the first time.</p>
+    <p>
+      These images show pfSense booting for the first time after powering on the VM.
+    </p>
 
     <div class="gallery-wrap">
-      <button class="gbtn gprev">&#10094;</button>
-      <button class="gbtn gnext">&#10095;</button>
-      <div class="gallery hide-scrollbar">
-        <article class="item"><figure class="figure"><img src="Images/pfSense/Start/start1.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/pfSense/Start/start2.png"><div class="zoom-icon">zoom</div></figure></article>
-        <!-- Continue start3, start4, start5 -->
+      <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+      <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+
+      <div class="gallery hide-scrollbar" role="region" aria-label="pfSense initial startup screenshots">
+
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Start/start1.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Start/start2.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Start/start3.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Start/start4.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Start/start5.png" loading="lazy" decoding="async"></figure></article>
+
       </div>
     </div>
   </section>
 
-  <!-- pfSense Installer -->
+
+  <!-- PFSENSE — INSTALLER SETUP -->
   <section class="card">
     <h2>pfSense VM — Installer Setup</h2>
-    <p>pfSense installer screens during system installation.</p>
+    <p>
+      This section shows the pfSense installation screens during the setup process.
+    </p>
 
     <div class="gallery-wrap">
-      <button class="gbtn gprev">&#10094;</button>
-      <button class="gbtn gnext">&#10095;</button>
-      <div class="gallery hide-scrollbar">
-        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer%20Setup/IS1.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer%20Setup/IS2.png"><div class="zoom-icon">zoom</div></figure></article>
-        <!-- Continue IS3 → IS10 -->
+      <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+      <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+
+      <div class="gallery hide-scrollbar" role="region" aria-label="pfSense installer setup screenshots">
+
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS1.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS2.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS3.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS4.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS5.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS6.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS7.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS8.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS9.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Installer Setup/IS10.png" loading="lazy" decoding="async"></figure></article>
+
       </div>
     </div>
   </section>
 
-  <!-- pfSense Final Setup -->
+
+  <!-- PFSENSE — FINAL CONFIGURATION -->
   <section class="card">
     <h2>pfSense VM — Final Configuration</h2>
-    <p>System configuration after installation completes.</p>
+    <p>
+      These images show final pfSense setup and configuration steps after installation completes.
+    </p>
 
     <div class="gallery-wrap">
-      <button class="gbtn gprev">&#10094;</button>
-      <button class="gbtn gnext">&#10095;</button>
-      <div class="gallery hide-scrollbar">
-        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup3.png"><div class="zoom-icon">zoom</div></figure></article>
-        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup4.png"><div class="zoom-icon">zoom</div></figure></article>
-        <!-- Continue setup5 → setup20 -->
-      </div>
-    </div>
-  </section>
+      <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+      <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
 
-  <section class="card">
-    <p><a href="../index.html">Back to Home</a></p>
-  </section>
+      <div class="gallery hide-scrollbar" role="region" aria-label="pfSense final configuration screenshots">
 
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-    <div class="links">
-      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank">LinkedIn</a> ·
-      <a href="https://github.com/mark-thompson01" target="_blank">GitHub</a>
-    </div>
-  </footer>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup3.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup4.png" loading="lazy" decoding="async"></figure></article>
 
-</div>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup5.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup6.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup7.png" loading="lazy" decoding="async"></figure></article>
 
-<!-- ===== LIGHTBOX + GALLERY JS ===== -->
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup8.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup9.png" loading="lazy" decoding="async"></figure></article>
+        <article class="item"><figure class="figure"><img src="Images/pfSense/Setup/setup10.png" loading="lazy" decoding="async"></figure></article>
+
+        <article class="item"><figure class="
+
+    <!-- LIGHTBOX + GALLERY JAVASCRIPT -->
 <script>
-(function(){
-  document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
-    const scroller = wrap.querySelector('.gallery');
-    if(!scroller) return;
-    const left = wrap.querySelector('.gprev');
-    const right = wrap.querySelector('.gnext');
-    const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
-    if(left) left.addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
-    if(right) right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
-    scroller.addEventListener('wheel', (e) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+document.addEventListener("DOMContentLoaded", () => {
+
+  /* ============================================================
+     INITIALIZE GALLERIES
+     ============================================================ */
+  document.querySelectorAll(".gallery-wrap").forEach(galleryWrap => {
+
+    const gallery = galleryWrap.querySelector(".gallery");
+    const prevBtn = galleryWrap.querySelector(".gprev");
+    const nextBtn = galleryWrap.querySelector(".gnext");
+
+    /* Smooth horizontal scroll */
+    const scrollAmount = () => gallery.clientWidth * 0.9;
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        gallery.scrollBy({ left: -scrollAmount(), behavior: "smooth" });
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        gallery.scrollBy({ left: scrollAmount(), behavior: "smooth" });
+      });
+    }
+
+    /* Horizontal scrolling with mouse wheel */
+    gallery.addEventListener("wheel", (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
         e.preventDefault();
-        scroller.scrollLeft += e.deltaY;
+        gallery.scrollBy({
+          left: e.deltaY * 1.2,
+          behavior: "smooth"
+        });
       }
-    }, {passive:false});
+    }, { passive: false });
   });
-})();
-</script>
 
-<script>
-(function(){
-  const lb = document.createElement('div');
-  lb.className = 'lightbox';
-  lb.innerHTML = `
-    <div class="lb-stage" role="dialog" aria-modal="true">
-      <button class="lb-btn lb-close">✕</button>
-      <button class="lb-btn lb-prev">&#10094;</button>
-      <img class="lb-img" alt="">
-      <button class="lb-btn lb-next">&#10095;</button>
-      <div class="lb-cap"></div>
-    </div>`;
-  document.body.appendChild(lb);
 
-  const imgEl = lb.querySelector('.lb-img');
-  const capEl = lb.querySelector('.lb-cap');
-  const btnClose = lb.querySelector('.lb-close');
-  const btnPrev  = lb.querySelector('.lb-prev');
-  const btnNext  = lb.querySelector('.lb-next');
+  /* ============================================================
+     LIGHTBOX FUNCTIONALITY
+     ============================================================ */
 
-  const groups = new Map();
-  let current = { gid:null, idx:0 };
-  let gidCounter = 0;
+  // Create lightbox container
+  const lightbox = document.createElement("div");
+  lightbox.className = "lightbox";
+  lightbox.innerHTML = `
+    <div class="lb-stage">
+      <img class="lb-img" src="" alt="">
+      <button class="lb-btn lb-close" aria-label="Close">&times;</button>
+      <button class="lb-btn lb-prev" aria-label="Previous">&#10094;</button>
+      <button class="lb-btn lb-next" aria-label="Next">&#10095;</button>
+    </div>
+  `;
+  document.body.appendChild(lightbox);
 
-  document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
-    const imgs = Array.from(wrap.querySelectorAll('.gallery img'));
-    if(!imgs.length) return;
-    const gid = 'g' + (++gidCounter);
-    groups.set(gid, imgs);
-    imgs.forEach((img, i)=>{
-      img.dataset.gid = gid;
-      img.dataset.gindex = i;
-      img.style.cursor = 'zoom-in';
-      img.addEventListener('click', (e)=>{ 
-        e.preventDefault(); open(gid, i); 
+  const lbImg = lightbox.querySelector(".lb-img");
+  const lbClose = lightbox.querySelector(".lb-close");
+  const lbPrev = lightbox.querySelector(".lb-prev");
+  const lbNext = lightbox.querySelector(".lb-next");
+
+  let galleryImages = [];  
+  let currentIndex = 0;
+
+  /* Open lightbox */
+  const openLightbox = (src, images, index) => {
+    galleryImages = images;
+    currentIndex = index;
+
+    lbImg.src = src;
+    lightbox.classList.add("open");
+    document.body.style.overflow = "hidden"; // disable background scroll
+  };
+
+  /* Close lightbox */
+  const closeLightbox = () => {
+    lightbox.classList.remove("open");
+    document.body.style.overflow = "";
+  };
+
+  /* Next / Prev navigation */
+  const showImage = (index) => {
+    currentIndex = (index + galleryImages.length) % galleryImages.length;
+    lbImg.src = galleryImages[currentIndex].src;
+  };
+
+  lbNext.addEventListener("click", () => showImage(currentIndex + 1));
+  lbPrev.addEventListener("click", () => showImage(currentIndex - 1));
+  lbClose.addEventListener("click", closeLightbox);
+
+  /* Close on background click */
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  /* Keyboard navigation */
+  document.addEventListener("keydown", (e) => {
+    if (!lightbox.classList.contains("open")) return;
+
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowRight") showImage(currentIndex + 1);
+    if (e.key === "ArrowLeft") showImage(currentIndex - 1);
+  });
+
+
+  /* ============================================================
+     BIND IMAGES TO LIGHTBOX
+     ============================================================ */
+  document.querySelectorAll(".gallery").forEach(gallery => {
+
+    const images = Array.from(gallery.querySelectorAll("img"));
+
+    images.forEach((img, index) => {
+      img.addEventListener("click", () => {
+        openLightbox(img.src, images, index);
       });
     });
+
   });
 
-  function open(gid, idx){
-    if(!groups.has(gid)) return;
-    current.gid = gid; current.idx = idx;
-    update();
-    lb.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    btnClose.focus();
-  }
-
-  function close(){
-    lb.classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  function update(){
-    const list = groups.get(current.gid) || [];
-    const el = list[current.idx];
-    if(!el) return;
-    imgEl.src = el.currentSrc || el.src;
-    imgEl.alt = el.alt || '';
-    capEl.textContent = el.alt || '';
-    const multi = list.length > 1;
-    btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
-  }
-
-  function prev(){
-    const list = groups.get(current.gid)||[];
-    if(!list.length) return;
-    current.idx = (current.idx-1+list.length)%list.length;
-    update();
-  }
-
-  function next(){
-    const list = groups.get(current.gid)||[];
-    if(!list.length) return;
-    current.idx = (current.idx+1)%list.length;
-    update();
-  }
-
-  btnClose.addEventListener('click', close);
-  btnPrev .addEventListener('click', prev);
-  btnNext .addEventListener('click', next);
-
-  lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
-
-  document.addEventListener('keydown', (e)=>{
-    if(!lb.classList.contains('open')) return;
-    if(e.key === 'Escape') close();
-    else if(e.key === 'ArrowLeft') prev();
-    else if(e.key === 'ArrowRight') next();
-  });
-})();
+});
 </script>
 
-</body>
-</html>
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 18px;
-            margin-top: 25px;
-        }
 
-        .gallery img {
-            width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .gallery img:hover {
-            transform: scale(1.03);
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            padding-top: 70px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.85);
-        }
-
-        .modal img {
-            display: block;
-            margin: auto;
-            max-width: 90%;
-            max-height: 85%;
-        }
-
-        .close {
-            position: fixed;
-            top: 20px;
-            right: 35px;
-            font-size: 40px;
-            color: white;
-            cursor: pointer;
-        }
-
-        hr {
-            margin: 60px 0;
-            border: 1px solid #30363d;
-        }
-    </style>
-</head>
-
-<body>
-
-<div class="section">
-    <h1>Creating Virtual Machines in Hyper-V</h1>
-    <p>(Intro VM example will be added later.)</p>
-</div>
-
-<hr>
-
-<!-- WINDOWS SERVER SECTION -->
-<div class="section">
-    <h2>Windows Server VM — Installation & Setup</h2>
-    <p>This gallery shows the complete creation and installation process for a Windows Server virtual machine in Hyper-V.</p>
-
-    <div class="gallery">
-        <!-- Windows Server Images -->
-        <img src="Images/Windows Server/MS1.png">
-        <img src="Images/Windows Server/MS2.png">
-        <img src="Images/Windows Server/MS3.png">
-        <img src="Images/Windows Server/MS4.png">
-        <img src="Images/Windows Server/MS5.png">
-        <img src="Images/Windows Server/MS6.png">
-        <img src="Images/Windows Server/MS7.png">
-        <img src="Images/Windows Server/MS8.png">
-        <img src="Images/Windows Server/MS9.png">
-        <img src="Images/Windows Server/MS10.png">
-        <img src="Images/Windows Server/MS11.png">
-        <img src="Images/Windows Server/MS12.png">
-        <img src="Images/Windows Server/MS13.png">
-        <img src="Images/Windows Server/MS14.png">
-        <img src="Images/Windows Server/MS15.png">
-        <img src="Images/Windows Server/MS16.png">
-        <img src="Images/Windows Server/MS17.png">
-        <img src="Images/Windows Server/MS18.png">
-        <img src="Images/Windows Server/MS19.png">
-        <img src="Images/Windows Server/MS20.png">
-        <img src="Images/Windows Server/MS21.png">
-        <img src="Images/Windows Server/MS22.png">
-        <img src="Images/Windows Server/MS23.png">
-        <img src="Images/Windows Server/MS24.png">
-        <img src="Images/Windows Server/MS25.png">
-        <img src="Images/Windows Server/MS26.png">
-        <img src="Images/Windows Server/MS27.png">
-        <img src="Images/Windows Server/MS28.png">
-        <img src="Images/Windows Server/MS29.png">
-        <img src="Images/Windows Server/MS30.png">
-    </div>
-</div>
-
-<hr>
+<!-- BACK BUTTON -->
+  <div style="margin-top:40px; text-align:center;">
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" 
+       style="
+         display:inline-block;
+         padding:12px 22px;
+         border-radius:12px;
+         background:#0e1220;
+         border:1px solid #2A3447;
+         color:var(--text);
+         text-decoration:none;
+         font-size:16px;
+         box-shadow:var(--shadow);
+       ">
+      ← Back to Hyper-V Overview
+    </a>
+  </div>
 
 
-  <div class="section">
-    <h2>Ubuntu Server VM — Installation & Setup</h2>
-    <p>This gallery walks through creating an Ubuntu Server VM and installing the operating system inside Hyper-V.</p>
 
-    <div class="gallery">
-        <!-- Ubuntu Server Images -->
-        <img src="Images/Ubuntu Server/UbuntuServer1.png">
-        <img src="Images/Ubuntu Server/UbuntuServer2.png">
-        <img src="Images/Ubuntu Server/UbuntuServer3.png">
-        <img src="Images/Ubuntu Server/UbuntuServer10.png">
-        <img src="Images/Ubuntu Server/UbuntuServer11.png">
-        <img src="Images/Ubuntu Server/UbuntuServer12.png">
-        <img src="Images/Ubuntu Server/UbuntuServer13.png">
-        <img src="Images/Ubuntu Server/UbuntuServer14.png">
-        <img src="Images/Ubuntu Server/UbuntuServer15.png">
-        <img src="Images/Ubuntu Server/UbuntuServer16.png">
-        <img src="Images/Ubuntu Server/UbuntuServer17.png">
-        <img src="Images/Ubuntu Server/UbuntuServer18.png">
-        <img src="Images/Ubuntu Server/UbuntuServer19.png">
-        <img src="Images/Ubuntu Server/UbuntuServer20.png">
-        <img src="Images/Ubuntu Server/UbuntuServer21.png">
-        <img src="Images/Ubuntu Server/UbuntuServer22.png">
-        <img src="Images/Ubuntu Server/UbuntuServer23.png">
-        <img src="Images/Ubuntu Server/UbuntuServer24.png">
-        <img src="Images/Ubuntu Server/UbuntuServer25.png">
-        <img src="Images/Ubuntu Server/UbuntuServer26.png">
-        <img src="Images/Ubuntu Server/UbuntuServer27.png">
-        <img src="Images/Ubuntu Server/UbuntuServer28.png">
-        <img src="Images/Ubuntu Server/UbuntuServer29.png">
-        <img src="Images/Ubuntu Server/UbuntuServer30.png">
-        <img src="Images/Ubuntu Server/UbuntuServer31.png">
-        <img src="Images/Ubuntu Server/UbuntuServer32.png">
-        <img src="Images/Ubuntu Server/UbuntuServer33.png">
-        <img src="Images/Ubuntu Server/UbuntuServer34.png">
-        <img src="Images/Ubuntu Server/UbuntuServer35.png">
-        <img src="Images/Ubuntu Server/UbuntuServer36.png">
-    </div>
-</div>
-
-<hr>
-
-
-  
-<div class="section">
-    <h2>pfSense VM — VM Setup</h2>
-    <p>This section shows the VM setup and configuration before installation of pfSense.</p>
-
-    <div class="gallery">
-        <img src="Images/pfSense/VM Setup/pf1.png">
-        <img src="Images/pfSense/VM Setup/pf2.png">
-        <img src="Images/pfSense/VM Setup/pf3.png">
-        <img src="Images/pfSense/VM Setup/pf4.png">
-        <img src="Images/pfSense/VM Setup/pf5.png">
-        <img src="Images/pfSense/VM Setup/pf6.png">
-        <img src="Images/pfSense/VM Setup/pf7.png">
-        <img src="Images/pfSense/VM Setup/pf8.png">
-        <img src="Images/pfSense/VM Setup/pf9.png">
-        <img src="Images/pfSense/VM Setup/pf10.png">
-        <img src="Images/pfSense/VM Setup/pf11.png">
-        <img src="Images/pfSense/VM Setup/pf12.png">
-    </div>
-</div>
-
-<hr>
-
-<div class="section">
-    <h2>pfSense VM — Initial Startup</h2>
-    <p>These images show pfSense booting for the first time after VM creation.</p>
-
-    <div class="gallery">
-        <img src="Images/pfSense/Start/start1.png">
-        <img src="Images/pfSense/Start/start2.png">
-        <img src="Images/pfSense/Start/start3.png">
-        <img src="Images/pfSense/Start/start4.png">
-        <img src="Images/pfSense/Start/start5.png">
-    </div>
-</div>
-
-<hr>
-
-<div class="section">
-    <h2>pfSense VM — Installer Setup</h2>
-    <p>This section shows the pfSense installer configuration workflow.</p>
-
-    <div class="gallery">
-        <img src="Images/pfSense/Installer Setup/IS1.png">
-        <img src="Images/pfSense/Installer Setup/IS2.png">
-        <img src="Images/pfSense/Installer Setup/IS3.png">
-        <img src="Images/pfSense/Installer Setup/IS4.png">
-        <img src="Images/pfSense/Installer Setup/IS5.png">
-        <img src="Images/pfSense/Installer Setup/IS6.png">
-        <img src="Images/pfSense/Installer Setup/IS7.png">
-        <img src="Images/pfSense/Installer Setup/IS8.png">
-        <img src="Images/pfSense/Installer Setup/IS9.png">
-        <img src="Images/pfSense/Installer Setup/IS10.png">
-    </div>
-</div>
-
-<hr>
-
-<div class="section">
-    <h2>pfSense VM — Final Configuration</h2>
-    <p>These images show the final pfSense system configuration steps following installation.</p>
-
-    <div class="gallery">
-        <img src="Images/pfSense/Setup/setup3.png">
-        <img src="Images/pfSense/Setup/setup4.png">
-        <img src="Images/pfSense/Setup/setup5.png">
-        <img src="Images/pfSense/Setup/setup6.png">
-        <img src="Images/pfSense/Setup/setup7.png">
-        <img src="Images/pfSense/Setup/setup8.png">
-        <img src="Images/pfSense/Setup/setup9.png">
-        <img src="Images/pfSense/Setup/setup10.png">
-        <img src="Images/pfSense/Setup/setup11.png">
-        <img src="Images/pfSense/Setup/setup12.png">
-        <img src="Images/pfSense/Setup/setup13.png">
-        <img src="Images/pfSense/Setup/setup14.png">
-        <img src="Images/pfSense/Setup/setup15.png">
-        <img src="Images/pfSense/Setup/setup16.png">
-        <img src="Images/pfSense/Setup/setup17.png">
-        <img src="Images/pfSense/Setup/setup18.png">
-        <img src="Images/pfSense/Setup/setup19.png">
-        <img src="Images/pfSense/Setup/setup20.png">
-    </div>
-</div>
-
-<section>
-    <p><a href="../index.html">Back to Home</a></p>
-</section>
-
-<!-- MODAL SCRIPT -->
-<div id="modal" class="modal">
-    <span class="close" onclick="document.getElementById('modal').style.display='none'">&times;</span>
-    <img id="modal-img">
-</div>
-
-<script>
-    const images = document.querySelectorAll(".gallery img");
-    const modal = document.getElementById("modal");
-    const modalImg = document.getElementById("modal-img");
-
-    images.forEach(img => {
-        img.addEventListener("click", () => {
-            modal.style.display = "block";
-            modalImg.src = img.src;
-        });
-    });
-
-    modal.addEventListener("click", () => {
-        modal.style.display = "none";
-    });
-</script>
-
-</body>
-</html>
+    <p style="margin-top:16px; font-size:14px; color:var(--muted);">
+      © 2025 Mark Thompson · MTPortfolio  
+      <br>Built with HTML, CSS, Linux, Hyper-V, and a passion for hands-on learning.
+    </p>
+  </footer>
