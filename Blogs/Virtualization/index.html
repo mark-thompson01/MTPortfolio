@@ -61,13 +61,42 @@
       background:#0e1220;
       padding:8px;
       margin:12px auto;
-      width:max-content;
-      max-width:100%;
+      max-width:500px; /* NEW: smaller scroll-friendly images */
+      cursor:pointer;
+      transition:transform .2s ease;
     }
     .figure img{
       display:block;
       height:auto;
       max-width:100%;
+    }
+    .figure:hover{
+      transform:scale(1.01);
+    }
+
+    /* Zoom Overlay */
+    #zoomOverlay {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.85);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
+    }
+
+    #zoomOverlay img {
+      max-width:90%;
+      max-height:90%;
+      border-radius:12px;
+      border:1px solid #444;
+      box-shadow:0 0 30px rgba(0,0,0,0.5);
+    }
+
+    #zoomOverlay:active {
+      display:none;
     }
 
     /* Footer */
@@ -83,6 +112,8 @@
 </head>
 
 <body>
+<div id="zoomOverlay"></div>
+
 <div class="wrap">
 
   <!-- Nav -->
@@ -101,8 +132,8 @@
 
   <!-- Header -->
   <header>
-    <div class="figure">
-      <img src="Images/Virtualization.png" alt="Virtualization Blog Cover" style="width:600px; height:350px;" loading="lazy" />
+    <div class="figure" style="max-width:600px;">
+      <img src="Images/Virtualization.png" alt="Virtualization Blog Cover" loading="lazy" />
     </div>
 
     <h1>Virtualization: My Experience, Insights, and How You Can Get Started</h1>
@@ -137,8 +168,7 @@
   </section>
 
 
-
-<!-- ORACLE VIRTUALBOX SECTION -->
+  <!-- ORACLE VIRTUALBOX SECTION -->
 <section class="card">
 
   <h2>Oracle VirtualBox</h2>
@@ -155,17 +185,17 @@
 
   <h3>Installing Oracle VirtualBox on Ubuntu 24.04</h3>
 
-  <div class="figure"><img src="Images/vbox1.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox2.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox3.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox5.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox6.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox7.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox8.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox9.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox12.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox14.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vbox15.png" alt="" loading="lazy"></div>
+  <div class="figure"><img src="Images/vbox1.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox2.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox3.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox5.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox6.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox7.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox8.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox9.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox12.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox14.png" alt=""></div>
+  <div class="figure"><img src="Images/vbox15.png" alt=""></div>
 
 </section>
 
@@ -174,15 +204,15 @@
 <!-- VMWARE WORKSTATION SECTION -->
 <section class="card">
 
-  <h2>VMWare Workstation</h2>
+  <h2>VMware Workstation</h2>
   <p>
-    Similar to Oracle VirtualBox, VMWare Workstation is also a Type 2 Hypervisor, 
+    Similar to Oracle VirtualBox, VMware Workstation is also a Type 2 Hypervisor, 
     but it provides a more advanced and polished experience. The platform offers 
     better performance, stability, and virtual hardware support compared to VirtualBox.
   </p>
 
   <p>
-    VMWare Workstation can be downloaded at:
+    VMware Workstation can be downloaded at:
     <a href="https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion" 
        target="_blank" rel="noopener">https://www.vmware.com/products/desktop-hypervisor/workstation-and-fusion</a>
   </p>
@@ -191,17 +221,17 @@
     Registered VMware accounts are required to download the free Windows and Linux versions.
   </p>
 
-  <h3>Installing VMWare Workstation on Windows</h3>
+  <h3>Installing VMware Workstation on Windows</h3>
 
-  <div class="figure"><img src="Images/vmware2.PNG" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vmware3.PNG" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vmware4.PNG" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vmware7.PNG" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vmware8.PNG" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vmware10.PNG" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vmware11.PNG" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vmware12.PNG" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/vmware13.PNG" alt="" loading="lazy"></div>
+  <div class="figure"><img src="Images/vmware2.PNG" alt=""></div>
+  <div class="figure"><img src="Images/vmware3.PNG" alt=""></div>
+  <div class="figure"><img src="Images/vmware4.PNG" alt=""></div>
+  <div class="figure"><img src="Images/vmware7.PNG" alt=""></div>
+  <div class="figure"><img src="Images/vmware8.PNG" alt=""></div>
+  <div class="figure"><img src="Images/vmware10.PNG" alt=""></div>
+  <div class="figure"><img src="Images/vmware11.PNG" alt=""></div>
+  <div class="figure"><img src="Images/vmware12.PNG" alt=""></div>
+  <div class="figure"><img src="Images/vmware13.PNG" alt=""></div>
 
 </section>
 
@@ -220,29 +250,29 @@
 
   <h3>Enabling Hyper-V in Windows 11</h3>
 
-  <div class="figure"><img src="Images/Hyper-V0.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/Hyper-V1.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/Hyper-V1-1.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/Hyper-V2.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/Hyper-V3.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/Hyper-V4.png" alt="" loading="lazy"></div>
+  <div class="figure"><img src="Images/Hyper-V0.png" alt=""></div>
+  <div class="figure"><img src="Images/Hyper-V1.png" alt=""></div>
+  <div class="figure"><img src="Images/Hyper-V1-1.png" alt=""></div>
+  <div class="figure"><img src="Images/Hyper-V2.png" alt=""></div>
+  <div class="figure"><img src="Images/Hyper-V3.png" alt=""></div>
+  <div class="figure"><img src="Images/Hyper-V4.png" alt=""></div>
 
   <h3>Enabling Hyper-V Using DISM</h3>
 
-  <div class="figure"><img src="Images/DISM1.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/DISM2.png" alt="" loading="lazy"></div>
+  <div class="figure"><img src="Images/DISM1.png" alt=""></div>
+  <div class="figure"><img src="Images/DISM2.png" alt=""></div>
 
   <h3>Enabling Hyper-V with PowerShell</h3>
 
-  <div class="figure"><img src="Images/EnablePS1.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/EnablePS2.png" alt="" loading="lazy"></div>
-  <div class="figure"><img src="Images/EnablePS3.png" alt="" loading="lazy"></div>
+  <div class="figure"><img src="Images/EnablePS1.png" alt=""></div>
+  <div class="figure"><img src="Images/EnablePS2.png" alt=""></div>
+  <div class="figure"><img src="Images/EnablePS3.png" alt=""></div>
 
 </section>
 
 
 
-<!-- CONCLUSION SECTION -->
+<!-- CONCLUSION -->
 <section class="card">
 
   <p>
@@ -261,17 +291,38 @@
 
 </section>
 
-  <p><a href="../index.html">Back to Home</a></p>
 
-  <!-- Footer -->
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-    <div class="links">
-      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </footer>
+<p><a href="../index.html">Back to Home</a></p>
+
+<!-- Footer -->
+<footer>
+  <div>Mark Thompson · MTPortfolio</div>
+  <div class="links">
+    <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+    <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</footer>
 
 </div>
+
+
+<!-- IMAGE ZOOM SCRIPT -->
+<script>
+  const zoomOverlay = document.getElementById('zoomOverlay');
+  const figures = document.querySelectorAll('.figure img');
+
+  figures.forEach(img => {
+    img.addEventListener('click', () => {
+      zoomOverlay.innerHTML = `<img src="${img.src}" />`;
+      zoomOverlay.style.display = 'flex';
+    });
+  });
+
+  zoomOverlay.addEventListener('click', () => {
+    zoomOverlay.style.display = 'none';
+  });
+</script>
+
 </body>
 </html>
+
