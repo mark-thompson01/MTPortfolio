@@ -38,6 +38,7 @@
     h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     h2{margin:0 0 10px;font-size:22px}
     h3{margin:16px 0 8px;font-size:18px}
+    h4{margin:16px 0 6px;font-size:17px;color:var(--brand);}
 
     .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
@@ -61,7 +62,7 @@
       background:#0e1220;
       padding:8px;
       margin:12px auto;
-      max-width:650px; /* NEW: smaller scroll-friendly images */
+      max-width:650px;
       cursor:pointer;
       transition:transform .2s ease;
     }
@@ -94,20 +95,6 @@
       border:1px solid #444;
       box-shadow:0 0 30px rgba(0,0,0,0.5);
     }
-
-    #zoomOverlay:active {
-      display:none;
-    }
-
-    /* Footer */
-    footer{
-      margin-top:36px;padding-top:20px;
-      border-top:1px solid #232a3a;
-      color:var(--muted);font-size:14px
-    }
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)}
-    footer a:hover{color:var(--brand)}
   </style>
 </head>
 
@@ -147,7 +134,7 @@
 
     <p>Virtualization. I have personally always been a fan of virtualization in computing. When I was getting my career started and studying towards the CompTIA A+ certification, I thought it was the coolest thing in the world that you could download something such as Oracle VirtualBox, and setup a virtualized Windows or Linux PC and have it run on your computer like an application.</p>
 
-    <p>I thought it was even cooler to find that from the perspective of a guest operating system, the virtual machine behaves just like a real physical computer. It has no awareness that it's running inside another system, it powers on, sees virtualized hardware, and operates normally.</p>
+    <p>I thought it was even cooler to find that from the perspective of a guest operating system, the virtual machine behaves just like a real physical computer. It has no awareness that it's running inside another system; it powers on, sees virtualized hardware, and operates normally.</p>
 
     <p>Virtual Machine (VM) implementations can be in the form of a Type 1 or Type 2 Hypervisor. The Hypervisor is essentially the engine that runs and manages the virtualization tasks behind the scenes.</p>
 
@@ -157,11 +144,11 @@
 
     <p>What’s also really nice is that Hyper-V is built into Windows 11 Pro, Enterprise, and Education editions. The design of Hyper-V functions directly on the hardware level, making it a Type 1 Hypervisor in every implementation. Whether it’s running on enterprise-grade servers or a standard laptop that meets the hardware requirements.</p>
 
-    <p>I find virtualization to be fun, exciting, innovative, and endlessly useful. Virtual Machines are fantastic for experimentation and incredibly helpful across many IT disciplines that include networking, cybersecurity, DevOps, system administration, scripting, and more.</p>
+    <p>I find virtualization to be fun, exciting, innovative, and endlessly useful. Virtual Machines are fantastic for experimentation and incredibly helpful across many IT disciplines including networking, cybersecurity, DevOps, system administration, scripting, and more.</p>
 
     <p>From building labs and training environments to sandboxing, setting up virtual servers, or simply tinkering out of curiosity, virtualization provides limitless learning opportunities.</p>
 
-    <p>When it comes to home lab setups with Oracle VirtualBox, VMware Workstation, or Hyper-V, I think it's fair to say each virtualization platform has its own advantages and disadvantages. Some may prefer one platform over another, and sometimes you'll run into an issue you don’t want to troubleshoot, so you switch platforms entirely.</p>
+    <p>When it comes to home lab setups with Oracle VirtualBox, VMware Workstation, or Hyper-V, each virtualization platform has its own advantages and disadvantages. Some may prefer one platform over another, and sometimes you'll run into an issue you don’t want to troubleshoot, so you switch platforms entirely.</p>
 
     <p>The following outlines how to get started with virtualization, including examples across multiple hypervisor platforms.</p>
 
@@ -185,30 +172,104 @@
 
   <h3>Installing Oracle VirtualBox on Ubuntu 24.04</h3>
 
+
+  <!-- Step 1 -->
+  <h4>1. Create the APT Keyring Directory</h4>
   <div class="figure"><img src="Images/vbox1.png" alt=""></div>
+  <p>
+    This command creates the <code>/etc/apt/keyrings</code> directory, which Ubuntu now uses 
+    to securely store repository signing keys.
+  </p>
+
+  <!-- Step 2 -->
+  <h4>2. Download the Oracle VirtualBox Repository Signing Key</h4>
   <div class="figure"><img src="Images/vbox2.png" alt=""></div>
+  <p>
+    Here, the Oracle VirtualBox public key is downloaded using <code>wget</code> and piped into 
+    <code>gpg</code> to be processed and used by the system.
+  </p>
+
+  <!-- Step 3 -->
+  <h4>3. Convert and Store the Signing Key</h4>
   <div class="figure"><img src="Images/vbox3.png" alt=""></div>
+  <p>
+    The signing key is converted from ASCII format to binary format using GPG and stored 
+    inside the keyrings directory. This step allows Ubuntu to authenticate VirtualBox packages.
+  </p>
+
+  <!-- Step 4 -->
+  <h4>4. Add the VirtualBox APT Repository</h4>
   <div class="figure"><img src="Images/vbox5.png" alt=""></div>
+  <p>
+    The VirtualBox repository is added to Ubuntu's software sources, pointing to Oracle’s 
+    official package server for Debian/Ubuntu distributions.
+  </p>
+
+  <!-- Step 5 -->
+  <h4>5. Update APT Package Lists</h4>
   <div class="figure"><img src="Images/vbox6.png" alt=""></div>
+  <p>
+    Running <code>sudo apt update</code> refreshes Ubuntu’s package lists, allowing it to 
+    recognize the newly added VirtualBox repository.
+  </p>
+
+  <!-- Step 6 -->
+  <h4>6. Install VirtualBox</h4>
   <div class="figure"><img src="Images/vbox7.png" alt=""></div>
+  <p>
+    The <code>sudo apt install virtualbox-7.0</code> command installs the latest compatible 
+    version of VirtualBox along with any required dependencies.
+  </p>
+
+  <!-- Step 7 -->
+  <h4>7. DKMS Kernel Modules Build Automatically</h4>
   <div class="figure"><img src="Images/vbox8.png" alt=""></div>
+  <p>
+    VirtualBox relies on kernel modules for virtualization support. DKMS automatically compiles 
+    these modules for the current Linux kernel.
+  </p>
+
+  <!-- Step 8 -->
+  <h4>8. Module Build and Signing in Progress</h4>
   <div class="figure"><img src="Images/vbox9.png" alt=""></div>
+  <p>
+    Additional kernel modules are built and signed. This ensures they load properly under 
+    Secure Boot environments.
+  </p>
+
+  <!-- Step 9 -->
+  <h4>9. Import MOK (Machine Owner Key) for Secure Boot</h4>
   <div class="figure"><img src="Images/vbox12.png" alt=""></div>
+  <p>
+    If Secure Boot is enabled, Ubuntu prompts the user to create and confirm a password 
+    to enroll the VirtualBox module key during the next reboot.
+  </p>
+
+  <!-- Step 10 -->
+  <h4>10. Confirm MOK Enrollment</h4>
   <div class="figure"><img src="Images/vbox14.png" alt=""></div>
+  <p>
+    Upon reboot, the MOK manager appears, allowing the user to confirm enrollment of the 
+    VirtualBox kernel module signing key.
+  </p>
+
+  <!-- Step 11 -->
+  <h4>11. VirtualBox Successfully Installed</h4>
   <div class="figure"><img src="Images/vbox15.png" alt=""></div>
+  <p>
+    After the key is enrolled and the system finishes booting, VirtualBox is fully installed 
+    and ready to launch from the system menu or terminal.
+  </p>
+</section>
 
-</section><br><br><br>
-
-
-
-<!-- VMWARE WORKSTATION SECTION -->
+  <!-- VMWARE WORKSTATION SECTION -->
 <section class="card">
 
   <h2>VMware Workstation</h2>
   <p>
     Similar to Oracle VirtualBox, VMware Workstation is also a Type 2 Hypervisor, 
-    but it provides a more advanced and polished experience. The platform offers 
-    better performance, stability, and virtual hardware support compared to VirtualBox.
+    but it provides a more advanced and polished experience. Many users prefer VMware 
+    because of its enhanced performance, stability, and virtual hardware support.
   </p>
 
   <p>
@@ -218,67 +279,211 @@
   </p>
 
   <p>
-    Registered VMware accounts are required to download the free Windows and Linux versions.
+    A free VMware account is required to download the Windows and Linux versions.
   </p>
 
   <h3>Installing VMware Workstation on Windows</h3>
 
+  <!-- Step 1 -->
+  <h4>1. VMware Workstation Installer Startup</h4>
   <div class="figure" style="max-width:450px;"><img src="Images/vmware2.PNG" alt=""></div>
+  <p>
+    The VMware Workstation installer launches with an initial setup screen. 
+    This is where Windows verifies the executable and prepares the installation wizard.
+  </p>
+
+  <!-- Step 2 -->
+  <h4>2. Beginning the Setup Wizard</h4>
   <div class="figure" style="max-width:450px;"><img src="Images/vmware3.PNG" alt=""></div>
+  <p>
+    The setup wizard begins, offering details about VMware Workstation installation. 
+    Selecting “Next” continues through the installation prompts.
+  </p>
+
+  <!-- Step 3 -->
+  <h4>3. Accepting the License Agreement</h4>
   <div class="figure" style="max-width:450px;"><img src="Images/vmware4.PNG" alt=""></div>
+  <p>
+    The End-User License Agreement (EULA) must be reviewed and accepted before installation can proceed.
+  </p>
+
+  <!-- Step 4 -->
+  <h4>4. Enhanced Keyboard Driver Option</h4>
   <div class="figure" style="max-width:450px;"><img src="Images/vmware7.PNG" alt=""></div>
+  <p>
+    VMware offers the option to install the Enhanced Keyboard Driver.  
+    This adds better key mapping support inside VMs — especially useful for Linux.
+  </p>
+
+  <!-- Step 5 -->
+  <h4>5. User Experience Settings</h4>
   <div class="figure" style="max-width:450px;"><img src="Images/vmware8.PNG" alt=""></div>
+  <p>
+    Options such as checking for product updates and participation in VMware's 
+    user experience program appear here. These can be enabled or disabled based on preference.
+  </p>
+
+  <!-- Step 6 -->
+  <h4>6. Selecting the Installation Directory</h4>
   <div class="figure" style="max-width:450px;"><img src="Images/vmware10.PNG" alt=""></div>
+  <p>
+    The installation path is shown, usually defaulting to <code>C:\Program Files (x86)\VMware</code>.  
+    Most users keep the default settings.
+  </p>
+
+  <!-- Step 7 -->
+  <h4>7. Selecting Shortcuts</h4>
   <div class="figure" style="max-width:450px;"><img src="Images/vmware11.PNG" alt=""></div>
+  <p>
+    You can choose whether to add Start Menu and Desktop shortcuts. 
+    These are optional and won’t affect VM performance.
+  </p>
+
+  <!-- Step 8 -->
+  <h4>8. Ready to Install VMware Workstation</h4>
   <div class="figure" style="max-width:450px;"><img src="Images/vmware12.PNG" alt=""></div>
+  <p>
+    A summary screen appears showing your chosen configuration.  
+    Clicking “Install” begins the actual installation process.
+  </p>
+
+  <!-- Step 9 -->
+  <h4>9. VMware Workstation Installing</h4>
   <div class="figure" style="max-width:450px;"><img src="Images/vmware13.PNG" alt=""></div>
-  <div class="figure" style="max-width:450px:"><img src="Images/postinstall1.PNG" alt=""></div>
+  <p>
+    VMware Workstation installs its components, kernel modules, and virtualization drivers.  
+    This may take a few minutes depending on hardware speed.
+  </p>
+
+  <!-- Step 10 -->
+  <h4>10. VMware Workstation Ready to Launch</h4>
+  <div class="figure" style="max-width:450px;"><img src="Images/postinstall1.PNG" alt=""></div>
+  <p>
+    After installation completes, VMware Workstation can now be launched from the Start Menu.  
+    You are now ready to create your first virtual machine.
+  </p>
 
 </section><br><br><br>
 
-
-
-<!-- HYPER-V SECTION -->
+  <!-- HYPER-V SECTION -->
 <section class="card">
 
   <h2>Hyper-V</h2>
   <p>
-    Hyper-V is unique because it’s Microsoft’s virtualization platform built directly into 
-    Windows. It runs as a Type 1 Hypervisor, meaning it interfaces directly with the hardware, 
-    even when installed on a standard Windows 11 laptop. Hyper-V is included in Windows 11 Pro, 
-    Enterprise, and Education editions.
+    Hyper-V is Microsoft’s built-in virtualization platform for Windows. Unlike VirtualBox 
+    and VMware Workstation, Hyper-V is a <strong>Type 1 Hypervisor</strong>, meaning it interfaces 
+    directly with the hardware layer, even when installed on a standard Windows 11 laptop.  
+    Hyper-V is available in Windows 11 Pro, Enterprise, and Education editions.
   </p>
 
-  <h3>Enabling Hyper-V in Windows 11</h3>
+  <!-- GUI ENABLEMENT -->
+  <h3>Enabling Hyper-V in Windows 11 (Graphical Method)</h3>
 
+  <!-- Step 1 -->
+  <h4>1. Opening Windows Features</h4>
   <div class="figure"><img src="Images/Hyper-V0.png" alt=""></div>
+  <p>
+    Hyper-V is enabled through the “Turn Windows features on or off” control panel.  
+    This window allows you to enable or disable optional Windows components.
+  </p>
+
+  <!-- Step 2 -->
+  <h4>2. Locating Hyper-V in the Feature List</h4>
   <div class="figure"><img src="Images/Hyper-V1.png" alt=""></div>
+  <p>
+    Scroll down the feature list and locate the <strong>Hyper-V</strong> section.  
+    This expands into the core platform and associated tools.
+  </p>
+
+  <!-- Step 3 -->
+  <h4>3. Selecting Hyper-V and Sub-Features</h4>
   <div class="figure"><img src="Images/Hyper-V1-1.png" alt=""></div>
+  <p>
+    Ensure that <strong>Hyper-V Management Tools</strong> and the <strong>Hyper-V Platform</strong> 
+    are both checked. This installs the actual hypervisor and the administrative tools.
+  </p>
+
+  <!-- Step 4 -->
+  <h4>4. Windows Applies the Hyper-V Components</h4>
   <div class="figure" style="max-width:475px;"><img src="Images/Hyper-V2.png" alt=""></div>
+  <p>
+    Windows prepares the necessary components and applies the Hyper-V configuration.  
+    This step typically takes a few minutes.
+  </p>
+
+  <!-- Step 5 -->
+  <h4>5. Windows Completes the Installation Process</h4>
   <div class="figure" style="max-width:475px;"><img src="Images/Hyper-V3.png" alt=""></div>
-  <div class="figure"><img src="Images/Hyper-V4.png" alt=""></div><br>
+  <p>
+    Windows finishes enabling the required virtualization infrastructure.  
+    A restart is required before Hyper-V becomes active.
+  </p>
 
-  <h3>Enabling Hyper-V Using DISM</h3>
+  <!-- Step 6 -->
+  <h4>6. Restart Required</h4>
+  <div class="figure"><img src="Images/Hyper-V4.png" alt=""></div>
+  <p>
+    A system reboot is necessary to finalize Hyper-V activation.  
+    After the restart, Windows will boot with Hyper-V as the underlying Type 1 hypervisor.
+  </p>
 
+
+  <!-- DISM ENABLEMENT -->
+  <h3>Enabling Hyper-V Using DISM (Deployment Image Servicing and Management)</h3>
+
+  <!-- Step 7 -->
+  <h4>7. Running DISM to Enable Hyper-V</h4>
   <div class="figure"><img src="Images/DISM1.png" alt=""></div>
-  <div class="figure"><img src="Images/DISM2.png" alt=""></div><br>
+  <p>
+    The DISM command enables Hyper-V components through the Windows servicing engine.  
+    This is a command-line alternative to the graphical Windows Features menu.
+  </p>
 
-  <h3>Enabling Hyper-V with PowerShell</h3>
+  <!-- Step 8 -->
+  <h4>8. DISM Processing the Request</h4>
+  <div class="figure"><img src="Images/DISM2.png" alt=""></div>
+  <p>
+    DISM processes the installation and activates virtualization features.  
+    A reboot may be required once the operation completes successfully.
+  </p>
 
+
+  <!-- POWERSHELL ENABLEMENT -->
+  <h3>Enabling Hyper-V Using PowerShell</h3>
+
+  <!-- Step 9 -->
+  <h4>9. Running the Hyper-V Install Command in PowerShell</h4>
   <div class="figure"><img src="Images/EnablePS1.png" alt=""></div>
+  <p>
+    PowerShell provides another command-line method to enable Hyper-V.  
+    This method is popular for automation and scripted deployments.
+  </p>
+
+  <!-- Step 10 -->
+  <h4>10. PowerShell Installing Hyper-V Components</h4>
   <div class="figure"><img src="Images/EnablePS2.png" alt=""></div>
+  <p>
+    PowerShell installs the Hyper-V Platform and management tools.  
+    This handles all required dependencies automatically.
+  </p>
+
+  <!-- Step 11 -->
+  <h4>11. Restart Prompt After PowerShell Installation</h4>
   <div class="figure"><img src="Images/EnablePS3.png" alt=""></div>
+  <p>
+    Once PowerShell completes installation, the system must restart to activate Hyper-V 
+    as the primary hypervisor layer.
+  </p>
 
-</section>
+</section><br><br><br>
 
 
-
-<!-- CONCLUSION -->
+  <!-- CONCLUSION -->
 <section class="card">
 
   <p>
     These are just a few ways to get started with virtualization in a home lab environment. 
-    There are countless setups and implementations that go a long way, from installing 
+    There are countless setups and implementations that go a long way — from installing 
     Oracle VirtualBox on a standard Windows 11 PC to setting up a virtualization server 
     from scratch running on Arch Linux.
   </p>
@@ -292,7 +497,7 @@
 
 </section>
 
-
+<!-- Back Button -->
 <p><a href="../index.html">Back to Home</a></p>
 
 <!-- Footer -->
@@ -304,8 +509,7 @@
   </div>
 </footer>
 
-</div>
-
+</div> <!-- end .wrap -->
 
 <!-- IMAGE ZOOM SCRIPT -->
 <script>
@@ -326,4 +530,5 @@
 
 </body>
 </html>
+
 
