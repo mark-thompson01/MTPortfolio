@@ -182,91 +182,102 @@
 
   <!-- Step 1 -->
   <h4>1. Create the APT Keyring Directory</h4>
-  <div class="figure"><img src="Images/vbox1.png" alt=""></div>
-  <p>
+    <p>
     This command creates the <code>/etc/apt/keyrings</code> directory, which Ubuntu now uses 
     to securely store repository signing keys.
   </p>
+  <div class="figure"><img src="Images/vbox1.png" alt=""></div>
+
 
   <!-- Step 2 -->
   <h4>2. Download the Oracle VirtualBox Repository Signing Key</h4>
-  <div class="figure"><img src="Images/vbox2.png" alt=""></div>
-  <p>
+    <p>
     Here, the Oracle VirtualBox public key is downloaded using <code>wget</code> and piped into 
     <code>gpg</code> to be processed and used by the system.
   </p>
+  <div class="figure"><img src="Images/vbox2.png" alt=""></div>
+
 
   <!-- Step 3 -->
-  <h4>3. Convert and Store the Signing Key</h4>
-  <div class="figure"><img src="Images/vbox3.png" alt=""></div>
-  <p>
+  <h4>3. Convert and Store the Signing Key</h4> <p>
     The signing key is converted from ASCII format to binary format using GPG and stored 
     inside the keyrings directory. This step allows Ubuntu to authenticate VirtualBox packages.
   </p>
+  
+  <div class="figure"><img src="Images/vbox3.png" alt=""></div>
+ 
 
   <!-- Step 4 -->
   <h4>4. Add the VirtualBox APT Repository</h4>
-  <div class="figure"><img src="Images/vbox5.png" alt=""></div>
-  <p>
+    <p>
     The VirtualBox repository is added to Ubuntu's software sources, pointing to Oracle’s 
     official package server for Debian/Ubuntu distributions.
   </p>
+  <div class="figure"><img src="Images/vbox5.png" alt=""></div>
+
 
   <!-- Step 5 -->
   <h4>5. Update APT Package Lists</h4>
-  <div class="figure"><img src="Images/vbox6.png" alt=""></div>
-  <p>
+    <p>
     Running <code>sudo apt update</code> refreshes Ubuntu’s package lists, allowing it to 
     recognize the newly added VirtualBox repository.
   </p>
+  <div class="figure"><img src="Images/vbox6.png" alt=""></div>
+
 
   <!-- Step 6 -->
   <h4>6. Install VirtualBox</h4>
-  <div class="figure"><img src="Images/vbox7.png" alt=""></div>
-  <p>
+    <p>
     The <code>sudo apt install virtualbox-7.0</code> command installs the latest compatible 
     version of VirtualBox along with any required dependencies.
   </p>
+  <div class="figure"><img src="Images/vbox7.png" alt=""></div>
+
 
   <!-- Step 7 -->
   <h4>7. DKMS Kernel Modules Build Automatically</h4>
-  <div class="figure"><img src="Images/vbox8.png" alt=""></div>
-  <p>
+    <p>
     VirtualBox relies on kernel modules for virtualization support. DKMS automatically compiles 
     these modules for the current Linux kernel.
   </p>
 
+  <div class="figure"><img src="Images/vbox8.png" alt=""></div>
+
   <!-- Step 8 -->
   <h4>8. Module Build and Signing in Progress</h4>
-  <div class="figure"><img src="Images/vbox9.png" alt=""></div>
-  <p>
+    <p>
     Additional kernel modules are built and signed. This ensures they load properly under 
     Secure Boot environments.
   </p>
+  <div class="figure"><img src="Images/vbox9.png" alt=""></div>
+
 
   <!-- Step 9 -->
   <h4>9. Import MOK (Machine Owner Key) for Secure Boot</h4>
-  <div class="figure"><img src="Images/vbox12.png" alt=""></div>
-  <p>
+    <p>
     If Secure Boot is enabled, Ubuntu prompts the user to create and confirm a password 
     to enroll the VirtualBox module key during the next reboot.
   </p>
+  <div class="figure"><img src="Images/vbox12.png" alt=""></div>
+
 
   <!-- Step 10 -->
   <h4>10. Confirm MOK Enrollment</h4>
-  <div class="figure"><img src="Images/vbox14.png" alt=""></div>
-  <p>
+    <p>
     Upon reboot, the MOK manager appears, allowing the user to confirm enrollment of the 
     VirtualBox kernel module signing key.
   </p>
+  <div class="figure"><img src="Images/vbox14.png" alt=""></div>
+
 
   <!-- Step 11 -->
   <h4>11. VirtualBox Successfully Installed</h4>
-  <div class="figure"><img src="Images/vbox15.png" alt=""></div>
-  <p>
+    <p>
     After the key is enrolled and the system finishes booting, VirtualBox is fully installed 
     and ready to launch from the system menu or terminal.
   </p>
+  <div class="figure"><img src="Images/vbox15.png" alt=""></div>
+
 </section>
 
   <!-- VMWARE WORKSTATION SECTION -->
@@ -293,82 +304,92 @@
 
   <!-- Step 1 -->
   <h4>1. VMware Workstation Installer Startup</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/vmware2.PNG" alt=""></div>
-  <p>
+    <p>
     The VMware Workstation installer launches with an initial setup screen. 
     This is where Windows verifies the executable and prepares the installation wizard.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/vmware2.PNG" alt=""></div>
+
 
   <!-- Step 2 -->
   <h4>2. Beginning the Setup Wizard</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/vmware3.PNG" alt=""></div>
-  <p>
+    <p>
     The setup wizard begins, offering details about VMware Workstation installation. 
     Selecting “Next” continues through the installation prompts.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/vmware3.PNG" alt=""></div>
+
 
   <!-- Step 3 -->
   <h4>3. Accepting the License Agreement</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/vmware4.PNG" alt=""></div>
-  <p>
+    <p>
     The End-User License Agreement (EULA) must be reviewed and accepted before installation can proceed.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/vmware4.PNG" alt=""></div>
+
 
   <!-- Step 4 -->
   <h4>4. Enhanced Keyboard Driver Option</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/vmware7.PNG" alt=""></div>
-  <p>
+    <p>
     VMware offers the option to install the Enhanced Keyboard Driver.  
     This adds better key mapping support inside VMs — especially useful for Linux.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/vmware7.PNG" alt=""></div>
+
 
   <!-- Step 5 -->
   <h4>5. User Experience Settings</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/vmware8.PNG" alt=""></div>
-  <p>
+    <p>
     Options such as checking for product updates and participation in VMware's 
     user experience program appear here. These can be enabled or disabled based on preference.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/vmware8.PNG" alt=""></div>
+
 
   <!-- Step 6 -->
   <h4>6. Selecting the Installation Directory</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/vmware10.PNG" alt=""></div>
-  <p>
+    <p>
     The installation path is shown, usually defaulting to <code>C:\Program Files (x86)\VMware</code>.  
     Most users keep the default settings.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/vmware10.PNG" alt=""></div>
+
 
   <!-- Step 7 -->
   <h4>7. Selecting Shortcuts</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/vmware11.PNG" alt=""></div>
-  <p>
+    <p>
     You can choose whether to add Start Menu and Desktop shortcuts. 
     These are optional and won’t affect VM performance.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/vmware11.PNG" alt=""></div>
+
 
   <!-- Step 8 -->
   <h4>8. Ready to Install VMware Workstation</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/vmware12.PNG" alt=""></div>
-  <p>
+    <p>
     A summary screen appears showing your chosen configuration.  
     Clicking “Install” begins the actual installation process.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/vmware12.PNG" alt=""></div>
+
 
   <!-- Step 9 -->
   <h4>9. VMware Workstation Installing</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/vmware13.PNG" alt=""></div>
-  <p>
+    <p>
     VMware Workstation installs its components, kernel modules, and virtualization drivers.  
     This may take a few minutes depending on hardware speed.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/vmware13.PNG" alt=""></div>
+
 
   <!-- Step 10 -->
   <h4>10. VMware Workstation Ready to Launch</h4>
-  <div class="figure" style="max-width:450px;"><img src="Images/postinstall1.PNG" alt=""></div>
-  <p>
+    <p>
     After installation completes, VMware Workstation can now be launched from the Start Menu.  
     You are now ready to create your first virtual machine.
   </p>
+  <div class="figure" style="max-width:450px;"><img src="Images/postinstall1.PNG" alt=""></div>
+
 
 </section><br><br><br>
 
@@ -388,51 +409,56 @@
 
   <!-- Step 1 -->
   <h4>1. Opening Windows Features</h4>
-  <div class="figure"><img src="Images/Hyper-V0.png" alt=""></div>
-  <p>
+    <p>
     Hyper-V is enabled through the “Turn Windows features on or off” control panel.  
     This window allows you to enable or disable optional Windows components.
   </p>
+  <div class="figure"><img src="Images/Hyper-V0.png" alt=""></div>
+
 
   <!-- Step 2 -->
-  <h4>2. Locating Hyper-V in the Feature List</h4>
-  <div class="figure"><img src="Images/Hyper-V1.png" alt=""></div>
-  <p>
+  <h4>2. Locating Hyper-V in the Feature List</h4>  <p>
     Scroll down the feature list and locate the <strong>Hyper-V</strong> section.  
     This expands into the core platform and associated tools.
   </p>
+  
+  <div class="figure"><img src="Images/Hyper-V1.png" alt=""></div>
+
 
   <!-- Step 3 -->
   <h4>3. Selecting Hyper-V and Sub-Features</h4>
-  <div class="figure"><img src="Images/Hyper-V1-1.png" alt=""></div>
-  <p>
+    <p>
     Ensure that <strong>Hyper-V Management Tools</strong> and the <strong>Hyper-V Platform</strong> 
     are both checked. This installs the actual hypervisor and the administrative tools.
   </p>
 
+  <div class="figure"><img src="Images/Hyper-V1-1.png" alt=""></div>
+
   <!-- Step 4 -->
   <h4>4. Windows Applies the Hyper-V Components</h4>
-  <div class="figure" style="max-width:475px;"><img src="Images/Hyper-V2.png" alt=""></div>
-  <p>
+    <p>
     Windows prepares the necessary components and applies the Hyper-V configuration.  
     This step typically takes a few minutes.
   </p>
+  <div class="figure" style="max-width:475px;"><img src="Images/Hyper-V2.png" alt=""></div>
+
 
   <!-- Step 5 -->
   <h4>5. Windows Completes the Installation Process</h4>
-  <div class="figure" style="max-width:475px;"><img src="Images/Hyper-V3.png" alt=""></div>
-  <p>
+    <p>
     Windows finishes enabling the required virtualization infrastructure.  
     A restart is required before Hyper-V becomes active.
   </p>
+  <div class="figure" style="max-width:475px;"><img src="Images/Hyper-V3.png" alt=""></div>
+
 
   <!-- Step 6 -->
   <h4>6. Restart Required</h4>
-  <div class="figure"><img src="Images/Hyper-V4.png" alt=""></div>
-  <p>
-    A system reboot is necessary to finalize Hyper-V activation.  
+     A system reboot is necessary to finalize Hyper-V activation.  
     After the restart, Windows will boot with Hyper-V as the underlying Type 1 hypervisor.
-  </p><br><br>
+  </p>
+  <div class="figure"><img src="Images/Hyper-V4.png" alt=""></div><br><br>
+
 
 
   <!-- DISM ENABLEMENT -->
@@ -440,19 +466,20 @@
 
   <!-- Step 7 -->
   <h4>7. Running DISM to Enable Hyper-V</h4>
-  <div class="figure"><img src="Images/DISM1.png" alt=""></div>
-  <p>
+    <p>
     The DISM command enables Hyper-V components through the Windows servicing engine.  
     This is a command-line alternative to the graphical Windows Features menu.
   </p>
+  <div class="figure"><img src="Images/DISM1.png" alt=""></div>
+
 
   <!-- Step 8 -->
   <h4>8. DISM Processing the Request</h4>
-  <div class="figure"><img src="Images/DISM2.png" alt=""></div>
-  <p>
+    <p>
     DISM processes the installation and activates virtualization features.  
     A reboot may be required once the operation completes successfully.
-  </p><br><br>
+  </p>
+  <div class="figure"><img src="Images/DISM2.png" alt=""></div><br><br>
 
 
   <!-- POWERSHELL ENABLEMENT -->
@@ -460,27 +487,30 @@
 
   <!-- Step 9 -->
   <h4>9. Running the Hyper-V Install Command in PowerShell</h4>
-  <div class="figure"><img src="Images/EnablePS1.png" alt=""></div>
-  <p>
+    <p>
     PowerShell provides another command-line method to enable Hyper-V.  
     This method is popular for automation and scripted deployments.
   </p>
+  <div class="figure"><img src="Images/EnablePS1.png" alt=""></div>
+
 
   <!-- Step 10 -->
   <h4>10. PowerShell Installing Hyper-V Components</h4>
-  <div class="figure"><img src="Images/EnablePS2.png" alt=""></div>
-  <p>
+    <p>
     PowerShell installs the Hyper-V Platform and management tools.  
     This handles all required dependencies automatically.
   </p>
+  <div class="figure"><img src="Images/EnablePS2.png" alt=""></div>
+
 
   <!-- Step 11 -->
   <h4>11. Restart Prompt After PowerShell Installation</h4>
-  <div class="figure"><img src="Images/EnablePS3.png" alt=""></div>
-  <p>
+    <p>
     Once PowerShell completes installation, the system must restart to activate Hyper-V 
     as the primary hypervisor layer.
   </p>
+  <div class="figure"><img src="Images/EnablePS3.png" alt=""></div>
+
 
 </section><br><br><br>
 
