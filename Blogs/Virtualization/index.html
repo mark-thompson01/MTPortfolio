@@ -209,12 +209,11 @@
   <!-- Step 3 -->
   <h4>3. Add the VirtualBox APT Repository</h4>
     <p>
-    The VirtualBox repository is added to Ubuntu's software sources, pointing to Oracle’s 
-    official package server for Debian/Ubuntu distributions.
+    With the system's codename from step 2 verified <code>noble</code> on Ubuntu 24.04 LTS, the next step
+      is creating and setting up the repository file that tells Ubuntu where to download the VirtualBox packages.
   </p>
- 
-
-  
+  <P>Ubuntu uses <code>.sources</code> files to define external package repositories.</P>
+  <p>To create the file, run <code>sudo nano /etc/apt/sources.list.d/virtualbox.sources</code></p>
   <div class="figure"><img src="Images/vbox3.png" alt=""></div><br>
  
 
