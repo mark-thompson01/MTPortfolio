@@ -354,30 +354,24 @@
   <h3>Enabling Hyper-V in Windows 11 (Graphical Method)</h3>
 
   <!-- Step 1 -->
-  <h4>1. Opening Windows Features</h4>
+  <h4>1. Access Programs and Features from Control Panel</h4>
     <p>
-    Hyper-V is enabled through the “Turn Windows features on or off” control panel.  
-    This window allows you to enable or disable optional Windows components.
+    Hyper-V is enabled through the “Turn Windows features on or off” under Programs and Features within control panel. 
   </p>
   <div class="figure"><img src="Images/Hyper-V0.png" alt=""></div>
 
 
   <!-- Step 2 -->
-  <h4>2. Locating Hyper-V in the Feature List</h4>  <p>
-    Scroll down the feature list and locate the <strong>Hyper-V</strong> section.  
-    This expands into the core platform and associated tools.
-  </p>
-  
+  <h4>2. Click on Turn Windows features on or off in the upper-left</h4>
   <div class="figure"><img src="Images/Hyper-V1.png" alt=""></div>
 
 
   <!-- Step 3 -->
-  <h4>3. Selecting Hyper-V and Sub-Features</h4>
+  <h4>3. Locate Hyper-V in the Feature List</h4>
     <p>
     Ensure that <strong>Hyper-V Management Tools</strong> and the <strong>Hyper-V Platform</strong> 
     are both checked. This installs the actual hypervisor and the administrative tools.
   </p>
-
   <div class="figure"><img src="Images/Hyper-V1-1.png" alt=""></div>
 
   <!-- Step 4 -->
@@ -390,19 +384,18 @@
 
 
   <!-- Step 5 -->
-  <h4>5. Windows Completes the Installation Process</h4>
+  <h4>5. Installation Complate - Restart Required</h4>
     <p>
     Windows finishes enabling the required virtualization infrastructure.  
     A restart is required before Hyper-V becomes active.
   </p>
+  <p>  A system reboot is necessary to finalize Hyper-V activation.  
+    After the restart, Windows will boot with Hyper-V as the underlying Type 1 hypervisor.</p>
   <div class="figure" style="max-width:475px;"><img src="Images/Hyper-V3.png" alt=""></div>
 
 
   <!-- Step 6 -->
-  <h4>6. Restart Required</h4>
-     A system reboot is necessary to finalize Hyper-V activation.  
-    After the restart, Windows will boot with Hyper-V as the underlying Type 1 hypervisor.
-  </p>
+  <h4>6. Hyper-V Manager ready to go
   <div class="figure"><img src="Images/Hyper-V4.png" alt=""></div><br><br><br><br>
 
 
