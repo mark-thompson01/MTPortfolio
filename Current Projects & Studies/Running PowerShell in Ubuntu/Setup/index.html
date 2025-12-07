@@ -123,7 +123,7 @@
       Before installing new software, it’s best practice to update Ubuntu’s package index. This ensures the package manager has the latest metadata and prevents version conflicts when adding new repositories.
     </p>
     <div class="figure">
-      <img src="/Images/Setup1.png" alt="Setup step 1" />
+      <img src="Images/Setup1.png" alt="Setup step 1" />
     </div>
 
     <!-- Step 2 -->
@@ -132,7 +132,7 @@
       Some installations depend on release codename or architecture. Checking system details provides clarity and ensures commands are compatible with your Ubuntu version.
     </p>
     <div class="figure">
-      <img src="/Images/Setup2.png" alt="Setup step 2" />
+      <img src="Images/Setup2.png" alt="Setup step 2" />
     </div>
 
     <!-- Step 3 -->
@@ -141,7 +141,7 @@
       PowerShell installation requires certain prerequisite packages such as <code>curl</code>, <code>apt-transport-https</code>, and certificate utilities. These enable secure communication with Microsoft's package servers.
     </p>
     <div class="figure">
-      <img src="/Images/Setup3.png" alt="Setup step 3" />
+      <img src="Images/Setup3.png" alt="Setup step 3" />
     </div>
 
     <!-- Step 4 -->
@@ -150,7 +150,7 @@
       This command installs all necessary tools for securely downloading and validating Microsoft’s signing key. These prerequisites ensure apt can trust and process packages from external repositories.
     </p>
     <div class="figure">
-      <img src="/Images/Setup4.png" alt="Setup step 4" />
+      <img src="Images/Setup4.png" alt="Setup step 4" />
     </div>
 
     <!-- Step 5 -->
@@ -159,7 +159,7 @@
       Ubuntu confirms the installation of required packages. If all dependencies are satisfied, you’re ready to continue importing the Microsoft signing key.
     </p>
     <div class="figure">
-      <img src="/Images/Setup5.png" alt="Setup step 5" />
+      <img src="Images/Setup5.png" alt="Setup step 5" />
     </div>
 
     <!-- Step 6 -->
@@ -168,7 +168,7 @@
       Microsoft signs all packages with a GPG key. Importing this key allows Ubuntu to verify that PowerShell packages come from a trusted and authenticated source.
     </p>
     <div class="figure">
-      <img src="/Images/Setup6 - Prerequites.png" alt="Setup step 6 prerequisites" />
+      <img src="Images/Setup6 - Prerequites.png" alt="Setup step 6 prerequisites" />
     </div>
 
     <!-- Step 7 -->
@@ -177,7 +177,7 @@
       After the signing key is installed, the Microsoft repository must be added to Ubuntu's sources list. This step enables <code>apt</code> to fetch PowerShell directly from Microsoft’s servers.
     </p>
     <div class="figure">
-      <img src="/Images/Setup7 - Import Key.png" alt="Import Microsoft GPG key" />
+      <img src="Images/Setup7 - Import Key.png" alt="Import Microsoft GPG key" />
     </div>
 
     <!-- Step 8 -->
@@ -186,7 +186,7 @@
       Once the new repository is added, apt needs to be refreshed to recognize available PowerShell packages from Microsoft’s repo.
     </p>
     <div class="figure">
-      <img src="/Images/Setup8.png" alt="Setup step 8" />
+      <img src="Images/Setup8.png" alt="Setup step 8" />
     </div>
 
     <!-- Step 9 -->
@@ -195,7 +195,7 @@
       The PowerShell package can now be installed normally using apt. This downloads the latest stable version for Ubuntu and registers the <code>pwsh</code> interpreter.
     </p>
     <div class="figure">
-      <img src="/Images/Setup9.png" alt="Setup step 9" />
+      <img src="Images/Setup9.png" alt="Setup step 9" />
     </div>
 
     <!-- Step 10 -->
@@ -204,7 +204,7 @@
       Running <code>pwsh --version</code> confirms a successful installation. You can now launch PowerShell on Ubuntu by typing <code>pwsh</code> into the terminal.
     </p>
     <div class="figure">
-      <img src="/Images/Setup10.png" alt="">
+      <img src="Images/Setup10.png" alt="">
     </div>
 
   </section>
