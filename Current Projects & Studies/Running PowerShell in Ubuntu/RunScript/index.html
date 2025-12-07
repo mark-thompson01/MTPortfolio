@@ -1,1 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Running the Cross-Platform System Monitoring Script · Mark Thompson Portfolio</title>
+
+    <style>
+        :root {
+            --bg-1:#0f1115;
+            --bg-2:#141821;
+            --text:#E6E7EE;
+            --muted:#A9ADBE;
+            --brand:#4DA3FF;
+            --border:#2A3447;
+            --radius:18px;
+        }
+
+        body {
+            background: var(--bg-1);
+            color: var(--text);
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        h1, h2 {
+            color: var(--brand);
+            text-align: center;
+        }
+
+        .section {
+            max-width: 1100px;
+            margin: 50px auto;
+            padding: 20px;
+            background: var(--bg-2);
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,.35);
+        }
+
+        p {
+            color: var(--text);
+            font-size: 1.05rem;
+        }
+
+        .step-label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .img-box {
+            width: 100%;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .img-box img {
+            width: 90%;
+            max-width: 900px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+            transition: transform .25s ease;
+        }
+
+        .img-box img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Fullscreen zoom */
+        .zoom-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .zoom-overlay img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: var(--radius);
+        }
+
+        /* Back Button */
+        .back-btn {
+            display: inline-block;
+            margin: 30px auto;
+            padding: 12px 22px;
+            color: var(--text);
+            background: var(--bg-2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--brand);
+            color: #000;
+        }
+
+        footer {
+            text-align: center;
+            color: var(--muted);
+            margin: 40px 0 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="section">
+        <h1>Running the Cross-Platform System Monitoring Script</h1>
+        <p>
+            This section demonstrates how to run the cross-platform system monitoring script written in PowerShell 7. 
+            The script collects CPU usage, memory statistics, disk usage, uptime, and network information across Linux and Windows.
+            Below is the full execution workflow, from opening the script in Nano to generating the JSON and CSV output reports.
+        </p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="section">
+        <div class="step-label">Step 1 — Opening the Script in Nano</div>
+        <p>
+            The first step is to open <code>monitor.ps1</code> inside Nano so you can review or edit the script. 
+            Nano is a lightweight command-line text editor available on most Linux systems.
+        </p>
+        <div class="img-box"><img src="/Images/run1.png" alt="Opening the script in Nano"></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="section">
+        <div class="step-label">Step 2 — Running the Script with PowerShell (pwsh)</div>
+        <p>
+            Once the script is ready, run it using <code>pwsh ./monitor.ps1</code>. 
+            PowerShell 7 allows cross-platform execution, meaning the same script runs on Linux, macOS, and Windows.
+        </p>
+        <div class="img-box"><img src="/Images/run2.png" alt="Running the script"></div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="section">
+        <div class="step-label">Step 3 — Script Output: System Monitoring Report</div>
+        <p>
+            The script outputs a formatted system summary including CPU usage, memory consumption, disk utilization, 
+            your device's IP address, and system uptime.  
+            This step shows the script successfully detecting Linux as the OS and displaying your system metrics.
+        </p>
+        <div class="img-box"><img src="/Images/run3.png" alt="System Monitoring Report Output"></div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="section">
+        <div class="step-label">Step 4 — Running It Again to Generate Fresh Data</div>
+        <p>
+            Running the script again produces an updated snapshot of system performance.  
+            This confirms the script is functioning properly and dynamically collecting fresh system data on every run.
+        </p>
+        <div class="img-box"><img src="/Images/run4.png" alt="Second execution output"></div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="section">
+        <div class="step-label">Step 5 — Navigating the Output Directory</div>
+        <p>
+            The script saves the JSON and CSV reports to the <code>output</code> directory.  
+            Here, we confirm the directory exists and contains the latest log files, each representing an execution of the script.
+        </p>
+        <div class="img-box"><img src="/Images/run5.png" alt="Navigating output directory"></div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="section">
+        <div class="step-label">Step 6 — Viewing Stored Reports</div>
+        <p>
+            The final step demonstrates viewing the generated reports.  
+            Using <code>cat</code> on a CSV output shows the system monitoring data serialized into a readable key/value format.
+        </p>
+        <div class="img-box"><img src="/Images/run6.png" alt="Viewing CSV report"></div>
+    </div>
+
+    <div style="text-align:center;">
+        <a href="../index.html" class="back-btn">← Back to Portfolio</a>
+    </div>
+
+    <footer>
+        Built for the MTPortfolio · © Mark Thompson
+    </footer>
+
+    <div class="zoom-overlay" id="zoomOverlay">
+        <img id="zoomImage" />
+    </div>
+
+    <script>
+        const overlay = document.getElementById("zoomOverlay");
+        const zoomImg = document.getElementById("zoomImage");
+
+        document.querySelectorAll(".img-box img").forEach(img => {
+            img.addEventListener("click", () => {
+                zoomImg.src = img.src;
+                overlay.style.display = "flex";
+            });
+        });
+
+        overlay.addEventListener("click", () => {
+            overlay.style.display = "none";
+        });
+    </script>
+
+</body>
+</html>
 
