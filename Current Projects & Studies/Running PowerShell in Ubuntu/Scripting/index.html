@@ -1,1 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PowerShell Scripting via Nano · Mark Thompson Portfolio</title>
+
+    <style>
+        :root {
+            --bg-1:#0f1115; 
+            --bg-2:#141821; 
+            --text:#E6E7EE; 
+            --muted:#A9ADBE;
+            --brand:#4DA3FF; 
+            --card-border:#2A3447; 
+            --shadow:0 10px 30px rgba(0,0,0,.35);
+            --radius:18px;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg-1);
+            color: var(--text);
+            font-family: system-ui, Arial, sans-serif;
+            line-height: 1.6;
+        }
+
+        header {
+            padding: 40px 20px;
+            text-align: center;
+            background: var(--bg-2);
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        header h1 {
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            color: var(--brand);
+        }
+
+        header p {
+            max-width: 900px;
+            margin: auto;
+            color: var(--muted);
+        }
+
+        .breadcrumb {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .breadcrumb a {
+            color: var(--brand);
+            text-decoration: none;
+        }
+
+        .section {
+            padding: 40px 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        h2 {
+            color: var(--brand);
+            margin-bottom: 10px;
+        }
+
+        .step {
+            background: var(--bg-2);
+            padding: 25px;
+            border-radius: var(--radius);
+            border: 1px solid var(--card-border);
+            margin-bottom: 45px;
+            box-shadow: var(--shadow);
+        }
+
+        .step h3 {
+            margin-top: 0;
+            color: var(--brand);
+        }
+
+        .img-block {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .img-block img {
+            width: 90%;
+            max-width: 900px;
+            border-radius: var(--radius);
+            border: 1px solid var(--card-border);
+            cursor: zoom-in;
+            transition: .2s ease;
+        }
+
+        .img-label {
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            color: var(--muted);
+        }
+
+        /* Zoom modal */
+        .zoom-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .zoom-modal img {
+            max-width: 95%;
+            max-height: 95%;
+            border-radius: var(--radius);
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+
+        .nav-buttons a {
+            padding: 12px 20px;
+            background: var(--brand);
+            color: #000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: var(--radius);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--muted);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>PowerShell Scripting via Nano</h1>
+    <p>
+        In this section, you will walk through writing a complete cross-platform PowerShell system-monitoring script
+        using the <strong>nano</strong> text editor in Ubuntu. This script detects the operating system, gathers system
+        metrics, and exports structured monitoring data to JSON and CSV formats.
+    </p>
+
+    <div class="breadcrumb">
+        <a href="index.html">Home</a> › 
+        <a href="running-powershell.html">Running PowerShell on Ubuntu</a> › 
+        PowerShell Scripting via Nano
+    </div>
+</header>
+
+<section class="section">
+
+    <!-- Step 1 -->
+    <div class="step">
+        <h3>Step 1 — Opening Nano and Creating the Script File</h3>
+        <p>
+            Begin by launching <code>nano</code> to create a new script file named <code>monitor.ps1</code>. 
+            Nano opens a blank editor where you can begin writing your PowerShell code.
+        </p>
+        <div class="img-block">
+            <div class="img-label">Step 1</div>
+            <img src="/Images/monitor1.png" alt="Opening nano and creating PowerShell script">
+        </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+        <h3>Step 2 — Script Metadata & OS Detection</h3>
+        <p>
+            The script begins by defining metadata such as author and version, followed by logic 
+            that determines whether the script is running on Windows or Linux. This allows PowerShell
+            to handle each operating system appropriately.
+        </p>
+        <div class="img-block">
+            <div class="img-label">Step 2</div>
+            <img src="/Images/monitor2.png" alt="PowerShell metadata and OS detection">
+        </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+        <h3>Step 3 — Windows Branch: CPU, Memory, Disk & Network</h3>
+        <p>
+            When Windows is detected, the script gathers system metrics using CIM queries. 
+            This includes CPU load, total and free memory, disk statistics, and IPv4 network information.
+        </p>
+        <div class="img-block">
+            <div class="img-label">Step 3</div>
+            <img src="/Images/monitor3.png" alt="Windows monitoring branch CPU memory disk network">
+        </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step">
+        <h3>Step 4 — Completing Windows Branch: Network & Uptime</h3>
+        <p>
+            Additional Windows metrics include uptime calculations using 
+            <code>Win32_OperatingSystem</code>. These values help build a complete system report.
+        </p>
+        <div class="img-block">
+            <div class="img-label">Step 4</div>
+            <img src="/Images/monitor4.png" alt="Windows uptime and network code">
+        </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step">
+        <h3>Step 5 — Linux Branch: CPU, Memory & Disk Metrics</h3>
+        <p>
+            In Linux environments, CPU usage is obtained through <code>mpstat</code> or <code>/proc/stat</code>, 
+            memory via <code>free -m</code>, and disk usage through <code>df -h</code>.
+        </p>
+        <div class="img-block">
+            <div class="img-label">Step 5</div>
+            <img src="/Images/monitor5.png" alt="Linux CPU memory disk functions">
+        </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="step">
+        <h3>Step 6 — Linux Branch: Network & Uptime Collection</h3>
+        <p>
+            Linux network information is collected using <code>hostname -I</code>, and uptime via 
+            <code>uptime -p</code>. This brings the Linux monitoring section to completion.
+        </p>
+        <div class="img-block">
+            <div class="img-label">Step 6</div>
+            <img src="/Images/monitor6.png" alt="Linux network and uptime code">
+        </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="step">
+        <h3>Step 7 — Final Report Creation & Export</h3>
+        <p>
+            Both Windows and Linux branches feed into a unified output object. 
+            The script generates an <code>output</code> directory and exports system information to 
+            <strong>JSON</strong> and <strong>CSV</strong>. A readable summary is printed to the terminal.
+        </p>
+        <div class="img-block">
+            <div class="img-label">Step 7</div>
+            <img src="/Images/monitor7.png" alt="Final report building and export">
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-buttons">
+        <a href="system-process-management.html">← Previous: System & Process Management</a>
+        <a href="cross-platform-os-detection.html">Next: Cross-Platform OS Detection →</a>
+    </div>
+
+</section>
+
+<footer>
+    © 2025 Mark Thompson · MTPortfolio
+</footer>
+
+<!-- Zoom Modal -->
+<div class="zoom-modal" id="zoomModal">
+    <img id="zoomImg" src="" alt="">
+</div>
+
+<script>
+    const modal = document.getElementById("zoomModal");
+    const zoomImg = document.getElementById("zoomImg");
+
+    document.querySelectorAll(".img-block img").forEach(img => {
+        img.addEventListener("click", () => {
+            zoomImg.src = img.src;
+            modal.style.display = "flex";
+        });
+    });
+
+    modal.addEventListener("click", () => {
+        modal.style.display = "none";
+        zoomImg.src = "";
+    });
+</script>
+
+</body>
+</html>
 
