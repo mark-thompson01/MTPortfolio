@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Running PowerShell on Ubuntu · Mark Thompson Portfolio</title>
+  <meta name="description" content="How to install and run PowerShell on Ubuntu 24.04, explore core cmdlets, manage files and processes, and begin scripting inside the Linux terminal." />
+
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:18px;
+      margin-top:16px;
+    }
+
+    /* Image wrapper */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:12px auto;
+      width:max-content;
+      max-width:100%;
+    }
+    .figure img{
+      display:block;
+      max-width:100%;
+      height:auto;
+    }
+
+    .zoomable{cursor:zoom-in}
+    .zoomable:hover{filter:brightness(1.03)}
+
+    /* Lightbox */
+    .zb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999}
+    .zb-overlay.is-open{display:flex}
+    .zb-stage{position:relative;max-width:95vw;max-height:92vh;overflow:hidden}
+    .zb-img{user-select:none;pointer-events:none;transform-origin:0 0;will-change:transform}
+    .zb-close{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;color:#cfd3e6;padding:8px 10px;border-radius:10px;font-size:14px}
+    .zb-hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);color:#cfd3e6;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;padding:6px 10px;border-radius:999px;font-size:12px}
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="topnav">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs" class="active">Blog</a>
+  </nav>
+
+  <!-- Breadcrumb -->
+  <div class="crumbs">
+    <a href="/MTPortfolio/Blogs">Blog</a> · <span>Running PowerShell on Ubuntu</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Running PowerShell on Ubuntu</h1>
+    <p class="lead">
+      Exploring how to install PowerShell on Ubuntu 24.04, launch <code>pwsh</code>, run essential cmdlets, and begin scripting in a cross-platform environment.
+    </p>
+  </header>
+
+  <!-- INTRO -->
+  <section class="card">
+    <p>
+      One of the most interesting things with PowerShell’s growth in the last decade has been the development of the <strong>.NET Core</strong> framework, allowing PowerShell to run cross-platform and be installed on Linux and macOS systems.
+    </p>
+    <p>
+      This page walks through the steps for installing PowerShell on Ubuntu 24.04, launching <code>pwsh</code> in the terminal, and briefly exploring the PowerShell experience inside a Linux environment.
+    </p>
+  </section>
+
+  <!-- ORDER OF OPERATION -->
+  <section class="card">
+    <h2>Order of Operation</h2>
+    <ol>
+      <li>Download and install PowerShell on Ubuntu</li>
+      <li>Launch <code>pwsh</code> — explore with some cmdlets</li>
+      <li>File & Directory Management</li>
+      <li>System & Process Management</li>
+      <li>PowerShell scripting via Nano</li>
+      <li>Creating and executing a cross-platform OS detection script</li>
+    </ol>
+
+    <p style="color:var(--muted); margin-top:10px;">
+      Each section will become its own dedicated sub-page in this series.
+    </p>
+  </section>
+
+  <p><a href="../index.html">Back to Home</a></p>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- LIGHTBOX SCRIPT -->
+<script>
+  const allImgs = Array.from(document.querySelectorAll('img'));
+  const zoomImgs = allImgs.filter(img => !img.closest('header'));
+  zoomImgs.forEach(img => img.classList.add('zoomable'));
+
+  const overlay = document.createElement('div');
+  overlay.className = 'zb-overlay';
+  overlay.innerHTML = `
+    <button class="zb-close">Close</button>
+    <div class="zb-stage"><img class="zb-img" /></div>
+    <div class="zb-hint">Scroll to zoom · Drag to pan · Esc to close</div>
+  `;
+  document.body.appendChild(overlay);
+
+  const stage = overlay.querySelector('.zb-stage');
+  const zimg  = overlay.querySelector('.zb-img');
+  const closeBtn = overlay.querySelector('.zb-close');
+
+  let scale = 1, originX = 0, originY = 0, startX = 0, startY = 0, panning = false;
+
+  function applyTransform(){
+    zimg.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+  }
+
+  zoomImgs.forEach(img => {
+    img.addEventListener('click', () => {
+      zimg.src = img.currentSrc || img.src;
+      scale = 1; originX = 0; originY = 0;
+      overlay.classList.add('is-open');
+      applyTransform();
+    });
+  });
+
+  closeBtn.onclick = () => overlay.classList.remove('is-open');
+  overlay.onclick = e => { if (e.target === overlay) overlay.classList.remove('is-open'); };
+  window.onkeydown = e => { if (e.key === 'Escape') overlay.classList.remove('is-open'); };
+
+  stage.onwheel = e => {
+    e.preventDefault();
+    const rect = stage.getBoundingClientRect();
+    const mx = e.clientX - rect.left - originX;
+    const my = e.clientY - rect.top  - originY;
+    const delta = -Math.sign(e.deltaY) * 0.15;
+    const newScale = Math.min(5, Math.max(1, scale + delta));
+    const factor = newScale / scale;
+    originX -= mx * (factor - 1);
+    originY -= my * (factor - 1);
+    scale = newScale;
+    applyTransform();
+  };
+
+  stage.onmousedown = e => {
+    if (scale <= 1) return;
+    panning = true;
+    startX = e.clientX - originX;
+    startY = e.clientY - originY;
+  };
+  window.onmousemove = e => {
+    if (!panning) return;
+    originX = e.clientX - startX;
+    originY = e.clientY - startY;
+    applyTransform();
+  };
+  window.onmouseup = () => panning = false;
+</script>
+
+</body>
+</html>
