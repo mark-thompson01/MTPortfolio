@@ -1,1 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Launch pwsh & Explore Cmdlets · Mark Thompson Portfolio</title>
+  <meta name="description" content="Learn how to launch PowerShell on Ubuntu and explore essential cmdlets such as Get-Item, Get-Process, and pipeline filtering." />
+
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:20px;font-weight:700}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px;
+    }
+
+    .figure{
+      border:1px solid var(--card-border);border-radius:12px;background:#0e1220;
+      padding:8px;margin:12px auto;width:max-content;max-width:100%;
+    }
+    .figure img{
+      display:block;max-width:100%;height:auto;
+    }
+
+    .zoomable{cursor:zoom-in}
+    .zoomable:hover{filter:brightness(1.03)}
+
+    .zb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;
+      align-items:center;justify-content:center;z-index:9999}
+    .zb-overlay.is-open{display:flex}
+    .zb-stage{position:relative;max-width:95vw;max-height:92vh;overflow:hidden}
+    .zb-img{user-select:none;pointer-events:none;transform-origin:0 0}
+    .zb-close{
+      position:fixed;top:14px;right:14px;background:rgba(255,255,255,.08);
+      border:1px solid #2a2f3f;color:#cfd3e6;padding:8px 10px;border-radius:10px;font-size:14px
+    }
+    .zb-hint{
+      position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
+      color:#cfd3e6;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;
+      padding:6px 10px;border-radius:999px;font-size:12px
+    }
+
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <!-- NAV -->
+  <nav class="topnav">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs" class="active">Blog</a>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="crumbs">
+    <a href="/MTPortfolio/Blogs">Blog</a> · 
+    <a href="/MTPortfolio/Blogs/PowerShell-Ubuntu/">Running PowerShell on Ubuntu</a> · 
+    <span>Launch & Explore</span>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <h1>Launch <code>pwsh</code> & Explore Some Cmdlets</h1>
+    <p class="lead">
+      PowerShell is now installed — this section demonstrates how to launch <code>pwsh</code> and begin exploring the PowerShell environment using common cmdlets and pipeline operations.
+    </p>
+  </header>
+
+  <!-- INTRO -->
+  <section class="card">
+    <p>
+      After installing PowerShell, you can launch it directly from the Ubuntu terminal by typing <code>pwsh</code>. This opens a PowerShell session running on .NET Core, complete with full pipeline support, object-based output, and cross-platform compatibility.
+    </p>
+    <p>
+      The following examples illustrate how PowerShell interacts with the Linux filesystem, retrieves process information, and searches output using both PowerShell and native Unix-style commands.
+    </p>
+  </section>
+
+  <!-- STEPS -->
+  <section class="card">
+
+    <h3>Step 1 — Launch PowerShell using <code>pwsh</code></h3>
+    <p>
+      PowerShell is started on Ubuntu by typing <code>pwsh</code> into the terminal.  
+      Once launched, the banner displays the installed PowerShell version and the environment switches into a PowerShell session.
+    </p>
+    <p>
+      In this example, the user runs:
+    </p>
+    <ul>
+      <li><code>Get-Item /var/log | Select-Object Name</code> — retrieves directory information as a PowerShell object</li>
+      <li><code>Get-Process | Sort-Object CPU -Descending | Select-Object -First 5</code> — lists the top CPU-consuming processes</li>
+    </ul>
+    <div class="figure">
+      <img src="/Images/Explore1.png" alt="Launching PowerShell and running cmdlets" />
+    </div>
+
+    <h3>Step 2 — Searching for processes using native Linux commands</h3>
+    <p>
+      PowerShell supports execution of native Linux commands directly inside the session.  
+      In this example, a standard Linux pipeline is used:
+    </p>
+    <pre><code>ps -aux | grep cron</code></pre>
+    <p>
+      This searches for any running <strong>cron</strong> processes and outputs matching results.  
+      This demonstrates PowerShell’s hybrid flexibility: you can seamlessly mix PowerShell cmdlets with traditional Unix commands in the same terminal session.
+    </p>
+    <div class="figure">
+      <img src="/Images/Explore2.png" alt="Using ps aux and grep inside PowerShell" />
+    </div>
+
+  </section>
+
+  <p><a href="../index.html">← Back to Running PowerShell on Ubuntu</a></p>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- LIGHTBOX SCRIPT -->
+<script>
+  const allImgs = Array.from(document.querySelectorAll('img'));
+  const zoomImgs = allImgs.filter(img => !img.closest('header'));
+  zoomImgs.forEach(img => img.classList.add('zoomable'));
+
+  const overlay = document.createElement('div');
+  overlay.className = 'zb-overlay';
+  overlay.innerHTML = `
+    <button class="zb-close">Close</button>
+    <div class="zb-stage"><img class="zb-img" /></div>
+    <div class="zb-hint">Scroll to zoom · Drag to pan · Esc to close</div>
+  `;
+  document.body.appendChild(overlay);
+
+  const stage = overlay.querySelector('.zb-stage');
+  const zimg = overlay.querySelector('.zb-img');
+
+  let scale = 1, originX = 0, originY = 0, startX = 0, startY = 0, panning = false;
+
+  function applyTransform(){
+    zimg.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
+  }
+
+  zoomImgs.forEach(img => {
+    img.addEventListener('click', () => {
+      zimg.src = img.src;
+      scale = 1; originX = 0; originY = 0;
+      overlay.classList.add('is-open');
+      applyTransform();
+    });
+  });
+
+  document.querySelector('.zb-close').onclick = () => overlay.classList.remove('is-open');
+  overlay.onclick = e => { if (e.target === overlay) overlay.classList.remove('is-open'); };
+  window.onkeydown = e => { if (e.key === 'Escape') overlay.classList.remove('is-open'); };
+
+  stage.onwheel = e => {
+    e.preventDefault();
+    const rect = stage.getBoundingClientRect();
+    const mx = e.clientX - rect.left - originX;
+    const my = e.clientY - rect.top - originY;
+    const delta = -Math.sign(e.deltaY) * 0.15;
+    const newScale = Math.min(5, Math.max(1, scale + delta));
+    const factor = newScale / scale;
+    originX -= mx * (factor - 1);
+    originY -= my * (factor - 1);
+    scale = newScale;
+    applyTransform();
+  };
+
+  stage.onmousedown = e => {
+    if (scale <= 1) return;
+    panning = true;
+    startX = e.clientX - originX;
+    startY = e.clientY - originY;
+  };
+  window.onmousemove = e => {
+    if (!panning) return;
+    originX = e.clientX - startX;
+    originY = e.clientY - startY;
+    applyTransform();
+  };
+  window.onmouseup = () => panning = false;
+</script>
+
+</body>
+</html>
 
