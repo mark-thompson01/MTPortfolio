@@ -24,8 +24,12 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
+    /* NAVIGATION */
     .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a{
+      color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;
+      border:1px solid transparent
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -35,45 +39,61 @@
 
     h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
     h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:20px;font-weight:700}
+    h3{margin:22px 0 10px;font-size:20px;font-weight:700}
     .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
+    /* CARD */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:18px;
-      margin-top:16px;
+      padding:20px;
+      margin-top:20px;
     }
 
+    /* FIGURES — now compact */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:12px auto;
+      margin:14px auto;
       width:max-content;
       max-width:100%;
     }
     .figure img{
       display:block;
-      max-width:100%;
+      max-width:650px;   /* OPTION A — smaller scroll-friendly images */
+      width:100%;
       height:auto;
     }
 
     .zoomable{cursor:zoom-in}
-    .zoomable:hover{filter:brightness(1.03)}
+    .zoomable:hover{filter:brightness(1.05)}
 
-    .zb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:9999}
+    /* LIGHTBOX */
+    .zb-overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,.85);
+      display:none;align-items:center;justify-content:center;z-index:9999
+    }
     .zb-overlay.is-open{display:flex}
     .zb-stage{position:relative;max-width:95vw;max-height:92vh;overflow:hidden}
     .zb-img{user-select:none;pointer-events:none;transform-origin:0 0}
-    .zb-close{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;color:#cfd3e6;padding:8px 10px;border-radius:10px;font-size:14px}
-    .zb-hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);color:#cfd3e6;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;padding:6px 10px;border-radius:999px;font-size:12px}
+    .zb-close{
+      position:fixed;top:14px;right:14px;background:rgba(255,255,255,.08);
+      border:1px solid #2a2f3f;color:#cfd3e6;padding:8px 10px;border-radius:10px;font-size:14px
+    }
+    .zb-hint{
+      position:fixed;bottom:14px;left:50%;transform:translateX(-50%);
+      color:#cfd3e6;background:rgba(255,255,255,.08);
+      border:1px solid #2a2f3f;padding:6px 10px;border-radius:999px;font-size:12px
+    }
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;
+      color:var(--muted);font-size:14px}
+    footer a{color:var(--muted)}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 
@@ -107,105 +127,75 @@
   <!-- INTRO -->
   <section class="card">
     <p>
-      PowerShell is fully cross-platform thanks to its .NET Core foundation. Installing PowerShell on Ubuntu allows Linux users to leverage familiar cmdlets, automation, and scripting capabilities directly within the terminal environment.
+      PowerShell is fully cross-platform thanks to its .NET Core foundation. Installing it on Ubuntu allows Linux users to leverage automation, scripting, and rich command-line tooling directly within the terminal.
     </p>
     <p>
-      The following steps walk through updating your system, installing prerequisites, importing the Microsoft GPG key, enabling the Microsoft repository, and installing the <code>powershell</code> package.
+      The steps below walk through updating your system, installing prerequisites, importing Microsoft's signing key, enabling the repository, and installing PowerShell.
     </p>
   </section>
 
-  <!-- STEPS CARD -->
+  <!-- STEPS -->
   <section class="card">
 
-    <!-- Step 1 -->
     <h3>Step 1 — Update and Refresh Package Index</h3>
     <p>
-      Before installing new software, it’s best practice to update Ubuntu’s package index. This ensures the package manager has the latest metadata and prevents version conflicts when adding new repositories.
+      Updating ensures Ubuntu retrieves the latest metadata for available packages and prevents conflicts when adding new repositories.
     </p>
-    <div class="figure">
-      <img src="Images/Setup1.png" alt="Setup step 1" />
-    </div>
+    <div class="figure"><img src="Images/Setup1.png" alt=""></div>
 
-    <!-- Step 2 -->
     <h3>Step 2 — Verify System Information (Optional)</h3>
     <p>
-      Some installations depend on release codename or architecture. Checking system details provides clarity and ensures commands are compatible with your Ubuntu version.
+      Checking Ubuntu’s codename and architecture helps ensure repository commands match your system’s version.
     </p>
-    <div class="figure">
-      <img src="Images/Setup2.png" alt="Setup step 2" />
-    </div>
+    <div class="figure"><img src="Images/Setup2.png" alt=""></div>
 
-    <!-- Step 3 -->
     <h3>Step 3 — Prepare the System</h3>
     <p>
-      PowerShell installation requires certain prerequisite packages such as <code>curl</code>, <code>apt-transport-https</code>, and certificate utilities. These enable secure communication with Microsoft's package servers.
+      PowerShell installation requires several tools such as <code>curl</code> and certificate utilities to securely fetch and validate Microsoft’s package signing key.
     </p>
-    <div class="figure">
-      <img src="Images/Setup3.png" alt="Setup step 3" />
-    </div>
+    <div class="figure"><img src="Images/Setup3.png" alt=""></div>
 
-    <!-- Step 4 -->
     <h3>Step 4 — Install Prerequisite Packages</h3>
     <p>
-      This command installs all necessary tools for securely downloading and validating Microsoft’s signing key. These prerequisites ensure apt can trust and process packages from external repositories.
+      This command installs the necessary dependencies that allow apt to securely communicate with external repositories.
     </p>
-    <div class="figure">
-      <img src="Images/Setup4.png" alt="Setup step 4" />
-    </div>
+    <div class="figure"><img src="Images/Setup4.png" alt=""></div>
 
-    <!-- Step 5 -->
     <h3>Step 5 — Confirm Prerequisites were Installed</h3>
     <p>
-      Ubuntu confirms the installation of required packages. If all dependencies are satisfied, you’re ready to continue importing the Microsoft signing key.
+      Ubuntu validates that all required packages are installed and ready for repository configuration.
     </p>
-    <div class="figure">
-      <img src="Images/Setup5.png" alt="Setup step 5" />
-    </div>
+    <div class="figure"><img src="Images/Setup5.png" alt=""></div>
 
-    <!-- Step 6 -->
     <h3>Step 6 — Import Microsoft’s GPG Key</h3>
     <p>
-      Microsoft signs all packages with a GPG key. Importing this key allows Ubuntu to verify that PowerShell packages come from a trusted and authenticated source.
+      Microsoft signs all official Linux packages. Importing the GPG key ensures Ubuntu only installs authentic, verified PowerShell builds.
     </p>
-    <div class="figure">
-      <img src="Images/Setup6 - Prerequites.png" alt="Setup step 6 prerequisites" />
-    </div>
+    <div class="figure"><img src="Images/Setup6 - Prerequites.png" alt=""></div>
 
-    <!-- Step 7 -->
     <h3>Step 7 — Add the Microsoft Repository</h3>
     <p>
-      After the signing key is installed, the Microsoft repository must be added to Ubuntu's sources list. This step enables <code>apt</code> to fetch PowerShell directly from Microsoft’s servers.
+      This adds the official Microsoft apt repository, enabling PowerShell installation through standard package management.
     </p>
-    <div class="figure">
-      <img src="Images/Setup7 - Import Key.png" alt="Import Microsoft GPG key" />
-    </div>
+    <div class="figure"><img src="Images/Setup7 - Import Key.png" alt=""></div>
 
-    <!-- Step 8 -->
     <h3>Step 8 — Update Package Index Again</h3>
     <p>
-      Once the new repository is added, apt needs to be refreshed to recognize available PowerShell packages from Microsoft’s repo.
+      After adding the new repository, apt must refresh its index to detect available Microsoft packages.
     </p>
-    <div class="figure">
-      <img src="Images/Setup8.png" alt="Setup step 8" />
-    </div>
+    <div class="figure"><img src="Images/Setup8.png" alt=""></div>
 
-    <!-- Step 9 -->
     <h3>Step 9 — Install PowerShell</h3>
     <p>
-      The PowerShell package can now be installed normally using apt. This downloads the latest stable version for Ubuntu and registers the <code>pwsh</code> interpreter.
+      PowerShell can now be installed using apt, which downloads the latest stable Linux build from Microsoft.
     </p>
-    <div class="figure">
-      <img src="Images/Setup9.png" alt="Setup step 9" />
-    </div>
+    <div class="figure"><img src="Images/Setup9.png" alt=""></div>
 
-    <!-- Step 10 -->
     <h3>Step 10 — Verify Installation</h3>
     <p>
-      Running <code>pwsh --version</code> confirms a successful installation. You can now launch PowerShell on Ubuntu by typing <code>pwsh</code> into the terminal.
+      Running <code>pwsh --version</code> confirms a successful installation. PowerShell can now be launched by typing <code>pwsh</code>.
     </p>
-    <div class="figure">
-      <img src="Images/Setup10.png" alt="">
-    </div>
+    <div class="figure"><img src="Images/Setup10.png" alt=""></div>
 
   </section>
 
@@ -290,4 +280,3 @@
 
 </body>
 </html>
-
