@@ -195,9 +195,9 @@
     </div>
   </section>
 
-  <!-- STEP 5 -->
+  <!-- STEP 6 -->
   <section class="card">
-     <h2>Step 6 — View Log File Contents (<code>cat</code> / <code>Get-Content</code>)</h2>
+     <h2>Step 5 — View Log File Contents (<code>cat</code> / <code>Get-Content</code>)</h2>
     <p>
       PowerShell supports both <code>cat</code> (alias) and <code>Get-Content</code> for reading files.
       This example shows examining the <strong>vbox-setup.log</strong> file to verify VirtualBox module builds.
@@ -209,7 +209,12 @@
 
   <!-- STEP 6 -->
   <section class="card">
-    <h2>Step 6 — View Log File Contents (<code>cat</code> / <code>Get-Content</code>)</h2>
+  <h2>Step 6 — Create Directories (<code>mkdir</code> / <code>New-Item</code>)</h2>
+    <p>
+      Directories can be created using either <code>mkdir</code> or the more explicit PowerShell cmdlet:
+      <code>New-Item -ItemType Directory</code>.  
+      In this step, two test directories (<strong>Test1</strong> and <strong>Test2</strong>) are created to demonstrate both methods.
+    </p>
  
     <div class="figure">
       <img src="Images/File6.png" alt="PowerShell cat Get-Content example" class="zoomable" />
@@ -218,12 +223,7 @@
 
   <!-- STEP 7 -->
   <section class="card">
-    <h2>Step 7 — Create Directories (<code>mkdir</code> / <code>New-Item</code>)</h2>
-    <p>
-      Directories can be created using either <code>mkdir</code> or the more explicit PowerShell cmdlet:
-      <code>New-Item -ItemType Directory</code>.  
-      In this step, two test directories (<strong>Test1</strong> and <strong>Test2</strong>) are created to demonstrate both methods.
-    </p>
+  
     <div class="figure">
       <img src="Images/File7.png" alt="PowerShell mkdir New-Item Directory example" class="zoomable" />
     </div>
