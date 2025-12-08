@@ -152,7 +152,7 @@
 
   <!-- STEP 1 -->
   <section class="card">
-    <h2>Step 1 — List Directory Contents (<code>ls</code>) and (<code>Get-ChildItem</code>)</h2>
+    <h2>Step 1 — List Directory Contents (<code>ls</code> and <code>Get-ChildItem</code>)</h2>
      <p>
       PowerShell supports both the traditional UNIX-style <code>ls</code> alias and the native cmdlet <code>Get-ChildItem</code>.
       The output displays directory contents, including file metadata such as permissions, ownership, timestamps, and file sizes.
@@ -164,7 +164,7 @@
 
   <!-- STEP 2 -->
   <section class="card">
-    <h2>Step 2 — Change Directories (<code>cd</code>) / (<code>Set-Location</code>)</h2>
+    <h2>Step 2 — Change Directories (<code>cd</code> / <code>Set-Location</code>)</h2>
     <p>
       PowerShell provides multiple ways to change directories.  
       Whether using <code>cd</code> or <code>Set-Location</code>, both commands update your working path just as they would in Bash.
@@ -177,7 +177,7 @@
 
   <!-- STEP 3 -->
   <section class="card">
-    <h2>Step 3 — Verify Current Location (<code>pwd</code>) / <code>Get-Location</code>)</h2>
+    <h2>Step 3 — Verify Current Location (<code>pwd</code> / <code>Get-Location</code>)</h2>
 
     <div class="figure">
       <img src="Images/File3.png" alt="PowerShell cd Set-Location example" class="zoomable" />
@@ -209,7 +209,7 @@
 
   <!-- STEP 6 -->
   <section class="card">
-  <h2>Step 6 — Create Directories (<code>mkdir</code>) / <code>New-Item</code>)</h2>
+  <h2>Step 6 — Create Directories (<code>mkdir</code> / <code>New-Item</code>)</h2>
     <p>
       Directories can be created using either <code>mkdir</code> or the more explicit PowerShell cmdlet:
       <code>New-Item -ItemType Directory</code>.  
@@ -249,21 +249,13 @@
 
   <!-- STEP 9 -->
   <section class="card">
-    <div class="figure">
-      <img src="Images/File9.png" alt="PowerShell cp Copy-Item example" class="zoomable" />
-    </div>
-  </section>
-
-  <!-- STEP 10 -->
-  <section class="card">
-    <h2>Step 10 — Create Files (<code>touch</code> / <code>New-Item -ItemType File</code>)</h2>
+     <h2>Step 9 — Create Files (<code>touch</code> / <code>New-Item -ItemType File</code>)</h2>
     <p>
       PowerShell supports both <code>touch</code> (alias) and explicit file creation with:
       <code>New-Item -ItemType File</code>.  
-      This step shows creating two new text files inside the <strong>Linux-Commands</strong> directory.
-    </p>
+      This step shows creating tw
     <div class="figure">
-      <img src="Images/File10.png" alt="PowerShell file creation example" class="zoomable" />
+      <img src="Images/File9.png" alt="PowerShell cp Copy-Item example" class="zoomable" />
     </div>
   </section>
 
