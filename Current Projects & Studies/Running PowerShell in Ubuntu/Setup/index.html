@@ -139,61 +139,47 @@
   <!-- STEPS -->
   <section class="card">
 
-    <h3>Step 1 — Update and Refresh Package Index</h3>
+    <h3>Step 1 — Update and Refresh Package Index </h3>
     <p>
       Updating ensures Ubuntu retrieves the latest metadata for available packages and prevents conflicts when adding new repositories.
     </p>
     <div class="figure"><img src="Images/Setup1.png" alt=""></div>
 
-    <h3>Step 2 — Verify System Information (Optional)</h3>
-    <p>
-      Checking Ubuntu’s codename and architecture helps ensure repository commands match your system’s version.
-    </p>
     <div class="figure"><img src="Images/Setup2.png" alt=""></div>
 
-    <h3>Step 3 — Prepare the System</h3>
-    <p>
-      PowerShell installation requires several tools such as <code>curl</code> and certificate utilities to securely fetch and validate Microsoft’s package signing key.
-    </p>
+    <h3>Step 2 — Enter Y to confirm upgrade to run</h3>
+
     <div class="figure"><img src="Images/Setup3.png" alt=""></div>
 
-    <h3>Step 4 — Install Prerequisite Packages</h3>
-    <p>
-      This command installs the necessary dependencies that allow apt to securely communicate with external repositories.
-    </p>
     <div class="figure"><img src="Images/Setup4.png" alt=""></div>
 
-    <h3>Step 5 — Confirm Prerequisites were Installed</h3>
-    <p>
-      Ubuntu validates that all required packages are installed and ready for repository configuration.
-    </p>
     <div class="figure"><img src="Images/Setup5.png" alt=""></div>
 
-    <h3>Step 6 — Import Microsoft’s GPG Key</h3>
+    <h3>Step 3 — Import Microsoft’s GPG Key</h3>
     <p>
       Microsoft signs all official Linux packages. Importing the GPG key ensures Ubuntu only installs authentic, verified PowerShell builds.
     </p>
     <div class="figure"><img src="Images/Setup6 - Prerequites.png" alt=""></div>
 
-    <h3>Step 7 — Add the Microsoft Repository</h3>
+    <h3>Step 4 — Add the Microsoft Repository</h3>
     <p>
       This adds the official Microsoft apt repository, enabling PowerShell installation through standard package management.
     </p>
     <div class="figure"><img src="Images/Setup7 - Import Key.png" alt=""></div>
 
-    <h3>Step 8 — Update Package Index Again</h3>
+    <h3>Step 5 — Update Package Index Again</h3>
     <p>
       After adding the new repository, apt must refresh its index to detect available Microsoft packages.
     </p>
     <div class="figure"><img src="Images/Setup8.png" alt=""></div>
 
-    <h3>Step 9 — Install PowerShell</h3>
+    <h3>Step 6 — Install PowerShell</h3>
     <p>
       PowerShell can now be installed using apt, which downloads the latest stable Linux build from Microsoft.
     </p>
     <div class="figure"><img src="Images/Setup9.png" alt=""></div>
 
-    <h3>Step 10 — Verify Installation</h3>
+    <h3>Step 7 — Verify Installation</h3>
     <p>
       Running <code>pwsh --version</code> confirms a successful installation. PowerShell can now be launched by typing <code>pwsh</code>.
     </p>
