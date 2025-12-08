@@ -164,7 +164,7 @@
 
   <!-- STEP 2 -->
   <section class="card">
-    <h2>Step 2 — Change Directories (<code>cd</code> / (<code>Set-Location</code>)</h2>
+    <h2>Step 2 — Change Directories (<code>cd</code>) / (<code>Set-Location</code>)</h2>
     <p>
       PowerShell provides multiple ways to change directories.  
       Whether using <code>cd</code> or <code>Set-Location</code>, both commands update your working path just as they would in Bash.
@@ -177,7 +177,7 @@
 
   <!-- STEP 3 -->
   <section class="card">
-    <h2>Step 3 — Verify Current Location (<code>pwd</code> / <code>Get-Location</code>)</h2>
+    <h2>Step 3 — Verify Current Location (<code>pwd</code>) / <code>Get-Location</code>)</h2>
 
     <div class="figure">
       <img src="Images/File3.png" alt="PowerShell cd Set-Location example" class="zoomable" />
@@ -209,13 +209,12 @@
 
   <!-- STEP 6 -->
   <section class="card">
-  <h2>Step 6 — Create Directories (<code>mkdir</code> / <code>New-Item</code>)</h2>
+  <h2>Step 6 — Create Directories (<code>mkdir</code>) / <code>New-Item</code>)</h2>
     <p>
       Directories can be created using either <code>mkdir</code> or the more explicit PowerShell cmdlet:
       <code>New-Item -ItemType Directory</code>.  
       In this step, two test directories (<strong>Test1</strong> and <strong>Test2</strong>) are created to demonstrate both methods.
     </p>
- 
     <div class="figure">
       <img src="Images/File6.png" alt="PowerShell cat Get-Content example" class="zoomable" />
     </div>
@@ -223,6 +222,12 @@
 
   <!-- STEP 7 -->
   <section class="card">
+    <h2>Step 7 — Remove Directories (<code>rm</code> / <code>Remove-Item</code>)</h2>
+    <p>
+      PowerShell on Linux supports UNIX-style removal via <code>rm</code>, as well as structured deletion through
+      <code>Remove-Item</code>.  
+      This example removes the earlier test directories with both methods.
+    </p>
   
     <div class="figure">
       <img src="Images/File7.png" alt="PowerShell mkdir New-Item Directory example" class="zoomable" />
@@ -231,11 +236,11 @@
 
   <!-- STEP 8 -->
   <section class="card">
-    <h2>Step 8 — Remove Directories (<code>rm</code> / <code>Remove-Item</code>)</h2>
+       <h2>Step 8 — Copy Files (<code>cp</code>)</h2>
     <p>
-      PowerShell on Linux supports UNIX-style removal via <code>rm</code>, as well as structured deletion through
-      <code>Remove-Item</code>.  
-      This example removes the earlier test directories with both methods.
+      File copying works exactly as expected on Linux.  
+      The <code>cp</code> alias maps directly to PowerShell’s <code>Copy-Item</code>, allowing files to be duplicated across directories.
+      This step shows copying multiple <strong>Linux-Commands</strong> files into a new directory.
     </p>
     <div class="figure">
       <img src="Images/File8.png" alt="PowerShell rm Remove-Item example" class="zoomable" />
@@ -244,12 +249,6 @@
 
   <!-- STEP 9 -->
   <section class="card">
-    <h2>Step 9 — Copy Files (<code>cp</code>)</h2>
-    <p>
-      File copying works exactly as expected on Linux.  
-      The <code>cp</code> alias maps directly to PowerShell’s <code>Copy-Item</code>, allowing files to be duplicated across directories.
-      This step shows copying multiple <strong>Linux-Commands</strong> files into a new directory.
-    </p>
     <div class="figure">
       <img src="Images/File9.png" alt="PowerShell cp Copy-Item example" class="zoomable" />
     </div>
