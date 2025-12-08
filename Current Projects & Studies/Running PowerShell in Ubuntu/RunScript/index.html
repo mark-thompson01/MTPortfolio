@@ -5,196 +5,246 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Running the Cross-Platform System Monitoring Script · Mark Thompson Portfolio</title>
 
-    <style>
-    :root{
-      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
-      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;
-    }
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
-      background:
-        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
-        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
-        linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6;
-    }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+<style>
+:root{
+  --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+  --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:18px;
+}
 
-    .topnav{margin-bottom:18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
-    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
-    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+html,body{height:100%}
+body{
+  margin:0; color:var(--text);
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+  background:
+    radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+    radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  line-height:1.6;
+}
 
-    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
-    .crumbs a{color:var(--muted);text-decoration:none}
-    .crumbs a:hover{color:var(--text)}
+.wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    h1{font-size:clamp(26px,4vw,38px);font-weight:800;margin:8px 0 6px}
-    h2{margin-top:26px;font-size:22px}
-    h3{margin-top:20px;font-size:18px;font-weight:700}
-    a{color:var(--brand);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
+.topnav{margin-bottom:18px;display:flex;gap:14px;flex-wrap:wrap}
+.topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+.topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+.topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    .card{
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);
-      border-radius:var(--radius);
-      padding:22px;
-      margin-top:22px;
-      box-shadow:var(--shadow);
-    }
+.crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+.crumbs a{color:var(--muted);text-decoration:none}
+.crumbs a:hover{color:var(--text)}
 
-    .figure{
-      border:1px solid var(--card-border);
-      border-radius:12px;
-      background:#0e1220;
-      padding:8px;
-      margin:14px auto;
-      width:max-content;
-      max-width:100%;
-    }
-    .figure img{
-      display:block;
-      max-width:650px;
-      width:100%;
-      height:auto;
-    }
-    .zoomable{cursor:zoom-in}
-    .zoomable:hover{filter:brightness(1.04)}
+h1{font-size:clamp(26px,4vw,38px);font-weight:800;margin:8px 0 6px}
+h3{margin-top:22px;font-size:18px;font-weight:700}
 
-    footer{margin-top:40px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
-  </style>
+.lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
 
+/* ---- Image Blocks ---- */
+.img-block{
+  margin:20px 0;
+  text-align:center;
+}
 
+.img-label{
+  font-size:14px;
+  color:var(--muted);
+  margin-bottom:6px;
+}
+
+.figure{
+  border:1px solid var(--card-border);
+  border-radius:12px;
+  background:#0e1220;
+  padding:8px;
+  margin:0 auto;
+  width:max-content;
+  max-width:100%;
+}
+
+.figure img{
+  width:100%;
+  max-width:480px;   /* improved scrollability */
+  border-radius:8px;
+  cursor:zoom-in;
+  transition:.25s;
+}
+
+.figure img:hover{
+  filter:brightness(1.06);
+}
+
+/* ---- Zoom Modal ---- */
+.zoom-modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.8);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.zoom-modal img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:10px;
+  box-shadow:0 0 25px rgba(0,0,0,.6);
+  cursor:zoom-out;
+  animation:zoom .25s ease;
+}
+
+@keyframes zoom{
+  from{transform:scale(.6);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+footer{
+  margin-top:40px;
+  padding-top:20px;
+  border-top:1px solid #232a3a;
+  color:var(--muted);
+  font-size:14px;
+}
+footer a{color:var(--muted)}
+footer a:hover{color:var(--brand)}
+</style>
 </head>
+
 
 <body>
 <div class="wrap">
 
-    <!-- NAV -->
-  <nav class="topnav">
+<!-- NAV -->
+<nav class="topnav">
     <a href="/MTPortfolio/">Home</a>
     <a href="/MTPortfolio/Skills">Networking</a>
     <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows & Linux</a>
     <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
     <a href="/MTPortfolio/Blogs">Blog</a>
-  </nav>
+</nav>
 
-  <!-- Breadcrumb -->
-  <div class="crumbs">
-    <a href="../index.html">Running PowerShell on Ubuntu</a> ·
-    <span>System & Process Management</span>
-  </div>
+<!-- Breadcrumb -->
+<div class="crumbs">
+  <a href="../index.html">Running PowerShell on Ubuntu</a> ·
+  <span>System & Process Management</span>
+</div>
 
 
-    
-    <div class="section">
-        <h1>Running the Cross-Platform System Monitoring Script</h1>
-        <p>
-            This section demonstrates how to run the cross-platform system monitoring script written in PowerShell 7. 
-            The script collects CPU usage, memory statistics, disk usage, uptime, and network information across Linux and Windows.
-            Below is the full execution workflow, from opening the script in Nano to generating the JSON and CSV output reports.
-        </p>
+<h1>Running the Cross-Platform System Monitoring Script</h1>
+<p class="lead">
+This section demonstrates how to run your cross-platform system monitoring script in PowerShell 7 on Ubuntu.  
+You will see every step from invoking the script to verifying JSON/CSV output and reviewing stored reports.
+</p>
+
+
+<!-- STEP 1 -->
+<div class="step">
+    <h3>Step 1 — Opening the Script in Nano</h3>
+    <p>Use Nano to inspect or modify <code>monitor.ps1</code> before execution.</p>
+    <div class="img-block">
+        <div class="img-label">Step 1</div>
+        <div class="figure"><img src="Images/run1.png" alt=""></div>
     </div>
+</div>
 
-    <!-- STEP 1 -->
-    <div class="section">
-        <div class="step-label">Step 1 — Opening the Script in Nano</div>
-        <p>
-            The first step is to open <code>monitor.ps1</code> inside Nano so you can review or edit the script. 
-            Nano is a lightweight command-line text editor available on most Linux systems.
-        </p>
-        <div class="img-box"><img src="Images/run1.png" alt="Opening the script in Nano"></div>
+<!-- STEP 2 -->
+<div class="step">
+    <h3>Step 2 — Running the Script with PowerShell (pwsh)</h3>
+    <p>Execute the script using <code>pwsh ./monitor.ps1</code> to gather system metrics.</p>
+    <div class="img-block">
+        <div class="img-label">Step 2</div>
+        <div class="figure"><img src="Images/run2.png" alt=""></div>
     </div>
+</div>
 
-    <!-- STEP 2 -->
-    <div class="section">
-        <div class="step-label">Step 2 — Running the Script with PowerShell (pwsh)</div>
-        <p>
-            Once the script is ready, run it using <code>pwsh ./monitor.ps1</code>. 
-            PowerShell 7 allows cross-platform execution, meaning the same script runs on Linux, macOS, and Windows.
-        </p>
-        <div class="img-box"><img src="Images/run2.png" alt="Running the script"></div>
+<!-- STEP 3 -->
+<div class="step">
+    <h3>Step 3 — Script Output: System Monitoring Report</h3>
+    <p>
+        The script detects the OS platform and prints CPU, memory, disk, uptime,  
+        and network information to the terminal in a readable format.
+    </p>
+    <div class="img-block">
+        <div class="img-label">Step 3</div>
+        <div class="figure"><img src="Images/run3.png" alt=""></div>
     </div>
+</div>
 
-    <!-- STEP 3 -->
-    <div class="section">
-        <div class="step-label">Step 3 — Script Output: System Monitoring Report</div>
-        <p>
-            The script outputs a formatted system summary including CPU usage, memory consumption, disk utilization, 
-            your device's IP address, and system uptime.  
-            This step shows the script successfully detecting Linux as the OS and displaying your system metrics.
-        </p>
-        <div class="img-box"><img src="Images/run3.png" alt="System Monitoring Report Output"></div>
+<!-- STEP 4 -->
+<div class="step">
+    <h3>Step 4 — Running the Script Again for Fresh Data</h3>
+    <p>
+        Re-running the script produces a new snapshot of system performance,  
+        confirming dynamic, real-time data collection.
+    </p>
+    <div class="img-block">
+        <div class="img-label">Step 4</div>
+        <div class="figure"><img src="Images/run4.png" alt=""></div>
     </div>
+</div>
 
-    <!-- STEP 4 -->
-    <div class="section">
-        <div class="step-label">Step 4 — Running It Again to Generate Fresh Data</div>
-        <p>
-            Running the script again produces an updated snapshot of system performance.  
-            This confirms the script is functioning properly and dynamically collecting fresh system data on every run.
-        </p>
-        <div class="img-box"><img src="/Images/run4.png" alt="Second execution output"></div>
+<!-- STEP 5 -->
+<div class="step">
+    <h3>Step 5 — Navigating the Output Directory</h3>
+    <p>
+        The script writes each run to an <code>output</code> directory.  
+        This step confirms the directory exists and contains JSON/CSV files.
+    </p>
+    <div class="img-block">
+        <div class="img-label">Step 5</div>
+        <div class="figure"><img src="Images/run5.png" alt=""></div>
     </div>
+</div>
 
-    <!-- STEP 5 -->
-    <div class="section">
-        <div class="step-label">Step 5 — Navigating the Output Directory</div>
-        <p>
-            The script saves the JSON and CSV reports to the <code>output</code> directory.  
-            Here, we confirm the directory exists and contains the latest log files, each representing an execution of the script.
-        </p>
-        <div class="img-box"><img src="Images/run5.png" alt="Navigating output directory"></div>
+<!-- STEP 6 -->
+<div class="step">
+    <h3>Step 6 — Viewing Stored System Reports</h3>
+    <p>
+        Viewing CSV output demonstrates the serialized, structured system report  
+        generated on each execution.
+    </p>
+    <div class="img-block">
+        <div class="img-label">Step 6</div>
+        <div class="figure"><img src="Images/run6.png" alt=""></div>
     </div>
+</div>
 
-    <!-- STEP 6 -->
-    <div class="section">
-        <div class="step-label">Step 6 — Viewing Stored Reports</div>
-        <p>
-            The final step demonstrates viewing the generated reports.  
-            Using <code>cat</code> on a CSV output shows the system monitoring data serialized into a readable key/value format.
-        </p>
-        <div class="img-box"><img src="Images/run6.png" alt="Viewing CSV report"></div>
-    </div>
 
 <p><a href="../index.html">Back to Home</a></p>
 
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-    <div class="links">
-      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank">LinkedIn</a> ·
-      <a href="https://github.com/mark-thompson01" target="_blank">GitHub</a>
-    </div>
-  </footer>
+<footer>
+  <div>Mark Thompson · MTPortfolio</div>
+  <div class="links">
+    <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank">LinkedIn</a> ·
+    <a href="https://github.com/mark-thompson01" target="_blank">GitHub</a>
+  </div>
+</footer>
 
 </div>
- 
-    <div class="zoom-overlay" id="zoomOverlay">
-        <img id="zoomImage" />
-    </div>
 
-    <script>
-        const overlay = document.getElementById("zoomOverlay");
-        const zoomImg = document.getElementById("zoomImage");
+<!-- Zoom Modal -->
+<div class="zoom-modal" id="zoomModal">
+    <img id="zoomImg" src="" alt="">
+</div>
 
-        document.querySelectorAll(".img-box img").forEach(img => {
-            img.addEventListener("click", () => {
-                zoomImg.src = img.src;
-                overlay.style.display = "flex";
-            });
-        });
+<script>
+const modal = document.getElementById("zoomModal");
+const zoomImg = document.getElementById("zoomImg");
 
-        overlay.addEventListener("click", () => {
-            overlay.style.display = "none";
-        });
-    </script>
+document.querySelectorAll(".figure img").forEach(img => {
+    img.addEventListener("click", () => {
+        zoomImg.src = img.src;
+        modal.style.display = "flex";
+    });
+});
+
+modal.addEventListener("click", () => {
+    modal.style.display = "none";
+    zoomImg.src = "";
+});
+</script>
 
 </body>
 </html>
-
