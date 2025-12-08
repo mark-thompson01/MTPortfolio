@@ -145,17 +145,17 @@
 
   <h1>File & Directory Management</h1>
   <p class="lead">
-    These examples demonstrate how PowerShell handles files and directories inside an Ubuntu environment.  
+    These examples demonstrate how PowerShell handles files and directories inside an Ubuntu environment while comparing the commands you wouuld run normally in Linux for these tasks.  
     From navigation and inspection to creating, copying, and removing items — this section builds a strong foundation
     for working efficiently in PowerShell on Linux.
   </p>
 
   <!-- STEP 1 -->
   <section class="card">
-    <h2>Step 1 — Print Working Directory (<code>pwd</code>)</h2>
-    <p>
-      The <code>pwd</code> cmdlet shows your current working directory using PowerShell’s provider-based path system.
-      On Linux, this corresponds to the actual filesystem path, making it easy to confirm where you are before performing file operations.
+    <h2>Step 1 — List Directory Contents (<code>ls</code>) and (<code>Get-ChildItem</code></h2>
+     <p>
+      PowerShell supports both the traditional UNIX-style <code>ls</code> alias and the native cmdlet <code>Get-ChildItem</code>.
+      The output displays directory contents, including file metadata such as permissions, ownership, timestamps, and file sizes.
     </p>
     <div class="figure">
       <img src="Images/File1.png" alt="PowerShell pwd example" class="zoomable" />
@@ -164,10 +164,11 @@
 
   <!-- STEP 2 -->
   <section class="card">
-    <h2>Step 2 — List Files & Directories (<code>ls</code> / <code>Get-ChildItem</code>)</h2>
+    <h2>Step 2 — Change Directories (<code>cd</code> / (<code>Set-Location</code>)</h2>
     <p>
-      PowerShell supports both the traditional UNIX-style <code>ls</code> alias and the native cmdlet <code>Get-ChildItem</code>.
-      The output displays directory contents, including file metadata such as permissions, ownership, timestamps, and file sizes.
+      PowerShell provides multiple ways to change directories.  
+      Whether using <code>cd</code> or <code>Set-Location</code>, both commands update your working path just as they would in Bash.
+      This step shows navigating into the <strong>Documents</strong> directory and back out into <strong>/home/mark</strong>.
     </p>
     <div class="figure">
       <img src="Images/File2.png" alt="PowerShell ls Get-ChildItem example" class="zoomable" />
@@ -176,12 +177,8 @@
 
   <!-- STEP 3 -->
   <section class="card">
-    <h2>Step 3 — Change Directory (<code>cd</code> / <code>Set-Location</code>)</h2>
-    <p>
-      PowerShell provides multiple ways to change directories.  
-      Whether using <code>cd</code> or <code>Set-Location</code>, both commands update your working path just as they would in Bash.
-      This step shows navigating into the <strong>Documents</strong> directory and back out into <strong>/home/mark</strong>.
-    </p>
+    <h2>Step 3 — Verify Current Location (<code>pwd</code> / <code>Get-Location</code>)</h2>
+
     <div class="figure">
       <img src="Images/File3.png" alt="PowerShell cd Set-Location example" class="zoomable" />
     </div>
@@ -189,10 +186,9 @@
 
   <!-- STEP 4 -->
   <section class="card">
-    <h2>Step 4 — Verify Current Location (<code>Get-Location</code>)</h2>
+    <h2> Step 4 — Navigate to <code>/var/log</code> and Inspect Files</h2>
     <p>
-      <code>Get-Location</code> is the PowerShell-native way to confirm your present directory.
-      It mirrors Bash’s <code>pwd</code> but integrates with PowerShell’s provider model.
+      Navigating into /var/log, a common directory for stored system logs. Using Get-ChildItem, you can inspect log files and directories directly inside PowerShell.
     </p>
     <div class="figure">
       <img src="Images/File4.png" alt="PowerShell Get-Location example" class="zoomable" />
@@ -201,10 +197,10 @@
 
   <!-- STEP 5 -->
   <section class="card">
-    <h2>Step 5 — Navigate to <code>/var/log</code> and Inspect Files</h2>
+     <h2>Step 6 — View Log File Contents (<code>cat</code> / <code>Get-Content</code>)</h2>
     <p>
-      This step demonstrates navigating into <code>/var/log</code>, a common directory for stored system logs.
-      Using <code>Get-ChildItem</code>, you can inspect log files and directories directly inside PowerShell.
+      PowerShell supports both <code>cat</code> (alias) and <code>Get-Content</code> for reading files.
+      This example shows examining the <strong>vbox-setup.log</strong> file to verify VirtualBox module builds.
     </p>
     <div class="figure">
       <img src="Images/File5.png" alt="/var/log inspection example" class="zoomable" />
@@ -214,10 +210,7 @@
   <!-- STEP 6 -->
   <section class="card">
     <h2>Step 6 — View Log File Contents (<code>cat</code> / <code>Get-Content</code>)</h2>
-    <p>
-      PowerShell supports both <code>cat</code> (alias) and <code>Get-Content</code> for reading files.
-      This example shows examining the <strong>vbox-setup.log</strong> file to verify VirtualBox module builds.
-    </p>
+ 
     <div class="figure">
       <img src="Images/File6.png" alt="PowerShell cat Get-Content example" class="zoomable" />
     </div>
