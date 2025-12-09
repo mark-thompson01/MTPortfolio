@@ -151,11 +151,8 @@
 
   <!-- STEP 1 -->
   <section class="card">
-    <h2>Step 1 — Checking PowerShell Version</h2>
-    <p>
-      Before exploring system commands, it’s useful to confirm which version of PowerShell is installed.
-      Running <code>$PSVersionTable</code> displays your current version details, platform, and environment information.
-    </p>
+    <h2>Step 1 — List Running Processes (<code>ps</code> / <code>Get-Process</code></h2>
+
     <div class="figure">
       <img src="Images/Sys1.png" class="zoomable" alt="Checking PowerShell version" />
     </div>
@@ -163,11 +160,8 @@
 
   <!-- STEP 2 -->
   <section class="card">
-    <h2>Step 2 — List Running Processes (<code>Get-Process</code>)</h2>
-    <p>
-      The <code>Get-Process</code> cmdlet retrieves all running processes on the system.
-      This gives a Windows-style process list, even while running on Linux.
-    </p>
+    <h2>Step 2 - Retrieve System Disk Details (<code>df -h</code> / <code>Get-PSDrive</code></h2>
+   
     <div class="figure">
       <img src="Images/Sys2.png" class="zoomable" alt="Get-Process example" />
     </div>
@@ -175,12 +169,7 @@
 
   <!-- STEP 3 -->
   <section class="card">
-    <h2>Step 3 — Sort Processes by CPU Usage</h2>
-    <p>
-      By piping <code>Get-Process</code> into <code>Sort-Object</code>, you can sort active processes
-      by CPU time or memory usage.  
-      This example sorts by CPU descending to reveal the most resource-intensive processes.
-    </p>
+    <h2>Step 3 — List Running Processes <code>Get-Process</code></h2>
     <div class="figure">
       <img src="Images/Sys3.png" class="zoomable" alt="Sorting processes by CPU usage" />
     </div>
@@ -188,7 +177,10 @@
 
   <!-- STEP 4 -->
   <section class="card">
-    <h2>Step 4 — Viewing Only the Top CPU Consumers</h2>
+    <h2>Step 4 — Sorting Processes</h2>
+    <p>By piping Get-Process into Sort-Object, you can sort active processes by CPU time or memory usage. 
+    This example sorts by CPU descending to reveal the most resource-intensive processes.
+    </p>
     <p>
       You can combine <code>Sort-Object</code> with <code>Select-Object -First N</code>
       to display only the top processes.  
@@ -198,14 +190,8 @@
       <img src="Images/Sys4.png" class="zoomable" alt="Displaying top CPU usage processes" />
     </div>
   </section>
-
-  <!-- STEP 5 -->
+  
   <section class="card">
-    <h2>Step 5 — Filtering for a Specific Process</h2>
-    <p>
-      PowerShell supports pipeline filtering and searching.  
-      This example searches for processes related to Firefox using <code>Where-Object</code>.
-    </p>
     <div class="figure">
       <img src="Images/Sys5.png" class="zoomable" alt="Filtering specific process" />
     </div>
