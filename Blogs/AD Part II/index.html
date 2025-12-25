@@ -271,6 +271,10 @@ or recover an Active Directory (AD) database when the directory service cannot s
           <p>The <strong>Paths</strong> step allows you to define the storage location paths for the Active Directory database, transaction logs, and the SYSVOL folder. While the default C:\Windows locations are standard for smaller setups, moving these files to separate physical drives can significantly boost performance and simplify disaster recovery in larger environments. Properly configuring these paths ensures that your identity data, system "receipts" (logs), and Group Policies are stored securely and efficiently.</p>
       <div class="figure"><img src="Images/ad19.png" alt="Active Directory lab step 19" loading="lazy"></div><br>
       <p><strong>16.</strong> <strong>Review Options</strong></p>
+      <p>The <strong>Review Options</strong> step provides a comprehensive summary of all your configuration choices, from naming conventions to functional levels, ensuring everything is correct before the installation begins.</p>
+      <p>It serves as a final safety check to prevent deployment errors that could be difficult to change later.</p>
+      <p>The <strong>"View Script"</strong> button lets you export your settings into a PowerShell script for automated, consistent deployments in the future.</p>
+    
       <div class="figure"><img src="Images/ad20.png" alt="Active Directory lab step 20" loading="lazy"></div><br>
       <p><strong>17.</strong> <strong>Prerequisites Check:</strong> Run the check and then click <strong>Install</strong>.</p>
       <div class="figure"><img src="Images/ad21.png" alt="Active Directory lab step 21" loading="lazy"></div><br>
