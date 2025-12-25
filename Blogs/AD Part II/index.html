@@ -290,6 +290,10 @@ or recover an Active Directory (AD) database when the directory service cannot s
       <div class="figure"><img src="Images/ad23.png" alt="Active Directory lab step 23" loading="lazy"></div><br>
       <p><strong>19.</strong> Waiting for the <strong>gpsvc</strong> service to start.</p>
       <p>After the promotion process completes, it is perfectly normal for the first reboot to take significantly longer as the server initializes the Active Directory database and sets up the <strong>SYSVOL</strong> share.</p>
+      <p>You may see the screen hang on "Please wait for the gpsvc" while the system creates and applies the initial Group Policy objects that govern the new domain.</p>
+      <p>This delay is a one-time occurrence that ensures the security and directory services are fully operational before the login screen is presented.</p>
+
+    
       <div class="figure"><img src="Images/ad24.png" alt="Active Directory lab step 24" loading="lazy"></div><br>
       <p><strong>20.</strong> <strong>Domain Logon Screen</strong></p>
       <div class="figure"><img src="Images/ad25.png" alt="Active Directory lab step 25" loading="lazy"></div><br>
