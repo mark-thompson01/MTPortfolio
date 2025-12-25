@@ -269,7 +269,8 @@ topmost logical container that groups together one or more domains.</p>
     <p>The Domain Controller Options step configures the server's core roles, such as 
 DNS and the Global Catalog, while setting the Functional Level to determine which
 Advanced Active Directory features are available.</p>
-    <p>It also requires you to create a Directory Services Restore Mode (DSRM) password,
+    <p>It also requires you    <p><strong>12.</strong> <strong>AD DS</strong> Server Role installation in progress.</p>
+ to create a Directory Services Restore Mode (DSRM) password,
 which acts as a unique "emergency key" for local access if the database ever becomes
 corruprted or needs offline maintenance.</p>
     <p>By completing this step, you are essentially defining both the operational 
@@ -285,7 +286,8 @@ or recover an Active Directory (AD) database when the directory service cannot s
         <p><strong>16.</strong> <strong>Additional Options</strong></p>
           <p>Verify the NetBIOS name resolution to the domain.</p>
     <p>Before DNS became the standard for the internet, Windows used NetBIOS to identify computers and domains on a local network. Today, it remains relevant primarily for the legacy login format that most users are familiar with: DOMAIN\username (e.g., CONTOSO\jdoe).</p>
-      <div class="figure"><img src="Images/ad18.png" alt="Active Directory lab step 18" loading="lazy"></div><br>
+    <p>In this example, the domain name <strong>DOMAIN-1</strong> is the NetBIOS domain name.</p>
+    <div class="figure"><img src="Images/ad18.png" alt="Active Directory lab step 18" loading="lazy"></div><br>
         <p><strong>17.</strong> <strong>Paths</strong></p>
         <p>Specify and review the folder location of the database, log files, and SYSVOL.</p>
           <p>The <strong>Paths</strong> step allows you to define the storage location paths for the Active Directory database, transaction logs, and the SYSVOL folder. While the default C:\Windows locations are standard for smaller setups, moving these files to separate physical drives can significantly boost performance and simplify disaster recovery in larger environments. Properly configuring these paths ensures that your identity data, system "receipts" (logs), and Group Policies are stored securely and efficiently.</p>
