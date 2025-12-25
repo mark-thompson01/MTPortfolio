@@ -177,7 +177,7 @@ ow:0 10px 30px rgba(0,0,0,.35);style="display:block; margin:0 auto; width:600px;
   </nav>
 
   <div class="crumbs">
-    <a href="/MTPortfolio/Blogs">Blog</a> · <span>Active Directory Part II: Where AD Starts</span>
+    <a href="/MTPortfolio/Blogs">Blog</a> · <span>Active DirGeminiectory Part II: Where AD Starts</span>
   </div>
 
 <header style="text-align:center;">
@@ -248,7 +248,19 @@ topmost logical container that groups together one or more domains.</p>
     <p>As this example outlines creating a new domain from scratch, a new forest will be added.</p>
     <div class="figure"><img src="Images/ad15.png" alt="Active Directory lab step 15" loading="lazy"></div><br>
     <p><strong>13.</strong> <strong>Domain Controller Options:</strong></p>
-    <p>Verify capabilities and set a <strong>Directory Services Restore Mode (DSRM)</strong> password.</p>
+    <p>The Domain Controller Options step configures the server's core roles, such as 
+DNS and the Global Catalog, while setting the Functional Level to determine which
+Advanced Active Directory features are available.</p>
+    <p>It also requires you to create a Directory Services Restore Mode (DSRM) password,
+which acts as a unique "emergency key" for local access if the database ever becomes
+corruprted or needs offline maintenance.</p>
+    <p>By completing this step, you are essentially defining both the operational 
+capabilities of the domain and the security guardrails of its recovery.</p>
+    <p>Directory Services Restore Mode (DSRM) is a special "Safe Mode" for Windows
+Domain Controllers. It provides administrators with the ability to repair, restore,
+or recover an Active Directory (AD) database when the directory service cannot start or needs to be taken offline for maintenance.</p>
+    
+  
       <div class="figure"><img src="Images/ad16.png" alt="Active Directory lab step 16" loading="lazy"></div>
       <div class="figure"><img src="Images/ad17.png" alt="Active Directory lab step 17" loading="lazy"></div><br>
         <p><strong>14.</strong> Verify the NetBIOS name resolution to the domain.</p>
