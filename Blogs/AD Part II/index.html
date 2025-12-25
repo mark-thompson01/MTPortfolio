@@ -247,7 +247,7 @@ ow:0 10px 30px rgba(0,0,0,.35);style="display:block; margin:0 auto; width:600px;
 topmost logical container that groups together one or more domains.</p>
     <p>As this example outlines creating a new domain from scratch, a new forest will be added.</p>
     <div class="figure"><img src="Images/ad15.png" alt="Active Directory lab step 15" loading="lazy"></div><br>
-    <p><strong>13.</strong> <strong>Domain Controller Options:</strong></p>
+    <p><strong>13.</strong> <strong>Domain Controller Options</strong></p>
     <p>The Domain Controller Options step configures the server's core roles, such as 
 DNS and the Global Catalog, while setting the Functional Level to determine which
 Advanced Active Directory features are available.</p>
@@ -304,6 +304,12 @@ or recover an Active Directory (AD) database when the directory service cannot s
       <p><strong>23.</strong> Expanding the domain hierarchy.</p>
       <div class="figure"><img src="Images/ad28.png" alt="Active Directory lab step 28" loading="lazy"></div><br>
       <p><strong>24.</strong> Builtin Security Groups - Domain Local</p>
+      <p>The Builtin container holds a collection of default security groups that come pre-configured with specific administrative rights to manage various parts of the domain.</p>
+      <p>These groups, such as Account Operators or Backup Operators, allow you to delegate specific tasks to users without granting them full control over the entire network.</p>
+      <p>Understanding these groups is essential for maintaining a secure environment, as they represent the primary way Windows organizes local administrative power on your Domain Controllers.</p>
+
+
+    
       <div class="figure"><img src="Images/ad29.png" alt="Active Directory lab step 29" loading="lazy"></div><br>
       <p><strong>25.</strong> <strong>Domain Controller(s)</strong></p>
       <p>When you install the AD DS server role onto a server, proThe Prerequisites Check is a mandatory diagnostic phase where the wizard scans your server’s hardware, network settings, and security permissions to ensure they meet the strict requirements of a Domain Controller.moting that server
