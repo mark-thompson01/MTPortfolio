@@ -170,11 +170,78 @@
     <div class="figure"><img src="Images/Trouble8AdminActAudit.png"></div>
     <div class="figure"><img src="Images/Trouble9EvidenceCapture.png"></div>
   </section>
+  p><a href="../index.html">Back to Home</a></p>
 
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-  </footer>
+ <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 
 </div>
+    <!-- Zoom modal -->
+  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <div class="zoom-content" data-close>
+      <img class="zoom-img" id="zoomImg" alt="">
+      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const modal = document.getElementById('zoom');
+      const zoomImg = document.getElementById('zoomImg');
+      const closeBtn = modal.querySelector('.zoom-close');
+      let lastFocus = null;
+
+      // Make all images inside .figure zoomable (add .no-zoom to opt out)
+      document.querySelectorAll('.figure img:not(.no-zoom)').forEach(img=>{
+        img.classList.add('zoomable');
+      });
+
+      function openModal(src, alt){
+        lastFocus = document.activeElement;
+        zoomImg.src = src;
+        zoomImg.alt = alt || '';
+        modal.setAttribute('open','');
+        modal.setAttribute('aria-hidden','false');
+        document.body.classList.add('hide-scroll');
+        closeBtn.focus();
+      }
+      function closeModal(){
+        modal.removeAttribute('open');
+        modal.setAttribute('aria-hidden','true');
+        document.body.classList.remove('hide-scroll');
+        zoomImg.removeAttribute('src');
+        zoomImg.alt = '';
+        if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      }
+
+      // Open on image click
+      document.addEventListener('click', (e) => {
+        const img = e.target.closest('.figure img.zoomable');
+        if (img){
+          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
+          openModal(full, img.alt);
+        }
+      });
+
+      // Close interactions
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', (e) => {
+        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
+      });
+      zoomImg.addEventListener('click', closeModal);
+      document.addEventListener('keydown', (e) => {
+        if (!modal.hasAttribute('open')) return;
+        if (e.key === 'Escape') closeModal();
+        // simple focus trap
+        if (e.key === 'Tab'){ e.preventDefault(); closeBtn.focus(); }
+      });
+    })();
+  </script>
 </body>
 </html>
