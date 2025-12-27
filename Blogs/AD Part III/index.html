@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Active Directory Part III: Security, Misconfigurations, & Attack Paths · Mark Thompson Portfolio</title>
+  <meta name="description" content="Exploring Active Directory security, common misconfigurations, attack paths, and the Tier Administration / Enterprise Access Model." />
+
+  <style>
+    :root {
+      --bg-1:#0f1115;
+      --bg-2:#141821;
+      --text:#E6E7EE;
+      --muted:#A9ADBE;
+      --brand:#4DA3FF;
+      --card-border:#2A3447;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+
+    html,body { height:100% }
+
+    body {
+      margin:0;
+      color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    .wrap {
+      max-width:1000px;
+      margin:0 auto;
+      padding:40px 20px 64px;
+    }
+
+    /* NAV */
+    .topnav {
+      margin:0 0 18px;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .topnav a {
+      color:var(--muted);
+      text-decoration:none;
+      padding:6px 10px;
+      border-radius:10px;
+      border:1px solid transparent;
+    }
+
+    .topnav a:hover {
+      color:var(--text);
+      border-color:#2a3447;
+      background:rgba(255,255,255,.04);
+    }
+
+    .topnav a.active {
+      color:var(--text);
+      border-color:#3a4a67;
+      background:rgba(255,255,255,.06);
+    }
+
+    .crumbs {
+      color:var(--muted);
+      font-size:14px;
+      margin:2px 0 8px;
+    }
+
+    .crumbs a {
+      color:var(--muted);
+      text-decoration:none;
+    }
+
+    .crumbs a:hover { color: var(--text); }
+
+    h1 {
+      margin:8px 0 6px;
+      font-size:clamp(28px,4vw,40px);
+      font-weight:800;
+      text-align:center;
+    }
+
+    h2 { margin:0 0 10px; font-size:22px }
+    h3 { margin:18px 0 6px; font-size:18px }
+
+    p.lead {
+      color:var(--muted);
+      margin:8px auto 18px;
+      font-size:clamp(16px,2.2vw,18px);
+      max-width:800px;
+      text-align:center;
+    }
+
+    .card {
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:22px;
+      margin-top:18px;
+    }
+
+    .figure {
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:16px auto;
+      max-width:675px;
+    }
+
+    .figure img {
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:8px;
+      cursor:zoom-in;
+    }
+
+    footer {
+      margin-top:36px;
+      padding-top:20px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    footer .links { margin-top:8px }
+    footer a { color:var(--muted) }
+    footer a:hover { color:var(--brand) }
+
+    .zoom-overlay {
+      position:fixed;
+      inset:0;
+      background:rgba(10,12,20,.92);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
+    }
+
+    .zoom-overlay.active { display:flex }
+
+    .zoom-overlay img {
+      max-width:95vw;
+      max-height:95vh;
+      border-radius:14px;
+      cursor:zoom-out;
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <nav class="topnav">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs" class="active">Blog</a>
+  </nav>
+
+  <div class="crumbs">
+    <a href="/MTPortfolio/Blogs">Blog</a> · <span>Active Directory Part III</span>
+  </div>
+
+  <header>
+    <div class="figure" style="border:none; background:transparent; padding:0;">
+      <img src="Images/ActiveDirectory-Part-III.png"
+           alt="Active Directory security and attack paths visualization"
+           loading="lazy"
+           style="border-radius:0;" />
+    </div>
+
+    <h1>Active Directory – Part III</h1>
+    <p class="lead">
+      Security, misconfigurations, attack paths, and the Tier Administration / Enterprise Access Model.
+    </p>
+  </header>
+
+  <section class="card">
+    <p><strong>Active Directory rarely gets compromised; it gets misconfigured, over-trusted, and left unattended.</strong></p>
+
+    <p>Most breaches originate from misconfiguration, over-privileged accounts, legacy compatibility decisions, and improper operational hygiene.</p>
+
+    <p>Active Directory isn’t a static phonebook that you set up once and leave running indefinitely. It is a critical identity system that must be actively managed. While AD introduces simplicity early on, the risks that accumulate behind the scenes are not always obvious when a “set it and forget it” mindset takes hold.</p>
+
+    <p>These risks break the simplistic narrative of “attacker breaks in and immediately gets everything.” Instead, misconfigurations form multiple attack paths — chains of opportunity that attackers can leverage in different ways.</p>
+
+    <h3>Common Sources of Risk</h3>
+
+    <p>Active Directory environments often accumulate unused user accounts over time. These accounts may belong to employees who left the organization long ago and are no longer monitored. In some cases, they remain enabled.</p>
+
+    <p>Over-privileged accounts are also common. Users may be added to groups for temporary projects or departmental transitions, and those group memberships are never removed.</p>
+
+    <p>As a result, many environments contain both inactive accounts and accounts with unnecessary privileges.</p>
+
+    <p>Some environments still rely on obsolete and insecure protocols such as NTLMv1 or SMBv1. If Active Directory is not actively reviewed and hardened, these legacy doors remain unlocked.</p>
+
+    <p>Service accounts present another frequent risk. These accounts authenticate to services and resources within the AD environment and are often configured with non-expiring passwords and excessive permissions. When left unmonitored, they provide a quiet path for lateral movement.</p>
+
+    <h3>The Tier Administration Model</h3>
+
+    <p>Modern Active Directory security practices emerged to move away from the “static directory” mindset. In 2014, Microsoft introduced the <strong>Tier Administration Model</strong> in response to real-world AD compromise patterns.</p>
+
+    <p>This approach is also commonly referred to as the <em>Tier Model</em> or <em>Tiered Administration</em>. Microsoft later rebranded it as the <strong>Enterprise Access Model (EAM)</strong> to better reflect hybrid and cloud environments.</p>
+
+    <p>The Tier Administration Model is a security architecture and operational methodology designed to separate administrative trust boundaries.</p>
+
+    <h3>Tier Structure</h3>
+
+    <ul>
+      <li><strong>Tier 0:</strong> Identity and forest-level control</li>
+      <li><strong>Tier 1:</strong> Server and application management</li>
+      <li><strong>Tier 2:</strong> User-facing endpoints</li>
+    </ul>
+
+    <p>The core rule is simple: <strong>administrative credentials must never cross downward between tiers</strong>. This limits credential exposure, breaks attack paths, and prevents a single compromise from escalating into full domain control.</p>
+
+    <p>Although introduced in 2014, tiered administration never became the norm across the broader AD ecosystem. It remained a recommended methodology, primarily adopted by security-mature organizations.</p>
+
+    <p>Beyond terminology, no fundamental changes were made to the architecture. The same principles apply today: identity remains the primary attack surface, administrative access must be separated by risk, and credentials must be prevented from flowing across trust boundaries.</p>
+
+    <p>What changed was not the model itself, but the environments it needed to account for.</p>
+
+    <p>On-premises environments rely heavily on administrative discipline, while cloud environments enforce boundaries through policy, identity roles, and token lifetimes. In both cases, identity remains the primary attack surface — only the enforcement mechanisms differ.</p>
+  </section>
+
+  <p><em>Active Directory is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
+
+  <p><a href="/MTPortfolio/Blogs">← Back to Blog</a></p>
+
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+
+<div class="zoom-overlay" id="zoomOverlay">
+  <img src="" alt="">
+</div>
+
+<script>
+  const overlay = document.getElementById("zoomOverlay");
+  const overlayImg = overlay.querySelector("img");
+
+  document.querySelectorAll(".figure img").forEach(img => {
+    img.addEventListener("click", () => {
+      overlayImg.src = img.src;
+      overlay.classList.add("active");
+    });
+  });
+
+  overlay.addEventListener("click", () => {
+    overlay.classList.remove("active");
+    overlayImg.src = "";
+  });
+</script>
+
+</body>
+</html>
