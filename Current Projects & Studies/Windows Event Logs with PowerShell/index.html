@@ -178,13 +178,29 @@
   Id      = 4625
 }
 </code>
-    <p>This command retrieves <strong>failed authentication attempts</strong> from the <strong>Security event log</strong> by filtering on <strong>Event ID 4625</strong>.</p>
-    <div class="figure"><img src="Images/WinEvent6.png"></div>
+    <p>This command identifies failed authentication attempts by querying Security Event ID 4625, a key indicator used for detecting unauthorized access and credential misuse.</p>
+    <div class="figure"><img src="Images/WinEvent6.png"></div><br>
 
     
-    <div class="figure"><img src="Images/WinEvent7.png"></div>
-    <div class="figure"><img src="Images/WinEvent8.png"></div>
+    <code>Get-WinEvent -FilterHashtable @{
+  LogName = 'Security'
+  Id      = 4624
+}
+</code>
+    <p>This command queries successful authentication events (Event ID 4625), providing visibility into who and what is actively logging on to the system.</p>
+    <div class="figure"><img src="Images/WinEvent7.png"></div><br>
+
+    <code>Get-WinEvent -LogName Security | Where-Object { $_.Id -eq 4625 } | Select-Object TimeCreated, Id, Message</code>
+    <p>This command demonstrates pipeline-based filtering to isolate failed authentication events (Event ID 4625).</p>
+    <div class="figure"><img src="Images/WinEvent8.png"></div><br>
+
+
+
+    
     <div class="figure"><img src="Images/WinEvent9-ServerHealth.png"></div>
+
+
+    
     <div class="figure"><img src="Images/WinEvent10Reboots.png"></div>
     <div class="figure"><img src="Images/WinEvent11ServiceCrash.png"></div>
     <div class="figure"><img src="Images/WinEvent12LogonP&F.png"></div>
