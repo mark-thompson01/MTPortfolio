@@ -169,12 +169,19 @@
 }
 </code>
     <p>This command retrieves <strong>only System log events that occurred within the last 24 hours</strong>, using PowerShell's <strong>native event filtering engine</strong> instead of post-processing results.</p>
-    <div class="figure"><img src="Images/WinEvent4.png"></div><br>
-    
-    <div class="figure"><img src="Images/WinEvent5.png"></div>
+    <div class="figure"><img src="Images/WinEvent4.png"></div>
+    <p>Here it shows the Windows update service started downloading an update.</p>
+    <div class="figure"><img src="Images/WinEvent5.png"></div><br>
+
+    <code>Get-WinEvent -FilterHashtable @{
+  LogName = 'Security'
+  Id      = 4625
+}
+</code>
+    <p>This command retrieves <strong>failed authentication attempts</strong> from the <strong>Security event log</strong> by filtering on <strong>Event ID 4625</strong>.</p>
+    <div class="figure"><img src="Images/WinEvent6.png"></div>
 
     
-    <div class="figure"><img src="Images/WinEvent6.png"></div>
     <div class="figure"><img src="Images/WinEvent7.png"></div>
     <div class="figure"><img src="Images/WinEvent8.png"></div>
     <div class="figure"><img src="Images/WinEvent9-ServerHealth.png"></div>
