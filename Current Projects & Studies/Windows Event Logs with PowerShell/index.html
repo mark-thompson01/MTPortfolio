@@ -187,7 +187,7 @@
   Id      = 4624
 }
 </code>
-    <p>This command queries successful authentication events (Event ID 4625), providing visibility into who and what is actively logging on to the system.</p>
+    <p>This command queries successful authentication events (Event ID 4624), providing visibility into who and what is actively logging on to the system.</p>
     <div class="figure"><img src="Images/WinEvent7.png"></div><br><br><br><br>
 
     <code>Get-WinEvent -LogName Security | Where-Object { $_.Id -eq 4625 } | Select-Object TimeCreated, Id, Message</code>
