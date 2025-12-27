@@ -159,15 +159,21 @@
     <code>Get-WinEvent -LogName System -MaxEvents 50</code>
     <p>This command retrieves the <strong>50 most recent events</strong> from the <strong>System event log</strong>, displaying them directly in the PowerShell console.</p>
     <p>Outputting the most recent system-level events, providing immediate visibility into service activity, updates, and core OS behavior.</p>
-    <div class="figure"><img src="Images/WinEvent2.png"></div><b>
+    <div class="figure"><img src="Images/WinEvent2.png"></div>
+    <p>This output exposes system uptime and time adjustments, helping confirm system stability and maintain accurate timelines during troubleshooting and incident response.</p>
+    <div class="figure"><img src="Images/WinEvent3.png"></div><br>
 
-
-    <div class="figure"><img src="Images/WinEvent3.png"></div>
-
-
-      
-    <div class="figure"><img src="Images/WinEvent4.png"></div>
+    <code>Get-WinEvent -FilterHashtable @{
+  LogName   = 'System'
+  StartTime = (Get-Date).AddHours(-24)
+}
+</code>
+    <p>This command retrieves <strong>only System log events that occurred within the last 24 hours</strong>, using PowerShell's <strong>native event filtering engine</strong> instead of post-processing results.</p>
+    <div class="figure"><img src="Images/WinEvent4.png"></div><br>
+    
     <div class="figure"><img src="Images/WinEvent5.png"></div>
+
+    
     <div class="figure"><img src="Images/WinEvent6.png"></div>
     <div class="figure"><img src="Images/WinEvent7.png"></div>
     <div class="figure"><img src="Images/WinEvent8.png"></div>
