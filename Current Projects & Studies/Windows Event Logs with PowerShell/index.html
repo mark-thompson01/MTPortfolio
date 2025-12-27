@@ -149,8 +149,13 @@
     <h2>Event Log Operations with PowerShell</h2>
     <p>This lab demonstration is being performed on a Windows Server 2022 Evaluation version installed on a Hyper-V VM instance, with remote access via RDP protocol, to work with some Windows event logs using the Get-WinEvent cmdlet between these two elevated PowerShell sessions.</p>
 
-    <div class="figure"><img src="Images/WinEvent0.png"></div>
-    <div class="figure"><img src="Images/WinEvent1.png"></div>
+    <div class="figure"><img src="Images/WinEvent0.png"></div><br>
+    
+    <code>Get-WinEvent -ListLog *</code>
+    <p>This command <strong>enumerates every Windows Event Log available on the system</strong>, returning high-level metadata about each log rather than indivdual events.</p>
+    <p>Providing a complete inventory of available Windows Event Logs, allowing administrators to identify where meaningful data exists before querying individual events.</p>
+    <div class="figure"><img src="Images/WinEvent1.png"></div><br>
+    
     <div class="figure"><img src="Images/WinEvent2.png"></div>
     <div class="figure"><img src="Images/WinEvent3.png"></div>
     <div class="figure"><img src="Images/WinEvent4.png"></div>
