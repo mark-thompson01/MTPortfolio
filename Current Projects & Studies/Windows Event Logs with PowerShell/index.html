@@ -154,14 +154,14 @@
     <code>Get-WinEvent -ListLog *</code>
     <p>This command <strong>enumerates every Windows Event Log available on the system</strong>, returning high-level metadata about each log rather than indivdual events.</p>
     <p>Providing a complete inventory of available Windows Event Logs, allowing administrators to identify where meaningful data exists before querying individual events.</p>
-    <div class="figure"><img src="Images/WinEvent1.png"></div><br><br><br>
+    <div class="figure"><img src="Images/WinEvent1.png"></div><br><br><br><br>
 
     <code>Get-WinEvent -LogName System -MaxEvents 50</code>
     <p>This command retrieves the <strong>50 most recent events</strong> from the <strong>System event log</strong>, displaying them directly in the PowerShell console.</p>
     <p>Outputting the most recent system-level events, providing immediate visibility into service activity, updates, and core OS behavior.</p>
     <div class="figure"><img src="Images/WinEvent2.png"></div>
     <p>This output exposes system uptime and time adjustments, helping confirm system stability and maintain accurate timelines during troubleshooting and incident response.</p>
-    <div class="figure"><img src="Images/WinEvent3.png"></div><br><br><br>
+    <div class="figure"><img src="Images/WinEvent3.png"></div><br><br><br><br>
 
     <code>Get-WinEvent -FilterHashtable @{
   LogName   = 'System'
@@ -171,7 +171,7 @@
     <p>This command retrieves <strong>only System log events that occurred within the last 24 hours</strong>, using PowerShell's <strong>native event filtering engine</strong> instead of post-processing results.</p>
     <div class="figure"><img src="Images/WinEvent4.png"></div>
     <p>Here it shows the Windows update service started downloading an update.</p>
-    <div class="figure"><img src="Images/WinEvent5.png"></div><br><br><br>
+    <div class="figure"><img src="Images/WinEvent5.png"></div><br><br><br><br>
 
     <code>Get-WinEvent -FilterHashtable @{
   LogName = 'Security'
@@ -179,7 +179,7 @@
 }
 </code>
     <p>This command identifies failed authentication attempts by querying Security Event ID 4625, a key indicator used for detecting unauthorized access and credential misuse.</p>
-    <div class="figure"><img src="Images/WinEvent6.png"></div><br><br><br>
+    <div class="figure"><img src="Images/WinEvent6.png"></div><br><br><br><br>
 
     
     <code>Get-WinEvent -FilterHashtable @{
@@ -188,11 +188,11 @@
 }
 </code>
     <p>This command queries successful authentication events (Event ID 4625), providing visibility into who and what is actively logging on to the system.</p>
-    <div class="figure"><img src="Images/WinEvent7.png"></div><br><br><br>
+    <div class="figure"><img src="Images/WinEvent7.png"></div><br><br><br><br>
 
     <code>Get-WinEvent -LogName Security | Where-Object { $_.Id -eq 4625 } | Select-Object TimeCreated, Id, Message</code>
     <p>This command demonstrates pipeline-based filtering to isolate failed authentication events (Event ID 4625).</p>
-    <div class="figure"><img src="Images/WinEvent8.png"></div><br><br><br>
+    <div class="figure"><img src="Images/WinEvent8.png"></div><br><br><br><br>
 
 
 
