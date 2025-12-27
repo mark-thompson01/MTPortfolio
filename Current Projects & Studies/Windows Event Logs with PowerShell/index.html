@@ -195,19 +195,81 @@
     <div class="figure"><img src="Images/WinEvent8.png"></div><br><br><br><br>
 
 
+    <code> Get-WinEvent -LogName System -MaxEvents 100 | Group-Object Id | Sort-Object Count -Descending | Select-Object -First 10</code>
+    <p>This command groups recent system events by Event ID and ranks them by frequency, helping identify dominant system behaviors and recurring activity patterns.</p>
+    <div class="figure"><img src="Images/WinEvent9-ServerHealth.png"></div><br><br><br><br>
 
-    
-    <div class="figure"><img src="Images/WinEvent9-ServerHealth.png"></div>
+    <code>
+      Get-WinEvent -FilterHashtable @{
+  LogName   = 'System'
+  Id        = 6005,6006,6008
+  StartTime = (Get-Date).AddDays(-14)
+}
+    </code>
+    <p>This command reconstructs system startup and shutdown activity by correlating Event IDs 6005, 6006, and 6008 over a defined time window.</p>
+    <div class="figure"><img src="Images/WinEvent10Reboots.png"></div><br><br><br><br>
+
+    <code>
+      Get-WinEvent -FilterHashtable @{
+  LogName   = 'System'
+  Id        = 7031,7034
+  StartTime = (Get-Date).AddDays(-3)
+}
+    </code>
+    <p>This command checks the System event log fo recent service crashes (Event IDs 7032 and 7034) within the last three days. The absence of results indicates that no services terminated unexpectedly during this period, suggesting stable service operation.</p>
+    <div class="figure"><img src="Images/WinEvent11ServiceCrash.png"></div><br><br><br>
 
 
-    
-    <div class="figure"><img src="Images/WinEvent10Reboots.png"></div>
-    <div class="figure"><img src="Images/WinEvent11ServiceCrash.png"></div>
-    <div class="figure"><img src="Images/WinEvent12LogonP&F.png"></div>
-    <div class="figure"><img src="Images/WinEvent13PrivLogon.png"></div>
-    <div class="figure"><img src="Images/WinEvent14ServiceFail.png"></div>
-    <div class="figure"><img src="Images/WinEvent15OvernightAct.png"></div>
-    <div class="figure"><img src="Images/WinEvent16Compliance.png"></div>
+    <code>
+      Get-WinEvent -FilterHashtable @{
+  LogName   = 'Security'
+  Id        = 4625
+  StartTime = (Get-Date).AddHours(-1)
+}
+    </code><br>
+
+    <code>
+      Get-WinEvent -FilterHashtable @{
+  LogName   = 'Security'
+  Id        = 4624
+  StartTime = (Get-Date).AddHours(-1)
+}
+    </code>
+    <p>These commands compare failed and successful authentication events within the last hour. The absence of Event ID 4625 indicates no failed logon attempts during this period, while multiple Event ID 4624 entries confirm normal authentication activity. This contrast helps validate system security and rule out brute-force or credential misuse attempts.</p>
+    <div class="figure"><img src="Images/WinEvent12LogonP&F.png"></div><br><br><br><br>
+
+
+    <code>
+      Get-WinEvent -FilterHashtable @{
+  LogName   = 'Security'
+  Id        = 4672
+  StartTime = (Get-Date).AddHours(-1)
+}
+    </code>
+    <p>This command retrieves security events indicating when elevated privileges were assigned during a logon. Event ID 4672 is generated when an account logs in with administrative or special rights. Monitoring these events helps identify privileged access, validate administrative activity, and detect potential unauthorized elevation attempts.</p>
+    <div class="figure"><img src="Images/WinEvent13PrivLogon.png"></div><br><br><br><br>
+
+    <code>
+      Get-WinEvent -LogName System |
+  Where-Object { $_.Id -in 7031,7034 } |
+  Select-Object TimeCreated, Id, Message
+    </code>
+    <p>This command searches the System event log for service crash and abnormal termination events (7031 and 7034). The absence of output indicates that no services have failed or exited unexpectedly, helping confirm system stability during routine health checks.</p>
+    <div class="figure"><img src="Images/WinEvent14ServiceFail.png"></div><br><br><br><br>
+
+
+    <code>Get-WinEvent -LogName Security | Where-Object { $_.TimeCreated -gt (Get-Date).Date.AddHours(-8) } | Select-Object TimeCreated, Id, Message</code>
+    <p>This command builds a chronological view of recent security activity by filtering Security event logs to the last eight hours. By displaying logon (4624), privilege assignment (4672), and logoff (4634) events together, it helps reconstruct user and system authentication activity and validate normal administrative behavior.</p>
+    <div class="figure"><img src="Images/WinEvent15OvernightAct.png"></div><br><br><br><br>
+
+    <code>Get-WinEvent -FilterHashtable @{
+LogName   = 'Security'
+  Id        = 4625
+  StartTime = (Get-Date).AddDays(-1)
+} | Export-Csv FailedLogons.csv -NoTypeInformation
+</code>
+    <p>This command attempts to export failed authentication events (Event ID 4625) from the Security log over the last 24 hours into a CSV file for reporting or investigation. In this case, no events were found, indicating no failed logon attempts occurred during the selected timeframe. This confirms a healthy authentication state and demonstrates how PowerShell can be used to generate audit-ready evidence—even when no issues are present.</p>
+    <div class="figure"><img src="Images/WinEvent16Compliance.png"></div><br><br><br><br><br><br>
   </section>
 
   <!-- Troubleshooting -->
