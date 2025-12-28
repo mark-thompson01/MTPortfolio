@@ -171,6 +171,8 @@
     <p>This output exposes system uptime and time adjustments, helping confirm system stability and maintain accurate timelines during troubleshooting and incident response.</p>
     <div class="figure"><img src="Images/WinEvent3.png"></div><br><br><br><br>
 
+
+    <h3>Filtering System Events by Time Window (Native Engine)</h3>
     <code>Get-WinEvent -FilterHashtable @{
 LogName   = 'System'
   StartTime = (Get-Date).AddHours(-24)
