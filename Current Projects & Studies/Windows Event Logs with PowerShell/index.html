@@ -156,7 +156,8 @@
     <p><strong>Get-WinEvent</strong> is a PowerShell cmdlet that provides direct, scriptable access to Windows Event Logs, enabling administrators to perform efficient log analysis, troubleshooting, and incident response without relying on the Event Viewer GUI.</p>
     
     <div class="figure"><img src="Images/WinEvent0.png"></div><br><br><br><br>
-    
+
+    <h3>Enumerating Available Windows Event Logs</h3>
     <code>Get-WinEvent -ListLog *</code>
     <p>This command <strong>enumerates every Windows Event Log available on the system</strong>, returning high-level metadata about each log rather than indivdual events.</p>
     <p>Providing a complete inventory of available Windows Event Logs, allowing administrators to identify where meaningful data exists before querying individual events.</p>
