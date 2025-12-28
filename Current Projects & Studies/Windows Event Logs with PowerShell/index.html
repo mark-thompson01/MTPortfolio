@@ -297,10 +297,13 @@ LogName   = 'Security'
     <div class="figure"><img src="Images/WinEvent16Compliance.png"></div><br><br><br><br><br><br>
   </section>
 
+
+  
   <!-- Troubleshooting -->
   <section class="card">
     <h2>Troubleshooting &amp; Incident Scenarios</h2><br>
-    
+
+    <h3>1. System Startup & Shutdown Timeline Reconstruction</h3>
     <code>
       Get-WinEvent -FilterHashtable @{
   LogName = 'System'
@@ -311,6 +314,8 @@ LogName   = 'Security'
     <p>This command queries the System event log for startup, shutdown, and unexpected shutdown events over the past 7 days. By correlating Event IDs 6005, 6006, and 6008, administrators can quickly reconstruct system reboot timelines and distinguish between clean shutdowns and abnormal terminations.</p>
     <div class="figure"><img src="Images/Trouble1RvC.png"></div><br><br><br><br>
 
+
+    <h3>2. Investigating Recent System Activity During Live Troubleshooting</h3>
     <code>
       Get-WinEvent -LogName System |
 Where-Object {
@@ -321,6 +326,8 @@ Where-Object {
     <p>This command filters the System event log to display only events generated within the last 15 minutes. By focusing on a narrow time window, administrators can quickly identify recent service state changes and system activity during live troubleshooting or incident investigation.</p>
     <div class="figure"><img src="Images/Trouble2B4Reboot.png"></div><br><br><br><br>
 
+
+    <h3>3. Ruling Out Service-Level Crashes as a Root Cause</h3>
     <code>
       Get-WinEvent -FilterHashtable @{
   LogName = 'System'
@@ -331,6 +338,8 @@ Where-Object {
     <p>This command queries the System event log for service crash and abnormal termination events (7031 and 7034) over the past three days. The absence of results confirms that no services failed unexpectedly during this period, indicating system stability and ruling out service-level crashes as a root cause.</p>
     <div class="figure"><img src="Images/Trouble3DetectServiceCrash.png"></div><br><br><br><br>
 
+
+    <h3>4. Reviewing Authentication Activity Outside Normal Business Hours</h3>
     <code>
       Get-WinEvent -LogName Security |
 Where-Object {
@@ -341,6 +350,8 @@ Where-Object {
     <p>This query filters the Windows Security event log to identify authentication and privilege-related activity occurring outside of normal business hours. By focusing on late-night and early-morning events, this approach highlights off-hours logons and privileged sessions that may warrant closer review during incident investigations or audit scenarios.</p>
     <div class="figure"><img src="Images/Trouble4AfterHoursAct.png"></div><br><br><br><br>
 
+
+    <h3>5. Reviewing Scheduled Task Activity Over the Last 24 Hours</h3>
     <code>
       Get-WinEvent -FilterHashtable @{
     LogName = 'Microsoft-Windows-TaskScheduler/Operational'
@@ -350,6 +361,8 @@ Where-Object {
     <p>This query examines the Task Scheduler Operational log to identify scheduled task activity over the last 24 hours. It provides visibility into task execution, completion, failures, and updates, including the processes launched and the security context under which they ran. Task Scheduler is a common mechanism for both legitimate automation and malicious persistence, making this log a valuable source for behavioral analysis and incident investigations.</p>
     <div class="figure"><img src="Images/Trouble5ScheduledTaskExec.png"></div><br><br><br><br>
 
+
+    <h3>6. Detecting System Instability Through Error and Critical Events</h3>
     <code>
       Get-WinEvent -LogName System |
 Where-Object { $_.LevelDisplayName -in 'Error','Critical' } |
@@ -358,6 +371,8 @@ Select TimeCreated, Id, Message
     <p>This query filters the System event log to surface only Error and Critical events, providing a focused view of serious operating system issues. It highlights unexpected shutdowns, reboot anomalies, service failures, time synchronization events, and firmware-related security messages. This type of analysis is useful for diagnosing system instability, identifying power or hardware issues, and validating system health during incident response or troubleshooting.</p>
     <div class="figure"><img src="Images/Trouble6ServerFeelSlow.png"></div><br><br><br><br>
 
+
+    <h3>7. Detecting Noisy and Recurring System Events</h3>
     <code>
       Get-WinEvent -LogName System |
 Group-Object Id |
@@ -367,6 +382,8 @@ Select -First 10
     <p>This command summarizes the System event log by grouping events based on Event ID and ranking them by frequency. It provides a high-level view of the most common system activities, allowing administrators to identify normal operational patterns, noisy events, and frequently occurring service state changes. This technique is useful for establishing a system baseline and prioritizing which event types deserve closer investigation.</p>
     <div class="figure"><img src="Images/Trouble7PatternRecog.png"></div><br><br><br><br>
 
+
+    <h3>8. Validating Administrative Logon Activity</h3>
     <code>
       Get-WinEvent -FilterHashtable @{
     LogName = 'Security'
@@ -377,6 +394,8 @@ Select -First 10
     <p>This query retrieves Security log events where special privileges were assigned during logon. Event ID 4672 indicates that a user or process received elevated rights such as administrative or system-level privileges. Monitoring this event is critical for detecting privileged access, validating administrative activity, and identifying potential privilege escalation during security investigations.</p>
     <div class="figure"><img src="Images/Trouble8AdminActAudit.png"></div><br><br><br><br>
 
+
+    <h3>9. Collecting System Error Events for Troubleshooting</h3>
     <code>
       Get-WinEvent -LogName System |
 Where-Object { $_.LevelDisplayName -eq 'Error' } |
