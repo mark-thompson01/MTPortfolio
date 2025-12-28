@@ -1,185 +1,224 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ubuntu Server: Post-Installation Baseline & Hardening · Mark Thompson Portfolio</title>
-  <meta name="description" content="Ubuntu Server post-installation baseline focusing on systems administration, security hardening, and operational discipline." />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <style>
-    :root{
-      --bg-1:#0f1115;
-      --bg-2:#141821;
-      --text:#E6E7EE;
-      --muted:#A9ADBE;
-      --brand:#4DA3FF;
-      --card-border:#2A3447;
-      --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;
-    }
+<title>Ubuntu Server: Post-Installation Baseline & Hardening · Mark Thompson Portfolio</title>
+<meta name="description" content="Ubuntu Server post-installation baseline focusing on systems administration, security hardening, and operational discipline.">
 
-    html,body{height:100%}
+<style>
+:root{
+  --bg-1:#0f1115;
+  --bg-2:#141821;
+  --text:#E6E7EE;
+  --muted:#A9ADBE;
+  --brand:#4DA3FF;
+  --border:#2A3447;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:18px;
+}
 
-    body{
-      margin:0;
-      color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
-      background:
-        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
-        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
-        linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6;
-    }
+html,body{height:100%}
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+body{
+  margin:0;
+  color:var(--text);
+  font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
+  background:
+    radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+    radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  line-height:1.65;
+}
 
-    /* Nav */
-    .topnav{margin-bottom:18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{
-      color:var(--muted);
-      text-decoration:none;
-      padding:6px 10px;
-      border-radius:10px;
-      border:1px solid transparent
-    }
-    .topnav a:hover{
-      color:var(--text);
-      border-color:#2a3447;
-      background:rgba(255,255,255,.04)
-    }
-    .topnav a.active{
-      color:var(--text);
-      border-color:#3a4a67;
-      background:rgba(255,255,255,.06)
-    }
+.wrap{
+  max-width:1000px;
+  margin:0 auto;
+  padding:40px 20px 70px;
+}
 
-    .crumbs{color:var(--muted);font-size:14px;margin-bottom:10px}
-    .crumbs a{color:var(--muted);text-decoration:none}
+/* NAV */
+.topnav{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
+}
+.topnav a{
+  color:var(--muted);
+  text-decoration:none;
+  padding:6px 10px;
+  border-radius:10px;
+}
+.topnav a.active{
+  color:var(--text);
+  border:1px solid #3a4a67;
+  background:rgba(255,255,255,.06);
+}
 
-    h1{
-      margin:12px 0 6px;
-      font-size:clamp(28px,4vw,40px);
-      font-weight:800;
-      text-align:center;
-    }
+/* HEADER */
+header{
+  margin-bottom:24px;
+}
 
-    h2{margin-top:32px;font-size:22px}
-    h3{margin-top:18px;font-size:18px;color:var(--brand)}
+h1{
+  text-align:center;
+  margin:14px 0 6px;
+  font-size:clamp(30px,4vw,42px);
+  font-weight:800;
+}
 
-    .lead{
-      color:var(--muted);
-      font-size:18px;
-      text-align:center;
-      margin-bottom:6px;
-    }
+.subtitle{
+  color:var(--muted);
+  font-size:18px;
+  margin-bottom:20px;
+}
 
-    .card{
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:22px;
-      margin-top:20px;
-    }
+/* CARD */
+.card{
+  background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:26px;
+}
 
-    /* IMAGE FRAME */
-    .figure{
-      border:1px solid var(--card-border);
-      border-radius:14px;
-      background:#0e1220;
-      padding:8px;
-      margin:20px auto;
-      width:max-content;
-      max-width:100%;
-      cursor:zoom-in;
-      transition:transform .25s ease, box-shadow .25s ease;
-    }
+/* HEADINGS */
+h2{
+  margin-top:38px;
+  font-size:22px;
+}
 
-    .figure img{
-      display:block;
-      max-width:520px;
-      height:auto;
-      border-radius:10px;
-    }
+/* IMAGE FRAME */
+.figure{
+  margin:22px auto;
+  padding:8px;
+  background:#0e1220;
+  border:1px solid var(--border);
+  border-radius:14px;
+  width:max-content;
+  max-width:100%;
+  cursor:zoom-in;
+}
 
-    /* HEADER IMAGE (UNCHANGED SIZE) */
-    .figure.header img{
-      max-width:600px;
-    }
+.figure img{
+  display:block;
+  max-width:520px;
+  height:auto;
+  border-radius:10px;
+}
 
-    /* ZOOM */
-    .figure:active{
-      cursor:zoom-out;
-    }
+/* HEADER IMAGE */
+.figure.header img{
+  max-width:600px;
+}
 
-    .figure:active img{
-      max-width:95vw;
-      max-height:90vh;
-    }
+/* ZOOM */
+.figure:active{
+  cursor:zoom-out;
+}
+.figure:active img{
+  max-width:95vw;
+  max-height:90vh;
+}
 
-    footer{
-      margin-top:40px;
-      padding-top:20px;
-      border-top:1px solid #232a3a;
-      color:var(--muted);
-      font-size:14px;
-      text-align:center;
-    }
-  </style>
+/* FOOTER */
+footer{
+  margin-top:40px;
+  padding-top:20px;
+  border-top:1px solid #232a3a;
+  color:var(--muted);
+  font-size:14px;
+  text-align:center;
+}
+</style>
 </head>
 
 <body>
 <div class="wrap">
 
-  <nav class="topnav">
-    <a href="/MTPortfolio/">Home</a>
-    <a href="/MTPortfolio/Skills">Networking</a>
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
-    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
-    <a href="/MTPortfolio/Blogs" class="active">Blog</a>
-  </nav>
+<nav class="topnav">
+  <a href="/MTPortfolio/">Home</a>
+  <a href="/MTPortfolio/Skills">Networking</a>
+  <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a>
+  <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+  <a href="/MTPortfolio/Blogs" class="active">Blog</a>
+</nav>
 
-  <div class="crumbs">
-    <a href="/MTPortfolio/Blogs">Blog</a> · <span>Ubuntu Server: Post-Installation Baseline & Hardening</span>
+<header>
+  <div class="figure header">
+    <img src="Images/UbuntuServer.png" alt="Ubuntu Server Blog Cover">
   </div>
+  <h1>Ubuntu Server: Post-Installation Baseline & Hardening</h1>
+  <div class="subtitle">Building a Real Systems Administration Foundation</div>
+</header>
 
-  <header>
-    <div class="figure header">
-      <img src="Images/UbuntuServer.png" alt="Ubuntu Server blog cover" loading="lazy">
-    </div>
-    <h1>Ubuntu Server: Post-Installation Baseline & Hardening</h1>
-    <p class="lead">Building a Real Systems Administration Foundation</p>
-  </header>
+<section class="card">
 
-  <section class="card">
+<p>Simply installing an operating system is not systems administration.</p>
+<p>The actions that immediately follow after an installation are imperative decisions that determine whether a server becomes a stable, secure foundation or a quiet liability waiting to fail.</p>
+<p>As a long-time enthusiast of Linux, I’ve used a handful of desktop distributions, but have been eager to explore more Linux Systems administration, and getting started in that direction with Ubuntu Server.</p>
+<p>This post walks through the exact steps I take after installing Ubuntu Server to establish a baseline. These steps aim to reflect the approach of how a given Ubuntu Server system in a production environment would be prepared before services are ever deployed.</p>
 
-    <p>Simply installing an operating system is not systems administration.</p>
-    <p>The actions that immediately follow after an installation are imperative decisions that determine whether a server becomes a stable, secure foundation or a quiet liability waiting to fail.</p>
-    <p>As a long-time enthusiast of Linux, I’ve used a handful of desktop distributions, but have been eager to explore more Linux Systems administration, and getting started in that direction with Ubuntu Server.</p>
-    <p>This post walks through the exact steps I take after installing Ubuntu Server to establish a baseline.</p>
+<div class="figure"><img src="Images/phase1-1.png"></div>
+<div class="figure"><img src="Images/phase1-2.png"></div>
 
-    <div class="figure"><img src="Images/phase1-1.png"></div>
-    <div class="figure"><img src="Images/phase1-2.png"></div>
+<p>In this example, I have Ubuntu Server 24.04 installed on a Hyper-V VM. Deployed as a virtual machine in a lab environment for educational purposes and hands-on skills development.</p>
+<p>The overall goal here is to take knowledge and curiosity and initiate hands-on action followed by best practice research to produce an intended result.</p>
 
-    <h2>Step 1: Validate the Installation</h2>
-    <div class="figure"><img src="Images/phase1-3.png"></div>
-    <div class="figure"><img src="Images/phase1-4.png"></div>
-    <div class="figure"><img src="Images/phase1-5.png"></div>
-    <div class="figure"><img src="Images/phase1-9.png"></div>
+<h2>Step 1: Validate the Installation</h2>
+<div class="figure"><img src="Images/phase1-3.png"></div>
+<div class="figure"><img src="Images/phase1-4.png"></div>
+<div class="figure"><img src="Images/phase1-5.png"></div>
+<div class="figure"><img src="Images/phase1-9.png"></div>
 
-    <h2>Step 2: Update the System Immediately</h2>
-    <div class="figure"><img src="Images/phase2-1.png"></div>
-    <div class="figure"><img src="Images/phase2-2.png"></div>
-    <div class="figure"><img src="Images/phase2-3.png"></div>
-    <div class="figure"><img src="Images/phase2-4.png"></div>
+<h2>Step 2: Update the System Immediately</h2>
+<div class="figure"><img src="Images/phase2-1.png"></div>
+<div class="figure"><img src="Images/phase2-2.png"></div>
+<div class="figure"><img src="Images/phase2-3.png"></div>
+<div class="figure"><img src="Images/phase2-4.png"></div>
+<div class="figure"><img src="Images/phase2-5.png"></div>
+<div class="figure"><img src="Images/phase2-6.png"></div>
+<div class="figure"><img src="Images/phase2-7.png"></div>
+<div class="figure"><img src="Images/phase2-8.png"></div>
 
-    <p><em>Ubuntu and the Ubuntu logo are registered trademarks of Canonical Ltd. This content is for educational purposes only and is not affiliated with or endorsed by Canonical.</em></p>
+<h2>Step 3: Create a Non-Root Administrative User</h2>
+<div class="figure"><img src="Images/phase3-1.png"></div>
+<div class="figure"><img src="Images/phase3-2.png"></div>
+<div class="figure"><img src="Images/phase3-3.png"></div>
+<div class="figure"><img src="Images/phase3-4.png"></div>
+<div class="figure"><img src="Images/phase3-5.png"></div>
+<div class="figure"><img src="Images/phase3-6.png"></div>
+<div class="figure"><img src="Images/phase3-7.png"></div>
 
-  </section>
+<h2>Step 4: Secure SSH Access</h2>
+<div class="figure"><img src="Images/phase4-1.png"></div>
+<div class="figure"><img src="Images/phase4-2.png"></div>
+<div class="figure"><img src="Images/phase4-3.png"></div>
+<div class="figure"><img src="Images/phase4-4.png"></div>
+<div class="figure"><img src="Images/phase4-5.png"></div>
 
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-  </footer>
+<h2>Step 5: Verify Network Configuration</h2>
+<div class="figure"><img src="Images/phase5-1.png"></div>
+<div class="figure"><img src="Images/phase5-2.png"></div>
+<div class="figure"><img src="Images/phase5-4.png"></div>
+<div class="figure"><img src="Images/phase5-5.png"></div>
+
+<h2>Step 6: Set Hostname and Local Resolution</h2>
+<div class="figure"><img src="Images/phase6-1.png"></div>
+<div class="figure"><img src="Images/phase6-2.png"></div>
+<div class="figure"><img src="Images/phase6-3.png"></div>
+<div class="figure"><img src="Images/phase6-4.png"></div>
+
+
+</section>
+<p><em>Ubuntu and the Ubuntu logo are registered trademarks of Canonical Ltd. This content is for educational purposes only and is not affiliated with or endorsed by Canonical.</em></p>
+
+   <p><a href="/MTPortfolio/Blogs">← Back to Blog</a></p>
+<footer>
+  Mark Thompson · MTPortfolio
+</footer>
 
 </div>
 </body>
