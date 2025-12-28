@@ -170,11 +170,12 @@
     <div class="figure"><img src="Images/WinEvent3.png"></div><br><br><br><br>
 
     <code>Get-WinEvent -FilterHashtable @{
-  LogName   = 'System'
+LogName   = 'System'
   StartTime = (Get-Date).AddHours(-24)
 }
 </code>
     <p>This command retrieves <strong>only System log events that occurred within the last 24 hours</strong>, using PowerShell's <strong>native event filtering engine</strong> instead of post-processing results.</p>
+    <p>PowerShell’s native event filtering engine allows administrators to query Windows Event Logs efficiently by filtering events at the source, reducing resource usage and enabling scalable, automation-friendly log analysis.</p>
     <div class="figure"><img src="Images/WinEvent4.png"></div>
     <p>Here it shows the Windows update service started downloading an update.</p>
     <div class="figure"><img src="Images/WinEvent5.png"></div><br><br><br><br>
