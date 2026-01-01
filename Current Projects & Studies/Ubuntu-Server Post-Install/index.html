@@ -261,12 +261,18 @@ of the command <code>adduser</code> process works correctly.</p>
 <div class="figure"><img src="Images/phase2-5.png"></div>
 <div class="figure"><img src="Images/phase2-6.png"></div>
 <p><strong>Recommended changes:</strong></p>
-  <ul>
+  <ul style="list-style-type: none;">
     <li><strong>PermitRootlogin no</strong></li>
     <li><strong>PasswordAuthentication no</strong></li>
     <li><strong>PubKeyAuthentication yes</strong></li>
   </ul><br>
 <p>Verify/Make necessary changes, <strong>ctrl + o</strong> to save <strong>ctrl + x</strong> to exit.</p>
+<p><strong>Here it shows:</strong></p>
+  <ul style="list-style-type: none;">
+    <li>PermitRootLogin prohibit-password</li>
+    <li>PubKeyAuthentication yes</li>
+    <li>PermitRootLogoin prohibit-password (set-above)</li>
+  </ul>
 <div class="figure"><img src="Images/phase2-7.png"></div><br>
 
 
