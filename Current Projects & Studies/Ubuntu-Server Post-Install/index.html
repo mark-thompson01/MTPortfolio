@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Ubuntu Server Post-Installation Baseline Lab · Mark Thompson Portfolio</title>
 
@@ -25,25 +25,44 @@ body{
 }
 .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-h1{font-size:clamp(28px,4vw,40px);margin-bottom:6px}
-h2{margin-top:34px;font-size:22px}
-.lead{color:var(--muted);font-size:18px}
+/* Top nav */
+.topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+.topnav a{
+  color:var(--muted);text-decoration:none;
+  padding:6px 10px;border-radius:10px;border:1px solid transparent
+}
+.topnav a:hover{
+  color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)
+}
+.topnav a.active{
+  color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)
+}
 
+/* Breadcrumb */
+.crumbs{color:var(--muted);font-size:14px;margin:2px 0 10px}
+.crumbs a{color:var(--muted);text-decoration:none}
+.crumbs a:hover{color:var(--text)}
+
+h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px)}
+h2{margin:0 0 14px;font-size:22px}
+.lead{color:var(--muted);font-size:18px;margin:8px 0 18px}
+
+/* Cards */
 .card{
   background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
   border:1px solid var(--card-border);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
   padding:22px;
-  margin-top:20px;
+  margin-top:18px;
 }
 
-/* Images */
+/* Image wrapper */
 .figure{
   border:1px solid var(--card-border);
   border-radius:12px;
   background:#0e1220;
-  padding:6px;
+  padding:8px;
   margin:14px auto;
   max-width:720px;
   cursor:zoom-in;
@@ -55,17 +74,21 @@ h2{margin-top:34px;font-size:22px}
   border-radius:8px;
 }
 
-/* Zoom */
-.zoom{
-  position:fixed; inset:0;
-  background:rgba(10,12,18,.95);
-  display:none; align-items:center; justify-content:center;
-  z-index:9999; padding:20px;
+/* Lightbox */
+.zb-overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;align-items:center;justify-content:center;
+  z-index:9999;
 }
-.zoom img{
-  max-width:95%; max-height:95%;
-  border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.6);
-  cursor:zoom-out;
+.zb-overlay.is-open{display:flex}
+.zb-stage{position:relative;max-width:95vw;max-height:92vh;overflow:hidden}
+.zb-img{max-width:100%;max-height:100%;border-radius:12px}
+.zb-close{
+  position:fixed;top:14px;right:14px;
+  background:rgba(255,255,255,.08);
+  border:1px solid #2a2f3f;
+  color:#cfd3e6;padding:8px 10px;border-radius:10px
 }
 
 footer{
@@ -79,6 +102,21 @@ footer{
 <body>
 <div class="wrap">
 
+<!-- NAV -->
+<nav class="topnav">
+  <a href="/MTPortfolio/">Home</a>
+  <a href="/MTPortfolio/Skills">Networking</a>
+  <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows & Linux</a>
+  <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+  <a href="/MTPortfolio/Blogs">Blog</a>
+</nav>
+
+<!-- Breadcrumb -->
+<div class="crumbs">
+  <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a> ·
+  <span>Ubuntu Server Post-Installation Baseline</span>
+</div>
+
 <header>
   <h1>Ubuntu Server Post-Installation Baseline Lab</h1>
   <p class="lead">
@@ -86,10 +124,9 @@ footer{
   </p>
 </header>
 
-<!-- PHASE 1 -->
+<!-- PHASES (UNCHANGED CONTENT) -->
 <section class="card">
 <h2>Phase 1 — Initial Validation & Environment Awareness</h2>
-
 <div class="figure"><img src="Images/phase1-1.png"></div>
 <div class="figure"><img src="Images/phase1-2.png"></div>
 <div class="figure"><img src="Images/phase1-3.png"></div>
@@ -101,13 +138,10 @@ footer{
 <div class="figure"><img src="Images/phase1-9.png"></div>
 <div class="figure"><img src="Images/phase1-10.png"></div>
 <div class="figure"><img src="Images/phase1-11.png"></div>
-
 </section>
 
-<!-- PHASE 2 -->
 <section class="card">
 <h2>Phase 2 — System Updates & Package Baseline</h2>
-
 <div class="figure"><img src="Images/phase2-1.png"></div>
 <div class="figure"><img src="Images/phase2-2.png"></div>
 <div class="figure"><img src="Images/phase2-3.png"></div>
@@ -116,13 +150,10 @@ footer{
 <div class="figure"><img src="Images/phase2-6.png"></div>
 <div class="figure"><img src="Images/phase2-7.png"></div>
 <div class="figure"><img src="Images/phase2-8.png"></div>
-
 </section>
 
-<!-- PHASE 3 -->
 <section class="card">
 <h2>Phase 3 — Identity & Privilege Management</h2>
-
 <div class="figure"><img src="Images/phase3-1.png"></div>
 <div class="figure"><img src="Images/phase3-2.png"></div>
 <div class="figure"><img src="Images/phase3-3.png"></div>
@@ -130,43 +161,33 @@ footer{
 <div class="figure"><img src="Images/phase3-5.png"></div>
 <div class="figure"><img src="Images/phase3-6.png"></div>
 <div class="figure"><img src="Images/phase3-7.png"></div>
-
 </section>
 
-<!-- PHASE 4 -->
 <section class="card">
 <h2>Phase 4 — Secure Remote Access (SSH)</h2>
-
 <div class="figure"><img src="Images/phase4-1.png"></div>
 <div class="figure"><img src="Images/phase4-2.png"></div>
 <div class="figure"><img src="Images/phase4-3.png"></div>
 <div class="figure"><img src="Images/phase4-4.png"></div>
 <div class="figure"><img src="Images/phase4-5.png"></div>
-
 </section>
 
-<!-- PHASE 5 -->
 <section class="card">
 <h2>Phase 5 — Network Configuration & Host Identity</h2>
-
 <div class="figure"><img src="Images/phase5-1.png"></div>
 <div class="figure"><img src="Images/phase5-2.png"></div>
 <div class="figure"><img src="Images/phase5-3.png"></div>
 <div class="figure"><img src="Images/phase5-4.png"></div>
 <div class="figure"><img src="Images/phase5-5.png"></div>
 <div class="figure"><img src="Images/phase5-6.png"></div>
-
 </section>
 
-<!-- PHASE 6 -->
 <section class="card">
 <h2>Phase 6 — System Readiness & Operational Baseline</h2>
-
 <div class="figure"><img src="Images/phase6-1.png"></div>
 <div class="figure"><img src="Images/phase6-2.png"></div>
 <div class="figure"><img src="Images/phase6-3.png"></div>
 <div class="figure"><img src="Images/phase6-4.png"></div>
-
 </section>
 
 <footer>
@@ -176,29 +197,26 @@ footer{
 
 </div>
 
-<!-- Zoom -->
-<div class="zoom" id="zoom">
-  <img id="zoomImg">
-</div>
-
+<!-- Lightbox Script -->
 <script>
 const imgs = document.querySelectorAll('.figure img');
-const zoom = document.getElementById('zoom');
-const zoomImg = document.getElementById('zoomImg');
+const overlay = document.createElement('div');
+overlay.className = 'zb-overlay';
+overlay.innerHTML = '<button class="zb-close">Close</button><div class="zb-stage"><img class="zb-img"></div>';
+document.body.appendChild(overlay);
+
+const zimg = overlay.querySelector('.zb-img');
+const close = overlay.querySelector('.zb-close');
 
 imgs.forEach(img=>{
   img.onclick=()=>{
-    zoomImg.src=img.src;
-    zoom.style.display='flex';
+    zimg.src=img.src;
+    overlay.classList.add('is-open');
   };
 });
-zoom.onclick=()=>{
-  zoom.style.display='none';
-  zoomImg.src='';
-};
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){zoom.style.display='none';zoomImg.src='';}
-});
+close.onclick=()=>overlay.classList.remove('is-open');
+overlay.onclick=e=>{if(e.target===overlay)overlay.classList.remove('is-open');};
+window.onkeydown=e=>{if(e.key==='Escape')overlay.classList.remove('is-open');};
 </script>
 
 </body>
