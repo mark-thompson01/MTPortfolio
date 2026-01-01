@@ -342,11 +342,22 @@ of the command <code>adduser</code> process works correctly.</p>
 
 <section class="card">
 <h2>Phase 4 — Security Baseline</h2>
+  <h3>1. Configure the Firewall (UFW)</h3>
+  <code>sudo ufw default deny incoming</code>
+  <code>sudo ufw default allow outgoing</code>
+  <code>sudo ufw allow OpenSSH</code>
+  <code>sudo ufw enable</code>
+  <code>sudo ufw status verbose</code>
 <div class="figure"><img src="Images/phase4-1.png"></div>
 <div class="figure"><img src="Images/phase4-2.png"></div>
 <div class="figure"><img src="Images/phase4-3.png"></div>
 <div class="figure"><img src="Images/phase4-4.png"></div>
 <div class="figure"><img src="Images/phase4-5.png"></div>
+<h4>Why:</h4>
+<ul>
+  <li>Immediate attack surface reduction</li>
+  <li>Zero-trust mindset</li>
+</ul>  
 </section><br><br><br><br>
 
 <section class="card">
