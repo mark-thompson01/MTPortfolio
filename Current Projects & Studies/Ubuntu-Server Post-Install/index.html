@@ -258,14 +258,28 @@ of the command <code>adduser</code> process works correctly.</p>
   <p><strong>Edit SSH configuration:</strong></p>
   <code>sudo nano /etc/ssh/sshd_config</code>
 <div class="figure"><img src="Images/phase2-4.png"></div>
-  
-
-
-  
 <div class="figure"><img src="Images/phase2-5.png"></div>
 <div class="figure"><img src="Images/phase2-6.png"></div>
-<div class="figure"><img src="Images/phase2-7.png"></div>
-<div class="figure"><img src="Images/phase2-8.png"></div>
+<p><strong>Recommended changes:</strong></p>
+  <ul>
+    <li><strong>PermitRootlogin no</strong></li>
+    <li><strong>PasswordAuthentication no</strong></li>
+    <li><strong>PubKeyAuthentication yes</strong></li>
+  </ul><br>
+<p>Verify/Make necessary changes, <strong>ctrl + o</strong> to save <strong>ctrl + x</strong> to exit.</p>
+<div class="figure"><img src="Images/phase2-7.png"></div><br>
+
+
+
+<p>After making adjustments, restart the ssh service for the changes to take effect.</p>
+<code>sudo systemctl restart ssh</code>
+<div class="figure"><img src="Images/phase2-8.png"></div><br>
+
+<h4>Why:</h4>
+  <ul>
+    <li>Prevents brute-force attacks</li>
+    <li>Enforces key-based auth</li>
+  </ul>
 </section><br><br><br><br>
 
 <section class="card">
