@@ -279,6 +279,7 @@ of the command <code>adduser</code> process works correctly.</p>
 
 <p>After making adjustments, restart the ssh service for the changes to take effect.</p>
 <code>sudo systemctl restart ssh</code>
+<code>sudo systemctl status ssh</code>
 <div class="figure"><img src="Images/phase2-8.png"></div><br>
 
 <h4>Why:</h4>
@@ -288,9 +289,17 @@ of the command <code>adduser</code> process works correctly.</p>
   </ul>
 </section><br><br><br><br>
 
+
+  
 <section class="card">
 <h2>Phase 3 — Networking & Host Identity</h2>
-<div class="figure"><img src="Images/phase3-1.png"></div>
+  <h3>1. Verify Network Configuration (Netplan)</h3>
+  <code>ip a</code>
+  <code>ip route</code>
+<div class="figure"><img src="Images/phase3-1.png"></div><br>
+
+<code>ls /etc/netplan/</code>
+<code>sudo nano /etc/netplan/*.yaml</code>
 <div class="figure"><img src="Images/phase3-2.png"></div>
 <div class="figure"><img src="Images/phase3-3.png"></div>
 <div class="figure"><img src="Images/phase3-4.png"></div>
