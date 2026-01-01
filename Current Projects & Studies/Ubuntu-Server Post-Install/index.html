@@ -298,18 +298,40 @@ of the command <code>adduser</code> process works correctly.</p>
   <code>ip route</code>
 <div class="figure"><img src="Images/phase3-1.png"></div><br>
 
+<h4>View Netplan:</h4>
 <code>ls /etc/netplan/</code>
 <code>sudo nano /etc/netplan/*.yaml</code>
 <div class="figure"><img src="Images/phase3-2.png"></div>
 <div class="figure"><img src="Images/phase3-3.png"></div>
 
+<h4>Apply safely</h4>
 <code>sudo netplan try</code><br>
 <code>sudo netplan apply</code>
 <div class="figure"><img src="Images/phase3-4.png"></div><br>
+<h4>Why:</h4>
+  <ul>
+    <li>Static IPs for servers</li>
+    <li>Prevents accidental lockouts</li>
+  </ul><br><br>
 
+
+  
+<h3>2. Set Hostname & Local Name Resolution</h3>
 <code>hostname</code><br>
 <code>sudo hostnamectl set-hostname ubuntu-srv01</code><br>
 <code>sudo nano /etc/hosts</code> 
+  <h4>Add:</h4>
+  <ul style="list-style-type: none;">
+    <li>127.0.1.1 ubuntu-srv01</li>
+  </ul><br>
+  <h4>Why:</h4>
+  <ul>
+    <li>Clean logs</li>
+    <li>Predictable service identity</li>
+    <li>Easier monitoring & automation</li>
+  </ul><br>
+
+  
 <div class="figure"><img src="Images/phase3-5.png"></div>
 <div class="figure"><img src="Images/phase3-6.png"></div>
 <div class="figure"><img src="Images/phase3-7.png"></div>
