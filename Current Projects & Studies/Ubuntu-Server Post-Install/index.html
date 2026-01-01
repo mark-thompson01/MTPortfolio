@@ -386,11 +386,26 @@ sudo dpkg-reconfigure unattended-upgrades
 
 <section class="card">
 <h2>Phase 6 — Logging, Monitoring & Maintenance</h2>
+  <h3>1. Log Inspection</h3>
+  <code>journalctl -p 3 -xb</code>
 <div class="figure"><img src="Images/phase6-1.png"></div>
-<div class="figure"><img src="Images/phase6-2.png"></div>
+<div class="figure"><img src="Images/phase6-2.png"></div><br>
+
+<p><strong>Check auth logs:</strong></p>
+<code>sudo tail -f /var/log/auth.log</code>
 <div class="figure"><img src="Images/phase6-3.png"></div>
 <div class="figure"><img src="Images/phase6-4.png"></div>
 </section>
+  <h4>Why:</h4>
+  <ul>
+    <li>Early intrusion detection</li>
+    <li>Debugging misconfigurations</li>
+  </ul><br><br>
+
+  <h3>2. Backup Awareness (Often Ignored)</h3>
+  <p><strong>Even if you don't implement backups yet:</strong></p>
+  <code>ls /etc</code><br>
+  <code>ls /var</code><br>
 
   <p><a href="../index.html">Back to Home</a></p>
 
