@@ -286,6 +286,7 @@ of the command <code>adduser</code> process works correctly.</p>
 <code>sudo systemctl restart ssh</code>
 <code>sudo systemctl status ssh</code>
 <div class="figure"><img src="Images/phase2-8.png"></div><br>
+sudo dpkg-reconfigure unattended-upgrades
 
 <h4>Why:</h4>
   <ul>
@@ -357,7 +358,7 @@ of the command <code>adduser</code> process works correctly.</p>
  
 
 <h3>2. Enable Automatic Security Updates</h3>
-<code>sudo apt install unattended-upgrades -y</code>
+<code>sudo apt install unattended-upgrades -y</code><br>
 <code>sudo dpkg-reconfigure unattended-upgrades</code>
 <div class="figure"><img src="Images/phase4-2.png"></div>
 <div class="figure"><img src="Images/phase4-3.png"></div>
