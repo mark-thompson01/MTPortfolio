@@ -372,10 +372,14 @@ sudo dpkg-reconfigure unattended-upgrades
 <section class="card">
 <h2>Phase 5 — Service & System Management</h2>
   <h3>1. Install Core SysAdmin Tools</h3>
+  <code>sudo apt install -y htop curl wget git net-tools fail2ban</code>
 <div class="figure"><img src="Images/phase5-1.png"></div>
 <div class="figure"><img src="Images/phase5-2.png"></div><br>
+
+<code>sudo systemctl enable fail2ban --now</code>
 <div class="figure"><img src="Images/phase5-3.png"></div>
 <div class="figure"><img src="Images/phase5-4.png"></div>
+<code>systemctl list-units --type=service --state=running</code>
 <div class="figure"><img src="Images/phase5-5.png"></div>
 <div class="figure"><img src="Images/phase5-6.png"></div>
 </section><br><br><br><br>
