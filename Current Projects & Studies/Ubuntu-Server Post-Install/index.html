@@ -239,12 +239,13 @@ of the command adduser process works correctly.</p>
 <ul>
   <li><strong>Primary Group:</strong> The user has their private group ( sysadmin )</li>
   <li><strong>Standard Access:</strong> The user was successfully added to the users group, which is the standard pool for non-0administrative accounts on the system.</li>
-</ul>
+</ul><br><br>
   
   
   
 <p>Creating a Non-Root Admin User account is an action of Account Isolation.</p>
 <p>Instead of doing everything through your personal account or the "root" account, this creates a dedicated service account <code>(sysadmin)</code>. This is a key security-step-if one users becomes compromised, the other user accounts remain protected.</p>
+<div class="figure"><img src="Images/phase2-3.png"></div>
   <h4>Why:</h4>
   <ul>
     <li>Least privilege</li>
@@ -253,7 +254,6 @@ of the command adduser process works correctly.</p>
   </ul><br>
 
   
-<div class="figure"><img src="Images/phase2-3.png"></div>
 
 
 <div class="figure"><img src="Images/phase2-4.png"></div>
