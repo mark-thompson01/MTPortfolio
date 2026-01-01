@@ -157,12 +157,26 @@ accidentally installed an interin version, you want
 want to know before you spend hours configuring it. It also confirms if you are running a 64-bit or ARM-based system.</li>
 </ul><br>
 
-<h4>The Systems "Stability Check"</h4>
+<h4>The System "Stability Check"</h4>
   <code>uptime</code>
   <ul>
     <li><strong>Why:</strong> This tells you how long the server has been running and the "load average."</li><br>
     <li><strong>The Goal:</strong> This helps to confirm that the system didn't experience a silent crash or reboot during the final stages of the installation process. If the load average is high on a brand-new install, something is going on with the background processes.</li>
+  </ul><br>
+
+  <h4>The System "Storage Check"</h4>
+  <code>df -h</code>
+  <ul><strong>Why:</strong> This shows your disk partitions and how much space is used.</ul><br>
+  <ul><strong>The Goal:</strong> There is a common issue during Ubuntu installations is the "LVM" default, which can sometimes only allocate half of the drive space. Running this command ensures that the server actually sess all the storage you gave it.</ul><br>
+  <ul>The <code>-h</code> makes the command output "human readable" (showing GB instead of raw blocks).</ul><br>
+
+  <h4>The System "Memory Check"</h4>
+  <code>free -h</code>
+  <ul>
+    <li><strong>Why:</strong> This displays the system RAM usage and system "Swap" space.</li><br>
+    <li><strong>The Goal:</strong> You want to make sure the server is detecting all of the RAM sticks (or the full amount of RAM allocated). If the server is already using 90% of its RAM with nothing installed, that's a sure sign an upgrade is needed well before the deployment stage is reached.</li>
   </ul>
+  
 <div class="figure"><img src="Images/phase1-4.png"></div><br><br>
   
   
