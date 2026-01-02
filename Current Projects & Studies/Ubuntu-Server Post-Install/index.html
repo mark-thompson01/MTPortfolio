@@ -300,11 +300,22 @@ of the command <code>adduser</code> process works correctly.</p>
   <h3>1. Verify Network Configuration (Netplan)</h3>
   <code>ip a</code><br>
   <code>ip route</code>
+  <p>The <code>ip a</code> command confirms/verifies the IP configuration details to the systems network adapater.</p>
+  <p>Best practice to review the IP configuration details to verify that you have the expected details set for the given configuration.</p>
+  <p>The <code>ip route</code> command lists the default routes that are defined on the given system.</p>
+  <p>It's a good detail to verify, and a good command to run in different troubleshooting scenarios.</p>
 <div class="figure"><img src="Images/phase3-1.png"></div><br>
+
 
 <h4>View Netplan:</h4>
 <code>ls /etc/netplan/</code><br>
 <code>sudo nano /etc/netplan/*.yaml</code>
+<p>Here, things are moving into network administration with the <strong>Netplan</strong> system utility. Netplan is the default way Ubuntu Server manages network settings like IP addresses, DNS, and gateways.</p>
+<p>Running <code>ls /etc/netplan/</code> to see what is available in the /netplan directory.</p>
+<p>In this example, the output file is <code>50-cloud-init.yaml</code>.</p>
+<p>In Ubuntu systems, network configurations are stored in <strong>YAML</strong> files.</p>
+<p>These files are the "instruction manuals" that instruct a <strong>Network Interface Card (NIC)</strong> how to establish an internet connection.</p>
+  
 <div class="figure"><img src="Images/phase3-2.png"></div>
 <div class="figure"><img src="Images/phase3-3.png"></div>
 
