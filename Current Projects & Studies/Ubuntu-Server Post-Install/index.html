@@ -555,6 +555,14 @@ of the command <code>adduser</code> process works correctly.</p>
 <section class="card">
 <h2>Phase 4 — Security Baseline</h2>
   <h3>1. Configure the Firewall (UFW)</h3>
+  <ul>
+    <li>Deny incoming traffic by default</li>
+    <li>Allow outgoing traffic by default</li>
+    <li>Allow OpenSSH</li>
+    <li>Enable the ufw Firewall</li>
+    <li>List ufw Firewall status</li>
+  </ul>
+  
   <code>sudo ufw default deny incoming</code><br>
   <code>sudo ufw default allow outgoing</code><br>
   <code>sudo ufw allow OpenSSH</code><br>
