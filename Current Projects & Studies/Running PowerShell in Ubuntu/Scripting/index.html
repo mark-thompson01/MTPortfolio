@@ -180,7 +180,18 @@ for processor load, memory consumption, filesystem usage, and network addressing
 <div class="step">
  
     <div class="img-block">
-        <div class="img-label">Step 5</div>
+        <p>Continuing through the Linux branch, the script collects additional system health metrics using standard Linux command-line utilities.</p>
+        <p>Memory usage is calculated by parsing the output of <code>free -m</code>, allowing total, used, 
+        and available memory to be derived in a predictable format.</p>
+        <p>Disk usage is gathered using <code>df -h</code>, providing filesystem-level capacity and 
+        utilization data.</p>
+        <p>Network information is retrieved via <code>hostname -I</code> to capture the system's
+        primary IP address, and system uptime is collected using <code>uptime -p</code>
+        for human-readable runtime value.</p>
+        
+        <p>Each metric is wrapped in a <code>try/catch</code> block to ensure fault tolerance, allowing the script to continue executing even if a specific command or data source is unavailable. This approach mirrors real-world monitoring practices, where resilience and continuity are prioritized over perfect data collection.</p>
+        
+        
         <div class="figure"><img src="Images/monitor5.png" alt=""></div>
     </div>
 </div><br>
