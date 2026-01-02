@@ -132,6 +132,7 @@ footer{
 </header>
 
   <h4>Table of Contents:</h4>
+
   <ul style="list-style-type: none;">
     <li><strong>Phase 1 - Initial Validation & Environment Awareness</strong></li>
     <li><strong>Phase 2 - Identity, Privilege Management, & Access Control</strong></li>
@@ -325,11 +326,31 @@ of the command <code>adduser</code> process works correctly.</p>
   </ul>
   <p>Operational continuity relies heavily on servers with <strong>Network Persistence & Configuration</strong>. To ensure consistent remote access, using <strong>Netplan</strong> to manage the server's network stack, helps to maintain that persistence.</p>
   <p>By auditing the YAML configuration files in <code>/etc/netplan/</code>, you can define static IP assignments and custom DNS resolvers.</p>
-  <p>The <code>nano</code> or other text editor CLI of your choice can be used to make changes to the file's configuration details, ensuring the server maintains a reliable 'heartbeat' on the local network, ensuring operations are not disrupted.</p>
+  <p>The <code>nano</code> or other text editor CLI of your choice can be used to make changes to the file's configuration details, ensuring the server maintains a reliable 'heartbeat' on the local network, ensuring operations are not disrupted.</p><br>
 
 <h4>Apply safely</h4>
 <code>sudo netplan try</code><br>
 <code>sudo netplan apply</code>
+<p><strong>This right here is the most critical part of network configuration:</strong></p>
+<p><strong>Committing changes safely!</strong></p>
+<p>When you edit network settings on a headless server, there is a high risk of accidentally locking yourself out.</p>
+<p>If you type one wrong number in an IP address and hit "apply," the server might lose its connection, and since you don't have a GUI or a local screen, you'd have no way to get back in to fix it.</p>
+<br>
+<p>The <code>sudo netplan try</code> command applies new network settings temporarily.</p>
+  <ul>
+    <li><strong>The "Timeout" Feature:</strong> In the output it says "Changes will revert in 115 seconds." It starts a countdown. If you don't press <strong>Enter</strong> within that time, the server assumes something went wrong (like you losing your connection) and automatically rolls back to the old, working settings.</li>
+    <li><strong>Why it's a lifesaver:</strong> If your new config breaks the internet, you just wait two minutes, and the server "fixes itself" by reverting back to your previous settings.</li>
+  </ul><br>
+
+ <p>The <code>sudo netplan apply</code> command is <strong>The "Final Commitment"</strong></p>
+  <ul>
+    <li><strong>What it does:</strong> Once you've confirmed that <code>netplan try</code> worked and you still have access, you run this to make the changes <strong>permanent</strong>.</li><br>
+    <li><stronger>The Result:</stronger> The system writes the configuration to the network stack. These settings will now persist even after the server reboots.</li>
+    
+  </ul>
+  
+
+  
 <div class="figure"><img src="Images/phase3-4.png"></div>
 <h4>Why:</h4>
   <ul>
