@@ -632,7 +632,12 @@ prevention service.</p>
   <h3>1. Log Inspection</h3>
   <code>journalctl -p 3 -xb</code>
 <div class="figure"><img src="Images/phase6-1.png"></div>
-<div class="figure"><img src="Images/phase6-2.png"></div><br>
+<div class="figure"><img src="Images/phase6-2.png"></div>
+  <p>In this example, I utilized <code>journalctl -p 3 -xb</code> as a primary diagnostic tool to run high-priority log inspections.</p>
+  <p>By filtering for Priority 3 (Error-level) events within the current boot descriptro, to be able to bypass non-critical system telemetry and immediately isolate service failures or kernel exceptions that could impact system stability.</p>
+
+
+  <br>
 
 <p><strong>Check auth logs:</strong></p>
 <code>sudo tail -f /var/log/auth.log</code>
