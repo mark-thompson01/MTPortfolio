@@ -191,7 +191,7 @@ for processor load, memory consumption, filesystem usage, and network addressing
         
         
         <div class="figure"><img src="Images/monitor5.png" alt=""></div>
-</div><br>
+</div>
 
 <div class="step">
   <h2>Step 3 – Build and Export a Unified Monitoring Report</h2>
@@ -199,7 +199,8 @@ for processor load, memory consumption, filesystem usage, and network addressing
        creating a normalized report structure that includes the timestamp, operating system, CPU usage, memory statistics, disk usage, IP address, and system uptime. This object acts as a consistent data model regardless of whether the script is executed on Windows or Linux.
    </p>
     <p>An output directory is then created relative to the script’s location if it does not already exist, ensuring reports are stored in a predictable and portable location. Finally, the report is exported in both <strong>JSON</strong>and <strong>CSV</strong> formats, making the data suitable for logging, auditing, automation pipelines, or ingestion by external monitoring and analysis tools.</p>
-        <div class="figure"><img src="Images/monitor6.png" alt=""></div>
+    <p>This design reflects real-world systems administration practices by separating data collection from data storage and ensuring monitoring output is structured, durable, and reusable.</p>
+    <div class="figure"><img src="Images/monitor6.png" alt=""></div>
     </div>
 </div><br>
 
