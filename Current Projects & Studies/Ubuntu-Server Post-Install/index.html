@@ -366,6 +366,10 @@ of the command <code>adduser</code> process works correctly.</p>
 
   
 <h3>2. Set Hostname & Local Name Resolution</h3>
+  <p><strong>Initial System Provisioning</strong></p>
+  
+
+  
 <code>hostname</code><br>
 <code>sudo hostnamectl set-hostname ubuntu-srv01</code><br>
 <code>sudo nano /etc/hosts</code> 
@@ -373,6 +377,12 @@ of the command <code>adduser</code> process works correctly.</p>
   <ul style="list-style-type: none;">
     <li>127.0.1.1 ubuntu-srv01</li>
   </ul>
+  <p>With these commands, the goal is to ensure network clarity and application stability.</p>
+  <p>After the initial system health check, it's time setup a recognizable hostname for the system that will be deployed into production that fits its intended purpose.</p>
+  <p>Listing out the current default hostname, followed by running the <code>sudo hostnamectl set-hostname</code> command to change the system's hostname to <code>ubuntu-srv01</code>.</p>
+  <p>Then mapping the new system hostname to the local loopback address in the <code>/etc/hosts</code> file.</p>
+  <p>This prevents 'DNS-lookup lag' and ensures that local services can resolve the system's identity without external network dependencies.</p>
+  
 <div class="figure"><img src="Images/phase3-5.png"></div>
 <div class="figure"><img src="Images/phase3-6.png"></div>
 <div class="figure"><img src="Images/phase3-7.png"></div>
