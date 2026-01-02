@@ -149,7 +149,7 @@ for processor load, memory consumption, filesystem usage, and network addressing
     <div class="img-block">
         <div class="figure"><img src="Images/monitor2.png" alt=""></div>
     </div>
-</div><br>
+</div>
 
 <div class="step">
     <div class="img-block">
@@ -160,7 +160,21 @@ for processor load, memory consumption, filesystem usage, and network addressing
 <div class="step">
  
     <div class="img-block">
-        <div class="img-label">Step 4</div>
+       <h2>Step 2 – Implement Linux-Specific System Monitoring Logic</h2>
+        <p>Here, we have the Linux execution branch of the monitoring script, where system
+            metrics are collected using native Linux utilities and kernel interfaces.
+        </p>
+        <p>CPU usage is gathered by first checking for the presence of <code>mpstat</code>, 
+        and if unavailable, falling back to directly parsing <code>/proc/stat</code>.
+        </p>
+        <p>
+            Ths layered approach ensures compatibility across minimal and full Linux installations. 
+            Memory and additional system metrics are handled within the same Linux-specific branch, 
+            maintaining consistency with the overall script structure. 
+        </p>
+        <p>
+            By isolating Linux logic in its own conditional block, the script preserves cross-platform portability while respecting the differences between Windows and Linux system internals. This design reflects real-world systems administration practices, where tooling must remain resilient across varied Linux environments.
+        </p>
         <div class="figure"><img src="Images/monitor4.png" alt=""></div>
     </div>
 </div><br>
