@@ -137,17 +137,21 @@ footer{
     </p>
 </header>
 
-<h2 id="phase-1">Phase 1 - Initial Validation & Environment Awareness</h2>
-<h2 id="phase-2">Phase 2 - Identity, Privilege Management, & Access Control</h2>
-<h2 id="phase-3">Phase 3 - Networking & Host Identity</h2>
-<h2 id="phase-4">Phase 4 - Security Baseline</h2>
-<h2 id="phase-5">Phase 5 - Service & System Management</h2>
-<h2 id="phase-6">Phase 6 - Logging, Monitoring, & Maintenance</h2>
-
+  <section class="card" id="toc">
+  <h4>Table of Contents:</h4>
+  <ul style="list-style-type: none;">
+    <li><a href="#phase-1"><strong>Phase 1 - Initial Validation & Environment Awareness</strong></a></li>
+    <li><a href="#phase-2"><strong>Phase 2 - Identity, Privilege Management, & Access Control</strong></a></li>
+    <li><a href="#phase-3"><strong>Phase 3 - Networking & Host Identity</strong></a></li>
+    <li><a href="#phase-4"><strong>Phase 4 - Security Baseline</strong></a></li>
+    <li><a href="#phase-5"><strong>Phase 5 - Service & System Management</strong></a></li>
+    <li><a href="#phase-6"><strong>Phase 6 - Logging, Monitoring, & Maintenance</strong></a></li>
+  </ul>
+</section><br><br>
 
 <!-- PHASES (UNCHANGED CONTENT) -->
 <section class="card">
-<h2>Phase 1 — Initial Validation & Environment Awareness</h2>
+<h2 id="phase-1">>Phase 1 — Initial Validation & Environment Awareness</h2>
 <h3>1. ubuntu-server login:</h3>
 <div class="figure"><img src="Images/phase1-1.png"></div>
 <div class="figure"><img src="Images/phase1-2.png"></div>
@@ -234,7 +238,7 @@ want to know before you spend hours configuring it. It also confirms if you are 
 </section><br><br><br><br>
 
 <section class="card">
-<h2>Phase 2 — Identity, Privilege Management & Access Control</h2>
+<h2 id="phase-2">Phase 2 — Identity, Privilege Management & Access Control</h2>
 <h3>1. Create a Non-Root Admin User</h3>
 <p><strong>Never operate day-to-day as root:</strong></p>
 <code>sudo adduser sysadmin</code>
@@ -300,7 +304,7 @@ of the command <code>adduser</code> process works correctly.</p>
 
   
 <section class="card">
-<h2>Phase 3 — Networking & Host Identity</h2>
+<h2 id="phase-3">Phase 3 — Networking & Host Identity</h2>
   <h3>1. Verify Network Configuration (Netplan)</h3>
   <code>ip a</code><br>
   <code>ip route</code>
@@ -398,7 +402,7 @@ of the command <code>adduser</code> process works correctly.</p>
 </section><br><br><br><br>
 
 <section class="card">
-<h2>Phase 4 — Security Baseline</h2>
+<h2 id="phase-4">Phase 4 — Security Baseline</h2>
   <h3>1. Configure the Firewall (UFW)</h3>
   <ul>
     <li>Deny incoming traffic by default</li>
@@ -441,7 +445,7 @@ of the command <code>adduser</code> process works correctly.</p>
 </section><br><br><br><br>
 
 <section class="card">
-<h2>Phase 5 — Service & System Management</h2>
+<h2 id="phase-5">Phase 5 — Service & System Management</h2>
   <h3>1. Install Core SysAdmin Tools</h3>
   <code>sudo apt install -y htop curl wget git net-tools fail2ban</code>
   <p>Install essential commands:</p>
@@ -473,7 +477,7 @@ prevention service.</p>
 </section><br><br><br><br>
 
 <section class="card">
-<h2>Phase 6 — Logging, Monitoring & Maintenance</h2>
+<h2 id="phase-6">Phase 6 — Logging, Monitoring & Maintenance</h2>
   <h3>1. Log Inspection</h3>
   <code>journalctl -p 3 -xb</code>
 <div class="figure"><img src="Images/phase6-1.png"></div>
