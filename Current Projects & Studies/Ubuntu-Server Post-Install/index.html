@@ -315,9 +315,14 @@ of the command <code>adduser</code> process works correctly.</p>
 <p>In this example, the output file is <code>50-cloud-init.yaml</code>.</p>
 <p>In Ubuntu systems, network configurations are stored in <strong>YAML</strong> files.</p>
 <p>These files are the "instruction manuals" that instruct a <strong>Network Interface Card (NIC)</strong> how to establish an internet connection.</p>
-  
-<div class="figure"><img src="Images/phase3-2.png"></div>
+<div class="figure"><img src="Images/phase3-2.png"></div><br>
 <div class="figure"><img src="Images/phase3-3.png"></div>
+    <p><strong>Why This is Among One of the First Steps - Post OS Installation:</strong></p>
+  <p>In a headless server configuration, the <strong>Network Configuration</strong> is the most critical file. If the file is set up incorrectly, the server goes offline, and you lose your SSH connection. Admins usually have to:</p>
+  <ul>
+    <li><strong>Set a Static IP:</strong> Ensuring the server's address never changes (so you always know where to SSH).</li>
+    <li><strong>Configure DNS:</strong> Telling the server which "phonebook" (like Google or Cloudflare) to use to find websites.</li>
+  </ul><br>
 
 <h4>Apply safely</h4>
 <code>sudo netplan try</code><br>
