@@ -322,7 +322,10 @@ of the command <code>adduser</code> process works correctly.</p>
   <ul>
     <li><strong>Set a Static IP:</strong> Ensuring the server's address never changes (so you always know where to SSH).</li>
     <li><strong>Configure DNS:</strong> Telling the server which "phonebook" (like Google or Cloudflare) to use to find websites.</li>
-  </ul><br>
+  </ul>
+  <p>Operational continuity relies heavily on servers with <strong>Network Persistence & Configuration</strong>. To ensure consistent remote access, using <strong>Netplan</strong> to manage the server's network stack, helps to maintain that persistence.</p>
+  <p>By auditing the YAML configuration files in <code>/etc/netplan/</code>, you can define static IP assignments and custom DNS resolvers.</p>
+  <p>The <code>nano</code> or other text editor CLI of your choice can be used to make changes to the file's configuration details, ensuring the server maintains a reliable 'heartbeat' on the local network, ensuring operations are not disrupted.</p>
 
 <h4>Apply safely</h4>
 <code>sudo netplan try</code><br>
