@@ -159,7 +159,6 @@ for processor load, memory consumption, filesystem usage, and network addressing
 
 <div class="step">
  
-    <div class="img-block">
        <h2>Step 2 – Implement Linux-Specific System Monitoring Logic</h2>
         <p>Here, we have the Linux execution branch of the monitoring script, where system
             metrics are collected using native Linux utilities and kernel interfaces.
@@ -176,7 +175,6 @@ for processor load, memory consumption, filesystem usage, and network addressing
             By isolating Linux logic in its own conditional block, the script preserves cross-platform portability while respecting the differences between Windows and Linux system internals. This design reflects real-world systems administration practices, where tooling must remain resilient across varied Linux environments.
         </p>
         <div class="figure"><img src="Images/monitor4.png" alt=""></div>
-    </div>
 </div><br>
 
 <div class="step">
