@@ -655,6 +655,12 @@ prevention service.</p>
   <p><strong>Even if you don't implement backups yet:</strong></p>
   <code>ls /etc</code><br>
   <code>ls /var</code><br>
+
+  <p>In establishing a robust disaster recovery plan, it's absolutely imperative to prioritize the <code>/etc</code> and <code>/var</code> directories.</p>
+  <p>Backing up <code>/etc</code> preserves the <strong>System State</strong>, capturing all custom configurations, security policies, and network definitions.</p>
+  <p>Meanwhile, backing up <code>/var</code> ensures preservation of <strong>Operational Data</strong>, including critical security logs and application databases.</p>
+  <p>Together, these backups allow for a rapid 'Bare Metal' recovery, ensuring that the system can be restored to its exact functional state in the event of hardware failure or data corruption.</p>
+  
   </section>
 
   <p><a href="../index.html">Back to Home</a></p>
