@@ -330,8 +330,8 @@ header{
    FOOTER (COMPACT & ALWAYS VISIBLE)
    ========================================================= */
 footer{
-  margin-top:2px;
-  padding-top:2px;
+  margin-top:12px;
+  padding-top:10px;
   padding-bottom:2px;
   border-top:1px solid #232a3a;
   color:var(--muted);
@@ -347,22 +347,21 @@ footer{
 @media (max-width:640px){
   footer{
     font-size:0.84rem;
-    padding-top:2px;
+    padding-top:10px;
     padding-bottom:2px;
   }
 }
 
 footer .links{
-  margin-top:1px;
-  gap:4px;
+  margin-top:4px;
+  gap:0;
   display:flex;
   flex-wrap:wrap;
 }
 
 @media (max-width:640px){
   footer .links{
-    margin-top:1px;
-    gap:3px;
+    margin-top:4px;
   }
 }
 
@@ -373,6 +372,7 @@ footer a{
 }
 footer a:hover{
   color:var(--brand);
+  text-decoration:none;
 }
 </style>
 </head>
