@@ -23,31 +23,90 @@
     }
     .wrap {max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    .topnav {margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a {color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav {margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a {
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover {color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active {color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    .crumbs {color:var(--muted);font-size:14px;margin:2px 0 8px}
+    /* Breadcrumb - INCREASED SIZE */
+    .crumbs {color:var(--muted);font-size:15px;margin:4px 0 12px}
     .crumbs a {color:var(--muted);text-decoration:none}
     .crumbs a:hover {color:var(--text)}
 
-    h1 {margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2 {margin:0 0 10px;font-size:22px}
-    p.lead {color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Headings - INCREASED SIZE */
+    h1 {margin:8px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800}
+    h2 {margin:0 0 14px;font-size:26px;font-weight:700}
+    p.lead {color:var(--muted);margin:10px 0 18px;font-size:clamp(17px,2.4vw,19px)}
 
+    /* Body text - INCREASED SIZE */
+    p {font-size:16px;line-height:1.65;margin:12px 0}
+    ul,ol {font-size:16px;line-height:1.65;padding-left:24px;margin:10px 0}
+    li {margin:6px 0}
+    em {font-style:italic}
+    strong {font-weight:600}
+
+    /* Links */
+    a {color:var(--brand);text-decoration:none}
+    a:hover {text-decoration:underline}
+
+    /* Card - INCREASED PADDING */
     .card {
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      box-shadow:var(--shadow);padding:26px;margin-top:20px
     }
 
-    .figure {border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;width:max-content;max-width:100%}
+    /* Figure */
+    .figure {
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:10px;
+      margin:16px auto;
+      width:max-content;
+      max-width:100%
+    }
     .figure img {display:block;height:auto;max-width:100%;border-radius:8px}
 
-    footer {margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Footer - MATCHING MAIN PAGE */
+    footer {
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links {
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a {
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover {
+      color:var(--brand);
+    }
   </style>
 </head>
 <body>
@@ -70,15 +129,15 @@
         <img src="Images/PowerShell.png" alt="PowerShell blog header showing PowerShell logo and automation theme" style="width:600px; height:auto;" loading="lazy" />
       </div>
       <h1>PowerShell: How PowerShell Changes the Way Technicians Work</h1>
-      <p class="lead">How PowerShell’s object-driven automation changes the way technicians interact with systems — across Windows and beyond.</p>
+      <p class="lead">How PowerShell's object-driven automation changes the way technicians interact with systems — across Windows and beyond.</p>
     </header>
 
     <section class="card">
       <p><strong>PowerShell</strong> is a tool of complexity that is easy to learn yet highly technical and sophisticated behind the scenes. Truly mastering PowerShell involves building a strong foundation, progressing into intermediate knowledge, and putting in plenty of keyboard time.</p>
 
-      <p>It’s an essential tool for Windows domain management and administration, providing the ability to implement automation within an environment, manage on-premises Active Directory, and handle hybrid setups with Microsoft 365 and Azure.</p>
+      <p>It's an essential tool for Windows domain management and administration, providing the ability to implement automation within an environment, manage on-premises Active Directory, and handle hybrid setups with Microsoft 365 and Azure.</p>
 
-      <p>It’s a shell that allows you to interact with nearly every aspect of the operating system, from files, processes, and services to networking, user accounts, and system configuration. PowerShell represents and interacts with system components in the form of <strong>objects</strong>.</p>
+      <p>It's a shell that allows you to interact with nearly every aspect of the operating system, from files, processes, and services to networking, user accounts, and system configuration. PowerShell represents and interacts with system components in the form of <strong>objects</strong>.</p>
 
       <p>This is made possible through the <strong>.NET Framework</strong> and <strong>.NET Core</strong>, the foundation that enables PowerShell to function across platforms. This structure allows every command (called a <strong>cmdlet</strong>) in PowerShell to return <strong>.NET objects</strong> rather than plain text.</p>
 
@@ -97,10 +156,11 @@
 
       <p>This is possible because both the <strong>.NET Framework (Windows)</strong> and <strong>.NET Core (cross-platform)</strong> are object-oriented, allowing commands to exchange structured data, or <em><strong>objects</strong></em>, instead of raw text. This makes automation, filtering, and scripting far more powerful, reliable, and consistent.</p>
 
-      <p>The power that comes with <strong>PowerShell</strong> makes a technician’s job much easier by turning repetitive, manual tasks into automated, consistent, and faster workflows. It allows you to work smarter, not harder.</p>
+      <p>The power that comes with <strong>PowerShell</strong> makes a technician's job much easier by turning repetitive, manual tasks into automated, consistent, and faster workflows. It allows you to work smarter, not harder.</p>
 
       <p>The consistency it brings to automation, faster troubleshooting, remote management, and reporting makes it a must-have in the toolbox for anyone working in Windows or Microsoft-centric environments.</p>
     </section>
+
     <p><em>PowerShell is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
 
     <p><a href="../index.html">Back to Home</a></p>
