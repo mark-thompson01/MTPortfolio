@@ -92,13 +92,17 @@
     a {
       color: var(--brand);
       text-decoration: none;
-      border-bottom: 1px dotted var(--muted);
-      transition: color 0.2s, border-color 0.2s;
+      transition: color 0.2s;
     }
     a:hover {
       color: var(--brand);
-      border-color: var(--brand);
-      text-decoration: none;
+      text-decoration: underline;
+    }
+    .card > p > a {
+      border-bottom: none;
+    }
+    .card > p > a:hover {
+      text-decoration: underline;
     }
 
     /* Footer - MATCHING MAIN PAGE */
