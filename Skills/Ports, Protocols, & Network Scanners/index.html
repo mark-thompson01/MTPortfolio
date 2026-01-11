@@ -23,82 +23,121 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
-    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    /* Breadcrumb - INCREASED SIZE */
+    .crumbs{color:var(--muted);font-size:15px;margin:4px 0 12px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:10px 0 6px;font-size:16px}
+    /* Headings & links - INCREASED SIZES */
+    h1{margin:8px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800}
+    h2{margin:0 0 14px;font-size:26px;font-weight:700}
+    h3{margin:20px 0 10px;font-size:22px;font-weight:700}
+    h4{margin:14px 0 8px;font-size:18px;font-weight:600}
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    .lead{color:var(--muted);margin:10px 0 18px;font-size:clamp(17px,2.4vw,19px)}
 
-    /* Cards / sections */
+    /* Body text - INCREASED SIZE */
+    p{font-size:16px;line-height:1.65;margin:12px 0}
+    ul,ol{font-size:16px;line-height:1.65}
+    li{margin:6px 0}
+
+    /* Cards / sections - INCREASED PADDING */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      box-shadow:var(--shadow);padding:26px;margin-top:20px
     }
 
-    /* Figures honor your inline sizes */
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
-      padding:8px;
-      margin:12px auto;
-      width:max-content;   /* shrink-wrap to image width */
+      padding:10px;
+      margin:16px auto;
+      width:max-content;
       max-width:100%;
     }
     .figure img{
       display:block;
       height:auto;
-      max-width:100%;  /* allows downscale on narrow screens */
-      /* no width:100% => your inline sizes stay in control */
+      max-width:100%;
     }
 
-    /* Code + quotes */
+    /* Code + quotes - INCREASED SIZE */
     pre{
-      margin:10px 0;
-      padding:12px 14px;
+      margin:14px 0;
+      padding:16px 18px;
       background:#0f1424;
       border:1px solid #202a3f;
       border-radius:12px;
       overflow:auto;
       color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      font:500 14.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
     }
     code{
       background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      padding:3px 7px;color:#e8eaf6;font:500 14.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
     blockquote{
-      background:#101522;border-left:4px solid #4DA3FF;padding:12px 14px;
-      margin:12px 0;color:#cfd3e6;border-radius:10px;
+      background:#101522;border-left:4px solid #4DA3FF;padding:14px 18px;
+      margin:14px 0;color:#cfd3e6;border-radius:10px;font-size:16px;
     }
 
-    /* Tables */
-    table{border-collapse:collapse;width:100%;max-width:100%;margin:10px 0;border:1px solid var(--table-border);border-radius:10px;overflow:hidden}
-    th,td{border-bottom:1px solid var(--table-border);padding:10px 12px;text-align:left}
-    thead th{background:#0e1322;color:#cfd3e6}
+    /* Tables - INCREASED SIZE */
+    table{border-collapse:collapse;width:100%;max-width:100%;margin:14px 0;border:1px solid var(--table-border);border-radius:10px;overflow:hidden}
+    th,td{border-bottom:1px solid var(--table-border);padding:12px 14px;text-align:left;font-size:15px}
+    thead th{background:#0e1322;color:#cfd3e6;font-weight:600}
     tbody tr{background:var(--table-row)}
     tbody tr:nth-child(even){background:#0c1020}
 
-    /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Footer - MATCHING MAIN PAGE */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
   </style>
 </head>
 <body>
@@ -133,13 +172,13 @@
     <section class="card">
       <h2>Introduction</h2>
       <p>Understanding how devices communicate on a network is a cornerstone of Information Technology. At the heart of this communication are <strong>ports</strong> and <strong>protocols</strong> – the essential rules and channels that govern data flow across systems. Whether you're troubleshooting a network issue, performing a security assessment, or mapping out assets, knowing how to identify open ports, active services, and connected endpoints is critical.</p>
-      <p>This tutorial is designed to introduce and reinforce core concepts of ports, protocols, and network discovery through hands-on use of popular network scanning tools – including Advanced IP Scanner, Nmap, and its graphical counterpart Zenmap. By the end, you’ll not only have a strong theoretical grasp but also practical experience scanning a live network, interpreting results, and identifying potential security and infrastructure insights.</p>
+      <p>This tutorial is designed to introduce and reinforce core concepts of ports, protocols, and network discovery through hands-on use of popular network scanning tools – including Advanced IP Scanner, Nmap, and its graphical counterpart Zenmap. By the end, you'll not only have a strong theoretical grasp but also practical experience scanning a live network, interpreting results, and identifying potential security and infrastructure insights.</p>
       <blockquote><strong>Note:</strong> Only run scanning tools on networks where you have explicit permission from the owner or administrator.</blockquote>
     </section>
 
     <!-- What you'll learn -->
     <section class="card">
-      <h2>What You’ll Learn</h2>
+      <h2>What You'll Learn</h2>
       <ul>
         <li>The structure and function of the <strong>TCP/IP suite</strong></li>
         <li>The difference between <strong>TCP and UDP</strong>, and how <strong>port numbers</strong> relate to services</li>
@@ -156,7 +195,7 @@
       <h3>What is TCP/IP?</h3>
       <p>It all starts with the <strong>TCP/IP (Transmission Control Protocol/Internet Protocol)</strong> suite. The TCP/IP Suite is the fundamental communication framework of computer networking and the Internet that allows devices to connect and communicate across the Internet and most modern networks. It is a suite of protocols that work together to transmit data between computers.</p>
       <p>TCP/IP is comprised of two fundamental transport layer protocols to facilitate computer network communications over local and remote networks. TCP (Transmission Control Protocol) and UDP (User Datagram Protocol).</p>
-      <p>While TCP focuses on reliable, ordered communication, UDP is designed for speed and simplicity. It’s used when applications care more about performance than guaranteed delivery, for such example such as video streaming or voice/video communications.</p>
+      <p>While TCP focuses on reliable, ordered communication, UDP is designed for speed and simplicity. It's used when applications care more about performance than guaranteed delivery, for such example such as video streaming or voice/video communications.</p>
       <ul>
         <li><strong>IP</strong> handles addressing and routing packets to the correct destination</li>
         <li><strong>TCP</strong> ensures reliable, ordered, error-checked delivery of packets</li>
@@ -211,22 +250,22 @@
       </ul>
 
       <h3>DNS - Domain Name Service</h3>
-      <p>DNS acts as the internet's phonebook, translating human-friendly domain names (like google.com) into IP addresses (like 142.250.190.78) that computers use to identify each other on a network. Without DNS, you’d have to remember the exact IP address of every website or service you want to access. Every time you type a URL or click a link, DNS silently resolves it for you. It’s the first step in nearly every online interaction.</p>
+      <p>DNS acts as the internet's phonebook, translating human-friendly domain names (like google.com) into IP addresses (like 142.250.190.78) that computers use to identify each other on a network. Without DNS, you'd have to remember the exact IP address of every website or service you want to access. Every time you type a URL or click a link, DNS silently resolves it for you. It's the first step in nearly every online interaction.</p>
 
       <h3>DHCP - Dynamic Host Configuration Protocol</h3>
       <p>DHCP automatically assigns IP addresses and network configuration details (like subnet masks, default gateways, and DNS servers) to devices on a network. Thanks to DHCP, your device connects to Wi-Fi and just works – no manual IP settings required. It allows for quick, scalable, and conflict-free connectivity across home, office, and public networks.</p>
 
       <h3>SMTP - Simple Mail Transfer Protocol</h3>
-      <p>SMTP is the protocol used to send outgoing emails from a client (like Outlook or Gmail) to a mail server, or between mail servers themselves. Every time you hit “send”, SMTP handles the delivery process behind the scenes – routing your message across servers until it reaches its destination inbox.</p>
+      <p>SMTP is the protocol used to send outgoing emails from a client (like Outlook or Gmail) to a mail server, or between mail servers themselves. Every time you hit "send", SMTP handles the delivery process behind the scenes – routing your message across servers until it reaches its destination inbox.</p>
 
       <h3>IMAP - Internet Message Access Protocol</h3>
-      <p>IMAP lets your email client retrieve and sync messages from a mail server while keeping them on the server. It’s what makes email synchronization possible across multiple devices—read, delete, or organize on one device and it’s reflected everywhere.</p>
+      <p>IMAP lets your email client retrieve and sync messages from a mail server while keeping them on the server. It's what makes email synchronization possible across multiple devices—read, delete, or organize on one device and it's reflected everywhere.</p>
 
       <h3>HTTP – HTTPS – Hypertext Transfer Protocol / Secure</h3>
       <p>HTTP governs how browsers and servers communicate. HTTPS is the encrypted version, protecting credentials and personal data from interception. Today, HTTPS is essential for nearly every website.</p>
 
       <h3>The Bigger Picture – Why These Five Are Essential</h3>
-      <p>These protocols work together to enable everything from browsing the web, sending email, and connecting to networks, to keeping your inbox in sync. They’re the invisible architecture of digital life.</p>
+      <p>These protocols work together to enable everything from browsing the web, sending email, and connecting to networks, to keeping your inbox in sync. They're the invisible architecture of digital life.</p>
       <ul>
         <li>No <strong>DNS</strong> → no human-readable websites</li>
         <li>No <strong>DHCP</strong> → painful manual IP setup</li>
@@ -270,7 +309,7 @@
       <div class="figure">
         <img src="Images/AdvancedIPScanner.png" alt="AdvancedIPScanner">
       </div>
-      <p>To scan for devices on a network using Advanced IP Scanner, enter the default gateway followed by the subnet CIDR (in this case, /24). Then click <strong>“Scan”</strong> to begin. For each device it detects, you’ll see hostname, IP, manufacturer, and MAC address.</p>
+      <p>To scan for devices on a network using Advanced IP Scanner, enter the default gateway followed by the subnet CIDR (in this case, /24). Then click <strong>"Scan"</strong> to begin. For each device it detects, you'll see hostname, IP, manufacturer, and MAC address.</p>
 
       <h3>Nmap – The Powerhouse</h3>
       <p><strong>Nmap</strong> discovers hosts, services, and potential exposures by sending crafted packets and analyzing responses.</p>
@@ -368,7 +407,7 @@
       <p><a href="../index.html">Back to Home</a></p>
     </section>
 
-    <!-- Footer (branding only, no © or year) -->
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
