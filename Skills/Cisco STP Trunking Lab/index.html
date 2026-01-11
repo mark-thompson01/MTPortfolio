@@ -23,75 +23,111 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
-    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    /* Breadcrumb - INCREASED SIZE */
+    .crumbs{color:var(--muted);font-size:15px;margin:4px 0 12px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Headings & links - INCREASED SIZES */
+    h1{margin:8px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800}
+    h2{margin:0 0 14px;font-size:26px;font-weight:700}
+    h3{margin:20px 0 10px;font-size:22px;font-weight:700}
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    .lead{color:var(--muted);margin:10px 0 18px;font-size:clamp(17px,2.4vw,19px)}
 
-    /* Cards / sections */
+    /* Body text - INCREASED SIZE */
+    p{font-size:16px;line-height:1.65;margin:12px 0}
+    ul,ol{font-size:16px;line-height:1.65;padding-left:24px;margin:10px 0}
+    li{margin:6px 0}
+
+    /* Cards / sections - INCREASED PADDING */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      box-shadow:var(--shadow);padding:26px;margin-top:20px
     }
 
-    /* Figures: keep your original inline sizes; only downscale if viewport is narrower */
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
-      padding:8px;
-      margin:12px auto;
+      padding:10px;
+      margin:16px auto;
       width:max-content;
       max-width:100%;
     }
     .figure img{
       display:block;
       height:auto;
-      max-width:100%; /* responsive downscale only */
+      max-width:100%;
     }
 
-    /* Code & pre */
+    /* Code & pre - INCREASED SIZE */
     pre{
-      margin:10px 0;
-      padding:12px 14px;
+      margin:14px 0;
+      padding:16px 18px;
       background:#0f1424;
       border:1px solid #202a3f;
       border-radius:12px;
       overflow:auto;
       color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      font:500 14.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
     }
     code{
       background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      padding:3px 7px;color:#e8eaf6;font:500 14.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Lists */
-    ul{padding-left:22px;margin:8px 0}
-    ol{padding-left:22px;margin:8px 0}
+    /* Footer - MATCHING MAIN PAGE */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
 
-    /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
-
-    /* ===== Image Zoom (click-to-zoom) ===== */
+    /* Image Zoom */
     .zoomable{cursor:zoom-in}
     .zoom-overlay{
       position:fixed; inset:0; display:none;
@@ -182,7 +218,7 @@
       <div class="figure"><img src="Images/basicconfig3.png" alt="basicconfig3.png"></div>
 
       <h3>2. Line Console Configuration</h3>
-      <p>Enable logging synchronous on the console line so system messages don’t interrupt your typing.</p>
+      <p>Enable logging synchronous on the console line so system messages don't interrupt your typing.</p>
       <div class="figure"><img src="Images/basicconfig4.png" alt="basicconfig4.png"></div>
 
       <h3>3. VLAN Creation</h3>
@@ -202,7 +238,7 @@
     <section class="card" id="trunk-port-and-stp">
       <h2>Trunk Port and Spanning Tree Protocol (STP)</h2>
 
-      <p><strong>Trunk Port:</strong> A trunk carries multiple VLANs over a single link using <strong>802.1Q</strong> tags so the receiving switch knows each frame’s VLAN. Trunks commonly connect switches, or a switch to a router/firewall handling multiple VLANs. Here, VLAN 10 and VLAN 20 traffic must traverse between the 2950 and 3550 while remaining logically separated.</p>
+      <p><strong>Trunk Port:</strong> A trunk carries multiple VLANs over a single link using <strong>802.1Q</strong> tags so the receiving switch knows each frame's VLAN. Trunks commonly connect switches, or a switch to a router/firewall handling multiple VLANs. Here, VLAN 10 and VLAN 20 traffic must traverse between the 2950 and 3550 while remaining logically separated.</p>
 
       <p><strong>Spanning Tree Protocol (STP):</strong> STP prevents Layer 2 loops by placing redundant links in a blocking state, ensuring a single active path. If the active path fails, STP reconverges and activates an alternate path. In this lab, we set root bridge priority so the 3550 becomes the root for VLANs 10 and 20.</p>
 
@@ -242,7 +278,7 @@
       <p><a href="../index.html">Back to Home</a></p>
     </section>
 
-    <!-- Footer (branding only) -->
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
@@ -252,7 +288,7 @@
     </footer>
   </div>
 
-  <!-- Tiny, reusable click-to-zoom for all images -->
+  <!-- Click-to-zoom for all images -->
   <script>
     (function(){
       const imgs = document.querySelectorAll('.wrap img');
