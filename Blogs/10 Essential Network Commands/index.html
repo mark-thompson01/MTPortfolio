@@ -10,10 +10,8 @@
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
       --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
       --radius:18px;
-
-      /* smaller figures for smoother scrolling */
-      --figure-sm-max-w: 600px;  /* small screenshot max width */
-      --figure-max-w: 800px;     /* regular figure max width */
+      --figure-sm-max-w: 600px;
+      --figure-max-w: 800px;
     }
     html,body{height:100%}
     body{
@@ -27,27 +25,35 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
-    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    /* Breadcrumb - INCREASED SIZE */
+    .crumbs{color:var(--muted);font-size:15px;margin:4px 0 12px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Title & lead */
-    h1{margin:4px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    .lead{color:var(--muted);margin:0 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Title & lead - INCREASED SIZE */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800}
+    .lead{color:var(--muted);margin:0 0 18px;font-size:clamp(17px,2.4vw,19px)}
 
-    /* Cover image (excluded from zoom) */
+    /* Cover image */
     .cover{
       border:1px solid var(--card-border);
       border-radius:14px;
       overflow:hidden;
-      margin:10px 0 14px;
+      margin:10px 0 18px;
       background:#0c0e13;
       text-align:center;
     }
@@ -61,40 +67,51 @@
     }
 
     /* Meta chips */
-    .meta{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 18px}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 20px}
     .chip{padding:6px 10px;border:1px solid var(--card-border);border-radius:999px;background:rgba(255,255,255,.03);color:var(--muted);font-size:14px}
 
-    /* Card blocks */
+    /* Body text - INCREASED SIZE */
+    p{font-size:16px;line-height:1.65;margin:12px 0}
+    ul,ol{font-size:16px;line-height:1.65;padding-left:24px;margin:10px 0}
+    li{margin:6px 0}
+
+    /* Card blocks - INCREASED PADDING */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      box-shadow:var(--shadow);padding:26px;margin-top:20px
     }
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:10px 0 6px;font-size:16px}
-    p{margin:8px 0}
+    h2{margin:0 0 14px;font-size:26px;font-weight:700}
+    h3{margin:20px 0 10px;font-size:22px;font-weight:700}
+    h4{margin:14px 0 8px;font-size:18px;font-weight:600}
+    
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* TOC */
-    .toc{padding:14px}
-    .toc ul{list-style:none;margin:6px 0 0 0;padding:0}
-    .toc li{margin:6px 0}
-    .toc a{color:var(--text);text-decoration:none}
+    /* Code - INCREASED SIZE */
+    code{
+      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
+      padding:3px 7px;color:#e8eaf6;font:500 14.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+
+    /* TOC - INCREASED SIZE */
+    .toc{padding:20px}
+    .toc ul{list-style:none;margin:8px 0 0 0;padding:0}
+    .toc li{margin:8px 0}
+    .toc a{color:var(--text);text-decoration:none;font-size:16px}
     .toc a:hover{color:var(--brand)}
 
     /* Figures */
-    figure{margin:12px 0}
+    figure{margin:16px 0}
     .figure{
       border:1px solid var(--card-border);border-radius:12px;overflow:hidden;background:#0e1220;
       max-width:var(--figure-max-w); margin-left:auto; margin-right:auto;
     }
     .figure.is-sm{max-width:var(--figure-sm-max-w)}
     .figure img{width:100%;height:auto;display:block}
-    figcaption{color:var(--muted);font-size:13px;margin-top:6px}
+    figcaption{color:var(--muted);font-size:14px;margin-top:8px}
 
-    /* Zoom affordance for non-cover images */
+    /* Zoom affordance */
     .zoomable{cursor:zoom-in;}
     .zoomable:hover{filter:brightness(1.03)}
 
@@ -107,10 +124,36 @@
     .zb-close:hover{background:rgba(255,255,255,.12)}
     .zb-hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);color:#cfd3e6;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;padding:6px 10px;border-radius:999px;font-size:12px}
 
-    /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Footer - MATCHING MAIN PAGE */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+    }
   </style>
 </head>
 <body>
@@ -130,7 +173,7 @@
       <a href="/MTPortfolio/Blogs">Blog</a> · <span>Essential Network Commands</span>
     </div>
 
-    <!-- Header (cover image excluded from zoom) -->
+    <!-- Header -->
     <header>
       <div class="cover">
         <img src="Images/Essential%20Network%20Commands.png"
@@ -155,7 +198,7 @@
       </p>
       <p>
         This blog walks through several commonly used network commands that help uncover useful information such as IP 
-        configurations, DNS resolution, routing, active connections, network paths, and more. It’s based on material I put together 
+        configurations, DNS resolution, routing, active connections, network paths, and more. It's based on material I put together 
         in my <b>Cross-Platform Network Commands</b> tutorial, which is available through my 
         <a href="https://mark-thompson01.github.io/MTPortfolio/" target="_blank">GitHub Pages portfolio</a>.
       </p>
@@ -189,7 +232,7 @@
       <p>
         <b>Ping</b> is the first responder on the network — it sends tiny data packets (ICMP echo requests) to a target IP or domain and waits for a reply,
         letting you verify that a device is reachable and measure how long the round-trip takes. It can be thought of as the digital equivalent of shouting
-        “You there?” and listening for a reply.
+        "You there?" and listening for a reply.
       </p>
       <p>Often the first command run when verifying connectivity...</p>
       <figure class="figure is-sm">
@@ -201,8 +244,8 @@
     <section class="card" id="ipconfig">
       <h3><code>ipconfig</code> / <code>ipconfig /all</code> · <code>ifconfig</code> / <code>ip a</code></h3>
       <p>
-        These commands reveal a given system’s IP configuration on the network. Whether you're using <code>ipconfig</code> on Windows or
-        <code>ifconfig</code> / <code>ip a</code> on Linux, they display your interface’s IP address, subnet, gateway, and more — essential for
+        These commands reveal a given system's IP configuration on the network. Whether you're using <code>ipconfig</code> on Windows or
+        <code>ifconfig</code> / <code>ip a</code> on Linux, they display your interface's IP address, subnet, gateway, and more — essential for
         understanding how your machine is plugged into the network.
       </p>
       <h4>Windows</h4>
@@ -226,7 +269,7 @@
       <h3><code>arp -a</code></h3>
       <p>
         The <code>arp -a</code> command lets you peek behind the scenes of local communications by listing the Address Resolution Protocol (ARP) table.
-        It maps IP addresses to MAC addresses — like your system’s contact book for nearby devices.
+        It maps IP addresses to MAC addresses — like your system's contact book for nearby devices.
       </p>
       <p>This command comes in handy when troubleshooting duplicate IP and MAC addresses or unauthorized devices on a network.</p>
       <figure class="figure is-sm">
@@ -240,7 +283,7 @@
         The <code>nslookup</code> command is a Windows DNS investigation tool — it asks a DNS server for information about domain names and IP addresses.
         Whether you're hunting down where a website lives or diagnosing DNS failures, this command gives you a direct line to the domain name system.
       </p>
-      <p>Use this when you want to manually test if a domain resolves to the correct IP address or troubleshoot DNS server behavior. It’s a quick way to confirm whether DNS is functioning as expected.</p>
+      <p>Use this when you want to manually test if a domain resolves to the correct IP address or troubleshoot DNS server behavior. It's a quick way to confirm whether DNS is functioning as expected.</p>
       <figure class="figure is-sm">
         <img src="Images/nslookup1.PNG" data-fallback="../../Images/nslookup1.PNG" alt="nslookup output" loading="lazy" />
       </figure>
@@ -248,7 +291,7 @@
 
     <section class="card" id="host">
       <h3><code>host</code></h3>
-      <p>Use this for quick domain-to-IP lookups or reverse lookups on Linux. It’s lightweight and ideal when you need fast, simple DNS resolution results without extra verbosity.</p>
+      <p>Use this for quick domain-to-IP lookups or reverse lookups on Linux. It's lightweight and ideal when you need fast, simple DNS resolution results without extra verbosity.</p>
       <figure class="figure">
         <img src="Images/host1.png" data-fallback="../../Images/host1.png" alt="host output" loading="lazy" />
       </figure>
@@ -256,7 +299,7 @@
 
     <section class="card" id="dig">
       <h3><code>dig</code></h3>
-      <p>Best used when you need a deep look into DNS responses, query times, and authoritative answers. It’s the go-to tool for advanced DNS troubleshooting and validation.</p>
+      <p>Best used when you need a deep look into DNS responses, query times, and authoritative answers. It's the go-to tool for advanced DNS troubleshooting and validation.</p>
       <figure class="figure">
         <img src="Images/dig1.png" data-fallback="../../Images/dig1.png" alt="dig output" loading="lazy" />
       </figure>
@@ -265,7 +308,7 @@
     <section class="card" id="netstat">
       <h3><code>netstat -a</code> / <code>netstat -an</code></h3>
       <p>
-        The <code>netstat</code> command exposes a system’s open doors — it shows which ports are listening, which connections are active,
+        The <code>netstat</code> command exposes a system's open doors — it shows which ports are listening, which connections are active,
         and which processes are using them. Useful for identifying suspicious activity, verifying services, or seeing what active connections a given system has.
       </p>
       <figure class="figure is-sm">
@@ -302,7 +345,7 @@
       <h3><code>pathping</code></h3>
       <p>
         <code>pathping</code> is a Windows command that combines <code>ping</code> and <code>tracert</code> into one — but with a twist.
-        It sends pings to every hop along the path and calculates packet loss and latency at each point. It's the network path’s health report, not just its roadmap.
+        It sends pings to every hop along the path and calculates packet loss and latency at each point. It's the network path's health report, not just its roadmap.
       </p>
       <figure class="figure is-sm">
         <img src="Images/pathping.png" data-fallback="../../Images/pathping.png" alt="pathping output" loading="lazy" />
@@ -316,7 +359,7 @@
     <section class="card" id="route">
       <h3><code>route print</code> · <code>route -n</code> / <code>ip route</code></h3>
       <p>
-        These commands unveil a system’s routing table — the rules it follows to decide where to send packets.
+        These commands unveil a system's routing table — the rules it follows to decide where to send packets.
         <code>route print</code> on Windows and <code>route -n</code>, <code>ip route</code> on Linux give you a map of how traffic is directed across gateways and networks.
       </p>
       <h4>Windows</h4>
@@ -342,12 +385,12 @@
         to inspecting DNS responses to active connections, these commands are foundational for anyone in IT, cybersecurity, DevOps or system/network administration.
       </p>
       <p>
-        While these tools may seem basic, they’re often the first place professionals turn when diagnosing issues — and knowing how to interpret their output can set you apart as someone who
+        While these tools may seem basic, they're often the first place professionals turn when diagnosing issues — and knowing how to interpret their output can set you apart as someone who
         truly understands how networks function.
       </p>
       <p>
         As you continue building your technical skills, revisit these commands in different scenarios, experiment with their options, and incorporate them into your troubleshooting workflow.
-        The command line doesn’t just tell you what’s wrong — it teaches you how systems behave under the hood.
+        The command line doesn't just tell you what's wrong — it teaches you how systems behave under the hood.
       </p>
       <p>
         Thanks for reading — and feel free to explore the full hands-on version of this guide in my
@@ -402,8 +445,8 @@
     const closeBtn = overlay.querySelector('.zb-close');
 
     let scale = 1, minScale = 1, maxScale = 5;
-    let originX = 0, originY = 0;   // top-left translation
-    let startX = 0, startY = 0;     // drag start mouse pos
+    let originX = 0, originY = 0;
+    let startX = 0, startY = 0;
     let isPanning = false;
 
     function openLightbox(src){
@@ -411,7 +454,6 @@
       scale = 1; originX = 0; originY = 0;
       applyTransform();
       overlay.classList.add('is-open');
-      // Allow pointer-events to image only for drag logic
       zimg.style.pointerEvents = 'none';
     }
 
@@ -422,35 +464,30 @@
 
     function applyTransform(){
       zimg.style.transform = `translate(${originX}px, ${originY}px) scale(${scale})`;
-      // Natural size vs stage: ensure the image intrinsic size is used for crisp zoom
       zimg.style.maxWidth = 'none';
       zimg.style.maxHeight = 'none';
     }
 
     function clamp(val, min, max){ return Math.min(max, Math.max(min, val)); }
 
-    // Click to open
     imgs.forEach(img => {
       img.addEventListener('click', () => openLightbox(img.currentSrc || img.src));
     });
 
-    // Close actions
     overlay.addEventListener('click', e => { if(e.target === overlay) closeLightbox(); });
     closeBtn.addEventListener('click', closeLightbox);
     window.addEventListener('keydown', e => { if(e.key === 'Escape') closeLightbox(); });
 
-    // Wheel to zoom (center around cursor)
     stage.addEventListener('wheel', e => {
       e.preventDefault();
       const rect = stage.getBoundingClientRect();
-      const mx = e.clientX - rect.left - originX; // mouse pos relative to image translation
+      const mx = e.clientX - rect.left - originX;
       const my = e.clientY - rect.top  - originY;
 
-      const delta = -Math.sign(e.deltaY) * 0.15; // zoom step
+      const delta = -Math.sign(e.deltaY) * 0.15;
       const newScale = clamp(scale + delta, minScale, maxScale);
       const scaleDelta = newScale / scale;
 
-      // Adjust origin to zoom around cursor
       originX -= mx * (scaleDelta - 1);
       originY -= my * (scaleDelta - 1);
 
@@ -458,9 +495,8 @@
       applyTransform();
     }, { passive:false });
 
-    // Drag to pan when zoomed
     stage.addEventListener('mousedown', e => {
-      if (scale <= 1) return; // no pan at base scale
+      if (scale <= 1) return;
       isPanning = true;
       startX = e.clientX - originX;
       startY = e.clientY - originY;
@@ -477,7 +513,6 @@
       document.body.style.cursor = '';
     });
 
-    // Optional: double-click to toggle 1x/2.5x
     stage.addEventListener('dblclick', e => {
       const rect = stage.getBoundingClientRect();
       const mx = e.clientX - rect.left - originX;
@@ -490,7 +525,6 @@
       applyTransform();
     });
 
-    // Guard if an element with id="y" doesn't exist
     const yEl = document.getElementById('y');
     if (yEl) yEl.textContent = new Date().getFullYear();
   </script>
