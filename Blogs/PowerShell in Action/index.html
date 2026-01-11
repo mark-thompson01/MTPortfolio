@@ -25,29 +25,61 @@
 
     .wrap {max-width:1000px; margin:0 auto; padding:40px 20px 64px}
 
-    .topnav {margin:0 0 18px; display:flex; gap:14px; flex-wrap:wrap}
-    .topnav a {color:var(--muted); text-decoration:none; padding:6px 10px; border-radius:10px; border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav {margin:0 0 24px; display:flex; gap:18px; flex-wrap:wrap}
+    .topnav a {
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover {color:var(--text); border-color:#2a3447; background:rgba(255,255,255,.04)}
     .topnav a.active {color:var(--text); border-color:#3a4a67; background:rgba(255,255,255,.06)}
 
-    .crumbs {color:var(--muted); font-size:14px; margin:2px 0 8px}
+    /* Breadcrumb - INCREASED SIZE */
+    .crumbs {color:var(--muted); font-size:15px; margin:4px 0 12px}
     .crumbs a {color:var(--muted); text-decoration:none}
     .crumbs a:hover {color:var(--text)}
 
-    h1 {margin:8px 0 6px; font-size:clamp(28px,4vw,40px); font-weight:800}
-    h2 {margin:10px 0 8px; font-size:22px; color:var(--brand)}
-    p.lead {color:var(--muted); margin:8px 0 14px; font-size:clamp(16px,2.2vw,18px)}
+    /* Headings - INCREASED SIZE */
+    h1 {margin:8px 0 8px; font-size:clamp(32px,4.5vw,44px); font-weight:800}
+    h2 {margin:14px 0 10px; font-size:26px; color:var(--brand); font-weight:700}
+    p.lead {color:var(--muted); margin:10px 0 18px; font-size:clamp(17px,2.4vw,19px)}
 
+    /* Body text - INCREASED SIZE */
+    p {font-size:16px; line-height:1.65; margin:12px 0}
+    ul,ol {font-size:16px; line-height:1.65; padding-left:24px; margin:10px 0}
+    li {margin:6px 0}
+    em {font-style:italic}
+    strong {font-weight:600}
+    code {
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:6px;
+      padding:3px 7px;
+      color:#e8eaf6;
+      font:500 14.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+
+    /* Links */
+    a {color:var(--brand); text-decoration:none}
+    a:hover {text-decoration:underline}
+
+    /* Card - INCREASED PADDING */
     .card {
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:20px;
+      padding:26px;
       margin-top:20px;
     }
 
-    .figure {margin:18px auto; width:90%; max-width:700px;}
+    /* Figures */
+    .figure {margin:20px auto; width:90%; max-width:700px;}
     .figure img {display:block; height:auto; width:100%; border-radius:8px; transition:transform 0.3s ease;}
     .zoom img:hover {transform:scale(1.03); cursor:zoom-in;}
     .full img {width:auto; max-width:100%; cursor:zoom-in;}
@@ -78,6 +110,7 @@
       border-radius: 10px;
       font-size: 14px;
       z-index: 10000;
+      cursor: pointer;
     }
     .zb-close:hover {background: rgba(255,255,255,.12);}
     .zb-hint {
@@ -93,9 +126,34 @@
       font-size: 12px;
     }
 
-    footer {margin-top:36px; padding-top:20px; border-top:1px solid #232a3a; color:var(--muted); font-size:14px;}
-    footer .links {margin-top:8px}
-    footer a {color:var(--muted)} footer a:hover {color:var(--brand)}
+    /* Footer - MATCHING MAIN PAGE */
+    footer {
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links {
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a {
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover {color:var(--brand)}
   </style>
 </head>
 <body>
@@ -144,7 +202,7 @@
     <!-- 2. Pipelines -->
     <section class="card">
       <h2>2. Working with Pipelines</h2>
-      <p>The pipeline is one of PowerShell’s greatest strengths and advantages. Instead of passing plain text between commands, PowerShell pipelines pass entire objects, complete with properties and methods. This makes filtering, sorting, and transforming data extremely efficient.</p>
+      <p>The pipeline is one of PowerShell's greatest strengths and advantages. Instead of passing plain text between commands, PowerShell pipelines pass entire objects, complete with properties and methods. This makes filtering, sorting, and transforming data extremely efficient.</p>
       <p>The examples below chain multiple cmdlets together to pull data from one source, filter it, and output clean results. Once you become more comfortable using pipelines, your workflow starts to evolve, repetitive data filtering and log parsing tasks become quick one-liners.</p>
       <div class="figure zoom"><img src="Images/Piping Examples/PipeExample1.png" alt="Pipeline example 1" /></div>
       <div class="figure zoom"><img src="Images/Piping Examples/PipeExample2.png" alt="Pipeline example 2" /></div>
@@ -154,8 +212,8 @@
     <section class="card">
       <h2>3. Accessing Data the Easy Way (No String Parsing Needed)</h2>
       <p>In traditional shells like CMD and Bash, data is returned as plain text. This often requires string parsing to extract the information you need. PowerShell eliminates that limitation entirely by returning structured objects with accessible properties.</p>
-      <p>For example, when you query system or network information, you don’t need to rely on text manipulation. Instead, you can directly call object properties such as <code>.Status</code>, <code>.Name</code>, or <code>.CPU</code>.</p>
-      <p>The comparison below shows how PowerShell replaces traditional string parsing logic. In CMD, you’d typically run a command like <code>sc query spooler</code> and then manually parse the output to find the service status.</p>
+      <p>For example, when you query system or network information, you don't need to rely on text manipulation. Instead, you can directly call object properties such as <code>.Status</code>, <code>.Name</code>, or <code>.CPU</code>.</p>
+      <p>The comparison below shows how PowerShell replaces traditional string parsing logic. In CMD, you'd typically run a command like <code>sc query spooler</code> and then manually parse the output to find the service status.</p>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/scspooler.png" alt="CMD service query example" /></div>
       <p>In PowerShell, that same task is simplified with <code>Get-Service spooler</code>, which outputs a structured object you can query directly, no parsing required.</p>
       <div class="figure zoom"><img src="Images/Access Data Without String Parsing/PSSpooler.png" alt="PowerShell Get-Service example" /></div>
@@ -177,7 +235,7 @@
     <!-- 5. OS Interaction -->
     <section class="card">
       <h2>5. Interacting with the Operating System</h2>
-      <p>PowerShell allows you to control nearly every aspect of the operating system. Whether you’re creating directories, copying files, managing services and processes, or inspecting network adapters, PowerShell provides full control through a single, consistent syntax.</p>
+      <p>PowerShell allows you to control nearly every aspect of the operating system. Whether you're creating directories, copying files, managing services and processes, or inspecting network adapters, PowerShell provides full control through a single, consistent syntax.</p>
       <p>With the <strong>Stop-Service</strong> cmdlet, you can stop a running service directly without opening the Services console. Perfect for quick troubleshooting or scripting service restarts.</p>
       <div class="figure zoom"><img src="Images/OS Interaction Examples/Stop-Service.png" alt="Stop service example" /></div>
       <p>Using <strong>New-Item</strong>, you can instantly create files, directories, or registry entries.</p>
@@ -195,7 +253,7 @@
     <!-- 6. Cross Platform -->
     <section class="card">
       <h2>6. Running PowerShell 7.5 on Ubuntu Desktop 24.04</h2>
-      <p>One of the most exciting advancements in PowerShell’s evolution with .NET Core is its expansion into Linux. It’s no longer a Windows-only tool. You can now use the same commands and scripts across different operating systems, making PowerShell truly cross-platform.</p>
+      <p>One of the most exciting advancements in PowerShell's evolution with .NET Core is its expansion into Linux. It's no longer a Windows-only tool. You can now use the same commands and scripts across different operating systems, making PowerShell truly cross-platform.</p>
       <p>In this section, I walk through installing PowerShell 7.5 on Ubuntu Desktop 24.04 and running a few simple commands to confirm functionality. These screenshots represent the process from package updates to the final PowerShell installation.</p>
       <p><strong>Step 1:</strong> Update package lists</p>
       <div class="figure full"><img src="Images/Cross-Platform Examples/aptupdate.png" alt="apt update example" /></div>
@@ -213,11 +271,11 @@
 
     <!-- 7. Conclusion -->
     <section class="card">
-      <p>Building these examples reminded me why I enjoy PowerShell so much. It’s not just about commands—it’s about efficiency, creativity, and control.</p>
+      <p>Building these examples reminded me why I enjoy PowerShell so much. It's not just about commands—it's about efficiency, creativity, and control.</p>
       <p>Whether you are maintaining servers, automating reports, or experimenting in your own environment, PowerShell gives you the tools to truly shape how you work and to approach every task with a mindset focused on precision and automation.</p>
     </section>
 
-      <p><em>PowerShell is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
+    <p><em>PowerShell is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
 
     <p><a href="../index.html">Back to Home</a></p>
 
@@ -257,4 +315,40 @@
       overlay.classList.add('is-open');
     }
     function close() {
-     
+      overlay.classList.remove('is-open');
+      zimg.src = '';
+    }
+
+    imgs.forEach(img => img.addEventListener('click', () => open(img.src)));
+    overlay.addEventListener('click', e => { if(e.target === overlay) close(); });
+    closeBtn.addEventListener('click', close);
+    window.addEventListener('keydown', e => { if(e.key === 'Escape') close(); });
+
+    stage.addEventListener('wheel', e => {
+      e.preventDefault();
+      const delta = -Math.sign(e.deltaY) * 0.15;
+      scale = Math.max(1, Math.min(5, scale + delta));
+      applyTransform();
+    }, {passive: false});
+
+    stage.addEventListener('mousedown', e => {
+      if (scale <= 1) return;
+      isPanning = true;
+      startX = e.clientX - originX;
+      startY = e.clientY - originY;
+    });
+    window.addEventListener('mousemove', e => {
+      if (!isPanning) return;
+      originX = e.clientX - startX;
+      originY = e.clientY - startY;
+      applyTransform();
+    });
+    window.addEventListener('mouseup', () => { isPanning = false; });
+
+    stage.addEventListener('dblclick', () => {
+      scale = (scale > 1.2) ? 1 : 2.5;
+      applyTransform();
+    });
+  </script>
+</body>
+</html>
