@@ -22,59 +22,73 @@
       line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:16px}
-    h1{font-size:clamp(28px,4vw,40px);font-weight:800;margin:8px 0 6px}
-    h2{margin:0 0 10px;font-size:22px}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-        /* Cards / sections */
+    /* Headings - INCREASED SIZES */
+    h1{font-size:clamp(32px,4.5vw,44px);font-weight:800;margin:8px 0 8px}
+    h2{margin:0 0 14px;font-size:26px;font-weight:700}
+    h3{margin:20px 0 10px;font-size:22px;font-weight:700}
+    .lead{color:var(--muted);margin:10px 0 18px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Body text - INCREASED SIZE */
+    p{font-size:16px;line-height:1.65;margin:12px 0}
+    ul,ol{font-size:16px;line-height:1.65;padding-left:24px;margin:10px 0}
+    li{margin:6px 0}
+
+    /* Cards - INCREASED PADDING */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      box-shadow:var(--shadow);padding:26px;margin-top:20px
     }
 
-    /* Figures: keep your original inline sizes; only downscale if viewport is narrower */
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
-      padding:8px;
-      margin:12px auto;
+      padding:10px;
+      margin:16px auto;
       width:max-content;
       max-width:100%;
     }
     .figure img{
       display:block;
       height:auto;
-      max-width:100%; /* responsive downscale only */
-      /* no width:100% here so your inline sizes remain in control */
+      max-width:100%;
     }
 
-    /* Code & pre */
+    /* Code - INCREASED SIZE */
     pre{
-      margin:10px 0;
-      padding:12px 14px;
+      margin:14px 0;
+      padding:16px 18px;
       background:#0f1424;
       border:1px solid #202a3f;
       border-radius:12px;
       overflow:auto;
       color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      font:500 14.5px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
       box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
     }
-      code{
+    code{
       background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      padding:3px 7px;color:#e8eaf6;font:500 14.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Updated hyperlink styling */
+    /* Links */
     a {
       color: var(--brand);
       text-decoration: none;
@@ -86,16 +100,40 @@
       border-color: var(--brand);
       text-decoration: none;
     }
+
+    /* Footer - MATCHING MAIN PAGE */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
     footer a {
       color: var(--muted);
       border-bottom: none;
+      text-decoration:none;
+      white-space:nowrap;
     }
     footer a:hover {
       color: var(--brand);
     }
 
-    .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;width:max-content;max-width:100%}
-    .figure img{display:block;height:auto;max-width:100%}
+    /* Image zoom */
     .zoomable{cursor:zoom-in}
     .zoom-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:9999;padding:24px}
     .zoom-overlay.open{display:flex}
@@ -106,7 +144,7 @@
 <body>
  
   <div class="wrap">
-  <!-- Site nav -->
+    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills" class="active">Networking</a>
@@ -122,16 +160,17 @@ computers and devices to locate and communicate with one another across a networ
 the internet.</p> 
     <p class="lead">This lab demonstrates how to configure a Raspberry Pi 5 as a DNS server using both <strong>DNSMasq</strong> and <strong>BIND9</strong>. Each implementation is documented step-by-step, including setup, configuration, and validation.</p>
 
-    <a href="https://github.com/mark-thompson01/raspberry-pi-5-dns-server-lab/blob/main" target="_blank" rel="noopener">
-      View this project on GitHub
-    </a>
+    <p>
+      <a href="https://github.com/mark-thompson01/raspberry-pi-5-dns-server-lab/blob/main" target="_blank" rel="noopener">
+        View this project on GitHub
+      </a>
+    </p>
     
     <!-- PART 1 -->
     <section class="card">
       <h2>Part 1: Configuring DNSMasq</h2>
-      <p><strong>DNSMasq</strong> is a lightweight DNS forwarder and DHCP server suitable for small environments. It’s efficient, simple to configure, and ideal for local caching.</p>
+      <p><strong>DNSMasq</strong> is a lightweight DNS forwarder and DHCP server suitable for small environments. It's efficient, simple to configure, and ideal for local caching.</p>
       
-      <!-- rpdns1 - rpdns19 -->
       <p><strong>1.</strong> Begin with updating software packages on Raspberry Pi with apt package manager.</p>
       <div class="figure"><img src="Images/rpdns1.png" alt="Installing dnsmasq"></div>
       <p><strong>2.</strong> Install the <strong>DNSMasq</strong> DNS software on the Raspberry Pi with apt package manager.</p>
@@ -161,10 +200,10 @@ the internet.</p>
       <div class="figure"><img src="Images/rpdns17.png" alt="Testing local domain"></div>
       <p><strong>5.</strong> Configure Windows 11 Lab-Client with Raspberry Pi IP address as Preferred DNS Server.</p>
       <div class="figure"><img src="Images/rpdns18.png" alt="Restarting network services"></div>
-      <p><strong>6.</strong> Run <strong>nslookup</strong> command to test out DNS server functionality with <strong>DNSMasq</strong> running on the Raspberry Pi.</strong></p>
+      <p><strong>6.</strong> Run <strong>nslookup</strong> command to test out DNS server functionality with <strong>DNSMasq</strong> running on the Raspberry Pi.</p>
       <div class="figure"><img src="Images/rpdns19.png" alt="Final dnsmasq verification"></div>
       
-      <p>After configuration, the Raspberry Pi successfully caches DNS queries and forwards requests to Cloudflare’s 1.1.1.1 and 1.0.0.1 servers.</p>
+      <p>After configuration, the Raspberry Pi successfully caches DNS queries and forwards requests to Cloudflare's 1.1.1.1 and 1.0.0.1 servers.</p>
       <p>From here, the Raspberry Pi IP address can be added as the DNS server IP on other devices.</p>
     </section>
 
@@ -179,7 +218,6 @@ the internet.</p>
       Pi OS.</p>
       <p>Setting this up will ensure the Raspberry Pi retains the same IP address after rebooting, enabling reliable DNS, SSH, and other network services. </p>
 
-      <!-- Static IP and environment setup -->
       <p><strong>1. Identify the OS Version</strong></p>
       <p>Learn which networking framework the OS uses.</p>
       <p>Here we see the OS Version Raspberry Pi OS Bookworm. This means the OS Version uses <strong>NetworkManager</strong> as the networking framework.</p>
@@ -199,7 +237,7 @@ the internet.</p>
       <p><strong>4. Check Current Network Interface and IP</strong></p>
       <p>To confirm which interface (e.g., eth0, wlan0) is active and what IP/subnet the Pi currently uses.</p>
       <p>This ensures your static IP stays in the same valid range and avoids conflicts.</p>
-      <p>In this example, I'm only using the command hostname -I, in other caeses running ip a would be necessary.</p>
+      <p>In this example, I'm only using the command hostname -I, in other cases running ip a would be necessary.</p>
       <div class="figure"><img src="Images/4hostname.png" alt="Check hostname"></div>
 
       <p><strong>5. Inspect Connection Settings</strong></p>
@@ -229,9 +267,8 @@ the internet.</p>
       <p>Re-verify that the current Ipv4 method <strong>ipv4.method</strong> is set to <strong>manual</strong>.</p>
       <div class="figure"><img src="Images/7verify3.png" alt="Verify IP config 3"></div>
       <p>Verify connectivity:</p>
-      <div class="figure"><img src="Images/7verify4.png" alt="Verify IP config 4"></div><br><br>
+      <div class="figure"><img src="Images/7verify4.png" alt="Verify IP config 4"></div>
 
-      <!-- Installing and configuring BIND9 -->
       <h3>Installing and configuring BIND9</h3>
       <p><strong>1. Installing BIND9</strong></p>
       <p>Now that the Raspberry Pi is configured with a Static IP address, we can install BIND.</p>
@@ -272,7 +309,7 @@ the internet.</p>
       <p><strong>Verification:</strong></p>
       <div class="figure"><img src="Images/Part2-12.png" alt="Testing with dig"></div>
 
-      <p>The BIND9 configuration includes both forward and reverse zone definitions, along with Cloudflare’s DNS for external resolution. Successful testing with <code>dig</code> confirms the DNS server’s proper function.</p>
+      <p>The BIND9 configuration includes both forward and reverse zone definitions, along with Cloudflare's DNS for external resolution. Successful testing with <code>dig</code> confirms the DNS server's proper function.</p>
     </section>
 
     <!-- PART 3 -->
