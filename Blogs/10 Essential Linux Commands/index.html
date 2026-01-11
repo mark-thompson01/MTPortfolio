@@ -23,52 +23,74 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
-    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    /* Breadcrumb - INCREASED SIZE */
+    .crumbs{color:var(--muted);font-size:15px;margin:4px 0 12px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Title & lead */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:10px 0 6px;font-size:16px}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Headings - INCREASED SIZE */
+    h1{margin:8px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800}
+    h2{margin:0 0 14px;font-size:26px;font-weight:700}
+    h3{margin:20px 0 10px;font-size:22px;font-weight:700}
+    h4{margin:14px 0 8px;font-size:18px;font-weight:600}
+    .lead{color:var(--muted);margin:10px 0 18px;font-size:clamp(17px,2.4vw,19px)}
+    
+    /* Body text - INCREASED SIZE */
+    p{font-size:16px;line-height:1.65;margin:12px 0}
+    ul,ol{font-size:16px;line-height:1.65;padding-left:24px;margin:10px 0}
+    li{margin:6px 0}
+    
+    /* Links and code */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
+    code{
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:6px;
+      padding:3px 7px;
+      color:#e8eaf6;
+      font:500 14.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
 
-    /* Card blocks */
+    /* Card blocks - INCREASED PADDING */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      box-shadow:var(--shadow);padding:26px;margin-top:20px
     }
 
-    /* Image wrappers: keep your inline sizes intact */
+    /* Image wrappers */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
-      padding:8px;
-      margin:12px auto;
-      width:max-content;            /* shrink-wrap to image width */
-      max-width:100%;               /* never overflow container */
+      padding:10px;
+      margin:16px auto;
+      width:max-content;
+      max-width:100%;
     }
     .figure img{
       display:block;
       height:auto;
-      max-width:100%;               /* allow smaller on narrow screens */
-      /* no width:100% on purpose, so your inline width values win */
+      max-width:100%;
     }
-    .figure + br{display:none;}     /* tidy extra <br> after figures */
+    .figure + br{display:none;}
 
-    /* Zoom affordance (all images except header) */
+    /* Zoom affordance */
     .zoomable{cursor:zoom-in}
     .zoomable:hover{filter:brightness(1.03)}
 
@@ -77,14 +99,38 @@
     .zb-overlay.is-open{display:flex}
     .zb-stage{position:relative;max-width:95vw;max-height:92vh;overflow:hidden}
     .zb-img{user-select:none;pointer-events:none;transform-origin:0 0;will-change:transform}
-    .zb-close{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;color:#cfd3e6;padding:8px 10px;border-radius:10px;font-size:14px}
+    .zb-close{position:fixed;top:14px;right:14px;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;color:#cfd3e6;padding:8px 10px;border-radius:10px;font-size:14px;cursor:pointer}
     .zb-close:hover{background:rgba(255,255,255,.12)}
     .zb-hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);color:#cfd3e6;background:rgba(255,255,255,.08);border:1px solid #2a2f3f;padding:6px 10px;border-radius:999px;font-size:12px}
 
-    /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Footer - MATCHING MAIN PAGE */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -104,7 +150,7 @@
       <a href="/MTPortfolio/Blogs">Blog</a> · <span>Essential Linux Commands</span>
     </div>
 
-    <!-- Header (top image excluded from zoom) -->
+    <!-- Header -->
     <header>
       <div class="figure">
         <img src="Images/Terminal.png" alt="Linux terminal themed cover" style="width:600px; height:400px;" loading="lazy" />
@@ -121,10 +167,10 @@
         The following outlines <strong>Essential Linux Commands</strong> that form a great foundation when starting out with Linux and other Unix-based systems.
       </p>
       <p>
-        Linux is everywhere — it powers over 70% of the world’s servers and dominates cloud infrastructure. You'll find Linux running on web servers, networking equipment, IoT devices, embedded systems, mobile phones, and more. From data centers to smart homes, Linux is at the core of modern computing.
+        Linux is everywhere — it powers over 70% of the world's servers and dominates cloud infrastructure. You'll find Linux running on web servers, networking equipment, IoT devices, embedded systems, mobile phones, and more. From data centers to smart homes, Linux is at the core of modern computing.
       </p>
       <p>
-        For anyone working with Linux, having a strong command-line foundation is essential and beneficial depending on what circumstances are encountered. In this blog, I’ll share some <strong>Essential Linux Commands</strong> that are fundamental and go a long way in helping to navigate the filesystem and work confidently in a Linux terminal.
+        For anyone working with Linux, having a strong command-line foundation is essential and beneficial depending on what circumstances are encountered. In this blog, I'll share some <strong>Essential Linux Commands</strong> that are fundamental and go a long way in helping to navigate the filesystem and work confidently in a Linux terminal.
       </p>
     </section>
 
@@ -280,7 +326,7 @@
 
       <h3><code>htop</code></h3>
       <h4>Interactive Process Viewer</h4>
-      <p>The <code>htop</code> command is an enhanced interactive alternative in constrast to <code>top</code>.</p>
+      <p>The <code>htop</code> command is an enhanced interactive alternative in contrast to <code>top</code>.</p>
       <p>Typing <code>htop</code> into the Linux terminal and pressing Enter brings this up in terminal output:</p>
       <div class="figure">
         <img src="Images/htop.png" alt="htop.png" style="width:650px; height:400px;" loading="lazy" />
@@ -366,14 +412,12 @@
     </footer>
   </div>
 
-  <!-- Lightbox script (applies to all images except those inside <header>) -->
+  <!-- Lightbox script -->
   <script>
-    // Add zoom to all images except any within the header
     const allImgs = Array.from(document.querySelectorAll('img'));
     const zoomImgs = allImgs.filter(img => !img.closest('header'));
     zoomImgs.forEach(img => img.classList.add('zoomable'));
 
-    // Build overlay once
     const overlay = document.createElement('div');
     overlay.className = 'zb-overlay';
     overlay.innerHTML = `
@@ -410,17 +454,14 @@
     }
     function clamp(v, mn, mx){ return Math.min(mx, Math.max(mn, v)); }
 
-    // Open on click
     zoomImgs.forEach(img => {
       img.addEventListener('click', () => openLightbox(img.currentSrc || img.src));
     });
 
-    // Close interactions
     overlay.addEventListener('click', e => { if (e.target === overlay) closeLightbox(); });
     closeBtn.addEventListener('click', closeLightbox);
     window.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-    // Wheel zoom around cursor
     stage.addEventListener('wheel', e => {
       e.preventDefault();
       const rect = stage.getBoundingClientRect();
@@ -435,7 +476,6 @@
       applyTransform();
     }, { passive:false });
 
-    // Drag to pan when zoomed
     stage.addEventListener('mousedown', e => {
       if (scale <= 1) return;
       isPanning = true;
@@ -454,7 +494,6 @@
       document.body.style.cursor = '';
     });
 
-    // Double-click toggle 1x/2.5x
     stage.addEventListener('dblclick', e => {
       const rect = stage.getBoundingClientRect();
       const mx = e.clientX - rect.left - originX;
@@ -467,7 +506,6 @@
       applyTransform();
     });
 
-    // Guard if #y doesn't exist
     const yEl = document.getElementById('y');
     if (yEl) yEl.textContent = new Date().getFullYear();
   </script>
