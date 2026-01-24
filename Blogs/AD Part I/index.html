@@ -23,38 +23,98 @@
     }
     .wrap {max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    .topnav {margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a {color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav {margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a {
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover {color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active {color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    .crumbs {color:var(--muted);font-size:14px;margin:2px 0 8px}
+    /* Breadcrumb - INCREASED SIZE */
+    .crumbs {color:var(--muted);font-size:15px;margin:4px 0 12px}
     .crumbs a {color:var(--muted);text-decoration:none}
     .crumbs a:hover {color:var(--text)}
 
-    h1 {margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2 {margin:0 0 10px;font-size:22px}
-    p.lead {color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Header - CENTERED TITLE */
+    header {text-align:center}
 
+    /* Headings - INCREASED SIZE */
+    h1 {margin:8px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800}
+    h2 {margin:0 0 14px;font-size:26px;font-weight:700}
+    h3 {margin:20px 0 10px;font-size:22px;font-weight:700}
+    h4 {margin:14px 0 8px;font-size:18px;font-weight:600}
+    p.lead {color:var(--muted);margin:10px 0 18px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Body text - INCREASED SIZE */
+    p {font-size:16px;line-height:1.65;margin:12px 0}
+    ul,ol {font-size:16px;line-height:1.65;padding-left:24px;margin:10px 0}
+    li {margin:6px 0}
+
+    /* Links */
+    a {color:var(--brand);text-decoration:none}
+    a:hover {text-decoration:underline}
+
+    /* Card blocks - INCREASED PADDING */
     .card {
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:18px;
-      margin-top:16px;
+      padding:26px;
+      margin-top:20px;
     }
 
+    /* Image wrapper */
+    .figure {
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:10px;
+      margin:16px auto;
+      width:max-content;
+      max-width:100%;
+    }
+    .figure img {
+      display:block;
+      height:auto;
+      max-width:100%;
+    }
+
+    /* Footer - MATCHING MAIN PAGE */
     footer {
-      margin-top:36px;
-      padding-top:20px;
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
       border-top:1px solid #232a3a;
       color:var(--muted);
-      font-size:14px;
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
     }
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)}
-    footer a:hover{color:var(--brand)}
+    footer .links {
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a {
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover {color:var(--brand)}
   </style>
 </head>
 <body>
@@ -73,10 +133,10 @@
     
     <header>
       <div class="figure">
-<img src="Images/AD5.png"
-     alt="Active Directory Theme Cover"
-     loading="lazy"
-     style="display:block; margin:0 auto; width:600px; height:auto;" />
+        <img src="Images/AD5.png"
+             alt="Active Directory Theme Cover"
+             loading="lazy"
+             style="width:600px; height:auto;" />
       </div>
       <h1>Active Directory - Blog Part I: Architecture & Identity</h1>
       <p class="lead">A foundational look at how Active Directory structures identity, authentication, and access across enterprise networks.</p>
@@ -101,7 +161,7 @@
 
       <p>This centralized design enables features like single sign-on (SSO), enforcement of security policies through Group Policy, and consistent domain-wide management. In many ways, Active Directory acts as the primary identity authority for an enterprise network.</p>
 
-      <p>In modern environments, hybrid identity setups have become increasingly common. These configurations bridge on-premises Active Directory with cloud platforms such as Microsoft 365 and Azure. Originally introduced with Windows 2000, Active Directory has evolved into a foundational component of today’s hybrid identity models. Particularly when integrated with services like Microsoft Entra ID.</p>
+      <p>In modern environments, hybrid identity setups have become increasingly common. These configurations bridge on-premises Active Directory with cloud platforms such as Microsoft 365 and Azure. Originally introduced with Windows 2000, Active Directory has evolved into a foundational component of today's hybrid identity models. Particularly when integrated with services like Microsoft Entra ID.</p>
 
       <p>This evolution has largely enhanced Active Directory rather than replaced it. Expanding identity into the cloud has introduced greater flexibility, scalability, and broader SSO capabilities across both on-premises and cloud-based resources.</p>
     </section>
@@ -109,7 +169,7 @@
     <section class="card">
       <h2>Protocols That Make Active Directory Work</h2>
 
-      <p>There are three protocols that are absolutely critical to Active Directory’s functionality:</p>
+      <p>There are three protocols that are absolutely critical to Active Directory's functionality:</p>
 
       <ul>
         <li><strong>LDAP</strong></li>
@@ -117,37 +177,36 @@
         <li><strong>DNS</strong></li>
       </ul>
 
-
       <p><strong>LDAP</strong></p>
       <p>The primary protocol used to query and interact with directory data. It allows applications and systems, especially cross-platform ones, to read from and write to the Active Directory database.</p>
 
-      <p>A common way to think about LDAP is as the “phonebook language” of Active Directory. If Active Directory is the phonebook itself, LDAP is the language you use to look up an entry.</p><br>
+      <p>A common way to think about LDAP is as the "phonebook language" of Active Directory. If Active Directory is the phonebook itself, LDAP is the language you use to look up an entry.</p>
 
       <p><strong>Kerberos</strong></p>
       <p>The authentication protocol responsible for secure logins across the domain. It uses cryptographically generated Ticket Granting Tickets (TGTs) to authenticate users behind the scenes.</p>
 
-      <p>When a user logs into a domain-joined computer using their Active Directory credentials, Kerberos is the mechanism performing that authentication. It validates the identity and confirms the credentials without requiring repeated password prompts.</p><br>
+      <p>When a user logs into a domain-joined computer using their Active Directory credentials, Kerberos is the mechanism performing that authentication. It validates the identity and confirms the credentials without requiring repeated password prompts.</p>
 
       <p><strong>DNS</strong></p>
-      <p>DNS or Domain Name System, is one of Active Directory’s most critical dependencies. Without DNS, systems cannot locate domain controllers, and authentication simply does not work. In practice, DNS acts as the primary service discovery mechanism for directory-aware systems.</p>
+      <p>DNS or Domain Name System, is one of Active Directory's most critical dependencies. Without DNS, systems cannot locate domain controllers, and authentication simply does not work. In practice, DNS acts as the primary service discovery mechanism for directory-aware systems.</p>
     </section>
 
     <section class="card">
       <h2>Why Active Directory is Still Relevant</h2>
 
-      <p>Active Directory is fun. Well, sometimes. That really depends on the environment and how it’s configured.</p>
+      <p>Active Directory is fun. Well, sometimes. That really depends on the environment and how it's configured.</p>
 
       <p>Over the years, a lot of high-quality educational content has emerged around Active Directory, including well-structured courses and lab environments that demonstrate both foundational administration and more advanced use cases. Many labs focus on building on-premises AD environments, integrating them with cloud services, and exploring both defensive and offensive security perspectives.</p>
 
       <p>These demonstrations highlight an important reality: Active Directory is not just an administrative system, it is a critical security boundary.</p>
 
-      <p>For me, the computer science behind Active Directory and the creativity involved in labs and tutorials are what make it genuinely interesting. There are definitely times when AD is frustrating, and I’m sure many people can relate to that. But as a technology and IT enthusiast, it has been one of my favorite systems to study and understand more deeply.</p>
+      <p>For me, the computer science behind Active Directory and the creativity involved in labs and tutorials are what make it genuinely interesting. There are definitely times when AD is frustrating, and I'm sure many people can relate to that. But as a technology and IT enthusiast, it has been one of my favorite systems to study and understand more deeply.</p>
 
       <p>Active Directory is often labeled as legacy, yet it continues to serve as the identity backbone of many enterprise environments. Even organizations that are cloud-first commonly rely on AD in some form.</p>
 
       <p>Understanding Active Directory beyond surface-level administration is essential. Its internal architecture, protocols, and dependencies directly impact reliability, security, and scalability. Misconfigurations are frequently the root cause of both operational issues and security incidents.</p>
 
-      <p>Active Directory’s continued relevance reflects its architectural design and its ability to adapt within modern hybrid environments.</p>
+      <p>Active Directory's continued relevance reflects its architectural design and its ability to adapt within modern hybrid environments.</p>
     </section>
 
     <p><em>Active Directory is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
