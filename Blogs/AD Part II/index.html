@@ -325,7 +325,8 @@
     <p>During this step, when I saw Windows Server 2016, I thought to myself, interesting, isn't this a Windows Server 2022 version I'm working with? Which made me curious. This occurs because Windows Server 2016 is currently the highest available forest and domain functional level, even when deploying on Windows Server 2022. This helps to preserve compatibility with newer domain controllers.</p>
     <div class="figure"><img src="Images/ad16.png" alt="Active Directory lab step 16" loading="lazy"></div><br>
 
-    <p>The DNS Options step displays a warning about 'DNS delegation,' but for most new setups, this can be safely ignored. It simply means the wizard can't find a parent DNS server to link to, so it will proceed by making this Domain Controller its own authoritative DNS source instead.</p>
+    <p>The DNS Options step displays a warning about 'DNS delegation,' but for most new setups, this can be safely ignored. It simply means the wizard can't find a parent DNS server to link to. <p>The DNS Options step displays a warning about 'DNS delegation,' but for most new setups, this can be safely ignored. It indicates that no DNS delegation could be created in an existing parent zone, which is expected in a new forest deployment.</p>
+
     <p>In a typical Active Directory deployment, this requirement is fulfilled automatically, as the AD DS installation process installs and configures the DNS Server role on the Domain Controller.</p>  
     <div class="figure"><img src="Images/ad17.png" alt="Active Directory lab step 17" loading="lazy"></div><br>
 
