@@ -240,6 +240,16 @@
 
     <p>In this hands-on example, I have an Evaluation version of Windows Server 2022 installed and running on Hyper-V using a Lenovo Thinkpad.</p>
     <p>These are the steps you would take to install and set up Active Directory post Windows Server installation.</p><br>
+
+    <h3>Common Active Directory Setup Mistakes</h3>
+  <ul>
+    <li>Installing AD DS without configuring a static IP address</li>
+    <li>Using a public DNS server instead of the Domain Controller for DNS</li>
+    <li>Deploying only a single Domain Controller in production environments</li>
+    <li>Ignoring time synchronization requirements (Kerberos dependency)</li>
+    <li>Promoting a Domain Controller before verifying hostname and domain naming</li>
+  </ul>
+</div><br>
     
     <h3>Step-by-Step Lab Walk Through</h3>
 
@@ -354,16 +364,8 @@ Which made me curious. This occurs because Windows Server 2016 is currently the 
     <p><strong>Install & Reboot:</strong> The server installs <strong>AD DS</strong> and restarts automatically.</p>
     <div class="figure"><img src="Images/ad22.png" alt="Active Directory lab step 22" loading="lazy"></div>
     <div class="figure"><img src="Images/ad23.png" alt="Active Directory lab step 23" loading="lazy"></div><br>
-    <div class="card">
-  <h3>Common Active Directory Setup Mistakes</h3>
-  <ul>
-    <li>Installing AD DS without configuring a static IP address</li>
-    <li>Using a public DNS server instead of the Domain Controller for DNS</li>
-    <li>Deploying only a single Domain Controller in production environments</li>
-    <li>Ignoring time synchronization requirements (Kerberos dependency)</li>
-    <li>Promoting a Domain Controller before verifying hostname and domain naming</li>
-  </ul>
-</div><br>
+    <div class="card"><br>
+
 
 
     <p><strong>21.</strong> Waiting for the <strong>gpsvc</strong> service to start.</p>
