@@ -692,7 +692,7 @@ Which made me curious. This occurs because Windows Server 2016 is currently the 
     <p><strong>26. Builtin Security Groups</strong> - Domain Local</p>
     <p>The <strong>Builtin container</strong> holds a collection of default security groups that come pre-configured with specific administrative rights to manage various parts of the domain.</p>
     <p>These groups, such as Account Operators or Backup Operators, allow you to delegate specific tasks to users without granting them full control over the entire network.</p>
-    <p>Understanding these groups is essential for maintaining a secure environment, as they represent the primary way Windows organizes local administrative power on your Domain Controllers.</p>
+    <p>Understanding these groups is essential for maintaining a secure environment. These groups represent how Active Directory organizes domain-level administrative permissions, particularly as they apply to Domain Controllers.</p>
     <div class="figure"><img src="Images/ad29.png" alt="Active Directory lab step 29" loading="lazy"></div>
 
     <p><strong>27. Domain Controller(s)</strong></p>
@@ -702,8 +702,7 @@ Domain Controller. </p>
     <p>A Domain Controller is the server that runs the <strong>AD DS</strong> Windows Server Role. 
 Essentially runs Active Directory. 
 </p>
-    <p>A Domain Controller can be thought of as the server that provides the horsepower 
-to run the "root" of Active Directory, which is the <strong>Forest Root Domain</strong>, the
+    <p>A Domain Controller hosts a writable replica of the Active Directory database for the forest root domain, providing authentication, authorization, and directory services., the
 logical "root" of the structure. </p>
     <p>A single domain can have one or more Domain Controllers (DCs), one or more of these
 computers that run Active Directory. </p>
