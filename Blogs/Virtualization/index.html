@@ -16,53 +16,73 @@
     body{
       margin:0; color:var(--text);
       font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
-      background: radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
-                  radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
-                  linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
       line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
-    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    /* Breadcrumb - INCREASED SIZE */
+    .crumbs{color:var(--muted);font-size:15px;margin:4px 0 12px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Titles */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:16px 0 6px;font-size:17px;color:var(--brand);}
-
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
-
+    /* Headings - INCREASED SIZE */
+    h1{margin:8px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800}
+    h2{margin:0 0 14px;font-size:26px;font-weight:700}
+    h3{margin:20px 0 10px;font-size:22px;font-weight:700}
+    h4{margin:14px 0 8px;font-size:18px;font-weight:600;color:var(--text)}
+    .lead{color:var(--muted);margin:10px 0 18px;font-size:clamp(17px,2.4vw,19px)}
+    
+    /* Body text - INCREASED SIZE */
+    p{font-size:16px;line-height:1.65;margin:12px 0}
+    ul,ol{font-size:16px;line-height:1.65;padding-left:24px;margin:10px 0}
+    li{margin:6px 0}
+    
+    /* Links and code */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-
-    /* Card */
-    .card{
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      padding:22px;
-      margin-top:16px;
+    code{
+      background:#0f1424;
+      border:1px solid #202a3f;
+      border-radius:6px;
+      padding:3px 7px;
+      color:#e8eaf6;
+      font:500 14.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    /* Image wrapper */
+    /* Card blocks - INCREASED PADDING */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:26px;margin-top:20px
+    }
+
+    /* Image wrappers */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
-      padding:8px;
-      margin:12px auto;
-      max-width:650px;
+      padding:10px;
+      margin:16px auto;
+      width:max-content;
+      max-width:100%;
       cursor:pointer;
       transition:transform .2s ease;
     }
@@ -71,16 +91,7 @@
       height:auto;
       max-width:100%;
     }
-    .figure:hover{
-      transform:scale(1.01);
-    }
-
-    .step-title {
-      color: var(--text); /* white */
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
+    .figure:hover{transform:scale(1.01)}
 
     /* Zoom Overlay */
     #zoomOverlay {
@@ -94,7 +105,6 @@
       z-index:9999;
       padding:20px;
     }
-
     #zoomOverlay img {
       max-width:90%;
       max-height:90%;
@@ -103,14 +113,34 @@
       box-shadow:0 0 30px rgba(0,0,0,0.5);
     }
 
-    h4 {
-      color: var(--text)
+    /* Footer - MATCHING MAIN PAGE */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
     }
-
-
-   footer {margin-top:36px; padding-top:20px; border-top:1px solid #232a3a; color:var(--muted); font-size:14px;}
-    footer .links {margin-top:8px}
-    footer a {color:var(--muted)} footer a:hover {color:var(--brand)}
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 
@@ -158,13 +188,13 @@
 
     <p><strong>Type 2 Hypervisors</strong> run directly on top of the operating system, not the hardware. A Type 2 implementation depends on hardware that supports virtualization. Common examples include Oracle VirtualBox and VMware Workstation.</p>
 
-    <p>What’s also really nice is that Hyper-V is built into Windows 11 Pro, Enterprise, and Education editions. The design of Hyper-V functions directly on the hardware level, making it a Type 1 Hypervisor in every implementation. Whether it’s running on enterprise-grade servers or a standard laptop that meets the hardware requirements.</p>
+    <p>What's also really nice is that Hyper-V is built into Windows 11 Pro, Enterprise, and Education editions. The design of Hyper-V functions directly on the hardware level, making it a Type 1 Hypervisor in every implementation. Whether it's running on enterprise-grade servers or a standard laptop that meets the hardware requirements.</p>
 
     <p>I find virtualization to be fun, exciting, innovative, and endlessly useful. Virtual Machines are fantastic for experimentation and incredibly helpful across many IT disciplines including networking, cybersecurity, DevOps, system administration, scripting, and more.</p>
 
     <p>From building labs and training environments to sandboxing, setting up virtual servers, or simply tinkering out of curiosity, virtualization provides limitless learning opportunities.</p>
 
-    <p>When it comes to home lab setups with Oracle VirtualBox, VMware Workstation, or Hyper-V, I think it's fair to say that each virtualization platform has its own advantages and disadvantages. Some may prefer one platform over another, and sometimes you'll run into an issue you don’t want to troubleshoot, so you switch platforms entirely.</p>
+    <p>When it comes to home lab setups with Oracle VirtualBox, VMware Workstation, or Hyper-V, I think it's fair to say that each virtualization platform has its own advantages and disadvantages. Some may prefer one platform over another, and sometimes you'll run into an issue you don't want to troubleshoot, so you switch platforms entirely.</p>
 
     <p>The following outlines how to get started with virtualization, including examples across multiple hypervisor platforms.</p>
 
@@ -178,7 +208,7 @@
   <p>
     Oracle VirtualBox is a popular Type 2 Hypervisor and a common starting point. 
     Setup and installation are generally straightforward. Installing it on Linux via terminal 
-    includes a few extra steps, whereas on Windows it’s a follow-the-prompts installation wizard.
+    includes a few extra steps, whereas on Windows it's a follow-the-prompts installation wizard.
   </p>
 
   <p>
@@ -195,7 +225,7 @@
     To get things started, create the <code>/etc/apt/keyrings</code> directory in the specified path below. This is the directory path Ubuntu now uses 
     to securely store repository signing keys.</p>
   <p>After the APT Keyring Directory is created, the next command downloads the Oracle VirtualBox public key. Downloaded with the use of the <code>wget</code> command and piped into <code>gpg</code> to be processed and used by the system.</p>
-  <div class="figure"><img src="Images/vbox1.png" alt=""></div><br>
+  <div class="figure"><img src="Images/vbox1.png" alt=""></div>
 
 
   <!-- Step 2 -->
@@ -203,7 +233,7 @@
     <p>Before adding the VirtualBox repository, run this command to confirm the System's Ubuntu codename.</p>
     <p>VirtualBox organizes its download repositories based on Ubuntu release names, so the codename must match your version entirely.</p>
     <p>In this example, the code name is <code>UBUNTU_CODENAME=noble</code></p>
-  <div class="figure"><img src="Images/vbox2.png" alt=""></div><br>
+  <div class="figure"><img src="Images/vbox2.png" alt=""></div>
 
 
   <!-- Step 3 -->
@@ -212,20 +242,20 @@
     With the system's codename from step 2 verified <code>noble</code> on Ubuntu 24.04 LTS, the next step
       is creating and setting up the repository file that tells Ubuntu where to download the VirtualBox packages.
   </p>
-  <P>Ubuntu uses <code>.sources</code> files to define external package repositories.</P>
-  <p>To create the file, run <code>sudo nano /etc/apt/sources.list.d/virtualbox.sources</code></p><br>
+  <p>Ubuntu uses <code>.sources</code> files to define external package repositories.</p>
+  <p>To create the file, run <code>sudo nano /etc/apt/sources.list.d/virtualbox.sources</code></p>
   <p>Inside <code>nano</code>, add the following:</p>
   <p>Replace <code>noble</code> with the codename that applies to your Ubuntu installation.</p>
-  <div class="figure"><img src="Images/vbox3.png" alt=""></div><br>
+  <div class="figure"><img src="Images/vbox3.png" alt=""></div>
  
 
   <!-- Step 4 -->
   <h4>4. Update APT Packages Lists</h4>
    <p>
-    Running <code>sudo apt update</code> refreshes Ubuntu’s package lists, allowing it to 
+    Running <code>sudo apt update</code> refreshes Ubuntu's package lists, allowing it to 
     recognize the newly added VirtualBox repository.
   </p>
-  <div class="figure"><img src="Images/vbox5.png" alt=""></div><br>
+  <div class="figure"><img src="Images/vbox5.png" alt=""></div>
 
 
   <!-- Step 5 -->
@@ -236,7 +266,7 @@
   </p>
   <div class="figure"><img src="Images/vbox6.png" alt=""></div>
 
-  <div class="figure"><img src="Images/vbox7.png" alt=""></div><br>
+  <div class="figure"><img src="Images/vbox7.png" alt=""></div>
 
   <!-- Step 6 -->
 
@@ -246,19 +276,19 @@
 
   <div class="figure"><img src="Images/vbox9.png" alt=""></div>
 
-  <div class="figure"><img src="Images/vbox12.png" alt=""></div><br>
+  <div class="figure"><img src="Images/vbox12.png" alt=""></div>
   
   <h4>7. Installation Complete</h4>
-  <div class="figure"><img src="Images/vbox14.png" alt=""></div><br>
+  <div class="figure"><img src="Images/vbox14.png" alt=""></div>
 
  <!-- Step 8 -->
   <h4>8. VirtualBox Successfully Installed</h4>
   <p>VirtualBox fully installed 
     and ready to launch from the system menu or terminal.
   </p>
-  <div class="figure"><img src="Images/vbox15.png" alt=""></div><br>
+  <div class="figure"><img src="Images/vbox15.png" alt=""></div>
 
-</section><br><br><br>
+</section>
 
   <!-- VMWARE WORKSTATION SECTION -->
 <section class="card">
@@ -337,14 +367,14 @@
   <div class="figure" style="width:800px;"><img src="Images/postinstall1.PNG" alt=""></div>
 
 
-</section><br><br><br>
+</section>
 
   <!-- HYPER-V SECTION -->
 <section class="card">
 
   <h2>Hyper-V</h2>
   <p>
-    Hyper-V is Microsoft’s built-in virtualization platform for Windows. Unlike VirtualBox 
+    Hyper-V is Microsoft's built-in virtualization platform for Windows. Unlike VirtualBox 
     and VMware Workstation, Hyper-V is a <strong>Type 1 Hypervisor</strong>, meaning it interfaces 
     directly with the hardware layer, even when installed on a standard Windows 11 laptop.  
     Hyper-V is available in Windows 11 Pro, Enterprise, and Education editions.
@@ -356,7 +386,7 @@
   <!-- Step 1 -->
   <h4>1. Access Programs and Features from Control Panel</h4>
     <p>
-    Hyper-V is enabled through the “Turn Windows features on or off” under Programs and Features within control panel. 
+    Hyper-V is enabled through the "Turn Windows features on or off" under Programs and Features within control panel. 
   </p>
   <div class="figure"><img src="Images/Hyper-V0.png" alt=""></div>
 
@@ -394,8 +424,8 @@
 
 
   <!-- Step 6 -->
-  <h4>6. Hyper-V Manager ready to go
-  <div class="figure"><img src="Images/Hyper-V4.png" alt=""></div><br><br><br><br>
+  <h4>6. Hyper-V Manager ready to go</h4>
+  <div class="figure"><img src="Images/Hyper-V4.png" alt=""></div>
 
 
 
@@ -416,7 +446,7 @@
     <p>
     Reboot required once the operation completes successfully.
   </p>
-  <div class="figure"><img src="Images/DISM2.png" alt=""></div><br><br><br><br>
+  <div class="figure"><img src="Images/DISM2.png" alt=""></div>
 
 
   <!-- POWERSHELL ENABLEMENT -->
@@ -449,7 +479,7 @@
   <div class="figure"><img src="Images/EnablePS3.png" alt=""></div>
 
 
-</section><br><br><br>
+</section>
 
 
   <!-- CONCLUSION -->
@@ -465,7 +495,7 @@
   <p>
     From an experimental standpoint, virtual machines can feel like a digital playground. 
     Virtualization lets you break things, fix things, learn, tinker, build systems, and 
-    expand your IT skill set without worrying about damaging your main machine. It’s one 
+    expand your IT skill set without worrying about damaging your main machine. It's one 
     of the most powerful educational tools available to anyone in technology today.
   </p>
 
@@ -482,8 +512,7 @@
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-  </div> <!-- end .wrap --
-  
+  </div>
 
 <!-- IMAGE ZOOM SCRIPT -->
 <script>
@@ -504,5 +533,3 @@
 
 </body>
 </html>
-
-
