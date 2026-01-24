@@ -40,14 +40,14 @@
     h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
     .lead{color:var(--muted);margin:0 0 28px;font-size:clamp(17px,2.4vw,19px)}
 
-    /* Blog grid - INCREASED SIZE */
-    .blog-grid{--gap:20px;display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap);margin-top:16px}
+    /* Blog grid - LARGER CARDS */
+    .blog-grid{--gap:24px;display:grid;grid-template-columns:repeat(2,1fr);gap:var(--gap);margin-top:16px}
     @media (max-width:900px){.blog-grid{grid-template-columns:1fr}}
 
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
-      border-radius:16px;
+      border-radius:18px;
       overflow:hidden;
       transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
       box-shadow:var(--shadow);
@@ -63,23 +63,23 @@
     .card.linux .thumb{aspect-ratio:16/9}
     .card.linux .thumb img{object-position:50% 45%}
 
-    /* Card text - INCREASED SIZE */
+    /* Card text - LARGER SIZE */
     .title{
-      font:700 1.2rem/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      font:700 1.35rem/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
       margin:0;
-      padding:1.1rem 1.3rem 0 1.3rem;
+      padding:1.4rem 1.6rem 0 1.6rem;
       color:#d3d3d3;
     }
     .excerpt{
       color:#a9b0c3;
-      font:400 1rem/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-      margin:0.55rem 1.3rem 0 1.3rem;
+      font:400 1.05rem/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      margin:0.65rem 1.6rem 0 1.6rem;
     }
     .meta{
       display:inline-block;
       color:#7f8599;
-      font-size:1rem;
-      margin:1rem 1.3rem 1.2rem 1.3rem;
+      font-size:1.05rem;
+      margin:1.1rem 1.6rem 1.4rem 1.6rem;
     }
 
     .card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.45);border-color:#3a4a67}
