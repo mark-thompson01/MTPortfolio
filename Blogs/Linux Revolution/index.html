@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>How Linux Revolutionized Computing · Mark Thompson Portfolio</title>
-  <meta name="description" content="A reflection on how the Linux kernel evolved from Linus Torvalds’s 1991 hobby project into the foundation of modern computing." />
+  <meta name="description" content="A reflection on how the Linux kernel evolved from Linus Torvalds's 1991 hobby project into the foundation of modern computing." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -23,31 +23,47 @@
     }
     .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Top nav - INCREASED SIZE */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
-    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    /* Breadcrumb - INCREASED SIZE */
+    .crumbs{color:var(--muted);font-size:15px;margin:4px 0 12px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Title & lead */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:10px 0 6px;font-size:16px}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Headings - INCREASED SIZE */
+    h1{margin:8px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800}
+    h2{margin:0 0 14px;font-size:26px;font-weight:700}
+    h3{margin:20px 0 10px;font-size:22px;font-weight:700}
+    h4{margin:14px 0 8px;font-size:18px;font-weight:600}
+    .lead{color:var(--muted);margin:10px 0 18px;font-size:clamp(17px,2.4vw,19px)}
+    
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* Card blocks */
+    /* Body text - INCREASED SIZE */
+    p{font-size:16px;line-height:1.65;margin:12px 0}
+    ul,ol{font-size:16px;line-height:1.65;padding-left:24px;margin:10px 0}
+    li{margin:6px 0}
+    strong{font-weight:600}
+
+    /* Card blocks - INCREASED PADDING */
     .card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:22px;margin-top:16px
+      box-shadow:var(--shadow);padding:26px;margin-top:20px
     }
 
     /* Image wrapper */
@@ -55,8 +71,8 @@
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
-      padding:8px;
-      margin:12px auto;
+      padding:10px;
+      margin:16px auto;
       width:max-content;
       max-width:100%;
     }
@@ -66,10 +82,34 @@
       max-width:100%;
     }
 
-    /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Footer - MATCHING MAIN PAGE */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -96,7 +136,7 @@
       </div>
       <h1>How Linux Revolutionized Computing</h1>
       <p class="lead">
-        A reflection on how Linus Torvalds’s small 1991 hobby project evolved into the backbone of modern computing, shaping open-source innovation and global technology.
+        A reflection on how Linus Torvalds's small 1991 hobby project evolved into the backbone of modern computing, shaping open-source innovation and global technology.
       </p>
     </header>
 
@@ -112,27 +152,27 @@
 
       <p>Metaphorically, the Linux kernel can be thought of as an engine, and a Linux distribution can be thought of as a whole car. There are hundreds of active Linux distributions and even more discontinued ones. Different distros serve various intended purposes.</p>
 
-      <p>For general desktop use, Ubuntu is one of the most popular. There’s also Linux Mint, Fedora Workstation, and Pop!_OS. A more advanced distro would be Arch Linux. There are also some popular Linux server distributions such as Debian, CentOS, and Red Hat Enterprise Linux. Ubuntu also has a server version. Additionally, there are specialized versions such as Kali Linux, Parrot OS, and Raspberry Pi OS.</p>
+      <p>For general desktop use, Ubuntu is one of the most popular. There's also Linux Mint, Fedora Workstation, and Pop!_OS. A more advanced distro would be Arch Linux. There are also some popular Linux server distributions such as Debian, CentOS, and Red Hat Enterprise Linux. Ubuntu also has a server version. Additionally, there are specialized versions such as Kali Linux, Parrot OS, and Raspberry Pi OS.</p>
 
-      <p>The Linux kernel truly revolutionized the world of computing. But this didn’t happen overnight. It evolved through a chain reaction that reshaped how operating systems, servers, and eventually the entire internet functioned.</p>
+      <p>The Linux kernel truly revolutionized the world of computing. But this didn't happen overnight. It evolved through a chain reaction that reshaped how operating systems, servers, and eventually the entire internet functioned.</p>
 
       <p>It revolutionized computing by starting out as an open-source collaboration. This allowed computing practitioners and hobbyists worldwide to develop and collaborate, which further led to the rise of free and open operating systems. Now, most of the modern internet today is powered by Linux.</p>
 
-      <p>It runs over 70% of the world’s servers, dominates cloud infrastructure, and essentially runs everything from supercomputers to smartphones, from Raspberry Pis to self-driving cars. It’s the dominant OS in embedded systems, networking gear, and IoT devices.</p>
+      <p>It runs over 70% of the world's servers, dominates cloud infrastructure, and essentially runs everything from supercomputers to smartphones, from Raspberry Pis to self-driving cars. It's the dominant OS in embedded systems, networking gear, and IoT devices.</p>
 
       <p>Because it was free and open, students, researchers, and startups could experiment without licensing costs, leading to explosive innovation in computing, networking, and security.</p>
 
       <p>Linux was released under the GNU General Public License. Sparking a turning point for the software industry, allowing anyone to study, modify, and redistribute the Linux kernel source code legally and freely. This opened a lot of doors for community-driven development.</p>
-<p>So, the General Public Licensing or GPL, followed by the heavy progression of a global volunteer community, along with the modular design of the Linux kernel’s ability to ease hardware portability, are all factors that led to this ecosystem effect in computing.</p>
-      
+
+      <p>So, the General Public Licensing or GPL, followed by the heavy progression of a global volunteer community, along with the modular design of the Linux kernel's ability to ease hardware portability, are all factors that led to this ecosystem effect in computing.</p>
 
       <p>As a result, the Linux kernel is the foundation for:</p>
       <ul>
-        <li><strong>Being a cornerstone in the open-source movement</strong></li><br>
-        <li><strong>Android OS - Mobile device revolution</strong></li><br>
-        <li><strong>Docker / Kubernetes - Containerization</strong></li><br>
-        <li><strong>Raspberry Pi - Maker revolution</strong></li><br>
-        <li><strong>The standard OS for servers, supercomputers, and cloud environments</strong></li><br>
+        <li><strong>Being a cornerstone in the open-source movement</strong></li>
+        <li><strong>Android OS - Mobile device revolution</strong></li>
+        <li><strong>Docker / Kubernetes - Containerization</strong></li>
+        <li><strong>Raspberry Pi - Maker revolution</strong></li>
+        <li><strong>The standard OS for servers, supercomputers, and cloud environments</strong></li>
         <li><strong>A symbol of global collaboration and freedom in technology</strong></li>
       </ul>
 
