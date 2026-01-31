@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hyper-V Lab Extended · Mark Thompson Portfolio</title>
+  <meta name="description" content="Extended Hyper-V lab setup on Dell Pro Slim QCS1250 with Intel i5-14500, 32GB RAM, exploring virtualization technology." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 28px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:24px;
+      font-weight:700;
+      margin:32px 0 16px 0;
+      color:var(--text);
+    }
+    .content h2:first-child{margin-top:0}
+    .content p{
+      color:var(--text);
+      font-size:16px;
+      line-height:1.7;
+      margin:0 0 16px 0;
+    }
+    .content strong{
+      color:var(--brand);
+      font-weight:600;
+    }
+
+    /* Hardware specs highlight */
+    .specs{
+      background:rgba(77,163,255,.08);
+      border-left:3px solid var(--brand);
+      padding:16px 20px;
+      margin:20px 0;
+      border-radius:8px;
+    }
+    .specs p{margin:0}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Compact site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Title + short intro -->
+    <header>
+      <h1>Hyper-V Lab Extended</h1>
+      <p class="lead">An advanced virtualization setup for hands-on learning and experimentation.</p>
+    </header>
+
+    <!-- Main content -->
+    <main class="content">
+      <p>This hands-on lab project is an extension of the previous Hyper-V lab documented on this portfolio. In that lab, the setup was configured on a Lenovo Thinkpad E16 Gen 2 laptop unit with limited hardware resources; not necessary enough for a realistic setup – but enough to build a decent setup for demonstration.</p>
+
+      <p>I documented that lab as the beginning of many other labs to come, as the VMs that are configured will become dedicated lab projects on their own.</p>
+
+      <div class="specs">
+        <p>In this extended Hyper-V lab, I'm transferring the setup to a <strong>Dell Pro Slim QCS1250 desktop unit</strong> running Windows 11 Pro, equipped with an <strong>Intel Core i5-14500 processor</strong> with 14 cores, 20 logical processors running at 2600 MHz, <strong>32 GB of RAM</strong>, and a <strong>1TB SSD</strong>.</p>
+      </div>
+
+      <p>A configuration that is geared with more hardware resources to increase the efficiency and functionality of the VMs to go the extra mile.</p>
+
+      <p>This extended lab into a more advanced rig will become a full functional Hyper-V server for further experimentation.</p>
+
+      <h2>Project Overview</h2>
+
+      <p>This project started out with the curiosity of learning more about Microsoft Hyper-V, to learn more about the technology and gain more hands-on experience with it.</p>
+
+      <p>In enterprise environments, I have exposure to bare metal enterprise setups configured with Hyper-V. At the very management consoles of active production systems. While applying the mindful responsibility to operate them properly without causing disruption by having keen attention to detail.</p>
+
+      <p>After all, managing a production system that is imperative to business continuity is a great responsibility.</p>
+
+      <p>In the lab, I'm exploring Hyper-V on standard laptop and desktop computers to gain experience with setting up an implementation from scratch. Gaining the experience with building and customizing my own setups, and overall getting creative, exploring, grabbing a keyboard and tinkering around.</p>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html>
