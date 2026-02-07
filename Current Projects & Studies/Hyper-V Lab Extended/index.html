@@ -222,7 +222,7 @@
       <!-- Step 3 -->
       <h2><span class="step-badge">Step 3</span> Shrink Volume - Context Menu</h2>
       <p>Right-clicking on the C: drive partition and selecting "Shrink Volume..." from the context menu. This will allow us to reduce the size of the system partition and create unallocated space for a new data volume.</p>
-      <div class="img-container full-window">
+      <div class="img-container dialog">
         <img src="Images/diskedit2.png" alt="Shrink Volume context menu option" />
       </div>
 
@@ -250,35 +250,35 @@
       <!-- Step 7 -->
       <h2><span class="step-badge">Step 7</span> New Simple Volume Wizard - Welcome</h2>
       <p>The New Simple Volume Wizard launches. This wizard will guide through creating a simple volume on the unallocated disk space. A simple volume can only be on a single disk.</p>
-      <div class="img-container medium-window">
+      <div class="img-container dialog">
         <img src="Images/diskedit7.png" alt="New Simple Volume Wizard welcome screen" />
       </div>
 
       <!-- Step 8 -->
       <h2><span class="step-badge">Step 8</span> Specify Volume Size</h2>
       <p>Choosing the volume size for the new partition. The maximum available space is 349,999 MB. Setting the simple volume size to 349,999 MB (approximately 341 GB) to use all available unallocated space for Hyper-V virtual machine storage.</p>
-      <div class="img-container medium-window">
+      <div class="img-container dialog">
         <img src="Images/diskedit8.png" alt="Specify Volume Size dialog" />
       </div>
 
       <!-- Step 9 -->
       <h2><span class="step-badge">Step 9</span> Assign Drive Letter or Path</h2>
       <p>Assigning a drive letter for the new partition. Selecting "D:" as the drive letter for easier access to the Hyper-V storage volume. This will make it simple to locate and manage virtual machine files.</p>
-      <div class="img-container medium-window">
+      <div class="img-container dialog">
         <img src="Images/diskedit9.png" alt="Assign Drive Letter dialog" />
       </div>
 
       <!-- Step 10 -->
       <h2><span class="step-badge">Step 10</span> Format Partition</h2>
       <p>Configuring the format settings for the new partition. Selecting NTFS file system with default allocation unit size. Setting the volume label to "X" and enabling both quick format and file/folder compression for optimal storage efficiency.</p>
-      <div class="img-container medium-window">
+      <div class="img-container dialog">
         <img src="Images/diskedit10.png" alt="Format Partition dialog" />
       </div>
 
       <!-- Step 11 -->
       <h2><span class="step-badge">Step 11</span> Completing the New Simple Volume Wizard</h2>
       <p>Reviewing the final settings before creating the volume. Summary shows: Volume type: Simple Volume, Disk selected: Disk 0, Volume size: 349,999 MB, Drive letter: D:, File system: NTFS, Allocation unit size: Default, Volume label: X, Quick format: Yes. Ready to click Finish to create the partition.</p>
-      <div class="img-container medium-window">
+      <div class="img-container dialog">
         <img src="Images/diskedit11.png" alt="Completing the wizard summary screen" />
       </div>
 
@@ -306,21 +306,21 @@
       <!-- Step 15 -->
       <h2><span class="step-badge">Step 15</span> System Protection Settings</h2>
       <p>Opening System Properties to configure System Protection. Currently, protection is enabled (On) for Local Disk (C:) System, but disabled (Off) for the new X (D:) drive. Accessing the Configure button to enable System Protection for the D: drive to create restore points for the Hyper-V storage volume.</p>
-      <div class="img-container medium-window">
+      <div class="img-container dialog">
         <img src="Images/diskedit15.png" alt="System Protection settings" />
       </div>
 
       <!-- Step 16 -->
       <h2><span class="step-badge">Step 16</span> Configure System Protection - Initial State</h2>
       <p>Viewing the System Protection configuration for X (D:) drive. System protection is currently turned on with 0 bytes of current usage. The max usage slider is at minimum, indicating no disk space is allocated yet for restore points on this volume.</p>
-      <div class="img-container medium-window">
+      <div class="img-container dialog">
         <img src="Images/diskedit16.png" alt="System Protection configuration initial state" />
       </div>
 
       <!-- Step 17 -->
       <h2><span class="step-badge">Step 17</span> Configure System Protection - Final Settings</h2>
       <p>Adjusting the System Protection disk space allocation for the D: drive. The max usage slider has been set to 25% (85.45 GB) of the total disk space. This reserves adequate space for restore points while leaving the majority of the 341 GB drive available for Hyper-V virtual machine storage. Clicking Apply to finalize the configuration.</p>
-      <div class="img-container medium-window">
+      <div class="img-container dialog">
         <img src="Images/diskedit17.png" alt="System Protection with 25% allocated" />
       </div>
 
