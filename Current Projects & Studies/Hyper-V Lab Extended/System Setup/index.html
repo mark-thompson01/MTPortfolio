@@ -29,6 +29,37 @@
     ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
     * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
     .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Initial System Setup · Mark Thompson Portfolio</title>
+  <meta name="description" content="Initial system preparation and configuration for the extended Hyper-V lab environment." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
     .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
@@ -260,6 +291,298 @@
       <p>Finalizing the Windows update process and confirming the system is fully patched and ready for Hyper-V deployment.</p>
       <div class="img-container">
         <img src="/MTPortfolio/Images/update5.png" alt="Windows Update finalization" />
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Zoom overlay -->
+  <div class="zoom-overlay" id="zoomOverlay">
+    <span class="zoom-close" id="zoomClose">&times;</span>
+    <img id="zoomImage" src="" alt="Zoomed image" />
+  </div>
+
+  <script>
+    // Get all image containers
+    const imgContainers = document.querySelectorAll('.img-container');
+    const zoomOverlay = document.getElementById('zoomOverlay');
+    const zoomImage = document.getElementById('zoomImage');
+    const zoomClose = document.getElementById('zoomClose');
+
+    // Add click event to each image container
+    imgContainers.forEach(container => {
+      container.addEventListener('click', function() {
+        const img = this.querySelector('img');
+        zoomImage.src = img.src;
+        zoomImage.alt = img.alt;
+        zoomOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close zoom on overlay click
+    zoomOverlay.addEventListener('click', function() {
+      this.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close zoom on X button click
+    zoomClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      zoomOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close zoom on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && zoomOverlay.classList.contains('active')) {
+        zoomOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  </script>
+
+</body>
+</html>
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 28px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:24px;
+      font-weight:700;
+      margin:40px 0 16px 0;
+      color:var(--text);
+    }
+    .content h2:first-child{margin-top:0}
+    .content p{
+      color:var(--text);
+      font-size:16px;
+      line-height:1.7;
+      margin:0 0 16px 0;
+    }
+    .content strong{
+      color:var(--brand);
+      font-weight:600;
+    }
+
+    /* Image container */
+    .img-container{
+      margin:24px 0;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--card-border);
+      box-shadow:0 4px 12px rgba(0,0,0,.3);
+      cursor:pointer;
+      transition:transform .2s;
+    }
+    .img-container:hover{
+      transform:scale(1.02);
+    }
+    .img-container img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    /* Zoom overlay */
+    .zoom-overlay{
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,.95);
+      z-index:9999;
+      cursor:zoom-out;
+      padding:40px;
+      box-sizing:border-box;
+    }
+    .zoom-overlay.active{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .zoom-overlay img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      border-radius:8px;
+    }
+    .zoom-close{
+      position:absolute;
+      top:20px;
+      right:30px;
+      color:#fff;
+      font-size:40px;
+      font-weight:bold;
+      cursor:pointer;
+      z-index:10000;
+    }
+    .zoom-close:hover{
+      color:var(--brand);
+    }
+
+    /* Step number badge */
+    .step-badge{
+      display:inline-block;
+      background:var(--brand);
+      color:#0f1115;
+      padding:4px 12px;
+      border-radius:6px;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Compact site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Title + short intro -->
+    <header>
+      <h1>Initial System Setup</h1>
+      <p class="lead">Initial configuration and system preparation for the extended Hyper-V lab environment.</p>
+    </header>
+
+    <!-- Main content -->
+    <main class="content">
+      
+      <!-- Step 1: DISM -->
+      <h2><span class="step-badge">Step 1</span> DISM - Deployment Image Servicing and Management</h2>
+      <p>Running DISM to check the system health and prepare the Windows image for Hyper-V installation. This ensures the operating system is in good condition before enabling virtualization features.</p>
+      <div class="img-container">
+        <img src="Images/dism.png" alt="DISM command execution" />
+      </div>
+
+      <!-- Step 2: SFC -->
+      <h2><span class="step-badge">Step 2</span> SFC - System File Checker</h2>
+      <p>Running System File Checker to scan and repair any corrupted Windows system files. This step ensures system integrity before proceeding with the Hyper-V installation.</p>
+      <div class="img-container">
+        <img src="Images/sfc.png" alt="System File Checker scan" />
+      </div>
+
+      <!-- Step 3: Reboot -->
+      <h2><span class="step-badge">Step 3</span> System Reboot</h2>
+      <p>Rebooting the system to apply changes and ensure all repairs are properly implemented before enabling Hyper-V features.</p>
+      <div class="img-container">
+        <img src="Images/reboot.png" alt="System reboot process" />
+      </div>
+
+      <!-- Step 4: Group Policy Configuration -->
+      <h2><span class="step-badge">Step 4</span> Group Policy Configuration</h2>
+      <p>Configuring Windows Group Policy settings to enable and optimize Hyper-V functionality. This includes setting execution policies and virtualization-related configurations.</p>
+      <div class="img-container">
+        <img src="Images/execpolicy.png" alt="Group Policy execution policy settings" />
+      </div>
+
+      <!-- Step 5: Additional Execution Policy Settings -->
+      <h2><span class="step-badge">Step 5</span> PowerShell Execution Policy</h2>
+      <p>Adjusting PowerShell execution policy to allow Hyper-V management scripts and cmdlets to run properly on the system.</p>
+      <div class="img-container">
+        <img src="Images/execpolicy2.png" alt="PowerShell execution policy configuration" />
+      </div>
+
+      <!-- Step 6: Windows Update 3 -->
+      <h2><span class="step-badge">Step 6</span> Windows Updates - Part 1</h2>
+      <p>Installing critical Windows updates to ensure the system has the latest security patches and Hyper-V improvements before deployment.</p>
+      <div class="img-container">
+        <img src="Images/update3.png" alt="Windows Update installation process" />
+      </div>
+
+      <!-- Step 7: Windows Update 2 -->
+      <h2><span class="step-badge">Step 7</span> Windows Updates - Part 2</h2>
+      <p>Completing additional Windows updates and verifying all necessary components are up to date for optimal Hyper-V performance.</p>
+      <div class="img-container">
+        <img src="Images/update2.png" alt="Windows Update completion" />
+      </div>
+
+      <!-- Step 8: Windows Update 6 -->
+      <h2><span class="step-badge">Step 8</span> Windows Updates - Part 3</h2>
+      <p>Continuing the update process to ensure all cumulative updates and security patches are installed on the system.</p>
+      <div class="img-container">
+        <img src="Images/update6.png" alt="Windows Update continued installation" />
+      </div>
+
+      <!-- Step 9: Windows Update 5 -->
+      <h2><span class="step-badge">Step 9</span> Windows Updates - Final</h2>
+      <p>Finalizing the Windows update process and confirming the system is fully patched and ready for Hyper-V deployment.</p>
+      <div class="img-container">
+        <img src="Images/update5.png" alt="Windows Update finalization" />
       </div>
 
     </main>
