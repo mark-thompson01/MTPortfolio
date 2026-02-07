@@ -85,6 +85,52 @@
     }
     .specs p{margin:0}
 
+    /* Lab modules list */
+    .lab-modules{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:20px;
+    }
+    .module-link{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      padding:16px 20px;
+      background:rgba(77,163,255,.06);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      text-decoration:none;
+      transition:all .2s;
+    }
+    .module-link:hover{
+      background:rgba(77,163,255,.12);
+      border-color:var(--brand);
+      transform:translateX(4px);
+    }
+    .module-number{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:40px;
+      height:40px;
+      background:var(--brand);
+      color:#0f1115;
+      font-weight:800;
+      font-size:18px;
+      border-radius:8px;
+      flex-shrink:0;
+    }
+    .module-title{
+      color:var(--brand);
+      font-size:16px;
+      font-weight:500;
+      line-height:1.4;
+    }
+    .module-link:hover .module-title{
+      color:#6bb7ff;
+    }
+
     /* Footer */
     footer{
       margin-top:48px;
@@ -148,7 +194,7 @@
 
       <p>A configuration that is geared with more hardware resources to increase the efficiency and functionality of the VMs to go the extra mile.</p>
 
-      <p>This extended lab into a more advanced rig will become a full functional Hyper-V server for further experimentation.</p><br>
+      <p>This extended lab into a more advanced rig will become a full functional Hyper-V server for further experimentation.</p>
 
       <h2>Project Overview</h2>
 
@@ -158,20 +204,41 @@
 
       <p>After all, managing a production system that is imperative to business continuity is a great responsibility.</p>
 
-      <p>In the lab, I'm exploring Hyper-V on standard laptop and desktop computers to gain experience with setting up an implementation from scratch. Gaining the experience with building and customizing my own setups, and overall getting creative, exploring, grabbing a keyboard and tinkering around.</p><br><br>
+      <p>In the lab, I'm exploring Hyper-V on standard laptop and desktop computers to gain experience with setting up an implementation from scratch. Gaining the experience with building and customizing my own setups, and overall getting creative, exploring, grabbing a keyboard and tinkering around.</p>
 
+      <h2>Lab Structure</h2>
 
-      <section class="card">
-        <h2>Lab Structure</h2>
-        <div class="modulelist">
-           <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup/">Initial System Setup - I - Maintenance & Updates</a><br>
-           <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20II"/>Initial System Setup - II - Create a split partition on SSD</a><br>
-           <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20III"/>Initial System Setup - III - Create standard user account</a><br>
-           <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20IIII"/>Initial System Setup - IV - Enable Hyper-V using PowerShell</a><br>
-           <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20V"/>Initial System Setup - V - Hyper-V Setup</a><br>
-           <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20VI"/>Initial System Setup - VI - VM Setup</a><br>
-        </div>
-      </section>
+      <div class="lab-modules">
+        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup/" class="module-link">
+          <span class="module-number">I</span>
+          <span class="module-title">Initial System Setup - Maintenance & Updates</span>
+        </a>
+        
+        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20II" class="module-link">
+          <span class="module-number">II</span>
+          <span class="module-title">Initial System Setup - Create a Split Partition on SSD</span>
+        </a>
+        
+        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20III" class="module-link">
+          <span class="module-number">III</span>
+          <span class="module-title">Initial System Setup - Create Standard User Account</span>
+        </a>
+        
+        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20IIII" class="module-link">
+          <span class="module-number">IV</span>
+          <span class="module-title">Initial System Setup - Enable Hyper-V using PowerShell</span>
+        </a>
+        
+        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20V" class="module-link">
+          <span class="module-number">V</span>
+          <span class="module-title">Initial System Setup - Hyper-V Setup</span>
+        </a>
+        
+        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V%20Lab%20Extended/System%20Setup%20VI" class="module-link">
+          <span class="module-number">VI</span>
+          <span class="module-title">Initial System Setup - VM Setup</span>
+        </a>
+      </div>
     
     </main>
 
