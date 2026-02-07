@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Initial System Setup II · Mark Thompson Portfolio</title>
-  <meta name="description" content="Disk management and storage configuration for the extended Hyper-V lab environment." />
+  <title>Hyper-V Lab Extended · Mark Thompson Portfolio</title>
+  <meta name="description" content="Extended Hyper-V lab setup on Dell Pro Slim QCS1250 with Intel i5-14500, 32GB RAM, exploring virtualization technology." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -60,7 +60,7 @@
     .content h2{
       font-size:24px;
       font-weight:700;
-      margin:40px 0 16px 0;
+      margin:32px 0 16px 0;
       color:var(--text);
     }
     .content h2:first-child{margin-top:0}
@@ -75,81 +75,15 @@
       font-weight:600;
     }
 
-    /* Image container */
-    .img-container{
-      margin:24px auto;
-      border-radius:12px;
-      overflow:hidden;
-      border:1px solid var(--card-border);
-      box-shadow:0 4px 12px rgba(0,0,0,.3);
-      cursor:pointer;
-      transition:transform .2s;
-      max-width:85%;
-    }
-    .img-container:hover{
-      transform:scale(1.02);
-    }
-    .img-container img{
-      width:100%;
-      height:auto;
-      display:block;
-    }
-    
-    /* Size variations for different window types */
-    .img-container.dialog{max-width:450px}
-    .img-container.full-window{max-width:85%}
-    .img-container.medium-window{max-width:65%}
-
-    /* Zoom overlay */
-    .zoom-overlay{
-      display:none;
-      position:fixed;
-      top:0;
-      left:0;
-      width:100%;
-      height:100%;
-      background:rgba(0,0,0,.95);
-      z-index:9999;
-      cursor:zoom-out;
-      padding:40px;
-      box-sizing:border-box;
-    }
-    .zoom-overlay.active{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .zoom-overlay img{
-      max-width:100%;
-      max-height:100%;
-      object-fit:contain;
+    /* Hardware specs highlight */
+    .specs{
+      background:rgba(77,163,255,.08);
+      border-left:3px solid var(--brand);
+      padding:16px 20px;
+      margin:20px 0;
       border-radius:8px;
     }
-    .zoom-close{
-      position:absolute;
-      top:20px;
-      right:30px;
-      color:#fff;
-      font-size:40px;
-      font-weight:bold;
-      cursor:pointer;
-      z-index:10000;
-    }
-    .zoom-close:hover{
-      color:var(--brand);
-    }
-
-    /* Step number badge */
-    .step-badge{
-      display:inline-block;
-      background:var(--brand);
-      color:#0f1115;
-      padding:4px 12px;
-      border-radius:6px;
-      font-size:14px;
-      font-weight:700;
-      margin-bottom:8px;
-    }
+    .specs p{margin:0}
 
     /* Footer */
     footer{
@@ -198,132 +132,33 @@
 
     <!-- Title + short intro -->
     <header>
-      <h1>Initial System Setup II</h1>
-      <p class="lead">Disk management and storage configuration for the extended Hyper-V lab environment.</p>
+      <h1>Hyper-V Lab Extended</h1>
+      <p class="lead">An advanced virtualization setup for hands-on learning and experimentation.</p>
     </header>
 
     <!-- Main content -->
     <main class="content">
-      
-      <!-- Step 1 -->
-      <h2><span class="step-badge">Step 1</span> Shrink Volume - C: Drive</h2>
-      <p>Opening the Shrink Volume dialog for the C: drive. Preparing to shrink the system partition from 952,896 MB down to 602,896 MB, freeing up 350,000 MB of space for creating a new data partition for Hyper-V storage.</p>
-      <div class="img-container dialog">
-        <img src="Images/disk4.png" alt="Shrink Volume dialog for C: drive" />
+      <p>This hands-on lab project is an extension of the previous Hyper-V lab documented on this portfolio. In that lab, the setup was configured on a Lenovo Thinkpad E16 Gen 2 laptop unit with limited hardware resources; not necessary enough for a realistic setup – but enough to build a decent setup for demonstration.</p>
+
+      <p>I documented that lab as the beginning of many other labs to come, as the VMs that are configured will become dedicated lab projects on their own.</p>
+
+      <div class="specs">
+        <p>In this extended Hyper-V lab, I'm transferring the setup to a <strong>Dell Pro Slim QCS1250 desktop unit</strong> running Windows 11 Pro, equipped with an <strong>Intel Core i5-14500 processor</strong> with 14 cores, 20 logical processors running at 2600 MHz, <strong>32 GB of RAM</strong>, and a <strong>1TB SSD</strong>.</p>
       </div>
 
-      <!-- Step 2 -->
-      <h2><span class="step-badge">Step 2</span> Disk Management - Current Configuration</h2>
-      <p>Viewing the current disk layout in Disk Management. The system shows Disk 0 with three partitions: 200 MB EFI System Partition, 930.56 GB C: drive (NTFS), and 755 MB Recovery Partition. This is the starting point before creating the new data partition.</p>
-      <div class="img-container full-window">
-        <img src="Images/diskedit1.png" alt="Disk Management current configuration" />
-      </div>
+      <p>A configuration that is geared with more hardware resources to increase the efficiency and functionality of the VMs to go the extra mile.</p>
 
-      <!-- Step 3 -->
-      <h2><span class="step-badge">Step 3</span> Shrink Volume - Context Menu</h2>
-      <p>Right-clicking on the C: drive partition and selecting "Shrink Volume..." from the context menu. This will allow us to reduce the size of the system partition and create unallocated space for a new data volume.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit2.png" alt="Shrink Volume context menu option" />
-      </div>
+      <p>This extended lab into a more advanced rig will become a full functional Hyper-V server for further experimentation.</p><br>
 
-      <!-- Step 4 -->
-      <h2><span class="step-badge">Step 4</span> Shrink Volume - Specify Amount</h2>
-      <p>Entering 465,403 MB as the amount of space to shrink from the C: drive. This will reduce the C: drive to 487,493 MB and create 465,403 MB of unallocated space for the new Hyper-V data partition.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit3.png" alt="Shrink Volume dialog with amount specified" />
-      </div>
+      <h2>Project Overview</h2>
 
-      <!-- Step 5 -->
-      <h2><span class="step-badge">Step 5</span> Shrink Complete - Unallocated Space Created</h2>
-      <p>The shrink operation is complete. Disk Management now shows the C: drive reduced to 588.77 GB with 341.80 GB of unallocated space available. This unallocated space will be used to create a new data partition for Hyper-V virtual machines.</p>
-      <div class="img-container full-window">
-        <img src="Images/diskedit5.png" alt="Disk Management showing unallocated space" />
-      </div>
+      <p>This project started out with the curiosity of learning more about Microsoft Hyper-V, to learn more about the technology and gain more hands-on experience with it.</p>
 
-      <!-- Step 6 -->
-      <h2><span class="step-badge">Step 6</span> Create New Volume - Context Menu</h2>
-      <p>Right-clicking on the unallocated space to access volume creation options. Selecting "New Simple Volume..." to start the wizard for creating a new partition dedicated to Hyper-V storage.</p>
-      <div class="img-container full-window">
-        <img src="Images/diskedit6.png" alt="New Simple Volume context menu" />
-      </div>
+      <p>In enterprise environments, I have exposure to bare metal enterprise setups configured with Hyper-V. At the very management consoles of active production systems. While applying the mindful responsibility to operate them properly without causing disruption by having keen attention to detail.</p>
 
-      <!-- Step 7 -->
-      <h2><span class="step-badge">Step 7</span> New Simple Volume Wizard - Welcome</h2>
-      <p>The New Simple Volume Wizard launches. This wizard will guide through creating a simple volume on the unallocated disk space. A simple volume can only be on a single disk.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit7.png" alt="New Simple Volume Wizard welcome screen" />
-      </div>
+      <p>After all, managing a production system that is imperative to business continuity is a great responsibility.</p>
 
-      <!-- Step 8 -->
-      <h2><span class="step-badge">Step 8</span> Specify Volume Size</h2>
-      <p>Choosing the volume size for the new partition. The maximum available space is 349,999 MB. Setting the simple volume size to 349,999 MB (approximately 341 GB) to use all available unallocated space for Hyper-V virtual machine storage.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit8.png" alt="Specify Volume Size dialog" />
-      </div>
-
-      <!-- Step 9 -->
-      <h2><span class="step-badge">Step 9</span> Assign Drive Letter or Path</h2>
-      <p>Assigning a drive letter for the new partition. Selecting "D:" as the drive letter for easier access to the Hyper-V storage volume. This will make it simple to locate and manage virtual machine files.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit9.png" alt="Assign Drive Letter dialog" />
-      </div>
-
-      <!-- Step 10 -->
-      <h2><span class="step-badge">Step 10</span> Format Partition</h2>
-      <p>Configuring the format settings for the new partition. Selecting NTFS file system with default allocation unit size. Setting the volume label to "X" and enabling both quick format and file/folder compression for optimal storage efficiency.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit10.png" alt="Format Partition dialog" />
-      </div>
-
-      <!-- Step 11 -->
-      <h2><span class="step-badge">Step 11</span> Completing the New Simple Volume Wizard</h2>
-      <p>Reviewing the final settings before creating the volume. Summary shows: Volume type: Simple Volume, Disk selected: Disk 0, Volume size: 349,999 MB, Drive letter: D:, File system: NTFS, Allocation unit size: Default, Volume label: X, Quick format: Yes. Ready to click Finish to create the partition.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit11.png" alt="Completing the wizard summary screen" />
-      </div>
-
-      <!-- Step 12 -->
-      <h2><span class="step-badge">Step 12</span> New Volume Created Successfully</h2>
-      <p>The new partition has been successfully created. Disk Management now displays four volumes: C: (588.77 GB), EFI System Partition (200 MB), Recovery Partition (755 MB), and the newly created X: (D:) drive (341.80 GB) with 100% free space, ready for Hyper-V virtual machine storage.</p>
-      <div class="img-container full-window">
-        <img src="Images/diskedit12.png" alt="Disk Management with new D: drive" />
-      </div>
-
-      <!-- Step 13 -->
-      <h2><span class="step-badge">Step 13</span> PowerShell Volume Verification - Command</h2>
-      <p>Opening PowerShell as Administrator to verify the disk configuration. Running the command: Get-Volume | Select-Object DriveLetter, FriendlyName, SizeRemaining, HealthStatus | Format-Table to display detailed information about all volumes on the system.</p>
-      <div class="img-container full-window">
-        <img src="Images/diskedit13.png" alt="PowerShell Get-Volume command" />
-      </div>
-
-      <!-- Step 14 -->
-      <h2><span class="step-badge">Step 14</span> PowerShell Volume Verification - Results</h2>
-      <p>Viewing the output from the Get-Volume command. The results confirm both drives are healthy: D: drive shows 366,889,795,584 bytes (341 GB) available, and C: drive shows 568,355,786,752 bytes (529 GB) available. All volumes report "Healthy" status, confirming the disk configuration is complete and operational.</p>
-      <div class="img-container full-window">
-        <img src="Images/diskedit14.png" alt="PowerShell Get-Volume output" />
-      </div>
-
-      <!-- Step 15 -->
-      <h2><span class="step-badge">Step 15</span> System Protection Settings</h2>
-      <p>Opening System Properties to configure System Protection. Currently, protection is enabled (On) for Local Disk (C:) System, but disabled (Off) for the new X (D:) drive. Accessing the Configure button to enable System Protection for the D: drive to create restore points for the Hyper-V storage volume.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit15.png" alt="System Protection settings" />
-      </div>
-
-      <!-- Step 16 -->
-      <h2><span class="step-badge">Step 16</span> Configure System Protection - Initial State</h2>
-      <p>Viewing the System Protection configuration for X (D:) drive. System protection is currently turned on with 0 bytes of current usage. The max usage slider is at minimum, indicating no disk space is allocated yet for restore points on this volume.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit16.png" alt="System Protection configuration initial state" />
-      </div>
-
-      <!-- Step 17 -->
-      <h2><span class="step-badge">Step 17</span> Configure System Protection - Final Settings</h2>
-      <p>Adjusting the System Protection disk space allocation for the D: drive. The max usage slider has been set to 25% (85.45 GB) of the total disk space. This reserves adequate space for restore points while leaving the majority of the 341 GB drive available for Hyper-V virtual machine storage. Clicking Apply to finalize the configuration.</p>
-      <div class="img-container dialog">
-        <img src="Images/diskedit17.png" alt="System Protection with 25% allocated" />
-      </div>
-
+      <p>In the lab, I'm exploring Hyper-V on standard laptop and desktop computers to gain experience with setting up an implementation from scratch. Gaining the experience with building and customizing my own setups, and overall getting creative, exploring, grabbing a keyboard and tinkering around.</p>
     </main>
 
     <!-- Footer -->
@@ -335,52 +170,6 @@
       </div>
     </footer>
   </div>
-
-  <!-- Zoom overlay -->
-  <div class="zoom-overlay" id="zoomOverlay">
-    <span class="zoom-close" id="zoomClose">&times;</span>
-    <img id="zoomImage" src="" alt="Zoomed image" />
-  </div>
-
-  <script>
-    // Get all image containers
-    const imgContainers = document.querySelectorAll('.img-container');
-    const zoomOverlay = document.getElementById('zoomOverlay');
-    const zoomImage = document.getElementById('zoomImage');
-    const zoomClose = document.getElementById('zoomClose');
-
-    // Add click event to each image container
-    imgContainers.forEach(container => {
-      container.addEventListener('click', function() {
-        const img = this.querySelector('img');
-        zoomImage.src = img.src;
-        zoomImage.alt = img.alt;
-        zoomOverlay.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      });
-    });
-
-    // Close zoom on overlay click
-    zoomOverlay.addEventListener('click', function() {
-      this.classList.remove('active');
-      document.body.style.overflow = 'auto';
-    });
-
-    // Close zoom on X button click
-    zoomClose.addEventListener('click', function(e) {
-      e.stopPropagation();
-      zoomOverlay.classList.remove('active');
-      document.body.style.overflow = 'auto';
-    });
-
-    // Close zoom on ESC key
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && zoomOverlay.classList.contains('active')) {
-        zoomOverlay.classList.remove('active');
-        document.body.style.overflow = 'auto';
-      }
-    });
-  </script>
 
 </body>
 </html>
