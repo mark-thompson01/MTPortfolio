@@ -1,1 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Initial System Setup II · Mark Thompson Portfolio</title>
+  <meta name="description" content="Disk management and storage configuration for the extended Hyper-V lab environment." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
 
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 28px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:24px;
+      font-weight:700;
+      margin:40px 0 16px 0;
+      color:var(--text);
+    }
+    .content h2:first-child{margin-top:0}
+    .content p{
+      color:var(--text);
+      font-size:16px;
+      line-height:1.7;
+      margin:0 0 16px 0;
+    }
+    .content strong{
+      color:var(--brand);
+      font-weight:600;
+    }
+
+    /* Image container */
+    .img-container{
+      margin:24px 0;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--card-border);
+      box-shadow:0 4px 12px rgba(0,0,0,.3);
+      cursor:pointer;
+      transition:transform .2s;
+    }
+    .img-container:hover{
+      transform:scale(1.02);
+    }
+    .img-container img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    /* Zoom overlay */
+    .zoom-overlay{
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,.95);
+      z-index:9999;
+      cursor:zoom-out;
+      padding:40px;
+      box-sizing:border-box;
+    }
+    .zoom-overlay.active{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .zoom-overlay img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      border-radius:8px;
+    }
+    .zoom-close{
+      position:absolute;
+      top:20px;
+      right:30px;
+      color:#fff;
+      font-size:40px;
+      font-weight:bold;
+      cursor:pointer;
+      z-index:10000;
+    }
+    .zoom-close:hover{
+      color:var(--brand);
+    }
+
+    /* Step number badge */
+    .step-badge{
+      display:inline-block;
+      background:var(--brand);
+      color:#0f1115;
+      padding:4px 12px;
+      border-radius:6px;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Compact site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Title + short intro -->
+    <header>
+      <h1>Initial System Setup II</h1>
+      <p class="lead">Disk management and storage configuration for the extended Hyper-V lab environment.</p>
+    </header>
+
+    <!-- Main content -->
+    <main class="content">
+      
+      <!-- Step 1 -->
+      <h2><span class="step-badge">Step 1</span> Disk Management - Initial View</h2>
+      <p>Opening Disk Management to view the current disk configuration and prepare for storage optimization for Hyper-V virtual machines.</p>
+      <div class="img-container">
+        <img src="Images/diskedit1.png" alt="Disk Management initial view" />
+      </div>
+
+      <!-- Step 2 -->
+      <h2><span class="step-badge">Step 2</span> Disk Configuration - Edit 2</h2>
+      <p>Beginning the disk partitioning process to allocate storage space efficiently for the Hyper-V environment.</p>
+      <div class="img-container">
+        <img src="Images/diskedit2.png" alt="Disk configuration step 2" />
+      </div>
+
+      <!-- Step 3 -->
+      <h2><span class="step-badge">Step 3</span> Disk Configuration - Edit 3</h2>
+      <p>Continuing disk configuration to set up dedicated volumes for virtual machine storage and system operations.</p>
+      <div class="img-container">
+        <img src="Images/diskedit3.png" alt="Disk configuration step 3" />
+      </div>
+
+      <!-- Step 4 -->
+      <h2><span class="step-badge">Step 4</span> System Disk Overview</h2>
+      <p>Reviewing the system disk structure and verifying available space for Hyper-V installation and VM storage.</p>
+      <div class="img-container">
+        <img src="Images/disk4.png" alt="System disk overview" />
+      </div>
+
+      <!-- Step 5 -->
+      <h2><span class="step-badge">Step 5</span> Disk Configuration - Edit 5</h2>
+      <p>Adjusting partition sizes to optimize storage allocation for virtual machine files and snapshots.</p>
+      <div class="img-container">
+        <img src="Images/diskedit5.png" alt="Disk configuration step 5" />
+      </div>
+
+      <!-- Step 6 -->
+      <h2><span class="step-badge">Step 6</span> Disk Configuration - Edit 6</h2>
+      <p>Configuring additional storage partitions to separate system files from virtual machine data.</p>
+      <div class="img-container">
+        <img src="Images/diskedit6.png" alt="Disk configuration step 6" />
+      </div>
+
+      <!-- Step 7 -->
+      <h2><span class="step-badge">Step 7</span> Disk Configuration - Edit 7</h2>
+      <p>Fine-tuning disk layout to ensure optimal performance for Hyper-V workloads and VM operations.</p>
+      <div class="img-container">
+        <img src="Images/diskedit7.png" alt="Disk configuration step 7" />
+      </div>
+
+      <!-- Step 8 -->
+      <h2><span class="step-badge">Step 8</span> Disk Configuration - Edit 8</h2>
+      <p>Applying formatting options and file system selections for the newly configured partitions.</p>
+      <div class="img-container">
+        <img src="Images/diskedit8.png" alt="Disk configuration step 8" />
+      </div>
+
+      <!-- Step 9 -->
+      <h2><span class="step-badge">Step 9</span> Disk Configuration - Edit 9</h2>
+      <p>Finalizing partition settings and preparing drives for Hyper-V virtual disk storage.</p>
+      <div class="img-container">
+        <img src="Images/diskedit9.png" alt="Disk configuration step 9" />
+      </div>
+
+      <!-- Step 10 -->
+      <h2><span class="step-badge">Step 10</span> Disk Configuration - Edit 10</h2>
+      <p>Verifying disk configuration changes and ensuring all partitions are properly initialized.</p>
+      <div class="img-container">
+        <img src="Images/diskedit10.png" alt="Disk configuration step 10" />
+      </div>
+
+      <!-- Step 11 -->
+      <h2><span class="step-badge">Step 11</span> Disk Configuration - Edit 11</h2>
+      <p>Assigning drive letters and volume labels for easy identification of storage locations.</p>
+      <div class="img-container">
+        <img src="Images/diskedit11.png" alt="Disk configuration step 11" />
+      </div>
+
+      <!-- Step 12 -->
+      <h2><span class="step-badge">Step 12</span> Disk Configuration - Edit 12</h2>
+      <p>Configuring advanced disk properties and settings for enhanced performance.</p>
+      <div class="img-container">
+        <img src="Images/diskedit12.png" alt="Disk configuration step 12" />
+      </div>
+
+      <!-- Step 13 -->
+      <h2><span class="step-badge">Step 13</span> Disk Configuration - Edit 13</h2>
+      <p>Setting up disk quotas and permissions to manage storage resources effectively.</p>
+      <div class="img-container">
+        <img src="Images/diskedit13.png" alt="Disk configuration step 13" />
+      </div>
+
+      <!-- Step 14 -->
+      <h2><span class="step-badge">Step 14</span> Disk Configuration - Edit 14</h2>
+      <p>Implementing disk optimization settings for improved virtual machine performance.</p>
+      <div class="img-container">
+        <img src="Images/diskedit14.png" alt="Disk configuration step 14" />
+      </div>
+
+      <!-- Step 15 -->
+      <h2><span class="step-badge">Step 15</span> Disk Configuration - Edit 15</h2>
+      <p>Reviewing and confirming all disk management changes before finalizing the configuration.</p>
+      <div class="img-container">
+        <img src="Images/diskedit15.png" alt="Disk configuration step 15" />
+      </div>
+
+      <!-- Step 16 -->
+      <h2><span class="step-badge">Step 16</span> Disk Configuration - Edit 16</h2>
+      <p>Applying final disk configuration settings and preparing the system for Hyper-V deployment.</p>
+      <div class="img-container">
+        <img src="Images/diskedit16.png" alt="Disk configuration step 16" />
+      </div>
+
+      <!-- Step 17 -->
+      <h2><span class="step-badge">Step 17</span> Disk Configuration - Edit 17</h2>
+      <p>Completing the disk management setup and verifying that all storage is ready for virtual machine creation and operations.</p>
+      <div class="img-container">
+        <img src="Images/diskedit17.png" alt="Disk configuration step 17" />
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Zoom overlay -->
+  <div class="zoom-overlay" id="zoomOverlay">
+    <span class="zoom-close" id="zoomClose">&times;</span>
+    <img id="zoomImage" src="" alt="Zoomed image" />
+  </div>
+
+  <script>
+    // Get all image containers
+    const imgContainers = document.querySelectorAll('.img-container');
+    const zoomOverlay = document.getElementById('zoomOverlay');
+    const zoomImage = document.getElementById('zoomImage');
+    const zoomClose = document.getElementById('zoomClose');
+
+    // Add click event to each image container
+    imgContainers.forEach(container => {
+      container.addEventListener('click', function() {
+        const img = this.querySelector('img');
+        zoomImage.src = img.src;
+        zoomImage.alt = img.alt;
+        zoomOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close zoom on overlay click
+    zoomOverlay.addEventListener('click', function() {
+      this.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close zoom on X button click
+    zoomClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      zoomOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close zoom on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && zoomOverlay.classList.contains('active')) {
+        zoomOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  </script>
+
+</body>
+</html>
