@@ -210,21 +210,22 @@
       <p>Searching for "Hyper-V Manager" in the Windows Start menu. The Hyper-V Manager application appears under "Best match" as a System tool. This is the primary management interface for creating and managing virtual machines on the Hyper-V host.</p>
       <div class="img-container full-window">
         <img src="Images/Setup1.png" alt="Windows Start menu showing Hyper-V Manager" />
-      </div>
+      </div><br><br>
 
       <!-- Step 2 -->
       <h2><span class="step-badge">Step 2</span> Hyper-V Manager - Initial View</h2>
       <p>Opening Hyper-V Manager for the first time. The interface shows the server "SRV-HYPERV-01" in the left panel with no virtual machines currently created. The Virtual Machines section displays "No virtual machines were found on this server." The Actions pane on the right provides options for creating and managing VMs.</p>
       <div class="img-container full-window">
         <img src="Images/Setup2.png" alt="Hyper-V Manager initial view with no VMs" />
-      </div>
+      </div><br><br>
 
       <!-- Step 3 -->
       <h2><span class="step-badge">Step 3</span> Hyper-V Manager - Action Menu</h2>
       <p>Accessing the Action menu from the Hyper-V Manager interface. The menu displays options including Quick Create, New, Import Virtual Machine, Hyper-V Settings, Virtual Switch Manager, Virtual SAN Manager, and various disk and server management tools.</p>
       <div class="img-container full-window">
         <img src="Images/Setup3.png" alt="Hyper-V Manager Action menu expanded" />
-      </div>
+      </div><br><br>
+      
 
       <!-- Step 4 -->
       <h2><span class="step-badge">Step 4</span> Import Virtual Machine Wizard - Before You Begin</h2>
@@ -232,90 +233,92 @@
       <div class="img-container medium-window">
         <img src="Images/Setup4.png" alt="Import Virtual Machine wizard welcome screen" />
       </div>
+      </div><br><br>
+    
 
       <!-- Step 5 -->
       <h2><span class="step-badge">Step 5</span> Virtual Switch Manager - Create External Switch</h2>
       <p>Opening the Virtual Switch Manager for SRV-HYPERV-01. Creating a new virtual switch by selecting "External" type. This will create a virtual switch that binds to the physical network adapter, allowing virtual machines to access the physical network.</p>
       <div class="img-container medium-window">
         <img src="Images/Setup5.png" alt="Virtual Switch Manager - Create external switch" />
-      </div>
+      </div><br><br>
 
       <!-- Step 6 -->
       <h2><span class="step-badge">Step 6</span> Virtual Switch Properties - Configure External Network</h2>
       <p>Configuring the new virtual switch named "vSwitch0". Setting the connection type to "External network" and selecting "Intel(R) Ethernet Connection (17) I219-LM" as the physical network adapter. The checkbox "Allow management operating system to share this network adapter" is enabled, allowing the host OS to use the network connection alongside VMs.</p>
       <div class="img-container medium-window">
         <img src="Images/Setup6.png" alt="Virtual Switch Properties configuration" />
-      </div>
+      </div><br><br>
 
       <!-- Step 7 -->
       <h2><span class="step-badge">Step 7</span> Apply Networking Changes - Warning Dialog</h2>
       <p>A warning dialog appears: "Pending changes may disrupt network connectivity." The system warns that applying these changes may temporarily interrupt network connections. This is expected when creating an external virtual switch. Clicking "Yes" to proceed with the network configuration changes.</p>
       <div class="img-container medium-window">
         <img src="Images/Setup7.png" alt="Network changes warning dialog" />
-      </div>
+      </div><br><br>
 
       <!-- Step 8 -->
       <h2><span class="step-badge">Step 8</span> Virtual Switch Created Successfully</h2>
       <p>The external virtual switch "vSwitch0" has been successfully created. It now appears in the Virtual Switches list, bound to the Intel(R) Ethernet Connection (17) I219-LM adapter. The switch is ready for virtual machines to use for network connectivity.</p>
       <div class="img-container medium-window">
         <img src="Images/Setup8.png" alt="Virtual Switch Manager showing created vSwitch0" />
-      </div>
+      </div><br><br>
 
       <!-- Step 9 -->
       <h2><span class="step-badge">Step 9</span> Return to Hyper-V Manager</h2>
       <p>Returning to the main Hyper-V Manager interface after completing the virtual switch configuration. The system is now ready for virtual machine creation with network connectivity properly configured.</p>
       <div class="img-container full-window">
         <img src="Images/Setup9.png" alt="Hyper-V Manager main interface" />
-      </div>
+      </div><br><br>
 
       <!-- Step 10 -->
       <h2><span class="step-badge">Step 10</span> Open Computer Management</h2>
       <p>Searching for "Computer Management" in the Windows Start menu to configure user permissions for Hyper-V. This tool will be used to add users to the Hyper-V Administrators group, granting them the necessary permissions to manage virtual machines.</p>
       <div class="img-container full-window">
         <img src="Images/Setup10.png" alt="Windows Start menu showing Computer Management" />
-      </div>
+      </div><br><br>
 
       <!-- Step 11 -->
       <h2><span class="step-badge">Step 11</span> Computer Management - System Tools</h2>
       <p>Opening Computer Management console. The left panel shows System Tools including Task Scheduler, Event Viewer, Shared Folders, Local Users and Groups, Performance, Device Manager, Storage, and Services and Applications.</p>
       <div class="img-container full-window">
         <img src="Images/Setup11.png" alt="Computer Management console overview" />
-      </div>
+      </div><br><br>
 
       <!-- Step 12 -->
       <h2><span class="step-badge">Step 12</span> Local Users and Groups</h2>
       <p>Navigating to "Local Users and Groups" in Computer Management. This section contains Users and Groups folders for managing local user accounts and security groups on the system.</p>
       <div class="img-container full-window">
         <img src="Images/Setup12.png" alt="Computer Management - Local Users and Groups" />
-      </div>
+      </div><br><br>
 
       <!-- Step 13 -->
       <h2><span class="step-badge">Step 13</span> View Groups</h2>
       <p>Opening the Groups folder to view all local security groups. The list includes various groups such as Administrators, Backup Operators, Hyper-V Administrators, Users, and many other built-in Windows groups with specific permissions and access rights.</p>
       <div class="img-container full-window">
         <img src="Images/Setup13.png" alt="Computer Management - Groups list" />
-      </div>
+      </div><br><br>
 
       <!-- Step 14 -->
       <h2><span class="step-badge">Step 14</span> Hyper-V Administrators Group Properties</h2>
       <p>Opening the properties for the "Hyper-V Administrators" group. The description states: "Members of this group have complete and unrestricted access to all features of Hyper-V." The Members section is currently empty. Clicking "Add..." to add users to this administrative group.</p>
       <div class="img-container dialog">
         <img src="Images/Setup14.png" alt="Hyper-V Administrators Properties dialog" />
-      </div>
+      </div><br><br>
 
       <!-- Step 15 -->
       <h2><span class="step-badge">Step 15</span> Select Users - Add Lab-Client User</h2>
       <p>Using the "Select Users" dialog to add a user to the Hyper-V Administrators group. Entering "Lab-Client User" in the object names field. The location is set to "SRV-HYPERV-01" (the local computer). Clicking "Check Names" to verify the username, then OK to add the user.</p>
       <div class="img-container dialog">
         <img src="Images/Setup15.png" alt="Select Users dialog with Lab-Client User" />
-      </div>
+      </div><br><br>
 
       <!-- Step 16 -->
       <h2><span class="step-badge">Step 16</span> User Added to Hyper-V Administrators</h2>
       <p>The "Lab-Client User" has been successfully added to the Hyper-V Administrators group. The user now appears in the Members list. A note at the bottom explains: "Changes to a user's group membership are not effective until the next time the user logs on." Clicking "Apply" to save the changes.</p>
       <div class="img-container dialog">
         <img src="Images/Setup16.png" alt="Hyper-V Administrators Properties with Lab-Client User added" />
-      </div>
+      </div><br><br>
 
       <!-- Step 17 -->
       <h2><span class="step-badge">Step 17</span> Configuration Complete</h2>
