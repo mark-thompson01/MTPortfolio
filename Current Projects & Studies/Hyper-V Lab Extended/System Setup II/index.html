@@ -206,31 +206,31 @@
     <main class="content">
       
       <!-- Step 1 -->
-      <h2><span class="step-badge">Step 1</span> Shrink Volume - C: Drive</h2>
-      <p>Opening the Shrink Volume dialog for the C: drive. Preparing to shrink the system partition from 952,896 MB down to 602,896 MB, freeing up 350,000 MB of space for creating a new data partition for Hyper-V storage.</p>
-      <div class="img-container dialog">
-        <img src="Images/disk4.png" alt="Shrink Volume dialog for C: drive" />
-      </div>
-
-      <!-- Step 2 -->
-      <h2><span class="step-badge">Step 2</span> Disk Management - Current Configuration</h2>
+      <h2><span class="step-badge">Step 1</span> Disk Management - Current Configuration</h2>
       <p>Viewing the current disk layout in Disk Management. The system shows Disk 0 with three partitions: 200 MB EFI System Partition, 930.56 GB C: drive (NTFS), and 755 MB Recovery Partition. This is the starting point before creating the new data partition.</p>
       <div class="img-container full-window">
         <img src="Images/diskedit1.png" alt="Disk Management current configuration" />
       </div>
 
-      <!-- Step 3 -->
-      <h2><span class="step-badge">Step 3</span> Shrink Volume - Context Menu</h2>
+      <!-- Step 2 -->
+      <h2><span class="step-badge">Step 2</span> Shrink Volume - Context Menu</h2>
       <p>Right-clicking on the C: drive partition and selecting "Shrink Volume..." from the context menu. This will allow us to reduce the size of the system partition and create unallocated space for a new data volume.</p>
       <div class="img-container dialog">
         <img src="Images/diskedit2.png" alt="Shrink Volume context menu option" />
       </div>
 
-      <!-- Step 4 -->
-      <h2><span class="step-badge">Step 4</span> Shrink Volume - Specify Amount</h2>
+      <!-- Step 3 -->
+      <h2><span class="step-badge">Step 3</span> Shrink Volume - Specify Amount</h2>
       <p>Entering 465,403 MB as the amount of space to shrink from the C: drive. This will reduce the C: drive to 487,493 MB and create 465,403 MB of unallocated space for the new Hyper-V data partition.</p>
       <div class="img-container dialog">
         <img src="Images/diskedit3.png" alt="Shrink Volume dialog with amount specified" />
+      </div>
+
+      <!-- Step 4 -->
+      <h2><span class="step-badge">Step 4</span> Shrink Volume - Initial Dialog</h2>
+      <p>The Shrink Volume dialog opens, showing the total size before shrink (952,896 MB), available shrink space (465,403 MB), and allowing input for the amount of space to shrink. Preparing to enter 350,000 MB to free up space for the new Hyper-V data partition.</p>
+      <div class="img-container dialog">
+        <img src="Images/disk4.png" alt="Shrink Volume initial dialog" />
       </div>
 
       <!-- Step 5 -->
