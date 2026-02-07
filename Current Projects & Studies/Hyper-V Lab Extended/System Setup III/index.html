@@ -1,1 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Initial System Setup III · Mark Thompson Portfolio</title>
+  <meta name="description" content="User account creation and configuration for the extended Hyper-V lab environment." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
 
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 28px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:24px;
+      font-weight:700;
+      margin:40px 0 16px 0;
+      color:var(--text);
+    }
+    .content h2:first-child{margin-top:0}
+    .content p{
+      color:var(--text);
+      font-size:16px;
+      line-height:1.7;
+      margin:0 0 16px 0;
+    }
+    .content strong{
+      color:var(--brand);
+      font-weight:600;
+    }
+
+    /* Image container */
+    .img-container{
+      margin:24px auto;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid var(--card-border);
+      box-shadow:0 4px 12px rgba(0,0,0,.3);
+      cursor:pointer;
+      transition:transform .2s;
+      max-width:85%;
+    }
+    .img-container:hover{
+      transform:scale(1.02);
+    }
+    .img-container img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    
+    /* Size variations for different window types */
+    .img-container.dialog{max-width:650px}
+    .img-container.full-window{max-width:85%}
+    .img-container.medium-window{max-width:65%}
+
+    /* Zoom overlay */
+    .zoom-overlay{
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,.95);
+      z-index:9999;
+      cursor:zoom-out;
+      padding:40px;
+      box-sizing:border-box;
+    }
+    .zoom-overlay.active{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .zoom-overlay img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      border-radius:8px;
+    }
+    .zoom-close{
+      position:absolute;
+      top:20px;
+      right:30px;
+      color:#fff;
+      font-size:40px;
+      font-weight:bold;
+      cursor:pointer;
+      z-index:10000;
+    }
+    .zoom-close:hover{
+      color:var(--brand);
+    }
+
+    /* Step number badge */
+    .step-badge{
+      display:inline-block;
+      background:var(--brand);
+      color:#0f1115;
+      padding:4px 12px;
+      border-radius:6px;
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Compact site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Title + short intro -->
+    <header>
+      <h1>Initial System Setup III</h1>
+      <p class="lead">User account creation and configuration for the extended Hyper-V lab environment.</p>
+    </header>
+
+    <!-- Main content -->
+    <main class="content">
+      
+      <!-- Step 1 -->
+      <h2><span class="step-badge">Step 1</span> Windows Settings - Accounts</h2>
+      <p>Opening Windows Settings and navigating to the Accounts section. This is where user accounts for the Hyper-V lab system are managed. The current account "LAB-CLIENT" is a Local Account with Administrator privileges.</p>
+      <div class="img-container full-window">
+        <img src="Images/useracct1.png" alt="Windows Settings Accounts page" />
+      </div><br><br>
+
+      <!-- Step 2 -->
+      <h2><span class="step-badge">Step 2</span> Other Users - Add Account</h2>
+      <p>Accessing the "Other users" section to add a new user account. The existing user "Mark Thompson" (Administrator) is already configured. Clicking "Add account" to create a new local user account for the lab environment.</p>
+      <div class="img-container full-window">
+        <img src="Images/useracct2.png" alt="Other Users page with Add account button" />
+      </div><br><br>
+
+      <!-- Step 3 -->
+      <h2><span class="step-badge">Step 3</span> Create User Account - Initial Form</h2>
+      <p>The "Create a user for this PC" dialog opens. This form allows creation of a local user account with a username and password. Important notes about child accounts and password security are displayed. Ready to enter the new username.</p>
+      <div class="img-container dialog">
+        <img src="Images/useracct3.png" alt="Create user account form" />
+      </div><br><br>
+
+      <!-- Step 4 -->
+      <h2><span class="step-badge">Step 4</span> Create User Account - Enter Details</h2>
+      <p>Entering "Lab-Client User" as the username for the new account. This will be a standard user account (non-administrator) that can be used for testing and regular operations in the Hyper-V lab environment. Password fields are ready to be filled in.</p>
+      <div class="img-container dialog">
+        <img src="Images/useracct4.png" alt="Create user account with username entered" />
+      </div><br><br>
+
+      <!-- Step 5 -->
+      <h2><span class="step-badge">Step 5</span> User Account Created Successfully</h2>
+      <p>The new user account "Lab-Client User" has been successfully created and now appears in the "Other users" list as a Local account. The account is ready to be used for lab operations and can be further configured with specific permissions as needed.</p>
+      <div class="img-container full-window">
+        <img src="Images/useracct5.png" alt="Other Users page showing new Lab-Client User account" />
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Zoom overlay -->
+  <div class="zoom-overlay" id="zoomOverlay">
+    <span class="zoom-close" id="zoomClose">&times;</span>
+    <img id="zoomImage" src="" alt="Zoomed image" />
+  </div>
+
+  <script>
+    // Get all image containers
+    const imgContainers = document.querySelectorAll('.img-container');
+    const zoomOverlay = document.getElementById('zoomOverlay');
+    const zoomImage = document.getElementById('zoomImage');
+    const zoomClose = document.getElementById('zoomClose');
+
+    // Add click event to each image container
+    imgContainers.forEach(container => {
+      container.addEventListener('click', function() {
+        const img = this.querySelector('img');
+        zoomImage.src = img.src;
+        zoomImage.alt = img.alt;
+        zoomOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close zoom on overlay click
+    zoomOverlay.addEventListener('click', function() {
+      this.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close zoom on X button click
+    zoomClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      zoomOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close zoom on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && zoomOverlay.classList.contains('active')) {
+        zoomOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  </script>
+
+</body>
+</html>
