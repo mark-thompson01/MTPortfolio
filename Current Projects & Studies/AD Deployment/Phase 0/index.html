@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Phase 0 – Lab Planning · Mark Thompson Portfolio</title>
+  <meta name="description" content="Lab planning phase: Define environment scope before installing anything for the Active Directory deployment." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav - INCREASED SIZE */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 28px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Content sections */
+    .section{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-bottom:24px;
+    }
+    .section h2{
+      margin:0 0 20px;
+      font-size:24px;
+      font-weight:700;
+      color:var(--text);
+    }
+    .section h3{
+      margin:24px 0 12px;
+      font-size:20px;
+      font-weight:600;
+      color:var(--text);
+    }
+    .section h3:first-child{
+      margin-top:0;
+    }
+    .section p{
+      margin:0 0 16px;
+      color:var(--muted);
+      line-height:1.6;
+      font-size:16px;
+    }
+    .section p:last-child{
+      margin-bottom:0;
+    }
+    .section ul{
+      margin:0;
+      padding-left:24px;
+      color:var(--muted);
+    }
+    .section li{
+      margin-bottom:12px;
+      line-height:1.6;
+      font-size:16px;
+    }
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Compact site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Title + short intro -->
+    <header>
+      <h1>PHASE 0 – Lab Planning (Do This Before Installing Anything)</h1>
+      <p class="lead">Define your environment scope and core services before beginning deployment.</p>
+    </header>
+
+    <!-- Content sections -->
+    <main aria-label="Lab planning details">
+      <section class="section">
+        <h2>Step 1 – Define Environment Scope</h2>
+        <p>Document this in your portfolio first:</p>
+        
+        <h3>Environment Goal:</h3>
+        <p>Simulate a 25-user small business domain environment.</p>
+        
+        <h3>Core Services:</h3>
+        <ul>
+          <li>Active Directory Domain Services</li>
+          <li>DNS</li>
+          <li>Group Policy</li>
+          <li>File Services</li>
+          <li>Role-Based Access Control</li>
+          <li>Basic security hardening</li>
+        </ul>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html>
