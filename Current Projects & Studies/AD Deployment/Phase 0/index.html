@@ -162,6 +162,41 @@
           <li>Basic security hardening</li>
         </ul>
       </section>
+
+      <section class="section">
+        <h2>Step 2 – Define Network Plan</h2>
+        
+        <h3>Choose internal subnet:</h3>
+        <p style="background:rgba(0,0,0,.3);padding:16px;border-radius:8px;font-family:monospace;font-size:15px;margin-bottom:24px;">192.168.50.0/24</p>
+        
+        <h3>IP Plan:</h3>
+        <table style="width:100%;border-collapse:collapse;margin-top:12px;">
+          <thead>
+            <tr style="border-bottom:2px solid var(--card-border);">
+              <th style="text-align:left;padding:12px 8px;font-weight:600;color:var(--text);">Host</th>
+              <th style="text-align:left;padding:12px 8px;font-weight:600;color:var(--text);">Role</th>
+              <th style="text-align:left;padding:12px 8px;font-weight:600;color:var(--text);">IP</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--card-border);">
+              <td style="padding:12px 8px;color:var(--muted);">DC01</td>
+              <td style="padding:12px 8px;color:var(--muted);">Domain Controller + DNS</td>
+              <td style="padding:12px 8px;color:var(--muted);">192.168.50.10</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--card-border);">
+              <td style="padding:12px 8px;color:var(--muted);">FS01</td>
+              <td style="padding:12px 8px;color:var(--muted);">File Server</td>
+              <td style="padding:12px 8px;color:var(--muted);">192.168.50.20</td>
+            </tr>
+            <tr>
+              <td style="padding:12px 8px;color:var(--muted);">WIN11-CL01</td>
+              <td style="padding:12px 8px;color:var(--muted);">Client</td>
+              <td style="padding:12px 8px;color:var(--muted);">DHCP</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
     </main>
 
     <!-- Footer -->
