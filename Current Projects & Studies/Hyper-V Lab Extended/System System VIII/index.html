@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VM Setup · Mark Thompson Portfolio</title>
-  <meta name="description" content="Virtual machine setup for Windows Server 2022, Ubuntu Server 24.04, and pfSense on Hyper-V." />
+  <title>Post Config Automation · Mark Thompson Portfolio</title>
+  <meta name="description" content="Automated system maintenance and health check scripts for the Hyper-V lab environment." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -78,36 +77,66 @@
       font-weight:600;
     }
 
-    /* VM Section Cards */
-    .vm-section{
-      margin:40px 0;
-      padding:24px;
-      background:rgba(77,163,255,.04);
+    /* Image container */
+    .img-container{
+      margin:24px auto;
+      border-radius:12px;
+      overflow:hidden;
       border:1px solid var(--card-border);
-      border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,.3);
+      cursor:pointer;
+      transition:transform .2s;
+      max-width:85%;
     }
-    .vm-section h3{
-      font-size:22px;
-      font-weight:700;
-      color:var(--brand);
-      margin:0 0 16px 0;
+    .img-container:hover{
+      transform:scale(1.02);
     }
-    .vm-section p{
-      color:var(--muted);
-      font-size:15px;
-      margin:0;
+    .img-container img{
+      width:100%;
+      height:auto;
+      display:block;
     }
+    
+    /* Size variations */
+    .img-container.full-window{max-width:85%}
 
-    /* Gallery placeholder */
-    .gallery-placeholder{
-      margin-top:20px;
+    /* Zoom overlay */
+    .zoom-overlay{
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background:rgba(0,0,0,.95);
+      z-index:9999;
+      cursor:zoom-out;
       padding:40px;
-      background:rgba(0,0,0,.2);
-      border:2px dashed var(--card-border);
-      border-radius:12px;
-      text-align:center;
-      color:var(--muted);
-      font-style:italic;
+      box-sizing:border-box;
+    }
+    .zoom-overlay.active{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .zoom-overlay img{
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      border-radius:8px;
+    }
+    .zoom-close{
+      position:absolute;
+      top:20px;
+      right:30px;
+      color:#fff;
+      font-size:40px;
+      font-weight:bold;
+      cursor:pointer;
+      z-index:10000;
+    }
+    .zoom-close:hover{
+      color:var(--brand);
     }
 
     /* Footer */
@@ -157,46 +186,163 @@
 
     <!-- Title + short intro -->
     <header>
-      <h1>VM Setup</h1>
-      <p class="lead">Virtual machine configurations for Windows Server 2022, Ubuntu Server 24.04, and pfSense on Hyper-V.</p>
+      <h1>Post Config Automation</h1>
+      <p class="lead">Automated system maintenance, health checks, and troubleshooting scripts for the Hyper-V lab environment.</p>
     </header>
 
     <!-- Main content -->
     <main class="content">
-      <p>In the previous Hyper-V Exploration lab, I laid out step by step examples of setting up and installing Windows Server 2022, Ubuntu Server 24.04, and pfSense on virtual machines with the Hyper-V hypervisor.</p>
 
-      <p>As these steps have been presented previously and this Hyper-V lab serves as an extension with a machine more geared for virtualization, I have the installation steps of each Virtual Machine for each OS in gallery mode to review.</p>
-
-      <p>Each of these will have much more flexibility and be able to go further with more hardware resources allocated to them. Let's get started with some VM labs!</p>
-
-      <!-- Windows Server 2022 Section -->
-      <h2>Windows Server 2022 VM Setup</h2>
-      <div class="vm-section">
-        <h3>Windows Server 2022 Installation Gallery</h3>
-        <p>Step-by-step installation process for Windows Server 2022 on Hyper-V with enhanced resource allocation.</p>
-        <div class="gallery-placeholder">
-          Gallery images will be inserted here
-        </div>
+      <!-- Section 1: System Health Check -->
+      <h2>1. System Health Check</h2>
+      <p>Automated PowerShell script that runs DISM and SFC to verify system integrity and repair corrupted Windows files. This script is scheduled to run daily at 7pm to maintain system health.</p>
+      
+      <div class="img-container full-window">
+        <img src="Images/Run-SystemHealthCheck1.png" alt="System Health Check script registration" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/Run-SystemHealthCheck2.png" alt="System Health Check scheduled job confirmation" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/Run-SystemHealthCheckTake1.png" alt="Running System Health Check - DISM operation" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/Run-SystemHealthCheckTake2.png" alt="System Health Check - SFC scan in progress" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/Run-SystemHealthCheckTake3.png" alt="System Health Check completed successfully" />
       </div>
 
-      <!-- Ubuntu Server 24.04 Section -->
-      <h2>Ubuntu Server 24.04 VM Setup</h2>
-      <div class="vm-section">
-        <h3>Ubuntu Server 24.04 Installation Gallery</h3>
-        <p>Complete Ubuntu Server deployment on Hyper-V virtual machine infrastructure.</p>
-        <div class="gallery-placeholder">
-          Gallery images will be inserted here
-        </div>
+      <!-- Section 2: Temp File and Disk Cleanup -->
+      <h2>2. Temp File and Disk Cleanup</h2>
+      <p>Automated cleanup scripts to remove temporary files, clear the recycle bin, and run Windows Disk Cleanup utility. These scripts help maintain optimal disk space and system performance.</p>
+      
+      <div class="img-container full-window">
+        <img src="Images/TmpFileCln1.png" alt="Temp file cleanup script" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/TmpFileCln2.png" alt="Temp files and recycle bin cleaned" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/TmpFileCln3.png" alt="Clean Temp Files scheduled job registration" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/RunDiskClean1.png" alt="Disk Cleanup script" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/RunDiskClean2.png" alt="Disk Cleanup settings dialog" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/RunDiskClean3.png" alt="Disk Cleanup calculating space" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/RunDiskClean4.png" alt="Disk Cleanup in progress" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/RunDiskClean5.png" alt="Disk Cleanup script completion" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/RunDiskClean6.png" alt="Disk Cleanup scheduled job confirmation" />
       </div>
 
-      <!-- pfSense Section -->
-      <h2>pfSense VM Setup</h2>
-      <div class="vm-section">
-        <h3>pfSense Installation Gallery</h3>
-        <p>pfSense firewall configuration on Hyper-V for network security and routing capabilities.</p>
-        <div class="gallery-placeholder">
-          Gallery images will be inserted here
-        </div>
+      <!-- Section 3: Disk Health Check -->
+      <h2>3. Disk Health Check</h2>
+      <p>PowerShell script that monitors disk space and alerts when drives fall below 15% free space threshold. Helps prevent storage-related issues in the virtualization environment.</p>
+      
+      <div class="img-container full-window">
+        <img src="Images/DiskHealthCheck0.png" alt="Disk Health Check script code" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/DiskHealthCheck1.png" alt="Disk Health Check registration" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/DiskHealthCheck2.png" alt="Disk Health Check scheduled job confirmed" />
+      </div>
+
+      <!-- Section 4: Event Error Log -->
+      <h2>4. Event Error Log</h2>
+      <p>PowerShell script that scans Windows Event Logs for system errors in the last 24 hours. Exports findings to a CSV file for analysis and troubleshooting.</p>
+      
+      <div class="img-container full-window">
+        <img src="Images/EventErrorLogScan1.png" alt="Event Error Log Scanner script" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/EventErrorLogScan2.png" alt="System Errors report from Event Log" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/EventErrorLogScan3.png" alt="Event Error Log Scanner registration" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/EventErrorLogScan4.png" alt="Event Error Log Scanner scheduled job confirmed" />
+      </div>
+
+      <!-- Section 5: Network Connectivity Troubleshooting -->
+      <h2>5. Network Connectivity Troubleshooting</h2>
+      <p>Comprehensive network diagnostics script that tests network adapters, DNS resolution, gateway reachability, and internet connectivity. Logs results for proactive network monitoring.</p>
+      
+      <div class="img-container full-window">
+        <img src="Images/NetworkConnectTD.png" alt="Network Connectivity Troubleshooting script" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/NetworkConnectAutomation.png" alt="Network Connectivity registration" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/NetworrkConnectAutomation2.png" alt="Network Connectivity scheduled job confirmed" />
+      </div>
+
+      <!-- Section 6: Service Status Check -->
+      <h2>6. Service Status Check</h2>
+      <p>Script for monitoring critical Windows services and ensuring they remain running for system stability.</p>
+
+      <!-- Section 7: User Profile Troubleshooting -->
+      <h2>7. User Profile Troubleshooting</h2>
+      <p>Automated script that identifies potentially corrupted user profiles by checking profile paths, existence, and backup status. Essential for maintaining user account integrity.</p>
+      
+      <div class="img-container full-window">
+        <img src="Images/UserProfileCheck1.png" alt="User Profile Troubleshooter script output" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/UserProfileCheck2.png" alt="User Profile Troubleshooter registration" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/UserProfileCheck3.png" alt="User Profile Troubleshooter scheduled job confirmed" />
+      </div>
+
+      <!-- Section 8: Windows Update & Compliance Check -->
+      <h2>8. Windows Update & Compliance Check</h2>
+      <p>Automated script that checks for missing or failed Windows updates, lists installed updates, and triggers update scans. Ensures the system remains compliant and secure with the latest patches.</p>
+      
+      <div class="img-container full-window">
+        <img src="Images/WindowsUpdate_ComplianceCheck1.png" alt="Windows Update & Compliance Check script" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/WindowsUpdate_ComplianceCheck2.png" alt="Windows Update Compliance Check registration" />
+      </div>
+      
+      <div class="img-container full-window">
+        <img src="Images/WindowsUpdate_ComplianceCheck3.png" alt="Windows Update Compliance Check scheduled job confirmed" />
       </div>
 
     </main>
@@ -210,6 +356,52 @@
       </div>
     </footer>
   </div>
+
+  <!-- Zoom overlay -->
+  <div class="zoom-overlay" id="zoomOverlay">
+    <span class="zoom-close" id="zoomClose">&times;</span>
+    <img id="zoomImage" src="" alt="Zoomed image" />
+  </div>
+
+  <script>
+    // Get all image containers
+    const imgContainers = document.querySelectorAll('.img-container');
+    const zoomOverlay = document.getElementById('zoomOverlay');
+    const zoomImage = document.getElementById('zoomImage');
+    const zoomClose = document.getElementById('zoomClose');
+
+    // Add click event to each image container
+    imgContainers.forEach(container => {
+      container.addEventListener('click', function() {
+        const img = this.querySelector('img');
+        zoomImage.src = img.src;
+        zoomImage.alt = img.alt;
+        zoomOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    // Close zoom on overlay click
+    zoomOverlay.addEventListener('click', function() {
+      this.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close zoom on X button click
+    zoomClose.addEventListener('click', function(e) {
+      e.stopPropagation();
+      zoomOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    });
+
+    // Close zoom on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && zoomOverlay.classList.contains('active')) {
+        zoomOverlay.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    });
+  </script>
 
 </body>
 </html>
