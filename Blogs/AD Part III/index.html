@@ -84,7 +84,7 @@
       margin:8px 0 6px;
       font-size:clamp(28px,4vw,40px);
       font-weight:800;
-      text-align:center;
+      text-align:left;
     }
 
     h2 { margin:0 0 10px; font-size:22px }
@@ -182,56 +182,69 @@
     </div>
 
     <h1>Active Directory – Blog Part III: Security, Misconfigurations, Attack Paths, & The Tier Administration Model/EAM</h1>
-  
   </header>
 
+  <!-- Section 1: Security & Misconfigurations -->
   <section class="card">
-    <p><strong>Active Directory rarely gets compromised; it gets misconfigured, over-trusted, and left unattended.</strong></p>
+    <h2>Security &amp; Misconfigurations</h2>
 
-    <p>Most breaches originate from misconfiguration, over-privileged accounts, legacy compatibility decisions, and improper operational hygiene.</p>
+    <p>Active Directory is more than just a complex hierarchical directory system; it effectively functions as the <strong>Identity Perimeter</strong> of an organization's enterprise network. Specifically, the Active Directory Forest is what serves as the ultimate security boundary, while individual domains act as management boundaries.</p>
 
-    <p>Active Directory isn’t a static phonebook that you set up once and leave running indefinitely. It is a critical identity system that must be actively managed. While AD introduces simplicity early on, the risks that accumulate behind the scenes are not always obvious when you “set it and forget it".</p>
+    <p>Not all Active Directory setups are configured equally. When an AD environment is not actively maintained, it becomes misconfigured and over-trusted, resulting in doors being left open for potential breaches in the event of a system compromise.</p>
 
-    <p>These accumulated risks are caused by misconfigurations
-that form multiple attack paths, chains of opportunity that attackers can leverage in different ways.</p>
+    <p>Most breaches stem from over-privileged accounts, misconfigurations, legacy compatibility decisions, and inadequate operational hygiene.</p>
 
-    <h3>Common Sources of Risk</h3>
+    <p>Over time, these risks accumulate as AD environments are left unattended. Like any critical administrative system, consistent management and adherence to best practices are essential.</p>
+  </section>
 
-    <p>Active Directory environments often accumulate unused user accounts over time. These accounts may belong to employees who left the organization long ago and are no longer monitored. In some cases, they remain enabled.</p>
+  <!-- Section 2: Attack Paths -->
+  <section class="card">
+    <h2>Attack Paths</h2>
 
-    <p>Over-privileged accounts are also common. Users may be added to groups for temporary projects or departmental transitions, and those group memberships are never removed.</p>
+    <p>A successful breach does not automatically grant full domain control. Instead, attackers must navigate chains of misconfigurations and trust relationships to escalate privileges. These chains are known as <strong>attack paths</strong>.</p>
 
-    <p>As a result, many environments contain both inactive accounts and accounts with unnecessary privileges.</p>
+    <p>AD environments often accumulate unused user accounts that are no longer monitored, including accounts belonging to former employees that were never disabled.</p>
 
-    <p>Some environments still rely on obsolete and insecure protocols such as NTLMv1 or SMBv1. If Active Directory is not actively reviewed and hardened, these legacy doors remain unlocked.</p>
+    <p>Over-privileged accounts often emerge when users are added to groups over time. Sometimes these may have been temporary projects; other times a user transfers to a different department, and in both scenarios the groups are never removed from the account. As a result, many AD environments contain unused yet enabled accounts, some of which retain unnecessary group memberships and elevated privileges.</p>
 
-    <p>Service accounts present another frequent risk. These accounts authenticate to services and resources within the AD environment and are often configured with non-expiring passwords and excessive permissions. When left unmonitored, they provide a quiet path for lateral movement.</p>
+    <p>Some environments still operate with outdated security protocols — such as NTLMv1 or SMBv1 — which are obsolete and insecure. If AD isn't actively updated, these "doors" remain unlocked.</p>
 
-    <h3>The Tier Administration Model</h3>
+    <p>Then there are unmonitored service accounts. These are special accounts in AD designed for applications to authenticate to services and resources within the AD environment. These accounts frequently have <strong>Service Principal Names (SPNs)</strong> registered, making them common targets for <strong>Kerberoasting</strong> attacks.</p>
 
-    <p>Modern Active Directory security practices emerged to move away from the “static directory” mindset. In 2014, Microsoft introduced the <strong>Tier Administration Model</strong> in response to real-world AD compromise patterns.</p>
+    <p>Service accounts are often left unattended, with static passwords and excessive permissions, which enables a silent path for lateral movement. Modern best practices involve migrating these to <strong>Group Managed Service Accounts (gMSAs)</strong>, which automates password management and significantly reduces Kerberoasting risk.</p>
 
-    <p>This approach is also commonly referred to as the <em>Tier Model</em> or <em>Tiered Administration</em>. Microsoft later rebranded it as the <strong>Enterprise Access Model (EAM)</strong> to better reflect hybrid and cloud environments.</p>
+    <p>Modern attack mapping tools such as <strong>BloodHound</strong> visually demonstrate how small misconfigurations combine into privilege escalation chains. Attackers use tools like BloodHound to identify "short-circuit" paths across tiers. For example, a Tier 2 user may be a Local Administrator on a workstation where a Tier 1 Server Admin previously logged in. If that workstation is compromised, the attacker can extract the Tier 1 credential and use it to access a server. From there, they may encounter an active Tier 0 Domain Admin session, allowing escalation to full domain control. This "upward flow" of credentials is precisely what the Enterprise Access Model is designed to prevent.</p>
+  </section>
 
-    <p>The Tier Administration Model is a security architecture and operational methodology designed to separate administrative trust boundaries.</p>
+  <!-- Section 3: Evolution of Administrative Security -->
+  <section class="card">
+    <h2>The Evolution of Administrative Security</h2>
 
-    <h3>Tier Structure</h3>
+    <p>In an effort to design mitigation strategies, AD management practices have evolved from a "static phonebook" model to a containment and hygiene approach. This evolution is marked by two major architectural frameworks: the <strong>Legacy Tier Administrative Model</strong> and the modern <strong>Enterprise Access Model (EAM)</strong>.</p>
+
+    <h3>The Legacy Tier Administrative Model – 2014</h3>
+
+    <p>In 2014, the Tier Administrative Model operational methodology was introduced as a response to real-world AD compromise patterns, designed to separate trust boundaries in on-premises environments. It was built as a bottom-up, server-centric approach geared towards preventing credential theft.</p>
+
+    <p>The methodology is structured around three security tiers:</p>
 
     <ul>
-      <li><strong>Tier 0:</strong> Identity and forest-level control</li>
-      <li><strong>Tier 1:</strong> Server and application management</li>
-      <li><strong>Tier 2:</strong> User-facing endpoints</li>
+      <li><strong>Tier 0:</strong> Identity and forest-level control — Domain Controllers, AD DS, PKI, and other systems that directly control the Active Directory environment.</li>
+      <li><strong>Tier 1:</strong> Server and application management — Member servers, application servers, and the administrators who manage them.</li>
+      <li><strong>Tier 2:</strong> User-facing endpoints — Workstations, devices, and the helpdesk or endpoint admins who support them.</li>
     </ul>
 
-    <p>The core rule is simple: <strong>administrative credentials must never cross downward between tiers</strong>. This limits credential exposure, breaks attack paths, and prevents a single compromise from escalating into full domain control.</p>
+    <p><strong>The Golden Rule:</strong> Administrative credentials must never cross downward between tiers (e.g., a Tier 0 admin logging into a Tier 2 workstation). This separation is intended to limit credential exposure, break attack paths, and prevent single compromises from escalating into full domain control.</p>
 
-    <p>Although introduced in 2014, tiered administration never became the norm across the broader AD ecosystem. It remained a recommended methodology, primarily adopted by security-mature organizations.</p>
+    <h3>The Enterprise Access Model (EAM)</h3>
 
-    <p>Beyond terminology, no fundamental changes were made to the architecture. The same principles apply today: identity remains the primary attack surface, administrative access must be separated by risk, and credentials must be prevented from flowing across trust boundaries.</p>
+    <p>The EAM represents the evolution and expansion of the Tier Administration model. Rather than focusing on where a server physically sits, the EAM shifts focus to <em>what level of control the identity has</em> — accounting for Azure/Entra ID and the tools used to manage them.</p>
 
-    <p>What changed was not the model itself, but the environments it needed to account for.</p>
+    <p>It introduces a top-down, plane-centric view that accounts for the realities of hybrid and cloud environments. The underlying principle remains unchanged: higher-trust identities must never authenticate to lower-trust systems.</p>
 
-    <p>On-premises environments rely heavily on administrative discipline, while cloud environments enforce boundaries through policy, identity roles, and token lifetimes. In both cases, identity remains the primary attack surface — only the enforcement mechanisms differ.</p>
+    <p>The transition from the legacy Tier Administrative Model to the EAM reflects a shift in how boundaries are enforced. In the legacy model, boundaries were largely physical and network-based. In the modern EAM, boundaries are identity-driven, enforced through role separation, token controls, and <strong>Privileged Identity Management (PIM)</strong>.</p>
+
+    <p>Whether on-premises or in the cloud, identity remains the primary attack surface. The Enterprise Access Model provides the modern architectural roadmap for protecting it.</p>
   </section>
 
   <p><em>Active Directory is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
