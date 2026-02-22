@@ -229,16 +229,16 @@
     <p>The methodology is structured around three security tiers:</p>
 
     <ul>
-      <li><strong>Tier 0:</strong> Identity and forest-level control — Domain Controllers, AD DS, PKI, and other systems that directly control the Active Directory environment.</li><br>
-      <li><strong>Tier 1:</strong> Server and application management — Member servers, application servers, and the administrators who manage them.</li><br>
-      <li><strong>Tier 2:</strong> User-facing endpoints — Workstations, devices, and the helpdesk or endpoint admins who support them.</li>
+      <li><strong>Tier 0 - Identity and Forest-Level Control:</strong> Domain Controllers, AD DS, PKI, and other systems that directly control the Active Directory environment.</li><br>
+      <li><strong>Tier 1 - Server and Application Management:</strong> Member servers, application servers, and the administrators who manage them.</li><br>
+      <li><strong>Tier 2 - User-facing Endpoints:</strong> Workstations, devices, and the helpdesk or endpoint admins who support them.</li>
     </ul>
 
     <p><strong>The Golden Rule:</strong> Administrative credentials must never cross downward between tiers (e.g., a Tier 0 admin logging into a Tier 2 workstation). This separation is intended to limit credential exposure, break attack paths, and prevent single compromises from escalating into full domain control.</p><br>
 
     <h3>The Enterprise Access Model (EAM)</h3>
 
-    <p>The EAM represents the evolution and expansion of the Tier Administration model. Rather than focusing on where a server physically sits, the EAM shifts focus to <em>what level of control the identity has</em> — accounting for Azure/Entra ID and the tools used to manage them.</p>
+    <p>The EAM represents the evolution and expansion of the Tier Administration model. Rather than focusing on where a server physically sits, the EAM shifts focus to <em>what level of control the identity has</em>, accounting for Azure/Entra ID and the tools used to manage them.</p>
 
     <p>It introduces a top-down, plane-centric view that accounts for the realities of hybrid and cloud environments. The underlying principle remains unchanged: higher-trust identities must never authenticate to lower-trust systems.</p>
 
