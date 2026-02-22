@@ -181,7 +181,7 @@
            style="border-radius:0;" />
     </div>
 
-    <h1>Active Directory – Blog Part III: Security & Misconfigurations, Attack Paths, & The Tier Administration Model/EAM</h1>
+    <h1>Active Directory – Blog Part III: Security, Misconfigurations, Attack Paths, & The Tier Administration Model/EAM</h1>
   </header>
 
   <!-- Section 1: Security & Misconfigurations -->
@@ -195,7 +195,7 @@
     <p>Most breaches stem from over-privileged accounts, misconfigurations, legacy compatibility decisions, and inadequate operational hygiene.</p>
 
     <p>Over time, these risks accumulate as AD environments are left unattended. Like any critical administrative system, consistent management and adherence to best practices are essential.</p>
-  </section><br><br>
+  </section>
 
   <!-- Section 2: Attack Paths -->
   <section class="card">
@@ -207,14 +207,14 @@
 
     <p>Over-privileged accounts often emerge when users are added to groups over time. Sometimes these may have been temporary projects; other times a user transfers to a different department, and in both scenarios the groups are never removed from the account. As a result, many AD environments contain unused yet enabled accounts, some of which retain unnecessary group memberships and elevated privileges.</p>
 
-    <p>Some environments still operate with outdated security protocols such as NTLMv1 or SMBv1, which are obsolete and insecure. If AD isn't actively updated, these "doors" remain unlocked.</p>
+    <p>Some environments still operate with outdated security protocols — such as NTLMv1 or SMBv1 — which are obsolete and insecure. If AD isn't actively updated, these "doors" remain unlocked.</p>
 
     <p>Then there are unmonitored service accounts. These are special accounts in AD designed for applications to authenticate to services and resources within the AD environment. These accounts frequently have <strong>Service Principal Names (SPNs)</strong> registered, making them common targets for <strong>Kerberoasting</strong> attacks.</p>
 
     <p>Service accounts are often left unattended, with static passwords and excessive permissions, which enables a silent path for lateral movement. Modern best practices involve migrating these to <strong>Group Managed Service Accounts (gMSAs)</strong>, which automates password management and significantly reduces Kerberoasting risk.</p>
 
     <p>Modern attack mapping tools such as <strong>BloodHound</strong> visually demonstrate how small misconfigurations combine into privilege escalation chains. Attackers use tools like BloodHound to identify "short-circuit" paths across tiers. For example, a Tier 2 user may be a Local Administrator on a workstation where a Tier 1 Server Admin previously logged in. If that workstation is compromised, the attacker can extract the Tier 1 credential and use it to access a server. From there, they may encounter an active Tier 0 Domain Admin session, allowing escalation to full domain control. This "upward flow" of credentials is precisely what the Enterprise Access Model is designed to prevent.</p>
-  </section><br><br>
+  </section>
 
   <!-- Section 3: Evolution of Administrative Security -->
   <section class="card">
@@ -229,20 +229,49 @@
     <p>The methodology is structured around three security tiers:</p>
 
     <ul>
-      <li><strong>Tier 0 - Identity and Forest-Level Control:</strong> Domain Controllers, AD DS, PKI, and other systems that directly control the Active Directory environment.</li><br>
-      <li><strong>Tier 1 - Server and Application Management:</strong> Member servers, application servers, and the administrators who manage them.</li><br>
-      <li><strong>Tier 2 - User-facing Endpoints:</strong> Workstations, devices, and the helpdesk or endpoint admins who support them.</li>
+      <li><strong>Tier 0:</strong> Identity and forest-level control — Domain Controllers, AD DS, PKI, and other systems that directly control the Active Directory environment.</li>
+      <li><strong>Tier 1:</strong> Server and application management — Member servers, application servers, and the administrators who manage them.</li>
+      <li><strong>Tier 2:</strong> User-facing endpoints — Workstations, devices, and the helpdesk or endpoint admins who support them.</li>
     </ul>
 
-    <p><strong>The Golden Rule:</strong> Administrative credentials must never cross downward between tiers (e.g., a Tier 0 admin logging into a Tier 2 workstation). This separation is intended to limit credential exposure, break attack paths, and prevent single compromises from escalating into full domain control.</p><br>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;">
+      <thead>
+        <tr style="background:rgba(255,255,255,0.05);border-bottom:1px solid var(--card-border);">
+          <th style="padding:10px 14px;text-align:left;color:var(--muted);font-weight:600;">Tier</th>
+          <th style="padding:10px 14px;text-align:left;color:var(--muted);font-weight:600;">Name</th>
+          <th style="padding:10px 14px;text-align:left;color:var(--muted);font-weight:600;">Assets Included</th>
+          <th style="padding:10px 14px;text-align:left;color:var(--muted);font-weight:600;">The "Golden Rule"</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--card-border);">
+          <td style="padding:10px 14px;font-weight:700;">Tier 0</td>
+          <td style="padding:10px 14px;font-weight:700;">Identity Root</td>
+          <td style="padding:10px 14px;color:var(--muted);">Domain Controllers, Forest Admins, Enterprise Admins, Tier 0 Group Policy.</td>
+          <td style="padding:10px 14px;color:var(--muted);">Only log into Tier 0 systems. Never log into Tier 1 or 2.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--card-border);">
+          <td style="padding:10px 14px;font-weight:700;">Tier 1</td>
+          <td style="padding:10px 14px;font-weight:700;">Server/App</td>
+          <td style="padding:10px 14px;color:var(--muted);">Member Servers, File Shares, SQL Servers, Business Applications.</td>
+          <td style="padding:10px 14px;color:var(--muted);">Admins manage servers but never log into Tier 2 workstations.</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 14px;font-weight:700;">Tier 2</td>
+          <td style="padding:10px 14px;font-weight:700;">User Assets</td>
+          <td style="padding:10px 14px;color:var(--muted);">End-user laptops, Desktops, Print Servers, standard User accounts.</td>
+          <td style="padding:10px 14px;color:var(--muted);">Local admins have no rights to Tier 1 or Tier 0.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p><strong>The Golden Rule:</strong> Administrative credentials must never cross downward between tiers (e.g., a Tier 0 admin logging into a Tier 2 workstation). This separation is intended to limit credential exposure, break attack paths, and prevent single compromises from escalating into full domain control.</p>
 
     <h3>The Enterprise Access Model (EAM)</h3>
 
-    <p>The EAM represents the evolution and expansion of the Tier Administration model. Rather than focusing on where a server physically sits, the EAM shifts focus to <em>what level of control the identity has</em>, accounting for Azure/Entra ID and the tools used to manage them.</p>
+    <p>The EAM represents the evolution and expansion of the Tier Administration model. Rather than focusing on where a server physically sits, the EAM shifts focus to <em>what level of control the identity has</em> — accounting for Azure/Entra ID and the tools used to manage them.</p>
 
-    <p>It introduces a top-down, plane-centric view that accounts for the realities of hybrid and cloud environments.</p><br>
-
-    <p>The underlying principle remains unchanged: higher-trust identities must never authenticate to lower-trust systems.</p>
+    <p>It introduces a top-down, plane-centric view that accounts for the realities of hybrid and cloud environments. The underlying principle remains unchanged: higher-trust identities must never authenticate to lower-trust systems.</p>
 
     <p>The transition from the legacy Tier Administrative Model to the EAM reflects a shift in how boundaries are enforced. In the legacy model, boundaries were largely physical and network-based. In the modern EAM, boundaries are identity-driven, enforced through role separation, token controls, and <strong>Privileged Identity Management (PIM)</strong>.</p>
 
