@@ -94,7 +94,57 @@
     .vm-section p{
       color:var(--muted);
       font-size:15px;
-      margin:0;
+      margin:0 0 16px 0;
+    }
+
+    /* Gallery */
+    .gallery{
+      margin-top:20px;
+      display:grid;
+      grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+      gap:16px;
+    }
+    .gallery img{
+      width:100%;
+      border-radius:10px;
+      border:1px solid var(--card-border);
+      display:block;
+      cursor:pointer;
+      transition:transform 0.2s ease, border-color 0.2s ease;
+    }
+    .gallery img:hover{
+      transform:scale(1.02);
+      border-color:var(--brand);
+    }
+
+    /* Lightbox */
+    .lightbox{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.85);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:90vw;
+      max-height:90vh;
+      border-radius:12px;
+      border:1px solid var(--card-border);
+    }
+    .lightbox-close{
+      position:fixed;
+      top:20px;
+      right:24px;
+      font-size:32px;
+      color:#fff;
+      cursor:pointer;
+      line-height:1;
+      background:none;
+      border:none;
     }
 
     /* Gallery placeholder */
@@ -173,8 +223,9 @@
       <div class="vm-section">
         <h3>Windows Server 2022 Installation Gallery</h3>
         <p>Step-by-step installation process for Windows Server 2022 on Hyper-V with enhanced resource allocation.</p>
-        <div class="gallery-placeholder">
-          Gallery images will be inserted here
+        <div class="gallery">
+          <img src="/Images/winserver1.png" alt="Windows Server 2022 installation step 1" onclick="openLightbox(this)" />
+          <img src="/Images/winserver32.png" alt="Windows Server 2022 installation step 32" onclick="openLightbox(this)" />
         </div>
       </div>
 
@@ -209,6 +260,26 @@
       </div>
     </footer>
   </div>
+
+  <!-- Lightbox overlay -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <script>
+    function openLightbox(img) {
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox-img').alt = img.alt;
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
 
 </body>
 </html>
