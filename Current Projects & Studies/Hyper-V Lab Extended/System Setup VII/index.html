@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VM Setup · Mark Thompson Portfolio</title>
-  <meta name="description" content="Virtual machine setup for Windows Server 2022, Ubuntu Server 24.04, and pfSense on Hyper-V." />
+  <title>Initial System Setup – Security Hardening · Mark Thompson Portfolio</title>
+  <meta name="description" content="Initial system setup and security hardening covering updates, BitLocker, BitDefender, account hygiene, OS-level security, network exposure reduction, and logging." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -77,29 +77,50 @@
       font-weight:600;
     }
 
-    /* VM Section Cards */
-    .vm-section{
+    /* Step Section Cards */
+    .step-section{
       margin:40px 0;
       padding:24px;
       background:rgba(77,163,255,.04);
       border:1px solid var(--card-border);
       border-radius:12px;
     }
-    .vm-section h3{
-      font-size:22px;
-      font-weight:700;
-      color:var(--brand);
-      margin:0 0 16px 0;
-    }
-    .vm-section p{
+    .step-section p{
       color:var(--muted);
       font-size:15px;
-      margin:0 0 16px 0;
+      margin:0 0 12px 0;
+    }
+    .step-section ul{
+      color:var(--muted);
+      font-size:15px;
+      margin:0 0 12px 0;
+      padding-left:24px;
+      line-height:1.8;
+    }
+
+    /* Sub-section within a step */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:15px;
+      margin:0 0 10px 0;
     }
 
     /* Gallery */
     .gallery{
-      margin-top:20px;
+      margin-top:16px;
       display:grid;
       grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
       gap:16px;
@@ -183,18 +204,6 @@
       z-index:1001;
     }
 
-    /* Gallery placeholder */
-    .gallery-placeholder{
-      margin-top:20px;
-      padding:40px;
-      background:rgba(0,0,0,.2);
-      border:2px dashed var(--card-border);
-      border-radius:12px;
-      text-align:center;
-      color:var(--muted);
-      font-style:italic;
-    }
-
     /* Footer */
     footer{
       margin-top:48px;
@@ -242,156 +251,238 @@
 
     <!-- Title + short intro -->
     <header>
-      <h1>VM Setup</h1>
-      <p class="lead">Virtual machine configurations for Windows Server 2022, Ubuntu Server 24.04, and pfSense on Hyper-V.</p>
+      <h1>Initial System Setup – Security Hardening</h1>
+      <p class="lead">A step-by-step walkthrough of hardening a Windows system — from updates and drive encryption to endpoint protection, account hygiene, and logging.</p>
     </header>
 
     <!-- Main content -->
     <main class="content">
-      <p>In the previous Hyper-V Exploration lab, I laid out step by step examples of setting up and installing Windows Server 2022, Ubuntu Server 24.04, and pfSense on virtual machines with the Hyper-V hypervisor.</p>
 
-      <p>As these steps have been presented previously and this Hyper-V lab serves as an extension with a machine more geared for virtualization, I have the installation steps of each Virtual Machine for each OS in gallery mode to review.</p>
-
-      <p>Each of these will have much more flexibility and be able to go further with more hardware resources allocated to them. Let's get started with some VM labs!</p>
-
-      <!-- Windows Server 2022 Section -->
-      <h2>Windows Server 2022 VM Setup</h2>
-      <div class="vm-section">
-        <h3>Windows Server 2022 Installation Gallery</h3>
-        <p>Step-by-step installation process for Windows Server 2022 on Hyper-V with enhanced resource allocation.</p>
+      <!-- Step 1 -->
+      <h2>Step 1: Check Updates, Firmware, and Boot Trust</h2>
+      <div class="step-section">
+        <p>The very first best practice to run through prior to system setup and configuration is running all available updates straight away.</p>
+        <p>Running all available Windows updates &amp; security patches, system updates, drivers, and any available firmware update listed under Optional Updates within Windows Settings &gt; Updates.</p>
+        <p>After getting all of those run through, I run these PowerShell commands to verify secure boot is enabled and confirm the BIOSFirmwareType that is being worked with on the given system prior to enabling BitLocker for drive encryption.</p>
         <div class="gallery">
-          <img src="Images/Windows%20Server/winserver1.png" alt="Windows Server 2022 installation step 1" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver2.png" alt="Windows Server 2022 installation step 2" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver3.png" alt="Windows Server 2022 installation step 3" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver4.png" alt="Windows Server 2022 installation step 4" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver5.png" alt="Windows Server 2022 installation step 5" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver6.png" alt="Windows Server 2022 installation step 6" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver7.png" alt="Windows Server 2022 installation step 7" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver8.png" alt="Windows Server 2022 installation step 8" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver9.png" alt="Windows Server 2022 installation step 9" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver10.png" alt="Windows Server 2022 installation step 10" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver11.png" alt="Windows Server 2022 installation step 11" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver12.png" alt="Windows Server 2022 installation step 12" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver13.png" alt="Windows Server 2022 installation step 13" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver14.png" alt="Windows Server 2022 installation step 14" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver15.png" alt="Windows Server 2022 installation step 15" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver16.png" alt="Windows Server 2022 installation step 16" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver17.png" alt="Windows Server 2022 installation step 17" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver18.png" alt="Windows Server 2022 installation step 18" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver19.png" alt="Windows Server 2022 installation step 19" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver20.png" alt="Windows Server 2022 installation step 20" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver21.png" alt="Windows Server 2022 installation step 21" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver22.png" alt="Windows Server 2022 installation step 22" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver23.png" alt="Windows Server 2022 installation step 23" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver24.png" alt="Windows Server 2022 installation step 24" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver25.png" alt="Windows Server 2022 installation step 25" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver26.png" alt="Windows Server 2022 installation step 26" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver27.png" alt="Windows Server 2022 installation step 27" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver28.png" alt="Windows Server 2022 installation step 28" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver29.png" alt="Windows Server 2022 installation step 29" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver30.png" alt="Windows Server 2022 installation step 30" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver31.png" alt="Windows Server 2022 installation step 31" onclick="openLightbox(this)" />
-          <img src="Images/Windows%20Server/winserver32.png" alt="Windows Server 2022 installation step 32" onclick="openLightbox(this)" />
+          <img src="Images/Pre1.png" alt="Updates and firmware step 1" onclick="openLightbox(this)" />
+          <img src="Images/Pre2.png" alt="Updates and firmware step 2" onclick="openLightbox(this)" />
+          <img src="Images/Pre3.png" alt="Updates and firmware step 3" onclick="openLightbox(this)" />
+          <img src="Images/Pre4.png" alt="Updates and firmware step 4" onclick="openLightbox(this)" />
         </div>
       </div>
 
-      <!-- Ubuntu Server 24.04 Section -->
-      <h2>Ubuntu Server 24.04 VM Setup</h2>
-      <div class="vm-section">
-        <h3>Ubuntu Server 24.04 Installation Gallery</h3>
-        <p>Complete Ubuntu Server deployment on Hyper-V virtual machine infrastructure.</p>
+      <!-- Step 2 -->
+      <h2>Step 2 – Disk &amp; Device Protection</h2>
+      <div class="step-section">
+        <p>In this step, I'm going to go through how to enable BitLocker encryption for two different partitions C: System and D: Data on a single SSD drive, and securely backup the recovery keys.</p>
+        <p>In this example, I'm going to enable BitLocker on both disk partitions with the use of PowerShell to implement drive protection.</p>
         <div class="gallery">
-          <img src="Images/Ubuntu%20Server/ubuntu1.png" alt="Ubuntu Server 24.04 installation step 1" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu2.png" alt="Ubuntu Server 24.04 installation step 2" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu3.png" alt="Ubuntu Server 24.04 installation step 3" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu4.png" alt="Ubuntu Server 24.04 installation step 4" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu5.png" alt="Ubuntu Server 24.04 installation step 5" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu6.png" alt="Ubuntu Server 24.04 installation step 6" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu7.png" alt="Ubuntu Server 24.04 installation step 7" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu8.png" alt="Ubuntu Server 24.04 installation step 8" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu9.png" alt="Ubuntu Server 24.04 installation step 9" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu10.png" alt="Ubuntu Server 24.04 installation step 10" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu11.png" alt="Ubuntu Server 24.04 installation step 11" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu12.png" alt="Ubuntu Server 24.04 installation step 12" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu13.png" alt="Ubuntu Server 24.04 installation step 13" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu14.png" alt="Ubuntu Server 24.04 installation step 14" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu15.png" alt="Ubuntu Server 24.04 installation step 15" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu16.png" alt="Ubuntu Server 24.04 installation step 16" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu17.png" alt="Ubuntu Server 24.04 installation step 17" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu18.png" alt="Ubuntu Server 24.04 installation step 18" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu19.png" alt="Ubuntu Server 24.04 installation step 19" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu20.png" alt="Ubuntu Server 24.04 installation step 20" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu21.png" alt="Ubuntu Server 24.04 installation step 21" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu22.png" alt="Ubuntu Server 24.04 installation step 22" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu23.png" alt="Ubuntu Server 24.04 installation step 23" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu24.png" alt="Ubuntu Server 24.04 installation step 24" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu25.png" alt="Ubuntu Server 24.04 installation step 25" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu26.png" alt="Ubuntu Server 24.04 installation step 26" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu27.png" alt="Ubuntu Server 24.04 installation step 27" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu28.png" alt="Ubuntu Server 24.04 installation step 28" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu29.png" alt="Ubuntu Server 24.04 installation step 29" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu30.png" alt="Ubuntu Server 24.04 installation step 30" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu31.png" alt="Ubuntu Server 24.04 installation step 31" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu32.png" alt="Ubuntu Server 24.04 installation step 32" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu33.png" alt="Ubuntu Server 24.04 installation step 33" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu34.png" alt="Ubuntu Server 24.04 installation step 34" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu35.png" alt="Ubuntu Server 24.04 installation step 35" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu36.png" alt="Ubuntu Server 24.04 installation step 36" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu37.png" alt="Ubuntu Server 24.04 installation step 37" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu38.png" alt="Ubuntu Server 24.04 installation step 38" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu39.png" alt="Ubuntu Server 24.04 installation step 39" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu40.png" alt="Ubuntu Server 24.04 installation step 40" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu41.png" alt="Ubuntu Server 24.04 installation step 41" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu42.png" alt="Ubuntu Server 24.04 installation step 42" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu43.png" alt="Ubuntu Server 24.04 installation step 43" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu44.png" alt="Ubuntu Server 24.04 installation step 44" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu45.png" alt="Ubuntu Server 24.04 installation step 45" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu46.png" alt="Ubuntu Server 24.04 installation step 46" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu47.png" alt="Ubuntu Server 24.04 installation step 47" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu48.png" alt="Ubuntu Server 24.04 installation step 48" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu49.png" alt="Ubuntu Server 24.04 installation step 49" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu50.png" alt="Ubuntu Server 24.04 installation step 50" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu51.png" alt="Ubuntu Server 24.04 installation step 51" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu52.png" alt="Ubuntu Server 24.04 installation step 52" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu53.png" alt="Ubuntu Server 24.04 installation step 53" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu54.png" alt="Ubuntu Server 24.04 installation step 54" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu55.png" alt="Ubuntu Server 24.04 installation step 55" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu56.png" alt="Ubuntu Server 24.04 installation step 56" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu57.png" alt="Ubuntu Server 24.04 installation step 57" onclick="openLightbox(this)" />
-          <img src="Images/Ubuntu%20Server/ubuntu58.png" alt="Ubuntu Server 24.04 installation step 58" onclick="openLightbox(this)" />
+          <img src="Images/1Get-Tpm.png" alt="Get-Tpm" onclick="openLightbox(this)" />
+          <img src="Images/2Enable-BitLocker.png" alt="Enable BitLocker step 2" onclick="openLightbox(this)" />
+          <img src="Images/3Enable-BitLocker.png" alt="Enable BitLocker step 3" onclick="openLightbox(this)" />
+          <img src="Images/4Add-RecoveryKey.png" alt="Add Recovery Key" onclick="openLightbox(this)" />
+          <img src="Images/5Get-BitLockerVolume.png" alt="Get BitLocker Volume" onclick="openLightbox(this)" />
+          <img src="Images/6EnableBLonD.png" alt="Enable BitLocker on D" onclick="openLightbox(this)" />
+          <img src="Images/7EnableAutoUnlock.png" alt="Enable Auto Unlock" onclick="openLightbox(this)" />
+          <img src="Images/8Enable-BLVolume.png" alt="Enable BitLocker Volume" onclick="openLightbox(this)" />
+          <img src="Images/9Get-BLVolume.png" alt="Get BitLocker Volume final" onclick="openLightbox(this)" />
         </div>
       </div>
 
-      <!-- pfSense Section -->
-      <h2>pfSense VM Setup</h2>
-      <div class="vm-section">
-        <h3>pfSense Installation Gallery</h3>
-        <p>pfSense firewall configuration on Hyper-V for network security and routing capabilities.</p>
-        <div class="gallery">
-          <img src="Images/pfSense/pfsense1.png" alt="pfSense installation step 1" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense2.png" alt="pfSense installation step 2" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense3.png" alt="pfSense installation step 3" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense4.png" alt="pfSense installation step 4" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense5.png" alt="pfSense installation step 5" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense6.png" alt="pfSense installation step 6" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense7.png" alt="pfSense installation step 7" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense8.png" alt="pfSense installation step 8" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense9.png" alt="pfSense installation step 9" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense10.png" alt="pfSense installation step 10" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense11.png" alt="pfSense installation step 11" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense12.png" alt="pfSense installation step 12" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense13.png" alt="pfSense installation step 13" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense14.png" alt="pfSense installation step 14" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense15.png" alt="pfSense installation step 15" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense16.png" alt="pfSense installation step 16" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense17.png" alt="pfSense installation step 17" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense18.png" alt="pfSense installation step 18" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense19.png" alt="pfSense installation step 19" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense20.png" alt="pfSense installation step 20" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense21.png" alt="pfSense installation step 21" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense22.png" alt="pfSense installation step 22" onclick="openLightbox(this)" />
-          <img src="Images/pfSense/pfsense23.png" alt="pfSense installation step 23" onclick="openLightbox(this)" />
+      <!-- Step 3 -->
+      <h2>Step 3 – Endpoint Protection Strategy</h2>
+      <div class="step-section">
+        <p>In this step, I'm going to install and setup the commercial BitDefender antivirus solution.</p>
+        <div class="sub-section">
+          <h4>Install &amp; Setup BitDefender</h4>
+          <div class="gallery">
+            <img src="Images/Sec1.png" alt="BitDefender setup step 1" onclick="openLightbox(this)" />
+            <img src="Images/Sec2.png" alt="BitDefender setup step 2" onclick="openLightbox(this)" />
+            <img src="Images/Sec3.png" alt="BitDefender setup step 3" onclick="openLightbox(this)" />
+            <img src="Images/Sec4.png" alt="BitDefender setup step 4" onclick="openLightbox(this)" />
+            <img src="Images/Sec5.png" alt="BitDefender setup step 5" onclick="openLightbox(this)" />
+            <img src="Images/Sec6.png" alt="BitDefender setup step 6" onclick="openLightbox(this)" />
+            <img src="Images/Sec7.png" alt="BitDefender setup step 7" onclick="openLightbox(this)" />
+            <img src="Images/Sec8.png" alt="BitDefender setup step 8" onclick="openLightbox(this)" />
+            <img src="Images/Sec9.png" alt="BitDefender setup step 9" onclick="openLightbox(this)" />
+            <img src="Images/Sec10.png" alt="BitDefender setup step 10" onclick="openLightbox(this)" />
+            <img src="Images/Sec11.png" alt="BitDefender setup step 11" onclick="openLightbox(this)" />
+            <img src="Images/Sec12.png" alt="BitDefender setup step 12" onclick="openLightbox(this)" />
+            <img src="Images/Sec13.png" alt="BitDefender setup step 13" onclick="openLightbox(this)" />
+            <img src="Images/Sec14.png" alt="BitDefender setup step 14" onclick="openLightbox(this)" />
+            <img src="Images/Sec15.png" alt="BitDefender setup step 15" onclick="openLightbox(this)" />
+            <img src="Images/Sec16.png" alt="BitDefender setup step 16" onclick="openLightbox(this)" />
+            <img src="Images/Sec17.png" alt="BitDefender setup step 17" onclick="openLightbox(this)" />
+            <img src="Images/Sec18.png" alt="BitDefender setup step 18" onclick="openLightbox(this)" />
+            <img src="Images/Sec19.png" alt="BitDefender setup step 19" onclick="openLightbox(this)" />
+          </div>
         </div>
+      </div>
+
+      <!-- Step 4 -->
+      <h2>Step 4 – Account &amp; Privilege Hygiene</h2>
+      <div class="step-section">
+        <p>In a previous step a standard, non-admin regular user account was created for daily operations. This is one of the best practices any technician can implement on their individual computer system.</p>
+        <p>With that in place, the system has this account &amp; privilege configuration:</p>
+        <ul>
+          <li>Daily user is standard, not admin</li>
+          <li>Separate local admin account exists</li>
+          <li>Default Administrator renamed or disabled</li>
+          <li>UAC left at default or higher</li>
+        </ul>
+      </div>
+
+      <!-- Step 5 -->
+      <h2>Step 5 – OS-Level Platform Security</h2>
+      <div class="step-section">
+        <p>Windows Security has quite a few uniquely built-in security features that are indeed worth taking advantage of. This goes an extra mile on the OS-Level Platform Security with BitDefender and Microsoft Defender Antivirus all running.</p>
+
+        <div class="sub-section">
+          <h4>Security at a Glance</h4>
+          <p>Enable any applicable features.</p>
+          <div class="gallery">
+            <img src="Images/winsec1.png" alt="Windows Security at a glance 1" onclick="openLightbox(this)" />
+            <img src="Images/winsec2.png" alt="Windows Security at a glance 2" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Virus &amp; Threat Detection</h4>
+          <p>Here we have BitDefender Antivirus set to take precedence over Microsoft Defender Antivirus.</p>
+          <div class="gallery">
+            <img src="Images/winsec3.png" alt="Virus and threat detection" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Firewall &amp; Network Protection</h4>
+          <p>Ensure the OS-Level Firewall is enabled for Domain, Private, and Public networks.</p>
+          <div class="gallery">
+            <img src="Images/winsec4.png" alt="Firewall and network protection" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>App &amp; Browser Control</h4>
+          <div class="gallery">
+            <img src="Images/windsec5.png" alt="App and browser control" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Device Security</h4>
+          <p>Core isolation and Memory Integrity.</p>
+          <div class="gallery">
+            <img src="Images/winsec6.png" alt="Device security core isolation" onclick="openLightbox(this)" />
+            <img src="Images/winsec9.png" alt="Device security memory integrity" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Device Performance &amp; Health</h4>
+          <div class="gallery">
+            <img src="Images/Winsec7.png" alt="Device performance and health" onclick="openLightbox(this)" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <h2>Step 6 – Network Exposure Reduction</h2>
+      <div class="step-section">
+        <p>Reduce lateral movement opportunities.</p>
+        <ul>
+          <li>Windows Defender Firewall enabled</li>
+          <li>Inbound connections blocked by default</li>
+          <li>RDP added to authorized admin group only</li>
+        </ul>
+        <div class="gallery">
+          <img src="Images/1NetExposeRed.png" alt="Network exposure reduction step 1" onclick="openLightbox(this)" />
+          <img src="Images/2NetExposeRed.png" alt="Network exposure reduction step 2" onclick="openLightbox(this)" />
+          <img src="Images/3NetExposeRed.png" alt="Network exposure reduction step 3" onclick="openLightbox(this)" />
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <h2>Step 7 – Logging &amp; Visibility</h2>
+      <div class="step-section">
+        <p>For logging and visibility this out-of-the-box security hardening setup &amp; implementation is limited on enterprise tooling to monitor and detect for threats, so I engineered visibility with what Windows already provides out-of-the-box — PowerShell.</p>
+        <p>Here I have some lightweight PowerShell scripts that run on a daily schedule to check for any suspicious IP connections, run port scans, local IP scans, and generate a daily logon and special privilege report.</p>
+        <p>While there is no specialized tooling, this allows the use of PowerShell scripting and automation to examine the frequent things that bring threats — suspicious connections, open ports, new IPs on the network, and a logon report that monitors successful and failed logon attempts, and special assigned permissions with a given identity (e.g., system user account).</p>
+
+        <div class="sub-section">
+          <h4>BitDefender Vulnerability Scan</h4>
+          <div class="gallery">
+            <img src="Images/1L&amp;V1.png" alt="BitDefender vulnerability scan 1" onclick="openLightbox(this)" />
+            <img src="Images/1L&amp;V2.png" alt="BitDefender vulnerability scan 2" onclick="openLightbox(this)" />
+            <img src="Images/1L&amp;V3.png" alt="BitDefender vulnerability scan 3" onclick="openLightbox(this)" />
+            <img src="Images/1L&amp;V4.png" alt="BitDefender vulnerability scan 4" onclick="openLightbox(this)" />
+            <img src="Images/1L&amp;V5.png" alt="BitDefender vulnerability scan 5" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Daily Logon Report</h4>
+          <div class="gallery">
+            <img src="Images/DLR1.png" alt="Daily logon report 1" onclick="openLightbox(this)" />
+            <img src="Images/DLR2.png" alt="Daily logon report 2" onclick="openLightbox(this)" />
+            <img src="Images/DLR3.png" alt="Daily logon report 3" onclick="openLightbox(this)" />
+            <img src="Images/DLR4.png" alt="Daily logon report 4" onclick="openLightbox(this)" />
+            <img src="Images/DLR5.png" alt="Daily logon report 5" onclick="openLightbox(this)" />
+            <img src="Images/DLR6.png" alt="Daily logon report 6" onclick="openLightbox(this)" />
+            <img src="Images/DLR7.png" alt="Daily logon report 7" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>IP Monitoring</h4>
+          <div class="gallery">
+            <img src="Images/ipmon1.png" alt="IP monitoring 1" onclick="openLightbox(this)" />
+            <img src="Images/ipmon2.png" alt="IP monitoring 2" onclick="openLightbox(this)" />
+            <img src="Images/ipmon3.png" alt="IP monitoring 3" onclick="openLightbox(this)" />
+            <img src="Images/ipmon4.png" alt="IP monitoring 4" onclick="openLightbox(this)" />
+            <img src="Images/ipmon5.png" alt="IP monitoring 5" onclick="openLightbox(this)" />
+            <img src="Images/ipmon6.png" alt="IP monitoring 6" onclick="openLightbox(this)" />
+            <img src="Images/ipmon7.png" alt="IP monitoring 7" onclick="openLightbox(this)" />
+            <img src="Images/ipmon8.png" alt="IP monitoring 8" onclick="openLightbox(this)" />
+            <img src="Images/ipmon9.png" alt="IP monitoring 9" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Local IP Scan</h4>
+          <div class="gallery">
+            <img src="Images/LocalIP-ICMPScan1.png" alt="Local IP ICMP scan 1" onclick="openLightbox(this)" />
+            <img src="Images/LocalIP-ICMPScan2.png" alt="Local IP ICMP scan 2" onclick="openLightbox(this)" />
+            <img src="Images/LocalIP-TCPFallbackScan3.png" alt="Local IP TCP fallback scan 3" onclick="openLightbox(this)" />
+            <img src="Images/LocalIP-TCPFallbackScan4.png" alt="Local IP TCP fallback scan 4" onclick="openLightbox(this)" />
+            <img src="Images/LocalIP-TCPFallbackScan5.png" alt="Local IP TCP fallback scan 5" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Port Scanning</h4>
+          <div class="gallery">
+            <img src="Images/Portscanner1.png" alt="Port scanner 1" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner2.png" alt="Port scanner 2" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner3.png" alt="Port scanner 3" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner4.png" alt="Port scanner 4" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner5.png" alt="Port scanner 5" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner6.png" alt="Port scanner 6" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner7.png" alt="Port scanner 7" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Post Security Controller Script</h4>
+          <p>Automates all of the above activities at once.</p>
+          <div class="gallery">
+            <img src="Images/combo1.png" alt="Security controller script 1" onclick="openLightbox(this)" />
+            <img src="Images/combo2.png" alt="Security controller script 2" onclick="openLightbox(this)" />
+            <img src="Images/combo3.png" alt="Security controller script 3" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
       </div>
 
     </main>
@@ -412,7 +503,7 @@
     <button class="lightbox-arrow lightbox-prev" onclick="event.stopPropagation();changeImage(-1)">&#8249;</button>
     <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()" />
     <button class="lightbox-arrow lightbox-next" onclick="event.stopPropagation();changeImage(1)">&#8250;</button>
-    <div class="lightbox-counter" id="lightbox-counter">1 / 32</div>
+    <div class="lightbox-counter" id="lightbox-counter">1 / 1</div>
   </div>
 
   <script>
@@ -420,7 +511,6 @@
     let currentGalleryImgs = [];
 
     function openLightbox(img) {
-      // Collect all images in the same gallery as the clicked image
       const gallery = img.closest('.gallery');
       currentGalleryImgs = Array.from(gallery.querySelectorAll('img'));
       currentIndex = currentGalleryImgs.indexOf(img);
