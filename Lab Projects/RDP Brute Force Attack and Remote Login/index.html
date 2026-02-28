@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RDP Brute Force Attack and Remote Login · Mark Thompson Portfolio</title>
   <meta name="description" content="Hydra brute-forcing RDP on Windows 10, then logging in with xfreerdp using the recovered credentials in a segmented lab network." />
-
-  <!-- THEME -->
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -21,77 +19,168 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .wrap.wide{max-width:1100px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
     }
 
-    /* Figures – intrinsic image size (no zoom) */
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:24px auto;
+      margin:16px auto;
       max-width:100%;
       text-align:center;
     }
     .figure img{
-      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
-      width:auto; max-width:100%; height:auto;
+      display:block;
+      margin:0 auto;
+      border-radius:10px;
+      object-fit:contain;
+      width:auto;
+      max-width:100%;
+      height:auto;
+      cursor:zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Optional side-by-side helper */
+    /* Side-by-side pair */
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Image grid */
+    .img-grid{display:grid;gap:12px;margin:16px 0}
+    .img-grid.cols-2{grid-template-columns:1fr 1fr}
+    @media(max-width:700px){.img-grid.cols-2{grid-template-columns:1fr}}
+    .img-grid .figure{margin:0}
 
-    /* ===== Image Zoom (click-to-zoom) ===== */
-    .zoomable{cursor:zoom-in}
-    .zoom-overlay{
-      position:fixed; inset:0; display:none;
-      align-items:center; justify-content:center;
-      background:rgba(0,0,0,.8); z-index:9999; padding:24px;
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
     }
-    .zoom-overlay.open{display:flex}
-    .zoom-overlay img{
-      max-width:min(1200px,94vw); max-height:90vh;
-      border-radius:12px; box-shadow:var(--shadow);
-      cursor:zoom-out;
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
     }
-    body.zoom-open{overflow:hidden}
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
+    }
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <div class="wrap wide">
+  <div class="wrap">
+
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
@@ -109,51 +198,57 @@
     <!-- Header -->
     <header>
       <h1>RDP Brute Force Attack and Remote Login</h1>
-      <p class="lead">Use Hydra to brute-force RDP on Windows 10, then verify access by logging in with <code>xfreerdp</code>.</p>
+      <p class="lead">Use Hydra to brute-force RDP on Windows 10, then verify access by logging in with <code style="background:rgba(0,0,0,.3);border:1px solid var(--card-border);border-radius:4px;padding:1px 6px;font-size:15px;color:#a8d8ff;">xfreerdp</code>.</p>
       <p><a href="https://github.com/mark-thompson01/RDP-Brute-Force-Attack-and-Remote-Login/blob/main/README.md" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Overview -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Overview -->
       <h2>Overview</h2>
-      <p>This lab demonstrates a controlled brute-force attack against RDP in a segmented LAN. After enumerating the target, <strong>Hydra</strong> is used with a wordlist to attempt credential discovery. Upon success, <strong>xfreerdp</strong> confirms interactive access.</p>
-    </section>
-
-    <!-- Nmap -->
-    <section class="card">
-      <h2>Scan Port 3389 with Nmap</h2>
-      <div class="pair">
-        <figure class="figure"><img src="Images/RDPBFLab1.PNG" alt="Nmap scan step 1"></figure>
-        <figure class="figure"><img src="Images/RDPBFLab2.PNG" alt="Nmap scan step 2"></figure>
+      <div class="step-section">
+        <p>This lab demonstrates a controlled brute-force attack against RDP in a segmented LAN. After enumerating the target, <strong style="color:var(--brand);font-weight:600;">Hydra</strong> is used with a wordlist to attempt credential discovery. Upon success, <strong style="color:var(--brand);font-weight:600;">xfreerdp</strong> confirms interactive access.</p>
       </div>
-    </section>
 
-    <!-- Hydra -->
-    <section class="card">
+      <!-- Nmap -->
+      <h2>Scan Port 3389 with Nmap</h2>
+      <div class="step-section">
+        <div class="pair">
+          <figure class="figure"><img src="Images/RDPBFLab1.PNG" alt="Nmap scan step 1" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/RDPBFLab2.PNG" alt="Nmap scan step 2" loading="lazy"></figure>
+        </div>
+      </div>
+
+      <!-- Hydra -->
       <h2>Brute Force with Hydra (RDP + rockyou.txt)</h2>
-      <p>Run Hydra against the RDP service using a known username and a wordlist (e.g., <code>rockyou.txt</code>) to attempt password discovery.</p>
-      <figure class="figure"><img src="Images/RDPBFLab3.PNG" alt="Hydra brute force step 1"></figure>
-      <figure class="figure"><img src="Images/RDPBFLab4.PNG" alt="Hydra brute force step 2"></figure>
-      <figure class="figure"><img src="Images/RDPBFLab5.PNG" alt="Hydra brute force step 3"></figure>
-      <figure class="figure"><img src="Images/RDPBFLab6.PNG" alt="Hydra brute force step 4"></figure>
-      <figure class="figure"><img src="Images/RDPBFLab7.PNG" alt="Hydra brute force step 5"></figure>
-      <figure class="figure"><img src="Images/RDPBFLab8.PNG" alt="Hydra brute force step 6"></figure>
-    </section>
+      <div class="step-section">
+        <p>Run Hydra against the RDP service using a known username and a wordlist (e.g., <code>rockyou.txt</code>) to attempt password discovery.</p>
+        <div class="img-grid cols-2">
+          <figure class="figure"><img src="Images/RDPBFLab3.PNG" alt="Hydra brute force step 1" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/RDPBFLab4.PNG" alt="Hydra brute force step 2" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/RDPBFLab5.PNG" alt="Hydra brute force step 3" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/RDPBFLab6.PNG" alt="Hydra brute force step 4" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/RDPBFLab7.PNG" alt="Hydra brute force step 5" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/RDPBFLab8.PNG" alt="Hydra brute force step 6" loading="lazy"></figure>
+        </div>
+      </div>
 
-    <!-- Login -->
-    <section class="card">
-      <h2>Remote Login with <code>xfreerdp</code></h2>
-      <p>After Hydra identifies valid credentials, initiate an RDP session using <code>xfreerdp</code> to verify access.</p>
-      <figure class="figure"><img src="Images/RDPBFLab9.PNG" alt="Successful login step 1"></figure>
-      <figure class="figure"><img src="Images/RDPBFLab10.PNG" alt="Successful login step 2"></figure>
-      <figure class="figure"><img src="Images/RDPBFLab11.PNG" alt="Successful login step 3"></figure>
-      <figure class="figure"><img src="Images/RDPBFLab12.PNG" alt="Successful login step 4"></figure>
-    </section>
+      <!-- xfreerdp Login -->
+      <h2>Remote Login with <code style="font-size:22px;color:#a8d8ff;background:none;border:none;padding:0;">xfreerdp</code></h2>
+      <div class="step-section">
+        <p>After Hydra identifies valid credentials, initiate an RDP session using <code>xfreerdp</code> to verify access.</p>
+        <div class="img-grid cols-2">
+          <figure class="figure"><img src="Images/RDPBFLab9.PNG" alt="Successful login step 1" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/RDPBFLab10.PNG" alt="Successful login step 2" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/RDPBFLab11.PNG" alt="Successful login step 3" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/RDPBFLab12.PNG" alt="Successful login step 4" loading="lazy"></figure>
+        </div>
+      </div>
 
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -165,37 +260,35 @@
     </footer>
   </div>
 
-  <!-- Tiny, reusable click-to-zoom for all images -->
+  <!-- Lightbox -->
   <script>
     (function(){
-      const imgs = document.querySelectorAll('.wrap img');
-      if(!imgs.length) return;
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
 
-      const overlay = document.createElement('div');
-      overlay.className = 'zoom-overlay';
-      overlay.setAttribute('aria-hidden','true');
-      overlay.innerHTML = '<img alt="">';
-      document.body.appendChild(overlay);
-      const ovImg = overlay.querySelector('img');
-
-      function closeZoom(){
-        overlay.classList.remove('open');
-        document.body.classList.remove('zoom-open');
-        ovImg.removeAttribute('src');
-        ovImg.removeAttribute('srcset');
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
 
-      overlay.addEventListener('click', closeZoom);
-      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeZoom(); });
-
-      imgs.forEach(img=>{
-        img.classList.add('zoomable');
+      document.querySelectorAll('.figure img').forEach((img)=>{
         img.addEventListener('click', ()=>{
-          ovImg.alt = img.alt || '';
-          ovImg.src = img.currentSrc || img.src;
-          overlay.classList.add('open');
-          document.body.classList.add('zoom-open');
-        }, {passive:true});
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
       });
     })();
   </script>
