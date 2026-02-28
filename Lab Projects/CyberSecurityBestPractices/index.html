@@ -19,57 +19,202 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:16px 0 12px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:20px}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 28px;font-size:clamp(17px,2.4vw,19px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
-    }
-
-    .figure{
-      border:1px solid var(--card-border);
-      border-radius:12px;
-      background:#0e1220;
-      padding:6px;
-      margin:10px auto;
-      width:max-content;
-      max-width:100%;
-    }
-    .figure img{display:block;height:auto;max-width:100%;border-radius:10px}
-
-    .toc{
-      background:rgba(255,255,255,.02);
       border:1px solid var(--card-border);
       border-radius:var(--radius);
-      padding:16px;
-      margin-top:20px;
       box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
-    .toc ol{margin:0;padding-left:20px}
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+    .content p{
+      color:var(--text);
+      font-size:16px;
+      line-height:1.7;
+      margin:0 0 16px 0;
+    }
+    .content strong{
+      color:var(--brand);
+      font-weight:600;
+    }
+
+    /* Intro block */
+    .intro-block{
+      margin:0 0 32px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .intro-block p{
+      color:var(--muted);
+      font-size:15px;
+      margin:0 0 12px 0;
+      line-height:1.75;
+    }
+    .intro-block p:last-child{margin:0}
+
+    /* TOC */
+    .toc{
+      margin:0 0 32px 0;
+      padding:24px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .toc h3{
+      font-size:18px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 14px 0;
+    }
+    .toc ol{
+      margin:0;
+      padding-left:22px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:2;
+    }
     .toc a{color:var(--brand);text-decoration:none}
     .toc a:hover{text-decoration:underline}
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:15px;
+      margin:0 0 12px 0;
+      line-height:1.75;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section em{color:var(--text);font-style:italic}
+
+    /* Image container */
+    .figure{
+      margin:16px 0 0 0;
+      display:inline-block;
+      border:1px solid var(--card-border);
+      border-radius:10px;
+      background:#0e1220;
+      padding:6px;
+      max-width:100%;
+    }
+    .figure img{
+      display:block;
+      height:auto;
+      max-width:100%;
+      border-radius:8px;
+    }
+
+    /* Closing section */
+    .closing-block{
+      margin:40px 0 0 0;
+      padding:24px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .closing-block p{
+      color:var(--muted);
+      font-size:15px;
+      margin:0 0 12px 0;
+      line-height:1.75;
+    }
+    .closing-block p:last-child{margin:0}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
   </style>
 </head>
 <body>
   <div class="wrap">
 
+    <!-- Compact site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -78,134 +223,181 @@
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
 
+    <!-- Title + short intro -->
     <header>
       <h1>Cybersecurity Best Practices</h1>
       <p class="lead">Foundational Principles for Building a Strong Security Posture</p>
     </header>
 
-    <section class="card" id="intro">
-      <p>Cybersecurity is a broad and continuously evolving field that has gained significant attention and even a level of glorification over the years. As a result, it has inspired a wide range of interpretations—each with different approaches, implementations, and cultural perspectives on what “security” truly means.</p>
-      <p>Through my own journey studying cybersecurity as an IT professional, I’ve learned that what’s effective in one environment may not be suitable in another. Factors such as an organization’s mission, what it is trying to protect, the organization's risk appetite, and overall priorities ultimately shape how cybersecurity is applied.</p>
-      <p>That said, there are universal best practices that serve as essential building blocks for establishing a strong security posture in any environment. The following list highlights some of these foundational cybersecurity principles.</p>
-    </section>
+    <!-- Main content -->
+    <main class="content">
 
-    <section class="toc">
-      <h2>Table of Contents</h2>
-      <ol>
-        <li><a href="#password">Implement Password Complexity Requirements</a></li>
-        <li><a href="#mfa">Enable Multi-Factor Authentication (MFA)</a></li>
-        <li><a href="#leastprivilege">Limit Access and Apply Least Privilege</a></li>
-        <li><a href="#did">Implement a Defense-in-Depth Strategy</a></li>
-        <li><a href="#hardening">Infrastructure and Systems Hardening</a></li>
-        <li><a href="#patch">Effective Patch Management</a></li>
-        <li><a href="#encrypt">Encrypt Sensitive Data</a></li>
-        <li><a href="#backup">Backup Data Regularly</a></li>
-        <li><a href="#logs">Conduct Event Log Analysis and Vulnerability Scans</a></li>
-        <li><a href="#phishing">Implement Phishing Simulation Training</a></li>
-        <li><a href="#awareness">Conduct Annual Cybersecurity Awareness Training</a></li>
-        <li><a href="#policies">Continuous Improvement and Review of Security Policies</a></li>
-      </ol>
-    </section>
+      <!-- Intro -->
+      <div class="intro-block">
+        <p>Cybersecurity is a broad and continuously evolving field that has gained significant attention and even a level of glorification over the years. As a result, it has inspired a wide range of interpretations—each with different approaches, implementations, and cultural perspectives on what "security" truly means.</p>
+        <p>Through my own journey studying cybersecurity as an IT professional, I've learned that what's effective in one environment may not be suitable in another. Factors such as an organization's mission, what it is trying to protect, the organization's risk appetite, and overall priorities ultimately shape how cybersecurity is applied.</p>
+        <p>That said, there are universal best practices that serve as essential building blocks for establishing a strong security posture in any environment. The following list highlights some of these foundational cybersecurity principles.</p>
+      </div>
 
-    <section class="card" id="password">
-      <h3>1. Implementing Password Complexity Requirements</h3>
-      <p>Passwords are the longstanding gatekeepers that serve as an account’s first line of defense. Through the use of system policies, password complexity requirements can be configured to ensure end users create strong, hard-to-guess passwords by enforcing rules for minimum length, character variety, and blocking weak or breached passwords.</p>
-      <p>This helps prevent the reuse of common passwords, mitigating unauthorized access to accounts. It also reduces the success rate of brute-force and dictionary attacks, strengthening overall account security.</p>
-      <div class="figure"><img src="Images/1passwordcomplexity.png" alt="Password Complexity Requirements" width="500" loading="lazy"></div>
-    </section>
+      <!-- TOC -->
+      <div class="toc">
+        <h3>Table of Contents</h3>
+        <ol>
+          <li><a href="#password">Implement Password Complexity Requirements</a></li>
+          <li><a href="#mfa">Enable Multi-Factor Authentication (MFA)</a></li>
+          <li><a href="#leastprivilege">Limit Access and Apply Least Privilege</a></li>
+          <li><a href="#did">Implement a Defense-in-Depth Strategy</a></li>
+          <li><a href="#hardening">Infrastructure and Systems Hardening</a></li>
+          <li><a href="#patch">Effective Patch Management</a></li>
+          <li><a href="#encrypt">Encrypt Sensitive Data</a></li>
+          <li><a href="#backup">Backup Data Regularly</a></li>
+          <li><a href="#logs">Conduct Event Log Analysis and Vulnerability Scans</a></li>
+          <li><a href="#phishing">Implement Phishing Simulation Training</a></li>
+          <li><a href="#awareness">Conduct Annual Cybersecurity Awareness Training</a></li>
+          <li><a href="#policies">Continuous Improvement and Review of Security Policies</a></li>
+        </ol>
+      </div>
 
-    <section class="card" id="mfa">
-      <h3>2. Enable Multi-Factor Authentication (MFA)</h3>
-      <p>Enabling Multi-Factor Authentication (MFA) adds an extra layer of security by requiring users to verify their identity through multiple factors. These include <em>something you know</em> (password), <em>something you have</em> (authentication app, hardware token, or code), and <em>something you are</em> (biometric data).</p>
-      <p>By combining these factors, MFA significantly reduces the risk of unauthorized access from stolen or compromised credentials. Implementing MFA across all critical systems, cloud services, and administrative accounts is one of the most effective ways to strengthen authentication security and prevent account takeover attacks.</p>
-      <div class="figure"><img src="Images/2MFA.png" alt="Enable MFA" width="500" loading="lazy"></div>
-    </section>
+      <!-- 1 -->
+      <h2 id="password">1. Implement Password Complexity Requirements</h2>
+      <div class="step-section">
+        <p>Passwords are the longstanding gatekeepers that serve as an account's first line of defense. Through the use of system policies, password complexity requirements can be configured to ensure end users create strong, hard-to-guess passwords by enforcing rules for minimum length, character variety, and blocking weak or breached passwords.</p>
+        <p>This helps prevent the reuse of common passwords, mitigating unauthorized access to accounts. It also reduces the success rate of brute-force and dictionary attacks, strengthening overall account security.</p>
+        <div class="figure">
+          <img src="Images/1passwordcomplexity.png" alt="Password Complexity Requirements" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="leastprivilege">
-      <h3>3. Limit Access and Apply Least Privilege</h3>
-      <p>Limiting access and applying the principle of least privilege ensures that users, applications, and systems only have the minimum level of access necessary to perform their specific tasks. This minimizes the potential impact of compromised accounts or insider misuse by reducing unnecessary permissions and attack surfaces.</p>
-      <p>Implementing least privilege involves regularly reviewing user roles, access rights, and administrative privileges to ensure they align with current job responsibilities and organizational needs. This approach helps to strengthen overall security posture by preventing unauthorized access to critical systems and sensitive data.</p>
-      <div class="figure"><img src="Images/3LeastPrivilege.png" alt="Least Privilege" width="500" loading="lazy"></div>
-    </section>
+      <!-- 2 -->
+      <h2 id="mfa">2. Enable Multi-Factor Authentication (MFA)</h2>
+      <div class="step-section">
+        <p>Enabling Multi-Factor Authentication (MFA) adds an extra layer of security by requiring users to verify their identity through multiple factors. These include <em>something you know</em> (password), <em>something you have</em> (authentication app, hardware token, or code), and <em>something you are</em> (biometric data).</p>
+        <p>By combining these factors, MFA significantly reduces the risk of unauthorized access from stolen or compromised credentials. Implementing MFA across all critical systems, cloud services, and administrative accounts is one of the most effective ways to strengthen authentication security and prevent account takeover attacks.</p>
+        <div class="figure">
+          <img src="Images/2MFA.png" alt="Enable MFA" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="did">
-      <h3>4. Implement a Defense-in-Depth Strategy</h3>
-      <p>Implementing a defense-in-depth strategy involves layering multiple security controls throughout an organization’s technology stack to provide redundancy and reduce the likelihood of a single point of failure. This approach focuses on ensuring that if one layer of defense is bypassed, additional safeguards remain in place to detect, delay, or block an attack.</p>
-      <p>A defense-in-depth strategy typically combines preventive, detective, and responsive measures—such as firewalls, endpoint protection, network segmentation, intrusion detection systems, and user awareness training—to create a comprehensive and resilient security posture.</p>
-      <div class="figure"><img src="Images/4DID.png" alt="Defense-in-Depth Strategy" width="500" loading="lazy"></div>
-    </section>
+      <!-- 3 -->
+      <h2 id="leastprivilege">3. Limit Access and Apply Least Privilege</h2>
+      <div class="step-section">
+        <p>Limiting access and applying the principle of least privilege ensures that users, applications, and systems only have the minimum level of access necessary to perform their specific tasks. This minimizes the potential impact of compromised accounts or insider misuse by reducing unnecessary permissions and attack surfaces.</p>
+        <p>Implementing least privilege involves regularly reviewing user roles, access rights, and administrative privileges to ensure they align with current job responsibilities and organizational needs. This approach helps to strengthen overall security posture by preventing unauthorized access to critical systems and sensitive data.</p>
+        <div class="figure">
+          <img src="Images/3LeastPrivilege.png" alt="Least Privilege" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="hardening">
-      <h3>5. Infrastructure and Systems Hardening</h3>
-      <p>Infrastructure and systems hardening is the process of securing servers, networks, endpoints, and applications by reducing their attack surface and eliminating unnecessary vulnerabilities. This can include disabling or removing unused services, accounts, and ports, applying secure configurations, enforcing strong authentication methods, and keeping systems updated with the latest patches.</p>
-      <p>The goal of hardening is to create a stable, resilient environment that resists exploitation, ensuring that each component of the IT infrastructure operates with minimal exposure to threats while maintaining necessary functionality.</p>
-      <div class="figure"><img src="Images/5SystemHardening.png" alt="System Hardening" width="500" loading="lazy"></div>
-    </section>
+      <!-- 4 -->
+      <h2 id="did">4. Implement a Defense-in-Depth Strategy</h2>
+      <div class="step-section">
+        <p>Implementing a defense-in-depth strategy involves layering multiple security controls throughout an organization's technology stack to provide redundancy and reduce the likelihood of a single point of failure. This approach focuses on ensuring that if one layer of defense is bypassed, additional safeguards remain in place to detect, delay, or block an attack.</p>
+        <p>A defense-in-depth strategy typically combines preventive, detective, and responsive measures—such as firewalls, endpoint protection, network segmentation, intrusion detection systems, and user awareness training—to create a comprehensive and resilient security posture.</p>
+        <div class="figure">
+          <img src="Images/4DID.png" alt="Defense-in-Depth Strategy" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="patch">
-      <h3>6. Effective Patch Management to Reduce Attack Surface</h3>
-      <p>Keeping systems, servers, infrastructure, endpoints, and applications updated with the latest security patches and fixes minimizes exploitable weaknesses and reduces the overall attack surface. A strong patch management process includes maintaining an accurate asset inventory, prioritizing updates based on risk, and verifying successful deployments.</p>
-      <p>This proactive approach is essential for preventing threat actors from exploiting known vulnerabilities and for maintaining a secure, reliable infrastructure.</p>
-      <div class="figure"><img src="Images/6PatchManagement.png" alt="Patch Management" width="500" loading="lazy"></div>
-    </section>
+      <!-- 5 -->
+      <h2 id="hardening">5. Infrastructure and Systems Hardening</h2>
+      <div class="step-section">
+        <p>Infrastructure and systems hardening is the process of securing servers, networks, endpoints, and applications by reducing their attack surface and eliminating unnecessary vulnerabilities. This can include disabling or removing unused services, accounts, and ports, applying secure configurations, enforcing strong authentication methods, and keeping systems updated with the latest patches.</p>
+        <p>The goal of hardening is to create a stable, resilient environment that resists exploitation, ensuring that each component of the IT infrastructure operates with minimal exposure to threats while maintaining necessary functionality.</p>
+        <div class="figure">
+          <img src="Images/5SystemHardening.png" alt="System Hardening" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="encrypt">
-      <h3>7. Encrypt Sensitive Data</h3>
-      <p>Encrypting sensitive data ensures that information remains confidential and secure by converting it into an unreadable format that can only be deciphered with the correct encryption key. This protects data both at rest (stored on servers, databases, or devices) and in transit (transferred across networks or the internet) from unauthorized access or interception.</p>
-      <p>Implementing strong encryption standards—such as AES-256 for storage and TLS for communication—helps safeguard personal, financial, and proprietary information against data breaches and insider threats. Effective encryption also includes sound key management practices, ensuring keys are securely stored, rotated regularly, and managed in a way that maintains data integrity and confidentiality.</p>
-      <div class="figure"><img src="Images/7EncryptData.png" alt="Encrypt Sensitive Data" width="500" loading="lazy"></div>
-    </section>
+      <!-- 6 -->
+      <h2 id="patch">6. Effective Patch Management to Reduce Attack Surface</h2>
+      <div class="step-section">
+        <p>Keeping systems, servers, infrastructure, endpoints, and applications updated with the latest security patches and fixes minimizes exploitable weaknesses and reduces the overall attack surface. A strong patch management process includes maintaining an accurate asset inventory, prioritizing updates based on risk, and verifying successful deployments.</p>
+        <p>This proactive approach is essential for preventing threat actors from exploiting known vulnerabilities and for maintaining a secure, reliable infrastructure.</p>
+        <div class="figure">
+          <img src="Images/6PatchManagement.png" alt="Patch Management" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="backup">
-      <h3>8. Backup Data Regularly</h3>
-      <p>Backing up data regularly ensures that critical information can be restored in the event of data loss, corruption, ransomware, or hardware failure. A reliable backup strategy follows the 3-2-1 rule: keeping three copies of data, stored on two different media types, with one copy kept offsite or in the cloud.</p>
-      <p>Backups should be encrypted, automated, and tested periodically to confirm their integrity and availability when needed most.</p>
-      <div class="figure"><img src="Images/8BackupData.png" alt="Backup Data Regularly" width="500" loading="lazy"></div>
-    </section>
+      <!-- 7 -->
+      <h2 id="encrypt">7. Encrypt Sensitive Data</h2>
+      <div class="step-section">
+        <p>Encrypting sensitive data ensures that information remains confidential and secure by converting it into an unreadable format that can only be deciphered with the correct encryption key. This protects data both at rest (stored on servers, databases, or devices) and in transit (transferred across networks or the internet) from unauthorized access or interception.</p>
+        <p>Implementing strong encryption standards—such as AES-256 for storage and TLS for communication—helps safeguard personal, financial, and proprietary information against data breaches and insider threats. Effective encryption also includes sound key management practices, ensuring keys are securely stored, rotated regularly, and managed in a way that maintains data integrity and confidentiality.</p>
+        <div class="figure">
+          <img src="Images/7EncryptData.png" alt="Encrypt Sensitive Data" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="logs">
-      <h3>9. Conduct Frequent Event Log Analysis and Vulnerability Scans</h3>
-      <p>Conducting frequent event log analysis and vulnerability scans is essential for maintaining visibility into system activity and identifying potential weaknesses before they can be exploited. Event log analysis helps detect suspicious behavior, policy violations, or system anomalies by reviewing logs from servers, endpoints, and network devices.</p>
-      <p>Regular vulnerability scans proactively identify outdated software, misconfigurations, and exploitable flaws across the environment. Together, these practices provide early warning indicators of compromise, support faster incident response, and ensure systems remain aligned with security baselines and compliance requirements.</p>
-      <div class="figure"><img src="Images/9EventLogVuln.png" alt="Event Log Analysis and Vulnerability Scans" width="500" loading="lazy"></div>
-    </section>
+      <!-- 8 -->
+      <h2 id="backup">8. Backup Data Regularly</h2>
+      <div class="step-section">
+        <p>Backing up data regularly ensures that critical information can be restored in the event of data loss, corruption, ransomware, or hardware failure. A reliable backup strategy follows the 3-2-1 rule: keeping three copies of data, stored on two different media types, with one copy kept offsite or in the cloud.</p>
+        <p>Backups should be encrypted, automated, and tested periodically to confirm their integrity and availability when needed most.</p>
+        <div class="figure">
+          <img src="Images/8BackupData.png" alt="Backup Data Regularly" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="phishing">
-      <h3>10. Implement Phishing Simulation Training</h3>
-      <p>Phishing simulation training strengthens an organization’s human firewall by teaching employees how to recognize and properly respond to phishing attempts. It involves sending safe, simulated phishing emails that mimic real-world attack tactics to test user awareness and identify areas for improvement.</p>
-      <p>By analyzing results and providing targeted follow-up training, organizations can reduce the likelihood of credential theft, malware infections, and data breaches caused by social engineering. Regular simulations not only build user vigilance but also promote a culture of accountability and continuous cybersecurity awareness.</p>
-      <div class="figure"><img src="Images/10PhishingSimulation.png" alt="Phishing Simulation Training" width="500" loading="lazy"></div>
-    </section>
+      <!-- 9 -->
+      <h2 id="logs">9. Conduct Frequent Event Log Analysis and Vulnerability Scans</h2>
+      <div class="step-section">
+        <p>Conducting frequent event log analysis and vulnerability scans is essential for maintaining visibility into system activity and identifying potential weaknesses before they can be exploited. Event log analysis helps detect suspicious behavior, policy violations, or system anomalies by reviewing logs from servers, endpoints, and network devices.</p>
+        <p>Regular vulnerability scans proactively identify outdated software, misconfigurations, and exploitable flaws across the environment. Together, these practices provide early warning indicators of compromise, support faster incident response, and ensure systems remain aligned with security baselines and compliance requirements.</p>
+        <div class="figure">
+          <img src="Images/9EventLogVuln.png" alt="Event Log Analysis and Vulnerability Scans" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="awareness">
-      <h3>11. Conduct Mandatory Annual Cybersecurity Awareness Training</h3>
-      <p>Conducting mandatory annual cybersecurity awareness training helps to ensure that all employees remain informed, vigilant, and capable of recognizing potential threats that target human behavior. This training reinforces key topics such as password hygiene, phishing prevention, data handling, social engineering, and incident reporting.</p>
-      <p>By updating employees each year on emerging threats and evolving security policies, organizations strengthen their human defense layer and promote a culture of shared responsibility. Regular awareness training helps reduce user-related security incidents and ensures cybersecurity becomes an active, ongoing part of daily operations.</p>
-      <p>Conducting mandatory annual cybersecurity awareness training is one of the most effective and inexpensive best practices.</p>
-      <div class="figure"><img src="Images/11AwarenessTraining.png" alt="Cybersecurity Awareness Training" width="500" loading="lazy"></div>
-    </section>
+      <!-- 10 -->
+      <h2 id="phishing">10. Implement Phishing Simulation Training</h2>
+      <div class="step-section">
+        <p>Phishing simulation training strengthens an organization's human firewall by teaching employees how to recognize and properly respond to phishing attempts. It involves sending safe, simulated phishing emails that mimic real-world attack tactics to test user awareness and identify areas for improvement.</p>
+        <p>By analyzing results and providing targeted follow-up training, organizations can reduce the likelihood of credential theft, malware infections, and data breaches caused by social engineering. Regular simulations not only build user vigilance but also promote a culture of accountability and continuous cybersecurity awareness.</p>
+        <div class="figure">
+          <img src="Images/10PhishingSimulation.png" alt="Phishing Simulation Training" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card" id="policies">
-      <h3>12. Continuous Improvement and Review of Security Policies</h3>
-      <p>Continuous improvement and review of security policies focuses on ensuring that an organization’s cybersecurity framework remains effective, relevant, and aligned with evolving threats, technologies, and business objectives. This process involves routinely evaluating existing controls, updating procedures, and integrating lessons learned from audits, incidents, and industry developments.</p>
-      <p>By regularly revising policies, organizations can close security gaps, adapt to regulatory changes, and reinforce a culture of accountability and resilience. Continuous improvement transforms cybersecurity from a static requirement into a proactive, evolving discipline that strengthens long-term risk management.</p>
-      <div class="figure"><img src="Images/12securitypolicyimprove.png" alt="Continuous Improvement and Review of Security Policies" width="500" loading="lazy"></div>
-    </section>
+      <!-- 11 -->
+      <h2 id="awareness">11. Conduct Mandatory Annual Cybersecurity Awareness Training</h2>
+      <div class="step-section">
+        <p>Conducting mandatory annual cybersecurity awareness training helps to ensure that all employees remain informed, vigilant, and capable of recognizing potential threats that target human behavior. This training reinforces key topics such as password hygiene, phishing prevention, data handling, social engineering, and incident reporting.</p>
+        <p>By updating employees each year on emerging threats and evolving security policies, organizations strengthen their human defense layer and promote a culture of shared responsibility. Regular awareness training helps reduce user-related security incidents and ensures cybersecurity becomes an active, ongoing part of daily operations.</p>
+        <p>Conducting mandatory annual cybersecurity awareness training is one of the most effective and inexpensive best practices.</p>
+        <div class="figure">
+          <img src="Images/11AwarenessTraining.png" alt="Cybersecurity Awareness Training" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <section class="card">
-      <p>Cybersecurity best practices serve as the foundation for building a secure, resilient, and adaptive digital environment. While technology continues to evolve, these principles remain timeless—focusing on layered defense, proactive monitoring, and continuous education. Each practice works together to create a stronger security posture that protects systems, users, and organizational data from an ever-changing threat landscape.</p>
-      <p>Implementing and maintaining these practices demonstrates not only technical discipline but also a commitment to responsible information security management—an essential mindset for professionals in today’s interconnected world.</p>
-    </section>
+      <!-- 12 -->
+      <h2 id="policies">12. Continuous Improvement and Review of Security Policies</h2>
+      <div class="step-section">
+        <p>Continuous improvement and review of security policies focuses on ensuring that an organization's cybersecurity framework remains effective, relevant, and aligned with evolving threats, technologies, and business objectives. This process involves routinely evaluating existing controls, updating procedures, and integrating lessons learned from audits, incidents, and industry developments.</p>
+        <p>By regularly revising policies, organizations can close security gaps, adapt to regulatory changes, and reinforce a culture of accountability and resilience. Continuous improvement transforms cybersecurity from a static requirement into a proactive, evolving discipline that strengthens long-term risk management.</p>
+        <div class="figure">
+          <img src="Images/12securitypolicyimprove.png" alt="Continuous Improvement and Review of Security Policies" width="500" loading="lazy" />
+        </div>
+      </div>
 
-    <p><a href="../index.html">Back to Home</a></p>
+      <!-- Closing -->
+      <div class="closing-block">
+        <p>Cybersecurity best practices serve as the foundation for building a secure, resilient, and adaptive digital environment. While technology continues to evolve, these principles remain timeless—focusing on layered defense, proactive monitoring, and continuous education. Each practice works together to create a stronger security posture that protects systems, users, and organizational data from an ever-changing threat landscape.</p>
+        <p>Implementing and maintaining these practices demonstrates not only technical discipline but also a commitment to responsible information security management—an essential mindset for professionals in today's interconnected world.</p>
+      </div>
 
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
-        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson01" target="_blank">GitHub</a>
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
+
   </div>
 </body>
 </html>
