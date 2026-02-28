@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Network Hash Capture and Cracking · Mark Thompson Portfolio</title>
   <meta name="description" content="Capturing an NTLMv2 hash with Responder on a segmented LAN and cracking it with Hashcat to reveal the plaintext password." />
-
-  <!-- THEME -->
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -21,77 +19,172 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .wrap.wide{max-width:1100px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section em{color:var(--text);font-style:italic}
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
     }
 
-    /* Figures – intrinsic image size (no zoom) */
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:24px auto;
+      margin:16px auto;
       max-width:100%;
       text-align:center;
     }
     .figure img{
-      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
-      width:auto; max-width:100%; height:auto;
+      display:block;
+      margin:0 auto;
+      border-radius:10px;
+      object-fit:contain;
+      width:auto;
+      max-width:100%;
+      height:auto;
+      cursor:zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Optional side-by-side helper (not used by default) */
+    /* Side-by-side pair */
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Image grid */
+    .img-grid{display:grid;gap:12px;margin:16px 0}
+    .img-grid.cols-2{grid-template-columns:1fr 1fr}
+    .img-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+    @media(max-width:700px){
+      .img-grid.cols-2,.img-grid.cols-3{grid-template-columns:1fr}
+    }
+    .img-grid .figure{margin:0}
 
-    /* ===== Image Zoom (click-to-zoom) ===== */
-    .zoomable{cursor:zoom-in}
-    .zoom-overlay{
-      position:fixed; inset:0; display:none;
-      align-items:center; justify-content:center;
-      background:rgba(0,0,0,.8); z-index:9999; padding:24px;
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
     }
-    .zoom-overlay.open{display:flex}
-    .zoom-overlay img{
-      max-width:min(1200px,94vw); max-height:90vh;
-      border-radius:12px; box-shadow:var(--shadow);
-      cursor:zoom-out;
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
     }
-    body.zoom-open{overflow:hidden}
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
+    }
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <div class="wrap wide">
+  <div class="wrap">
+
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
@@ -113,96 +206,102 @@
       <p><a href="https://github.com/mark-thompson01/Network-Hash-Capture-and-Cracking" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Overview -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Overview -->
       <h2>Overview</h2>
-      <p>This lab demonstrates how <strong>Responder</strong> captures NTLMv2 authentication over the network, and how <strong>Hashcat</strong> can be used to attempt password recovery from the captured hash.</p>
-      <p><em>Environment:</em> Windows 10 target and attacker tooling on a segmented lab LAN (to avoid production impact).</p>
-    </section>
+      <div class="step-section">
+        <p>This lab demonstrates how <strong style="color:var(--brand);font-weight:600;">Responder</strong> captures NTLMv2 authentication over the network, and how <strong style="color:var(--brand);font-weight:600;">Hashcat</strong> can be used to attempt password recovery from the captured hash.</p>
+        <p><em>Environment:</em> Windows 10 target and attacker tooling on a segmented lab LAN (to avoid production impact).</p>
+      </div>
 
-    <!-- Responder: listening -->
-    <section class="card">
+      <!-- Step 1 -->
       <h2>Step 1 — Start Responder (Listening)</h2>
-      <p>Launch Responder on the attack host (e.g., interface <code>eth0</code>) to poison LLMNR/NetBIOS and await authentication attempts.</p>
-      <figure class="figure">
-        <img src="Images/ResponderLab2.PNG" alt="Responder listening (setup step 1)">
-        <figcaption class="figcap">Responder initialized and listening.</figcaption>
-      </figure>
-      <figure class="figure">
-        <img src="Images/ResponderLab3.PNG" alt="Responder listening (setup step 2)">
-        <figcaption class="figcap">Services enabled for capture.</figcaption>
-      </figure>
-    </section>
+      <div class="step-section">
+        <p>Launch Responder on the attack host (e.g., interface <code>eth0</code>) to poison LLMNR/NetBIOS and await authentication attempts.</p>
+        <div class="pair">
+          <figure class="figure">
+            <img src="Images/ResponderLab2.PNG" alt="Responder listening (setup step 1)" loading="lazy">
+            <figcaption class="figcap">Responder initialized and listening.</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/ResponderLab3.PNG" alt="Responder listening (setup step 2)" loading="lazy">
+            <figcaption class="figcap">Services enabled for capture.</figcaption>
+          </figure>
+        </div>
+      </div>
 
-    <!-- Capture hash -->
-    <section class="card">
-      <h2>Step 2 — Trigger & Capture NTLMv2 Hash</h2>
-      <p>From the Windows target, attempt to access a nonexistent host (e.g., <code>\\server01\share</code>). Responder poisons the broadcast resolution and intercepts the authentication to capture the NTLMv2 hash.</p>
-      <figure class="figure"><img src="Images/ResponderLabAdd1.PNG" alt="Triggering authentication to nonexistent server"></figure>
-      <figure class="figure"><img src="Images/ResponderLabAdd2.PNG" alt="Responder captures challenge/response"></figure>
-      <figure class="figure"><img src="Images/ResponderLabAdd3.PNG" alt="Captured NTLMv2 hash displayed"></figure>
-      <figure class="figure"><img src="Images/ResponderLab6.PNG" alt="Confirming captured hash on disk"></figure>
-    </section>
+      <!-- Step 2 -->
+      <h2>Step 2 — Trigger &amp; Capture NTLMv2 Hash</h2>
+      <div class="step-section">
+        <p>From the Windows target, attempt to access a nonexistent host (e.g., <code>\\server01\share</code>). Responder poisons the broadcast resolution and intercepts the authentication to capture the NTLMv2 hash.</p>
+        <div class="img-grid cols-2">
+          <figure class="figure"><img src="Images/ResponderLabAdd1.PNG" alt="Triggering authentication to nonexistent server" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/ResponderLabAdd2.PNG" alt="Responder captures challenge/response" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/ResponderLabAdd3.PNG" alt="Captured NTLMv2 hash displayed" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/ResponderLab6.PNG" alt="Confirming captured hash on disk" loading="lazy"></figure>
+        </div>
+      </div>
 
-    <!-- Hashcat -->
-    <section class="card">
+      <!-- Step 3 -->
       <h2>Step 3 — Crack with Hashcat</h2>
-      <p>Copy the captured NTLMv2 hash into a text file and run Hashcat with a wordlist to attempt recovery of the plaintext password.</p>
-      <figure class="figure"><img src="Images/ResponderLab7.PNG" alt="Hashcat: preparing input hash file"></figure>
-      <figure class="figure"><img src="Images/ResponderLab8.PNG" alt="Hashcat: command setup"></figure>
-      <figure class="figure"><img src="Images/ResponderLab9.PNG" alt="Hashcat: cracking in progress"></figure>
-      <figure class="figure"><img src="Images/ResponderLab10.PNG" alt="Hashcat: candidates tested"></figure>
-      <figure class="figure"><img src="Images/ResponderLab11.PNG" alt="Hashcat: session status"></figure>
-      <figure class="figure"><img src="Images/ResponderLab12.PNG" alt="Hashcat: recovered credential"></figure>
-      <figure class="figure"><img src="Images/ResponderLab13.PNG" alt="Hashcat: final output verification"></figure>
-    </section>
+      <div class="step-section">
+        <p>Copy the captured NTLMv2 hash into a text file and run Hashcat with a wordlist to attempt recovery of the plaintext password.</p>
+        <div class="img-grid cols-2">
+          <figure class="figure"><img src="Images/ResponderLab7.PNG" alt="Hashcat: preparing input hash file" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/ResponderLab8.PNG" alt="Hashcat: command setup" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/ResponderLab9.PNG" alt="Hashcat: cracking in progress" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/ResponderLab10.PNG" alt="Hashcat: candidates tested" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/ResponderLab11.PNG" alt="Hashcat: session status" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/ResponderLab12.PNG" alt="Hashcat: recovered credential" loading="lazy"></figure>
+        </div>
+        <figure class="figure"><img src="Images/ResponderLab13.PNG" alt="Hashcat: final output verification" loading="lazy"></figure>
+      </div>
 
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
         <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson-01" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
   </div>
 
-  <!-- Tiny, reusable click-to-zoom for all images -->
+  <!-- Lightbox -->
   <script>
     (function(){
-      const imgs = document.querySelectorAll('.wrap img');
-      if(!imgs.length) return;
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
 
-      const overlay = document.createElement('div');
-      overlay.className = 'zoom-overlay';
-      overlay.setAttribute('aria-hidden','true');
-      overlay.innerHTML = '<img alt="">';
-      document.body.appendChild(overlay);
-      const ovImg = overlay.querySelector('img');
-
-      function closeZoom(){
-        overlay.classList.remove('open');
-        document.body.classList.remove('zoom-open');
-        ovImg.removeAttribute('src');
-        ovImg.removeAttribute('srcset');
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
 
-      overlay.addEventListener('click', closeZoom);
-      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeZoom(); });
-
-      imgs.forEach(img=>{
-        img.classList.add('zoomable');
+      document.querySelectorAll('.figure img').forEach((img)=>{
         img.addEventListener('click', ()=>{
-          ovImg.alt = img.alt || '';
-          ovImg.src = img.currentSrc || img.src;
-          overlay.classList.add('open');
-          document.body.classList.add('zoom-open');
-        }, {passive:true});
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
       });
     })();
   </script>
