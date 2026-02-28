@@ -117,7 +117,7 @@
       margin:0 auto;
       border-radius:10px;
       object-fit:contain;
-      width:100%;
+      width:auto;
       max-width:100%;
       height:auto;
       cursor:zoom-in;
@@ -236,26 +236,22 @@
       <h2>Step 2 — Trigger &amp; Capture NTLMv2 Hash</h2>
       <div class="step-section">
         <p>From the Windows target, attempt to access a nonexistent host (e.g., <code>\\server01\share</code>). Responder poisons the broadcast resolution and intercepts the authentication to capture the NTLMv2 hash.</p>
-        <div class="img-grid cols-2">
-          <figure class="figure"><img src="Images/ResponderLabAdd1.PNG" alt="Triggering authentication to nonexistent server" loading="lazy"></figure>
-          <figure class="figure"><img src="Images/ResponderLabAdd2.PNG" alt="Responder captures challenge/response" loading="lazy"></figure>
-          <figure class="figure"><img src="Images/ResponderLabAdd3.PNG" alt="Captured NTLMv2 hash displayed" loading="lazy"></figure>
-          <figure class="figure"><img src="Images/ResponderLab6.PNG" alt="Confirming captured hash on disk" loading="lazy"></figure>
-        </div>
+        <figure class="figure"><img src="Images/ResponderLabAdd1.PNG" alt="Triggering authentication to nonexistent server" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/ResponderLabAdd2.PNG" alt="Responder captures challenge/response" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/ResponderLabAdd3.PNG" alt="Captured NTLMv2 hash displayed" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/ResponderLab6.PNG" alt="Confirming captured hash on disk" loading="lazy"></figure>
       </div>
 
       <!-- Step 3 -->
       <h2>Step 3 — Crack with Hashcat</h2>
       <div class="step-section">
         <p>Copy the captured NTLMv2 hash into a text file and run Hashcat with a wordlist to attempt recovery of the plaintext password.</p>
-        <div class="img-grid cols-2">
-          <figure class="figure"><img src="Images/ResponderLab7.PNG" alt="Hashcat: preparing input hash file" loading="lazy"></figure>
-          <figure class="figure"><img src="Images/ResponderLab8.PNG" alt="Hashcat: command setup" loading="lazy"></figure>
-          <figure class="figure"><img src="Images/ResponderLab9.PNG" alt="Hashcat: cracking in progress" loading="lazy"></figure>
-          <figure class="figure"><img src="Images/ResponderLab10.PNG" alt="Hashcat: candidates tested" loading="lazy"></figure>
-          <figure class="figure"><img src="Images/ResponderLab11.PNG" alt="Hashcat: session status" loading="lazy"></figure>
-          <figure class="figure"><img src="Images/ResponderLab12.PNG" alt="Hashcat: recovered credential" loading="lazy"></figure>
-        </div>
+        <figure class="figure"><img src="Images/ResponderLab7.PNG" alt="Hashcat: preparing input hash file" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/ResponderLab8.PNG" alt="Hashcat: command setup" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/ResponderLab9.PNG" alt="Hashcat: cracking in progress" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/ResponderLab10.PNG" alt="Hashcat: candidates tested" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/ResponderLab11.PNG" alt="Hashcat: session status" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/ResponderLab12.PNG" alt="Hashcat: recovered credential" loading="lazy"></figure>
         <figure class="figure"><img src="Images/ResponderLab13.PNG" alt="Hashcat: final output verification" loading="lazy"></figure>
       </div>
 
