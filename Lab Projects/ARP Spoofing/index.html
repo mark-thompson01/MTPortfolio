@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ARP Spoofing Lab · Mark Thompson Portfolio</title>
   <meta name="description" content="Hands-on ARP poisoning (on-path) with arpspoof in Kali, plus Nmap reconnaissance and Wireshark analysis in a segmented LAN lab." />
-
-  <!-- THEME -->
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -21,101 +19,205 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .wrap.wide{max-width:1100px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ol{
+      color:var(--muted);
+      font-size:17px;
+      margin:0 0 12px 0;
+      padding-left:24px;
+      line-height:1.9;
+    }
+    .step-section em{color:var(--text);font-style:italic}
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
     }
 
-    /* Figures – intrinsic image size + zoom cursor */
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:24px auto;
+      margin:16px auto;
       max-width:100%;
       text-align:center;
     }
     .figure img{
-      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
-      width:auto;         /* intrinsic width */
-      max-width:100%;     /* never overflow container */
-      height:auto;        /* preserve aspect ratio */
-      cursor:zoom-in;     /* hint zoom */
+      display:block;
+      margin:0 auto;
+      border-radius:10px;
+      object-fit:contain;
+      width:auto;
+      max-width:100%;
+      height:auto;
+      cursor:zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Layout helpers */
+    /* Side-by-side pair */
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
 
-    /* Horizontal gallery */
-    .gallery-wrap{position:relative;margin-top:10px}
-    .gallery{
-      display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
-      align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;
-      scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;
-      -webkit-overflow-scrolling:touch
+    /* Image grid */
+    .img-grid{
+      display:grid;
+      gap:12px;
+      margin:16px 0;
     }
-    .gallery .item{scroll-snap-align:start}
-    .gallery .figure{height:100%}
-    .gallery::-webkit-scrollbar{height:10px}
-    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
-    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
-    .gallery.hide-scrollbar{scrollbar-width:none}
-    .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
-    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
-    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
-    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
-    .gbtn:hover{background:#121733}
-    .gprev{left:-6px}
-    .gnext{right:-6px}
+    .img-grid.cols-2{grid-template-columns:1fr 1fr}
+    .img-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+    @media(max-width:700px){
+      .img-grid.cols-2,.img-grid.cols-3{grid-template-columns:1fr}
+    }
+    .img-grid .figure{margin:0}
 
-    /* Lightbox (click-to-zoom) */
+    /* Lightbox */
     .lightbox{
-      position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.85); z-index:9999;
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
     }
     .lightbox.open{display:grid}
     .lightbox img{
-      max-width:95vw; max-height:95vh; border-radius:12px;
-      box-shadow:0 20px 60px rgba(0,0,0,.6); cursor:zoom-out;
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
     }
     .lightbox .cap{
-      margin-top:10px; color:#cfd6e6; font-size:14px; text-align:center; max-width:92vw;
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
     }
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <div class="wrap wide">
+  <div class="wrap">
+
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
@@ -133,130 +235,125 @@
     <!-- Header -->
     <header>
       <h1>ARP Spoofing Lab</h1>
-      <p class="lead">ARP poisoning (on-path) with <code>arpspoof</code> in Kali on a segmented LAN, with pre-attack Nmap recon and post-attack Wireshark analysis.</p>
+      <p class="lead">ARP poisoning (on-path) with <code style="background:rgba(0,0,0,.3);border:1px solid var(--card-border);border-radius:4px;padding:1px 6px;font-size:15px;color:#a8d8ff;">arpspoof</code> in Kali on a segmented LAN, with pre-attack Nmap recon and post-attack Wireshark analysis.</p>
       <p><a href="https://github.com/mark-thompson01/ARP-Spoofing" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Overview -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Overview -->
       <h2>Overview</h2>
-      <p>This lab walks through an end-to-end attack path on a local network:</p>
-      <ol>
-        <li><strong>Active reconnaissance</strong> with Nmap to identify the target and infer OS details.</li>
-        <li><strong>ARP spoofing</strong> with <code>arpspoof</code> to position the attacker as on-path (man-in-the-middle).</li>
-        <li><strong>Traffic analysis</strong> in Wireshark to enumerate services and metadata (DNS, NetBIOS, SSDP, etc.).</li>
-      </ol>
-      <p><em>Environment:</em> Performed in a segmented lab LAN to avoid impacting production systems.</p>
-    </section>
+      <div class="step-section">
+        <p>This lab walks through an end-to-end attack path on a local network:</p>
+        <ol>
+          <li><strong style="color:var(--brand);font-weight:600;">Active reconnaissance</strong> with Nmap to identify the target and infer OS details.</li>
+          <li><strong style="color:var(--brand);font-weight:600;">ARP spoofing</strong> with <code>arpspoof</code> to position the attacker as on-path (man-in-the-middle).</li>
+          <li><strong style="color:var(--brand);font-weight:600;">Traffic analysis</strong> in Wireshark to enumerate services and metadata (DNS, NetBIOS, SSDP, etc.).</li>
+        </ol>
+        <p><em>Environment:</em> Performed in a segmented lab LAN to avoid impacting production systems.</p>
+      </div>
 
-    <!-- Nmap -->
-    <section class="card">
+      <!-- Nmap Recon -->
       <h2>Active Reconnaissance with Nmap</h2>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Nmap OS discovery screenshots">
-          <article class="item">
-            <figure class="figure">
-              <img src="Images/NmapOSDiscovery1.PNG" alt="Nmap OS detection result 1" loading="lazy" decoding="async">
-              <figcaption class="figcap">Nmap OS fingerprinting and host discovery.</figcaption>
-            </figure>
-          </article>
-          <article class="item">
-            <figure class="figure">
-              <img src="Images/NmapOSDiscovery2.PNG" alt="Nmap OS detection result 2" loading="lazy" decoding="async">
-              <figcaption class="figcap">Open services and protocol hints.</figcaption>
-            </figure>
-          </article>
-          <article class="item">
-            <figure class="figure">
-              <img src="Images/NmapOSDiscovery3.PNG" alt="Nmap OS detection result 3" loading="lazy" decoding="async">
-              <figcaption class="figcap">Confidence levels and CPE matches.</figcaption>
-            </figure>
-          </article>
+      <div class="step-section">
+        <div class="img-grid cols-3">
+          <figure class="figure">
+            <img src="Images/NmapOSDiscovery1.PNG" alt="Nmap OS detection result 1" loading="lazy" decoding="async">
+            <figcaption class="figcap">Nmap OS fingerprinting and host discovery.</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/NmapOSDiscovery2.PNG" alt="Nmap OS detection result 2" loading="lazy" decoding="async">
+            <figcaption class="figcap">Open services and protocol hints.</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/NmapOSDiscovery3.PNG" alt="Nmap OS detection result 3" loading="lazy" decoding="async">
+            <figcaption class="figcap">Confidence levels and CPE matches.</figcaption>
+          </figure>
         </div>
       </div>
-    </section>
 
-    <!-- arpspoof -->
-    <section class="card">
-      <h2>Initiating the ARP Spoofing Attack (<code>arpspoof</code>)</h2>
-      <p>With the target defined, the attacker poisons the ARP cache of the victim and/or gateway to redirect traffic through the attacker’s host.</p>
-
-      <div class="pair">
+      <!-- ARP Spoofing -->
+      <h2>Initiating the ARP Spoofing Attack (<code style="font-size:22px;color:#a8d8ff;background:none;border:none;padding:0;">arpspoof</code>)</h2>
+      <div class="step-section">
+        <p>With the target defined, the attacker poisons the ARP cache of the victim and/or gateway to redirect traffic through the attacker's host.</p>
+        <div class="pair">
+          <figure class="figure">
+            <img src="Images/arpspoof2.PNG" alt="Launching arpspoof with target and gateway" loading="lazy" decoding="async">
+            <figcaption class="figcap">Launching <code>arpspoof</code> to begin the on-path position.</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/arpspoof3%20arpspoof%20attack%20in%20action.PNG" alt="arpspoof attack in action: traffic flowing through attacker" loading="lazy" decoding="async">
+            <figcaption class="figcap">Attack in progress; packets traverse the attacker's host.</figcaption>
+          </figure>
+        </div>
         <figure class="figure">
-          <img src="Images/arpspoof2.PNG" alt="Launching arpspoof with target and gateway" loading="lazy" decoding="async">
-          <figcaption class="figcap">Launching <code>arpspoof</code> to begin the on-path position.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img src="Images/arpspoof3%20arpspoof%20attack%20in%20action.PNG" alt="arpspoof attack in action: traffic flowing through attacker" loading="lazy" decoding="async">
-          <figcaption class="figcap">Attack in progress; packets traverse the attacker’s host.</figcaption>
+          <img src="Images/arpspoof4%20attack%20in%20action%202.PNG" alt="arpspoof attack in action screenshot 2" loading="lazy" decoding="async">
+          <figcaption class="figcap">Sustained poisoning while monitoring traffic.</figcaption>
         </figure>
       </div>
 
-      <figure class="figure">
-        <img src="Images/arpspoof4%20attack%20in%20action%202.PNG" alt="arpspoof attack in action screenshot 2" loading="lazy" decoding="async">
-        <figcaption class="figcap">Sustained poisoning while monitoring traffic.</figcaption>
-      </figure>
-    </section>
-
-    <!-- Wireshark -->
-    <section class="card">
+      <!-- Wireshark Analysis -->
       <h2>Analyzing Captured Traffic with Wireshark</h2>
+      <div class="step-section">
 
-      <h3>Identifying DNS Server IP Address</h3>
-      <div class="pair">
-        <figure class="figure">
-          <img src="Images/Wireshark%20DNS%20Server%20Extraction.PNG" alt="Wireshark: extracting DNS server IP" loading="lazy" decoding="async">
-          <figcaption class="figcap">Extracting resolver IP from captured packets.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img src="Images/Wireshark%20DNS%20Server%20Enumeration%205.PNG" alt="Wireshark: DNS server enumeration example 1" loading="lazy" decoding="async">
-          <figcaption class="figcap">DNS enumeration details (queries/responses).</figcaption>
-        </figure>
-      </div>
-      <figure class="figure">
-        <img src="Images/Wireshark%20DNS%20Server%20Enumeration%206.PNG" alt="Wireshark: DNS server enumeration example 2" loading="lazy" decoding="async">
-        <figcaption class="figcap">Additional resolver metadata.</figcaption>
-      </figure>
-
-      <h3>NetBIOS and Other Host Information</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Wireshark NetBIOS and host info">
-          <article class="item"><figure class="figure"><img src="Images/Wireshark%20Enumeration%200.PNG" alt="Wireshark enumeration 0" loading="lazy"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Wireshark%20Enumeration%201.PNG" alt="Wireshark enumeration 1" loading="lazy"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/WSEnum1.PNG" alt="Wireshark enumeration panel 1" loading="lazy"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/WSEnum2.PNG" alt="Wireshark enumeration panel 2" loading="lazy"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/WSEnum3.PNG" alt="Wireshark enumeration panel 3" loading="lazy"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/WSEnum4.PNG" alt="Wireshark enumeration panel 4" loading="lazy"></figure></article>
+        <div class="sub-section">
+          <h4>Identifying DNS Server IP Address</h4>
+          <div class="pair">
+            <figure class="figure">
+              <img src="Images/Wireshark%20DNS%20Server%20Extraction.PNG" alt="Wireshark: extracting DNS server IP" loading="lazy" decoding="async">
+              <figcaption class="figcap">Extracting resolver IP from captured packets.</figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="Images/Wireshark%20DNS%20Server%20Enumeration%205.PNG" alt="Wireshark: DNS server enumeration example 1" loading="lazy" decoding="async">
+              <figcaption class="figcap">DNS enumeration details (queries/responses).</figcaption>
+            </figure>
+          </div>
+          <figure class="figure">
+            <img src="Images/Wireshark%20DNS%20Server%20Enumeration%206.PNG" alt="Wireshark: DNS server enumeration example 2" loading="lazy" decoding="async">
+            <figcaption class="figcap">Additional resolver metadata.</figcaption>
+          </figure>
         </div>
+
+        <div class="sub-section">
+          <h4>NetBIOS and Other Host Information</h4>
+          <div class="img-grid cols-2">
+            <figure class="figure"><img src="Images/Wireshark%20Enumeration%200.PNG" alt="Wireshark enumeration 0" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/Wireshark%20Enumeration%201.PNG" alt="Wireshark enumeration 1" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/WSEnum1.PNG" alt="Wireshark enumeration panel 1" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/WSEnum2.PNG" alt="Wireshark enumeration panel 2" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/WSEnum3.PNG" alt="Wireshark enumeration panel 3" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/WSEnum4.PNG" alt="Wireshark enumeration panel 4" loading="lazy"></figure>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>SSDP Enumeration</h4>
+          <div class="pair">
+            <figure class="figure">
+              <img src="Images/WSEnum5.PNG" alt="Wireshark SSDP enumeration 1" loading="lazy" decoding="async">
+              <figcaption class="figcap">UPnP/SSDP announcements observed on-path.</figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="Images/WSEnum6.PNG" alt="Wireshark SSDP enumeration 2" loading="lazy" decoding="async">
+              <figcaption class="figcap">Device/service hints gleaned from SSDP.</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Other Host Information</h4>
+          <figure class="figure">
+            <img src="Images/WSEnum7.PNG" alt="Additional host information from captured traffic" loading="lazy" decoding="async">
+            <figcaption class="figcap">Miscellaneous metadata useful for follow-up enumeration.</figcaption>
+          </figure>
+        </div>
+
       </div>
 
-      <h3>SSDP Enumeration</h3>
-      <div class="pair">
-        <figure class="figure">
-          <img src="Images/WSEnum5.PNG" alt="Wireshark SSDP enumeration 1" loading="lazy" decoding="async">
-          <figcaption class="figcap">UPnP/SSDP announcements observed on-path.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img src="Images/WSEnum6.PNG" alt="Wireshark SSDP enumeration 2" loading="lazy" decoding="async">
-          <figcaption class="figcap">Device/service hints gleaned from SSDP.</figcaption>
-        </figure>
-      </div>
+    </main>
 
-      <h3>Other Host Information</h3>
-      <figure class="figure">
-        <img src="Images/WSEnum7.PNG" alt="Additional host information from captured traffic" loading="lazy" decoding="async">
-        <figcaption class="figcap">Miscellaneous metadata useful for follow-up enumeration.</figcaption>
-      </figure>
-    </section>
-
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -268,27 +365,9 @@
     </footer>
   </div>
 
-  <!-- gallery wheel + arrows + lightbox -->
+  <!-- Lightbox -->
   <script>
     (function(){
-      // Horizontal gallery arrows + wheel-scroll
-      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
-        const scroller = wrap.querySelector('.gallery');
-        if(!scroller) return;
-        const left = wrap.querySelector('.gprev');
-        const right = wrap.querySelector('.gnext');
-        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
-        left  && left .addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
-        right && right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
-        scroller.addEventListener('wheel', (e) => {
-          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
-            e.preventDefault();
-            scroller.scrollLeft += e.deltaY;
-          }
-        }, {passive:false});
-      });
-
-      // Lightbox (click-to-zoom)
       const lb = document.createElement('div');
       lb.className = 'lightbox';
       lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
@@ -309,13 +388,11 @@
         lbImg.src = '';
       }
       lb.addEventListener('click', closeLB);
-      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && lb.classList.contains('open')) closeLB(); });
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
 
-      // Make all .figure img zoomable
       document.querySelectorAll('.figure img').forEach((img)=>{
         img.addEventListener('click', ()=>{
-          const caption = img.closest('.figure')?.querySelector('.figcap')?.textContent;
-          openLB(img.currentSrc || img.src, img.alt, caption);
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
         });
       });
     })();
