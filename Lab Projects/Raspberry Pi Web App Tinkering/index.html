@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Raspberry Pi Web App Tinkering · Mark Thompson Portfolio</title>
   <meta name="description" content="Building a deliberately vulnerable Raspberry Pi web app, then performing active reconnaissance, vulnerability scanning, and analysis." />
-
-  <!-- THEME -->
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -21,46 +19,154 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .wrap.wide{max-width:1100px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:14px 0 6px;font-size:16px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Code styles */
-    pre{
-      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
-      border-radius:12px;overflow:auto;color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
     }
-    code{
-      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
     }
+    .step-section p:last-child{margin:0}
+    .step-section ul, .step-section ol{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section em{color:var(--text);font-style:italic}
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
+    .step-section pre{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      padding:14px 16px;
+      font-size:14px;
+      color:#a8d8ff;
+      overflow-x:auto;
+      margin:12px 0;
+    }
+    .step-section pre code{background:none;border:none;padding:0;font-size:inherit}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul, .sub-section ol{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
+    .sub-section pre{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      padding:14px 16px;
+      font-size:14px;
+      color:#a8d8ff;
+      overflow-x:auto;
+      margin:12px 0;
+    }
+    .sub-section pre code{background:none;border:none;padding:0;font-size:inherit}
 
     /* Figures */
     .figure{
@@ -68,43 +174,74 @@
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:24px auto;
+      margin:16px auto;
       max-width:100%;
       text-align:center;
     }
     .figure img{
-      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
-      width:auto; max-width:100%; height:auto;
+      display:block;
+      margin:0 auto;
+      border-radius:10px;
+      object-fit:contain;
+      width:auto;
+      max-width:100%;
+      height:auto;
+      cursor:zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Side-by-side helper */
+    /* Side-by-side pair */
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
+    }
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
+    }
 
-    /* ===== Image Zoom (click-to-zoom) ===== */
-    .zoomable{cursor:zoom-in}
-    .zoom-overlay{
-      position:fixed; inset:0; display:none;
-      align-items:center; justify-content:center;
-      background:rgba(0,0,0,.8); z-index:9999; padding:24px;
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
     }
-    .zoom-overlay.open{display:flex}
-    .zoom-overlay img{
-      max-width:min(1200px,94vw); max-height:90vh;
-      border-radius:12px; box-shadow:var(--shadow);
-      cursor:zoom-out;
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
     }
-    body.zoom-open{overflow:hidden}
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <div class="wrap wide">
+  <div class="wrap">
+
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
@@ -126,244 +263,281 @@
       <p><a href="https://github.com/mark-thompson01/raspberry-pi-web-app-tinkering/blob/main/README.md" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Intro -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Overview -->
       <h2>Overview</h2>
-      <p>Web apps are a major attack surface. This project builds a custom site on a Raspberry Pi (Apache + WebDAV) with intentional misconfigurations, then demonstrates <em>reconnaissance</em>, <em>vulnerability scanning</em>, and <em>analysis &amp; reporting</em> workflows in a safe lab.</p>
-    </section>
+      <div class="step-section">
+        <p>Web apps are a major attack surface. This project builds a custom site on a Raspberry Pi (Apache + WebDAV) with intentional misconfigurations, then demonstrates <em>reconnaissance</em>, <em>vulnerability scanning</em>, and <em>analysis &amp; reporting</em> workflows in a safe lab.</p>
+      </div>
 
-    <!-- Purpose & Objectives -->
-    <section class="card">
-      <h2>Purpose</h2>
-      <ul>
-        <li><strong>Technical Proficiency:</strong> Build &amp; configure a basic app; deploy intentional misconfigurations.</li>
-        <li><strong>Security Mindset:</strong> Use industry tools for active recon and scanning in a controlled environment.</li>
-        <li><strong>Professional Documentation:</strong> Clear, reproducible steps mirroring real-world reporting.</li>
-      </ul>
+      <!-- Purpose & Objectives -->
+      <h2>Purpose &amp; Objectives</h2>
+      <div class="step-section">
+        <div class="sub-section">
+          <h4>Purpose</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Technical Proficiency:</strong> Build &amp; configure a basic app; deploy intentional misconfigurations.</li>
+            <li><strong style="color:var(--brand);">Security Mindset:</strong> Use industry tools for active recon and scanning in a controlled environment.</li>
+            <li><strong style="color:var(--brand);">Professional Documentation:</strong> Clear, reproducible steps mirroring real-world reporting.</li>
+          </ul>
+        </div>
+        <div class="sub-section">
+          <h4>Objectives</h4>
+          <ol>
+            <li><strong style="color:var(--brand);">Web App Configuration:</strong> Custom index page on Apache 2.4.59 (Raspberry Pi 3) with purposeful weaknesses.</li>
+            <li><strong style="color:var(--brand);">Active Reconnaissance:</strong> Enumerate HTTP/services using <code>nmap</code>, WhatWeb, and Burp Suite; run <code>dirb</code>, <code>dirbuster</code>, <code>gobuster</code>.</li>
+            <li><strong style="color:var(--brand);">Vulnerability Scanning:</strong> Identify issues with <code>nmap</code> and <code>nikto</code>.</li>
+            <li><strong style="color:var(--brand);">Analysis &amp; Reporting:</strong> Summarize findings and mitigations.</li>
+          </ol>
+        </div>
+      </div>
 
-      <h2>Objectives</h2>
-      <ol>
-        <li><strong>Web App Configuration:</strong> Custom index page on Apache 2.4.59 (Raspberry Pi 3) with purposeful weaknesses.</li>
-        <li><strong>Active Reconnaissance:</strong> Enumerate HTTP/services using <code>nmap</code>, <strong>WhatWeb</strong>, and <strong>Burp Suite</strong>; run <code>dirb</code>, <code>dirbuster</code>, <code>gobuster</code>.</li>
-        <li><strong>Vulnerability Scanning:</strong> Identify issues with <code>nmap</code> and <code>nikto</code>.</li>
-        <li><strong>Analysis &amp; Reporting:</strong> Summarize findings and mitigations.</li>
-      </ol>
-    </section>
-
-    <!-- Toolset -->
-    <section class="card">
+      <!-- Toolset -->
       <h2>Toolset</h2>
-      <ul>
-        <li><strong>Active Recon:</strong> <code>nmap</code>, <code>whatweb</code>, <code>dirb</code>, <code>dirbuster</code>, <code>gobuster</code>, <strong>Burp Suite</strong></li>
-        <li><strong>Vulnerability Scanning:</strong> <code>nmap</code>, <code>nikto</code></li>
-        <li><strong>Analysis:</strong> Clear, professional documentation &amp; reporting</li>
-      </ul>
-      <figure class="figure">
-        <img src="Images/The%20Web%20Page.PNG" alt="Customized web page on Raspberry Pi" loading="lazy" decoding="async">
-        <figcaption class="figcap">Customized web page used for testing.</figcaption>
-      </figure>
-    </section>
-
-    <!-- Configuring the Web Application -->
-    <section class="card" id="config">
-      <h2>Configuring the Web Application</h2>
-      <p>Deliberate misconfigurations make the target interesting for tools like Nmap, Nikto, and Burp Suite. WebDAV is enabled for file uploads.</p>
-
-      <h3>Specific Misconfigurations</h3>
-      <ol>
-        <li>Weak authentication for WebDAV</li>
-        <li>Directory listings enabled</li>
-        <li>Hidden directories and files</li>
-        <li>Exposed sensitive configuration</li>
-        <li>Crafted XSS vulnerability</li>
-      </ol>
-
-      <h3>Weak WebDAV Authentication</h3>
-      <p>Enable WebDAV with <strong>Basic Auth</strong> and intentionally weak credentials.</p>
-      <div class="pair">
-        <figure class="figure"><img src="Images/WebDAV%20BasicAuth.png" alt="webdav.conf with BasicAuth" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/WebDAV%20WeakPassSet.png" alt="Weak credentials configured for WebDAV" loading="lazy" decoding="async"></figure>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">Active Recon:</strong> <code>nmap</code>, <code>whatweb</code>, <code>dirb</code>, <code>dirbuster</code>, <code>gobuster</code>, Burp Suite</li>
+          <li><strong style="color:var(--brand);">Vulnerability Scanning:</strong> <code>nmap</code>, <code>nikto</code></li>
+          <li><strong style="color:var(--brand);">Analysis:</strong> Clear, professional documentation &amp; reporting</li>
+        </ul>
+        <figure class="figure">
+          <img src="Images/The%20Web%20Page.PNG" alt="Customized web page on Raspberry Pi" loading="lazy" decoding="async">
+          <figcaption class="figcap">Customized web page used for testing.</figcaption>
+        </figure>
       </div>
 
-      <h3>Directory Listings Enabled</h3>
-      <p>Apache <code>Options Indexes</code> exposes directory listings when no default index is present.</p>
-      <div class="pair">
-        <figure class="figure"><img src="Images/Directory%20Listings%201.png" alt="Indexes in apache2.conf" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Directory%20Listings%20Enabled%202.png" alt="Indexes also enabled in webdav.conf" loading="lazy" decoding="async"></figure>
+      <!-- Configuring the Web Application -->
+      <h2 id="config">Configuring the Web Application</h2>
+      <div class="step-section">
+        <p>Deliberate misconfigurations make the target interesting for tools like Nmap, Nikto, and Burp Suite. WebDAV is enabled for file uploads.</p>
+
+        <div class="sub-section">
+          <h4>Specific Misconfigurations</h4>
+          <ol>
+            <li>Weak authentication for WebDAV</li>
+            <li>Directory listings enabled</li>
+            <li>Hidden directories and files</li>
+            <li>Exposed sensitive configuration</li>
+            <li>Crafted XSS vulnerability</li>
+          </ol>
+        </div>
+
+        <div class="sub-section">
+          <h4>Weak WebDAV Authentication</h4>
+          <p>Enable WebDAV with <strong style="color:var(--brand);">Basic Auth</strong> and intentionally weak credentials.</p>
+          <div class="pair">
+            <figure class="figure"><img src="Images/WebDAV%20BasicAuth.png" alt="webdav.conf with BasicAuth" loading="lazy" decoding="async"></figure>
+            <figure class="figure"><img src="Images/WebDAV%20WeakPassSet.png" alt="Weak credentials configured for WebDAV" loading="lazy" decoding="async"></figure>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Directory Listings Enabled</h4>
+          <p>Apache <code>Options Indexes</code> exposes directory listings when no default index is present.</p>
+          <div class="pair">
+            <figure class="figure"><img src="Images/Directory%20Listings%201.png" alt="Indexes in apache2.conf" loading="lazy" decoding="async"></figure>
+            <figure class="figure"><img src="Images/Directory%20Listings%20Enabled%202.png" alt="Indexes also enabled in webdav.conf" loading="lazy" decoding="async"></figure>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Hidden Directories &amp; Files</h4>
+          <p>Hidden and obvious paths are created under <code>/var/www/html</code> to surface during directory busting and manual browsing.</p>
+        </div>
+
+        <div class="sub-section">
+          <h4>Exposed Sensitive Configuration</h4>
+          <p>Example: a public <code>config.php</code> containing sensitive information.</p>
+          <figure class="figure"><img src="Images/Exposed%20Sensitive%20Configuration.png" alt="Exposed config.php" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Crafted XSS Vulnerability</h4>
+          <p>Convert <code>index.html</code> to <code>index.php</code> and inject reflected XSS via unsanitized query parameter.</p>
+          <div class="pair">
+            <figure class="figure"><img src="Images/PHPFileConversion.png" alt="Renaming index.html to index.php" loading="lazy" decoding="async"></figure>
+            <figure class="figure"><img src="Images/CodeCheck.png" alt="Verifying vulnerable PHP code presence" loading="lazy" decoding="async"></figure>
+          </div>
+          <div class="pair">
+            <figure class="figure"><img src="Images/XSS%20Vulnerable%20Code.png" alt="Reflected XSS code example" loading="lazy" decoding="async"></figure>
+            <figure class="figure"><img src="Images/RestartApache.png" alt="Restarting Apache to load PHP" loading="lazy" decoding="async"></figure>
+          </div>
+        </div>
+
       </div>
 
-      <h3>Hidden Directories &amp; Files</h3>
-      <p>Hidden and obvious paths are created under <code>/var/www/html</code> to surface during directory busting and manual browsing.</p>
-
-      <h3>Exposed Sensitive Configuration</h3>
-      <p>Example: a public <code>config.php</code> containing sensitive information.</p>
-      <figure class="figure"><img src="Images/Exposed%20Sensitive%20Configuration.png" alt="Exposed config.php" loading="lazy" decoding="async"></figure>
-
-      <h3>Crafted XSS Vulnerability</h3>
-      <p>Convert <code>index.html</code> to <code>index.php</code> and inject reflected XSS via unsanitized query parameter.</p>
-      <div class="pair">
-        <figure class="figure"><img src="Images/PHPFileConversion.png" alt="Renaming index.html to index.php" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/CodeCheck.png" alt="Verifying vulnerable PHP code presence" loading="lazy" decoding="async"></figure>
-      </div>
-      <div class="pair">
-        <figure class="figure"><img src="Images/XSS%20Vulnerable%20Code.png" alt="Reflected XSS code example" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/RestartApache.png" alt="Restarting Apache to load PHP" loading="lazy" decoding="async"></figure>
-      </div>
-    </section>
-
-    <!-- Active Recon -->
-    <section class="card" id="active-recon">
-      <h2>Active Recon</h2>
-      <p>Create a Bash helper script to run initial Nmap sweeps, then save results; run WhatWeb for tech fingerprinting.</p>
-      <div class="pair">
-        <figure class="figure"><img src="Images/Bash%20Script%20Creation1.PNG" alt="Bash script creation 1" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Bash%20Script%20Creation2.PNG" alt="Bash script creation 2" loading="lazy" decoding="async"></figure>
-      </div>
-      <div class="pair">
-        <figure class="figure"><img src="Images/Bash%20Script%20Creation%205.PNG" alt="Bash script creation 3" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Bash%20Script%20Run%201.PNG" alt="Script run 1" loading="lazy" decoding="async"></figure>
-      </div>
-      <div class="pair">
-        <figure class="figure"><img src="Images/Bash%20Script%20Run%202.PNG" alt="Script run 2" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Bash%20Script%20Run%203.PNG" alt="Script run 3" loading="lazy" decoding="async"></figure>
-      </div>
-      <div class="pair">
-        <figure class="figure"><img src="Images/Bash%20Script%20Run%205.PNG" alt="Script run 4" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Save%20Scan%20Results%20in%20File.PNG" alt="Saving scan results to file" loading="lazy" decoding="async"></figure>
-      </div>
-      <figure class="figure"><img src="Images/WhatWeb.PNG" alt="WhatWeb fingerprinting" loading="lazy" decoding="async"></figure>
-    </section>
-
-    <!-- Directory Busting -->
-    <section class="card" id="dirbusting">
-      <h2>Directory Busting</h2>
-      <p>Discover hidden/interesting paths with Dirb, Dirbuster, and Gobuster.</p>
-      <div class="pair">
-        <figure class="figure"><img src="Images/Dirb%20Run%201.PNG" alt="Dirb run" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Dirbuster.PNG" alt="Dirbuster UI" loading="lazy" decoding="async"></figure>
-      </div>
-      <div class="pair">
-        <figure class="figure"><img src="Images/Dirbuster%202.PNG" alt="Dirbuster results 1" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Dirbuster%203.PNG" alt="Dirbuster results 2" loading="lazy" decoding="async"></figure>
-      </div>
-      <figure class="figure"><img src="Images/Dirbuster%204.PNG" alt="Dirbuster results 3" loading="lazy" decoding="async"></figure>
-      <figure class="figure"><img src="Images/gobuster.PNG" alt="Gobuster results" loading="lazy" decoding="async"></figure>
-    </section>
-
-    <!-- Burp Suite Recon -->
-    <section class="card" id="burp">
-      <h2>Active Recon with Burp Suite</h2>
-      <p>Intercept a <code>GET</code> request, send to Repeater, and probe different HTTP methods.</p>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Browser%20Settings.PNG" alt="Firefox proxy settings for Burp" loading="lazy" decoding="async"></figure>
-      <div class="pair">
-        <figure class="figure"><img src="Images/Burp%20Suite%20Start.png" alt="Burp start" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Burp%20Suite%20Start%202.png" alt="Burp start 2" loading="lazy" decoding="async"></figure>
-      </div>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Intercept%20on.PNG" alt="Burp Proxy Intercept ON" loading="lazy" decoding="async"></figure>
-      <div class="pair">
-        <figure class="figure"><img src="Images/The%20Web%20Page.PNG" alt="Target web page" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Refresh%20Firefox.PNG" alt="Refreshing the page through proxy" loading="lazy" decoding="async"></figure>
-      </div>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Captured%20GET%20Request.PNG" alt="Captured GET request" loading="lazy" decoding="async"></figure>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Send%20to%20Repeator.png" alt="Send to Repeater" loading="lazy" decoding="async"></figure>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%201%20GET%20Request.PNG" alt="GET request in Repeater" loading="lazy" decoding="async"></figure>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%202%20HEADRequestModify.PNG" alt="HEAD request in Repeater" loading="lazy" decoding="async"></figure>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%203%20OPTIONSRequestModify.PNG" alt="OPTIONS request in Repeater" loading="lazy" decoding="async"></figure>
-      <div class="pair">
-        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%204%20PUT.PNG" alt="PUT request response (405)" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%205%20BadRequest.PNG" alt="POST/Bad Request example" loading="lazy" decoding="async"></figure>
-      </div>
-      <figure class="figure"><img src="Images/Burp%20Suite%20Sitemap.PNG" alt="Burp Suite site map" loading="lazy" decoding="async"></figure>
-    </section>
-
-    <!-- Vulnerability Scanning -->
-    <section class="card" id="vuln-scans">
-      <h2>Vulnerability Scanning</h2>
-      <h3>Nmap <code>--script vuln</code></h3>
-      <figure class="figure"><img src="Images/nmap%20vuln%20scan.PNG" alt="Nmap vulnerability scan results" loading="lazy" decoding="async"></figure>
-
-      <h3>Nikto Scan</h3>
-      <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto scan findings" loading="lazy" decoding="async"></figure>
-    </section>
-
-    <!-- Exploitation -->
-    <section class="card" id="exploitation">
-      <h2>Exploitation</h2>
-
-      <h3>Exploiting Reflected XSS</h3>
-      <p>Exploit the vulnerable <code>index.php</code> by passing a crafted <code>?query=</code> value.</p>
-      <pre><code>http://192.168.1.103/index.php?query=test</code></pre>
-      <div class="pair">
-        <figure class="figure"><img src="Images/XSSTest1.png" alt="XSS test 1" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/XSSTest2.png" alt="XSS test 2" loading="lazy" decoding="async"></figure>
-      </div>
-      <div class="pair">
-        <figure class="figure"><img src="Images/XSSTest3.png" alt="XSS test 3" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/XSSTest4.png" alt="XSS test 4" loading="lazy" decoding="async"></figure>
+      <!-- Active Recon -->
+      <h2 id="active-recon">Active Recon</h2>
+      <div class="step-section">
+        <p>Create a Bash helper script to run initial Nmap sweeps, then save results; run WhatWeb for tech fingerprinting.</p>
+        <div class="pair">
+          <figure class="figure"><img src="Images/Bash%20Script%20Creation1.PNG" alt="Bash script creation 1" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Bash%20Script%20Creation2.PNG" alt="Bash script creation 2" loading="lazy" decoding="async"></figure>
+        </div>
+        <div class="pair">
+          <figure class="figure"><img src="Images/Bash%20Script%20Creation%205.PNG" alt="Bash script creation 3" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Bash%20Script%20Run%201.PNG" alt="Script run 1" loading="lazy" decoding="async"></figure>
+        </div>
+        <div class="pair">
+          <figure class="figure"><img src="Images/Bash%20Script%20Run%202.PNG" alt="Script run 2" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Bash%20Script%20Run%203.PNG" alt="Script run 3" loading="lazy" decoding="async"></figure>
+        </div>
+        <div class="pair">
+          <figure class="figure"><img src="Images/Bash%20Script%20Run%205.PNG" alt="Script run 4" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Save%20Scan%20Results%20in%20File.PNG" alt="Saving scan results to file" loading="lazy" decoding="async"></figure>
+        </div>
+        <figure class="figure"><img src="Images/WhatWeb.PNG" alt="WhatWeb fingerprinting" loading="lazy" decoding="async"></figure>
       </div>
 
-      <h4>Mitigation</h4>
-      <p>Sanitize and encode user input before output. Example using <code>htmlspecialchars()</code>:</p>
-      <figure class="figure"><img src="Images/XSSFix.png" alt="Using htmlspecialchars() to mitigate reflected XSS" loading="lazy" decoding="async"></figure>
-      <p>Also consider strict input validation and a defensive <strong>Content-Security-Policy</strong>.</p>
-      <div class="pair">
-        <figure class="figure"><img src="Images/queryparamSecure.png" alt="Restricting query parameter to safe characters" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/CSP.png" alt="Example CSP header" loading="lazy" decoding="async"></figure>
+      <!-- Directory Busting -->
+      <h2 id="dirbusting">Directory Busting</h2>
+      <div class="step-section">
+        <p>Discover hidden/interesting paths with Dirb, Dirbuster, and Gobuster.</p>
+        <div class="pair">
+          <figure class="figure"><img src="Images/Dirb%20Run%201.PNG" alt="Dirb run" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Dirbuster.PNG" alt="Dirbuster UI" loading="lazy" decoding="async"></figure>
+        </div>
+        <div class="pair">
+          <figure class="figure"><img src="Images/Dirbuster%202.PNG" alt="Dirbuster results 1" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Dirbuster%203.PNG" alt="Dirbuster results 2" loading="lazy" decoding="async"></figure>
+        </div>
+        <figure class="figure"><img src="Images/Dirbuster%204.PNG" alt="Dirbuster results 3" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/gobuster.PNG" alt="Gobuster results" loading="lazy" decoding="async"></figure>
       </div>
 
-      <h3>Exploiting WebDAV</h3>
-      <p>Weak Basic Auth on <code>/webdav</code> can be brute forced—or discovered via scanning. Once credentials are known, upload a PHP payload and gain a shell.</p>
-      <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto exposing weak WebDAV auth" loading="lazy" decoding="async"></figure>
-      <div class="pair">
-        <figure class="figure"><img src="Images/WebDAVLoginPrompt.png" alt="WebDAV login prompt" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/WebDAVLogin2.png" alt="Entering credentials" loading="lazy" decoding="async"></figure>
+      <!-- Burp Suite Recon -->
+      <h2 id="burp">Active Recon with Burp Suite</h2>
+      <div class="step-section">
+        <p>Intercept a <code>GET</code> request, send to Repeater, and probe different HTTP methods.</p>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Browser%20Settings.PNG" alt="Firefox proxy settings for Burp" loading="lazy" decoding="async"></figure>
+        <div class="pair">
+          <figure class="figure"><img src="Images/Burp%20Suite%20Start.png" alt="Burp start" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Burp%20Suite%20Start%202.png" alt="Burp start 2" loading="lazy" decoding="async"></figure>
+        </div>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Intercept%20on.PNG" alt="Burp Proxy Intercept ON" loading="lazy" decoding="async"></figure>
+        <div class="pair">
+          <figure class="figure"><img src="Images/The%20Web%20Page.PNG" alt="Target web page" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Refresh%20Firefox.PNG" alt="Refreshing the page through proxy" loading="lazy" decoding="async"></figure>
+        </div>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Captured%20GET%20Request.PNG" alt="Captured GET request" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Send%20to%20Repeator.png" alt="Send to Repeater" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%201%20GET%20Request.PNG" alt="GET request in Repeater" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%202%20HEADRequestModify.PNG" alt="HEAD request in Repeater" loading="lazy" decoding="async"></figure>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%203%20OPTIONSRequestModify.PNG" alt="OPTIONS request in Repeater" loading="lazy" decoding="async"></figure>
+        <div class="pair">
+          <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%204%20PUT.PNG" alt="PUT request response (405)" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Burp%20Suite%20Repeator%205%20BadRequest.PNG" alt="POST/Bad Request example" loading="lazy" decoding="async"></figure>
+        </div>
+        <figure class="figure"><img src="Images/Burp%20Suite%20Sitemap.PNG" alt="Burp Suite site map" loading="lazy" decoding="async"></figure>
       </div>
-      <figure class="figure"><img src="Images/WebDAVLoginSuccess.png" alt="Successful WebDAV login" loading="lazy" decoding="async"></figure>
-      <figure class="figure"><img src="Images/msfvenomCadaver.png" alt="Generating payload and uploading with cadaver" loading="lazy" decoding="async"></figure>
-      <div class="pair">
-        <figure class="figure"><img src="Images/ShellUploadSuccess.png" alt="Payload visible on site" loading="lazy" decoding="async"></figure>
-        <figure class="figure"><img src="Images/msflistener.png" alt="Metasploit reverse handler" loading="lazy" decoding="async"></figure>
+
+      <!-- Vulnerability Scanning -->
+      <h2 id="vuln-scans">Vulnerability Scanning</h2>
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>Nmap <code>--script vuln</code></h4>
+          <figure class="figure"><img src="Images/nmap%20vuln%20scan.PNG" alt="Nmap vulnerability scan results" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Nikto Scan</h4>
+          <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto scan findings" loading="lazy" decoding="async"></figure>
+        </div>
+
       </div>
-      <figure class="figure"><img src="Images/meterpreter2%20(1).png" alt="Meterpreter session obtained" loading="lazy" decoding="async"></figure>
-    </section>
 
-    <!-- Analysis & Reporting -->
-    <section class="card" id="analysis">
-      <h2>Analysis &amp; Reporting</h2>
-      <p>This lab demonstrates how misconfigurations are identified, exploited, and mitigated. It also reinforces a methodical workflow and clear documentation.</p>
+      <!-- Exploitation -->
+      <h2 id="exploitation">Exploitation</h2>
+      <div class="step-section">
 
-      <h3>Methodology</h3>
-      <ul>
-        <li>Identify HTTP methods, server details, and headers via Burp + Nmap.</li>
-        <li>Enumerate directories with Dirb/Dirbuster/Gobuster.</li>
-        <li>Probe various HTTP methods to analyze behavior and exposure.</li>
-        <li>Scan for vulnerabilities with Nmap NSE (vuln) and Nikto.</li>
-      </ul>
+        <div class="sub-section">
+          <h4>Exploiting Reflected XSS</h4>
+          <p>Exploit the vulnerable <code>index.php</code> by passing a crafted <code>?query=</code> value.</p>
+          <pre><code>http://192.168.1.103/index.php?query=test</code></pre>
+          <div class="pair">
+            <figure class="figure"><img src="Images/XSSTest1.png" alt="XSS test 1" loading="lazy" decoding="async"></figure>
+            <figure class="figure"><img src="Images/XSSTest2.png" alt="XSS test 2" loading="lazy" decoding="async"></figure>
+          </div>
+          <div class="pair">
+            <figure class="figure"><img src="Images/XSSTest3.png" alt="XSS test 3" loading="lazy" decoding="async"></figure>
+            <figure class="figure"><img src="Images/XSSTest4.png" alt="XSS test 4" loading="lazy" decoding="async"></figure>
+          </div>
+          <p>Sanitize and encode user input before output. Example using <code>htmlspecialchars()</code>:</p>
+          <figure class="figure"><img src="Images/XSSFix.png" alt="Using htmlspecialchars() to mitigate reflected XSS" loading="lazy" decoding="async"></figure>
+          <p>Also consider strict input validation and a defensive <strong style="color:var(--brand);">Content-Security-Policy</strong>.</p>
+          <div class="pair">
+            <figure class="figure"><img src="Images/queryparamSecure.png" alt="Restricting query parameter to safe characters" loading="lazy" decoding="async"></figure>
+            <figure class="figure"><img src="Images/CSP.png" alt="Example CSP header" loading="lazy" decoding="async"></figure>
+          </div>
+        </div>
 
-      <h3>Key Findings</h3>
-      <ul>
-        <li><strong>Reflected XSS:</strong> Risk of data theft, phishing, session hijacking.</li>
-        <li><strong>Weak WebDAV Auth:</strong> Enabled arbitrary file upload and remote shell.</li>
-        <li><strong>Directory Listings:</strong> Exposed structure and sensitive files.</li>
-        <li><strong>Missing Security Headers:</strong> Clickjacking/MIME risks.</li>
-      </ul>
+        <div class="sub-section">
+          <h4>Exploiting WebDAV</h4>
+          <p>Weak Basic Auth on <code>/webdav</code> can be brute forced—or discovered via scanning. Once credentials are known, upload a PHP payload and gain a shell.</p>
+          <figure class="figure"><img src="Images/Nikto%20Scan%202.PNG" alt="Nikto exposing weak WebDAV auth" loading="lazy" decoding="async"></figure>
+          <div class="pair">
+            <figure class="figure"><img src="Images/WebDAVLoginPrompt.png" alt="WebDAV login prompt" loading="lazy" decoding="async"></figure>
+            <figure class="figure"><img src="Images/WebDAVLogin2.png" alt="Entering credentials" loading="lazy" decoding="async"></figure>
+          </div>
+          <figure class="figure"><img src="Images/WebDAVLoginSuccess.png" alt="Successful WebDAV login" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/msfvenomCadaver.png" alt="Generating payload and uploading with cadaver" loading="lazy" decoding="async"></figure>
+          <div class="pair">
+            <figure class="figure"><img src="Images/ShellUploadSuccess.png" alt="Payload visible on site" loading="lazy" decoding="async"></figure>
+            <figure class="figure"><img src="Images/msflistener.png" alt="Metasploit reverse handler" loading="lazy" decoding="async"></figure>
+          </div>
+          <figure class="figure"><img src="Images/meterpreter2%20(1).png" alt="Meterpreter session obtained" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>Mitigation Recommendations</h3>
-      <ul>
-        <li>Sanitize/encode output (<code>htmlspecialchars()</code>), validate input, set CSP.</li>
-        <li>Harden WebDAV: strong creds, HTTPS, restrict methods &amp; file types.</li>
-        <li>Disable <code>Indexes</code> in Apache; restrict access to sensitive files.</li>
-        <li>Add security headers: <code>X-Frame-Options</code>, <code>Content-Security-Policy</code>, <code>X-Content-Type-Options</code>.</li>
-      </ul>
+      </div>
 
-      <h3>Lessons Learned</h3>
-      <p>Hands-on practice with a purposely vulnerable app sharpens recon, scanning, exploitation, and remediation skills—end-to-end.</p>
-    </section>
+      <!-- Analysis & Reporting -->
+      <h2 id="analysis">Analysis &amp; Reporting</h2>
+      <div class="step-section">
+        <p>This lab demonstrates how misconfigurations are identified, exploited, and mitigated. It also reinforces a methodical workflow and clear documentation.</p>
 
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+        <div class="sub-section">
+          <h4>Methodology</h4>
+          <ul>
+            <li>Identify HTTP methods, server details, and headers via Burp + Nmap.</li>
+            <li>Enumerate directories with Dirb/Dirbuster/Gobuster.</li>
+            <li>Probe various HTTP methods to analyze behavior and exposure.</li>
+            <li>Scan for vulnerabilities with Nmap NSE (vuln) and Nikto.</li>
+          </ul>
+        </div>
+
+        <div class="sub-section">
+          <h4>Key Findings</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Reflected XSS:</strong> Risk of data theft, phishing, session hijacking.</li>
+            <li><strong style="color:var(--brand);">Weak WebDAV Auth:</strong> Enabled arbitrary file upload and remote shell.</li>
+            <li><strong style="color:var(--brand);">Directory Listings:</strong> Exposed structure and sensitive files.</li>
+            <li><strong style="color:var(--brand);">Missing Security Headers:</strong> Clickjacking/MIME risks.</li>
+          </ul>
+        </div>
+
+        <div class="sub-section">
+          <h4>Mitigation Recommendations</h4>
+          <ul>
+            <li>Sanitize/encode output (<code>htmlspecialchars()</code>), validate input, set CSP.</li>
+            <li>Harden WebDAV: strong creds, HTTPS, restrict methods &amp; file types.</li>
+            <li>Disable <code>Indexes</code> in Apache; restrict access to sensitive files.</li>
+            <li>Add security headers: <code>X-Frame-Options</code>, <code>Content-Security-Policy</code>, <code>X-Content-Type-Options</code>.</li>
+          </ul>
+        </div>
+
+        <div class="sub-section">
+          <h4>Lessons Learned</h4>
+          <p>Hands-on practice with a purposely vulnerable app sharpens recon, scanning, exploitation, and remediation skills—end-to-end.</p>
+        </div>
+
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -375,36 +549,35 @@
     </footer>
   </div>
 
-  <!-- Tiny, reusable click-to-zoom for all images -->
+  <!-- Lightbox -->
   <script>
     (function(){
-      const imgs = document.querySelectorAll('.wrap img');
-      if(!imgs.length) return;
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
 
-      const overlay = document.createElement('div');
-      overlay.className = 'zoom-overlay';
-      overlay.innerHTML = '<img alt="">';
-      document.body.appendChild(overlay);
-      const ovImg = overlay.querySelector('img');
-
-      function closeZoom(){
-        overlay.classList.remove('open');
-        document.body.classList.remove('zoom-open');
-        ovImg.removeAttribute('src');
-        ovImg.removeAttribute('srcset');
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
 
-      overlay.addEventListener('click', closeZoom);
-      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeZoom(); });
-
-      imgs.forEach(img=>{
-        img.classList.add('zoomable');
+      document.querySelectorAll('.figure img').forEach((img)=>{
         img.addEventListener('click', ()=>{
-          ovImg.alt = img.alt || '';
-          ovImg.src = img.currentSrc || img.src;
-          overlay.classList.add('open');
-          document.body.classList.add('zoom-open');
-        }, {passive:true});
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
       });
     })();
   </script>
