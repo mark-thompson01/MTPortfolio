@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Windows 11 Security Hardening · Mark Thompson Portfolio</title>
+  <meta name="description" content="Initial system setup and security hardening covering updates, BitLocker, BitDefender, account hygiene, OS-level security, network exposure reduction, and logging." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 28px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+    .content p{
+      color:var(--text);
+      font-size:16px;
+      line-height:1.7;
+      margin:0 0 16px 0;
+    }
+    .content strong{
+      color:var(--brand);
+      font-weight:600;
+    }
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:15px;
+      margin:0 0 12px 0;
+    }
+    .step-section ul{
+      color:var(--muted);
+      font-size:15px;
+      margin:0 0 12px 0;
+      padding-left:24px;
+      line-height:1.8;
+    }
+
+    /* Sub-section within a step */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:15px;
+      margin:0 0 10px 0;
+    }
+
+    /* Image Stack */
+    .gallery{
+      margin-top:16px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .gallery img{
+      width:90%;
+      border-radius:10px;
+      border:1px solid var(--card-border);
+      display:block;
+      cursor:zoom-in;
+      transition:transform 0.2s ease, border-color 0.2s ease;
+    }
+    .gallery img:hover{
+      border-color:var(--brand);
+    }
+
+    /* Lightbox */
+    .lightbox{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.88);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:88vw;
+      max-height:85vh;
+      border-radius:12px;
+      border:1px solid var(--card-border);
+      display:block;
+    }
+    .lightbox-close{
+      position:fixed;
+      top:20px;
+      right:24px;
+      font-size:32px;
+      color:#fff;
+      cursor:pointer;
+      line-height:1;
+      background:none;
+      border:none;
+      z-index:1001;
+    }
+    .lightbox-arrow{
+      position:fixed;
+      top:50%;
+      transform:translateY(-50%);
+      background:rgba(255,255,255,.1);
+      border:1px solid rgba(255,255,255,.2);
+      color:#fff;
+      font-size:28px;
+      width:52px;
+      height:52px;
+      border-radius:50%;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:background 0.2s ease;
+      z-index:1001;
+    }
+    .lightbox-arrow:hover{background:rgba(77,163,255,.35);border-color:var(--brand);}
+    .lightbox-prev{left:20px;}
+    .lightbox-next{right:20px;}
+    .lightbox-counter{
+      position:fixed;
+      bottom:24px;
+      left:50%;
+      transform:translateX(-50%);
+      color:var(--muted);
+      font-size:14px;
+      background:rgba(0,0,0,.5);
+      padding:6px 16px;
+      border-radius:20px;
+      border:1px solid var(--card-border);
+      z-index:1001;
+    }
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Compact site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Title + short intro -->
+    <header>
+      <h1>Windows 11 Security Hardening</h1>
+      <p class="lead">A step-by-step walkthrough of hardening a Windows system — from updates and drive encryption to endpoint protection, account hygiene, and logging.</p>
+    </header>
+
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Step 1 -->
+      <h2>Step 1: Check Updates, Firmware, and Boot Trust</h2>
+      <div class="step-section">
+        <p>The very first best practice to run through prior to system setup and configuration is running all available updates straight away.</p>
+        <p>Running all available Windows updates &amp; security patches, system updates, drivers, and any available firmware update listed under Optional Updates within Windows Settings &gt; Updates.</p>
+        <p>After getting all of those run through, I run these PowerShell commands to verify secure boot is enabled and confirm the BIOSFirmwareType that is being worked with on the given system prior to enabling BitLocker for drive encryption.</p>
+        <div class="gallery">
+          <img src="Images/Pre1.png" alt="Updates and firmware step 1" onclick="openLightbox(this)" />
+          <img src="Images/Pre2.png" alt="Updates and firmware step 2" onclick="openLightbox(this)" />
+          <img src="Images/Pre3.png" alt="Updates and firmware step 3" onclick="openLightbox(this)" />
+          <img src="Images/Pre4.png" alt="Updates and firmware step 4" onclick="openLightbox(this)" />
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <h2>Step 2 – Disk &amp; Device Protection</h2>
+      <div class="step-section">
+        <p>In this step, I'm going to go through how to enable BitLocker encryption for two different partitions C: System and D: Data on a single SSD drive, and securely backup the recovery keys.</p>
+        <p>In this example, I'm going to enable BitLocker on both disk partitions with the use of PowerShell to implement drive protection.</p>
+        <div class="gallery">
+          <img src="Images/1Get-Tpm.png" alt="Get-Tpm" onclick="openLightbox(this)" />
+          <img src="Images/2Enable-BitLocker.png" alt="Enable BitLocker step 2" onclick="openLightbox(this)" />
+          <img src="Images/3Enable-BitLocker.png" alt="Enable BitLocker step 3" onclick="openLightbox(this)" />
+          <img src="Images/4Add-RecoveryKey.png" alt="Add Recovery Key" onclick="openLightbox(this)" />
+          <img src="Images/5Get-BitLockerVolume.png" alt="Get BitLocker Volume" onclick="openLightbox(this)" />
+          <img src="Images/6EnableBLonD.png" alt="Enable BitLocker on D" onclick="openLightbox(this)" />
+          <img src="Images/7EnableAutoUnlock.png" alt="Enable Auto Unlock" onclick="openLightbox(this)" />
+          <img src="Images/8Enable-BLVolume.png" alt="Enable BitLocker Volume" onclick="openLightbox(this)" />
+          <img src="Images/9Get-BLVolume.png" alt="Get BitLocker Volume final" onclick="openLightbox(this)" />
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <h2>Step 3 – Endpoint Protection Strategy</h2>
+      <div class="step-section">
+        <p>In this step, I'm going to install and setup the commercial BitDefender antivirus solution.</p>
+        <div class="sub-section">
+          <h4>Install &amp; Setup BitDefender</h4>
+          <div class="gallery">
+            <img src="Images/Sec1.png" alt="BitDefender setup step 1" onclick="openLightbox(this)" />
+            <img src="Images/Sec2.png" alt="BitDefender setup step 2" onclick="openLightbox(this)" />
+            <img src="Images/Sec3.png" alt="BitDefender setup step 3" onclick="openLightbox(this)" />
+            <img src="Images/Sec4.png" alt="BitDefender setup step 4" onclick="openLightbox(this)" />
+            <img src="Images/Sec5.png" alt="BitDefender setup step 5" onclick="openLightbox(this)" />
+            <img src="Images/Sec6.png" alt="BitDefender setup step 6" onclick="openLightbox(this)" />
+            <img src="Images/Sec7.png" alt="BitDefender setup step 7" onclick="openLightbox(this)" />
+            <img src="Images/Sec8.png" alt="BitDefender setup step 8" onclick="openLightbox(this)" />
+            <img src="Images/Sec9.png" alt="BitDefender setup step 9" onclick="openLightbox(this)" />
+            <img src="Images/Sec10.png" alt="BitDefender setup step 10" onclick="openLightbox(this)" />
+            <img src="Images/Sec11.png" alt="BitDefender setup step 11" onclick="openLightbox(this)" />
+            <img src="Images/Sec12.png" alt="BitDefender setup step 12" onclick="openLightbox(this)" />
+            <img src="Images/Sec13.png" alt="BitDefender setup step 13" onclick="openLightbox(this)" />
+            <img src="Images/Sec14.png" alt="BitDefender setup step 14" onclick="openLightbox(this)" />
+            <img src="Images/Sec15.png" alt="BitDefender setup step 15" onclick="openLightbox(this)" />
+            <img src="Images/Sec16.png" alt="BitDefender setup step 16" onclick="openLightbox(this)" />
+            <img src="Images/Sec17.png" alt="BitDefender setup step 17" onclick="openLightbox(this)" />
+            <img src="Images/Sec18.png" alt="BitDefender setup step 18" onclick="openLightbox(this)" />
+            <img src="Images/Sec19.png" alt="BitDefender setup step 19" onclick="openLightbox(this)" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <h2>Step 4 – Account &amp; Privilege Hygiene</h2>
+      <div class="step-section">
+        <p>In a previous step a standard, non-admin regular user account was created for daily operations. This is one of the best practices any technician can implement on their individual computer system.</p>
+        <p>With that in place, the system has this account &amp; privilege configuration:</p>
+        <ul>
+          <li>Daily user is standard, not admin</li>
+          <li>Separate local admin account exists</li>
+          <li>Default Administrator renamed or disabled</li>
+          <li>UAC left at default or higher</li>
+        </ul>
+      </div>
+
+      <!-- Step 5 -->
+      <h2>Step 5 – OS-Level Platform Security</h2>
+      <div class="step-section">
+        <p>Windows Security has quite a few uniquely built-in security features that are indeed worth taking advantage of. This goes an extra mile on the OS-Level Platform Security with BitDefender and Microsoft Defender Antivirus all running.</p>
+
+        <div class="sub-section">
+          <h4>Security at a Glance</h4>
+          <p>Enable any applicable features.</p>
+          <div class="gallery">
+            <img src="Images/winsec1.png" alt="Windows Security at a glance 1" onclick="openLightbox(this)" />
+            <img src="Images/winsec2.png" alt="Windows Security at a glance 2" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Virus &amp; Threat Detection</h4>
+          <p>Here we have BitDefender Antivirus set to take precedence over Microsoft Defender Antivirus.</p>
+          <div class="gallery">
+            <img src="Images/winsec3.png" alt="Virus and threat detection" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Firewall &amp; Network Protection</h4>
+          <p>Ensure the OS-Level Firewall is enabled for Domain, Private, and Public networks.</p>
+          <div class="gallery">
+            <img src="Images/winsec4.png" alt="Firewall and network protection" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>App &amp; Browser Control</h4>
+          <div class="gallery">
+            <img src="Images/windsec5.png" alt="App and browser control" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Device Security</h4>
+          <p>Core isolation and Memory Integrity.</p>
+          <div class="gallery">
+            <img src="Images/winsec6.png" alt="Device security core isolation" onclick="openLightbox(this)" />
+            <img src="Images/winsec9.png" alt="Device security memory integrity" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Device Performance &amp; Health</h4>
+          <div class="gallery">
+            <img src="Images/Winsec7.png" alt="Device performance and health" onclick="openLightbox(this)" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <h2>Step 6 – Network Exposure Reduction</h2>
+      <div class="step-section">
+        <p>Reduce lateral movement opportunities.</p>
+        <ul>
+          <li>Windows Defender Firewall enabled</li>
+          <li>Inbound connections blocked by default</li>
+          <li>RDP added to authorized admin group only</li>
+        </ul>
+        <div class="gallery">
+          <img src="Images/1NetExposeRed.png" alt="Network exposure reduction step 1" onclick="openLightbox(this)" />
+          <img src="Images/2NetExposeRed.png" alt="Network exposure reduction step 2" onclick="openLightbox(this)" />
+          <img src="Images/3NetExposeRed.png" alt="Network exposure reduction step 3" onclick="openLightbox(this)" />
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <h2>Step 7 – Logging &amp; Visibility</h2>
+      <div class="step-section">
+        <p>For logging and visibility this out-of-the-box security hardening setup &amp; implementation is limited on enterprise tooling to monitor and detect for threats, so I engineered visibility with what Windows already provides out-of-the-box — PowerShell.</p>
+        <p>Here I have some lightweight PowerShell scripts that run on a daily schedule to check for any suspicious IP connections, run port scans, local IP scans, and generate a daily logon and special privilege report.</p>
+        <p>While there is no specialized tooling, this allows the use of PowerShell scripting and automation to examine the frequent things that bring threats — suspicious connections, open ports, new IPs on the network, and a logon report that monitors successful and failed logon attempts, and special assigned permissions with a given identity (e.g., system user account).</p>
+
+        <div class="sub-section">
+          <h4>BitDefender Vulnerability Scan</h4>
+          <div class="gallery">
+            <img src="Images/1L&amp;V1.png" alt="BitDefender vulnerability scan 1" onclick="openLightbox(this)" />
+            <img src="Images/1L&amp;V2.png" alt="BitDefender vulnerability scan 2" onclick="openLightbox(this)" />
+            <img src="Images/1L&amp;V3.png" alt="BitDefender vulnerability scan 3" onclick="openLightbox(this)" />
+            <img src="Images/1L&amp;V4.png" alt="BitDefender vulnerability scan 4" onclick="openLightbox(this)" />
+            <img src="Images/1L&amp;V5.png" alt="BitDefender vulnerability scan 5" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Daily Logon Report</h4>
+          <div class="gallery">
+            <img src="Images/DLR1.png" alt="Daily logon report 1" onclick="openLightbox(this)" />
+            <img src="Images/DLR2.png" alt="Daily logon report 2" onclick="openLightbox(this)" />
+            <img src="Images/DLR3.png" alt="Daily logon report 3" onclick="openLightbox(this)" />
+            <img src="Images/DLR4.png" alt="Daily logon report 4" onclick="openLightbox(this)" />
+            <img src="Images/DLR5.png" alt="Daily logon report 5" onclick="openLightbox(this)" />
+            <img src="Images/DLR6.png" alt="Daily logon report 6" onclick="openLightbox(this)" />
+            <img src="Images/DLR7.png" alt="Daily logon report 7" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>IP Monitoring</h4>
+          <div class="gallery">
+            <img src="Images/ipmon1.png" alt="IP monitoring 1" onclick="openLightbox(this)" />
+            <img src="Images/ipmon2.png" alt="IP monitoring 2" onclick="openLightbox(this)" />
+            <img src="Images/ipmon3.png" alt="IP monitoring 3" onclick="openLightbox(this)" />
+            <img src="Images/ipmon4.png" alt="IP monitoring 4" onclick="openLightbox(this)" />
+            <img src="Images/ipmon5.png" alt="IP monitoring 5" onclick="openLightbox(this)" />
+            <img src="Images/ipmon6.png" alt="IP monitoring 6" onclick="openLightbox(this)" />
+            <img src="Images/ipmon7.png" alt="IP monitoring 7" onclick="openLightbox(this)" />
+            <img src="Images/ipmon8.png" alt="IP monitoring 8" onclick="openLightbox(this)" />
+            <img src="Images/ipmon9.png" alt="IP monitoring 9" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Local IP Scan</h4>
+          <div class="gallery">
+            <img src="Images/LocalIP-ICMPScan1.png" alt="Local IP ICMP scan 1" onclick="openLightbox(this)" />
+            <img src="Images/LocalIP-ICMPScan2.png" alt="Local IP ICMP scan 2" onclick="openLightbox(this)" />
+            <img src="Images/LocalIP-TCPFallbackScan3.png" alt="Local IP TCP fallback scan 3" onclick="openLightbox(this)" />
+            <img src="Images/LocalIP-TCPFallbackScan4.png" alt="Local IP TCP fallback scan 4" onclick="openLightbox(this)" />
+            <img src="Images/LocalIP-TCPFallbackScan5.png" alt="Local IP TCP fallback scan 5" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Port Scanning</h4>
+          <div class="gallery">
+            <img src="Images/Portscanner1.png" alt="Port scanner 1" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner2.png" alt="Port scanner 2" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner3.png" alt="Port scanner 3" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner4.png" alt="Port scanner 4" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner5.png" alt="Port scanner 5" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner6.png" alt="Port scanner 6" onclick="openLightbox(this)" />
+            <img src="Images/Portscanner7.png" alt="Port scanner 7" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Post Security Controller Script</h4>
+          <p>Automates all of the above activities at once.</p>
+          <div class="gallery">
+            <img src="Images/combo1.png" alt="Security controller script 1" onclick="openLightbox(this)" />
+            <img src="Images/combo2.png" alt="Security controller script 2" onclick="openLightbox(this)" />
+            <img src="Images/combo3.png" alt="Security controller script 3" onclick="openLightbox(this)" />
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightbox overlay -->
+  <div class="lightbox" id="lightbox" onclick="handleLightboxClick(event)">
+    <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+    <button class="lightbox-arrow lightbox-prev" onclick="event.stopPropagation();changeImage(-1)">&#8249;</button>
+    <img id="lightbox-img" src="" alt="" onclick="event.stopPropagation()" />
+    <button class="lightbox-arrow lightbox-next" onclick="event.stopPropagation();changeImage(1)">&#8250;</button>
+    <div class="lightbox-counter" id="lightbox-counter">1 / 1</div>
+  </div>
+
+  <script>
+    let currentIndex = 0;
+    let currentGalleryImgs = [];
+
+    function openLightbox(img) {
+      const gallery = img.closest('.gallery');
+      currentGalleryImgs = Array.from(gallery.querySelectorAll('img'));
+      currentIndex = currentGalleryImgs.indexOf(img);
+      showImage(currentIndex);
+      document.getElementById('lightbox').classList.add('open');
+    }
+
+    function showImage(index) {
+      const img = currentGalleryImgs[index];
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox-img').alt = img.alt;
+      document.getElementById('lightbox-counter').textContent = (index + 1) + ' / ' + currentGalleryImgs.length;
+    }
+
+    function changeImage(direction) {
+      currentIndex = (currentIndex + direction + currentGalleryImgs.length) % currentGalleryImgs.length;
+      showImage(currentIndex);
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+
+    function handleLightboxClick(e) {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') changeImage(-1);
+      if (e.key === 'ArrowRight') changeImage(1);
+    });
+  </script>
+
+</body>
+</html>
