@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Windows Event Log Monitoring · Mark Thompson Portfolio</title>
   <meta name="description" content="Monitoring Windows event logs with Sysmon, Event Viewer, and PowerShell scripts to detect failed logons, process creation, and registry changes." />
-
-  <!-- THEME -->
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -21,102 +19,199 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .wrap.wide{max-width:1100px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      margin:0 0 12px 0;
+      padding-left:24px;
+      line-height:1.9;
+    }
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
     }
 
-    /* Figures – intrinsic image size + zoom cursor */
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:24px auto;
+      margin:16px auto;
       max-width:100%;
       text-align:center;
     }
     .figure img{
-      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
-      width:auto; max-width:100%; height:auto;
-      cursor: zoom-in;
+      display:block;
+      margin:0 auto;
+      border-radius:10px;
+      object-fit:contain;
+      width:auto;
+      max-width:100%;
+      height:auto;
+      cursor:zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Horizontal gallery */
-    .gallery-wrap{position:relative;margin-top:10px}
-    .gallery{
-      display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
-      align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;
-      scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;
-      -webkit-overflow-scrolling:touch
+    /* Image grid */
+    .img-grid{
+      display:grid;
+      gap:12px;
+      margin:16px 0;
     }
-    .gallery .item{scroll-snap-align:start}
-    .gallery .figure{height:100%; margin:0}
-    .gallery::-webkit-scrollbar{height:10px}
-    .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
-    .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
-    .gallery.hide-scrollbar{scrollbar-width:none}
-    .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
-    @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
-    @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
-    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
-    .gbtn:hover{background:#121733}
-    .gprev{left:-6px}
-    .gnext{right:-6px}
+    .img-grid.cols-2{grid-template-columns:1fr 1fr}
+    .img-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
+    @media(max-width:700px){
+      .img-grid.cols-2,.img-grid.cols-3{grid-template-columns:1fr}
+    }
+    .img-grid .figure{margin:0}
 
-    /* Zoom modal (no history changes) */
-    .zoom-modal{
-      position:fixed; inset:0; z-index:1000; display:none;
-      background:rgba(0,0,0,.85);
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
     }
-    .zoom-modal[open]{display:block}
-    .zoom-content{
-      position:absolute; inset:40px; display:grid; place-items:center; overflow:auto;
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
     }
-    .zoom-img{
-      max-width:95vw; max-height:95vh; width:auto; height:auto; border-radius:12px;
-      box-shadow:0 20px 60px rgba(0,0,0,.6);
-      cursor: zoom-out;
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
     }
-    .zoom-close{
-      position:absolute; top:14px; right:16px; width:40px; height:40px;
-      border-radius:999px; border:1px solid #3a4a67; background:#0e1220; color:var(--text);
-      display:grid; place-items:center; font-size:22px; line-height:1; cursor:pointer;
-    }
-    .zoom-close:hover{background:#121733}
-    .hide-scroll{overflow:hidden}
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <div class="wrap wide">
+  <div class="wrap">
+
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
@@ -138,122 +233,112 @@
       <p><a href="https://github.com/mark-thompson01/Windows-Event-Log-Monitoring" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Overview -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Overview -->
       <h2>Overview</h2>
-      <p>This lab demonstrates how to leverage <strong>Sysmon</strong>, <strong>Event Viewer</strong>, and <strong>PowerShell</strong> for effective log monitoring and detection on Windows systems.</p>
-      <ul>
-        <li><strong>Sysmon</strong>: Provides detailed system activity logging.</li>
-        <li><strong>Windows Event Viewer</strong>: GUI for log visualization.</li>
-        <li><strong>PowerShell</strong>: Automates querying and filtering logs.</li>
-      </ul>
-    </section>
+      <div class="step-section">
+        <p>This lab demonstrates how to leverage <strong style="color:var(--brand);font-weight:600;">Sysmon</strong>, <strong style="color:var(--brand);font-weight:600;">Event Viewer</strong>, and <strong style="color:var(--brand);font-weight:600;">PowerShell</strong> for effective log monitoring and detection on Windows systems.</p>
+        <ul>
+          <li><strong style="color:var(--brand);font-weight:600;">Sysmon</strong>: Provides detailed system activity logging.</li>
+          <li><strong style="color:var(--brand);font-weight:600;">Windows Event Viewer</strong>: GUI for log visualization.</li>
+          <li><strong style="color:var(--brand);font-weight:600;">PowerShell</strong>: Automates querying and filtering logs.</li>
+        </ul>
+      </div>
 
-    <!-- Sysmon -->
-    <section class="card">
+      <!-- Sysmon -->
       <h2>Monitoring with Sysmon</h2>
-      <p>Sysmon (System Monitor) extends Windows logging by capturing events like process creation, file changes, and network connections. Below are example queries using <code>Get-WinEvent</code> in PowerShell.</p>
+      <div class="step-section">
+        <p>Sysmon (System Monitor) extends Windows logging by capturing events like process creation, file changes, and network connections. Below are example queries using <code>Get-WinEvent</code> in PowerShell.</p>
 
-      <h3>Example Queries</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Sysmon screenshots">
-          <article class="item"><figure class="figure"><img src="Images/List%20All%20Sysmon%20Events.PNG" alt="List All Sysmon Events"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/List%20all%20network%20connection%20events.PNG" alt="List all network connection events"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/List%20all%20process%20creation%20events.PNG" alt="List all process creation events"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/List%20new%20files%20created.PNG" alt="List events for new files created"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/List%20events%20for%20file%20modifications.PNG" alt="List events for file modifications"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Monitor%20for%20Remote%20Thread%20Creation.PNG" alt="Monitor for remote thread creation"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Monitor%20for%20changes%20to%20the%20registry.PNG" alt="Monitor for registry changes"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Retrieve%20Failed%20Logon%20Attempts.PNG" alt="List failed logon attempts"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Retrieve%20Successful%20Login%20Events.PNG" alt="List successful logon events"></figure></article>
+        <div class="sub-section">
+          <h4>Example Queries</h4>
+          <div class="img-grid cols-2">
+            <figure class="figure"><img src="Images/List%20All%20Sysmon%20Events.PNG" alt="List All Sysmon Events" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/List%20all%20network%20connection%20events.PNG" alt="List all network connection events" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/List%20all%20process%20creation%20events.PNG" alt="List all process creation events" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/List%20new%20files%20created.PNG" alt="List events for new files created" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/List%20events%20for%20file%20modifications.PNG" alt="List events for file modifications" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/Monitor%20for%20Remote%20Thread%20Creation.PNG" alt="Monitor for remote thread creation" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/Monitor%20for%20changes%20to%20the%20registry.PNG" alt="Monitor for registry changes" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/Retrieve%20Failed%20Logon%20Attempts.PNG" alt="List failed logon attempts" loading="lazy"></figure>
+          </div>
+          <figure class="figure"><img src="Images/Retrieve%20Successful%20Login%20Events.PNG" alt="List successful logon events" loading="lazy"></figure>
         </div>
       </div>
-    </section>
 
-    <!-- Event Viewer -->
-    <section class="card">
+      <!-- Event Viewer -->
       <h2>Monitoring with Windows Event Viewer</h2>
+      <div class="step-section">
 
-      <h3>Failed Login Attempts</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Failed login screenshots">
-          <article class="item"><figure class="figure"><img src="Images/EventViewer1.PNG" alt="Failed logon 1"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer2.PNG" alt="Failed logon 2"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer2.1.PNG" alt="Failed logon 3"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer2.2.PNG" alt="Failed logon 4"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer2.3.PNG" alt="Failed logon 5"></figure></article>
+        <div class="sub-section">
+          <h4>Failed Login Attempts</h4>
+          <div class="img-grid cols-2">
+            <figure class="figure"><img src="Images/EventViewer1.PNG" alt="Failed logon 1" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer2.PNG" alt="Failed logon 2" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer2.1.PNG" alt="Failed logon 3" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer2.2.PNG" alt="Failed logon 4" loading="lazy"></figure>
+          </div>
+          <figure class="figure"><img src="Images/EventViewer2.3.PNG" alt="Failed logon 5" loading="lazy"></figure>
         </div>
+
+        <div class="sub-section">
+          <h4>Successful Logins</h4>
+          <div class="img-grid cols-2">
+            <figure class="figure"><img src="Images/EventViewer3.PNG" alt="Successful login 1" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer4.PNG" alt="Successful login 2" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer5.PNG" alt="Successful login 3" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer5.1.PNG" alt="Successful login 4" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer5.2.PNG" alt="Successful login 5" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer5.3.PNG" alt="Successful login 6" loading="lazy"></figure>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Special Privileges Assigned to New Logon</h4>
+          <div class="img-grid cols-3">
+            <figure class="figure"><img src="Images/EventViewer6.PNG" alt="Special privileges 1" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer7.PNG" alt="Special privileges 2" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/EventViewer8.PNG" alt="Special privileges 3" loading="lazy"></figure>
+          </div>
+        </div>
+
       </div>
 
-      <h3>Successful Logins</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Successful login screenshots">
-          <article class="item"><figure class="figure"><img src="Images/EventViewer3.PNG" alt="Successful login 1"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer4.PNG" alt="Successful login 2"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer5.PNG" alt="Successful login 3"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer5.1.PNG" alt="Successful login 4"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer5.2.PNG" alt="Successful login 5"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer5.3.PNG" alt="Successful login 6"></figure></article>
-        </div>
-      </div>
-
-      <h3>Special Privileges Assigned to New Logon</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Special privileges screenshots">
-          <article class="item"><figure class="figure"><img src="Images/EventViewer6.PNG" alt="Special privileges 1"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer7.PNG" alt="Special privileges 2"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/EventViewer8.PNG" alt="Special privileges 3"></figure></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- PowerShell -->
-    <section class="card">
+      <!-- PowerShell -->
       <h2>Monitoring with PowerShell Scripts</h2>
+      <div class="step-section">
 
-      <h3>Failed Login Attempts</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Failed login PowerShell screenshots">
-          <article class="item"><figure class="figure"><img src="Images/FailedLoginMonitoringPSScript.PNG" alt="PowerShell failed logon script"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/RunningFailedLoginScript.PNG" alt="Running failed logon script"></figure></article>
+        <div class="sub-section">
+          <h4>Failed Login Attempts</h4>
+          <div class="img-grid cols-2">
+            <figure class="figure"><img src="Images/FailedLoginMonitoringPSScript.PNG" alt="PowerShell failed logon script" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/RunningFailedLoginScript.PNG" alt="Running failed logon script" loading="lazy"></figure>
+          </div>
         </div>
+
+        <div class="sub-section">
+          <h4>Successful Logins</h4>
+          <div class="img-grid cols-2">
+            <figure class="figure"><img src="Images/SuccessfulLogins.PNG" alt="PowerShell successful logon script" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/RunningSuccessfulLoginScript.PNG" alt="Running successful logon script" loading="lazy"></figure>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Process Creation Events</h4>
+          <div class="img-grid cols-2">
+            <figure class="figure"><img src="Images/ProcessCreationEvents.PNG" alt="Process creation script" loading="lazy"></figure>
+            <figure class="figure"><img src="Images/ProcessCreationEventsScriptRun.PNG" alt="Running process creation script" loading="lazy"></figure>
+          </div>
+        </div>
+
       </div>
 
-      <h3>Successful Logins</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Successful login PowerShell screenshots">
-          <article class="item"><figure class="figure"><img src="Images/SuccessfulLogins.PNG" alt="PowerShell successful logon script"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/RunningSuccessfulLoginScript.PNG" alt="Running successful logon script"></figure></article>
-        </div>
-      </div>
+    </main>
 
-      <h3>Process Creation Events</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Process creation PowerShell screenshots">
-          <article class="item"><figure class="figure"><img src="Images/ProcessCreationEvents.PNG" alt="Process creation script"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ProcessCreationEventsScriptRun.PNG" alt="Running process creation script"></figure></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -265,75 +350,35 @@
     </footer>
   </div>
 
-  <!-- gallery wheel + arrows -->
+  <!-- Lightbox -->
   <script>
     (function(){
-      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
-        const scroller = wrap.querySelector('.gallery');
-        if(!scroller) return;
-        const left = wrap.querySelector('.gprev');
-        const right = wrap.querySelector('.gnext');
-        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
-        left  && left .addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
-        right && right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
-        scroller.addEventListener('wheel', (e) => {
-          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
-            e.preventDefault();
-            scroller.scrollLeft += e.deltaY;
-          }
-        }, {passive:false});
-      });
-    })();
-  </script>
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
 
-  <!-- Zoom modal (built once, reused) -->
-  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-label="Image viewer">
-    <div class="zoom-content" data-close>
-      <img class="zoom-img" id="zoomImg" alt="">
-      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      const modal = document.getElementById('zoom');
-      const zoomImg = document.getElementById('zoomImg');
-      const closeBtn = modal.querySelector('.zoom-close');
-
-      function openModal(src, alt){
-        zoomImg.src = src;
-        zoomImg.alt = alt || '';
-        modal.setAttribute('open', '');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('hide-scroll');
-        closeBtn.focus();
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
-      function closeModal(){
-        modal.removeAttribute('open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('hide-scroll');
-        zoomImg.src = '';
-        zoomImg.alt = '';
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
       }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
 
-      // Delegate clicks from any figure image (works inside galleries too)
-      document.addEventListener('click', (e) => {
-        const img = e.target.closest('.figure img');
-        if (img){
-          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
-          openModal(full, img.alt);
-        }
-      });
-
-      // Close interactions
-      closeBtn.addEventListener('click', closeModal);
-      modal.addEventListener('click', (e) => {
-        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
-      });
-      zoomImg.addEventListener('click', closeModal);
-      document.addEventListener('keydown', (e) => {
-        if (!modal.hasAttribute('open')) return;
-        if (e.key === 'Escape') closeModal();
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        img.addEventListener('click', ()=>{
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
       });
     })();
   </script>
