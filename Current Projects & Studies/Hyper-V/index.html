@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hyper-V Lab · Mark Thompson Portfolio</title>
   <meta name="description" content="Introduction to the Hyper-V Lab project, exploring Microsoft's virtualization platform and hands-on system administration practice." />
-  
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -15,161 +14,221 @@
     html,body{height:100%}
     body{
       margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:18px;
+      padding:32px;
       margin-top:16px;
     }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+
     /* Module list */
-    .modulelist a{
-      display:block;padding:10px 12px;margin:8px 0;
-      border:1px solid var(--card-border); border-radius:12px;
-      background:rgba(255,255,255,.02);
+    .module-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:8px;
     }
-    .modulelist a:hover{
-      background:rgba(255,255,255,.05);
+    .module-list a{
+      display:block;
+      padding:14px 18px;
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:rgba(77,163,255,.04);
+      color:var(--brand);
+      font-size:16px;
+      font-weight:500;
+      text-decoration:none;
+      transition:background .15s, border-color .15s;
+    }
+    .module-list a:hover{
+      background:rgba(77,163,255,.09);
+      border-color:#3a4a67;
+      text-decoration:none;
     }
 
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
 
-    ul {margin:8px 0 8px 20px}
-    li {margin-bottom:6px}
-
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} 
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
     footer a:hover{color:var(--brand)}
   </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-  <nav class="topnav" aria-label="Sections">
-    <a href="/MTPortfolio/">Home</a>
-    <a href="/MTPortfolio/Skills">Networking</a>
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
-    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
-    <a href="/MTPortfolio/Blogs">Blog</a>
-  </nav>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <div class="crumbs">
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Hyper-V Lab</span>
-  </div>
-
-  <header>
-    <h1>Hyper-V Lab</h1>
-    <p class="lead">
-      A hands-on, continuously expanding Hyper-V learning environment built to develop real systems administration experience through experimentation, research, and practical implementation.
-    </p>
-    <p>
-      <a href="https://github.com/mark-thompson01/hyper-v-lab/tree/main" target="_blank" rel="noopener">
-          View this project on GitHub
-        </a>
-      </p>
-  </header>
-
-  <!-- INTRO CARD -->
-  <section class="card">
-    <h2>Introduction</h2>
-    <p>
-      As someone who is passionate about systems administration, the objective of this project is to explore, experiment, tinker, research, learn, and ultimately have fun while continuously building out my skillset.  
-    </p>
-    <p>
-      This lab was created from a desire to learn Microsoft’s virtualization platform, <strong>Hyper-V</strong>, and gain direct hands-on experience by setting up a customized environment from scratch.  
-      The primary system configured as the Hyper-V host for this project is a <strong>Lenovo ThinkPad E15 Gen 2</strong> running <strong>Windows 11 Professional</strong>.
-    </p>
-    <p>
-      Hyper-V is built into both <strong>Windows Server</strong> editions and <strong>Windows Pro / Enterprise</strong> editions, allowing systems that meet the minimum hardware specifications to create and manage virtual machines (VMs).  
-    </p>
-  </section>
-
-  <!-- HYPERV EXPLANATION -->
-  <section class="card">
-    <h2>What Hyper-V Actually Is</h2>
-    <p>
-      Hyper-V is a <strong>Type-1 (bare-metal) hypervisor</strong> — regardless of whether it is installed on enterprise server hardware or a standard laptop.  
-      The hypervisor layer runs directly on the physical hardware and introduces a lightweight virtualization layer that sits between the hardware and the operating system.
-    </p>
-    <p>
-      When Hyper-V is enabled, Windows transitions into what is known as the <strong>root partition</strong>, and all virtual machines run inside isolated <strong>child partitions</strong>.  
-      This structure allows multiple VMs to share the same physical resources (CPU, memory, storage, network) while maintaining isolation and stability across all workloads.
-    </p>
-  </section>
-
-  <!-- LAB PURPOSE -->
-  <section class="card">
-    <h2>Lab Purpose</h2>
-    <p>
-      This lab will serve as the foundation for many future projects involving Windows Server, Linux, networking, virtualization, and enterprise-style network environments.  
-      It begins with understanding Hyper-V itself and will expand into additional labs over time.
-    </p>
-  </section>
-
-  <!-- LAB STRUCTURE -->
-  <section class="card">
-    <h2>Lab Structure</h2>
-    <p>The Hyper-V lab is organized into multiple sections, each with its own dedicated page:</p>
-
-    <!-- Structure / subpages -->
-    <section class="card">
-      <h2>Lab Modules</h2>
-      <div class="modulelist">
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Overview">Hyper-V Overview</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Setup">Hyper-V Setups & Hardware Specs</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Enable">Enabling Hyper-V in Windows 11</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Manager">Hyper-V Manager</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Creating%20VMs">Creating VMs & OS Installations</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Switch">Setting up a Virtual Switch - vSwitch</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Management%20Tasks">Hyper-V Manager Administrative Tasks I</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Management%20Tasks%20II">Hyper-V Manager Administrative Tasks II</a>
-      </div>
-    </section>
-
-
-    <p>Future sections will be added as the environment grows.</p>
-  </section>
-    <p><em>Hyper-V is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
-  <p><a href="../index.html">Back to Home</a></p>
-
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-    <div class="links">
-      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>Hyper-V Lab</span>
     </div>
-  </footer>
 
-</div>
+    <!-- Header -->
+    <header>
+      <h1>Hyper-V Lab</h1>
+      <p class="lead">A hands-on, continuously expanding Hyper-V learning environment built to develop real systems administration experience through experimentation, research, and practical implementation.</p>
+      <p><a href="https://github.com/mark-thompson01/hyper-v-lab/tree/main" target="_blank" rel="noopener">View this project on GitHub</a></p>
+    </header>
+
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Introduction -->
+      <h2>Introduction</h2>
+      <div class="step-section">
+        <p>As someone who is passionate about systems administration, the objective of this project is to explore, experiment, tinker, research, learn, and ultimately have fun while continuously building out my skillset.</p>
+        <p>This lab was created from a desire to learn Microsoft's virtualization platform, <strong style="color:var(--brand);">Hyper-V</strong>, and gain direct hands-on experience by setting up a customized environment from scratch. The primary system configured as the Hyper-V host for this project is a <strong style="color:var(--brand);">Lenovo ThinkPad E15 Gen 2</strong> running <strong style="color:var(--brand);">Windows 11 Professional</strong>.</p>
+        <p>Hyper-V is built into both <strong style="color:var(--brand);">Windows Server</strong> editions and <strong style="color:var(--brand);">Windows Pro / Enterprise</strong> editions, allowing systems that meet the minimum hardware specifications to create and manage virtual machines (VMs).</p>
+      </div>
+
+      <!-- What Hyper-V Actually Is -->
+      <h2>What Hyper-V Actually Is</h2>
+      <div class="step-section">
+        <p>Hyper-V is a <strong style="color:var(--brand);">Type-1 (bare-metal) hypervisor</strong> — regardless of whether it is installed on enterprise server hardware or a standard laptop. The hypervisor layer runs directly on the physical hardware and introduces a lightweight virtualization layer that sits between the hardware and the operating system.</p>
+        <p>When Hyper-V is enabled, Windows transitions into what is known as the <strong style="color:var(--brand);">root partition</strong>, and all virtual machines run inside isolated <strong style="color:var(--brand);">child partitions</strong>. This structure allows multiple VMs to share the same physical resources (CPU, memory, storage, network) while maintaining isolation and stability across all workloads.</p>
+      </div>
+
+      <!-- Lab Purpose -->
+      <h2>Lab Purpose</h2>
+      <div class="step-section">
+        <p>This lab will serve as the foundation for many future projects involving Windows Server, Linux, networking, virtualization, and enterprise-style network environments. It begins with understanding Hyper-V itself and will expand into additional labs over time.</p>
+      </div>
+
+      <!-- Lab Modules -->
+      <h2>Lab Modules</h2>
+      <div class="step-section">
+        <div class="module-list">
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Overview">Hyper-V Overview</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Setup">Hyper-V Setups &amp; Hardware Specs</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Enable">Enabling Hyper-V in Windows 11</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Manager">Hyper-V Manager</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Creating%20VMs">Creating VMs &amp; OS Installations</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Hyper-V%20Switch">Setting up a Virtual Switch - vSwitch</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Management%20Tasks">Hyper-V Manager Administrative Tasks I</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/Management%20Tasks%20II">Hyper-V Manager Administrative Tasks II</a>
+        </div>
+        <p style="margin-top:16px">Future sections will be added as the environment grows.</p>
+      </div>
+
+      <!-- Trademark -->
+      <div class="step-section">
+        <p><em style="font-size:14px;">Hyper-V is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
