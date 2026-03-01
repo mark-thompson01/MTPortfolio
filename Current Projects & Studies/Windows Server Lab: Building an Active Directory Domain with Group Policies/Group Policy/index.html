@@ -19,91 +19,216 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumbs */
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:8px 0 10px;font-size:22px}
-    h3{margin:14px 0 8px;font-size:18px}
-    h4{margin:12px 0 6px;font-size:16px}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* Cards */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
-    ul,ol{padding-left:22px;margin:8px 0}
-    .tight li{margin:6px 0}
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Images */
-    .img-wrap{margin:12px 0;text-align:center}
-    .img-wrap img{
-      display:block;margin:0 auto;
-      max-width:70%;
-      height:auto;
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
       border:1px solid var(--card-border);
       border-radius:12px;
-      cursor: zoom-in; /* indicate zoomability */
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul, .step-section ol{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section li{margin:6px 0}
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    code{
-      background:#1b2233;border:1px solid #2A3447;border-radius:8px;
-      padding:10px 12px;display:block;white-space:pre-wrap;overflow-x:auto
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul, .sub-section ol{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section li{margin:6px 0}
+    .sub-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Figures */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:16px auto;
+      width:min(70%, 820px);
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:10px;
+      cursor:zoom-in;
+    }
+    @media (max-width:900px){ .figure{width:92%} }
 
-    /* Lightbox (zoom) for ALL images */
+    /* Lightbox */
     .lightbox{
-      position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.86); z-index:9999;
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.86);z-index:9999;
     }
     .lightbox.open{display:grid}
-    .lb-stage{position:relative; max-width:96vw; max-height:92vh}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
     .lb-img{
-      display:block; width:auto; height:auto; max-width:96vw; max-height:92vh;
-      border-radius:12px; box-shadow:var(--shadow);
+      display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;
+      border-radius:12px;box-shadow:var(--shadow);
     }
-    .lb-cap{color:#cfd6e6; font-size:13px; text-align:center; margin-top:8px}
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
     .lb-btn{
-      position:absolute; top:10px; padding:6px 10px; border-radius:10px;
-      border:1px solid #2A3447; background:#0e1220; color:var(--text);
-      cursor:pointer; user-select:none;
+      position:absolute;top:10px;padding:6px 10px;border-radius:10px;
+      border:1px solid #2A3447;background:#0e1220;color:var(--text);
+      cursor:pointer;user-select:none;
     }
     .lb-close{right:10px}
     .lb-prev,.lb-next{
-      top:50%; translate:0 -50%; width:44px; height:44px; display:grid; place-items:center;
-      border-radius:999px; font-size:20px; line-height:1;
+      top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;
+      border-radius:999px;font-size:20px;line-height:1;
     }
     .lb-prev{left:-58px}
     .lb-next{right:-58px}
-    @media (max-width:700px){
-      .lb-prev{left:-8px} .lb-next{right:-8px}
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
     }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
 
-    <!-- Top nav -->
+    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -125,197 +250,286 @@
       <p class="lead">Create and link GPOs, then scope them to users or computers. These examples cover common user restrictions, security baselines, and security filtering with AD groups.</p>
     </header>
 
-    <!-- Intro -->
-    <section class="card">
-      <p>The following demonstration outlines how to set up basic GPOs and apply them to Active Directory user and computer accounts.</p>
-    </section>
+    <!-- Main content -->
+    <main class="content">
 
-    <!-- User GPO: Remove Run -->
-    <section class="card">
+      <!-- Intro -->
+      <h2>Overview</h2>
+      <div class="step-section">
+        <p>The following demonstration outlines how to set up basic GPOs and apply them to Active Directory user and computer accounts.</p>
+      </div>
+
+      <!-- User GPOs -->
       <h2>GPO Applied to AD User Account</h2>
-      <h3>Hide the “Run” Command from Start Menu (User GPO)</h3>
-      <p><strong>Objective:</strong> Prevent users from accessing <strong>Run</strong> (<kbd>Win</kbd>+<kbd>R</kbd>) to limit launching tools or scripts.</p>
 
-      <h4>1) Open Group Policy Management</h4>
-      <p>Server Manager → <strong>Tools</strong> → <strong>Group Policy Management</strong>.</p>
-      <div class="img-wrap"><img src="Images/DR1.PNG" alt="Open Group Policy Management from Server Manager"></div>
+      <!-- Hide Run -->
+      <div class="step-section">
 
-      <h4>2) Expand the Forest/Domain</h4>
-      <div class="img-wrap"><img src="Images/DR2.PNG" alt="GPMC forest and domain view"></div>
+        <div class="sub-section">
+          <h4>Hide the "Run" Command from Start Menu (User GPO)</h4>
+          <p><strong style="color:var(--brand);">Objective:</strong> Prevent users from accessing <strong style="color:var(--brand);">Run</strong> (Win+R) to limit launching tools or scripts.</p>
+        </div>
 
-      <h4>3) Create & Link a GPO at the Domain</h4>
-      <p>Right-click the domain → <strong>Create a GPO in this domain, and Link it here…</strong></p>
-      <div class="img-wrap"><img src="Images/DR3.PNG" alt="Create and link GPO dialog"></div>
+        <div class="sub-section">
+          <h4>1) Open Group Policy Management</h4>
+          <p>Server Manager → <strong style="color:var(--brand);">Tools</strong> → <strong style="color:var(--brand);">Group Policy Management</strong>.</p>
+          <figure class="figure"><img src="Images/DR1.PNG" alt="Open Group Policy Management from Server Manager" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>4) Name the GPO</h4>
-      <div class="img-wrap"><img src="Images/DR4.PNG" alt="New GPO name"></div>
+        <div class="sub-section">
+          <h4>2) Expand the Forest/Domain</h4>
+          <figure class="figure"><img src="Images/DR2.PNG" alt="GPMC forest and domain view" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>5) Edit the GPO</h4>
-      <div class="img-wrap"><img src="Images/DR5.PNG" alt="Edit GPO context menu"></div>
+        <div class="sub-section">
+          <h4>3) Create &amp; Link a GPO at the Domain</h4>
+          <p>Right-click the domain → <strong style="color:var(--brand);">Create a GPO in this domain, and Link it here…</strong></p>
+          <figure class="figure"><img src="Images/DR3.PNG" alt="Create and link GPO dialog" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>6) Configure the Setting</h4>
-      <p><strong>User Configuration → Policies → Administrative Templates → Start Menu and Taskbar</strong> → <em>Remove Run menu from Start Menu</em></p>
-      <div class="img-wrap"><img src="Images/DR6.PNG" alt="Remove Run menu policy path"></div>
+        <div class="sub-section">
+          <h4>4) Name the GPO</h4>
+          <figure class="figure"><img src="Images/DR4.PNG" alt="New GPO name" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>7) Enable the Policy</h4>
-      <div class="img-wrap"><img src="Images/DR7.PNG" alt="Enable Remove Run menu policy"></div>
-    </section>
+        <div class="sub-section">
+          <h4>5) Edit the GPO</h4>
+          <figure class="figure"><img src="Images/DR5.PNG" alt="Edit GPO context menu" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- User GPO: Disable Control Panel -->
-    <section class="card">
-      <h3>Disable Control Panel and Settings (User GPO)</h3>
-      <p><strong>Objective:</strong> Block access to Control Panel and the Settings app on domain-joined clients.</p>
+        <div class="sub-section">
+          <h4>6) Configure the Setting</h4>
+          <p><strong style="color:var(--brand);">User Configuration → Policies → Administrative Templates → Start Menu and Taskbar</strong> → <em>Remove Run menu from Start Menu</em></p>
+          <figure class="figure"><img src="Images/DR6.PNG" alt="Remove Run menu policy path" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>1) Open GPMC & Create GPO</h4>
-      <div class="img-wrap"><img src="Images/GP1.PNG" alt="Open GPMC"></div>
-      <div class="img-wrap"><img src="Images/GP2.PNG" alt="Domain structure in GPMC"></div>
+        <div class="sub-section">
+          <h4>7) Enable the Policy</h4>
+          <figure class="figure"><img src="Images/DR7.PNG" alt="Enable Remove Run menu policy" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>2) Create & Link at Domain</h4>
-      <div class="img-wrap"><img src="Images/GP3.PNG" alt="Create and link GPO"></div>
+      </div>
 
-      <h4>3) Name the GPO</h4>
-      <div class="img-wrap"><img src="Images/GP4.PNG" alt="Name new GPO"></div>
+      <!-- Disable Control Panel -->
+      <div class="step-section">
 
-      <h4>4) Edit the GPO</h4>
-      <div class="img-wrap"><img src="Images/GP5.PNG" alt="Edit GPO"></div>
+        <div class="sub-section">
+          <h4>Disable Control Panel and Settings (User GPO)</h4>
+          <p><strong style="color:var(--brand);">Objective:</strong> Block access to Control Panel and the Settings app on domain-joined clients.</p>
+        </div>
 
-      <h4>5) Configure the Setting</h4>
-      <p><strong>User Configuration → Policies → Administrative Templates → Control Panel</strong> → <em>Prohibit access to Control Panel and PC settings</em></p>
-      <div class="img-wrap"><img src="Images/GP6.PNG" alt="Control Panel policy path"></div>
+        <div class="sub-section">
+          <h4>1) Open GPMC &amp; Create GPO</h4>
+          <figure class="figure"><img src="Images/GP1.PNG" alt="Open GPMC" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/GP2.PNG" alt="Domain structure in GPMC" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>6) Enable the Policy</h4>
-      <div class="img-wrap"><img src="Images/GP7.PNG" alt="Policy selection"></div>
-      <div class="img-wrap"><img src="Images/GP8.PNG" alt="Enable prohibit Control Panel policy"></div>
-    </section>
+        <div class="sub-section">
+          <h4>2) Create &amp; Link at Domain</h4>
+          <figure class="figure"><img src="Images/GP3.PNG" alt="Create and link GPO" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- Computer GPO: Account Lockout -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>3) Name the GPO</h4>
+          <figure class="figure"><img src="Images/GP4.PNG" alt="Name new GPO" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>4) Edit the GPO</h4>
+          <figure class="figure"><img src="Images/GP5.PNG" alt="Edit GPO" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>5) Configure the Setting</h4>
+          <p><strong style="color:var(--brand);">User Configuration → Policies → Administrative Templates → Control Panel</strong> → <em>Prohibit access to Control Panel and PC settings</em></p>
+          <figure class="figure"><img src="Images/GP6.PNG" alt="Control Panel policy path" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>6) Enable the Policy</h4>
+          <figure class="figure"><img src="Images/GP7.PNG" alt="Policy selection" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/GP8.PNG" alt="Enable prohibit Control Panel policy" loading="lazy" decoding="async"></figure>
+        </div>
+
+      </div>
+
+      <!-- Computer GPOs -->
       <h2>GPO Applied to AD Computer Account</h2>
-      <h3>Account Lockout Policy (Computer GPO)</h3>
-      <p>One of the first domain security baselines: define lockout threshold/duration to mitigate brute-force attempts.</p>
 
-      <h4>1) Open GPMC</h4>
-      <div class="img-wrap"><img src="Images/AccountL1.PNG" alt="Open GPMC from Server Manager"></div>
+      <!-- Account Lockout -->
+      <div class="step-section">
 
-      <h4>2) Create & Link a New GPO</h4>
-      <div class="img-wrap"><img src="Images/AccountL2.PNG" alt="Create and link Account Lockout GPO"></div>
+        <div class="sub-section">
+          <h4>Account Lockout Policy (Computer GPO)</h4>
+          <p>One of the first domain security baselines: define lockout threshold/duration to mitigate brute-force attempts.</p>
+        </div>
 
-      <h4>3) Name the GPO</h4>
-      <div class="img-wrap"><img src="Images/AccountL3.PNG" alt="Account Lockout Policy GPO name"></div>
+        <div class="sub-section">
+          <h4>1) Open GPMC</h4>
+          <figure class="figure"><img src="Images/AccountL1.PNG" alt="Open GPMC from Server Manager" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>4) Edit the GPO</h4>
-      <div class="img-wrap"><img src="Images/AccountL4.PNG" alt="Edit Account Lockout GPO"></div>
+        <div class="sub-section">
+          <h4>2) Create &amp; Link a New GPO</h4>
+          <figure class="figure"><img src="Images/AccountL2.PNG" alt="Create and link Account Lockout GPO" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>5) Configure Policies</h4>
-      <p><strong>Computer Configuration → Policies → Windows Settings → Security Settings → Account Policies → Account Lockout Policy</strong></p>
-      <div class="img-wrap"><img src="Images/AccountL5.PNG" alt="Account Lockout Policy path"></div>
+        <div class="sub-section">
+          <h4>3) Name the GPO</h4>
+          <figure class="figure"><img src="Images/AccountL3.PNG" alt="Account Lockout Policy GPO name" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>6) Set Threshold</h4>
-      <div class="img-wrap"><img src="Images/AccountL6.PNG" alt="Open Account lockout threshold"></div>
+        <div class="sub-section">
+          <h4>4) Edit the GPO</h4>
+          <figure class="figure"><img src="Images/AccountL4.PNG" alt="Edit Account Lockout GPO" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>7) Example Configuration</h4>
-      <p>Choose a threshold (e.g., <em>3 invalid attempts</em>), and define lockout duration/reset values.</p>
-      <div class="img-wrap"><img src="Images/AccountL7.PNG" alt="Configure lockout threshold"></div>
-    </section>
+        <div class="sub-section">
+          <h4>5) Configure Policies</h4>
+          <p><strong style="color:var(--brand);">Computer Configuration → Policies → Windows Settings → Security Settings → Account Policies → Account Lockout Policy</strong></p>
+          <figure class="figure"><img src="Images/AccountL5.PNG" alt="Account Lockout Policy path" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- Computer GPO: Custom Logon Message -->
-    <section class="card">
-      <h3>Custom Logon Message (Computer GPO)</h3>
-      <p><strong>Objective:</strong> Display a legal/banner message at sign-in.</p>
+        <div class="sub-section">
+          <h4>6) Set Threshold</h4>
+          <figure class="figure"><img src="Images/AccountL6.PNG" alt="Open Account lockout threshold" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>1) Create & Link a New GPO</h4>
-      <p>GPMC → Right-click the domain → <strong>Create a GPO in this domain, and Link it here…</strong></p>
-      <div class="img-wrap"><img src="Images/CL1.PNG" alt="Create Custom Logon Message GPO"></div>
+        <div class="sub-section">
+          <h4>7) Example Configuration</h4>
+          <p>Choose a threshold (e.g., <em>3 invalid attempts</em>), and define lockout duration/reset values.</p>
+          <figure class="figure"><img src="Images/AccountL7.PNG" alt="Configure lockout threshold" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>2) Name the GPO</h4>
-      <div class="img-wrap"><img src="Images/CL2.PNG" alt="Name Custom Logon Message GPO"></div>
+      </div>
 
-      <h4>3) Edit the GPO</h4>
-      <div class="img-wrap"><img src="Images/CL3.PNG" alt="Edit Custom Logon Message GPO"></div>
+      <!-- Custom Logon Message -->
+      <div class="step-section">
 
-      <h4>4) Configure Security Option</h4>
-      <p><strong>Computer Configuration → Policies → Windows Settings → Security Settings → Local Policies → Security Options</strong> → <em>Interactive logon: Message title for users attempting to log on</em> (and the accompanying <em>Message text</em>).</p>
-      <div class="img-wrap"><img src="Images/CL4.PNG" alt="Security Options path"></div>
+        <div class="sub-section">
+          <h4>Custom Logon Message (Computer GPO)</h4>
+          <p><strong style="color:var(--brand);">Objective:</strong> Display a legal/banner message at sign-in.</p>
+        </div>
 
-      <h4>5) Set the Message</h4>
-      <div class="img-wrap"><img src="Images/CL5.PNG" alt="Configure logon message title"></div>
-    </section>
+        <div class="sub-section">
+          <h4>1) Create &amp; Link a New GPO</h4>
+          <p>GPMC → Right-click the domain → <strong style="color:var(--brand);">Create a GPO in this domain, and Link it here…</strong></p>
+          <figure class="figure"><img src="Images/CL1.PNG" alt="Create Custom Logon Message GPO" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- Computer GPO: Disable USB storage -->
-    <section class="card">
-      <h3>Disable USB Storage Devices (Computer GPO)</h3>
-      <p><strong>Objective:</strong> Block USB mass-storage devices on domain-joined computers.</p>
+        <div class="sub-section">
+          <h4>2) Name the GPO</h4>
+          <figure class="figure"><img src="Images/CL2.PNG" alt="Name Custom Logon Message GPO" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>1) Configure Removable Storage Access</h4>
-      <p><strong>Computer Configuration → Policies → Administrative Templates → System → Removable Storage Access</strong> → <em>All Removable Storage classes: Deny all access</em></p>
-      <div class="img-wrap"><img src="Images/RSD1.PNG" alt="Removable Storage Access policy path"></div>
+        <div class="sub-section">
+          <h4>3) Edit the GPO</h4>
+          <figure class="figure"><img src="Images/CL3.PNG" alt="Edit Custom Logon Message GPO" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>2) Enable Policy</h4>
-      <div class="img-wrap"><img src="Images/RSD2.PNG" alt="Enable deny all access"></div>
-    </section>
+        <div class="sub-section">
+          <h4>4) Configure Security Option</h4>
+          <p><strong style="color:var(--brand);">Computer Configuration → Policies → Windows Settings → Security Settings → Local Policies → Security Options</strong> → <em>Interactive logon: Message title for users attempting to log on</em> (and the accompanying <em>Message text</em>).</p>
+          <figure class="figure"><img src="Images/CL4.PNG" alt="Security Options path" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- Security Group + Security Filtering -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>5) Set the Message</h4>
+          <figure class="figure"><img src="Images/CL5.PNG" alt="Configure logon message title" loading="lazy" decoding="async"></figure>
+        </div>
+
+      </div>
+
+      <!-- Disable USB -->
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>Disable USB Storage Devices (Computer GPO)</h4>
+          <p><strong style="color:var(--brand);">Objective:</strong> Block USB mass-storage devices on domain-joined computers.</p>
+        </div>
+
+        <div class="sub-section">
+          <h4>1) Configure Removable Storage Access</h4>
+          <p><strong style="color:var(--brand);">Computer Configuration → Policies → Administrative Templates → System → Removable Storage Access</strong> → <em>All Removable Storage classes: Deny all access</em></p>
+          <figure class="figure"><img src="Images/RSD1.PNG" alt="Removable Storage Access policy path" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>2) Enable Policy</h4>
+          <figure class="figure"><img src="Images/RSD2.PNG" alt="Enable deny all access" loading="lazy" decoding="async"></figure>
+        </div>
+
+      </div>
+
+      <!-- Security Group + Filtering -->
       <h2>Create a Security Group and Scope a GPO with Security Filtering</h2>
+      <div class="step-section">
 
-      <h3>Step 1: Create a Security Group in AD</h3>
-      <ol class="tight">
-        <li>Open <strong>Active Directory Users and Computers</strong> (dsa.msc).</li>
-        <li>Navigate to the desired OU → Right-click → <strong>New → Group</strong>.</li>
-        <li>Name it (e.g., <strong>GPO Testers</strong>), Type: <strong>Security</strong>, Scope: <strong>Global</strong>.</li>
-      </ol>
-      <div class="img-wrap"><img src="Images/SG1.PNG" alt="ADUC open"></div>
-      <div class="img-wrap"><img src="Images/SG2.PNG" alt="Create new group"></div>
-      <div class="img-wrap"><img src="Images/SG3.PNG" alt="Group properties"></div>
+        <div class="sub-section">
+          <h4>Step 1: Create a Security Group in AD</h4>
+          <ol>
+            <li>Open <strong style="color:var(--brand);">Active Directory Users and Computers</strong> (dsa.msc).</li>
+            <li>Navigate to the desired OU → Right-click → <strong style="color:var(--brand);">New → Group</strong>.</li>
+            <li>Name it (e.g., <strong style="color:var(--brand);">GPO Testers</strong>), Type: <strong style="color:var(--brand);">Security</strong>, Scope: <strong style="color:var(--brand);">Global</strong>.</li>
+          </ol>
+          <figure class="figure"><img src="Images/SG1.PNG" alt="ADUC open" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG2.PNG" alt="Create new group" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG3.PNG" alt="Group properties" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>Step 2: Add Users to the Group</h3>
-      <ol class="tight">
-        <li>Open the group → <strong>Members</strong> tab → <strong>Add</strong> users → <strong>OK</strong>.</li>
-      </ol>
-      <div class="img-wrap"><img src="Images/SG4.PNG" alt="Add members to group"></div>
-      <div class="img-wrap"><img src="Images/SG5.PNG" alt="Members list"></div>
+        <div class="sub-section">
+          <h4>Step 2: Add Users to the Group</h4>
+          <ol>
+            <li>Open the group → <strong style="color:var(--brand);">Members</strong> tab → <strong style="color:var(--brand);">Add</strong> users → <strong style="color:var(--brand);">OK</strong>.</li>
+          </ol>
+          <figure class="figure"><img src="Images/SG4.PNG" alt="Add members to group" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG5.PNG" alt="Members list" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>Step 3: Create & Link a New GPO</h3>
-      <ol class="tight">
-        <li>Open <strong>Group Policy Management</strong> (gpmc.msc).</li>
-        <li>Right-click the target OU → <strong>Create a GPO in this domain, and Link it here…</strong></li>
-        <li>Name it (e.g., <strong>Disable Control Panel</strong>) → <strong>Edit</strong> and configure settings.</li>
-      </ol>
-      <div class="img-wrap"><img src="Images/SG6.PNG" alt="GPMC open"></div>
-      <div class="img-wrap"><img src="Images/SG8.PNG" alt="Create and link GPO at OU"></div>
-      <div class="img-wrap"><img src="Images/SG9.PNG" alt="Name GPO"></div>
-      <div class="img-wrap"><img src="Images/SG10.PNG" alt="Edit GPO view"></div>
-      <div class="img-wrap"><img src="Images/SG12.PNG" alt="Example settings"></div>
-      <div class="img-wrap"><img src="Images/SG13.PNG" alt="Example settings 2"></div>
+        <div class="sub-section">
+          <h4>Step 3: Create &amp; Link a New GPO</h4>
+          <ol>
+            <li>Open <strong style="color:var(--brand);">Group Policy Management</strong> (gpmc.msc).</li>
+            <li>Right-click the target OU → <strong style="color:var(--brand);">Create a GPO in this domain, and Link it here…</strong></li>
+            <li>Name it (e.g., <strong style="color:var(--brand);">Disable Control Panel</strong>) → <strong style="color:var(--brand);">Edit</strong> and configure settings.</li>
+          </ol>
+          <figure class="figure"><img src="Images/SG6.PNG" alt="GPMC open" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG8.PNG" alt="Create and link GPO at OU" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG9.PNG" alt="Name GPO" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG10.PNG" alt="Edit GPO view" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG12.PNG" alt="Example settings" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG13.PNG" alt="Example settings 2" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>Step 4: Security Filtering</h3>
-      <ol class="tight">
-        <li>Select the GPO → <strong>Scope</strong> tab → Under <strong>Security Filtering</strong> remove <em>Authenticated Users</em> and add your new security group.</li>
-      </ol>
-      <div class="img-wrap"><img src="Images/SG15.PNG" alt="GPO scope tab"></div>
-      <div class="img-wrap"><img src="Images/SG16.PNG" alt="Security filtering edit"></div>
-      <div class="img-wrap"><img src="Images/SG17.PNG" alt="Group added to filtering"></div>
+        <div class="sub-section">
+          <h4>Step 4: Security Filtering</h4>
+          <ol>
+            <li>Select the GPO → <strong style="color:var(--brand);">Scope</strong> tab → Under <strong style="color:var(--brand);">Security Filtering</strong> remove <em>Authenticated Users</em> and add your new security group.</li>
+          </ol>
+          <figure class="figure"><img src="Images/SG15.PNG" alt="GPO scope tab" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG16.PNG" alt="Security filtering edit" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG17.PNG" alt="Group added to filtering" loading="lazy" decoding="async"></figure>
 
-      <h4>Verify Permissions</h4>
-      <ol class="tight">
-        <li>GPO → <strong>Delegation</strong> tab → <strong>Advanced</strong> → ensure the group has <strong>Read</strong> and <strong>Apply group policy</strong>.</li>
-      </ol>
-      <div class="img-wrap"><img src="Images/SG19.PNG" alt="Delegation tab"></div>
-      <div class="img-wrap"><img src="Images/SG20.PNG" alt="Advanced security - permissions"></div>
+          <p><strong style="color:var(--brand);">Verify Permissions:</strong> GPO → <strong style="color:var(--brand);">Delegation</strong> tab → <strong style="color:var(--brand);">Advanced</strong> → ensure the group has <strong style="color:var(--brand);">Read</strong> and <strong style="color:var(--brand);">Apply group policy</strong>.</p>
+          <figure class="figure"><img src="Images/SG19.PNG" alt="Delegation tab" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/SG20.PNG" alt="Advanced security - permissions" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>Step 5: Update & Test</h3>
-      <ul class="tight">
-        <li>On a client: <code>gpupdate /force</code></li>
-        <li>Sign in as a user inside the group → verify the GPO applies.</li>
-        <li>Sign in as a user not in the group → verify it does not apply.</li>
-      </ul>
+        <div class="sub-section">
+          <h4>Step 5: Update &amp; Test</h4>
+          <ul>
+            <li>On a client: <code>gpupdate /force</code></li>
+            <li>Sign in as a user inside the group → verify the GPO applies.</li>
+            <li>Sign in as a user not in the group → verify it does not apply.</li>
+          </ul>
+          <p>This approach provides precise targeting via security groups instead of broad OU application.</p>
+        </div>
 
-      <p>This approach provides precise targeting via security groups instead of broad OU application.</p>
-    </section>
+      </div>
 
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -325,10 +539,9 @@
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 
-  <!-- Lightbox / zoom for ALL images (no markup changes required) -->
+  <!-- Lightbox -->
   <script>
     (function(){
       const lb = document.createElement('div');
@@ -349,26 +562,33 @@
       const btnPrev  = lb.querySelector('.lb-prev');
       const btnNext  = lb.querySelector('.lb-next');
 
-      function open(src, alt){
-        imgEl.src = src; imgEl.alt = alt || '';
-        capEl.textContent = alt || '';
-        // Standalone images only on this page → hide prev/next
-        btnPrev.style.display = btnNext.style.display = 'none';
-        lb.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        btnClose.focus();
+      const imgs = Array.from(document.querySelectorAll('.figure img'));
+      let idx = 0;
+
+      function render(i){
+        const el = imgs[i];
+        if(!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.alt || '';
+        const multi = imgs.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
-      function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+      function open(i){ idx=i; render(idx); lb.classList.add('open'); document.body.style.overflow='hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+      function prev(){ idx=(idx-1+imgs.length)%imgs.length; render(idx); }
+      function next(){ idx=(idx+1)%imgs.length; render(idx); }
 
-      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+      imgs.forEach((img,i)=>{ img.addEventListener('click',(e)=>{ e.preventDefault(); open(i); }); });
       btnClose.addEventListener('click', close);
-      document.addEventListener('keydown', (e)=>{ if(lb.classList.contains('open') && e.key === 'Escape') close(); });
-
-      document.querySelectorAll('.img-wrap img').forEach((img)=>{
-        img.addEventListener('click', (e)=>{
-          e.preventDefault();
-          open(img.currentSrc || img.src, img.alt);
-        });
+      btnPrev .addEventListener('click', (e)=>{ e.stopPropagation(); prev(); });
+      btnNext .addEventListener('click', (e)=>{ e.stopPropagation(); next(); });
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+      document.addEventListener('keydown', (e)=>{
+        if(!lb.classList.contains('open')) return;
+        if(e.key==='Escape') close();
+        else if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
       });
     })();
   </script>
