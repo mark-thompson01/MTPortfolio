@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NAS Security Attack &amp; Defense Lab 3 · Mark Thompson Portfolio</title>
   <meta name="description" content="Lab 3: Privilege escalation via misconfigured SUID binary (vim), detection in logs/process list, and immediate response." />
-
-  <!-- THEME -->
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -21,15 +19,29 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .wrap.wide{max-width:1100px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -38,91 +50,202 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:14px 0 6px;font-size:16px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cards */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Code blocks */
-    pre{
-      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
-      border-radius:12px;overflow:auto;color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
     }
-    code{
-      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
     }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
+    .step-section pre{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      padding:14px 16px;
+      font-size:14px;
+      color:#a8d8ff;
+      overflow-x:auto;
+      margin:12px 0;
+    }
+    .step-section pre code{background:none;border:none;padding:0;font-size:inherit}
 
-    /* Figures – intrinsic image size (no zoom/gallery) */
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
+    .sub-section pre{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      padding:14px 16px;
+      font-size:14px;
+      color:#a8d8ff;
+      overflow-x:auto;
+      margin:12px 0;
+    }
+    .sub-section pre code{background:none;border:none;padding:0;font-size:inherit}
+
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:24px auto;
+      margin:16px auto;
       max-width:100%;
       text-align:center;
     }
     .figure img{
-      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
-      width:auto; max-width:100%; height:auto;
-      cursor: zoom-in; /* enable zoom affordance */
+      display:block;
+      margin:0 auto;
+      border-radius:10px;
+      object-fit:contain;
+      width:auto;
+      max-width:100%;
+      height:auto;
+      cursor:zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Side-by-side */
+    /* Side-by-side pair */
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
 
-    /* Zoom modal */
-    .zoom-modal{
-      position:fixed; inset:0; z-index:1000; display:none;
-      background:rgba(0,0,0,.85);
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
     }
-    .zoom-modal[open]{display:block}
-    .zoom-content{
-      position:absolute; inset:40px; display:grid; place-items:center; overflow:auto;
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
     }
-    .zoom-img{
-      max-width:95vw; max-height:95vh; width:auto; height:auto; border-radius:12px;
-      box-shadow:0 20px 60px rgba(0,0,0,.6);
-      cursor: zoom-out;
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
     }
-    .zoom-close{
-      position:absolute; top:14px; right:16px; width:40px; height:40px;
-      border-radius:999px; border:1px solid #3a4a67; background:#0e1220; color:var(--text);
-      display:grid; place-items:center; font-size:22px; line-height:1; cursor:pointer;
-    }
-    .zoom-close:hover{background:#121733}
-    .zoom-close:focus{outline:2px solid #4DA3FF; outline-offset:2px}
-    .hide-scroll{overflow:hidden}
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <div class="wrap wide" id="pageRoot">
+  <div class="wrap">
+
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
-      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Platforms</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
       <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
@@ -137,109 +260,126 @@
     <!-- Header -->
     <header>
       <h1>Lab 3 — Privilege Escalation</h1>
-      <p class="lead">Exploit: misconfigured SUID on <code>vim</code> to gain root. Detect via logs and process list; respond by killing sessions and hardening.</p>
+      <p class="lead">Exploit: misconfigured SUID on <code style="background:rgba(0,0,0,.3);border:1px solid var(--card-border);border-radius:4px;padding:1px 6px;font-size:15px;color:#a8d8ff;">vim</code> to gain root. Detect via logs and process list; respond by killing sessions and hardening.</p>
     </header>
 
-    <!-- Scenario -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Scenario -->
       <h2>Scenario</h2>
-      <p>Following the successful SSH compromise in Lab&nbsp;2, access was upgraded from a BSD shell to a Meterpreter session. The user lacks root privileges, so the next step is privilege escalation. For this lab, the <code>vim</code> binary is intentionally misconfigured with the SUID bit to demonstrate a common escalation path.</p>
-    </section>
+      <div class="step-section">
+        <p>Following the successful SSH compromise in Lab 2, access was upgraded from a BSD shell to a Meterpreter session. The user lacks root privileges, so the next step is privilege escalation. For this lab, the <code>vim</code> binary is intentionally misconfigured with the SUID bit to demonstrate a common escalation path.</p>
+      </div>
 
-    <!-- Notes on SUID -->
-    <section class="card">
+      <!-- SUID -->
       <h2>SUID: What It Is</h2>
-      <p>The SUID (Set User ID) permission causes an executable to run with the file owner’s privileges, not the caller’s. It appears as an <strong>s</strong> in the owner’s execute position in <code>ls -l</code> output.</p>
-      <pre><code>-rwsr-xr-x 1 root root 12345 Dec 27 12:00 example_program</code></pre>
-      <p>When a non-root user runs <code>example_program</code>, it executes with <code>root</code> privileges. Misconfiguring SUID on powerful binaries (like editors or shells) can enable trivial escalation.</p>
-    </section>
+      <div class="step-section">
+        <p>The SUID (Set User ID) permission causes an executable to run with the file owner's privileges, not the caller's. It appears as an <strong style="color:var(--brand);">s</strong> in the owner's execute position in <code>ls -l</code> output.</p>
+        <pre><code>-rwsr-xr-x 1 root root 12345 Dec 27 12:00 example_program</code></pre>
+        <p>When a non-root user runs <code>example_program</code>, it executes with <code>root</code> privileges. Misconfiguring SUID on powerful binaries (like editors or shells) can enable trivial escalation.</p>
+      </div>
 
-    <!-- Offensive -->
-    <section class="card">
+      <!-- Offensive -->
       <h2>Offensive</h2>
+      <div class="step-section">
 
-      <p>From Meterpreter, spawn an interactive shell:</p>
-      <pre><code>/bin/sh -i</code></pre>
-      <figure class="figure">
-        <img src="Images/shell.png" alt="Spawning an interactive /bin/sh from Meterpreter" loading="lazy" decoding="async">
-        <figcaption class="figcap">Interactive shell obtained.</figcaption>
-      </figure>
+        <div class="sub-section">
+          <h4>Spawning an Interactive Shell</h4>
+          <p>From Meterpreter, spawn an interactive shell:</p>
+          <pre><code>/bin/sh -i</code></pre>
+          <figure class="figure">
+            <img src="Images/shell.png" alt="Spawning an interactive /bin/sh from Meterpreter" loading="lazy" decoding="async">
+            <figcaption class="figcap">Interactive shell obtained.</figcaption>
+          </figure>
+        </div>
 
-      <p>Initially, <code>vim</code> behaved oddly inside this pseudo-tty (missing editor commands). Inspecting environment variables revealed the <code>TERM</code> variable was unset.</p>
-      <div class="pair">
-        <figure class="figure">
-          <img src="Images/snv.png" alt="Environment inspection showing missing TERM variable" loading="lazy" decoding="async">
-          <figcaption class="figcap"><code>TERM</code> not set.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img src="Images/xtermvim.png" alt="Exporting TERM=xterm so vim behaves correctly" loading="lazy" decoding="async">
-          <figcaption class="figcap">Fixing terminal with <code>export TERM=xterm</code>.</figcaption>
-        </figure>
-      </div>
+        <div class="sub-section">
+          <h4>Fixing the Terminal Environment</h4>
+          <p>Initially, <code>vim</code> behaved oddly inside this pseudo-tty (missing editor commands). Inspecting environment variables revealed the <code>TERM</code> variable was unset.</p>
+          <div class="pair">
+            <figure class="figure">
+              <img src="Images/snv.png" alt="Environment inspection showing missing TERM variable" loading="lazy" decoding="async">
+              <figcaption class="figcap"><code>TERM</code> not set.</figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="Images/xtermvim.png" alt="Exporting TERM=xterm so vim behaves correctly" loading="lazy" decoding="async">
+              <figcaption class="figcap">Fixing terminal with <code>export TERM=xterm</code>.</figcaption>
+            </figure>
+          </div>
+        </div>
 
-      <p>With SUID on <code>vim</code>, invoking a shell from inside the editor yields a root shell:</p>
-      <pre><code>vim
+        <div class="sub-section">
+          <h4>Exploiting SUID vim for Root</h4>
+          <p>With SUID on <code>vim</code>, invoking a shell from inside the editor yields a root shell:</p>
+          <pre><code>vim
 :!sh</code></pre>
-      <div class="pair">
-        <figure class="figure">
-          <img src="Images/%3A%21sh.png" alt="Using :!sh inside vim to spawn a shell" loading="lazy" decoding="async">
-          <figcaption class="figcap"><code>:!sh</code> spawns a privileged shell.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img src="Images/rootaccessgained.png" alt="Proof of root after exploiting SUID vim" loading="lazy" decoding="async">
-          <figcaption class="figcap">Root access confirmed.</figcaption>
-        </figure>
+          <div class="pair">
+            <figure class="figure">
+              <img src="Images/%3A%21sh.png" alt="Using :!sh inside vim to spawn a shell" loading="lazy" decoding="async">
+              <figcaption class="figcap"><code>:!sh</code> spawns a privileged shell.</figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="Images/rootaccessgained.png" alt="Proof of root after exploiting SUID vim" loading="lazy" decoding="async">
+              <figcaption class="figcap">Root access confirmed.</figcaption>
+            </figure>
+          </div>
+        </div>
+
       </div>
-    </section>
 
-    <!-- Defensive -->
-    <section class="card">
+      <!-- Defensive -->
       <h2>Defensive</h2>
+      <div class="step-section">
 
-      <h3>Incident Detection</h3>
-      <p>Review authentication and command logs to confirm abuse of <code>vim</code> to spawn a shell:</p>
-      <figure class="figure">
-        <img src="Images/LogData.png" alt="Logs showing vim execution with -c /bin/sh and sudo attempts" loading="lazy" decoding="async">
-        <figcaption class="figcap">Log events highlight suspicious <code>vim</code> usage launching <code>/bin/sh</code>.</figcaption>
-      </figure>
+        <div class="sub-section">
+          <h4>Incident Detection</h4>
+          <p>Review authentication and command logs to confirm abuse of <code>vim</code> to spawn a shell:</p>
+          <figure class="figure">
+            <img src="Images/LogData.png" alt="Logs showing vim execution with -c /bin/sh and sudo attempts" loading="lazy" decoding="async">
+            <figcaption class="figcap">Log events highlight suspicious <code>vim</code> usage launching <code>/bin/sh</code>.</figcaption>
+          </figure>
+          <p>Correlate with process listings to confirm interactive shells and ownership changes:</p>
+          <figure class="figure">
+            <img src="Images/psaux.png" alt="ps aux output showing shells under ronny and root, indicating escalation" loading="lazy" decoding="async">
+            <figcaption class="figcap">Processes show escalation from user <code>ronny</code> to <code>root</code>.</figcaption>
+          </figure>
+        </div>
 
-      <p>Correlate with process listings to confirm interactive shells and ownership changes:</p>
-      <figure class="figure">
-        <img src="Images/psaux.png" alt="ps aux output showing shells under ronny and root, indicating escalation" loading="lazy" decoding="async">
-        <figcaption class="figcap">Processes show escalation from user <code>ronny</code> to <code>root</code>.</figcaption>
-      </figure>
+        <div class="sub-section">
+          <h4>Response</h4>
+          <p>Terminate malicious sessions and clean up. Kill processes tied to the compromised user and any suspicious root shells:</p>
+          <figure class="figure">
+            <img src="Images/processkill2.png" alt="Killing processes tied to the compromised session" loading="lazy" decoding="async">
+            <figcaption class="figcap">Stopping rogue shells and sessions.</figcaption>
+          </figure>
+          <p>On the attacker side, access is lost:</p>
+          <figure class="figure">
+            <img src="Images/commandterminated.png" alt="Attacker session terminated after defensive actions" loading="lazy" decoding="async">
+            <figcaption class="figcap">Command terminated after response actions.</figcaption>
+          </figure>
+        </div>
 
-      <h3>Response</h3>
-      <p>Terminate malicious sessions and clean up. Kill processes tied to the compromised user and any suspicious root shells:</p>
-      <figure class="figure">
-        <img src="Images/processkill2.png" alt="Killing processes tied to the compromised session" loading="lazy" decoding="async">
-        <figcaption class="figcap">Stopping rogue shells and sessions.</figcaption>
-      </figure>
+      </div>
 
-      <p>On the attacker side, access is lost:</p>
-      <figure class="figure">
-        <img src="Images/commandterminated.png" alt="Attacker session terminated after defensive actions" loading="lazy" decoding="async">
-        <figcaption class="figcap">Command terminated after response actions.</figcaption>
-      </figure>
-    </section>
-
-    <!-- Analysis / Relevance -->
-    <section class="card">
+      <!-- Analysis -->
       <h2>Privilege Escalation via SUID &amp; Environment</h2>
-      <p>This lab demonstrates how a misconfigured SUID binary and an improperly configured environment (<code>TERM</code>) can be combined to achieve root. While production systems rarely ship with SUID on editors, legacy systems and ad-hoc admin changes can introduce these flaws. The workflow mirrors real assessments: identify SUID candidates, fix environment/pty issues, and pivot to a root shell.</p>
+      <div class="step-section">
+        <p>This lab demonstrates how a misconfigured SUID binary and an improperly configured environment (<code>TERM</code>) can be combined to achieve root. While production systems rarely ship with SUID on editors, legacy systems and ad-hoc admin changes can introduce these flaws. The workflow mirrors real assessments: identify SUID candidates, fix environment/pty issues, and pivot to a root shell.</p>
 
-      <h3>Real-World Takeaways</h3>
-      <ul>
-        <li>Audit SUID binaries regularly; remove SUID from unnecessary tools (especially editors, interpreters).</li>
-        <li>Harden shells and terminal handling in constrained environments (proper PTY, env sanitization).</li>
-        <li>Monitor for suspicious command lines (e.g., editors launching shells) and unusual root-owned interactive shells.</li>
-      </ul>
-    </section>
+        <div class="sub-section">
+          <h4>Real-World Takeaways</h4>
+          <ul>
+            <li>Audit SUID binaries regularly; remove SUID from unnecessary tools (especially editors, interpreters).</li>
+            <li>Harden shells and terminal handling in constrained environments (proper PTY, env sanitization).</li>
+            <li>Monitor for suspicious command lines (e.g., editors launching shells) and unusual root-owned interactive shells.</li>
+          </ul>
+        </div>
+      </div>
 
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to NAS Security Attack &amp; Defense Lab</a></p>
-    </section>
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to NAS Security Attack &amp; Defense Lab</a>
 
     <!-- Footer -->
     <footer>
@@ -251,66 +391,35 @@
     </footer>
   </div>
 
-  <!-- Zoom modal (built once, reused) -->
-  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image viewer">
-    <div class="zoom-content" data-close>
-      <img class="zoom-img" id="zoomImg" alt="">
-      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
-    </div>
-  </div>
-
+  <!-- Lightbox -->
   <script>
     (function(){
-      const root = document.getElementById('pageRoot');
-      const modal = document.getElementById('zoom');
-      const zoomImg = document.getElementById('zoomImg');
-      const closeBtn = modal.querySelector('.zoom-close');
-      let lastFocus = null;
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
 
-      // Auto-mark all figure images as zoomable (opt-out by adding .no-zoom)
-      document.querySelectorAll('.figure img:not(.no-zoom)').forEach(img=>{
-        img.classList.add('zoomable');
-      });
-
-      function openModal(src, alt){
-        lastFocus = document.activeElement;
-        zoomImg.src = src;
-        zoomImg.alt = alt || '';
-        modal.setAttribute('open','');
-        modal.setAttribute('aria-hidden','false');
-        document.body.classList.add('hide-scroll');
-        root.setAttribute('aria-hidden','true');
-        closeBtn.focus();
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
-      function closeModal(){
-        modal.removeAttribute('open');
-        modal.setAttribute('aria-hidden','true');
-        document.body.classList.remove('hide-scroll');
-        root.removeAttribute('aria-hidden');
-        zoomImg.removeAttribute('src');
-        zoomImg.alt = '';
-        if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
       }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
 
-      // Click to zoom
-      document.addEventListener('click', (e) => {
-        const img = e.target.closest('.figure img.zoomable');
-        if (img){
-          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
-          openModal(full, img.alt);
-        }
-      });
-
-      // Close interactions
-      closeBtn.addEventListener('click', closeModal);
-      modal.addEventListener('click', (e) => {
-        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (!modal.hasAttribute('open')) return;
-        if (e.key === 'Escape') closeModal();
-        // Trap Tab in modal (single focusable control)
-        if (e.key === 'Tab'){ e.preventDefault(); closeBtn.focus(); }
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        img.addEventListener('click', ()=>{
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
       });
     })();
   </script>
