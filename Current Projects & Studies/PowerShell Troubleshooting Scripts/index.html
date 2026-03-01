@@ -19,85 +19,177 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:12px auto;
+      margin:16px auto;
       width:max-content;
       max-width:100%;
       text-align:center;
     }
     .figure img{
       display:block;
-      height:auto;
-      max-width:85%;
-      cursor:zoom-in;
+      margin:0 auto;
       border-radius:10px;
-      margin:auto;
+      height:auto;
+      max-width:100%;
+      width:auto;
+      cursor:zoom-in;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Pair layout */
+    .pair{display:grid;gap:12px;margin:16px 0}
+    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
+    .pair .figure{margin:0}
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
+    }
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
     }
 
-    .figcaption{
-      margin-top:6px;
-      font-size:14px;
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
       color:var(--muted);
+      font-size:0.9rem;
     }
-
-    pre{
-      margin:10px 0;
-      padding:12px 14px;
-      background:#0f1424;
-      border:1px solid #202a3f;
-      border-radius:12px;
-      overflow:auto;
-      color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
     }
-
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
-
-    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
-    .zoom-modal[open]{display:block}
-    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
-    .zoom-img{max-width:95vw;max-height:95vh;width:auto;height:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out}
-    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;cursor:pointer}
-    .zoom-close:hover{background:#121733}
-    .hide-scroll{overflow:hidden}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
 
+    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -106,94 +198,179 @@
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
 
+    <!-- Breadcrumb -->
     <div class="crumbs">
       <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> · <span>PowerShell Troubleshooting Scripts</span>
     </div>
 
+    <!-- Header -->
     <header>
       <h1>PowerShell Troubleshooting Scripts</h1>
       <p class="lead">A set of PowerShell scripts built to automate system diagnostics and streamline IT troubleshooting across Windows environments.</p>
-      <p>
-        <a href="https://github.com/mark-thompson01/PowerShell-Troubleshooting-Scripts/tree/main" target="_blank" rel="noopener">
-          View this project on GitHub
-        </a>
-      </p>
+      <p><a href="https://github.com/mark-thompson01/PowerShell-Troubleshooting-Scripts/tree/main" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Section 1 -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Section 1 -->
       <h2>1. Network Connectivity Troubleshooting Script</h2>
-      <p>Tests adapters, gateway reachability, and DNS resolution, logging all results to a report file.</p>
-      <div class="figure"><img src="Images/networktroubleshooting1.png" alt="Network troubleshooting script in PowerShell ISE"><div class="figcaption">Network Troubleshooting Script</div></div>
-      <div class="figure"><img src="Images/networktroubleshooting2.png" alt="Network troubleshooting PowerShell log output"><div class="figcaption">Network Troubleshooting Output</div></div>
-      <h3>Automation</h3>
-      <p>This script is scheduled using a PowerShell Scheduled Job that runs daily at 9:00 AM.</p>
-      <div class="figure"><img src="Images/NetConnectTroubleshootScript.png" alt="Network Connectivity Troubleshooter Scheduled Job"><div class="figcaption">Network Connectivity Troubleshooter Scheduled Job</div></div>
-    </section>
+      <div class="step-section">
+        <p>Tests adapters, gateway reachability, and DNS resolution, logging all results to a report file.</p>
 
-    <!-- Section 2 -->
-    <section class="card">
+        <div class="pair">
+          <figure class="figure">
+            <img src="Images/networktroubleshooting1.png" alt="Network troubleshooting script in PowerShell ISE">
+            <figcaption class="figcap">Network Troubleshooting Script</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/networktroubleshooting2.png" alt="Network troubleshooting PowerShell log output">
+            <figcaption class="figcap">Network Troubleshooting Output</figcaption>
+          </figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Automation</h4>
+          <p>This script is scheduled using a PowerShell Scheduled Job that runs daily at 9:00 AM.</p>
+          <figure class="figure">
+            <img src="Images/NetConnectTroubleshootScript.png" alt="Network Connectivity Troubleshooter Scheduled Job">
+            <figcaption class="figcap">Network Connectivity Troubleshooter Scheduled Job</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Section 2 -->
       <h2>2. Disk Space and Drive Health Check</h2>
-      <p>Checks all local drives for free space and exports low-space results to CSV for documentation.</p>
-      <div class="figure"><img src="Images/DiskCheck.png" alt="Disk health check script in PowerShell ISE"><div class="figcaption">Disk Space and Drive Health Script</div></div>
-      <h3>Automation</h3>
-      <p>Automated using a PowerShell Scheduled Job that performs daily disk health checks.</p>
-      <div class="figure"><img src="Images/diskhealthchecksched.png" alt="Disk Health Check Scheduled Job"><div class="figcaption">Disk Health Check Scheduled Job</div></div>
-    </section>
+      <div class="step-section">
+        <p>Checks all local drives for free space and exports low-space results to CSV for documentation.</p>
+        <figure class="figure">
+          <img src="Images/DiskCheck.png" alt="Disk health check script in PowerShell ISE">
+          <figcaption class="figcap">Disk Space and Drive Health Script</figcaption>
+        </figure>
 
-    <!-- Section 3 -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>Automation</h4>
+          <p>Automated using a PowerShell Scheduled Job that performs daily disk health checks.</p>
+          <figure class="figure">
+            <img src="Images/diskhealthchecksched.png" alt="Disk Health Check Scheduled Job">
+            <figcaption class="figcap">Disk Health Check Scheduled Job</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Section 3 -->
       <h2>3. Windows Service Status Troubleshooter</h2>
-      <p>Monitors and restarts critical Windows services like Spooler, WinRM, and BITS, saving results to a log file.</p>
-      <div class="figure"><img src="Images/servicestatus.png" alt="Windows Service Troubleshooter script"><div class="figcaption">Windows Service Troubleshooter Script</div></div>
-      <h3>Automation</h3>
-      <p>Scheduled as a daily PowerShell job that automatically checks and restores essential Windows services.</p>
-      <div class="figure"><img src="Images/servicestatroubleshootsched.png" alt="Windows Service Troubleshooter Scheduled Job"><div class="figcaption">Windows Service Status Troubleshooter Scheduled Job</div></div>
-    </section>
+      <div class="step-section">
+        <p>Monitors and restarts critical Windows services like Spooler, WinRM, and BITS, saving results to a log file.</p>
+        <figure class="figure">
+          <img src="Images/servicestatus.png" alt="Windows Service Troubleshooter script">
+          <figcaption class="figcap">Windows Service Troubleshooter Script</figcaption>
+        </figure>
 
-    <!-- Section 4 -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>Automation</h4>
+          <p>Scheduled as a daily PowerShell job that automatically checks and restores essential Windows services.</p>
+          <figure class="figure">
+            <img src="Images/servicestatroubleshootsched.png" alt="Windows Service Troubleshooter Scheduled Job">
+            <figcaption class="figcap">Windows Service Status Troubleshooter Scheduled Job</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Section 4 -->
       <h2>4. Event Log Error Scanner</h2>
-      <p>Scans the System event log for errors within the last 24 hours and exports results for analysis.</p>
-      <div class="figure"><img src="Images/eventlogscanner.png" alt="PowerShell event log scanner script"><div class="figcaption">Event Log Scanner Script</div></div>
-      <div class="figure"><img src="Images/eventlogscannerrun.png" alt="Event log scanner results"><div class="figcaption">Event Log Scan Results</div></div>
-      <h3>Automation</h3>
-      <p>Automated through a PowerShell Scheduled Job that runs each morning to capture and log error events.</p>
-      <div class="figure"><img src="Images/eventlogerrorscannersched.png" alt="Event Log Error Scanner Scheduled Job"><div class="figcaption">Event Log Error Scanner Scheduled Job</div></div>
-    </section>
+      <div class="step-section">
+        <p>Scans the System event log for errors within the last 24 hours and exports results for analysis.</p>
 
-    <!-- Section 5 -->
-    <section class="card">
+        <div class="pair">
+          <figure class="figure">
+            <img src="Images/eventlogscanner.png" alt="PowerShell event log scanner script">
+            <figcaption class="figcap">Event Log Scanner Script</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/eventlogscannerrun.png" alt="Event log scanner results">
+            <figcaption class="figcap">Event Log Scan Results</figcaption>
+          </figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Automation</h4>
+          <p>Automated through a PowerShell Scheduled Job that runs each morning to capture and log error events.</p>
+          <figure class="figure">
+            <img src="Images/eventlogerrorscannersched.png" alt="Event Log Error Scanner Scheduled Job">
+            <figcaption class="figcap">Event Log Error Scanner Scheduled Job</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Section 5 -->
       <h2>5. User Profile or Login Issue Troubleshooter</h2>
-      <p>Finds corrupted or missing user profile paths and detects registry entries with .bak suffixes.</p>
-      <div class="figure"><img src="Images/loginissuetroubleshooter.png" alt="PowerShell user profile troubleshooter"><div class="figcaption">User Profile Troubleshooter Script</div></div>
-      <div class="figure"><img src="Images/userprofiletroubleshooting.png" alt="User profile troubleshooting PowerShell output"><div class="figcaption">User Profile Troubleshooter Output</div></div>
-      <h3>Automation</h3>
-      <p>Scheduled daily using PowerShell Scheduled Jobs to automatically identify and log user profile issues.</p>
-      <div class="figure"><img src="Images/userprofiletroubleshootsched.png" alt="User Profile Troubleshooter Scheduled Job"><div class="figcaption">User Profile or Login Issue Troubleshooter Scheduled Job</div></div>
-    </section>
+      <div class="step-section">
+        <p>Finds corrupted or missing user profile paths and detects registry entries with .bak suffixes.</p>
 
-    <!-- Section 6 -->
-    <section class="card">
+        <div class="pair">
+          <figure class="figure">
+            <img src="Images/loginissuetroubleshooter.png" alt="PowerShell user profile troubleshooter">
+            <figcaption class="figcap">User Profile Troubleshooter Script</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/userprofiletroubleshooting.png" alt="User profile troubleshooting PowerShell output">
+            <figcaption class="figcap">User Profile Troubleshooter Output</figcaption>
+          </figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Automation</h4>
+          <p>Scheduled daily using PowerShell Scheduled Jobs to automatically identify and log user profile issues.</p>
+          <figure class="figure">
+            <img src="Images/userprofiletroubleshootsched.png" alt="User Profile Troubleshooter Scheduled Job">
+            <figcaption class="figcap">User Profile or Login Issue Troubleshooter Scheduled Job</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Section 6 -->
       <h2>6. Windows Update and Compliance Check</h2>
-      <p>Lists installed updates, identifies failed patches, triggers scans, and logs compliance reports.</p>
-      <div class="figure"><img src="Images/windowsupdate.png" alt="Windows Update PowerShell script"><div class="figcaption">Windows Update Compliance Script</div></div>
-      <div class="figure"><img src="Images/windowsupdate2.png" alt="Windows update log output example"><div class="figcaption">Windows Update Log Output</div></div>
-      <h3>Automation</h3>
-      <p>Configured to run automatically through a PowerShell Scheduled Job that performs daily update scans and logs system status.</p>
-      <div class="figure"><img src="Images/windowsupdatesched.png" alt="Windows Update Compliance Check Scheduled Job"><div class="figcaption">Windows Update and Compliance Check Scheduled Job</div></div>
-    </section>
+      <div class="step-section">
+        <p>Lists installed updates, identifies failed patches, triggers scans, and logs compliance reports.</p>
 
-    <!-- Summary -->
-    <section class="card">
+        <div class="pair">
+          <figure class="figure">
+            <img src="Images/windowsupdate.png" alt="Windows Update PowerShell script">
+            <figcaption class="figcap">Windows Update Compliance Script</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/windowsupdate2.png" alt="Windows update log output example">
+            <figcaption class="figcap">Windows Update Log Output</figcaption>
+          </figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Automation</h4>
+          <p>Configured to run automatically through a PowerShell Scheduled Job that performs daily update scans and logs system status.</p>
+          <figure class="figure">
+            <img src="Images/windowsupdatesched.png" alt="Windows Update Compliance Check Scheduled Job">
+            <figcaption class="figcap">Windows Update and Compliance Check Scheduled Job</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <!-- Automation Summary -->
       <h2>Automation Summary</h2>
-      <p>All troubleshooting scripts are automated using <strong>PowerShell Scheduled Jobs</strong>, each configured to run daily at 9:00 AM.  
-      This ensures proactive system monitoring, regular logging, and simplified maintenance without using Task Scheduler.</p>
-      <div class="figure"><img src="Images/scheduledjobs.png" alt="List of all registered PowerShell scheduled jobs"><div class="figcaption">Overview of All PowerShell Scheduled Jobs</div></div>
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
-      <p><em>PowerShell is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
+      <div class="step-section">
+        <p>All troubleshooting scripts are automated using <strong style="color:var(--brand);">PowerShell Scheduled Jobs</strong>, each configured to run daily at 9:00 AM. This ensures proactive system monitoring, regular logging, and simplified maintenance without using Task Scheduler.</p>
+        <figure class="figure">
+          <img src="Images/scheduledjobs.png" alt="List of all registered PowerShell scheduled jobs">
+          <figcaption class="figcap">Overview of All PowerShell Scheduled Jobs</figcaption>
+        </figure>
+        <p><em style="color:var(--muted);font-size:14px;">PowerShell is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
+      </div>
 
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
@@ -203,28 +380,36 @@
     </footer>
   </div>
 
-  <!-- Zoom modal -->
-  <div class="zoom-modal" id="zoom" aria-hidden="true">
-    <div class="zoom-content" data-close>
-      <img class="zoom-img" id="zoomImg" alt="">
-      <button class="zoom-close" type="button">&times;</button>
-    </div>
-  </div>
-
+  <!-- Lightbox -->
   <script>
     (function(){
-      const modal=document.getElementById('zoom');
-      const zoomImg=document.getElementById('zoomImg');
-      const closeBtn=modal.querySelector('.zoom-close');
-      let lastFocus=null;
-      document.querySelectorAll('.figure img').forEach(img=>img.classList.add('zoomable'));
-      function openModal(src,alt){lastFocus=document.activeElement;zoomImg.src=src;zoomImg.alt=alt||'';modal.setAttribute('open','');document.body.classList.add('hide-scroll');closeBtn.focus();}
-      function closeModal(){modal.removeAttribute('open');document.body.classList.remove('hide-scroll');zoomImg.removeAttribute('src');if(lastFocus)lastFocus.focus();}
-      document.addEventListener('click',e=>{const img=e.target.closest('.figure img.zoomable');if(img){openModal(img.src,img.alt);}});
-      closeBtn.addEventListener('click',closeModal);
-      modal.addEventListener('click',e=>{if(e.target.hasAttribute('data-close')||e.target===modal)closeModal();});
-      zoomImg.addEventListener('click',closeModal);
-      document.addEventListener('keydown',e=>{if(!modal.hasAttribute('open'))return;if(e.key==='Escape')closeModal();});
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
+
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
+
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        img.addEventListener('click', ()=>{
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
+      });
     })();
   </script>
 </body>
