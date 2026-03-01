@@ -19,92 +19,182 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumbs */
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:12px 0 6px;font-size:16px;font-weight:700}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* Cards */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
-    ul,ol{padding-left:22px;margin:8px 0}
-    .tight li{margin:6px 0}
-
-    /* Code */
-    code, pre code{
-      background:#0e1220;border:1px solid var(--card-border);
-      border-radius:10px;padding:8px 10px;display:block;white-space:pre-wrap;margin:8px 0;color:var(--text)
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
     }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Images */
-    .img-wrap{margin:12px 0;text-align:center}
-    .img-wrap img{
-      display:block;margin:0 auto;
-      max-width:70%;
-      height:auto;
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
       border:1px solid var(--card-border);
       border-radius:12px;
-      cursor: zoom-in; /* indicate zoomability */
     }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
 
-    /* Lightbox (zoom) for ALL images */
+    /* Figures */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:16px auto;
+      width:min(70%, 820px);
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:10px;
+      cursor:zoom-in;
+    }
+    @media (max-width:900px){ .figure{width:92%} }
+
+    /* Lightbox */
     .lightbox{
-      position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.86); z-index:9999;
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.86);z-index:9999;
     }
     .lightbox.open{display:grid}
-    .lb-stage{position:relative; max-width:96vw; max-height:92vh}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
     .lb-img{
-      display:block; width:auto; height:auto; max-width:96vw; max-height:92vh;
-      border-radius:12px; box-shadow:var(--shadow);
+      display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;
+      border-radius:12px;box-shadow:var(--shadow);
     }
-    .lb-cap{color:#cfd6e6; font-size:13px; text-align:center; margin-top:8px}
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
     .lb-btn{
-      position:absolute; top:10px; padding:6px 10px; border-radius:10px;
-      border:1px solid #2A3447; background:#0e1220; color:var(--text);
-      cursor:pointer; user-select:none;
+      position:absolute;top:10px;padding:6px 10px;border-radius:10px;
+      border:1px solid #2A3447;background:#0e1220;color:var(--text);
+      cursor:pointer;user-select:none;
     }
     .lb-close{right:10px}
     .lb-prev,.lb-next{
-      top:50%; translate:0 -50%; width:44px; height:44px; display:grid; place-items:center;
-      border-radius:999px; font-size:20px; line-height:1;
+      top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;
+      border-radius:999px;font-size:20px;line-height:1;
     }
     .lb-prev{left:-58px}
     .lb-next{right:-58px}
-    @media (max-width:700px){
-      .lb-prev{left:-8px} .lb-next{right:-8px}
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
     }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
 
-    <!-- Top nav -->
+    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -123,169 +213,243 @@
     <!-- Header -->
     <header>
       <h1>Setting up Active Directory</h1>
-      <p class="lead">Install <strong>Active Directory Domain Services (AD&nbsp;DS)</strong> and promote Windows Server to a <strong>domain controller</strong>. Then perform core user-management tasks in ADUC.</p>
+      <p class="lead">Install <strong style="color:var(--text);">Active Directory Domain Services (AD DS)</strong> and promote Windows Server to a <strong style="color:var(--text);">domain controller</strong>. Then perform core user-management tasks in ADUC.</p>
     </header>
 
-    <!-- Intro -->
-    <section class="card">
-      <p>Setting up Active Directory starts with installing the <strong>AD DS</strong> server role on Windows Server and then promoting the server to a <strong>domain controller</strong>.</p>
-    </section>
+    <!-- Main content -->
+    <main class="content">
 
-    <!-- Steps to Setup -->
-    <section class="card">
+      <!-- Intro -->
+      <h2>Overview</h2>
+      <div class="step-section">
+        <p>Setting up Active Directory starts with installing the <strong style="color:var(--brand);">AD DS</strong> server role on Windows Server and then promoting the server to a <strong style="color:var(--brand);">domain controller</strong>.</p>
+      </div>
+
+      <!-- Steps to Setup AD DS Role -->
       <h2>Steps to Setting up Active Directory</h2>
+      <div class="step-section">
 
-      <h4>1) Add the AD DS Role</h4>
-      <p>In <strong>Server Manager</strong>, click <em>Add roles and features</em> to launch the wizard.</p>
-      <div class="img-wrap"><img src="Images/ADSetup1.PNG" alt="Server Manager - Add roles and features"></div>
-      <div class="img-wrap"><img src="Images/ADSetup2.PNG" alt="Add Roles and Features Wizard"></div>
+        <div class="sub-section">
+          <h4>1) Add the AD DS Role</h4>
+          <p>In <strong style="color:var(--brand);">Server Manager</strong>, click <em>Add roles and features</em> to launch the wizard.</p>
+          <figure class="figure"><img src="Images/ADSetup1.PNG" alt="Server Manager - Add roles and features" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/ADSetup2.PNG" alt="Add Roles and Features Wizard" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>2) Installation Type</h4>
-      <p>Select <strong>Role-based or feature-based installation</strong>.</p>
-      <div class="img-wrap"><img src="Images/ADSetup3.PNG" alt="Installation type selection"></div>
+        <div class="sub-section">
+          <h4>2) Installation Type</h4>
+          <p>Select <strong style="color:var(--brand);">Role-based or feature-based installation</strong>.</p>
+          <figure class="figure"><img src="Images/ADSetup3.PNG" alt="Installation type selection" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>3) Server Selection</h4>
-      <p>Select the local server from the server pool and click <strong>Next</strong>.</p>
-      <div class="img-wrap"><img src="Images/ADSetup4.PNG" alt="Server selection"></div>
+        <div class="sub-section">
+          <h4>3) Server Selection</h4>
+          <p>Select the local server from the server pool and click <strong style="color:var(--brand);">Next</strong>.</p>
+          <figure class="figure"><img src="Images/ADSetup4.PNG" alt="Server selection" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>4) Choose the Role</h4>
-      <p>Select <strong>Active Directory Domain Services</strong> (AD DS).</p>
-      <div class="img-wrap"><img src="Images/ADSetup5.PNG" alt="Select AD DS role"></div>
+        <div class="sub-section">
+          <h4>4) Choose the Role</h4>
+          <p>Select <strong style="color:var(--brand);">Active Directory Domain Services</strong> (AD DS).</p>
+          <figure class="figure"><img src="Images/ADSetup5.PNG" alt="Select AD DS role" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>5) Add required features</h4>
-      <p>Accept the additional features needed for AD DS.</p>
-      <div class="img-wrap"><img src="Images/ADSetup6.PNG" alt="Add required features for AD DS"></div>
+        <div class="sub-section">
+          <h4>5) Add Required Features</h4>
+          <p>Accept the additional features needed for AD DS.</p>
+          <figure class="figure"><img src="Images/ADSetup6.PNG" alt="Add required features for AD DS" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>6) Continue</h4>
-      <p>Click <strong>Add Features</strong>, then <strong>Next</strong>.</p>
-      <div class="img-wrap"><img src="Images/ADSetup7.PNG" alt="Features confirmation"></div>
+        <div class="sub-section">
+          <h4>6) Continue</h4>
+          <p>Click <strong style="color:var(--brand);">Add Features</strong>, then <strong style="color:var(--brand);">Next</strong>.</p>
+          <figure class="figure"><img src="Images/ADSetup7.PNG" alt="Features confirmation" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>7) Install</h4>
-      <div class="img-wrap"><img src="Images/ADSetup8.PNG" alt="Install selection"></div>
-    </section>
+        <div class="sub-section">
+          <h4>7) Install</h4>
+          <figure class="figure"><img src="Images/ADSetup8.PNG" alt="Install selection" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- AD DS Installation -->
-    <section class="card">
+      </div>
+
+      <!-- AD DS Installation & Promotion -->
       <h2>AD DS Installation</h2>
+      <div class="step-section">
 
-      <h4>1) AD DS tab → Install</h4>
-      <div class="img-wrap"><img src="Images/ADSetup9.PNG" alt="AD DS tab - Install"></div>
+        <div class="sub-section">
+          <h4>1) AD DS Tab → Install</h4>
+          <figure class="figure"><img src="Images/ADSetup9.PNG" alt="AD DS tab - Install" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>2) Confirmation → Install</h4>
-      <div class="img-wrap"><img src="Images/ADSetup10.PNG" alt="Confirmation step"></div>
+        <div class="sub-section">
+          <h4>2) Confirmation → Install</h4>
+          <figure class="figure"><img src="Images/ADSetup10.PNG" alt="Confirmation step" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>3) Installation Progress</h4>
-      <div class="img-wrap"><img src="Images/ADSetup11.PNG" alt="AD DS installation progress 1"></div>
-      <div class="img-wrap"><img src="Images/ADSetup12.PNG" alt="AD DS installation progress 2"></div>
+        <div class="sub-section">
+          <h4>3) Installation Progress</h4>
+          <figure class="figure"><img src="Images/ADSetup11.PNG" alt="AD DS installation progress 1" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/ADSetup12.PNG" alt="AD DS installation progress 2" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>4) Promote to Domain Controller</h4>
-      <p>Click <strong>Promote this server to a domain controller</strong>.</p>
-      <div class="img-wrap"><img src="Images/ADSetup13.PNG" alt="Promote to domain controller"></div>
+        <div class="sub-section">
+          <h4>4) Promote to Domain Controller</h4>
+          <p>Click <strong style="color:var(--brand);">Promote this server to a domain controller</strong>.</p>
+          <figure class="figure"><img src="Images/ADSetup13.PNG" alt="Promote to domain controller" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>5) Deployment Configuration</h4>
-      <p>Select <strong>Add a new forest</strong> for this example.</p>
-      <div class="img-wrap"><img src="Images/ADSetup14.PNG" alt="Add a new forest"></div>
+        <div class="sub-section">
+          <h4>5) Deployment Configuration</h4>
+          <p>Select <strong style="color:var(--brand);">Add a new forest</strong> for this example.</p>
+          <figure class="figure"><img src="Images/ADSetup14.PNG" alt="Add a new forest" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>6) Domain Controller Options</h4>
-      <p>Verify capabilities and set a <strong>Directory Services Restore Mode (DSRM)</strong> password.</p>
-      <div class="img-wrap"><img src="Images/ADSetup15.PNG" alt="Domain controller options and DSRM password"></div>
+        <div class="sub-section">
+          <h4>6) Domain Controller Options</h4>
+          <p>Verify capabilities and set a <strong style="color:var(--brand);">Directory Services Restore Mode (DSRM)</strong> password.</p>
+          <figure class="figure"><img src="Images/ADSetup15.PNG" alt="Domain controller options and DSRM password" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>7) Additional Options</h4>
-      <p>Specify the NetBIOS domain name.</p>
-      <div class="img-wrap"><img src="Images/ADSetup16.PNG" alt="NetBIOS domain name"></div>
+        <div class="sub-section">
+          <h4>7) Additional Options</h4>
+          <p>Specify the NetBIOS domain name.</p>
+          <figure class="figure"><img src="Images/ADSetup16.PNG" alt="NetBIOS domain name" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>8) Paths</h4>
-      <p>Paths for AD DS database, logs, and SYSVOL (defaults are fine for lab setups).</p>
-      <div class="img-wrap"><img src="Images/ADSetup17.PNG" alt="Database, logs, and SYSVOL paths"></div>
+        <div class="sub-section">
+          <h4>8) Paths</h4>
+          <p>Paths for AD DS database, logs, and SYSVOL (defaults are fine for lab setups).</p>
+          <figure class="figure"><img src="Images/ADSetup17.PNG" alt="Database, logs, and SYSVOL paths" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>9) Review Options</h4>
-      <div class="img-wrap"><img src="Images/ADSetup18.PNG" alt="Review options before install"></div>
+        <div class="sub-section">
+          <h4>9) Review Options</h4>
+          <figure class="figure"><img src="Images/ADSetup18.PNG" alt="Review options before install" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>10) Prerequisites Check</h4>
-      <p>Run the check and then click <strong>Install</strong>.</p>
-      <div class="img-wrap"><img src="Images/ADSetup19.PNG" alt="Prerequisites check"></div>
+        <div class="sub-section">
+          <h4>10) Prerequisites Check</h4>
+          <p>Run the check and then click <strong style="color:var(--brand);">Install</strong>.</p>
+          <figure class="figure"><img src="Images/ADSetup19.PNG" alt="Prerequisites check" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>11) Install &amp; Reboot</h4>
-      <p>The server installs AD DS and restarts automatically.</p>
-      <div class="img-wrap"><img src="Images/ADSetup20.PNG" alt="Installation in progress"></div>
-      <div class="img-wrap"><img src="Images/ADSetup21.PNG" alt="Server rebooting"></div>
+        <div class="sub-section">
+          <h4>11) Install &amp; Reboot</h4>
+          <p>The server installs AD DS and restarts automatically.</p>
+          <figure class="figure"><img src="Images/ADSetup20.PNG" alt="Installation in progress" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/ADSetup21.PNG" alt="Server rebooting" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>12) Domain Logon Screen</h4>
-      <div class="img-wrap"><img src="Images/ADSetup22.PNG" alt="Logon screen shows domain"></div>
+        <div class="sub-section">
+          <h4>12) Domain Logon Screen</h4>
+          <figure class="figure"><img src="Images/ADSetup22.PNG" alt="Logon screen shows domain" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>13) ADUC Available in Tools</h4>
-      <div class="img-wrap"><img src="Images/ADSetup23.PNG" alt="Active Directory Users and Computers in Server Manager > Tools"></div>
+        <div class="sub-section">
+          <h4>13) ADUC Available in Tools</h4>
+          <figure class="figure"><img src="Images/ADSetup23.PNG" alt="Active Directory Users and Computers in Server Manager > Tools" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>14) Active Directory Console</h4>
-      <div class="img-wrap"><img src="Images/ADSetup24.PNG" alt="ADUC console view 1"></div>
-      <div class="img-wrap"><img src="Images/ADSetup25.PNG" alt="ADUC console view 2"></div>
-    </section>
+        <div class="sub-section">
+          <h4>14) Active Directory Console</h4>
+          <figure class="figure"><img src="Images/ADSetup24.PNG" alt="ADUC console view 1" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/ADSetup25.PNG" alt="ADUC console view 2" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- Create a New AD User -->
-    <section class="card">
+      </div>
+
+      <!-- Create New User -->
       <h2>Creating a New AD User Account</h2>
+      <div class="step-section">
 
-      <h4>1) New User Wizard</h4>
-      <p>In <strong>Active Directory Users and Computers</strong>, right-click the <strong>Users</strong> container (or target OU) → <strong>New → User</strong>.</p>
-      <div class="img-wrap"><img src="Images/ADSetup2-1.PNG" alt="New user in ADUC"></div>
+        <div class="sub-section">
+          <h4>1) New User Wizard</h4>
+          <p>In <strong style="color:var(--brand);">Active Directory Users and Computers</strong>, right-click the <strong style="color:var(--brand);">Users</strong> container (or target OU) → <strong style="color:var(--brand);">New → User</strong>.</p>
+          <figure class="figure"><img src="Images/ADSetup2-1.PNG" alt="New user in ADUC" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>2) Enter Name Attributes</h4>
-      <div class="img-wrap"><img src="Images/ADSetup2-2.PNG" alt="Enter user attributes"></div>
+        <div class="sub-section">
+          <h4>2) Enter Name Attributes</h4>
+          <figure class="figure"><img src="Images/ADSetup2-2.PNG" alt="Enter user attributes" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>3) Next</h4>
-      <div class="img-wrap"><img src="Images/ADSetup2-3.PNG" alt="New user wizard next"></div>
+        <div class="sub-section">
+          <h4>3) Next</h4>
+          <figure class="figure"><img src="Images/ADSetup2-3.PNG" alt="New user wizard next" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>4) Set Password</h4>
-      <div class="img-wrap"><img src="Images/ADSetup2-4.PNG" alt="Set user password"></div>
+        <div class="sub-section">
+          <h4>4) Set Password</h4>
+          <figure class="figure"><img src="Images/ADSetup2-4.PNG" alt="Set user password" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>5) Finish</h4>
-      <div class="img-wrap"><img src="Images/ADSetup2-5.PNG" alt="Finish user creation"></div>
+        <div class="sub-section">
+          <h4>5) Finish</h4>
+          <figure class="figure"><img src="Images/ADSetup2-5.PNG" alt="Finish user creation" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>6) User Visible in OU</h4>
-      <div class="img-wrap"><img src="Images/ADSetup2-6.PNG" alt="New user object in Users container"></div>
-    </section>
+        <div class="sub-section">
+          <h4>6) User Visible in OU</h4>
+          <figure class="figure"><img src="Images/ADSetup2-6.PNG" alt="New user object in Users container" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- Reset Password -->
-    <section class="card">
+      </div>
+
+      <!-- Reset Password -->
       <h2>Resetting a User Account Password</h2>
-      <p>A common IT support task.</p>
+      <div class="step-section">
+        <p>A common IT support task.</p>
 
-      <h4>1) Locate the User</h4>
-      <div class="img-wrap"><img src="Images/User Account Setup/UAS1.PNG" alt="Locate user object"></div>
+        <div class="sub-section">
+          <h4>1) Locate the User</h4>
+          <figure class="figure"><img src="Images/User Account Setup/UAS1.PNG" alt="Locate user object" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>2) Right-click → <strong>Reset Password…</strong></h4>
-      <div class="img-wrap"><img src="Images/User Account Setup/UAS2.PNG" alt="Reset password action"></div>
+        <div class="sub-section">
+          <h4>2) Right-click → Reset Password…</h4>
+          <figure class="figure"><img src="Images/User Account Setup/UAS2.PNG" alt="Reset password action" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>3) Specify New Password</h4>
-      <div class="img-wrap"><img src="Images/User Account Setup/UAS3.PNG" alt="Specify new password"></div>
+        <div class="sub-section">
+          <h4>3) Specify New Password</h4>
+          <figure class="figure"><img src="Images/User Account Setup/UAS3.PNG" alt="Specify new password" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>4) Search Tools</h4>
-      <p>Use <strong>Find</strong> (toolbar icon) to quickly locate accounts in larger environments.</p>
-      <div class="img-wrap"><img src="Images/User Account Setup/UAS4.PNG" alt="ADUC Find tool"></div>
+        <div class="sub-section">
+          <h4>4) Search Tools</h4>
+          <p>Use <strong style="color:var(--brand);">Find</strong> (toolbar icon) to quickly locate accounts in larger environments.</p>
+          <figure class="figure"><img src="Images/User Account Setup/UAS4.PNG" alt="ADUC Find tool" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>5) Example Search</h4>
-      <div class="img-wrap"><img src="Images/User Account Setup/UAS5.PNG" alt="Search by first name"></div>
-    </section>
+        <div class="sub-section">
+          <h4>5) Example Search</h4>
+          <figure class="figure"><img src="Images/User Account Setup/UAS5.PNG" alt="Search by first name" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- Unlock Account -->
-    <section class="card">
+      </div>
+
+      <!-- Unlock Account -->
       <h2>Unlocking a User Account</h2>
-      <p>Accounts may lock after too many failed logons. For repeated locks, investigate mapped drives, services, or cached credentials.</p>
+      <div class="step-section">
+        <p>Accounts may lock after too many failed logons. For repeated locks, investigate mapped drives, services, or cached credentials.</p>
 
-      <h4>Unlock Steps</h4>
-      <p>Right-click the user → <strong>Properties</strong> → <strong>Account</strong> tab → check <strong>Unlock account</strong>.</p>
-      <div class="img-wrap"><img src="Images/User Account Setup/AccountUnlock.PNG" alt="Unlock account in user properties"></div>
-    </section>
+        <div class="sub-section">
+          <h4>Unlock Steps</h4>
+          <p>Right-click the user → <strong style="color:var(--brand);">Properties</strong> → <strong style="color:var(--brand);">Account</strong> tab → check <strong style="color:var(--brand);">Unlock account</strong>.</p>
+          <figure class="figure"><img src="Images/User Account Setup/AccountUnlock.PNG" alt="Unlock account in user properties" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
 
-    <!-- Summary -->
-    <section class="card">
-      <p>This walkthrough installed <strong>AD DS</strong>, promoted the server to a <strong>domain controller</strong>, and covered essential ADUC tasks: creating a user, resetting a password, and unlocking an account.</p>
-    </section>
+      <!-- Summary -->
+      <h2>Summary</h2>
+      <div class="step-section">
+        <p>This walkthrough installed <strong style="color:var(--brand);">AD DS</strong>, promoted the server to a <strong style="color:var(--brand);">domain controller</strong>, and covered essential ADUC tasks: creating a user, resetting a password, and unlocking an account.</p>
+      </div>
 
-    
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -295,10 +459,9 @@
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 
-  <!-- Lightbox / zoom for ALL images (no markup changes required) -->
+  <!-- Lightbox -->
   <script>
     (function(){
       const lb = document.createElement('div');
@@ -319,26 +482,33 @@
       const btnPrev  = lb.querySelector('.lb-prev');
       const btnNext  = lb.querySelector('.lb-next');
 
-      function open(src, alt){
-        imgEl.src = src; imgEl.alt = alt || '';
-        capEl.textContent = alt || '';
-        // Standalone figures on this page → hide prev/next
-        btnPrev.style.display = btnNext.style.display = 'none';
-        lb.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        btnClose.focus();
+      const imgs = Array.from(document.querySelectorAll('.figure img'));
+      let idx = 0;
+
+      function render(i){
+        const el = imgs[i];
+        if(!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.alt || '';
+        const multi = imgs.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
-      function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+      function open(i){ idx=i; render(idx); lb.classList.add('open'); document.body.style.overflow='hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+      function prev(){ idx=(idx-1+imgs.length)%imgs.length; render(idx); }
+      function next(){ idx=(idx+1)%imgs.length; render(idx); }
 
-      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+      imgs.forEach((img,i)=>{ img.addEventListener('click',(e)=>{ e.preventDefault(); open(i); }); });
       btnClose.addEventListener('click', close);
-      document.addEventListener('keydown', (e)=>{ if(lb.classList.contains('open') && e.key === 'Escape') close(); });
-
-      document.querySelectorAll('.img-wrap img').forEach((img)=>{
-        img.addEventListener('click', (e)=>{
-          e.preventDefault();
-          open(img.currentSrc || img.src, img.alt);
-        });
+      btnPrev .addEventListener('click', (e)=>{ e.stopPropagation(); prev(); });
+      btnNext .addEventListener('click', (e)=>{ e.stopPropagation(); next(); });
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+      document.addEventListener('keydown', (e)=>{
+        if(!lb.classList.contains('open')) return;
+        if(e.key==='Escape') close();
+        else if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
       });
     })();
   </script>
