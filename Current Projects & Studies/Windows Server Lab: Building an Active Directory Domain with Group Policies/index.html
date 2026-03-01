@@ -19,13 +19,29 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -34,39 +50,110 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Card */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Lists */
-    ul,ol{padding-left:22px;margin:8px 0}
-    .tight li{margin:6px 0}
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section li{margin:6px 0}
 
     /* Module list */
-    .modulelist a{
-      display:block;padding:10px 12px;margin:8px 0;
-      border:1px solid var(--card-border); border-radius:12px;
-      background:rgba(255,255,255,.02);
+    .module-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:8px;
     }
-    .modulelist a:hover{
-      background:rgba(255,255,255,.05);
+    .module-list a{
+      display:block;
+      padding:14px 18px;
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:rgba(77,163,255,.04);
+      color:var(--brand);
+      font-size:16px;
+      font-weight:500;
+      text-decoration:none;
+      transition:background .15s, border-color .15s;
+    }
+    .module-list a:hover{
+      background:rgba(77,163,255,.09);
+      border-color:#3a4a67;
+      text-decoration:none;
     }
 
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -91,82 +178,81 @@
     <header>
       <h1>Building an Active Directory Domain with Group Policies</h1>
       <p class="lead">Stand up a Windows Server 2016 domain in a lab, configure DNS/DHCP, deploy AD DS, join a client, apply Group Policies, and manage AD/GP with PowerShell.</p>
-      <p>
-        <a href="https://github.com/mark-thompson01/windows-server-ad-lab" target="_blank" rel="noopener">
-          View this project on GitHub
-        </a>
-      </p>
+      <p><a href="https://github.com/mark-thompson01/windows-server-ad-lab" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Overview -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Overview -->
       <h2>Project Overview</h2>
-      <p>This lab demonstrates core Windows domain administration by installing Windows Server 2016 (Oracle VirtualBox), configuring Active Directory and Group Policy in a safe test environment, and then managing AD and GPOs with PowerShell.</p>
-    </section>
-
-    <!-- AD -->
-    <section class="card">
-      <h2>Active Directory</h2>
-      <p><b>Active Directory (AD)</b> is Microsoft’s directory service for centrally managing users, computers, and resources in a Windows network. A <b>Domain Controller</b> validates credentials, enforces policy, and provides secure access to shared resources.</p>
-      <ul class="tight">
-        <li><b>Authenticate users</b> and authorize access.</li>
-        <li><b>Assign permissions and apply security policies</b> at scale.</li>
-        <li><b>Organize objects</b> (users, groups, devices) in a domain hierarchy.</li>
-      </ul>
-      <p>Whether a small office or large enterprise, AD is the backbone for identity, access, and centralized management.</p>
-    </section>
-
-    <!-- GPO -->
-    <section class="card">
-      <h2>Group Policy</h2>
-      <p><b>Group Policy</b> centrally manages user and computer settings across the domain with the <b>Group Policy Management Console (GPMC)</b>. Policies link to <b>Organizational Units (OUs)</b> and apply at boot/logon to ensure consistent, secure configurations.</p>
-      <ul class="tight">
-        <li>Enforce <b>password complexity</b> and security baselines</li>
-        <li>Restrict <b>Control Panel / Task Manager</b></li>
-        <li>Map <b>network drives</b> automatically</li>
-        <li>Configure <b>desktop environments</b></li>
-        <li>Deploy <b>software and scripts</b> at startup/logon</li>
-      </ul>
-    </section>
-
-    <!-- Objects -->
-    <section class="card">
-      <h2>Active Directory Objects</h2>
-      <p>AD is composed of <b>objects</b>—each with attributes—stored in a hierarchical database for organization, management, and security.</p>
-      <ul class="tight">
-        <li><b>User</b> – identity with credentials and permissions</li>
-        <li><b>Computer</b> – a domain-joined workstation/server</li>
-        <li><b>Group</b> – collections for simplified access control</li>
-        <li><b>Organizational Unit (OU)</b> – container for grouping and delegation</li>
-        <li><b>Shared resources</b> – printers, file shares, apps</li>
-      </ul>
-      <p>Objects are uniquely identified by a <b>Distinguished Name (DN)</b> and can have Group Policies applied via their OU structure.</p>
-    </section>
-
-    <!-- Modules / subpages -->
-    <section class="card">
-      <h2>Lab Modules</h2>
-      <div class="modulelist">
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Installing%20Windows%20Server%202016%20on%20Oracle%20VirtualBox">Installing Windows Server 2016 on Oracle VirtualBox</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Setting%20Up%20DNS%20and%20DHCP">Setting up DNS and DHCP</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Setting%20up%20Active%20Directory">Setting up Active Directory</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Adding%20a%20Computer%20to%20the%20domain">Adding a Computer to the Domain</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Group%20Policy">Setting up Group Policy</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Managing%20AD%20&%20GP%20with%20PowerShell">Managing AD &amp; GP with PowerShell</a>
-        <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Concluded%20Basics">Concluded Basics</a>
+      <div class="step-section">
+        <p>This lab demonstrates core Windows domain administration by installing Windows Server 2016 (Oracle VirtualBox), configuring Active Directory and Group Policy in a safe test environment, and then managing AD and GPOs with PowerShell.</p>
       </div>
-    </section>
-    <p style="font-size: 0.85em; color: #666; line-height: 1.4;">
-    <i>Microsoft, Active Directory, Windows, Windows Server, PowerShell, and other Microsoft products and services mentioned herein are either registered trademarks or trademarks of Microsoft Corporation in the United States and/or other countries. All other trademarks are the property of their respective owners.</i>
-</p>
 
+      <!-- Active Directory -->
+      <h2>Active Directory</h2>
+      <div class="step-section">
+        <p><strong style="color:var(--brand);">Active Directory (AD)</strong> is Microsoft's directory service for centrally managing users, computers, and resources in a Windows network. A <strong style="color:var(--brand);">Domain Controller</strong> validates credentials, enforces policy, and provides secure access to shared resources.</p>
+        <ul>
+          <li><strong style="color:var(--brand);">Authenticate users</strong> and authorize access.</li>
+          <li><strong style="color:var(--brand);">Assign permissions and apply security policies</strong> at scale.</li>
+          <li><strong style="color:var(--brand);">Organize objects</strong> (users, groups, devices) in a domain hierarchy.</li>
+        </ul>
+        <p>Whether a small office or large enterprise, AD is the backbone for identity, access, and centralized management.</p>
+      </div>
 
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+      <!-- Group Policy -->
+      <h2>Group Policy</h2>
+      <div class="step-section">
+        <p><strong style="color:var(--brand);">Group Policy</strong> centrally manages user and computer settings across the domain with the <strong style="color:var(--brand);">Group Policy Management Console (GPMC)</strong>. Policies link to <strong style="color:var(--brand);">Organizational Units (OUs)</strong> and apply at boot/logon to ensure consistent, secure configurations.</p>
+        <ul>
+          <li>Enforce <strong style="color:var(--brand);">password complexity</strong> and security baselines</li>
+          <li>Restrict <strong style="color:var(--brand);">Control Panel / Task Manager</strong></li>
+          <li>Map <strong style="color:var(--brand);">network drives</strong> automatically</li>
+          <li>Configure <strong style="color:var(--brand);">desktop environments</strong></li>
+          <li>Deploy <strong style="color:var(--brand);">software and scripts</strong> at startup/logon</li>
+        </ul>
+      </div>
 
-    <!-- Footer (branding only) -->
+      <!-- AD Objects -->
+      <h2>Active Directory Objects</h2>
+      <div class="step-section">
+        <p>AD is composed of <strong style="color:var(--brand);">objects</strong>—each with attributes—stored in a hierarchical database for organization, management, and security.</p>
+        <ul>
+          <li><strong style="color:var(--brand);">User</strong> – identity with credentials and permissions</li>
+          <li><strong style="color:var(--brand);">Computer</strong> – a domain-joined workstation/server</li>
+          <li><strong style="color:var(--brand);">Group</strong> – collections for simplified access control</li>
+          <li><strong style="color:var(--brand);">Organizational Unit (OU)</strong> – container for grouping and delegation</li>
+          <li><strong style="color:var(--brand);">Shared resources</strong> – printers, file shares, apps</li>
+        </ul>
+        <p>Objects are uniquely identified by a <strong style="color:var(--brand);">Distinguished Name (DN)</strong> and can have Group Policies applied via their OU structure.</p>
+      </div>
+
+      <!-- Lab Modules -->
+      <h2>Lab Modules</h2>
+      <div class="step-section">
+        <div class="module-list">
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Installing%20Windows%20Server%202016%20on%20Oracle%20VirtualBox">Installing Windows Server 2016 on Oracle VirtualBox</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Setting%20Up%20DNS%20and%20DHCP">Setting up DNS and DHCP</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Setting%20up%20Active%20Directory">Setting up Active Directory</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Adding%20a%20Computer%20to%20the%20domain">Adding a Computer to the Domain</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Group%20Policy">Setting up Group Policy</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Managing%20AD%20&%20GP%20with%20PowerShell">Managing AD &amp; GP with PowerShell</a>
+          <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Windows%20Server%20Lab:%20Building%20an%20Active%20Directory%20Domain%20with%20Group%20Policies/Concluded%20Basics">Concluded Basics</a>
+        </div>
+      </div>
+
+      <!-- Trademark -->
+      <div class="step-section">
+        <p><em style="font-size:14px;">Microsoft, Active Directory, Windows, Windows Server, PowerShell, and other Microsoft products and services mentioned herein are either registered trademarks or trademarks of Microsoft Corporation in the United States and/or other countries. All other trademarks are the property of their respective owners.</em></p>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
@@ -174,7 +260,6 @@
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 </body>
 </html>
