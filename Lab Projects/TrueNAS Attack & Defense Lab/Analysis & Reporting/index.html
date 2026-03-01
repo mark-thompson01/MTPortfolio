@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NAS Security Attack &amp; Defense Lab — Analysis &amp; Reporting · Mark Thompson Portfolio</title>
   <meta name="description" content="Summary of attack/defense labs on a NAS host: findings, detections, mitigations, key takeaways, and conclusions." />
-
-  <!-- THEME -->
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -21,15 +19,29 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .wrap.wide{max-width:1100px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -38,40 +50,134 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:14px 0 6px;font-size:16px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cards */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ol{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0;
+      padding-left:24px;
+    }
+    .step-section li{margin:8px 0}
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
     }
 
-    /* Lists inside cards */
-    ul{margin:8px 0 0 18px}
-    ol{margin:8px 0 0 18px}
-    li{margin:6px 0}
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0;
+      padding-left:24px;
+    }
+    .sub-section li{margin:6px 0}
+    .sub-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
 
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
+
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
-      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Platforms</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a>
       <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
@@ -89,65 +195,76 @@
       <p class="lead">A concise wrap-up of the NAS Attack &amp; Defense Labs—offense, detection, response, and lessons learned.</p>
     </header>
 
-    <!-- Overview -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Overview -->
       <h2>Overview</h2>
-      <p>The NAS Attack &amp; Defense Lab simulates real-world attack scenarios and corresponding defenses in a controlled environment. Across four labs, it demonstrates exploitation paths (brute force, privilege escalation, persistence) and blue-team playbooks (log analysis, process containment, hardening). The emphasis is on rapid detection, immediate response, and durable mitigation.</p>
-    </section>
+      <div class="step-section">
+        <p>The NAS Attack &amp; Defense Lab simulates real-world attack scenarios and corresponding defenses in a controlled environment. Across four labs, it demonstrates exploitation paths (brute force, privilege escalation, persistence) and blue-team playbooks (log analysis, process containment, hardening). The emphasis is on rapid detection, immediate response, and durable mitigation.</p>
+      </div>
 
-    <!-- Lab summaries -->
-    <section class="card">
+      <!-- Lab Summaries -->
       <h2>Lab Summaries</h2>
+      <div class="step-section">
 
-      <h3>Lab 1: SSH Brute Force Attack</h3>
-      <ul>
-        <li><strong>Attack:</strong> Automated wordlist brute force targeting SSH.</li>
-        <li><strong>Detection:</strong> Repeated failures in <code>/var/log/auth.log</code> tied to the attacker IP.</li>
-        <li><strong>Defense:</strong> Verified <code>pf</code> enabled; blocked attacker IP via <code>pf.conf</code> and reloaded rules.</li>
-      </ul>
+        <div class="sub-section">
+          <h4>Lab 1 — SSH Brute Force Attack</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Attack:</strong> Automated wordlist brute force targeting SSH.</li>
+            <li><strong style="color:var(--brand);">Detection:</strong> Repeated failures in <code>/var/log/auth.log</code> tied to the attacker IP.</li>
+            <li><strong style="color:var(--brand);">Defense:</strong> Verified <code>pf</code> enabled; blocked attacker IP via <code>pf.conf</code> and reloaded rules.</li>
+          </ul>
+        </div>
 
-      <h3>Lab 2: Successful Brute Force Login</h3>
-      <ul>
-        <li><strong>Attack:</strong> Valid credentials discovered; shell access obtained (then upgraded to Meterpreter).</li>
-        <li><strong>Detection:</strong> Unauthorized login in auth logs; unusual processes and activity.</li>
-        <li><strong>Defense:</strong> Reset password; disabled user login; disabled SSH password auth (keys only).</li>
-      </ul>
+        <div class="sub-section">
+          <h4>Lab 2 — Successful Brute Force Login</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Attack:</strong> Valid credentials discovered; shell access obtained (then upgraded to Meterpreter).</li>
+            <li><strong style="color:var(--brand);">Detection:</strong> Unauthorized login in auth logs; unusual processes and activity.</li>
+            <li><strong style="color:var(--brand);">Defense:</strong> Reset password; disabled user login; disabled SSH password auth (keys only).</li>
+          </ul>
+        </div>
 
-      <h3>Lab 3: Privilege Escalation</h3>
-      <ul>
-        <li><strong>Attack:</strong> Misconfigured SUID on <code>vim</code> + proper <code>TERM</code> led to root shell via <code>:!sh</code>.</li>
-        <li><strong>Detection:</strong> Logs show editor launching shells; <code>ps aux</code> reveals root-owned interactive shells.</li>
-        <li><strong>Defense:</strong> Killed rogue processes; removed unnecessary SUID permissions.</li>
-      </ul>
+        <div class="sub-section">
+          <h4>Lab 3 — Privilege Escalation</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Attack:</strong> Misconfigured SUID on <code>vim</code> + proper <code>TERM</code> led to root shell via <code>:!sh</code>.</li>
+            <li><strong style="color:var(--brand);">Detection:</strong> Logs show editor launching shells; <code>ps aux</code> reveals root-owned interactive shells.</li>
+            <li><strong style="color:var(--brand);">Defense:</strong> Killed rogue processes; removed unnecessary SUID permissions.</li>
+          </ul>
+        </div>
 
-      <h3>Lab 4: Persistence</h3>
-      <ul>
-        <li><strong>Attack:</strong> Added attacker public key to <code>authorized_keys</code> for passwordless SSH re-entry.</li>
-        <li><strong>Detection:</strong> Recent modification of <code>authorized_keys</code>; auth logs show key-based logins.</li>
-        <li><strong>Defense:</strong> Removed unauthorized keys, reset passwords, terminated active sessions.</li>
-      </ul>
-    </section>
+        <div class="sub-section">
+          <h4>Lab 4 — Persistence</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Attack:</strong> Added attacker public key to <code>authorized_keys</code> for passwordless SSH re-entry.</li>
+            <li><strong style="color:var(--brand);">Detection:</strong> Recent modification of <code>authorized_keys</code>; auth logs show key-based logins.</li>
+            <li><strong style="color:var(--brand);">Defense:</strong> Removed unauthorized keys, reset passwords, terminated active sessions.</li>
+          </ul>
+        </div>
 
-    <!-- Key takeaways -->
-    <section class="card">
+      </div>
+
+      <!-- Key Takeaways -->
       <h2>Key Takeaways</h2>
-      <ol>
-        <li><strong>Proactive defense matters:</strong> Immediate containment (firewall blocks, process kills) plus layered hardening (SSH keys-only, least privilege) stop escalation.</li>
-        <li><strong>Think like an attacker:</strong> Understanding offensive paths exposes weak configurations and guides practical defenses.</li>
-        <li><strong>Balanced skillset:</strong> Blending red/blue techniques yields better detections, faster response, and more resilient systems.</li>
-      </ol>
-    </section>
+      <div class="step-section">
+        <ol>
+          <li><strong style="color:var(--brand);">Proactive defense matters:</strong> Immediate containment (firewall blocks, process kills) plus layered hardening (SSH keys-only, least privilege) stop escalation.</li>
+          <li><strong style="color:var(--brand);">Think like an attacker:</strong> Understanding offensive paths exposes weak configurations and guides practical defenses.</li>
+          <li><strong style="color:var(--brand);">Balanced skillset:</strong> Blending red/blue techniques yields better detections, faster response, and more resilient systems.</li>
+        </ol>
+      </div>
 
-    <!-- Conclusion -->
-    <section class="card">
+      <!-- Conclusion -->
       <h2>Conclusion</h2>
-      <p>This project demonstrates end-to-end security practice: discovering weaknesses, exploiting them in a lab, detecting the activity through logs and telemetry, and applying durable mitigations. The workflows—brute force, privilege escalation, and persistence—mirror common intrusion chains and reinforce the value of continuous monitoring, strict access controls, and regular audits.</p>
-    </section>
+      <div class="step-section">
+        <p>This project demonstrates end-to-end security practice: discovering weaknesses, exploiting them in a lab, detecting the activity through logs and telemetry, and applying durable mitigations. The workflows—brute force, privilege escalation, and persistence—mirror common intrusion chains and reinforce the value of continuous monitoring, strict access controls, and regular audits.</p>
+      </div>
 
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to NAS Security Attack &amp; Defense Lab</a></p>
-    </section>
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to NAS Security Attack &amp; Defense Lab</a>
 
     <!-- Footer -->
     <footer>
