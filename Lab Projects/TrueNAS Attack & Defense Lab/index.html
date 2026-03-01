@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NAS Security Attack &amp; Defense Lab · Mark Thompson Portfolio</title>
   <meta name="description" content="Hands-on NAS security labs demonstrating attack techniques and matching defenses: SSH brute force, successful compromise, privilege escalation, and persistence." />
-
-  <!-- THEME -->
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -21,15 +19,29 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .wrap.wide{max-width:1100px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -38,36 +50,154 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cards */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
     }
 
-    /* Buttons */
-    .btn{
-      display:inline-block;margin-top:8px;padding:8px 12px;border:1px solid var(--card-border);
-      border-radius:10px;background:rgba(255,255,255,.03);color:var(--text);text-decoration:none
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
     }
-    .btn:hover{background:rgba(255,255,255,.06);border-color:#3a4a67}
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+
+    /* Lab link buttons */
+    .lab-grid{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+    .lab-btn{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:16px 20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      color:var(--text);
+      text-decoration:none;
+      font-size:16px;
+      font-weight:500;
+      transition:background .15s, border-color .15s;
+    }
+    .lab-btn:hover{
+      background:rgba(77,163,255,.08);
+      border-color:#3a4a67;
+      text-decoration:none;
+    }
+    .lab-num{
+      font-size:13px;
+      font-weight:700;
+      color:var(--brand);
+      background:rgba(77,163,255,.1);
+      border:1px solid rgba(77,163,255,.2);
+      border-radius:8px;
+      padding:4px 10px;
+      white-space:nowrap;
+    }
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
 
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
+
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
@@ -89,57 +219,76 @@
       <p><a href="https://github.com/mark-thompson01/nas-security-attack---defense-lab/blob/main/README.md" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Overview -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Overview -->
       <h2>Overview</h2>
-      <p>This project showcases offensive and defensive workflows side-by-side. Each lab demonstrates an attack technique followed by practical detection and mitigation steps—highlighting both attacker mindset and defender tradecraft.</p>
-    </section>
+      <div class="step-section">
+        <p>This project showcases offensive and defensive workflows side-by-side. Each lab demonstrates an attack technique followed by practical detection and mitigation steps—highlighting both attacker mindset and defender tradecraft.</p>
+      </div>
 
-    <!-- Labs summary -->
-    <section class="card">
+      <!-- Labs -->
       <h2>Labs</h2>
-      <ul>
-        <li><strong>Lab 1: SSH Brute Force Attack</strong> — Simulates brute forcing SSH, then detecting the attack and hardening to resist future attempts.</li>
-        <li><strong>Lab 2: Successful Brute Force Login</strong> — Examines what happens after compromise, including detection of unauthorized access and recovery steps.</li>
-        <li><strong>Lab 3: Privilege Escalation</strong> — Exploits a deliberate binary misconfiguration to escalate privileges, with detection and remediation.</li>
-        <li><strong>Lab 4: Persistence</strong> — Demonstrates one method to maintain access, plus ways to detect and evict it.</li>
-      </ul>
-    </section>
+      <div class="step-section">
+        <div class="sub-section">
+          <h4>Lab 1 — SSH Brute Force Attack</h4>
+          <p>Simulates brute forcing SSH, then detecting the attack and hardening to resist future attempts.</p>
+        </div>
+        <div class="sub-section">
+          <h4>Lab 2 — Successful Brute Force Login</h4>
+          <p>Examines what happens after compromise, including detection of unauthorized access and recovery steps.</p>
+        </div>
+        <div class="sub-section">
+          <h4>Lab 3 — Privilege Escalation</h4>
+          <p>Exploits a deliberate binary misconfiguration to escalate privileges, with detection and remediation.</p>
+        </div>
+        <div class="sub-section">
+          <h4>Lab 4 — Persistence</h4>
+          <p>Demonstrates one method to maintain access, plus ways to detect and evict it.</p>
+        </div>
+      </div>
 
-    <!-- Objectives -->
-    <section class="card">
+      <!-- Objectives -->
       <h2>Objectives</h2>
-      <ul>
-        <li><strong>Hands-on Demonstrations:</strong> Clear, step-by-step attack and defense scenarios.</li>
-        <li><strong>Educational Insights:</strong> Explanations of techniques and mitigations per lab.</li>
-        <li><strong>Presentation of Findings:</strong> Wrap-up reporting in a professional format.</li>
-      </ul>
-    </section>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">Hands-on Demonstrations:</strong> Clear, step-by-step attack and defense scenarios.</li>
+          <li><strong style="color:var(--brand);">Educational Insights:</strong> Explanations of techniques and mitigations per lab.</li>
+          <li><strong style="color:var(--brand);">Presentation of Findings:</strong> Wrap-up reporting in a professional format.</li>
+        </ul>
+      </div>
 
-    <!-- Launch links -->
-    <section class="card" aria-labelledby="labs-nav">
-      <h2 id="labs-nav">Open a Lab</h2>
-      <p>
-        <a class="btn" href="Lab%201%20SSH%20Brute%20Force%20Attack/">Lab 1 — SSH Brute Force Attack</a>
-      </p>
-      <p>
-        <a class="btn" href="Lab%202%20Successful%20Brute%20Force%20Login/">Lab 2 — Successful Brute Force Login</a>
-      </p>
-      <p>
-        <a class="btn" href="Lab%203%20Privilege%20Escalation/">Lab 3 — Privilege Escalation</a>
-      </p>
-      <p>
-        <a class="btn" href="Lab%204%20Persistence/">Lab 4 — Persistence</a>
-      </p>
-      <p>
-        <a class="btn" href="Analysis%20%26%20Reporting/">Analysis &amp; Reporting</a>
-      </p>
-    </section>
+      <!-- Open a Lab -->
+      <h2>Open a Lab</h2>
+      <div class="step-section">
+        <div class="lab-grid">
+          <a class="lab-btn" href="Lab%201%20SSH%20Brute%20Force%20Attack/">
+            <span class="lab-num">Lab 1</span>
+            SSH Brute Force Attack
+          </a>
+          <a class="lab-btn" href="Lab%202%20Successful%20Brute%20Force%20Login/">
+            <span class="lab-num">Lab 2</span>
+            Successful Brute Force Login
+          </a>
+          <a class="lab-btn" href="Lab%203%20Privilege%20Escalation/">
+            <span class="lab-num">Lab 3</span>
+            Privilege Escalation
+          </a>
+          <a class="lab-btn" href="Lab%204%20Persistence/">
+            <span class="lab-num">Lab 4</span>
+            Persistence
+          </a>
+          <a class="lab-btn" href="Analysis%20%26%20Reporting/">
+            <span class="lab-num">Report</span>
+            Analysis &amp; Reporting
+          </a>
+        </div>
+      </div>
 
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
