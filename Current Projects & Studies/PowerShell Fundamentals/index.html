@@ -19,13 +19,29 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -34,23 +50,132 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:10px 0 6px;font-size:16px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cards / sections */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section li{margin:4px 0}
+    .step-section pre{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      padding:14px 16px;
+      font-size:14px;
+      color:#a8d8ff;
+      overflow-x:auto;
+      margin:0 0 14px 0;
+    }
+    .step-section pre code{background:none;border:none;padding:0;font-size:inherit}
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
     }
 
-    /* Figures: intrinsic sizing */
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section li{margin:4px 0}
+    .sub-section pre{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      padding:14px 16px;
+      font-size:14px;
+      color:#a8d8ff;
+      overflow-x:auto;
+      margin:0 0 12px 0;
+    }
+    .sub-section pre code{background:none;border:none;padding:0;font-size:inherit}
+    .sub-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
+
+    /* Table */
+    table{border-collapse:collapse;width:100%;max-width:680px;margin:12px 0}
+    th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #2A3447;font-size:15px}
+    th{font-weight:700;color:var(--text)}
+    .tag{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;color:#a8d8ff}
+
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -59,25 +184,19 @@
       margin:12px auto;
       width:max-content;
       max-width:100%;
+      text-align:center;
     }
     .figure img{
       display:block;
       height:auto;
       width:auto;
       max-width:100%;
+      cursor:zoom-in;
+      border-radius:10px;
     }
 
-    /* Table */
-    table{border-collapse:collapse;width:100%;max-width:680px}
-    th,td{padding:8px 10px;text-align:left;border-bottom:1px solid #2A3447}
-    th{font-weight:700;color:var(--text)}
-    .tag{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
-
-    /* Lists */
-    ul,ol{padding-left:22px;margin:8px 0}
-
-    /* Horizontal gallery (used from Files & Dirs and below) */
-    .gallery-wrap{position:relative;margin:10px 0 6px}
+    /* Horizontal gallery */
+    .gallery-wrap{position:relative;margin:16px 0 24px}
     .gallery{
       display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
       align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;
@@ -85,7 +204,7 @@
       -webkit-overflow-scrolling:touch
     }
     .gallery .item{scroll-snap-align:start}
-    .gallery .figure{height:100%; margin:0; width:auto}
+    .gallery .figure{height:100%;margin:0;width:auto}
     .gallery::-webkit-scrollbar{height:10px}
     .gallery::-webkit-scrollbar-track{background:#0e1220;border-radius:999px}
     .gallery::-webkit-scrollbar-thumb{background:#2A3447;border-radius:999px}
@@ -98,38 +217,60 @@
     .gprev{left:-6px}
     .gnext{right:-6px}
 
-    /* Lightbox (zoom) — used for ALL images now */
+    /* Lightbox */
     .lightbox{
-      position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.86); z-index:9999;
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.86);z-index:9999;
     }
     .lightbox.open{display:grid}
-    .lb-stage{position:relative; max-width:96vw; max-height:92vh}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
     .lb-img{
-      display:block; width:auto; height:auto; max-width:96vw; max-height:92vh;
-      border-radius:12px; box-shadow:var(--shadow);
+      display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;
+      border-radius:12px;box-shadow:var(--shadow);
     }
-    .lb-cap{color:#cfd6e6; font-size:13px; text-align:center; margin-top:8px}
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
     .lb-btn{
-      position:absolute; top:10px; padding:6px 10px; border-radius:10px;
-      border:1px solid #2A3447; background:#0e1220; color:var(--text);
-      cursor:pointer; user-select:none;
+      position:absolute;top:10px;padding:6px 10px;border-radius:10px;
+      border:1px solid #2A3447;background:#0e1220;color:var(--text);
+      cursor:pointer;user-select:none;
     }
     .lb-close{right:10px}
     .lb-prev,.lb-next{
-      top:50%; translate:0 -50%; width:44px; height:44px; display:grid; place-items:center;
-      border-radius:999px; font-size:20px; line-height:1;
+      top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;
+      border-radius:999px;font-size:20px;line-height:1;
     }
     .lb-prev{left:-58px}
     .lb-next{right:-58px}
-    @media (max-width:700px){
-      .lb-prev{left:-8px} .lb-next{right:-8px}
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
     }
+    .back-link:hover{text-decoration:underline}
 
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -152,108 +293,118 @@
     <!-- Header -->
     <header>
       <h1>PowerShell Fundamentals</h1>
-      <p class="lead">A practical walkthrough of PowerShell’s object-based shell and scripting language—cmdlets, syntax, objects, scripting basics, policies, debugging, and real-world tasks.</p>
-      <p>
-        <a href="https://github.com/mark-thompson01/powershell-fundamentals" target="_blank" rel="noopener">
-          View this project on GitHub
-        </a>
-      </p>
+      <p class="lead">A practical walkthrough of PowerShell's object-based shell and scripting language—cmdlets, syntax, objects, scripting basics, policies, debugging, and real-world tasks.</p>
+      <p><a href="https://github.com/mark-thompson01/powershell-fundamentals" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Intro -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Introduction -->
       <h2>Introduction: What is PowerShell?</h2>
-      <p>PowerShell is a powerful command-line shell and scripting language built on .NET (and .NET Core for cross-platform PowerShell). Designed for admins and power users, it automates tasks, manages configurations, and interacts with APIs, the registry, and the file system. Unlike traditional text-based shells, PowerShell is <b>object-based</b>—commands pass rich objects, not just text—unlocking precise filtering, formatting, and automation.</p>
-    </section>
+      <div class="step-section">
+        <p>PowerShell is a powerful command-line shell and scripting language built on .NET (and .NET Core for cross-platform PowerShell). Designed for admins and power users, it automates tasks, manages configurations, and interacts with APIs, the registry, and the file system. Unlike traditional text-based shells, PowerShell is <strong style="color:var(--brand);">object-based</strong>—commands pass rich objects, not just text—unlocking precise filtering, formatting, and automation.</p>
+      </div>
 
-    <!-- Getting Started -->
-    <section class="card">
+      <!-- Getting Started -->
       <h2>Getting Started with PowerShell</h2>
-      <ul>
-        <li>.NET and .NET Core foundations</li>
-        <li>Windows PowerShell vs PowerShell (Core)</li>
-        <li>Cmdlets, basic syntax & structure</li>
-        <li>Working with files and directories</li>
-        <li>Scripting basics (types, control flow, functions)</li>
-        <li>Real-world examples</li>
-      </ul>
-    </section>
+      <div class="step-section">
+        <ul>
+          <li>.NET and .NET Core foundations</li>
+          <li>Windows PowerShell vs PowerShell (Core)</li>
+          <li>Cmdlets, basic syntax &amp; structure</li>
+          <li>Working with files and directories</li>
+          <li>Scripting basics (types, control flow, functions)</li>
+          <li>Real-world examples</li>
+        </ul>
+      </div>
 
-    <!-- .NET / .NET Core -->
-    <section class="card">
+      <!-- .NET / .NET Core -->
       <h2>.NET and .NET Core Foundations</h2>
+      <div class="step-section">
 
-      <h3>.NET Framework</h3>
-      <p>The <b>.NET Framework</b> provides PowerShell with the CLR runtime and vast class libraries. When you run <code>Get-Process</code>, format with <code>Select-Object</code>, or manage services, you’re leveraging .NET types and methods under the hood—enabling rich, object-first automation.</p>
-      <ul>
-        <li><b>Libraries:</b> file I/O, networking, services, UI, and more</li>
-        <li><b>CLR runtime:</b> execution, memory, exception handling</li>
-        <li><b>Objects:</b> structured data instead of flat text</li>
-      </ul>
+        <div class="sub-section">
+          <h4>.NET Framework</h4>
+          <p>The <strong style="color:var(--brand);">.NET Framework</strong> provides PowerShell with the CLR runtime and vast class libraries. When you run <code>Get-Process</code>, format with <code>Select-Object</code>, or manage services, you're leveraging .NET types and methods under the hood—enabling rich, object-first automation.</p>
+          <ul>
+            <li><strong style="color:var(--brand);">Libraries:</strong> file I/O, networking, services, UI, and more</li>
+            <li><strong style="color:var(--brand);">CLR runtime:</strong> execution, memory, exception handling</li>
+            <li><strong style="color:var(--brand);">Objects:</strong> structured data instead of flat text</li>
+          </ul>
+        </div>
 
-      <h3>.NET Core</h3>
-      <p><b>.NET Core</b> (now .NET 6/7/8+) powers cross-platform <b>PowerShell</b> (a.k.a. PowerShell Core). It’s modular, fast, and open source—ideal for modern automation across Windows, Linux, and macOS.</p>
-      <ul>
-        <li><b>Cross-platform:</b> consistent scripts on Windows/macOS/Linux</li>
-        <li><b>Performance & modularity:</b> lean runtime and libraries</li>
-        <li><b>Open source:</b> rapid improvements, community modules</li>
-      </ul>
-    </section>
+        <div class="sub-section">
+          <h4>.NET Core</h4>
+          <p><strong style="color:var(--brand);">.NET Core</strong> (now .NET 6/7/8+) powers cross-platform <strong style="color:var(--brand);">PowerShell</strong> (a.k.a. PowerShell Core). It's modular, fast, and open source—ideal for modern automation across Windows, Linux, and macOS.</p>
+          <ul>
+            <li><strong style="color:var(--brand);">Cross-platform:</strong> consistent scripts on Windows/macOS/Linux</li>
+            <li><strong style="color:var(--brand);">Performance &amp; modularity:</strong> lean runtime and libraries</li>
+            <li><strong style="color:var(--brand);">Open source:</strong> rapid improvements, community modules</li>
+          </ul>
+        </div>
 
-    <!-- Versions -->
-    <section class="card">
+      </div>
+
+      <!-- Versions -->
       <h2>Windows PowerShell and PowerShell (Core)</h2>
+      <div class="step-section">
 
-      <h3>Windows PowerShell</h3>
-      <ul>
-        <li><b>Version:</b> 5.1 (final)</li>
-        <li><b>Platform:</b> Windows-only</li>
-        <li><b>Runtime:</b> .NET Framework</li>
-        <li><b>Compatibility:</b> deep Windows integration & legacy APIs</li>
-      </ul>
+        <div class="sub-section">
+          <h4>Windows PowerShell</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Version:</strong> 5.1 (final)</li>
+            <li><strong style="color:var(--brand);">Platform:</strong> Windows-only</li>
+            <li><strong style="color:var(--brand);">Runtime:</strong> .NET Framework</li>
+            <li><strong style="color:var(--brand);">Compatibility:</strong> deep Windows integration &amp; legacy APIs</li>
+          </ul>
+        </div>
 
-      <h3>PowerShell (Core)</h3>
-      <ul>
-        <li><b>Version:</b> 6.x/7.x (current is 7 line)</li>
-        <li><b>Platform:</b> cross-platform (Windows, macOS, Linux)</li>
-        <li><b>Runtime:</b> .NET Core / .NET 5+</li>
-        <li><b>Notes:</b> faster & modular; some Windows-only features differ</li>
-      </ul>
-    </section>
+        <div class="sub-section">
+          <h4>PowerShell (Core)</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Version:</strong> 6.x/7.x (current is 7 line)</li>
+            <li><strong style="color:var(--brand);">Platform:</strong> cross-platform (Windows, macOS, Linux)</li>
+            <li><strong style="color:var(--brand);">Runtime:</strong> .NET Core / .NET 5+</li>
+            <li><strong style="color:var(--brand);">Notes:</strong> faster &amp; modular; some Windows-only features differ</li>
+          </ul>
+        </div>
 
-    <!-- Cmdlets & Syntax -->
-    <section class="card">
-      <h2>Cmdlets & Basic Syntax and Structure</h2>
-      <p><b>Cmdlets</b> are small, purpose-built commands that follow a clear <b>Verb-Noun</b> pattern and output <b>objects</b>. They’re the building blocks of PowerShell automation.</p>
+      </div>
 
-      <h3>Naming Format</h3>
-      <table>
-        <thead>
-          <tr><th>Verb</th><th>Noun</th><th>Meaning</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Help</span></td><td>Displays help for cmdlets</td></tr>
-          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Command</span></td><td>Lists available commands</td></tr>
-          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Process</span></td><td>Show running processes</td></tr>
-          <tr><td><span class="tag">Get-</span></td><td><span class="tag">Service</span></td><td>Show services</td></tr>
-          <tr><td><span class="tag">Start-</span></td><td><span class="tag">Service</span></td><td>Start a service</td></tr>
-          <tr><td><span class="tag">Restart-</span></td><td><span class="tag">Service</span></td><td>Restart a service</td></tr>
-          <tr><td><span class="tag">Stop-</span></td><td><span class="tag">Service</span></td><td>Stop a service</td></tr>
-        </tbody>
-      </table>
+      <!-- Cmdlets & Syntax -->
+      <h2>Cmdlets &amp; Basic Syntax and Structure</h2>
+      <div class="step-section">
+        <p><strong style="color:var(--brand);">Cmdlets</strong> are small, purpose-built commands that follow a clear <strong style="color:var(--brand);">Verb-Noun</strong> pattern and output <strong style="color:var(--brand);">objects</strong>. They're the building blocks of PowerShell automation.</p>
 
-      <!-- Single figures (now zoom-enabled) -->
-      <div class="figure"><img src="Images/GetHelp.png" alt="Get-Help screenshot"></div>
-      <div class="figure"><img src="Images/GetCommand.png" alt="Get-Command screenshot"></div>
-      <div class="figure"><img src="Images/GetProcess.png" alt="Get-Process screenshot"></div>
-      <div class="figure"><img src="Images/GetService.png" alt="Get-Service screenshot"></div>
-      <div class="figure"><img src="Images/ServiceMgmt.png" alt="Service management examples"></div>
-    </section>
+        <div class="sub-section">
+          <h4>Naming Format</h4>
+          <table>
+            <thead>
+              <tr><th>Verb</th><th>Noun</th><th>Meaning</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="tag">Get-</span></td><td><span class="tag">Help</span></td><td>Displays help for cmdlets</td></tr>
+              <tr><td><span class="tag">Get-</span></td><td><span class="tag">Command</span></td><td>Lists available commands</td></tr>
+              <tr><td><span class="tag">Get-</span></td><td><span class="tag">Process</span></td><td>Show running processes</td></tr>
+              <tr><td><span class="tag">Get-</span></td><td><span class="tag">Service</span></td><td>Show services</td></tr>
+              <tr><td><span class="tag">Start-</span></td><td><span class="tag">Service</span></td><td>Start a service</td></tr>
+              <tr><td><span class="tag">Restart-</span></td><td><span class="tag">Service</span></td><td>Restart a service</td></tr>
+              <tr><td><span class="tag">Stop-</span></td><td><span class="tag">Service</span></td><td>Stop a service</td></tr>
+            </tbody>
+          </table>
+        </div>
 
-    <!-- Exploration -->
-    <section class="card">
+        <div class="figure"><img src="Images/GetHelp.png" alt="Get-Help screenshot"></div>
+        <div class="figure"><img src="Images/GetCommand.png" alt="Get-Command screenshot"></div>
+        <div class="figure"><img src="Images/GetProcess.png" alt="Get-Process screenshot"></div>
+        <div class="figure"><img src="Images/GetService.png" alt="Get-Service screenshot"></div>
+        <div class="figure"><img src="Images/ServiceMgmt.png" alt="Service management examples"></div>
+      </div>
+
+      <!-- Exploration -->
       <h2>Exploration</h2>
-      <pre><code>$PSVersionTable
+      <div class="step-section">
+        <pre><code>$PSVersionTable
 Get-Module -ListAvailable
 Get-Command -Module ModuleName
 Get-FileHash
@@ -274,56 +425,75 @@ net user administrator
 Get-LocalGroupMember -Group "Administrators"
 Remove-LocalGroupMember -Group "Administrators" -Member "Domain Users"</code></pre>
 
-      <p><b>Get-Module -ListAvailable</b></p>
-      <div class="figure"><img src="Images/Exploration/GetModule.png" alt="Get-Module list"></div>
-      <div class="figure"><img src="Images/Exploration/GetModules2.png" alt="More module listings"></div>
+        <div class="sub-section">
+          <h4>Get-Module -ListAvailable</h4>
+          <div class="figure"><img src="Images/Exploration/GetModule.png" alt="Get-Module list"></div>
+          <div class="figure"><img src="Images/Exploration/GetModules2.png" alt="More module listings"></div>
+        </div>
 
-      <p><b>Command discovery across modules</b></p>
-      <div class="figure"><img src="Images/Exploration/GetCommand1.png" alt="WindowsUpdate commands"></div>
-      <div class="figure"><img src="Images/Exploration/GetCommand2.png" alt="NetAdapter commands"></div>
-      <div class="figure"><img src="Images/Exploration/GetCommand3.png" alt="NetTCPIP commands"></div>
-      <div class="figure"><img src="Images/Exploration/GetCommand4.png" alt="TroubleshootingPack commands"></div>
-      <div class="figure"><img src="Images/Exploration/GetCommand5.png" alt="NetworkConnectivityStatus commands"></div>
-      <div class="figure"><img src="Images/Exploration/GetCommand6.png" alt="NetSecurity commands list"></div>
+        <div class="sub-section">
+          <h4>Command Discovery Across Modules</h4>
+          <div class="figure"><img src="Images/Exploration/GetCommand1.png" alt="WindowsUpdate commands"></div>
+          <div class="figure"><img src="Images/Exploration/GetCommand2.png" alt="NetAdapter commands"></div>
+          <div class="figure"><img src="Images/Exploration/GetCommand3.png" alt="NetTCPIP commands"></div>
+          <div class="figure"><img src="Images/Exploration/GetCommand4.png" alt="TroubleshootingPack commands"></div>
+          <div class="figure"><img src="Images/Exploration/GetCommand5.png" alt="NetworkConnectivityStatus commands"></div>
+          <div class="figure"><img src="Images/Exploration/GetCommand6.png" alt="NetSecurity commands list"></div>
+        </div>
 
-      <p><b>Networking & hash basics</b></p>
-      <div class="figure"><img src="Images/Exploration/NetFirewall1.png" alt="NetSecurity module"></div>
-      <div class="figure"><img src="Images/Exploration/GetFileHash1.png" alt="Get-FileHash output"></div>
-      <div class="figure"><img src="Images/Exploration/NetAdapter.png" alt="Get-NetAdapter output"></div>
-      <div class="figure"><img src="Images/Exploration/NetAdapter2.png" alt="Adapter selected properties"></div>
+        <div class="sub-section">
+          <h4>Networking &amp; Hash Basics</h4>
+          <div class="figure"><img src="Images/Exploration/NetFirewall1.png" alt="NetSecurity module"></div>
+          <div class="figure"><img src="Images/Exploration/GetFileHash1.png" alt="Get-FileHash output"></div>
+          <div class="figure"><img src="Images/Exploration/NetAdapter.png" alt="Get-NetAdapter output"></div>
+          <div class="figure"><img src="Images/Exploration/NetAdapter2.png" alt="Adapter selected properties"></div>
+        </div>
 
-      <p><b>Firewall rules & discovery</b></p>
-      <div class="figure"><img src="Images/SetNetFirewall.png" alt="Enable File and Printer Sharing rule"></div>
-      <div class="figure"><img src="Images/Get-NetworkFirewall.png" alt="Network Discovery rules"></div>
+        <div class="sub-section">
+          <h4>Firewall Rules &amp; Discovery</h4>
+          <div class="figure"><img src="Images/SetNetFirewall.png" alt="Enable File and Printer Sharing rule"></div>
+          <div class="figure"><img src="Images/Get-NetworkFirewall.png" alt="Network Discovery rules"></div>
+        </div>
 
-      <p><b>Retrieve computer serial number</b></p>
-      <div class="figure"><img src="Images/Exploration/serialn.png" alt="Serial number retrieval"></div>
+        <div class="sub-section">
+          <h4>Retrieve Computer Serial Number</h4>
+          <div class="figure"><img src="Images/Exploration/serialn.png" alt="Serial number retrieval"></div>
+        </div>
 
-      <p><b>Block IP inbound/outbound</b></p>
-      <code>New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any</code>
-      <div class="figure"><img src="Images/FirewallBlock.png" alt="Inbound block rule"></div>
-      <code>New-NetFirewallRule -DisplayName "Block Specific IP Outbound" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any</code>
-      <div class="figure"><img src="Images/FirewallBlock2.png" alt="Outbound block rule"></div>
+        <div class="sub-section">
+          <h4>Block IP Inbound/Outbound</h4>
+          <pre><code>New-NetFirewallRule -DisplayName "Block Specific IP" -Direction Inbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any</code></pre>
+          <div class="figure"><img src="Images/FirewallBlock.png" alt="Inbound block rule"></div>
+          <pre><code>New-NetFirewallRule -DisplayName "Block Specific IP Outbound" -Direction Outbound -Action Block -RemoteAddress "192.168.1.100" -Protocol Any</code></pre>
+          <div class="figure"><img src="Images/FirewallBlock2.png" alt="Outbound block rule"></div>
+        </div>
 
-      <p><b>Get-ComputerInfo & selected properties</b></p>
-      <div class="figure"><img src="Images/Exploration/ComputerInfo.png" alt="ComputerInfo full"></div>
-      <div class="figure"><img src="Images/ComputerInfo2.png" alt="Selected OS properties 1"></div>
-      <div class="figure"><img src="Images/ComputerInfo3.png" alt="Selected OS properties 2"></div>
+        <div class="sub-section">
+          <h4>Get-ComputerInfo &amp; Selected Properties</h4>
+          <div class="figure"><img src="Images/Exploration/ComputerInfo.png" alt="ComputerInfo full"></div>
+          <div class="figure"><img src="Images/ComputerInfo2.png" alt="Selected OS properties 1"></div>
+          <div class="figure"><img src="Images/ComputerInfo3.png" alt="Selected OS properties 2"></div>
+        </div>
 
-      <p><b>Local users & groups</b></p>
-      <div class="figure"><img src="Images/Exploration/netuser.png" alt="net user"></div>
-      <div class="figure"><img src="Images/Exploration/netgroup.png" alt="net group"></div>
-      <div class="figure"><img src="Images/Exploration/netuseradmin.png" alt="net user administrator"></div>
+        <div class="sub-section">
+          <h4>Local Users &amp; Groups</h4>
+          <div class="figure"><img src="Images/Exploration/netuser.png" alt="net user"></div>
+          <div class="figure"><img src="Images/Exploration/netgroup.png" alt="net group"></div>
+          <div class="figure"><img src="Images/Exploration/netuseradmin.png" alt="net user administrator"></div>
+        </div>
 
-      <p><b>Modern local group cmdlets</b></p>
-      <div class="figure"><img src="Images/GetLocalGroup.png" alt="Get-LocalGroupMember"></div>
-      <div class="figure"><img src="Images/LocalGroup2.png" alt="Modify local group members"></div>
-    </section>
+        <div class="sub-section">
+          <h4>Modern Local Group Cmdlets</h4>
+          <div class="figure"><img src="Images/GetLocalGroup.png" alt="Get-LocalGroupMember"></div>
+          <div class="figure"><img src="Images/LocalGroup2.png" alt="Modify local group members"></div>
+        </div>
 
-    <!-- Files & Dirs (GALLERY + ZOOM FROM HERE DOWN) -->
-    <section class="card">
+      </div>
+
+      <!-- Files & Dirs -->
       <h2>Working with Files and Directories</h2>
-      <pre><code>Get-ChildItem
+      <div class="step-section">
+        <pre><code>Get-ChildItem
 New-Item
 Remove-Item
 echo
@@ -331,234 +501,259 @@ mkdir
 Move-Item
 Copy-Item
 ls</code></pre>
-      <p>The familiar Linux-style commands like <code>mkdir</code>, <code>echo</code>, and <code>ls</code> also work in a PowerShell session.</p>
-
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="File and directory operations">
-          <article class="item"><figure class="figure"><img src="Images/FileDir/NewItem.png" alt="New-Item examples"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/FileDir/GetChildItem.png" alt="Get-ChildItem examples"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/FileDir/RemoveItem.png" alt="Remove-Item examples"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/FileDir/echomkdir.png" alt="echo/mkdir examples"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/FileDir/Item.png" alt="Item operations"></figure></article>
+        <p>The familiar Linux-style commands like <code>mkdir</code>, <code>echo</code>, and <code>ls</code> also work in a PowerShell session.</p>
+        <div class="gallery-wrap">
+          <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+          <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+          <div class="gallery hide-scrollbar" role="region" aria-label="File and directory operations">
+            <article class="item"><figure class="figure"><img src="Images/FileDir/NewItem.png" alt="New-Item examples"></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/FileDir/GetChildItem.png" alt="Get-ChildItem examples"></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/FileDir/RemoveItem.png" alt="Remove-Item examples"></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/FileDir/echomkdir.png" alt="echo/mkdir examples"></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/FileDir/Item.png" alt="Item operations"></figure></article>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- Scripting Basics -->
-    <section class="card">
+      <!-- Scripting Basics -->
       <h2>PowerShell Scripting Basics</h2>
-      <p>Core building blocks that underpin automation and administration with PowerShell.</p>
+      <div class="step-section">
+        <p>Core building blocks that underpin automation and administration with PowerShell.</p>
 
-      <h3>Data Types (Variables, Strings, Integers)</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Types basics">
-          <article class="item"><figure class="figure"><img src="Images/BS/var.png" alt="Variables"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/strings.png" alt="Strings"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/Integers.png" alt="Integers"></figure></article>
+        <div class="sub-section">
+          <h4>Data Types (Variables, Strings, Integers)</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Types basics">
+              <article class="item"><figure class="figure"><img src="Images/BS/var.png" alt="Variables"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/strings.png" alt="Strings"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/Integers.png" alt="Integers"></figure></article>
+            </div>
+          </div>
         </div>
+
+        <div class="sub-section">
+          <h4>Arrays</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Arrays examples">
+              <article class="item"><figure class="figure"><img src="Images/BS/array.png" alt="Create arrays"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/array2.png" alt="Append to arrays"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/arrays3.png" alt="Loop through arrays"></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Booleans</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Boolean logic examples">
+              <article class="item"><figure class="figure"><img src="Images/BS/boolean1.png" alt="Boolean basics"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/boolean3.png" alt="Comparison produces boolean"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/boolean4.png" alt="Logical operators"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/Boolean5.png" alt="Negation example"></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Loops and Conditional Statements</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Loops">
+              <article class="item"><figure class="figure"><img src="Images/BS/loops.png" alt="Loops screenshot"></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Objects</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Objects and members">
+              <article class="item"><figure class="figure"><img src="Images/BS/objects1.png" alt="Process object properties"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/objects3.png" alt="Custom object"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/objects4.png" alt="Array of objects"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/objects5.png" alt="Filter objects"></figure></article>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <h3>Arrays</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Arrays examples">
-          <article class="item"><figure class="figure"><img src="Images/BS/array.png" alt="Create arrays"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/array2.png" alt="Append to arrays"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/arrays3.png" alt="Loop through arrays"></figure></article>
-        </div>
-      </div>
-
-      <h3>Booleans</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Boolean logic examples">
-          <article class="item"><figure class="figure"><img src="Images/BS/boolean1.png" alt="Boolean basics"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/boolean3.png" alt="Comparison produces boolean"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/boolean4.png" alt="Logical operators"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/Boolean5.png" alt="Negation example"></figure></article>
-        </div>
-      </div>
-
-      <h3>Loops and Conditional Statements</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Loops">
-          <article class="item"><figure class="figure"><img src="Images/BS/loops.png" alt="Loops screenshot"></figure></article>
-        </div>
-      </div>
-
-      <h3>Objects</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Objects and members">
-          <article class="item"><figure class="figure"><img src="Images/BS/objects1.png" alt="Process object properties"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/objects3.png" alt="Custom object"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/objects4.png" alt="Array of objects"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/objects5.png" alt="Filter objects"></figure></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Functions -->
-    <section class="card">
+      <!-- Functions -->
       <h2>Functions</h2>
-      <pre><code>function Greet-User {
+      <div class="step-section">
+        <pre><code>function Greet-User {
   param ($Name)
   "Welcome, $Name!"
 }
 Greet-User -Name "Dave"</code></pre>
-
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Function examples">
-          <article class="item"><figure class="figure"><img src="Images/BS/function.png" alt="Function with param"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/function1.png" alt="Function no params"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/function2.png" alt="Function one param"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/function3.png" alt="Function multiple params"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/fucntion4.png" alt="Function with logic"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/function5.png" alt="Return value function"></figure></article>
+        <div class="gallery-wrap">
+          <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+          <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+          <div class="gallery hide-scrollbar" role="region" aria-label="Function examples">
+            <article class="item"><figure class="figure"><img src="Images/BS/function.png" alt="Function with param"></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/function1.png" alt="Function no params"></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/function2.png" alt="Function one param"></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/function3.png" alt="Function multiple params"></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/fucntion4.png" alt="Function with logic"></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/function5.png" alt="Return value function"></figure></article>
+          </div>
         </div>
+        <p>Scripts end with the <code>.ps1</code> extension.</p>
       </div>
 
-      <p>Scripts end with the <code>.ps1</code> extension.</p>
-    </section>
-
-    <!-- Execution Policy -->
-    <section class="card">
+      <!-- Execution Policy -->
       <h2>Permissions and Execution Policy</h2>
-      <pre><code>Get-ExecutionPolicy
+      <div class="step-section">
+        <pre><code>Get-ExecutionPolicy
 Set-ExecutionPolicy RemoteSigned</code></pre>
-
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Execution policy">
-          <article class="item"><figure class="figure"><img src="Images/ExecutePolicy.png" alt="Execution policy"></figure></article>
+        <div class="gallery-wrap">
+          <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+          <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+          <div class="gallery hide-scrollbar" role="region" aria-label="Execution policy">
+            <article class="item"><figure class="figure"><img src="Images/ExecutePolicy.png" alt="Execution policy"></figure></article>
+          </div>
         </div>
+        <p><strong style="color:var(--brand);">Policies:</strong> Restricted · AllSigned · RemoteSigned · Unrestricted</p>
+        <p>Administrator privileges may be required.</p>
       </div>
 
-      <p><b>Policies:</b> Restricted · AllSigned · RemoteSigned · Unrestricted</p>
-      <p>Administrator privileges may be required.</p>
-    </section>
-
-    <!-- Debugging / Tools -->
-    <section class="card">
+      <!-- Debugging / Tools -->
       <h2>Useful Tools and Debugging</h2>
-      <ul>
-        <li><code>Write-Host</code> vs <code>Write-Output</code></li>
-        <li><code>Start-Transcript</code> to log sessions</li>
-        <li><code>try/catch/finally</code> for error handling</li>
-      </ul>
+      <div class="step-section">
+        <ul>
+          <li><code>Write-Host</code> vs <code>Write-Output</code></li>
+          <li><code>Start-Transcript</code> to log sessions</li>
+          <li><code>try/catch/finally</code> for error handling</li>
+        </ul>
 
-      <h3>Write-Host vs Write-Output</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Host vs Output">
-          <article class="item"><figure class="figure"><img src="Images/Debug/WriteHost.png" alt="Write-Host demo"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BS/file.png" alt="Write-Output demo"></figure></article>
+        <div class="sub-section">
+          <h4>Write-Host vs Write-Output</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Host vs Output">
+              <article class="item"><figure class="figure"><img src="Images/Debug/WriteHost.png" alt="Write-Host demo"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BS/file.png" alt="Write-Output demo"></figure></article>
+            </div>
+          </div>
         </div>
+
+        <div class="sub-section">
+          <h4>Start-Transcript</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Start-Transcript">
+              <article class="item"><figure class="figure"><img src="Images/Debug/StartTranscript.png" alt="Start-Transcript demo"></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>try / catch / finally</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Error handling examples">
+              <article class="item"><figure class="figure"><img src="Images/Debug/try1.png" alt="try/catch example 1"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Debug/try2.png" alt="try/catch example 2"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Debug/finallty.png" alt="finally block demo"></figure></article>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <h3>Start-Transcript</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Start-Transcript">
-          <article class="item"><figure class="figure"><img src="Images/Debug/StartTranscript.png" alt="Start-Transcript demo"></figure></article>
-        </div>
-      </div>
-
-      <h3>try / catch / finally</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Error handling examples">
-          <article class="item"><figure class="figure"><img src="Images/Debug/try1.png" alt="try/catch example 1"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Debug/try2.png" alt="try/catch example 2"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Debug/finallty.png" alt="finally block demo"></figure></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Real-world -->
-    <section class="card">
+      <!-- Real-world -->
       <h2>Real-World Use Cases</h2>
-      <ul>
-        <li>Batch user creation in AD</li>
-        <li>Automating updates</li>
-        <li>Backing up and archiving logs</li>
-        <li>Scheduled tasks and reporting</li>
-      </ul>
+      <div class="step-section">
+        <ul>
+          <li>Batch user creation in AD</li>
+          <li>Automating updates</li>
+          <li>Backing up and archiving logs</li>
+          <li>Scheduled tasks and reporting</li>
+        </ul>
 
-      <h3>Batch user creation in AD</h3>
-      <p><b>1.</b> Create a CSV with user attributes (example in Notepad++):</p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="AD batch creation">
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/csv0.png" alt="AD CSV example"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/ScriptCode0.png" alt="AD user creation script"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/csv00.PNG" alt="New AD users created"></figure></article>
+        <div class="sub-section">
+          <h4>Batch User Creation in AD</h4>
+          <p>Create a CSV with user attributes, then run a script to provision users in bulk.</p>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="AD batch creation">
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/csv0.png" alt="AD CSV example"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/ScriptCode0.png" alt="AD user creation script"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/csv00.PNG" alt="New AD users created"></figure></article>
+            </div>
+          </div>
         </div>
+
+        <div class="sub-section">
+          <h4>Automating Updates</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Windows Update scripting">
+              <article class="item"><figure class="figure"><img src="Images/WindowsUpdate.png" alt="Windows Update 1"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/WindowsUpdate2.png" alt="Windows Update 2"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/WindowsUpdate3.png" alt="Windows Update 3"></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Backing Up and Archiving Logs</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Backup logs">
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/Backup.png" alt="Backup logs with PowerShell"></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Scheduled Tasks and Reporting</h4>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Task Scheduler workflow">
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched1.png" alt="Task Scheduler 1"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched2.png" alt="Task Scheduler 2"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched3.png" alt="Task Scheduler 3"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched4.png" alt="Task Scheduler 4"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched5.png" alt="Task Scheduler 5"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched6.png" alt="Task Scheduler 6"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched7.png" alt="Task Scheduler 7"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched8.png" alt="Task Scheduler 8"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched9.png" alt="Task Scheduler 9"></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched10.png" alt="Task Scheduler 10"></figure></article>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <h3>Automating updates</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Windows Update scripting">
-          <article class="item"><figure class="figure"><img src="Images/WindowsUpdate.png" alt="Windows Update 1"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/WindowsUpdate2.png" alt="Windows Update 2"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/WindowsUpdate3.png" alt="Windows Update 3"></figure></article>
-        </div>
+      <!-- Wrap-up -->
+      <div class="step-section">
+        <p>PowerShell gives IT pros control and automation that save time, reduce errors, and improve reliability. Mastering the fundamentals is step one toward serious automation chops.</p>
+        <p><em style="color:var(--muted);font-size:14px;">PowerShell is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
       </div>
 
-      <h3>Backing up and archiving logs</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Backup logs">
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/Backup.png" alt="Backup logs with PowerShell"></figure></article>
-        </div>
-      </div>
+    </main>
 
-      <h3>Scheduled tasks and reporting</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll right">&#10095;</button>
-        <div class="gallery hide-scrollbar" role="region" aria-label="Task Scheduler workflow">
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched1.png" alt="Task Scheduler 1"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched2.png" alt="Task Scheduler 2"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched3.png" alt="Task Scheduler 3"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched4.png" alt="Task Scheduler 4"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched5.png" alt="Task Scheduler 5"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched6.png" alt="Task Scheduler 6"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched7.png" alt="Task Scheduler 7"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched8.png" alt="Task Scheduler 8"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched9.png" alt="Task Scheduler 9"></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Batch%20User%20Creationi/tasksched10.png" alt="Task Scheduler 10"></figure></article>
-        </div>
-      </div>
-    </section>
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
-    <!-- Wrap-up -->
-    <section class="card">
-      <p>PowerShell gives IT pros control and automation that save time, reduce errors, and improve reliability. Mastering the fundamentals is step one toward serious automation chops.</p>
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
-      <p><em>PowerShell is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
-
-    <!-- Footer (branding only) -->
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
@@ -589,10 +784,9 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
     })();
   </script>
 
-  <!-- Lightbox / zoom for ALL images (single figures & galleries) -->
+  <!-- Lightbox for all images (galleries + standalone) -->
   <script>
     (function(){
-      // Build lightbox
       const lb = document.createElement('div');
       lb.className = 'lightbox';
       lb.innerHTML = `
@@ -611,11 +805,10 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
       const btnPrev  = lb.querySelector('.lb-prev');
       const btnNext  = lb.querySelector('.lb-next');
 
-      const groups = new Map();            // galleryId -> [imgElements]
+      const groups = new Map();
       let gidCounter = 0;
       let current = { gid:null, idx:0 };
 
-      // 1) Index gallery images (within .gallery-wrap)
       document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
         const gid = 'g' + (++gidCounter);
         const imgs = Array.from(wrap.querySelectorAll('.gallery img'));
@@ -629,9 +822,8 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
         });
       });
 
-      // 2) Index standalone images (any .figure img NOT already in a group)
       document.querySelectorAll('.figure img').forEach((img)=>{
-        if (img.dataset.gid) return; // already grouped via gallery
+        if (img.dataset.gid) return;
         const gid = 's' + (++gidCounter);
         groups.set(gid, [img]);
         img.dataset.gid = gid;
@@ -649,12 +841,10 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
         document.body.style.overflow = 'hidden';
         btnClose.focus();
       }
-
       function close(){
         lb.classList.remove('open');
         document.body.style.overflow = '';
       }
-
       function update(){
         const list = groups.get(current.gid) || [];
         const el = list[current.idx];
@@ -662,24 +852,21 @@ Set-ExecutionPolicy RemoteSigned</code></pre>
         imgEl.src = el.currentSrc || el.src;
         imgEl.alt = el.alt || '';
         capEl.textContent = el.alt || '';
-        // show prev/next only when group has multiple images
         const multi = list.length > 1;
         btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
+      function prev(){ const list=groups.get(current.gid)||[]; if(!list.length) return; current.idx=(current.idx-1+list.length)%list.length; update(); }
+      function next(){ const list=groups.get(current.gid)||[]; if(!list.length) return; current.idx=(current.idx+1)%list.length; update(); }
 
-      function prev(){ const list = groups.get(current.gid)||[]; if(!list.length) return; current.idx = (current.idx-1+list.length)%list.length; update(); }
-      function next(){ const list = groups.get(current.gid)||[]; if(!list.length) return; current.idx = (current.idx+1)%list.length; update(); }
-
-      // Controls
       btnClose.addEventListener('click', close);
       btnPrev .addEventListener('click', prev);
       btnNext .addEventListener('click', next);
-      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
       document.addEventListener('keydown', (e)=>{
         if(!lb.classList.contains('open')) return;
-        if(e.key === 'Escape') close();
-        else if(e.key === 'ArrowLeft') prev();
-        else if(e.key === 'ArrowRight') next();
+        if(e.key==='Escape') close();
+        else if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
       });
     })();
   </script>
