@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Virtual Switch Setup · Mark Thompson Portfolio</title>
   <meta name="description" content="Step-by-step configuration of virtual switches in Hyper-V, with screenshots and detailed setup workflow." />
-
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -15,239 +14,329 @@
     html,body{height:100%}
     body{
       margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:18px;
+      padding:32px;
       margin-top:16px;
     }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Figure styling */
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:14px auto;
-      width:max-content;
+      margin:16px auto;
+      width:min(70%, 820px);
       max-width:100%;
       text-align:center;
     }
     .figure img{
       display:block;
+      width:100%;
       height:auto;
-      max-width:85%;
-      cursor:zoom-in;
       border-radius:10px;
-      margin:auto;
+      cursor:zoom-in;
     }
-    .figcaption{
-      margin-top:6px;
-      font-size:14px;
+    @media (max-width:900px){ .figure{width:92%} }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.86);z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
+    .lb-img{
+      display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;
+      border-radius:12px;box-shadow:var(--shadow);
+    }
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
+    .lb-btn{
+      position:absolute;top:10px;padding:6px 10px;border-radius:10px;
+      border:1px solid #2A3447;background:#0e1220;color:var(--text);
+      cursor:pointer;user-select:none;
+    }
+    .lb-close{right:10px}
+    .lb-prev,.lb-next{
+      top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;
+      border-radius:999px;font-size:20px;line-height:1;
+    }
+    .lb-prev{left:-58px}
+    .lb-next{right:-58px}
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
       color:var(--muted);
+      font-size:0.9rem;
     }
-
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
-
-    /* Zoom modal */
-    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
-    .zoom-modal[open]{display:block}
-    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
-    .zoom-img{max-width:95vw;max-height:95vh;width:auto;height:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out}
-    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;cursor:pointer}
-    .zoom-close:hover{background:#121733}
-    .hide-scroll{overflow:hidden}
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-  <!-- NAV -->
-  <nav class="topnav" aria-label="Sections">
-    <a href="/MTPortfolio/">Home</a>
-    <a href="/MTPortfolio/Skills">Networking</a>
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
-    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
-    <a href="/MTPortfolio/Blogs">Blog</a>
-  </nav>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <!-- BREADCRUMB -->
-  <div class="crumbs">
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> ·
-    <span>Virtual Switch Setup</span>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> ·
+      <span>Virtual Switch Setup</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+      <h1>Virtual Switch Setup</h1>
+      <p class="lead">A step-by-step walkthrough of creating and configuring a Virtual Switch in Hyper-V using the Virtual Switch Manager within Hyper-V Manager. All screenshots below follow the exact order of the setup process.</p>
+    </header>
+
+    <!-- Main content -->
+    <main class="content">
+
+      <h2>Virtual Switch Configuration Workflow</h2>
+      <div class="step-section">
+        <p>The following screenshots demonstrate the complete workflow for creating an External virtual switch type in Hyper-V, going over initial vSwitch creation in the Hyper-V <strong style="color:var(--brand);">Virtual Switch Manager</strong>, vSwitch types, network adapter selection, overall vSwitch configuration, applying settings, and assigning VMs to the vSwitch.</p>
+
+        <div class="sub-section">
+          <h4>Step 1 — Launch the Virtual Switch Manager</h4>
+          <figure class="figure"><img src="Images/vswitch1.png" alt="Launch the Virtual Switch Manager" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Step 2 — Select Virtual Switch Type</h4>
+          <p>Here an <strong style="color:var(--brand);">External</strong> vSwitch type is selected for this configuration.</p>
+          <figure class="figure"><img src="Images/vswitch2.png" alt="Select virtual switch type" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Step 3 — Click Create Virtual Switch</h4>
+          <figure class="figure"><img src="Images/vswitch3.png" alt="Click Create Virtual Switch" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Step 4 — Select Network Adapter and Configure the vSwitch, Then Click Apply</h4>
+          <p>In this example, the machine's Ethernet adapter is selected.</p>
+          <p>The checkbox <strong style="color:var(--brand);">"Allow management operating system to share this network adapter"</strong> allows each VM to use the Ethernet adapter's DNS/DHCP settings to obtain IP configurations.</p>
+          <figure class="figure"><img src="Images/vswitch4.png" alt="Select network adapter and configure the vSwitch" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Step 5 — Click Yes on Apply Networking Changes Prompt</h4>
+          <figure class="figure"><img src="Images/vswitch5.png" alt="Apply Networking Changes prompt" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Step 6 — Configured vSwitch Ready to Go, Click OK</h4>
+          <figure class="figure"><img src="Images/vswitch6.png" alt="Configured vSwitch ready" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Step 7 — Assign Ubuntu Server to vSwitch0</h4>
+          <figure class="figure"><img src="Images/vswitch7.png" alt="Assign Ubuntu Server to vSwitch0" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Step 8 — Assign Windows Server to vSwitch0</h4>
+          <figure class="figure"><img src="Images/vswitch8.png" alt="Assign Windows Server to vSwitch0" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Step 9 — Assign pfSense to vSwitch0</h4>
+          <figure class="figure"><img src="Images/vswitch9.png" alt="Assign pfSense to vSwitch0" loading="lazy" decoding="async"></figure>
+        </div>
+
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
   </div>
 
-  <!-- HEADER -->
-  <header>
-    <h1>Virtual Switch Setup</h1>
-    <p class="lead">
-      A step-by-step walkthrough of creating and configuring a Virtual Switch in Hyper-V using the Virtual Switch Manager within Hyper-V Manager.  
-      All screenshots below follow the exact order of the setup process.
-    </p>
-  </header>
+  <!-- Lightbox -->
+  <script>
+    (function(){
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = `
+        <div class="lb-stage" role="dialog" aria-modal="true" aria-label="Image preview">
+          <button class="lb-btn lb-close" aria-label="Close (Esc)">✕</button>
+          <button class="lb-btn lb-prev" aria-label="Previous">&#10094;</button>
+          <img class="lb-img" alt="">
+          <button class="lb-btn lb-next" aria-label="Next">&#10095;</button>
+          <div class="lb-cap" aria-live="polite"></div>
+        </div>`;
+      document.body.appendChild(lb);
 
-  <!-- SECTION 1 -->
-  <section class="card">
-    <h2>Virtual Switch Configuration Workflow</h2>
-    <p>
-      The following screenshots demonstrate the complete workflow for creating an External virtual switch type in Hyper-V,
-      going over intial vSwitch creation in the Hyper-V <strong>Virtual Switch Manager</strong>, vSwitch types, network adapter selection,
-      overall vSwitch configuration, applying settings, and assigning VMs to the vSwitch.
-    </p>
+      const imgEl = lb.querySelector('.lb-img');
+      const capEl = lb.querySelector('.lb-cap');
+      const btnClose = lb.querySelector('.lb-close');
+      const btnPrev  = lb.querySelector('.lb-prev');
+      const btnNext  = lb.querySelector('.lb-next');
 
-    <!-- IMAGE 1 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Step 1 - Launch the Virtual Switch Manager</strong></div>
-      <img src="Images/vswitch1.png" alt="Virtual Switch Setup Step 1">
-    </div>
+      const imgs = Array.from(document.querySelectorAll('.figure img'));
+      let idx = 0;
 
-    <!-- IMAGE 2 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Step 2 - Select virtual switch type</strong></div>
-      <div class="figcaption"><p>Here an External vSwitch type is selected for this configuration.</p>
-      <img src="Images/vswitch2.png" alt="Virtual Switch Setup Step 2">
-    </div>
+      function render(i){
+        const el = imgs[i];
+        if(!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.alt || '';
+        const multi = imgs.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
+      }
+      function open(i){ idx=i; render(idx); lb.classList.add('open'); document.body.style.overflow='hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+      function prev(){ idx=(idx-1+imgs.length)%imgs.length; render(idx); }
+      function next(){ idx=(idx+1)%imgs.length; render(idx); }
 
-    <!-- IMAGE 3 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Step 3 - Click Create Virtual Switch</strong></div>
-      <img src="Images/vswitch3.png" alt="Virtual Switch Setup Step 3">
-    </div>
-
-    <!-- IMAGE 4 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Step 4 - Select network adapter and configure the vSwitch, then click Apply</strong></div>
-      <div class="figcaption"><p>In this example, I'm selecting the machines Ethernet adapter.</p></div>
-      <div class="figcaption"><P>The check box <strong>"Allow management operating system to share this network adapter"</strong>, allows each VM to use the Ethernet adapters DNS/DHCP settings to obtain IP configurations.</P></div>
-      <img src="Images/vswitch4.png" alt="Virtual Switch Setup Step 4">
-    </div>
-
-    <!-- IMAGE 5 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Step 5 - Click Yes on Apply Networking Changes prompt</strong></div>
-      <img src="Images/vswitch5.png" alt="Virtual Switch Setup Step 5">
-    </div>
-
-    <!-- IMAGE 6 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Step 6 - Configured vSwitch ready to go, click OK</strong></div>
-      <img src="Images/vswitch6.png" alt="Virtual Switch Setup Step 6">
-    </div>
-
-    <!-- IMAGE 7 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Step 7 - Assign Ubuntu Server to vSwtich0</strong></div>
-      <img src="Images/vswitch7.png" alt="Virtual Switch Setup Step 7">
-    </div>
-
-    <!-- IMAGE 8 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Step 8 - Assign Windows Server to vSwitch0</strong></div>
-      <img src="Images/vswitch8.png" alt="Virtual Switch Setup Step 8">
-    </div>
-
-    <!-- IMAGE 9 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Step 9 - Assign pfSense to vSwitch0</strong></div>
-      <img src="Images/vswitch9.png" alt="virtual Switch Setup Setp 9">
-    </div>
-
-  </section>
-
-  <section>
-    <p><a href="../index.html">Back to Home</a></p>
-  </section>
-
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-    <div class="links">
-      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </footer>
-
-</div>
-
-<!-- ZOOM MODAL -->
-<div class="zoom-modal" id="zoom" aria-hidden="true">
-  <div class="zoom-content" data-close>
-    <img class="zoom-img" id="zoomImg" alt="">
-    <button class="zoom-close" type="button">&times;</button>
-  </div>
-</div>
-
-<script>
-(function(){
-  const modal=document.getElementById('zoom');
-  const zoomImg=document.getElementById('zoomImg');
-  const closeBtn=modal.querySelector('.zoom-close');
-  let lastFocus=null;
-
-  document.querySelectorAll('.figure img').forEach(img=>img.classList.add('zoomable'));
-
-  function openModal(src,alt){
-    lastFocus=document.activeElement;
-    zoomImg.src=src;
-    zoomImg.alt=alt||'';
-    modal.setAttribute('open','');
-    document.body.classList.add('hide-scroll');
-    closeBtn.focus();
-  }
-  function closeModal(){
-    modal.removeAttribute('open');
-    document.body.classList.remove('hide-scroll');
-    zoomImg.removeAttribute('src');
-    if(lastFocus) lastFocus.focus();
-  }
-
-  document.addEventListener('click',e=>{
-    const img=e.target.closest('.figure img.zoomable');
-    if(img){ openModal(img.src,img.alt); }
-  });
-  closeBtn.addEventListener('click',closeModal);
-  modal.addEventListener('click',e=>{
-    if(e.target.hasAttribute('data-close')||e.target===modal) closeModal();
-  });
-  zoomImg.addEventListener('click',closeModal);
-  document.addEventListener('keydown',e=>{
-    if(!modal.hasAttribute('open')) return;
-    if(e.key==='Escape') closeModal();
-  });
-})();
-</script>
-
+      imgs.forEach((img,i)=>{ img.addEventListener('click',(e)=>{ e.preventDefault(); open(i); }); });
+      btnClose.addEventListener('click', close);
+      btnPrev .addEventListener('click', (e)=>{ e.stopPropagation(); prev(); });
+      btnNext .addEventListener('click', (e)=>{ e.stopPropagation(); next(); });
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+      document.addEventListener('keydown', (e)=>{
+        if(!lb.classList.contains('open')) return;
+        if(e.key==='Escape') close();
+        else if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
+      });
+    })();
+  </script>
 </body>
 </html>
-
