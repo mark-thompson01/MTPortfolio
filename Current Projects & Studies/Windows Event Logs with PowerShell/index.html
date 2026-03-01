@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lab: Windows Event Log Analysis Using PowerShell · Mark Thompson Portfolio</title>
   <meta name="description" content="Windows Server 2022 lab demonstrating event log enumeration, filtering, troubleshooting, and analysis using PowerShell without Event Viewer." />
-
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -20,16 +19,29 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6;
-      -webkit-font-smoothing:antialiased;
-      text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -38,409 +50,493 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 6px;font-size:clamp(17px,2.4vw,19px)}
 
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* Cards */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:18px;
+      padding:32px;
       margin-top:16px;
     }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Figures (slightly smaller than GUI page) */
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section pre{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      padding:14px 16px;
+      font-size:14px;
+      color:#a8d8ff;
+      overflow-x:auto;
+      margin:0 0 14px 0;
+    }
+    .sub-section pre code{background:none;border:none;padding:0;font-size:inherit}
+
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:14px auto;
+      margin:16px auto;
       max-width:820px;
       text-align:center;
     }
     .figure img{
       display:block;
+      margin:0 auto;
+      border-radius:10px;
       height:auto;
       max-width:100%;
       cursor:zoom-in;
-      border-radius:10px;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
+    }
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
     }
 
-    ul{padding-left:22px;margin:8px 0}
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
 
+    /* Footer */
     footer{
-      margin-top:36px;
-      padding-top:20px;
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
       border-top:1px solid #232a3a;
       color:var(--muted);
-      font-size:14px;
+      font-size:0.9rem;
     }
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)}
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
     footer a:hover{color:var(--brand)}
-
-    /* Zoom modal */
-    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
-    .zoom-modal[open]{display:block}
-    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
-    .zoom-img{max-width:95vw;max-height:95vh;border-radius:12px;cursor:zoom-out}
-    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);font-size:22px;cursor:pointer}
-    .zoom-close:hover{background:#121733}
-    .hide-scroll{overflow:hidden}
   </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-  <!-- Nav -->
-  <nav class="topnav">
-    <a href="/MTPortfolio/">Home</a>
-    <a href="/MTPortfolio/Skills">Networking</a>
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
-    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
-    <a href="/MTPortfolio/Blogs">Blog</a>
-  </nav>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <!-- Breadcrumb -->
-  <div class="crumbs">
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
-    <span>Windows Event Log Analysis Using PowerShell</span>
-  </div>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+      <span>Windows Event Log Analysis Using PowerShell</span>
+    </div>
 
-  <!-- Header -->
-  <header>
-    <h1>Windows Event Log Analysis Using PowerShell</h1>
-    <p class="lead"><strong>Platform:</strong> Windows Server 2022 (GUI or Core)</p>
-    <p class="lead"><strong>Focus:</strong> Security &amp; System logs without Event Viewer</p>
-    <p>
-        <a href="https://github.com/mark-thompson01/windows-event-log-analysis-using-powershell/tree/main" target="_blank" rel="noopener">
-          View this project on GitHub
-        </a>
-      </p>
-  </header>
+    <!-- Header -->
+    <header>
+      <h1>Windows Event Log Analysis Using PowerShell</h1>
+      <p class="lead"><strong style="color:var(--text);">Platform:</strong> Windows Server 2022 (GUI or Core)</p>
+      <p class="lead"><strong style="color:var(--text);">Focus:</strong> Security &amp; System logs without Event Viewer</p>
+      <p><a href="https://github.com/mark-thompson01/windows-event-log-analysis-using-powershell/tree/main" target="_blank" rel="noopener">View this project on GitHub</a></p>
+    </header>
 
-  <!-- Objective -->
-  <section class="card">
-    <h2>Lab Objective</h2>
-    <p>
-      This lab demonstrates how to enumerate, query, filter, and export Windows Event Logs using PowerShell.
-      A practice that can come in handy in scenarios where you're troubleshooting a server and GUI
-      access is limited or unavailable, and you need to quickly evaluate something.
-    </p>
-  </section>
+    <!-- Main content -->
+    <main class="content">
 
-  <!-- Environment -->
-  <section class="card">
-    <h2>Lab Environment Setup</h2>
-    <ul>
-      <li>Windows Server 2022 (local VM)</li>
-      <li>Administrator PowerShell session</li>
-      <li>No dependency on Event Viewer GUI</li>
-    </ul>
-  </section>
+      <!-- Objective -->
+      <h2>Lab Objective</h2>
+      <div class="step-section">
+        <p>This lab demonstrates how to enumerate, query, filter, and export Windows Event Logs using PowerShell. A practice that can come in handy in scenarios where you're troubleshooting a server and GUI access is limited or unavailable, and you need to quickly evaluate something.</p>
+      </div>
 
-  <!-- Core Operations -->
-  <section class="card">
-    <h2>Event Log Operations with PowerShell</h2>
-    <p>This lab demonstration is being performed on a Windows Server 2022 Evaluation version installed on a Hyper-V VM instance, with remote access via RDP protocol, to work with some Windows event logs using the <strong>Get-WinEvent</strong> cmdlet between these two elevated PowerShell sessions.</p>
-    <p><strong>Get-WinEvent</strong> is a PowerShell cmdlet that provides direct, scriptable access to Windows Event Logs, enabling administrators to perform efficient log analysis, troubleshooting, and incident response without relying on the Event Viewer GUI.</p>
-    
-    <div class="figure"><img src="Images/WinEvent0.png"></div><br><br><br><br>
+      <!-- Environment -->
+      <h2>Lab Environment Setup</h2>
+      <div class="step-section">
+        <ul>
+          <li>Windows Server 2022 (local VM)</li>
+          <li>Administrator PowerShell session</li>
+          <li>No dependency on Event Viewer GUI</li>
+        </ul>
+      </div>
 
-    <h3>1. Enumerating Available Windows Event Logs</h3>
-    <code>Get-WinEvent -ListLog *</code>
-    <p>This command <strong>enumerates every Windows Event Log available on the system</strong>, returning high-level metadata about each log rather than indivdual events.</p>
-    <p>Providing a complete inventory of available Windows Event Logs, allowing administrators to identify where meaningful data exists before querying individual events.</p>
-    <div class="figure"><img src="Images/WinEvent1.png"></div><br><br><br><br>
-    
-    <h3>2. Reviewing Recent System Activity</h3>
-    <code>Get-WinEvent -LogName System -MaxEvents 50</code>
-    <p>This command retrieves the <strong>50 most recent events</strong> from the <strong>System event log</strong>, displaying them directly in the PowerShell console.</p>
-    <p>Outputting the most recent system-level events, providing immediate visibility into service activity, updates, and core OS behavior.</p>
-    <div class="figure"><img src="Images/WinEvent2.png"></div>
-    <p>This output exposes system uptime and time adjustments, helping confirm system stability and maintain accurate timelines during troubleshooting and incident response.</p>
-    <div class="figure"><img src="Images/WinEvent3.png"></div><br><br><br><br>
+      <!-- Core Operations -->
+      <h2>Event Log Operations with PowerShell</h2>
+      <div class="step-section">
+        <p>This lab demonstration is being performed on a Windows Server 2022 Evaluation version installed on a Hyper-V VM instance, with remote access via RDP protocol, to work with some Windows event logs using the <strong style="color:var(--brand);">Get-WinEvent</strong> cmdlet between these two elevated PowerShell sessions.</p>
+        <p><strong style="color:var(--brand);">Get-WinEvent</strong> is a PowerShell cmdlet that provides direct, scriptable access to Windows Event Logs, enabling administrators to perform efficient log analysis, troubleshooting, and incident response without relying on the Event Viewer GUI.</p>
+        <div class="figure"><img src="Images/WinEvent0.png" alt="PowerShell sessions overview"></div>
 
+        <div class="sub-section">
+          <h4>1. Enumerating Available Windows Event Logs</h4>
+          <pre><code>Get-WinEvent -ListLog *</code></pre>
+          <p>This command <strong style="color:var(--brand);">enumerates every Windows Event Log available on the system</strong>, returning high-level metadata about each log rather than individual events.</p>
+          <p>Providing a complete inventory of available Windows Event Logs, allowing administrators to identify where meaningful data exists before querying individual events.</p>
+          <div class="figure"><img src="Images/WinEvent1.png" alt="Get-WinEvent -ListLog * output"></div>
+        </div>
 
-    <h3>3. Filtering System Events by Time Window (Native Engine)</h3>
-    <code>Get-WinEvent -FilterHashtable @{
-LogName   = 'System'
+        <div class="sub-section">
+          <h4>2. Reviewing Recent System Activity</h4>
+          <pre><code>Get-WinEvent -LogName System -MaxEvents 50</code></pre>
+          <p>This command retrieves the <strong style="color:var(--brand);">50 most recent events</strong> from the <strong style="color:var(--brand);">System event log</strong>, displaying them directly in the PowerShell console.</p>
+          <p>Outputting the most recent system-level events, providing immediate visibility into service activity, updates, and core OS behavior.</p>
+          <div class="figure"><img src="Images/WinEvent2.png" alt="Recent system events output"></div>
+          <p>This output exposes system uptime and time adjustments, helping confirm system stability and maintain accurate timelines during troubleshooting and incident response.</p>
+          <div class="figure"><img src="Images/WinEvent3.png" alt="System uptime and time adjustment events"></div>
+        </div>
+
+        <div class="sub-section">
+          <h4>3. Filtering System Events by Time Window (Native Engine)</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
+  LogName   = 'System'
   StartTime = (Get-Date).AddHours(-24)
-}
-</code>
-    <p>This command retrieves <strong>only System log events that occurred within the last 24 hours</strong>, using PowerShell's <strong>native event filtering engine</strong> instead of post-processing results.</p>
-    <p>PowerShell’s native event filtering engine allows administrators to query Windows Event Logs efficiently by filtering events at the source, reducing resource usage and enabling scalable, automation-friendly log analysis.</p>
-    <div class="figure"><img src="Images/WinEvent4.png"></div>
-    <p>Here it shows the Windows update service started downloading an update.</p>
-    <div class="figure"><img src="Images/WinEvent5.png"></div><br><br><br><br>
+}</code></pre>
+          <p>This command retrieves <strong style="color:var(--brand);">only System log events that occurred within the last 24 hours</strong>, using PowerShell's <strong style="color:var(--brand);">native event filtering engine</strong> instead of post-processing results.</p>
+          <p>PowerShell's native event filtering engine allows administrators to query Windows Event Logs efficiently by filtering events at the source, reducing resource usage and enabling scalable, automation-friendly log analysis.</p>
+          <div class="figure"><img src="Images/WinEvent4.png" alt="Time-filtered system events"></div>
+          <p>Here it shows the Windows update service started downloading an update.</p>
+          <div class="figure"><img src="Images/WinEvent5.png" alt="Windows update download event"></div>
+        </div>
 
-
-    <h3>4. Detecting Failed Authentication Attempts (Security Event ID 4625)</h3>
-    <code>Get-WinEvent -FilterHashtable @{
+        <div class="sub-section">
+          <h4>4. Detecting Failed Authentication Attempts (Security Event ID 4625)</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
   LogName = 'Security'
   Id      = 4625
-}
-</code>
-    <p>This command identifies failed authentication attempts by querying Security Event ID 4625, a key indicator used for detecting unauthorized access and credential misuse.</p>
-    <div class="figure"><img src="Images/WinEvent6.png"></div><br><br><br><br>
+}</code></pre>
+          <p>This command identifies failed authentication attempts by querying Security Event ID 4625, a key indicator used for detecting unauthorized access and credential misuse.</p>
+          <div class="figure"><img src="Images/WinEvent6.png" alt="Failed authentication events 4625"></div>
+        </div>
 
-    <h3>5. Monitoring Successful Logons (Security Event ID 4624)</h3>
-    <code>Get-WinEvent -FilterHashtable @{
+        <div class="sub-section">
+          <h4>5. Monitoring Successful Logons (Security Event ID 4624)</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
   LogName = 'Security'
   Id      = 4624
-}
-</code>
-    <p>This command queries successful authentication events (Event ID 4624), providing visibility into who and what is actively logging on to the system.</p>
-    <div class="figure"><img src="Images/WinEvent7.png"></div><br><br><br><br>
+}</code></pre>
+          <p>This command queries successful authentication events (Event ID 4624), providing visibility into who and what is actively logging on to the system.</p>
+          <div class="figure"><img src="Images/WinEvent7.png" alt="Successful logon events 4624"></div>
+        </div>
 
-    
-    <h3>6. Detecting Failed Authentication Attempts (Security Event ID 4625)</h3>
-    <h3>Pipeline-Based Event Filtering (Post-Query Analysis)</h3>
-    <code>Get-WinEvent -LogName Security | Where-Object { $_.Id -eq 4625 } | Select-Object TimeCreated, Id, Message</code>
-    <p>This command demonstrates pipeline-based filtering to isolate failed authentication events (Event ID 4625).</p>
-    <div class="figure"><img src="Images/WinEvent8.png"></div><br><br><br><br>
-    
+        <div class="sub-section">
+          <h4>6. Pipeline-Based Event Filtering (Post-Query Analysis)</h4>
+          <pre><code>Get-WinEvent -LogName Security | Where-Object { $_.Id -eq 4625 } | Select-Object TimeCreated, Id, Message</code></pre>
+          <p>This command demonstrates pipeline-based filtering to isolate failed authentication events (Event ID 4625).</p>
+          <div class="figure"><img src="Images/WinEvent8.png" alt="Pipeline-based event filtering output"></div>
+        </div>
 
-    <h3>7. Identifying High-Frequency System Events (Event ID Pattern Analysis)</h3>
-    <code> Get-WinEvent -LogName System -MaxEvents 100 | Group-Object Id | Sort-Object Count -Descending | Select-Object -First 10</code>
-    <p>This command groups recent system events by Event ID and ranks them by frequency, helping identify dominant system behaviors and recurring activity patterns.</p>
-    <div class="figure"><img src="Images/WinEvent9-ServerHealth.png"></div><br><br><br><br>
+        <div class="sub-section">
+          <h4>7. Identifying High-Frequency System Events (Event ID Pattern Analysis)</h4>
+          <pre><code>Get-WinEvent -LogName System -MaxEvents 100 | Group-Object Id | Sort-Object Count -Descending | Select-Object -First 10</code></pre>
+          <p>This command groups recent system events by Event ID and ranks them by frequency, helping identify dominant system behaviors and recurring activity patterns.</p>
+          <div class="figure"><img src="Images/WinEvent9-ServerHealth.png" alt="Event ID frequency analysis"></div>
+        </div>
 
-    <h3>8. Reconstructing System Startup and Shutdown History</h3>
-    <code>
-      Get-WinEvent -FilterHashtable @{
+        <div class="sub-section">
+          <h4>8. Reconstructing System Startup and Shutdown History</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
   LogName   = 'System'
   Id        = 6005,6006,6008
   StartTime = (Get-Date).AddDays(-14)
-}
-    </code>
-    <p>This command reconstructs system startup and shutdown activity by correlating Event IDs 6005, 6006, and 6008 over a defined time window.</p>
-    <div class="figure"><img src="Images/WinEvent10Reboots.png"></div><br><br><br><br>
+}</code></pre>
+          <p>This command reconstructs system startup and shutdown activity by correlating Event IDs 6005, 6006, and 6008 over a defined time window.</p>
+          <div class="figure"><img src="Images/WinEvent10Reboots.png" alt="Startup and shutdown history"></div>
+        </div>
 
-
-    <h3>9.Validating Service Stability via Crash Event Analysis</h3>
-    <code>
-      Get-WinEvent -FilterHashtable @{
+        <div class="sub-section">
+          <h4>9. Validating Service Stability via Crash Event Analysis</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
   LogName   = 'System'
   Id        = 7031,7034
   StartTime = (Get-Date).AddDays(-3)
-}
-    </code>
-    <p>This command checks the System event log for recent service crashes (Event IDs 7032 and 7034) within the last three days. The absence of results indicates that no services terminated unexpectedly during this period, suggesting stable service operation.</p>
-    <div class="figure"><img src="Images/WinEvent11ServiceCrash.png"></div><br><br><br><br>
+}</code></pre>
+          <p>This command checks the System event log for recent service crashes (Event IDs 7031 and 7034) within the last three days. The absence of results indicates that no services terminated unexpectedly during this period, suggesting stable service operation.</p>
+          <div class="figure"><img src="Images/WinEvent11ServiceCrash.png" alt="Service crash event analysis"></div>
+        </div>
 
-
-    <h3>10. Comparing Failed vs Successful Authentication Activity</h3>
-    <code>
-      Get-WinEvent -FilterHashtable @{
+        <div class="sub-section">
+          <h4>10. Comparing Failed vs Successful Authentication Activity</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
   LogName   = 'Security'
   Id        = 4625
   StartTime = (Get-Date).AddHours(-1)
-}
-    </code><br><br>
-
-    <code>
-      Get-WinEvent -FilterHashtable @{
+}</code></pre>
+          <pre><code>Get-WinEvent -FilterHashtable @{
   LogName   = 'Security'
   Id        = 4624
   StartTime = (Get-Date).AddHours(-1)
-}
-    </code>
-    <p>These commands compare failed and successful authentication events within the last hour. The absence of Event ID 4625 indicates no failed logon attempts during this period, while multiple Event ID 4624 entries confirm normal authentication activity.</p>
-    <p>This contrast helps validate system security and rule out brute-force or credential misuse attempts.</p>
-    <div class="figure"><img src="Images/WinEvent12LogonP&F.png"></div><br><br><br><br>
+}</code></pre>
+          <p>These commands compare failed and successful authentication events within the last hour. The absence of Event ID 4625 indicates no failed logon attempts during this period, while multiple Event ID 4624 entries confirm normal authentication activity.</p>
+          <p>This contrast helps validate system security and rule out brute-force or credential misuse attempts.</p>
+          <div class="figure"><img src="Images/WinEvent12LogonP&F.png" alt="Failed vs successful authentication comparison"></div>
+        </div>
 
-    <h3>11. Tracking Privilege Assignment During Authentication</h3>
-    <code>
-      Get-WinEvent -FilterHashtable @{
+        <div class="sub-section">
+          <h4>11. Tracking Privilege Assignment During Authentication</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
   LogName   = 'Security'
   Id        = 4672
   StartTime = (Get-Date).AddHours(-1)
-}
-    </code>
-    <p>This command retrieves security events indicating when elevated privileges were assigned during a logon. Event ID 4672 is generated when an account logs in with administrative or special rights. Monitoring these events helps identify privileged access, validate administrative activity, and detect potential unauthorized elevation attempts.</p>
-    <div class="figure"><img src="Images/WinEvent13PrivLogon.png"></div><br><br><br><br>
+}</code></pre>
+          <p>This command retrieves security events indicating when elevated privileges were assigned during a logon. Event ID 4672 is generated when an account logs in with administrative or special rights. Monitoring these events helps identify privileged access, validate administrative activity, and detect potential unauthorized elevation attempts.</p>
+          <div class="figure"><img src="Images/WinEvent13PrivLogon.png" alt="Privilege assignment events 4672"></div>
+        </div>
 
-    <h3>12. Validating Service Stability (No Abnormal Terminations Detected)</h3>
-    <code>
-      Get-WinEvent -LogName System |
+        <div class="sub-section">
+          <h4>12. Validating Service Stability (No Abnormal Terminations Detected)</h4>
+          <pre><code>Get-WinEvent -LogName System |
   Where-Object { $_.Id -in 7031,7034 } |
-  Select-Object TimeCreated, Id, Message
-    </code>
-    <p>This command searches the System event log for service crash and abnormal termination events (7031 and 7034). The absence of output indicates that no services have failed or exited unexpectedly, helping confirm system stability during routine health checks.</p>
-    <div class="figure"><img src="Images/WinEvent14ServiceFail.png"></div><br><br><br><br>
+  Select-Object TimeCreated, Id, Message</code></pre>
+          <p>This command searches the System event log for service crash and abnormal termination events (7031 and 7034). The absence of output indicates that no services have failed or exited unexpectedly, helping confirm system stability during routine health checks.</p>
+          <div class="figure"><img src="Images/WinEvent14ServiceFail.png" alt="Service stability validation output"></div>
+        </div>
 
-    <h3>13. Reconstructing Recent Authentication Activity</h3>
-    <code>Get-WinEvent -LogName Security | Where-Object { $_.TimeCreated -gt (Get-Date).Date.AddHours(-8) } | Select-Object TimeCreated, Id, Message</code>
-    <p>This command builds a chronological view of recent security activity by filtering Security event logs to the last eight hours. By displaying logon (4624), privilege assignment (4672), and logoff (4634) events together, it helps reconstruct user and system authentication activity and validate normal administrative behavior.</p>
-    <div class="figure"><img src="Images/WinEvent15OvernightAct.png"></div><br><br><br><br>
+        <div class="sub-section">
+          <h4>13. Reconstructing Recent Authentication Activity</h4>
+          <pre><code>Get-WinEvent -LogName Security | Where-Object { $_.TimeCreated -gt (Get-Date).Date.AddHours(-8) } | Select-Object TimeCreated, Id, Message</code></pre>
+          <p>This command builds a chronological view of recent security activity by filtering Security event logs to the last eight hours. By displaying logon (4624), privilege assignment (4672), and logoff (4634) events together, it helps reconstruct user and system authentication activity and validate normal administrative behavior.</p>
+          <div class="figure"><img src="Images/WinEvent15OvernightAct.png" alt="Recent authentication activity timeline"></div>
+        </div>
 
-
-    <h3>14. Using Negative Evidence to Validate Authentication Security</h3>
-    <code>Get-WinEvent -FilterHashtable @{
-LogName   = 'Security'
+        <div class="sub-section">
+          <h4>14. Using Negative Evidence to Validate Authentication Security</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
+  LogName   = 'Security'
   Id        = 4625
   StartTime = (Get-Date).AddDays(-1)
-} | Export-Csv FailedLogons.csv -NoTypeInformation
-</code>
-    <p>This command attempts to export failed authentication events (Event ID 4625) from the Security log over the last 24 hours into a CSV file for reporting or investigation. In this case, no events were found, indicating no failed logon attempts occurred during the selected timeframe. This confirms a healthy authentication state and demonstrates how PowerShell can be used to generate audit-ready evidence—even when no issues are present.</p>
-    <div class="figure"><img src="Images/WinEvent16Compliance.png"></div><br><br><br><br><br><br>
-  </section>
+} | Export-Csv FailedLogons.csv -NoTypeInformation</code></pre>
+          <p>This command attempts to export failed authentication events (Event ID 4625) from the Security log over the last 24 hours into a CSV file for reporting or investigation. In this case, no events were found, indicating no failed logon attempts occurred during the selected timeframe. This confirms a healthy authentication state and demonstrates how PowerShell can be used to generate audit-ready evidence—even when no issues are present.</p>
+          <div class="figure"><img src="Images/WinEvent16Compliance.png" alt="Export failed logons to CSV output"></div>
+        </div>
 
+      </div>
 
-  
-  <!-- Troubleshooting -->
-  <section class="card">
-    <h2>Troubleshooting &amp; Incident Scenarios</h2><br>
+      <!-- Troubleshooting -->
+      <h2>Troubleshooting &amp; Incident Scenarios</h2>
+      <div class="step-section">
 
-    <h3>1. System Startup & Shutdown Timeline Reconstruction</h3>
-    <code>
-      Get-WinEvent -FilterHashtable @{
-  LogName = 'System'
-  Id = 6005,6006,6008
+        <div class="sub-section">
+          <h4>1. System Startup &amp; Shutdown Timeline Reconstruction</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
+  LogName   = 'System'
+  Id        = 6005,6006,6008
   StartTime = (Get-Date).AddDays(-7)
-}
-    </code>
-    <p>This command queries the System event log for startup, shutdown, and unexpected shutdown events over the past 7 days. By correlating Event IDs 6005, 6006, and 6008, administrators can quickly reconstruct system reboot timelines and distinguish between clean shutdowns and abnormal terminations.</p>
-    <div class="figure"><img src="Images/Trouble1RvC.png"></div><br><br><br><br>
+}</code></pre>
+          <p>This command queries the System event log for startup, shutdown, and unexpected shutdown events over the past 7 days. By correlating Event IDs 6005, 6006, and 6008, administrators can quickly reconstruct system reboot timelines and distinguish between clean shutdowns and abnormal terminations.</p>
+          <div class="figure"><img src="Images/Trouble1RvC.png" alt="System startup and shutdown timeline"></div>
+        </div>
 
-
-    <h3>2. Investigating Recent System Activity During Live Troubleshooting</h3>
-    <code>
-      Get-WinEvent -LogName System |
+        <div class="sub-section">
+          <h4>2. Investigating Recent System Activity During Live Troubleshooting</h4>
+          <pre><code>Get-WinEvent -LogName System |
 Where-Object {
   $_.TimeCreated -lt (Get-Date) -and
   $_.TimeCreated -gt (Get-Date).AddMinutes(-15)
-}
-    </code>
-    <p>This command filters the System event log to display only events generated within the last 15 minutes. By focusing on a narrow time window, administrators can quickly identify recent service state changes and system activity during live troubleshooting or incident investigation.</p>
-    <div class="figure"><img src="Images/Trouble2B4Reboot.png"></div><br><br><br><br>
+}</code></pre>
+          <p>This command filters the System event log to display only events generated within the last 15 minutes. By focusing on a narrow time window, administrators can quickly identify recent service state changes and system activity during live troubleshooting or incident investigation.</p>
+          <div class="figure"><img src="Images/Trouble2B4Reboot.png" alt="Recent 15-minute system activity"></div>
+        </div>
 
-
-    <h3>3. Ruling Out Service-Level Crashes as a Root Cause</h3>
-    <code>
-      Get-WinEvent -FilterHashtable @{
-  LogName = 'System'
-  Id = 7031,7034
+        <div class="sub-section">
+          <h4>3. Ruling Out Service-Level Crashes as a Root Cause</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
+  LogName   = 'System'
+  Id        = 7031,7034
   StartTime = (Get-Date).AddDays(-3)
-}
-    </code>
-    <p>This command queries the System event log for service crash and abnormal termination events (7031 and 7034) over the past three days. The absence of results confirms that no services failed unexpectedly during this period, indicating system stability and ruling out service-level crashes as a root cause.</p>
-    <div class="figure"><img src="Images/Trouble3DetectServiceCrash.png"></div><br><br><br><br>
+}</code></pre>
+          <p>This command queries the System event log for service crash and abnormal termination events (7031 and 7034) over the past three days. The absence of results confirms that no services failed unexpectedly during this period, indicating system stability and ruling out service-level crashes as a root cause.</p>
+          <div class="figure"><img src="Images/Trouble3DetectServiceCrash.png" alt="Service crash root cause ruling out"></div>
+        </div>
 
-
-    <h3>4. Reviewing Authentication Activity Outside Normal Business Hours</h3>
-    <code>
-      Get-WinEvent -LogName Security |
+        <div class="sub-section">
+          <h4>4. Reviewing Authentication Activity Outside Normal Business Hours</h4>
+          <pre><code>Get-WinEvent -LogName Security |
 Where-Object {
-    $_.TimeCreated.Hour -lt 6 -or
-    $_.TimeCreated.Hour -gt 20
-}
-    </code>
-    <p>This query filters the Windows Security event log to identify authentication and privilege-related activity occurring outside of normal business hours. By focusing on late-night and early-morning events, this approach highlights off-hours logons and privileged sessions that may warrant closer review during incident investigations or audit scenarios.</p>
-    <div class="figure"><img src="Images/Trouble4AfterHoursAct.png"></div><br><br><br><br>
+  $_.TimeCreated.Hour -lt 6 -or
+  $_.TimeCreated.Hour -gt 20
+}</code></pre>
+          <p>This query filters the Windows Security event log to identify authentication and privilege-related activity occurring outside of normal business hours. By focusing on late-night and early-morning events, this approach highlights off-hours logons and privileged sessions that may warrant closer review during incident investigations or audit scenarios.</p>
+          <div class="figure"><img src="Images/Trouble4AfterHoursAct.png" alt="After-hours authentication activity"></div>
+        </div>
 
+        <div class="sub-section">
+          <h4>5. Reviewing Scheduled Task Activity Over the Last 24 Hours</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
+  LogName   = 'Microsoft-Windows-TaskScheduler/Operational'
+  StartTime = (Get-Date).AddDays(-1)
+}</code></pre>
+          <p>This query examines the Task Scheduler Operational log to identify scheduled task activity over the last 24 hours. It provides visibility into task execution, completion, failures, and updates, including the processes launched and the security context under which they ran. Task Scheduler is a common mechanism for both legitimate automation and malicious persistence, making this log a valuable source for behavioral analysis and incident investigations.</p>
+          <div class="figure"><img src="Images/Trouble5ScheduledTaskExec.png" alt="Scheduled task execution log"></div>
+        </div>
 
-    <h3>5. Reviewing Scheduled Task Activity Over the Last 24 Hours</h3>
-    <code>
-      Get-WinEvent -FilterHashtable @{
-    LogName = 'Microsoft-Windows-TaskScheduler/Operational'
-    StartTime = (Get-Date).AddDays(-1)
-}
-   </code>
-    <p>This query examines the Task Scheduler Operational log to identify scheduled task activity over the last 24 hours. It provides visibility into task execution, completion, failures, and updates, including the processes launched and the security context under which they ran. Task Scheduler is a common mechanism for both legitimate automation and malicious persistence, making this log a valuable source for behavioral analysis and incident investigations.</p>
-    <div class="figure"><img src="Images/Trouble5ScheduledTaskExec.png"></div><br><br><br><br>
-
-
-    <h3>6. Detecting System Instability Through Error and Critical Events</h3>
-    <code>
-      Get-WinEvent -LogName System |
+        <div class="sub-section">
+          <h4>6. Detecting System Instability Through Error and Critical Events</h4>
+          <pre><code>Get-WinEvent -LogName System |
 Where-Object { $_.LevelDisplayName -in 'Error','Critical' } |
-Select TimeCreated, Id, Message
-    </code>
-    <p>This query filters the System event log to surface only Error and Critical events, providing a focused view of serious operating system issues. It highlights unexpected shutdowns, reboot anomalies, service failures, time synchronization events, and firmware-related security messages. This type of analysis is useful for diagnosing system instability, identifying power or hardware issues, and validating system health during incident response or troubleshooting.</p>
-    <div class="figure"><img src="Images/Trouble6ServerFeelSlow.png"></div><br><br><br><br>
+Select TimeCreated, Id, Message</code></pre>
+          <p>This query filters the System event log to surface only Error and Critical events, providing a focused view of serious operating system issues. It highlights unexpected shutdowns, reboot anomalies, service failures, time synchronization events, and firmware-related security messages. This type of analysis is useful for diagnosing system instability, identifying power or hardware issues, and validating system health during incident response or troubleshooting.</p>
+          <div class="figure"><img src="Images/Trouble6ServerFeelSlow.png" alt="Error and critical system events"></div>
+        </div>
 
-
-    <h3>7. Detecting Noisy and Recurring System Events</h3>
-    <code>
-      Get-WinEvent -LogName System |
+        <div class="sub-section">
+          <h4>7. Detecting Noisy and Recurring System Events</h4>
+          <pre><code>Get-WinEvent -LogName System |
 Group-Object Id |
 Sort Count -Descending |
-Select -First 10
-    </code>
-    <p>This command summarizes the System event log by grouping events based on Event ID and ranking them by frequency. It provides a high-level view of the most common system activities, allowing administrators to identify normal operational patterns, noisy events, and frequently occurring service state changes. This technique is useful for establishing a system baseline and prioritizing which event types deserve closer investigation.</p>
-    <div class="figure"><img src="Images/Trouble7PatternRecog.png"></div><br><br><br><br>
+Select -First 10</code></pre>
+          <p>This command summarizes the System event log by grouping events based on Event ID and ranking them by frequency. It provides a high-level view of the most common system activities, allowing administrators to identify normal operational patterns, noisy events, and frequently occurring service state changes. This technique is useful for establishing a system baseline and prioritizing which event types deserve closer investigation.</p>
+          <div class="figure"><img src="Images/Trouble7PatternRecog.png" alt="Recurring event pattern recognition"></div>
+        </div>
 
+        <div class="sub-section">
+          <h4>8. Validating Administrative Logon Activity</h4>
+          <pre><code>Get-WinEvent -FilterHashtable @{
+  LogName   = 'Security'
+  Id        = 4672
+  StartTime = (Get-Date).AddDays(-1)
+}</code></pre>
+          <p>This query retrieves Security log events where special privileges were assigned during logon. Event ID 4672 indicates that a user or process received elevated rights such as administrative or system-level privileges. Monitoring this event is critical for detecting privileged access, validating administrative activity, and identifying potential privilege escalation during security investigations.</p>
+          <div class="figure"><img src="Images/Trouble8AdminActAudit.png" alt="Administrative logon activity audit"></div>
+        </div>
 
-    <h3>8. Validating Administrative Logon Activity</h3>
-    <code>
-      Get-WinEvent -FilterHashtable @{
-    LogName = 'Security'
-    Id = 4672
-    StartTime = (Get-Date).AddDays(-1)
-}
-    </code>
-    <p>This query retrieves Security log events where special privileges were assigned during logon. Event ID 4672 indicates that a user or process received elevated rights such as administrative or system-level privileges. Monitoring this event is critical for detecting privileged access, validating administrative activity, and identifying potential privilege escalation during security investigations.</p>
-    <div class="figure"><img src="Images/Trouble8AdminActAudit.png"></div><br><br><br><br>
-
-
-    <h3>9. Collecting System Error Events for Troubleshooting</h3>
-    <code>
-      Get-WinEvent -LogName System |
+        <div class="sub-section">
+          <h4>9. Collecting System Error Events for Troubleshooting</h4>
+          <pre><code>Get-WinEvent -LogName System |
 Where-Object { $_.LevelDisplayName -eq 'Error' } |
-Export-Csv SystemErrors.csv -NoTypeInformation
-    </code>
-    <p>This command filters the System event log to extract only Error-level events and exports the results to a CSV file. This approach allows administrators to create a structured report of system failures for documentation, troubleshooting, and trend analysis. Exporting logs in this format supports incident response workflows and enables easy sharing with stakeholders.</p>
-    <div class="figure"><img src="Images/Trouble9EvidenceCapture.png"></div>
-  </section>
+Export-Csv SystemErrors.csv -NoTypeInformation</code></pre>
+          <p>This command filters the System event log to extract only Error-level events and exports the results to a CSV file. This approach allows administrators to create a structured report of system failures for documentation, troubleshooting, and trend analysis. Exporting logs in this format supports incident response workflows and enables easy sharing with stakeholders.</p>
+          <div class="figure"><img src="Images/Trouble9EvidenceCapture.png" alt="System error events exported to CSV"></div>
+        </div>
 
-  <p><a href="../index.html">Back to Home</a></p>
+      </div>
 
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-    <div class="links">
-      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </footer>
-</div>
+    </main>
 
-<!-- Zoom Modal -->
-<div class="zoom-modal" id="zoom" aria-hidden="true">
-  <div class="zoom-content" data-close>
-    <img class="zoom-img" id="zoomImg" alt="">
-    <button class="zoom-close" type="button">&times;</button>
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
   </div>
-</div>
 
-<script>
-(function(){
-  const modal=document.getElementById('zoom');
-  const zoomImg=document.getElementById('zoomImg');
-  document.querySelectorAll('.figure img').forEach(img=>{
-    img.addEventListener('click',()=>{
-      zoomImg.src=img.src;
-      modal.setAttribute('open','');
-      document.body.classList.add('hide-scroll');
-    });
-  });
-  modal.addEventListener('click',()=>{
-    modal.removeAttribute('open');
-    document.body.classList.remove('hide-scroll');
-  });
-})();
-</script>
+  <!-- Lightbox -->
+  <script>
+    (function(){
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
 
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
+
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        img.addEventListener('click', ()=>{
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
