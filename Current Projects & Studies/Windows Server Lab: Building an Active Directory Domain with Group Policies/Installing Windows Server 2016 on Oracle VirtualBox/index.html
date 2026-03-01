@@ -19,13 +19,29 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -34,79 +50,168 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Titles */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* Card blocks */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
-    ul,ol{padding-left:22px;margin:8px 0}
-    .tight li{margin:6px 0}
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Figures: smaller, scroll-friendly */
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section li{margin:6px 0}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section li{margin:6px 0}
+
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:12px auto;
-      width:min(62%, 820px); /* cap width on large screens */
+      margin:16px auto;
+      width:min(62%, 820px);
       max-width:100%;
       text-align:center;
     }
     .figure img{
       display:block;
-      width:100%;        /* fill the figure width */
+      width:100%;
       height:auto;
       border-radius:10px;
       cursor:zoom-in;
     }
-    @media (max-width: 900px){
-      .figure{ width:92%; } /* give phones/tablets more width */
-    }
+    @media (max-width:900px){ .figure{width:92%} }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Lightbox (zoom) */
+    /* Lightbox */
     .lightbox{
-      position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.86); z-index:9999;
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.86);z-index:9999;
     }
     .lightbox.open{display:grid}
-    .lb-stage{position:relative; max-width:96vw; max-height:92vh}
-    .lb-img{display:block; width:auto; height:auto; max-width:96vw; max-height:92vh; border-radius:12px; box-shadow:var(--shadow)}
-    .lb-cap{color:#cfd6e6; font-size:13px; text-align:center; margin-top:8px}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
+    .lb-img{
+      display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;
+      border-radius:12px;box-shadow:var(--shadow);
+    }
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
     .lb-btn{
-      position:absolute; top:10px; padding:6px 10px; border-radius:10px;
-      border:1px solid #2A3447; background:#0e1220; color:var(--text);
-      cursor:pointer; user-select:none;
+      position:absolute;top:10px;padding:6px 10px;border-radius:10px;
+      border:1px solid #2A3447;background:#0e1220;color:var(--text);
+      cursor:pointer;user-select:none;
     }
     .lb-close{right:10px}
     .lb-prev,.lb-next{
-      top:50%; translate:0 -50%; width:44px; height:44px; display:grid; place-items:center;
-      border-radius:999px; font-size:20px; line-height:1;
+      top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;
+      border-radius:999px;font-size:20px;line-height:1;
     }
     .lb-prev{left:-58px}
     .lb-next{right:-58px}
-    @media (max-width:700px){ .lb-prev{left:-8px} .lb-next{right:-8px} }
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
 
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
 
-    <!-- Top nav -->
+    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -129,114 +234,163 @@
       <p><a href="https://github.com/mark-thompson01/windows-server-ad-lab" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Windows Server overview -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Windows Server overview -->
       <h2>Windows Server</h2>
-      <p><strong>Windows Server</strong> is a server-grade operating system developed by Microsoft, built to manage and support enterprise networks, applications, and services. It’s the <strong>central brain</strong> for many environments—running services like <strong>Active Directory, DNS, DHCP, Group Policy</strong>, and <strong>Hyper-V</strong> to keep operations secure and efficient.</p>
-      <h3>Key Capabilities</h3>
-      <ul>
-        <li>Hosts and manages <strong>network resources</strong> (users, devices, applications)</li>
-        <li>Supports <strong>domain-based</strong> identity and access via Active Directory</li>
-        <li>Powers <strong>virtual environments</strong> with Hyper-V</li>
-        <li>Enables <strong>remote management</strong> and automation via PowerShell</li>
-        <li>Provides built-in <strong>security features</strong> (Defender, BitLocker, JEA)</li>
-      </ul>
-      <h3>Download Windows Server 2016 (Evaluation)</h3>
-      <p>For this lab, I used the official 180-day evaluation ISO of Windows Server 2016 from Microsoft’s Evaluation Center:</p>
-      <p><a href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016" target="_blank" rel="noopener">Windows Server 2016 Evaluation (Microsoft)</a></p>
-    </section>
+      <div class="step-section">
+        <p><strong style="color:var(--brand);">Windows Server</strong> is a server-grade operating system developed by Microsoft, built to manage and support enterprise networks, applications, and services. It's the <strong style="color:var(--brand);">central brain</strong> for many environments—running services like <strong style="color:var(--brand);">Active Directory, DNS, DHCP, Group Policy</strong>, and <strong style="color:var(--brand);">Hyper-V</strong> to keep operations secure and efficient.</p>
 
-    <!-- VirtualBox -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>Key Capabilities</h4>
+          <ul>
+            <li>Hosts and manages <strong style="color:var(--brand);">network resources</strong> (users, devices, applications)</li>
+            <li>Supports <strong style="color:var(--brand);">domain-based</strong> identity and access via Active Directory</li>
+            <li>Powers <strong style="color:var(--brand);">virtual environments</strong> with Hyper-V</li>
+            <li>Enables <strong style="color:var(--brand);">remote management</strong> and automation via PowerShell</li>
+            <li>Provides built-in <strong style="color:var(--brand);">security features</strong> (Defender, BitLocker, JEA)</li>
+          </ul>
+        </div>
+
+        <div class="sub-section">
+          <h4>Download Windows Server 2016 (Evaluation)</h4>
+          <p>For this lab, I used the official 180-day evaluation ISO of Windows Server 2016 from Microsoft's Evaluation Center:</p>
+          <p><a href="https://www.microsoft.com/en-us/evalcenter/evaluate-windows-server-2016" target="_blank" rel="noopener">Windows Server 2016 Evaluation (Microsoft)</a></p>
+        </div>
+      </div>
+
+      <!-- VirtualBox -->
       <h2>Oracle VirtualBox</h2>
-      <p><strong>Oracle VirtualBox</strong> is a free, open-source virtualization platform that lets you run multiple operating systems as VMs on a single machine. It’s perfect for simulating an enterprise lab—<strong>Active Directory, Group Policy, DNS, DHCP</strong>—without dedicated hardware.</p>
-      <h3>Download Oracle VirtualBox</h3>
-      <p><a href="https://www.virtualbox.org/" target="_blank" rel="noopener">Oracle VM VirtualBox (Official Site)</a></p>
-    </section>
+      <div class="step-section">
+        <p><strong style="color:var(--brand);">Oracle VirtualBox</strong> is a free, open-source virtualization platform that lets you run multiple operating systems as VMs on a single machine. It's perfect for simulating an enterprise lab—<strong style="color:var(--brand);">Active Directory, Group Policy, DNS, DHCP</strong>—without dedicated hardware.</p>
+        <div class="sub-section">
+          <h4>Download Oracle VirtualBox</h4>
+          <p><a href="https://www.virtualbox.org/" target="_blank" rel="noopener">Oracle VM VirtualBox (Official Site)</a></p>
+        </div>
+      </div>
 
-    <!-- Steps -->
-    <section class="card">
+      <!-- VM Creation Steps -->
       <h2>Windows Server 2016 Installation on Oracle VirtualBox Steps</h2>
+      <div class="step-section">
 
-      <h3>1. Creating a new VM in Oracle VirtualBox</h3>
-      <figure class="figure"><img src="Images/VMCreate0.PNG" alt="Create new VM"></figure>
+        <div class="sub-section">
+          <h4>1. Creating a New VM in Oracle VirtualBox</h4>
+          <figure class="figure"><img src="Images/VMCreate0.PNG" alt="Create new VM" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>2. Allocating System Resources</h3>
-      <ul class="tight">
-        <li>Base Memory</li>
-        <li>Processors</li>
-      </ul>
-      <p>In this example, I'm going to allocate 3460MB of base memory and 2 processors.</p>
-      <figure class="figure"><img src="Images/VMCreate2.PNG" alt="Set memory and CPU"></figure>
+        <div class="sub-section">
+          <h4>2. Allocating System Resources</h4>
+          <p>In this example, I'm allocating 3460MB of base memory and 2 processors.</p>
+          <ul>
+            <li>Base Memory</li>
+            <li>Processors</li>
+          </ul>
+          <figure class="figure"><img src="Images/VMCreate2.PNG" alt="Set memory and CPU" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>3. Create a Virtual Hard Disk</h3>
-      <figure class="figure"><img src="Images/VMCreate3.PNG" alt="Create virtual disk"></figure>
+        <div class="sub-section">
+          <h4>3. Create a Virtual Hard Disk</h4>
+          <figure class="figure"><img src="Images/VMCreate3.PNG" alt="Create virtual disk" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>4. Configuration Summary</h3>
-      <figure class="figure"><img src="Images/VMCreate4.PNG" alt="VM configuration summary"></figure>
+        <div class="sub-section">
+          <h4>4. Configuration Summary</h4>
+          <figure class="figure"><img src="Images/VMCreate4.PNG" alt="VM configuration summary" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>5. Adding the ISO Image to the VM</h3>
-      <figure class="figure"><img src="Images/VMCreate6.PNG" alt="Attach ISO - step 1"></figure>
-      <figure class="figure"><img src="Images/VMCreate7.PNG" alt="Attach ISO - step 2"></figure>
+        <div class="sub-section">
+          <h4>5. Adding the ISO Image to the VM</h4>
+          <figure class="figure"><img src="Images/VMCreate6.PNG" alt="Attach ISO - step 1" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/VMCreate7.PNG" alt="Attach ISO - step 2" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>6. Starting up the VM</h3>
-      <figure class="figure"><img src="Images/VMCreate9.PNG" alt="Start the virtual machine"></figure>
-    </section>
+        <div class="sub-section">
+          <h4>6. Starting up the VM</h4>
+          <figure class="figure"><img src="Images/VMCreate9.PNG" alt="Start the virtual machine" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <section class="card">
+      </div>
+
+      <!-- Installation Steps -->
       <h2>Windows Server 2016 Installation</h2>
+      <div class="step-section">
 
-      <h3>1. Install Now</h3>
-      <figure class="figure"><img src="Images/VMCreate11.PNG" alt="Install Now screen"></figure>
+        <div class="sub-section">
+          <h4>1. Install Now</h4>
+          <figure class="figure"><img src="Images/VMCreate11.PNG" alt="Install Now screen" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>2. Select Language, click <strong>Next</strong></h3>
-      <figure class="figure"><img src="Images/VMCreate10.PNG" alt="Language selection"></figure>
+        <div class="sub-section">
+          <h4>2. Select Language, click Next</h4>
+          <figure class="figure"><img src="Images/VMCreate10.PNG" alt="Language selection" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>3. Setup is starting</h3>
-      <figure class="figure"><img src="Images/VMCreate12.PNG" alt="Setup is starting"></figure>
+        <div class="sub-section">
+          <h4>3. Setup is Starting</h4>
+          <figure class="figure"><img src="Images/VMCreate12.PNG" alt="Setup is starting" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>4. Select Operating System version</h3>
-      <p>In this example, I'm going to install <strong>Windows Server 2016 Desktop Experience</strong>.</p>
-      <figure class="figure"><img src="Images/VMCreate13.PNG" alt="Choose Windows Server 2016 Desktop Experience"></figure>
+        <div class="sub-section">
+          <h4>4. Select Operating System Version</h4>
+          <p>In this example, I'm installing <strong style="color:var(--brand);">Windows Server 2016 Desktop Experience</strong>.</p>
+          <figure class="figure"><img src="Images/VMCreate13.PNG" alt="Choose Windows Server 2016 Desktop Experience" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>5. Accept the license terms, click <strong>Next</strong></h3>
-      <figure class="figure"><img src="Images/VMCreate14.PNG" alt="Accept license terms"></figure>
+        <div class="sub-section">
+          <h4>5. Accept the License Terms, click Next</h4>
+          <figure class="figure"><img src="Images/VMCreate14.PNG" alt="Accept license terms" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>6. Select the type of installation</h3>
-      <figure class="figure"><img src="Images/VMCreate15.PNG" alt="Installation type - step 1"></figure>
-      <figure class="figure"><img src="Images/VMCreate16.PNG" alt="Installation type - step 2"></figure>
+        <div class="sub-section">
+          <h4>6. Select the Type of Installation</h4>
+          <figure class="figure"><img src="Images/VMCreate15.PNG" alt="Installation type - step 1" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/VMCreate16.PNG" alt="Installation type - step 2" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>7. Windows Installation Process</h3>
-      <figure class="figure"><img src="Images/VMCreate17.PNG" alt="Installing Windows"></figure>
-      <figure class="figure"><img src="Images/VMCreate18.PNG" alt="Installation progress bar"></figure>
+        <div class="sub-section">
+          <h4>7. Windows Installation Process</h4>
+          <figure class="figure"><img src="Images/VMCreate17.PNG" alt="Installing Windows" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/VMCreate18.PNG" alt="Installation progress bar" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>8. The user's password must be changed before signing in</h3>
-      <figure class="figure"><img src="Images/VMCreate19PostReboot.PNG" alt="Change password prompt"></figure>
+        <div class="sub-section">
+          <h4>8. Password Must Be Changed Before Signing In</h4>
+          <figure class="figure"><img src="Images/VMCreate19PostReboot.PNG" alt="Change password prompt" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>9. Reset Password</h3>
-      <figure class="figure"><img src="Images/VMCreate20.PNG" alt="Reset password screen"></figure>
+        <div class="sub-section">
+          <h4>9. Reset Password</h4>
+          <figure class="figure"><img src="Images/VMCreate20.PNG" alt="Reset password screen" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>10. Press <strong>Ctrl, Alt, Del</strong></h3>
-      <figure class="figure"><img src="Images/VMCreate21.PNG" alt="Ctrl Alt Del sign-in"></figure>
+        <div class="sub-section">
+          <h4>10. Press Ctrl, Alt, Del</h4>
+          <figure class="figure"><img src="Images/VMCreate21.PNG" alt="Ctrl Alt Del sign-in" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>11. Desktop Experience</h3>
-      <figure class="figure"><img src="Images/VMCreate22.PNG" alt="First desktop after install"></figure>
+        <div class="sub-section">
+          <h4>11. Desktop Experience</h4>
+          <figure class="figure"><img src="Images/VMCreate22.PNG" alt="First desktop after install" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>12. Starting Server Manager</h3>
-      <figure class="figure"><img src="Images/VMCreate23.PNG" alt="Server Manager starting"></figure>
+        <div class="sub-section">
+          <h4>12. Starting Server Manager</h4>
+          <figure class="figure"><img src="Images/VMCreate23.PNG" alt="Server Manager starting" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>13. Server Manager</h3>
-      <figure class="figure"><img src="Images/VMCreate24.PNG" alt="Server Manager dashboard"></figure>
+        <div class="sub-section">
+          <h4>13. Server Manager</h4>
+          <figure class="figure"><img src="Images/VMCreate24.PNG" alt="Server Manager dashboard" loading="lazy" decoding="async"></figure>
+          <p>This demonstration included adding and setting up a new virtual machine in Oracle VirtualBox and installing Windows Server 2016 on the new VM. From here, I'll walk through setting up the DNS and DHCP server roles on this fresh installation, then installing the AD DS server role to set up Active Directory.</p>
+        </div>
 
-      <p>This demonstration included adding and setting up a new virtual machine in Oracle VirtualBox and installing Windows Server 2016 on the new VM. From here, I'll walk through setting up the DNS and DHCP server roles on this fresh installation, then installing the AD DS server role to set up Active Directory.</p>
-    </section>
+      </div>
 
-    
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+    </main>
 
-    
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
     <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
@@ -245,13 +399,11 @@
         <a href="https://github.com/mark-thompson-01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 
-  <!-- Lightbox / zoom (no history hash; ESC/back behaves normally) + lazy loading -->
+  <!-- Lightbox -->
   <script>
     (function(){
-      // Add lazy loading/async decoding to all figures’ images
       document.querySelectorAll('.figure img').forEach(img=>{
         img.loading = img.loading || 'lazy';
         img.decoding = img.decoding || 'async';
@@ -287,33 +439,21 @@
         const multi = imgs.length > 1;
         btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
-      function open(i){
-        idx = i;
-        render(idx);
-        lb.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        btnClose.focus();
-      }
-      function close(){
-        lb.classList.remove('open');
-        document.body.style.overflow = '';
-      }
-      function prev(){ idx = (idx - 1 + imgs.length) % imgs.length; render(idx); }
-      function next(){ idx = (idx + 1) % imgs.length; render(idx); }
+      function open(i){ idx=i; render(idx); lb.classList.add('open'); document.body.style.overflow='hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+      function prev(){ idx=(idx-1+imgs.length)%imgs.length; render(idx); }
+      function next(){ idx=(idx+1)%imgs.length; render(idx); }
 
-      imgs.forEach((img, i)=>{
-        img.addEventListener('click', (e)=>{ e.preventDefault(); open(i); });
-      });
-
+      imgs.forEach((img,i)=>{ img.addEventListener('click',(e)=>{ e.preventDefault(); open(i); }); });
       btnClose.addEventListener('click', close);
       btnPrev .addEventListener('click', (e)=>{ e.stopPropagation(); prev(); });
       btnNext .addEventListener('click', (e)=>{ e.stopPropagation(); next(); });
-      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
       document.addEventListener('keydown', (e)=>{
         if(!lb.classList.contains('open')) return;
-        if(e.key === 'Escape') close();
-        else if(e.key === 'ArrowLeft') prev();
-        else if(e.key === 'ArrowRight') next();
+        if(e.key==='Escape') close();
+        else if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
       });
     })();
   </script>
