@@ -19,85 +19,182 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumbs */
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* Cards */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
-    ul,ol{padding-left:22px;margin:8px 0}
-    .tight li{margin:6px 0}
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Images */
-    .img-wrap{margin:12px 0;text-align:center}
-    .img-wrap img{
-      display:block;margin:0 auto;
-      max-width:70%;
-      height:auto;
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
       border:1px solid var(--card-border);
       border-radius:12px;
-      cursor: zoom-in; /* indicate zoomability */
     }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
 
-    /* Lightbox (zoom) for ALL images */
+    /* Figures */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:16px auto;
+      width:min(70%, 820px);
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:10px;
+      cursor:zoom-in;
+    }
+    @media (max-width:900px){ .figure{width:92%} }
+
+    /* Lightbox */
     .lightbox{
-      position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.86); z-index:9999;
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.86);z-index:9999;
     }
     .lightbox.open{display:grid}
-    .lb-stage{position:relative; max-width:96vw; max-height:92vh}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
     .lb-img{
-      display:block; width:auto; height:auto; max-width:96vw; max-height:92vh;
-      border-radius:12px; box-shadow:var(--shadow);
+      display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;
+      border-radius:12px;box-shadow:var(--shadow);
     }
-    .lb-cap{color:#cfd6e6; font-size:13px; text-align:center; margin-top:8px}
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
     .lb-btn{
-      position:absolute; top:10px; padding:6px 10px; border-radius:10px;
-      border:1px solid #2A3447; background:#0e1220; color:var(--text);
-      cursor:pointer; user-select:none;
+      position:absolute;top:10px;padding:6px 10px;border-radius:10px;
+      border:1px solid #2A3447;background:#0e1220;color:var(--text);
+      cursor:pointer;user-select:none;
     }
     .lb-close{right:10px}
     .lb-prev,.lb-next{
-      top:50%; translate:0 -50%; width:44px; height:44px; display:grid; place-items:center;
-      border-radius:999px; font-size:20px; line-height:1;
+      top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;
+      border-radius:999px;font-size:20px;line-height:1;
     }
     .lb-prev{left:-58px}
     .lb-next{right:-58px}
-    @media (max-width:700px){
-      .lb-prev{left:-8px} .lb-next{right:-8px}
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
     }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
 
-    <!-- Top nav -->
+    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -116,63 +213,87 @@
     <!-- Header -->
     <header>
       <h1>Adding a Computer to the Domain</h1>
-      <p class="lead">Before joining, ensure the client’s <strong>DNS server</strong> points to your <strong>domain controller</strong>; domain joins rely on DNS to locate AD services.</p>
+      <p class="lead">Before joining, ensure the client's <strong style="color:var(--text);">DNS server</strong> points to your <strong style="color:var(--text);">domain controller</strong>; domain joins rely on DNS to locate AD services.</p>
     </header>
 
-    <!-- DNS prerequisite -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- DNS Prerequisite -->
       <h2>DNS Prerequisite</h2>
-      <p>In this lab, the Windows client uses the Windows Server VM’s IP as its DNS server to resolve the domain and find the domain controller.</p>
-    </section>
+      <div class="step-section">
+        <p>In this lab, the Windows client uses the Windows Server VM's IP as its DNS server to resolve the domain and find the domain controller.</p>
+      </div>
 
-    <!-- Steps -->
-    <section class="card">
+      <!-- Join Workflow -->
       <h2>Join Workflow</h2>
+      <div class="step-section">
 
-      <h3>1) Open Network and Sharing Center</h3>
-      <p>Control Panel → <strong>Network and Sharing Center</strong>.</p>
-      <div class="img-wrap"><img src="Images/ControlPanel.png" alt="Control Panel - Network and Sharing Center"></div>
+        <div class="sub-section">
+          <h4>1) Open Network and Sharing Center</h4>
+          <p>Control Panel → <strong style="color:var(--brand);">Network and Sharing Center</strong>.</p>
+          <figure class="figure"><img src="Images/ControlPanel.png" alt="Control Panel - Network and Sharing Center" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>2) Adapter Properties</h3>
-      <p>Right-click your active network adapter → <strong>Properties</strong>.</p>
-      <div class="img-wrap"><img src="Images/Controlpanel2.png" alt="Network adapter list and properties"></div>
+        <div class="sub-section">
+          <h4>2) Adapter Properties</h4>
+          <p>Right-click your active network adapter → <strong style="color:var(--brand);">Properties</strong>.</p>
+          <figure class="figure"><img src="Images/Controlpanel2.png" alt="Network adapter list and properties" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>3) IPv4 Settings</h3>
-      <p>Select <strong>Internet Protocol Version 4 (TCP/IPv4)</strong> → <strong>Properties</strong>.</p>
-      <div class="img-wrap"><img src="Images/NICProperties.png" alt="IPv4 properties selection"></div>
+        <div class="sub-section">
+          <h4>3) IPv4 Settings</h4>
+          <p>Select <strong style="color:var(--brand);">Internet Protocol Version 4 (TCP/IPv4)</strong> → <strong style="color:var(--brand);">Properties</strong>.</p>
+          <figure class="figure"><img src="Images/NICProperties.png" alt="IPv4 properties selection" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>4) Point DNS to the Domain Controller</h3>
-      <p>Set the <strong>Preferred DNS server</strong> to your DC’s IP in this lab. This enables the client to find and join the domain.</p>
-      <div class="img-wrap"><img src="Images/Sysproperties.png" alt="IPv4 properties showing manual DNS"></div>
+        <div class="sub-section">
+          <h4>4) Point DNS to the Domain Controller</h4>
+          <p>Set the <strong style="color:var(--brand);">Preferred DNS server</strong> to your DC's IP in this lab. This enables the client to find and join the domain.</p>
+          <figure class="figure"><img src="Images/Sysproperties.png" alt="IPv4 properties showing manual DNS" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>5) Open System Properties</h3>
-      <p>System → <strong>Advanced system settings</strong> → <strong>Computer Name</strong> tab.</p>
-      <div class="img-wrap"><img src="Images/Sysproperties2.png" alt="System properties access"></div>
+        <div class="sub-section">
+          <h4>5) Open System Properties</h4>
+          <p>System → <strong style="color:var(--brand);">Advanced system settings</strong> → <strong style="color:var(--brand);">Computer Name</strong> tab.</p>
+          <figure class="figure"><img src="Images/Sysproperties2.png" alt="System properties access" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>6) Change Computer Name/Domain</h3>
-      <p>Click <strong>Change…</strong> to join the domain.</p>
-      <div class="img-wrap"><img src="Images/DomainAdd.png" alt="Computer Name tab - Change button"></div>
+        <div class="sub-section">
+          <h4>6) Change Computer Name/Domain</h4>
+          <p>Click <strong style="color:var(--brand);">Change…</strong> to join the domain.</p>
+          <figure class="figure"><img src="Images/DomainAdd.png" alt="Computer Name tab - Change button" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>7) Enter Domain Name</h3>
-      <p>Select <strong>Domain</strong> and enter the FQDN (e.g., <em>domain-1.local</em>).</p>
-      <div class="img-wrap"><img src="Images/Prompt.png" alt="Prompt for domain name and credentials"></div>
+        <div class="sub-section">
+          <h4>7) Enter Domain Name</h4>
+          <p>Select <strong style="color:var(--brand);">Domain</strong> and enter the FQDN (e.g., <em>domain-1.local</em>).</p>
+          <figure class="figure"><img src="Images/Prompt.png" alt="Prompt for domain name and credentials" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>8) Provide Domain Credentials</h3>
-      <p>Enter an account with permission to join computers to the domain (typically a domain admin or delegated account).</p>
-      <div class="img-wrap"><img src="Images/SuccessfulAdd.png" alt="Domain join credential prompt"></div>
+        <div class="sub-section">
+          <h4>8) Provide Domain Credentials</h4>
+          <p>Enter an account with permission to join computers to the domain (typically a domain admin or delegated account).</p>
+          <figure class="figure"><img src="Images/SuccessfulAdd.png" alt="Domain join credential prompt" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>9) Welcome Prompt</h3>
-      <p>On success, you’ll receive a confirmation such as <em>Welcome to the domain</em>.</p>
-      <div class="img-wrap"><img src="Images/RestartPrompt.png" alt="Welcome to the domain dialog"></div>
+        <div class="sub-section">
+          <h4>9) Welcome Prompt</h4>
+          <p>On success, you'll receive a confirmation such as <em>Welcome to the domain</em>.</p>
+          <figure class="figure"><img src="Images/RestartPrompt.png" alt="Welcome to the domain dialog" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>10) Restart to Complete</h3>
-      <p>Click <strong>Restart Now</strong> to finalize the join.</p>
-      <div class="img-wrap"><img src="Images/RestartNow.png" alt="Restart computer prompt"></div>
-    </section>
+        <div class="sub-section">
+          <h4>10) Restart to Complete</h4>
+          <p>Click <strong style="color:var(--brand);">Restart Now</strong> to finalize the join.</p>
+          <figure class="figure"><img src="Images/RestartNow.png" alt="Restart computer prompt" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -182,10 +303,9 @@
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 
-  <!-- Lightbox / zoom for ALL images (no markup changes required) -->
+  <!-- Lightbox -->
   <script>
     (function(){
       const lb = document.createElement('div');
@@ -206,26 +326,33 @@
       const btnPrev  = lb.querySelector('.lb-prev');
       const btnNext  = lb.querySelector('.lb-next');
 
-      function open(src, alt){
-        imgEl.src = src; imgEl.alt = alt || '';
-        capEl.textContent = alt || '';
-        // Standalone images on this page → hide prev/next
-        btnPrev.style.display = btnNext.style.display = 'none';
-        lb.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        btnClose.focus();
+      const imgs = Array.from(document.querySelectorAll('.figure img'));
+      let idx = 0;
+
+      function render(i){
+        const el = imgs[i];
+        if(!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.alt || '';
+        const multi = imgs.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
-      function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+      function open(i){ idx=i; render(idx); lb.classList.add('open'); document.body.style.overflow='hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+      function prev(){ idx=(idx-1+imgs.length)%imgs.length; render(idx); }
+      function next(){ idx=(idx+1)%imgs.length; render(idx); }
 
-      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+      imgs.forEach((img,i)=>{ img.addEventListener('click',(e)=>{ e.preventDefault(); open(i); }); });
       btnClose.addEventListener('click', close);
-      document.addEventListener('keydown', (e)=>{ if(lb.classList.contains('open') && e.key === 'Escape') close(); });
-
-      document.querySelectorAll('.img-wrap img').forEach((img)=>{
-        img.addEventListener('click', (e)=>{
-          e.preventDefault();
-          open(img.currentSrc || img.src, img.alt);
-        });
+      btnPrev .addEventListener('click', (e)=>{ e.stopPropagation(); prev(); });
+      btnNext .addEventListener('click', (e)=>{ e.stopPropagation(); next(); });
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+      document.addEventListener('keydown', (e)=>{
+        if(!lb.classList.contains('open')) return;
+        if(e.key==='Escape') close();
+        else if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
       });
     })();
   </script>
