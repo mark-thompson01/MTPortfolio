@@ -19,92 +19,215 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumbs */
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:12px 0 6px;font-size:16px;font-weight:700}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* Cards */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
-    ul,ol{padding-left:22px;margin:8px 0}
-    .tight li{margin:6px 0}
-
-    /* Code */
-    code, pre code{
-      background:#0e1220;border:1px solid var(--card-border);
-      border-radius:10px;padding:8px 10px;display:block;white-space:pre-wrap;margin:8px 0;color:var(--text)
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
     }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Images */
-    .img-wrap{margin:12px 0;text-align:center}
-    .img-wrap img{
-      display:block;margin:0 auto;
-      max-width:70%;
-      height:auto;
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
       border:1px solid var(--card-border);
       border-radius:12px;
-      cursor: zoom-in; /* indicate zoomability */
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul, .step-section ol{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section li{margin:6px 0}
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
     }
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul, .sub-section ol{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section li{margin:6px 0}
+    .sub-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
 
-    /* Lightbox (zoom) for ALL images */
+    /* Figures */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:16px auto;
+      width:min(70%, 820px);
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:10px;
+      cursor:zoom-in;
+    }
+    @media (max-width:900px){ .figure{width:92%} }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Lightbox */
     .lightbox{
-      position:fixed; inset:0; display:none; place-items:center;
-      background:rgba(0,0,0,.86); z-index:9999;
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.86);z-index:9999;
     }
     .lightbox.open{display:grid}
-    .lb-stage{position:relative; max-width:96vw; max-height:92vh}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
     .lb-img{
-      display:block; width:auto; height:auto; max-width:96vw; max-height:92vh;
-      border-radius:12px; box-shadow:var(--shadow);
+      display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;
+      border-radius:12px;box-shadow:var(--shadow);
     }
-    .lb-cap{color:#cfd6e6; font-size:13px; text-align:center; margin-top:8px}
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
     .lb-btn{
-      position:absolute; top:10px; padding:6px 10px; border-radius:10px;
-      border:1px solid #2A3447; background:#0e1220; color:var(--text);
-      cursor:pointer; user-select:none;
+      position:absolute;top:10px;padding:6px 10px;border-radius:10px;
+      border:1px solid #2A3447;background:#0e1220;color:var(--text);
+      cursor:pointer;user-select:none;
     }
     .lb-close{right:10px}
     .lb-prev,.lb-next{
-      top:50%; translate:0 -50%; width:44px; height:44px; display:grid; place-items:center;
-      border-radius:999px; font-size:20px; line-height:1;
+      top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;
+      border-radius:999px;font-size:20px;line-height:1;
     }
     .lb-prev{left:-58px}
     .lb-next{right:-58px}
-    @media (max-width:700px){
-      .lb-prev{left:-8px} .lb-next{right:-8px}
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
     }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
   <div class="wrap">
 
-    <!-- Top nav -->
+    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -123,179 +246,245 @@
     <!-- Header -->
     <header>
       <h1>Setting up DNS and DHCP</h1>
-      <p class="lead">Before promoting your server to a domain controller, configure <strong>DNS</strong> and <strong>DHCP</strong>. DNS enables name resolution and domain location; DHCP automates IP and DNS distribution to clients.</p>
+      <p class="lead">Before promoting your server to a domain controller, configure <strong style="color:var(--text);">DNS</strong> and <strong style="color:var(--text);">DHCP</strong>. DNS enables name resolution and domain location; DHCP automates IP and DNS distribution to clients.</p>
     </header>
 
-    <!-- Windows Server Roles -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Windows Server Roles -->
       <h2>Windows Server Roles</h2>
-      <p><strong>Windows Server Roles</strong> are predefined feature sets that let a server deliver specific <strong>network services and infrastructure functions</strong>.</p>
-      <ul>
-        <li><strong>Active Directory Domain Services (AD DS)</strong> — makes the server a <strong>domain controller</strong>.</li>
-        <li><strong>DNS Server</strong> — handles name resolution inside the network.</li>
-        <li><strong>DHCP Server</strong> — assigns IP addresses and network options to clients.</li>
-        <li><strong>File and Storage Services</strong> — hosts and manages file shares and storage.</li>
-      </ul>
-      <p>In a lab, assigning and configuring these roles simulates <strong>real-world IT infrastructure</strong> for hands-on learning in domain management, policy enforcement, and network services—right from your <strong>VirtualBox</strong> Windows Server.</p>
-    </section>
+      <div class="step-section">
+        <p><strong style="color:var(--brand);">Windows Server Roles</strong> are predefined feature sets that let a server deliver specific <strong style="color:var(--brand);">network services and infrastructure functions</strong>.</p>
+        <ul>
+          <li><strong style="color:var(--brand);">Active Directory Domain Services (AD DS)</strong> — makes the server a <strong style="color:var(--brand);">domain controller</strong>.</li>
+          <li><strong style="color:var(--brand);">DNS Server</strong> — handles name resolution inside the network.</li>
+          <li><strong style="color:var(--brand);">DHCP Server</strong> — assigns IP addresses and network options to clients.</li>
+          <li><strong style="color:var(--brand);">File and Storage Services</strong> — hosts and manages file shares and storage.</li>
+        </ul>
+        <p>In a lab, assigning and configuring these roles simulates <strong style="color:var(--brand);">real-world IT infrastructure</strong> for hands-on learning in domain management, policy enforcement, and network services—right from your <strong style="color:var(--brand);">VirtualBox</strong> Windows Server.</p>
+      </div>
 
-    <!-- Overview -->
-    <section class="card">
+      <!-- Overview -->
       <h2>Overview</h2>
-      <p>Before setting up Active Directory, configure two critical services: <strong>DNS</strong> and <strong>DHCP</strong>.</p>
-      <ul>
-        <li><strong>DNS</strong> resolves domain names to IP addresses and allows clients to locate domain controllers.</li>
-        <li><strong>DHCP</strong> automatically assigns IP addresses and options like gateway and DNS servers.</li>
-      </ul>
-      <p>This lab configures both on the same Windows Server that will later function as a domain controller.</p>
-      <h3>Without DNS</h3>
-      <ul class="tight">
-        <li>You cannot promote the server to a domain controller.</li>
-        <li>Clients will not be able to join the domain.</li>
-      </ul>
-      <h3>Without DHCP</h3>
-      <ul class="tight">
-        <li>Every client would need manual IP configuration—inefficient and error-prone.</li>
-      </ul>
-    </section>
+      <div class="step-section">
+        <p>Before setting up Active Directory, configure two critical services: <strong style="color:var(--brand);">DNS</strong> and <strong style="color:var(--brand);">DHCP</strong>.</p>
+        <ul>
+          <li><strong style="color:var(--brand);">DNS</strong> resolves domain names to IP addresses and allows clients to locate domain controllers.</li>
+          <li><strong style="color:var(--brand);">DHCP</strong> automatically assigns IP addresses and options like gateway and DNS servers.</li>
+        </ul>
+        <p>This lab configures both on the same Windows Server that will later function as a domain controller.</p>
 
-    <!-- DNS -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>Without DNS</h4>
+          <ul>
+            <li>You cannot promote the server to a domain controller.</li>
+            <li>Clients will not be able to join the domain.</li>
+          </ul>
+        </div>
+
+        <div class="sub-section">
+          <h4>Without DHCP</h4>
+          <ul>
+            <li>Every client would need manual IP configuration—inefficient and error-prone.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- DNS -->
       <h2>Configuring Internal DNS (Windows Server 2016)</h2>
-      <h3>Verify DNS Installation</h3>
-      <p>In this example the <strong>DNS Server role</strong> is already installed—so we’ll verify.</p>
-      <ul>
-        <li>Open <strong>DNS Manager</strong> (<code>dnsmgmt.msc</code>)</li>
-      </ul>
-      <div class="img-wrap"><img src="Images/DNS2/dns-1.PNG" alt="Open DNS Manager"></div>
+      <div class="step-section">
 
-      <h4>Confirm a Forward Lookup Zone exists for your domain (e.g., <em>Domain-1.local</em>)</h4>
-      <div class="img-wrap"><img src="Images/DNS2/dns-2.PNG" alt="Forward Lookup Zones"></div>
+        <div class="sub-section">
+          <h4>Verify DNS Installation</h4>
+          <p>In this example the <strong style="color:var(--brand);">DNS Server role</strong> is already installed—so we'll verify by opening <strong style="color:var(--brand);">DNS Manager</strong> (<code>dnsmgmt.msc</code>).</p>
+          <figure class="figure"><img src="Images/DNS2/dns-1.PNG" alt="Open DNS Manager" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>Zone contains <strong>A records</strong> used for domain authentication</h4>
-      <div class="img-wrap"><img src="Images/DNS2/dns-3.PNG" alt="A records in forward lookup zone"></div>
+        <div class="sub-section">
+          <h4>Confirm a Forward Lookup Zone Exists</h4>
+          <p>Confirm a Forward Lookup Zone exists for your domain (e.g., <em>Domain-1.local</em>).</p>
+          <figure class="figure"><img src="Images/DNS2/dns-2.PNG" alt="Forward Lookup Zones" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h3>Configure DNS Forwarders (Optional)</h3>
-      <p>Forwarders allow internal DNS to resolve external names via public DNS servers.</p>
-      <ol>
-        <li>Right-click your server in <strong>DNS Manager → Properties</strong></li>
-        <div class="img-wrap"><img src="Images/DNS2/dns--5.PNG" alt="DNS server properties"></div>
-        <li>Go to the <strong>Forwarders</strong> tab</li>
-        <div class="img-wrap"><img src="Images/DNS2/dns--6.PNG" alt="Forwarders tab"></div>
-        <li><strong>Add:</strong></li>
-        <div class="img-wrap"><img src="Images/DNS2/dns--7.PNG" alt="Add forwarder"></div>
-        <li>8.8.8.8 (Google DNS) &nbsp; · &nbsp; 1.1.1.1 (Cloudflare DNS)</li>
-        <div class="img-wrap"><img src="Images/DNS2/dns--8.PNG" alt="Forwarders configured"></div>
-        <li>Click <strong>OK</strong> to save</li>
-      </ol>
-    </section>
+        <div class="sub-section">
+          <h4>Zone Contains A Records</h4>
+          <p>Zone contains <strong style="color:var(--brand);">A records</strong> used for domain authentication.</p>
+          <figure class="figure"><img src="Images/DNS2/dns-3.PNG" alt="A records in forward lookup zone" loading="lazy" decoding="async"></figure>
+        </div>
 
-    <!-- DHCP -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>Configure DNS Forwarders (Optional)</h4>
+          <p>Forwarders allow internal DNS to resolve external names via public DNS servers.</p>
+          <ol>
+            <li>Right-click your server in <strong style="color:var(--brand);">DNS Manager → Properties</strong></li>
+          </ol>
+          <figure class="figure"><img src="Images/DNS2/dns--5.PNG" alt="DNS server properties" loading="lazy" decoding="async"></figure>
+          <ol start="2">
+            <li>Go to the <strong style="color:var(--brand);">Forwarders</strong> tab</li>
+          </ol>
+          <figure class="figure"><img src="Images/DNS2/dns--6.PNG" alt="Forwarders tab" loading="lazy" decoding="async"></figure>
+          <ol start="3">
+            <li>Click <strong style="color:var(--brand);">Add</strong></li>
+          </ol>
+          <figure class="figure"><img src="Images/DNS2/dns--7.PNG" alt="Add forwarder" loading="lazy" decoding="async"></figure>
+          <ol start="4">
+            <li>Add <strong style="color:var(--brand);">8.8.8.8</strong> (Google DNS) and <strong style="color:var(--brand);">1.1.1.1</strong> (Cloudflare DNS)</li>
+          </ol>
+          <figure class="figure"><img src="Images/DNS2/dns--8.PNG" alt="Forwarders configured" loading="lazy" decoding="async"></figure>
+          <ol start="5">
+            <li>Click <strong style="color:var(--brand);">OK</strong> to save</li>
+          </ol>
+        </div>
+
+      </div>
+
+      <!-- DHCP Installation -->
       <h2>Configuring DHCP</h2>
-      <h3>Install the DHCP Server Role</h3>
-      <h4>1) Click <strong>Add roles and features</strong> in Server Manager</h4>
-      <div class="img-wrap"><img src="Images/dhcp1.PNG" alt="Add roles and features"></div>
+      <div class="step-section">
 
-      <h4>2) Follow the wizard prompts</h4>
-      <div class="img-wrap"><img src="Images/dhcp2.PNG" alt="Roles and Features wizard"></div>
+        <div class="sub-section">
+          <h4>Install the DHCP Server Role</h4>
 
-      <h4>3) Choose <strong>Role-based or feature-based</strong> installation</h4>
-      <div class="img-wrap"><img src="Images/dhcp3.PNG" alt="Installation type"></div>
+          <p><strong style="color:var(--brand);">1)</strong> Click <strong style="color:var(--brand);">Add roles and features</strong> in Server Manager</p>
+          <figure class="figure"><img src="Images/dhcp1.PNG" alt="Add roles and features" loading="lazy" decoding="async"></figure>
 
-      <h4>4) Server Selection</h4>
-      <div class="img-wrap"><img src="Images/dhcp3.5.PNG" alt="Server selection"></div>
+          <p><strong style="color:var(--brand);">2)</strong> Follow the wizard prompts</p>
+          <figure class="figure"><img src="Images/dhcp2.PNG" alt="Roles and Features wizard" loading="lazy" decoding="async"></figure>
 
-      <h4>5) Check <strong>DHCP Server</strong> under Server Roles</h4>
-      <div class="img-wrap"><img src="Images/dhcp5.PNG" alt="Select DHCP Server role"></div>
+          <p><strong style="color:var(--brand);">3)</strong> Choose <strong style="color:var(--brand);">Role-based or feature-based</strong> installation</p>
+          <figure class="figure"><img src="Images/dhcp3.PNG" alt="Installation type" loading="lazy" decoding="async"></figure>
 
-      <h4>6) Add Features when prompted</h4>
-      <div class="img-wrap"><img src="Images/dhcp6.PNG" alt="Add features for DHCP"></div>
+          <p><strong style="color:var(--brand);">4)</strong> Server Selection</p>
+          <figure class="figure"><img src="Images/dhcp3.5.PNG" alt="Server selection" loading="lazy" decoding="async"></figure>
 
-      <h4>7) Confirm selections → <strong>Install</strong></h4>
-      <div class="img-wrap"><img src="Images/dhcp7.PNG" alt="Confirm and install"></div>
+          <p><strong style="color:var(--brand);">5)</strong> Check <strong style="color:var(--brand);">DHCP Server</strong> under Server Roles</p>
+          <figure class="figure"><img src="Images/dhcp5.PNG" alt="Select DHCP Server role" loading="lazy" decoding="async"></figure>
 
-      <h4>8) Installation progress</h4>
-      <div class="img-wrap"><img src="Images/dhcp8.PNG" alt="Installation progress 1"></div>
-      <div class="img-wrap"><img src="Images/dhcp9.PNG" alt="Installation progress 2"></div>
-      <div class="img-wrap"><img src="Images/dhcp10.PNG" alt="Installation progress 3"></div>
+          <p><strong style="color:var(--brand);">6)</strong> Add Features when prompted</p>
+          <figure class="figure"><img src="Images/dhcp6.PNG" alt="Add features for DHCP" loading="lazy" decoding="async"></figure>
 
-      <h3>DHCP Authorization</h3>
-      <h4>1) Post-deployment configuration notification appears</h4>
-      <div class="img-wrap"><img src="Images/dhcpconf1.PNG" alt="Post-deployment configuration notice"></div>
+          <p><strong style="color:var(--brand);">7)</strong> Confirm selections → <strong style="color:var(--brand);">Install</strong></p>
+          <figure class="figure"><img src="Images/dhcp7.PNG" alt="Confirm and install" loading="lazy" decoding="async"></figure>
 
-      <h4>2) Click <strong>Complete DHCP configuration</strong> to open the wizard and authorize the server</h4>
-      <div class="img-wrap"><img src="Images/dhcpconf2.PNG" alt="Complete DHCP configuration wizard"></div>
+          <p><strong style="color:var(--brand);">8)</strong> Installation progress</p>
+          <figure class="figure"><img src="Images/dhcp8.PNG" alt="Installation progress 1" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/dhcp9.PNG" alt="Installation progress 2" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/dhcp10.PNG" alt="Installation progress 3" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>3) Specify credentials to authorize in AD DS → <strong>Commit</strong></h4>
-      <p>In this example, I select a specified user’s credentials and commit the changes.</p>
-      <div class="img-wrap"><img src="Images/dhcpconf3.PNG" alt="Authorize DHCP server"></div>
-    </section>
+        <div class="sub-section">
+          <h4>DHCP Authorization</h4>
 
-    <!-- DHCP Scope -->
-    <section class="card">
+          <p><strong style="color:var(--brand);">1)</strong> Post-deployment configuration notification appears</p>
+          <figure class="figure"><img src="Images/dhcpconf1.PNG" alt="Post-deployment configuration notice" loading="lazy" decoding="async"></figure>
+
+          <p><strong style="color:var(--brand);">2)</strong> Click <strong style="color:var(--brand);">Complete DHCP configuration</strong> to open the wizard and authorize the server</p>
+          <figure class="figure"><img src="Images/dhcpconf2.PNG" alt="Complete DHCP configuration wizard" loading="lazy" decoding="async"></figure>
+
+          <p><strong style="color:var(--brand);">3)</strong> Specify credentials to authorize in AD DS → <strong style="color:var(--brand);">Commit</strong></p>
+          <p>In this example, I select a specified user's credentials and commit the changes.</p>
+          <figure class="figure"><img src="Images/dhcpconf3.PNG" alt="Authorize DHCP server" loading="lazy" decoding="async"></figure>
+        </div>
+
+      </div>
+
+      <!-- DHCP Scope -->
       <h2>Create a DHCP Scope</h2>
+      <div class="step-section">
 
-      <h4>1) Server Manager → Tools → <strong>DHCP</strong></h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt2.PNG" alt="Open DHCP Manager"></div>
+        <div class="sub-section">
+          <h4>1) Server Manager → Tools → DHCP</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt2.PNG" alt="Open DHCP Manager" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>2) DHCP Manager</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt3.PNG" alt="DHCP Manager console"></div>
+        <div class="sub-section">
+          <h4>2) DHCP Manager</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt3.PNG" alt="DHCP Manager console" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>3) Expand the server/domain hierarchy</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt4.PNG" alt="DHCP hierarchy"></div>
+        <div class="sub-section">
+          <h4>3) Expand the Server/Domain Hierarchy</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt4.PNG" alt="DHCP hierarchy" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>4) Right-click <strong>IPv4</strong> → <strong>New Scope…</strong></h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt5.PNG" alt="New scope action"></div>
+        <div class="sub-section">
+          <h4>4) Right-click IPv4 → New Scope…</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt5.PNG" alt="New scope action" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>5) New Scope Wizard</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt6.PNG" alt="Scope wizard"></div>
+        <div class="sub-section">
+          <h4>5) New Scope Wizard</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt6.PNG" alt="Scope wizard" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>6) Name the scope (e.g., <em>Lab Scope</em>)</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt7.PNG" alt="Scope name"></div>
+        <div class="sub-section">
+          <h4>6) Name the Scope (e.g., Lab Scope)</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt7.PNG" alt="Scope name" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>7) Configure IP address range</h4>
-      <ul class="tight">
-        <li>Start IP Address</li>
-        <li>End IP Address</li>
-        <li>CIDR length / Subnet mask</li>
-      </ul>
-      <div class="img-wrap"><img src="Images/dhcpmgmt8.PNG" alt="Scope IP range"></div>
+        <div class="sub-section">
+          <h4>7) Configure IP Address Range</h4>
+          <ul>
+            <li>Start IP Address</li>
+            <li>End IP Address</li>
+            <li>CIDR length / Subnet mask</li>
+          </ul>
+          <figure class="figure"><img src="Images/dhcpmgmt8.PNG" alt="Scope IP range" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>8) Exclusions (optional)</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt9.PNG" alt="Exclusions"></div>
+        <div class="sub-section">
+          <h4>8) Exclusions (Optional)</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt9.PNG" alt="Exclusions" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>9) Lease Duration</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt10.PNG" alt="Lease duration"></div>
+        <div class="sub-section">
+          <h4>9) Lease Duration</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt10.PNG" alt="Lease duration" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>10) Configure DHCP Options</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt11.PNG" alt="Configure options"></div>
+        <div class="sub-section">
+          <h4>10) Configure DHCP Options</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt11.PNG" alt="Configure options" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>11) Default Gateway (e.g., 192.168.1.1)</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt12.PNG" alt="Default gateway"></div>
+        <div class="sub-section">
+          <h4>11) Default Gateway (e.g., 192.168.1.1)</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt12.PNG" alt="Default gateway" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>12) Domain Name &amp; DNS Servers (use your internal domain and DNS)</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt13.PNG" alt="DNS options"></div>
+        <div class="sub-section">
+          <h4>12) Domain Name &amp; DNS Servers</h4>
+          <p>Use your internal domain and DNS server address.</p>
+          <figure class="figure"><img src="Images/dhcpmgmt13.PNG" alt="DNS options" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>13) WINS (if applicable)</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt14.PNG" alt="WINS options"></div>
+        <div class="sub-section">
+          <h4>13) WINS (if applicable)</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt14.PNG" alt="WINS options" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>14) Activate the scope</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt15.PNG" alt="Activate scope"></div>
+        <div class="sub-section">
+          <h4>14) Activate the Scope</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt15.PNG" alt="Activate scope" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>15) Finish</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt16.PNG" alt="Finish scope wizard"></div>
+        <div class="sub-section">
+          <h4>15) Finish</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt16.PNG" alt="Finish scope wizard" loading="lazy" decoding="async"></figure>
+        </div>
 
-      <h4>16) Verify the new scope under IPv4</h4>
-      <div class="img-wrap"><img src="Images/dhcpmgmt17.PNG" alt="Scope visible in console"></div>
+        <div class="sub-section">
+          <h4>16) Verify the New Scope Under IPv4</h4>
+          <figure class="figure"><img src="Images/dhcpmgmt17.PNG" alt="Scope visible in console" loading="lazy" decoding="async"></figure>
+          <p>This walkthrough configured internal <strong style="color:var(--brand);">DNS</strong> and <strong style="color:var(--brand);">DHCP</strong> on Windows Server 2016—the two key services to set before promoting to a domain controller. Next up: installing the <strong style="color:var(--brand);">AD DS</strong> role and standing up Active Directory.</p>
+        </div>
 
-      <p>This walkthrough configured internal <strong>DNS</strong> and <strong>DHCP</strong> on Windows Server 2016—the two key services to set before promoting to a domain controller. Next up: installing the <strong>AD DS</strong> role and standing up Active Directory.</p>
-    </section>
+      </div>
 
-    
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -305,10 +494,9 @@
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 
-  <!-- Lightbox / zoom for ALL images (no markup changes required) -->
+  <!-- Lightbox -->
   <script>
     (function(){
       const lb = document.createElement('div');
@@ -329,26 +517,33 @@
       const btnPrev  = lb.querySelector('.lb-prev');
       const btnNext  = lb.querySelector('.lb-next');
 
-      function open(src, alt){
-        imgEl.src = src; imgEl.alt = alt || '';
-        capEl.textContent = alt || '';
-        // Standalone images only on this page → hide prev/next
-        btnPrev.style.display = btnNext.style.display = 'none';
-        lb.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        btnClose.focus();
+      const imgs = Array.from(document.querySelectorAll('.figure img'));
+      let idx = 0;
+
+      function render(i){
+        const el = imgs[i];
+        if(!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.alt || '';
+        const multi = imgs.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
-      function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+      function open(i){ idx=i; render(idx); lb.classList.add('open'); document.body.style.overflow='hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+      function prev(){ idx=(idx-1+imgs.length)%imgs.length; render(idx); }
+      function next(){ idx=(idx+1)%imgs.length; render(idx); }
 
-      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
+      imgs.forEach((img,i)=>{ img.addEventListener('click',(e)=>{ e.preventDefault(); open(i); }); });
       btnClose.addEventListener('click', close);
-      document.addEventListener('keydown', (e)=>{ if(lb.classList.contains('open') && e.key === 'Escape') close(); });
-
-      document.querySelectorAll('.img-wrap img').forEach((img)=>{
-        img.addEventListener('click', (e)=>{
-          e.preventDefault();
-          open(img.currentSrc || img.src, img.alt);
-        });
+      btnPrev .addEventListener('click', (e)=>{ e.stopPropagation(); prev(); });
+      btnNext .addEventListener('click', (e)=>{ e.stopPropagation(); next(); });
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+      document.addEventListener('keydown', (e)=>{
+        if(!lb.classList.contains('open')) return;
+        if(e.key==='Escape') close();
+        else if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
       });
     })();
   </script>
