@@ -19,13 +19,29 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -34,73 +50,150 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cards / sections */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
     }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Figures: keep your original inline sizes; only downscale if viewport is narrower */
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section li{margin:4px 0}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section li{margin:4px 0}
+
+    /* Figures — preserve inline dimensions, responsive downscale only */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:12px auto;
+      margin:16px auto;
       width:max-content;
       max-width:100%;
       text-align:center;
     }
     .figure img{
       display:block;
-      height:auto;
-      max-width:100%; /* responsive downscale only */
-      cursor: zoom-in;
+      margin:0 auto;
       border-radius:10px;
+      height:auto;
+      max-width:100%;
+      cursor:zoom-in;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
+    }
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
     }
 
-    /* Code/pre */
-    pre{
-      margin:10px 0;
-      padding:12px 14px;
-      background:#0f1424;
-      border:1px solid #202a3f;
-      border-radius:12px;
-      overflow:auto;
-      color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
     }
-    code{
-      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-    }
-
-    ul{padding-left:22px;margin:8px 0}
-    ol{padding-left:22px;margin:8px 0}
+    .back-link:hover{text-decoration:underline}
 
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
-
-    /* Image zoom modal */
-    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
-    .zoom-modal[open]{display:block}
-    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
-    .zoom-img{max-width:95vw;max-height:95vh;width:auto;height:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out}
-    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;line-height:1;cursor:pointer}
-    .zoom-close:hover{background:#121733}
-    .hide-scroll{overflow:hidden}
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -124,193 +217,240 @@
     <header>
       <h1>Windows Event Viewer Guide</h1>
       <p class="lead">Common event IDs, where to find them, and how they help troubleshoot crashes, logons, updates, GPO, performance, drivers, security, and printing.</p>
-      <p>
-        <a href="https://github.com/mark-thompson01/windows-event-viewer" target="_blank" rel="noopener">
-          View this project on GitHub
-        </a>
-      </p>
+      <p><a href="https://github.com/mark-thompson01/windows-event-viewer" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Section 1 -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Section 1 -->
       <h2>1. System Crashes or Unexpected Reboots</h2>
-      <ul>
-        <li><strong class="event-id">6008</strong> – Unexpected shutdown</li>
-        <li><strong class="event-id">41 (Kernel-Power)</strong> – System rebooted without clean shutdown</li>
-      </ul>
-      <p><strong>Log Location:</strong> Windows Logs → System</p>
-      <p><strong>Other Related Event IDs:</strong> <span class="event-id">1001</span> – Bugcheck codes (BSOD details)</p>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">6008</strong> – Unexpected shutdown</li>
+          <li><strong style="color:var(--brand);">41 (Kernel-Power)</strong> – System rebooted without clean shutdown</li>
+        </ul>
+        <p><strong style="color:var(--brand);">Log Location:</strong> Windows Logs → System</p>
+        <p><strong style="color:var(--brand);">Other Related Event IDs:</strong> 1001 – Bugcheck codes (BSOD details)</p>
 
-      <h3>6008 – Unexpected Shutdown</h3>
-      <div class="figure"><img src="Images/6008.png" alt="Event 6008 example" style="width:800px; height:450px;"></div>
-      <div class="figure"><img src="Images/6008-2.png" alt="Event 6008 details" style="width:550px; height:350px;"></div>
+        <div class="sub-section">
+          <h4>6008 – Unexpected Shutdown</h4>
+          <div class="figure"><img src="Images/6008.png" alt="Event 6008 example" style="width:800px; height:450px;"></div>
+          <div class="figure"><img src="Images/6008-2.png" alt="Event 6008 details" style="width:550px; height:350px;"></div>
+        </div>
 
-      <h3>41 (Kernel-Power) – Rebooted without Clean Shutdown</h3>
-      <div class="figure"><img src="Images/41.png" alt="Event 41 Kernel-Power"></div>
-    </section>
+        <div class="sub-section">
+          <h4>41 (Kernel-Power) – Rebooted without Clean Shutdown</h4>
+          <div class="figure"><img src="Images/41.png" alt="Event 41 Kernel-Power"></div>
+        </div>
+      </div>
 
-    <!-- Section 2 -->
-    <section class="card">
+      <!-- Section 2 -->
       <h2>2. Application Crashes or Freezes</h2>
-      <ul>
-        <li><strong class="event-id">1000</strong> – Application Error</li>
-        <li><strong class="event-id">1001</strong> – Windows Error Reporting</li>
-        <li><strong class="event-id">1002</strong> – Application Hang</li>
-      </ul>
-      <p><strong>Log Location:</strong> Windows Logs → Application</p>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">1000</strong> – Application Error</li>
+          <li><strong style="color:var(--brand);">1001</strong> – Windows Error Reporting</li>
+          <li><strong style="color:var(--brand);">1002</strong> – Application Hang</li>
+        </ul>
+        <p><strong style="color:var(--brand);">Log Location:</strong> Windows Logs → Application</p>
 
-      <h3>1000 – Application Error</h3>
-      <div class="figure"><img src="Images/1000.png" alt="Event 1000 Application Error"></div>
+        <div class="sub-section">
+          <h4>1000 – Application Error</h4>
+          <div class="figure"><img src="Images/1000.png" alt="Event 1000 Application Error"></div>
+        </div>
 
-      <h3>1001 – Windows Error Reporting</h3>
-      <div class="figure"><img src="Images/1001.png" alt="Event 1001 Windows Error Reporting"></div>
-      <div class="figure"><img src="Images/1001-2.png" alt="Event 1001 additional details"></div>
+        <div class="sub-section">
+          <h4>1001 – Windows Error Reporting</h4>
+          <div class="figure"><img src="Images/1001.png" alt="Event 1001 Windows Error Reporting"></div>
+          <div class="figure"><img src="Images/1001-2.png" alt="Event 1001 additional details"></div>
+        </div>
 
-      <h3>1002 – Application Hang</h3>
-      <div class="figure"><img src="Images/1002.png" alt="Event 1002 Application Hang"></div>
-    </section>
+        <div class="sub-section">
+          <h4>1002 – Application Hang</h4>
+          <div class="figure"><img src="Images/1002.png" alt="Event 1002 Application Hang"></div>
+        </div>
+      </div>
 
-    <!-- Section 3 -->
-    <section class="card">
+      <!-- Section 3 -->
       <h2>3. User Account Logon/Logoff Issues</h2>
-      <ul>
-        <li><strong class="event-id">4624</strong> – Successful logon</li>
-        <li><strong class="event-id">4625</strong> – Logon failure</li>
-        <li><strong class="event-id">4634</strong> – Logoff events</li>
-      </ul>
-      <p><strong>Log Location:</strong> Windows Logs → Security</p>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">4624</strong> – Successful logon</li>
+          <li><strong style="color:var(--brand);">4625</strong> – Logon failure</li>
+          <li><strong style="color:var(--brand);">4634</strong> – Logoff events</li>
+        </ul>
+        <p><strong style="color:var(--brand);">Log Location:</strong> Windows Logs → Security</p>
 
-      <h3>4624 – Successful Logon</h3>
-      <div class="figure"><img src="Images/4624.png" alt="Event 4624 Successful Logon"></div>
+        <div class="sub-section">
+          <h4>4624 – Successful Logon</h4>
+          <div class="figure"><img src="Images/4624.png" alt="Event 4624 Successful Logon"></div>
+        </div>
 
-      <h3>4625 – Logon Failure</h3>
-      <div class="figure"><img src="Images/4625.PNG" alt="Event 4625 Logon Failure"></div>
+        <div class="sub-section">
+          <h4>4625 – Logon Failure</h4>
+          <div class="figure"><img src="Images/4625.PNG" alt="Event 4625 Logon Failure"></div>
+        </div>
 
-      <h3>4634 – Logoff Events</h3>
-      <div class="figure"><img src="Images/4634.PNG" alt="Event 4634 Logoff summary" style="width:800px; height:200px;"></div>
-      <div class="figure"><img src="Images/4634-2.PNG" alt="Event 4634 details"></div>
-    </section>
+        <div class="sub-section">
+          <h4>4634 – Logoff Events</h4>
+          <div class="figure"><img src="Images/4634.PNG" alt="Event 4634 Logoff summary" style="width:800px; height:200px;"></div>
+          <div class="figure"><img src="Images/4634-2.PNG" alt="Event 4634 details"></div>
+        </div>
+      </div>
 
-    <!-- Section 4 -->
-    <section class="card">
+      <!-- Section 4 -->
       <h2>4. Windows Update Problems</h2>
-      <ul><li>Failure events and error codes indicating update issues.</li></ul>
-      <p><strong>Log Location:</strong> Windows Logs → System; Applications and Services Logs → Microsoft → Windows → WindowsUpdateClient → Operational</p>
-      <div class="figure"><img src="Images/WU1.png" alt="Windows Update log view" style="width:900px; height:300px;"></div>
-      <div class="figure"><img src="Images/WU2.png" alt="Windows Update error details" style="width:600px; height:400px;"></div>
-      <div class="figure"><img src="Images/WU3.png" alt="Windows Update codes" style="width:900px; height:300px;"></div>
-      <div class="figure"><img src="Images/WU4.png" alt="Windows Update Client Operational" style="width:600px; height:400px;"></div>
-    </section>
+      <div class="step-section">
+        <ul>
+          <li>Failure events and error codes indicating update issues.</li>
+        </ul>
+        <p><strong style="color:var(--brand);">Log Location:</strong> Windows Logs → System; Applications and Services Logs → Microsoft → Windows → WindowsUpdateClient → Operational</p>
 
-    <!-- Section 5 -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>Windows Update Logs</h4>
+          <div class="figure"><img src="Images/WU1.png" alt="Windows Update log view" style="width:900px; height:300px;"></div>
+          <div class="figure"><img src="Images/WU2.png" alt="Windows Update error details" style="width:600px; height:400px;"></div>
+          <div class="figure"><img src="Images/WU3.png" alt="Windows Update codes" style="width:900px; height:300px;"></div>
+          <div class="figure"><img src="Images/WU4.png" alt="Windows Update Client Operational" style="width:600px; height:400px;"></div>
+        </div>
+      </div>
+
+      <!-- Section 5 -->
       <h2>5. Group Policy (GPO) Issues</h2>
-      <ul>
-        <li><strong class="event-id">7017</strong> – GPO client-side extension errors</li>
-        <li><strong class="event-id">1129</strong> – Policy processing issues at startup/logon</li>
-      </ul>
-      <p><strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → GroupPolicy → Operational</p>
-      <p><strong>Other Related Event IDs:</strong> <span class="event-id">1058, 1030</span> – Problems accessing or applying GPOs</p>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">7017</strong> – GPO client-side extension errors</li>
+          <li><strong style="color:var(--brand);">1129</strong> – Policy processing issues at startup/logon</li>
+        </ul>
+        <p><strong style="color:var(--brand);">Log Location:</strong> Applications and Services Logs → Microsoft → Windows → GroupPolicy → Operational</p>
+        <p><strong style="color:var(--brand);">Other Related Event IDs:</strong> 1058, 1030 – Problems accessing or applying GPOs</p>
 
-        <h3>7017</h3>
-        <div class="figure"><img src="Images/7017.png" alt="Event 7017 GPO client-side extension"></div>
+        <div class="sub-section">
+          <h4>7017 – GPO Client-Side Extension Errors</h4>
+          <div class="figure"><img src="Images/7017.png" alt="Event 7017 GPO client-side extension"></div>
+        </div>
 
-        <h3>1129</h3>
-        <div class="figure"><img src="Images/1129.png" alt="Event 1129 policy processing issue" style="width:900px; height:400px;"></div>
-        <div class="figure"><img src="Images/1129-2.png" alt="Event 1129 details" style="width:600px; height:400px;"></div>
-    </section>
+        <div class="sub-section">
+          <h4>1129 – Policy Processing Issues</h4>
+          <div class="figure"><img src="Images/1129.png" alt="Event 1129 policy processing issue" style="width:900px; height:400px;"></div>
+          <div class="figure"><img src="Images/1129-2.png" alt="Event 1129 details" style="width:600px; height:400px;"></div>
+        </div>
+      </div>
 
-    <!-- Section 6 -->
-    <section class="card">
+      <!-- Section 6 -->
       <h2>6. Performance Issues (Slow Boot or Login)</h2>
-      <ul>
-        <li><strong class="event-id">100</strong> – Boot Performance (slow boot)</li>
-        <li><strong class="event-id">101</strong> – Application Performance (slow app start)</li>
-        <li><strong class="event-id">200</strong> – Shutdown Performance (slow shutdown)</li>
-      </ul>
-      <p><strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → Diagnostics-Performance → Operational</p>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">100</strong> – Boot Performance (slow boot)</li>
+          <li><strong style="color:var(--brand);">101</strong> – Application Performance (slow app start)</li>
+          <li><strong style="color:var(--brand);">200</strong> – Shutdown Performance (slow shutdown)</li>
+        </ul>
+        <p><strong style="color:var(--brand);">Log Location:</strong> Applications and Services Logs → Microsoft → Windows → Diagnostics-Performance → Operational</p>
 
-      <h3>100 – Boot Performance</h3>
-      <div class="figure"><img src="Images/100.png" alt="Event 100 boot performance"></div>
-      <div class="figure"><img src="Images/100-2.png" alt="Event 100 additional details"></div>
+        <div class="sub-section">
+          <h4>100 – Boot Performance</h4>
+          <div class="figure"><img src="Images/100.png" alt="Event 100 boot performance"></div>
+          <div class="figure"><img src="Images/100-2.png" alt="Event 100 additional details"></div>
+        </div>
 
-      <h3>101 – Application Performance</h3>
-      <div class="figure"><img src="Images/101.png" alt="Event 101 slow app start" style="width:800px; height:559px;"></div>
-      <div class="figure"><img src="Images/101-2.png" alt="Event 101 additional details"></div>
+        <div class="sub-section">
+          <h4>101 – Application Performance</h4>
+          <div class="figure"><img src="Images/101.png" alt="Event 101 slow app start" style="width:800px; height:559px;"></div>
+          <div class="figure"><img src="Images/101-2.png" alt="Event 101 additional details"></div>
+        </div>
 
-      <h3>200 – Shutdown Performance</h3>
-      <div class="figure"><img src="Images/200.png" alt="Event 200 slow shutdown"></div>
-    </section>
+        <div class="sub-section">
+          <h4>200 – Shutdown Performance</h4>
+          <div class="figure"><img src="Images/200.png" alt="Event 200 slow shutdown"></div>
+        </div>
+      </div>
 
-    <!-- Section 7 -->
-    <section class="card">
+      <!-- Section 7 -->
       <h2>7. Driver Issues or Device Failures</h2>
-      <ul>
-        <li><strong class="event-id">7000, 7001</strong> – Driver/service failed to start</li>
-        <li><strong class="event-id">7026</strong> – Driver loading failures</li>
-      </ul>
-      <p><strong>Log Location:</strong> Windows Logs → System</p>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">7000, 7001</strong> – Driver/service failed to start</li>
+          <li><strong style="color:var(--brand);">7026</strong> – Driver loading failures</li>
+        </ul>
+        <p><strong style="color:var(--brand);">Log Location:</strong> Windows Logs → System</p>
 
-      <h3>7000 – Service Failed to Start</h3>
-      <div class="figure"><img src="Images/7000.png" alt="Event 7000 service failed to start"></div>
+        <div class="sub-section">
+          <h4>7000 – Service Failed to Start</h4>
+          <div class="figure"><img src="Images/7000.png" alt="Event 7000 service failed to start"></div>
+        </div>
 
-      <h3>7026 – Driver Loading Failures</h3>
-      <div class="figure"><img src="Images/7026.png" alt="Event 7026 driver loading failure"></div>
-      <div class="figure"><img src="Images/7026-2.png" alt="Event 7026 more details" style="width:600px; height:400px;"></div>
-    </section>
+        <div class="sub-section">
+          <h4>7026 – Driver Loading Failures</h4>
+          <div class="figure"><img src="Images/7026.png" alt="Event 7026 driver loading failure"></div>
+          <div class="figure"><img src="Images/7026-2.png" alt="Event 7026 more details" style="width:600px; height:400px;"></div>
+        </div>
+      </div>
 
-    <!-- Section 8 -->
-    <section class="card">
+      <!-- Section 8 -->
       <h2>8. Malware or Security Incidents</h2>
-      <ul>
-        <li><strong class="event-id">1116, 1117</strong> – Malware detection (Windows Defender)</li>
-        <li><strong class="event-id">4625</strong> – Multiple failed logins (possible brute force)</li>
-      </ul>
-      <p><strong>Log Location:</strong> Windows Logs → Security, Application, Windows Defender</p>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">1116, 1117</strong> – Malware detection (Windows Defender)</li>
+          <li><strong style="color:var(--brand);">4625</strong> – Multiple failed logins (possible brute force)</li>
+        </ul>
+        <p><strong style="color:var(--brand);">Log Location:</strong> Windows Logs → Security, Application, Windows Defender</p>
 
-      <h3>Malware Detection – Windows Defender</h3>
-      <h3>1116</h3>
-      <div class="figure"><img src="Images/1116.png" alt="Event 1116 malware detected"></div>
-      <div class="figure"><img src="Images/1116-2.png" alt="Event 1116 details" style="width:600px; height:400px;"></div>
+        <div class="sub-section">
+          <h4>1116 – Malware Detected</h4>
+          <div class="figure"><img src="Images/1116.png" alt="Event 1116 malware detected"></div>
+          <div class="figure"><img src="Images/1116-2.png" alt="Event 1116 details" style="width:600px; height:400px;"></div>
+        </div>
 
-      <h3>1117</h3>
-      <div class="figure"><img src="Images/1117.png" alt="Event 1117 malware cleaned/quarantined"></div>
-      <div class="figure"><img src="Images/1117-2.png" alt="Event 1117 details" style="width:600px; height:400px;"></div>
+        <div class="sub-section">
+          <h4>1117 – Malware Cleaned/Quarantined</h4>
+          <div class="figure"><img src="Images/1117.png" alt="Event 1117 malware cleaned/quarantined"></div>
+          <div class="figure"><img src="Images/1117-2.png" alt="Event 1117 details" style="width:600px; height:400px;"></div>
+        </div>
 
-      <h3>4625 – Multiple Failed Login Attempts</h3>
-      <div class="figure"><img src="Images/MFailedLA.png" alt="Event 4625 multiple failed logons"></div>
-    </section>
+        <div class="sub-section">
+          <h4>4625 – Multiple Failed Login Attempts</h4>
+          <div class="figure"><img src="Images/MFailedLA.png" alt="Event 4625 multiple failed logons"></div>
+        </div>
+      </div>
 
-    <!-- Section 9 -->
-    <section class="card">
+      <!-- Section 9 -->
       <h2>9. Print Job Failures</h2>
-      <ul>
-        <li><strong class="event-id">307, 372</strong> – Print job failures or issues</li>
-        <li><strong class="event-id">7031</strong> – Spooler service errors</li>
-      </ul>
-      <p><strong>Log Location:</strong> Applications and Services Logs → Microsoft → Windows → PrintService → Operational</p>
+      <div class="step-section">
+        <ul>
+          <li><strong style="color:var(--brand);">307, 372</strong> – Print job failures or issues</li>
+          <li><strong style="color:var(--brand);">7031</strong> – Spooler service errors</li>
+        </ul>
+        <p><strong style="color:var(--brand);">Log Location:</strong> Applications and Services Logs → Microsoft → Windows → PrintService → Operational</p>
 
-      <h3>307</h3>
-      <div class="figure"><img src="Images/307.png" alt="Event 307 print job failure" style="width:900px; height:300px;"></div>
-      <div class="figure"><img src="Images/307-2.png" alt="Event 307 more details" style="width:600px; height:400px;"></div>
+        <div class="sub-section">
+          <h4>307 – Print Job Failure</h4>
+          <div class="figure"><img src="Images/307.png" alt="Event 307 print job failure" style="width:900px; height:300px;"></div>
+          <div class="figure"><img src="Images/307-2.png" alt="Event 307 more details" style="width:600px; height:400px;"></div>
+        </div>
 
-      <h3>7031 – Spooler Service Errors</h3>
-      <div class="figure"><img src="Images/7031.png" alt="Event 7031 spooler service error" style="width:900px; height:450px;"></div>
-      <div class="figure"><img src="Images/7031-2.png" alt="Event 7031 additional details" style="width:700px; height:450px;"></div>
-    </section>
+        <div class="sub-section">
+          <h4>7031 – Spooler Service Errors</h4>
+          <div class="figure"><img src="Images/7031.png" alt="Event 7031 spooler service error" style="width:900px; height:450px;"></div>
+          <div class="figure"><img src="Images/7031-2.png" alt="Event 7031 additional details" style="width:700px; height:450px;"></div>
+        </div>
+      </div>
 
-    <!-- Best Practices -->
-    <section class="card">
+      <!-- Best Practices -->
       <h2>Best Practices for Using Event Viewer</h2>
-      <ul>
-        <li>Filter logs by severity and time</li>
-        <li>Correlate events across multiple logs</li>
-        <li>Export logs for deeper analysis and documentation</li>
-      </ul>
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+      <div class="step-section">
+        <ul>
+          <li>Filter logs by severity and time</li>
+          <li>Correlate events across multiple logs</li>
+          <li>Export logs for deeper analysis and documentation</li>
+        </ul>
+      </div>
 
-    <!-- Footer (branding only) -->
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
@@ -320,64 +460,35 @@
     </footer>
   </div>
 
-  <!-- Zoom modal -->
-  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-label="Image viewer">
-    <div class="zoom-content" data-close>
-      <img class="zoom-img" id="zoomImg" alt="">
-      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
-    </div>
-  </div>
-
+  <!-- Lightbox -->
   <script>
     (function(){
-      const modal = document.getElementById('zoom');
-      const zoomImg = document.getElementById('zoomImg');
-      const closeBtn = modal.querySelector('.zoom-close');
-      let lastFocus = null;
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
 
-      // Make all images inside .figure zoomable (add .no-zoom to opt out)
-      document.querySelectorAll('.figure img:not(.no-zoom)').forEach(img=>{
-        img.classList.add('zoomable');
-      });
-
-      function openModal(src, alt){
-        lastFocus = document.activeElement;
-        zoomImg.src = src;
-        zoomImg.alt = alt || '';
-        modal.setAttribute('open','');
-        modal.setAttribute('aria-hidden','false');
-        document.body.classList.add('hide-scroll');
-        closeBtn.focus();
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
-      function closeModal(){
-        modal.removeAttribute('open');
-        modal.setAttribute('aria-hidden','true');
-        document.body.classList.remove('hide-scroll');
-        zoomImg.removeAttribute('src');
-        zoomImg.alt = '';
-        if(lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
       }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
 
-      // Open on image click
-      document.addEventListener('click', (e) => {
-        const img = e.target.closest('.figure img.zoomable');
-        if (img){
-          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
-          openModal(full, img.alt);
-        }
-      });
-
-      // Close interactions
-      closeBtn.addEventListener('click', closeModal);
-      modal.addEventListener('click', (e) => {
-        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
-      });
-      zoomImg.addEventListener('click', closeModal);
-      document.addEventListener('keydown', (e) => {
-        if (!modal.hasAttribute('open')) return;
-        if (e.key === 'Escape') closeModal();
-        // simple focus trap
-        if (e.key === 'Tab'){ e.preventDefault(); closeBtn.focus(); }
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        img.addEventListener('click', ()=>{
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
       });
     })();
   </script>
