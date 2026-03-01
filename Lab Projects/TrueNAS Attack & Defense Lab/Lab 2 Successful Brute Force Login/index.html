@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NAS Security Attack &amp; Defense Lab 2 · Mark Thompson Portfolio</title>
   <meta name="description" content="Lab 2: Successful SSH brute-force, log-based detection, immediate account mitigation, and hardening (keys-only SSH)." />
-
-  <!-- THEME -->
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -21,15 +19,29 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
-    .wrap.wide{max-width:1100px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -38,86 +50,161 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
-    h4{margin:14px 0 6px;font-size:16px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cards */
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
     }
 
-    /* Code blocks */
-    pre{
-      margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;
-      border-radius:12px;overflow:auto;color:#e8eaf6;
-      font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
-      box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
     }
-    code{
-      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
     }
 
-    /* Figures – intrinsic image size */
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:24px auto;
+      margin:16px auto;
       max-width:100%;
       text-align:center;
     }
     .figure img{
-      display:block;margin:0 auto;border-radius:10px;object-fit:contain;
-      width:auto; max-width:100%; height:auto;
-      cursor: zoom-in;
+      display:block;
+      margin:0 auto;
+      border-radius:10px;
+      object-fit:contain;
+      width:auto;
+      max-width:100%;
+      height:auto;
+      cursor:zoom-in;
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Side-by-side */
+    /* Side-by-side pair */
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
 
-    /* Zoom modal (no history changes) */
-    .zoom-modal{
-      position:fixed; inset:0; z-index:1000; display:none;
-      background:rgba(0,0,0,.85);
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
     }
-    .zoom-modal[open]{display:block}
-    .zoom-content{
-      position:absolute; inset:40px; display:grid; place-items:center; overflow:auto;
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
     }
-    .zoom-img{
-      max-width:95vw; max-height:95vh; width:auto; height:auto; border-radius:12px;
-      box-shadow:0 20px 60px rgba(0,0,0,.6);
-      cursor: zoom-out;
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
     }
-    .zoom-close{
-      position:absolute; top:14px; right:16px; width:40px; height:40px;
-      border-radius:999px; border:1px solid #3a4a67; background:#0e1220; color:var(--text);
-      display:grid; place-items:center; font-size:22px; line-height:1; cursor:pointer;
-    }
-    .zoom-close:hover{background:#121733}
-    .zoom-close:focus{outline:2px solid #4DA3FF; outline-offset:2px}
-    .hide-scroll{overflow:hidden}
 
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
-  <div class="wrap wide" id="pageRoot">
+  <div class="wrap">
+
     <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
@@ -137,182 +224,162 @@
     <!-- Header -->
     <header>
       <h1>Lab 2 — Successful Brute Force Login</h1>
-      <p class="lead">Attack: SSH credentials cracked via Metasploit’s <code>ssh_login</code>. Defense: detect the success in logs, reset/disable, and harden SSH to keys-only.</p>
+      <p class="lead">Attack: SSH credentials cracked via Metasploit's <code style="background:rgba(0,0,0,.3);border:1px solid var(--card-border);border-radius:4px;padding:1px 6px;font-size:15px;color:#a8d8ff;">ssh_login</code>. Defense: detect the success in logs, reset/disable, and harden SSH to keys-only.</p>
     </header>
 
-    <!-- Scenario -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Scenario -->
       <h2>Scenario</h2>
-      <p>Building on Lab&nbsp;1, SSH (port 22) is exposed on the NAS host. A weak user password allows a successful brute-force using Metasploit’s <code>auxiliary/scanner/ssh_login</code>. On defense, authentication logs reveal the success; the account is secured and SSH is hardened.</p>
-    </section>
+      <div class="step-section">
+        <p>Building on Lab 1, SSH (port 22) is exposed on the NAS host. A weak user password allows a successful brute-force using Metasploit's <code>auxiliary/scanner/ssh_login</code>. On defense, authentication logs reveal the success; the account is secured and SSH is hardened.</p>
+      </div>
 
-    <!-- Offensive -->
-    <section class="card">
+      <!-- Offensive -->
       <h2>Offensive</h2>
+      <div class="step-section">
 
-      <div class="pair">
-        <figure class="figure">
-          <img class="zoomable" src="Images/msf1.png" alt="Metasploit console prepared for SSH brute-force" loading="lazy" decoding="async">
-          <figcaption class="figcap">Preparing Metasploit for the SSH attack.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img class="zoomable" src="Images/ssh_login.png" alt="Metasploit auxiliary/scanner/ssh_login module options" loading="lazy" decoding="async">
-          <figcaption class="figcap">Using <code>auxiliary/scanner/ssh_login</code>.</figcaption>
-        </figure>
+        <div class="sub-section">
+          <h4>Configuring Metasploit <code>ssh_login</code></h4>
+          <div class="pair">
+            <figure class="figure">
+              <img src="Images/msf1.png" alt="Metasploit console prepared for SSH brute-force" loading="lazy" decoding="async">
+              <figcaption class="figcap">Preparing Metasploit for the SSH attack.</figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="Images/ssh_login.png" alt="Metasploit auxiliary/scanner/ssh_login module options" loading="lazy" decoding="async">
+              <figcaption class="figcap">Using <code>auxiliary/scanner/ssh_login</code>.</figcaption>
+            </figure>
+          </div>
+          <figure class="figure">
+            <img src="Images/BruteForceSuccess.png" alt="Successful SSH login via brute-force" loading="lazy" decoding="async">
+            <figcaption class="figcap">Credentials found — shell access obtained.</figcaption>
+          </figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Upgrading to Meterpreter</h4>
+          <p>With a BSD shell obtained, upgrade to Meterpreter using the post module <code>post/multi/manage/shell_to_meterpreter</code>.</p>
+          <div class="pair">
+            <figure class="figure">
+              <img src="Images/Meterpreter%20Session%20Upgrade.png" alt="Upgrading shell to Meterpreter session" loading="lazy" decoding="async">
+              <figcaption class="figcap">Upgrading shell to Meterpreter.</figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="Images/In%20The%20System.png" alt="Interactive Meterpreter session on the target" loading="lazy" decoding="async">
+              <figcaption class="figcap">Interactive Meterpreter session.</figcaption>
+            </figure>
+          </div>
+          <figure class="figure">
+            <img src="Images/getuid%20sysinfo.png" alt="getuid and sysinfo confirming user and system details" loading="lazy" decoding="async">
+            <figcaption class="figcap"><code>getuid</code> / <code>sysinfo</code> confirm context.</figcaption>
+          </figure>
+        </div>
+
       </div>
 
-      <figure class="figure">
-        <img class="zoomable" src="Images/BruteForceSuccess.png" alt="Successful SSH login via brute-force" loading="lazy" decoding="async">
-        <figcaption class="figcap">Credentials found — shell access obtained.</figcaption>
-      </figure>
-
-      <p>With a BSD shell obtained, upgrade to Meterpreter using the post module <code>post/multi/manage/shell_to_meterpreter</code>.</p>
-
-      <div class="pair">
-        <figure class="figure">
-          <img class="zoomable" src="Images/Meterpreter%20Session%20Upgrade.png" alt="Upgrading shell to Meterpreter session" loading="lazy" decoding="async">
-          <figcaption class="figcap">Upgrading shell to Meterpreter.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img class="zoomable" src="Images/In%20The%20System.png" alt="Interactive Meterpreter session on the target" loading="lazy" decoding="async">
-          <figcaption class="figcap">Interactive Meterpreter session.</figcaption>
-        </figure>
-      </div>
-
-      <figure class="figure">
-        <img class="zoomable" src="Images/getuid%20sysinfo.png" alt="getuid and sysinfo confirming user and system details" loading="lazy" decoding="async">
-        <figcaption class="figcap"><code>getuid</code> / <code>sysinfo</code> confirm context.</figcaption>
-      </figure>
-    </section>
-
-    <!-- Defensive -->
-    <section class="card">
+      <!-- Defensive -->
       <h2>Defensive</h2>
+      <div class="step-section">
 
-      <h3>Detect the Successful Login</h3>
-      <p>Review <code>/var/log/auth.log</code> (or platform equivalent). Look for a sequence of failures followed by a success.</p>
-      <div class="pair">
-        <figure class="figure">
-          <img class="zoomable" src="Images/LogSearch.png" alt="Log view showing failed attempts leading up to success" loading="lazy" decoding="async">
-          <figcaption class="figcap">Failed attempts chained together.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img class="zoomable" src="Images/LogSearch2.png" alt="Log view highlighting the successful SSH login event" loading="lazy" decoding="async">
-          <figcaption class="figcap">Success event identified in logs.</figcaption>
-        </figure>
+        <div class="sub-section">
+          <h4>Detect the Successful Login</h4>
+          <p>Review <code>/var/log/auth.log</code> (or platform equivalent). Look for a sequence of failures followed by a success.</p>
+          <div class="pair">
+            <figure class="figure">
+              <img src="Images/LogSearch.png" alt="Log view showing failed attempts leading up to success" loading="lazy" decoding="async">
+              <figcaption class="figcap">Failed attempts chained together.</figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="Images/LogSearch2.png" alt="Log view highlighting the successful SSH login event" loading="lazy" decoding="async">
+              <figcaption class="figcap">Success event identified in logs.</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Immediate Account Actions</h4>
+          <p>Reset the compromised password and temporarily disable interactive SSH access for the account while IR proceeds.</p>
+          <div class="pair">
+            <figure class="figure">
+              <img src="Images/ResetPassword.png" alt="Resetting the user password on the NAS host" loading="lazy" decoding="async">
+              <figcaption class="figcap">Password reset.</figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="Images/Disable.png" alt="Disabling the user account or restricting login" loading="lazy" decoding="async">
+              <figcaption class="figcap">Disable or restrict account logins.</figcaption>
+            </figure>
+          </div>
+        </div>
+
       </div>
 
-      <h3>Immediate Account Actions</h3>
-      <p>Reset the compromised password and temporarily disable interactive SSH access for the account while IR proceeds.</p>
-      <div class="pair">
-        <figure class="figure">
-          <img class="zoomable" src="Images/ResetPassword.png" alt="Resetting the user password on the NAS host" loading="lazy" decoding="async">
-          <figcaption class="figcap">Password reset.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img class="zoomable" src="Images/Disable.png" alt="Disabling the user account or restricting login" loading="lazy" decoding="async">
-          <figcaption class="figcap">Disable or restrict account logins.</figcaption>
-        </figure>
-      </div>
-    </section>
-
-    <!-- Hardening -->
-    <section class="card">
+      <!-- Hardening -->
       <h2>Hardening SSH</h2>
-      <h3>Disable Password-Based Logins</h3>
-      <p>Move to key-based authentication and disable password auth for SSH to prevent brute-force success.</p>
-      <div class="pair">
-        <figure class="figure">
-          <img class="zoomable" src="Images/Password%20Renable.png" alt="Server configuration snippet related to SSH password settings" loading="lazy" decoding="async">
-          <figcaption class="figcap">Disable password logins; use keys only.</figcaption>
-        </figure>
-        <figure class="figure">
-          <img class="zoomable" src="Images/SSH%20Server%20Settings%202.png" alt="SSH server settings showing keys-only configuration" loading="lazy" decoding="async">
-          <figcaption class="figcap">Confirm SSH server settings.</figcaption>
-        </figure>
-      </div>
-      <p>Additional options: rate-limit via firewall, fail2ban-style lockouts, and limiting SSH to trusted management networks.</p>
-    </section>
+      <div class="step-section">
 
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to NAS Security Attack &amp; Defense Lab</a></p>
-    </section>
+        <div class="sub-section">
+          <h4>Disable Password-Based Logins</h4>
+          <p>Move to key-based authentication and disable password auth for SSH to prevent brute-force success.</p>
+          <div class="pair">
+            <figure class="figure">
+              <img src="Images/Password%20Renable.png" alt="Server configuration snippet related to SSH password settings" loading="lazy" decoding="async">
+              <figcaption class="figcap">Disable password logins; use keys only.</figcaption>
+            </figure>
+            <figure class="figure">
+              <img src="Images/SSH%20Server%20Settings%202.png" alt="SSH server settings showing keys-only configuration" loading="lazy" decoding="async">
+              <figcaption class="figcap">Confirm SSH server settings.</figcaption>
+            </figure>
+          </div>
+          <p>Additional options: rate-limit via firewall, fail2ban-style lockouts, and limiting SSH to trusted management networks.</p>
+        </div>
+
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to NAS Security Attack &amp; Defense Lab</a>
 
     <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
         <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-        <a href="https://github.com/mark-thompson-01" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
   </div>
 
-  <!-- Zoom modal (built once, reused) -->
-  <div class="zoom-modal" id="zoom" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image viewer">
-    <div class="zoom-content" data-close>
-      <img class="zoom-img" id="zoomImg" alt="">
-      <button class="zoom-close" type="button" aria-label="Close" title="Close">&times;</button>
-    </div>
-  </div>
-
+  <!-- Lightbox -->
   <script>
     (function(){
-      const root = document.getElementById('pageRoot');
-      const modal = document.getElementById('zoom');
-      const zoomImg = document.getElementById('zoomImg');
-      const closeBtn = modal.querySelector('.zoom-close');
-      let lastFocus = null;
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
 
-      // Auto-enable zoom on all figure images (opt-out: add class="no-zoom")
-      document.querySelectorAll('.figure img:not(.no-zoom)').forEach(img=>{
-        img.classList.add('zoomable');
-      });
-
-      function openModal(src, alt){
-        lastFocus = document.activeElement;
-        zoomImg.src = src;
-        zoomImg.alt = alt || '';
-        modal.setAttribute('open','');
-        modal.setAttribute('aria-hidden','false');
-        document.body.classList.add('hide-scroll');
-        root.setAttribute('aria-hidden','true');
-        closeBtn.focus();
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
       }
-
-      function closeModal(){
-        modal.removeAttribute('open');
-        modal.setAttribute('aria-hidden','true');
-        document.body.classList.remove('hide-scroll');
-        root.removeAttribute('aria-hidden');
-        zoomImg.removeAttribute('src');
-        zoomImg.alt = '';
-        if (lastFocus && typeof lastFocus.focus === 'function') lastFocus.focus();
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
       }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
 
-      // Click any zoomable image
-      document.addEventListener('click', (e) => {
-        const img = e.target.closest('.figure img.zoomable');
-        if (img){
-          const full = img.getAttribute('data-full') || img.currentSrc || img.src;
-          openModal(full, img.alt);
-        }
-      });
-
-      // Close interactions
-      closeBtn.addEventListener('click', closeModal);
-      modal.addEventListener('click', (e) => {
-        if (e.target.hasAttribute('data-close') || e.target === modal) closeModal();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (!modal.hasAttribute('open')) return;
-        if (e.key === 'Escape') closeModal();
-        // Trap Tab within the close button (simple, since modal has one focusable control)
-        if (e.key === 'Tab'){
-          e.preventDefault();
-          closeBtn.focus();
-        }
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        img.addEventListener('click', ()=>{
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
       });
     })();
   </script>
