@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Installing Ubuntu on Oracle VirtualBox · Mark Thompson Portfolio</title>
-  <meta name="description" content="Step‑by‑step guide to installing Ubuntu 24.04 LTS in Oracle VirtualBox: download ISO, create VM, allocate resources, boot ISO, complete installer, and post‑install updates. Includes scroll‑friendly galleries." />
+  <meta name="description" content="Step-by-step guide to installing Ubuntu 24.04 LTS in Oracle VirtualBox: download ISO, create VM, allocate resources, boot ISO, complete installer, and post-install updates." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -14,18 +14,34 @@
     html,body{height:100%}
     body{
       margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -34,29 +50,117 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
-
-    /* Cards */
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:16px}
-
-    /* Figures */
-    .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;max-width:100%}
-    .figure img{display:block;height:auto;max-width:100%;cursor:zoom-in}
-    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
     /* Code */
-    pre{margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;border-radius:12px;overflow:auto;color:#e8eaf6;font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
-    code{background:#0f1424;border:1px solid #202a3f;border-radius:6px;padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
+    pre{
+      margin:12px 0;
+      padding:14px 16px;
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      overflow-x:auto;
+      color:#a8d8ff;
+      font:500 14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+    code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+    pre code{background:none;border:none;padding:0;font-size:inherit;color:inherit}
 
-    /* ===== Scroll‑friendly galleries ===== */
-    .gallery-wrap{position:relative;margin-top:10px}
-    .gallery{display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul, .step-section ol{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section li{margin:6px 0}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ol, .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section li{margin:6px 0}
+
+    /* Galleries */
+    .gallery-wrap{position:relative;margin-top:16px}
+    .gallery{
+      display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
+      align-items:stretch;overflow-x:auto;overflow-y:hidden;
+      padding:8px 6px 12px;scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+    }
     .gallery .item{scroll-snap-align:start}
     .gallery .item .figure{height:100%}
     .gallery::-webkit-scrollbar{height:10px}
@@ -66,12 +170,26 @@
     .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
     @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
     @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
-    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
+
+    .gbtn{
+      position:absolute;top:50%;translate:0 -50%;z-index:2;
+      border:1px solid var(--card-border);background:#0e1220;color:var(--text);
+      box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;
+      display:grid;place-items:center;cursor:pointer;user-select:none;
+    }
     .gbtn:hover{background:#121733}
     .gprev{left:-6px}
     .gnext{right:-6px}
 
-    /* ===== Lightbox (zoom) ===== */
+    /* Figures */
+    .figure{
+      border:1px solid var(--card-border);border-radius:12px;
+      background:#0e1220;padding:8px;margin:12px auto;max-width:100%;position:relative;
+    }
+    .figure img{display:block;height:auto;max-width:100%;cursor:zoom-in;border-radius:8px}
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px;padding:0 4px 2px}
+
+    /* Lightbox */
     .lightbox{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.86);z-index:9999}
     .lightbox.open{display:grid}
     .lb-stage{position:relative;max-width:96vw;max-height:92vh}
@@ -79,15 +197,20 @@
     .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
     .lb-btn{position:absolute;top:10px;padding:6px 10px;border-radius:10px;border:1px solid #2A3447;background:#0e1220;color:var(--text);cursor:pointer;user-select:none}
     .lb-close{right:10px}
-    .lb-prev,.lb-next{top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;border-radius:999px;font-size:20px;line-height:1;border:1px solid #2A3447;background:#0e1220}
+    .lb-prev,.lb-next{top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;border-radius:999px;font-size:20px;line-height:1}
     .lb-prev{left:-58px}
     .lb-next{right:-58px}
     @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
 
+    /* Back link */
+    .back-link{display:inline-block;margin-top:24px;color:var(--brand);text-decoration:none;font-size:15px}
+    .back-link:hover{text-decoration:underline}
+
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{margin-top:48px;padding-top:24px;padding-bottom:2px;border-top:1px solid #232a3a;color:var(--muted);font-size:0.9rem}
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -110,11 +233,7 @@
     <!-- Header -->
     <header>
       <h1>Installing Ubuntu on Oracle VirtualBox</h1>
-       <p style="margin-top:22px">
-      <a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" style="color:var(--brand);font-weight:600">
-        View this project on GitHub
-      </a>
-    </p>
+      <p style="margin-top:16px"><a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" rel="noopener" style="color:var(--brand);font-weight:600">View this project on GitHub</a></p>
       <p class="lead">Download the Ubuntu 24.04 LTS ISO, create a VM in VirtualBox, allocate resources, boot the ISO, run through the installer, and finish with updates.</p>
       <p>
         <a href="https://ubuntu.com/download/desktop" target="_blank" rel="noopener">Ubuntu Desktop ISO</a>
@@ -123,128 +242,138 @@
       </p>
     </header>
 
-    <!-- Prep -->
-    <section class="card">
-      <h2>Prerequisites & Recommendations</h2>
-      <ul>
-        <li>Enable virtualization in BIOS/UEFI (Intel VT‑x or AMD‑V).</li>
-        <li>Suggested VM resources: <b>2+ vCPU</b>, <b>8–12 GB RAM</b>, <b>40+ GB disk</b> for testing; you used <b>~9.2 GB RAM</b>, <b>2 CPUs</b>, and <b>200 GB disk</b> in this walkthrough.</li>
-        <li>Keep the ISO and a checksum handy; verify if needed.</li>
-      </ul>
-    </section>
+    <!-- Main content -->
+    <main class="content">
 
-    <!-- Create VM -->
-    <section class="card">
+      <!-- Prerequisites -->
+      <h2>Prerequisites &amp; Recommendations</h2>
+      <div class="step-section">
+        <ul>
+          <li>Enable virtualization in BIOS/UEFI (<strong style="color:var(--brand);">Intel VT-x</strong> or <strong style="color:var(--brand);">AMD-V</strong>).</li>
+          <li>Suggested VM resources: <strong style="color:var(--brand);">2+ vCPU</strong>, <strong style="color:var(--brand);">8–12 GB RAM</strong>, <strong style="color:var(--brand);">40+ GB disk</strong> for testing; this walkthrough uses ~9.2 GB RAM, 2 CPUs, and 200 GB disk.</li>
+          <li>Keep the ISO and a checksum handy; verify if needed.</li>
+        </ul>
+      </div>
+
+      <!-- Create VM -->
       <h2>Create a Virtual Machine</h2>
-      <ol>
-        <li>Open <b>Oracle VirtualBox</b> → click <b>New</b> and name it <b>Ubuntu</b>.</li>
-        <li>Allocate resources (RAM/CPU) and create a virtual disk.</li>
-        <li>Attach the Ubuntu ISO as the optical drive and set to boot.</li>
-      </ol>
-
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-create" class="gallery hide-scrollbar" role="region" aria-label="Create VM screenshots">
-          <article class="item"><figure class="figure"><img src="Images/ubuntu1.png" alt="New VM wizard" loading="lazy" decoding="async" /><figcaption class="figcap">1) New VM wizard.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu2.png" alt="Allocating memory and CPUs" loading="lazy" decoding="async" /><figcaption class="figcap">2) RAM & CPU allocation.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu3.png" alt="Create virtual hard disk" loading="lazy" decoding="async" /><figcaption class="figcap">3) Create virtual hard disk (e.g., 200 GB).</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu4.png" alt="Configuration summary" loading="lazy" decoding="async" /><figcaption class="figcap">4) Review configuration summary.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu5.png" alt="Attach ISO to optical drive" loading="lazy" decoding="async" /><figcaption class="figcap">5) Attach the ISO and set to boot.</figcaption></figure></article>
+      <div class="step-section">
+        <ol>
+          <li>Open <strong style="color:var(--brand);">Oracle VirtualBox</strong> → click <strong style="color:var(--brand);">New</strong> and name it <strong style="color:var(--brand);">Ubuntu</strong>.</li>
+          <li>Allocate resources (RAM/CPU) and create a virtual disk.</li>
+          <li>Attach the Ubuntu ISO as the optical drive and set to boot.</li>
+        </ol>
+        <div class="gallery-wrap">
+          <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+          <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+          <div class="gallery hide-scrollbar" role="region" aria-label="Create VM screenshots">
+            <article class="item"><figure class="figure"><img src="Images/ubuntu1.png" alt="New VM wizard" loading="lazy" decoding="async"><div class="figcap">1) New VM wizard.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu2.png" alt="Allocating memory and CPUs" loading="lazy" decoding="async"><div class="figcap">2) RAM &amp; CPU allocation.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu3.png" alt="Create virtual hard disk" loading="lazy" decoding="async"><div class="figcap">3) Create virtual hard disk (e.g., 200 GB).</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu4.png" alt="Configuration summary" loading="lazy" decoding="async"><div class="figcap">4) Review configuration summary.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu5.png" alt="Attach ISO to optical drive" loading="lazy" decoding="async"><div class="figcap">5) Attach the ISO and set to boot.</div></figure></article>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- Boot ISO -->
-    <section class="card">
+      <!-- Boot ISO -->
       <h2>Boot the ISO</h2>
-      <p>Power on the VM. From the GRUB menu, choose <b>Try or Install Ubuntu</b> and follow the prompts.</p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-boot" class="gallery hide-scrollbar" role="region" aria-label="Booting ISO screenshots">
-          <article class="item"><figure class="figure"><img src="Images/ubuntu6.png" alt="GRUB menu Try or Install Ubuntu" loading="lazy" decoding="async" /><figcaption class="figcap">GRUB: Try or Install Ubuntu.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu7.5.png" alt="Preparing Ubuntu" loading="lazy" decoding="async" /><figcaption class="figcap">Preparing Ubuntu.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu7.png" alt="Ubuntu 24.04 splash" loading="lazy" decoding="async" /><figcaption class="figcap">24.04 splash screen.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu8.png" alt="Choose language" loading="lazy" decoding="async" /><figcaption class="figcap">Choose language.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu9.png" alt="Select keyboard layout" loading="lazy" decoding="async" /><figcaption class="figcap">Keyboard layout.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu10.png" alt="Internet connectivity" loading="lazy" decoding="async" /><figcaption class="figcap">Connectivity.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu11.png" alt="Updates available" loading="lazy" decoding="async" /><figcaption class="figcap">Updates available.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu12.png" alt="Update ready close installer" loading="lazy" decoding="async" /><figcaption class="figcap">Update ready.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu13.png" alt="Ubuntu desktop" loading="lazy" decoding="async" /><figcaption class="figcap">Live desktop.</figcaption></figure></article>
+      <div class="step-section">
+        <p>Power on the VM. From the GRUB menu, choose <strong style="color:var(--brand);">Try or Install Ubuntu</strong> and follow the prompts.</p>
+        <div class="gallery-wrap">
+          <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+          <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+          <div class="gallery hide-scrollbar" role="region" aria-label="Booting ISO screenshots">
+            <article class="item"><figure class="figure"><img src="Images/ubuntu6.png" alt="GRUB menu Try or Install Ubuntu" loading="lazy" decoding="async"><div class="figcap">GRUB: Try or Install Ubuntu.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu7.5.png" alt="Preparing Ubuntu" loading="lazy" decoding="async"><div class="figcap">Preparing Ubuntu.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu7.png" alt="Ubuntu 24.04 splash" loading="lazy" decoding="async"><div class="figcap">24.04 splash screen.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu8.png" alt="Choose language" loading="lazy" decoding="async"><div class="figcap">Choose language.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu9.png" alt="Select keyboard layout" loading="lazy" decoding="async"><div class="figcap">Keyboard layout.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu10.png" alt="Internet connectivity" loading="lazy" decoding="async"><div class="figcap">Connectivity.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu11.png" alt="Updates available" loading="lazy" decoding="async"><div class="figcap">Updates available.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu12.png" alt="Update ready close installer" loading="lazy" decoding="async"><div class="figcap">Update ready.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu13.png" alt="Ubuntu desktop" loading="lazy" decoding="async"><div class="figcap">Live desktop.</div></figure></article>
+          </div>
         </div>
       </div>
-    </section>
 
-    <!-- Install Ubuntu -->
-    <section class="card">
+      <!-- Install Ubuntu -->
       <h2>Install Ubuntu 24.04 LTS</h2>
-      <ol>
-        <li>On the desktop, click <b>Install Ubuntu 24.04.x LTS</b>.</li>
-        <li>Choose language & keyboard, select install type and applications.</li>
-        <li>Optionally enable third‑party/proprietary drivers and media codecs.</li>
-        <li>Partition the disk (guided is fine for a fresh VM) and confirm.</li>
-        <li>Create your user, set timezone, and start installation.</li>
-      </ol>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-install" class="gallery hide-scrollbar" role="region" aria-label="Installation screenshots">
-          <article class="item"><figure class="figure"><img src="Images/ubuntu15.png" alt="Install icon on desktop" loading="lazy" decoding="async" /><figcaption class="figcap">1) Start installer.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu16.png" alt="Choose language" loading="lazy" decoding="async" /><figcaption class="figcap">2) Language.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu17.png" alt="Installation type" loading="lazy" decoding="async" /><figcaption class="figcap">3) Install type.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu18.png" alt="Applications default or extended" loading="lazy" decoding="async" /><figcaption class="figcap">4) Apps: Extended.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu19.png" alt="Third party software and codecs" loading="lazy" decoding="async" /><figcaption class="figcap">5) Third‑party & codecs.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu20.png" alt="Disk setup" loading="lazy" decoding="async" /><figcaption class="figcap">6) Disk setup.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu21.png" alt="Create your account" loading="lazy" decoding="async" /><figcaption class="figcap">7) User account.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu22.png" alt="Select timezone" loading="lazy" decoding="async" /><figcaption class="figcap">8) Timezone.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu23.png" alt="Ready to install summary" loading="lazy" decoding="async" /><figcaption class="figcap">9) Confirm & install.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu24.png" alt="Copying files" loading="lazy" decoding="async" /><figcaption class="figcap">10) Copying files.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu25.png" alt="Installing system" loading="lazy" decoding="async" /><figcaption class="figcap">11) Installing system.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu28.png" alt="Setting up system" loading="lazy" decoding="async" /><figcaption class="figcap">12) Setting up.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu29.png" alt="Installation complete restart" loading="lazy" decoding="async" /><figcaption class="figcap">13) Complete: Restart.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu30.png" alt="Restarting system" loading="lazy" decoding="async" /><figcaption class="figcap">Restarting…</figcaption></figure></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Post install -->
-    <section class="card">
-      <h2>Post‑Installation</h2>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-post" class="gallery hide-scrollbar" role="region" aria-label="Post install screenshots">
-          <article class="item"><figure class="figure"><img src="Images/ubuntu31.png" alt="System restart after install" loading="lazy" decoding="async" /><figcaption class="figcap">Restart after install.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu32.png" alt="Login screen" loading="lazy" decoding="async" /><figcaption class="figcap">Login screen.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu33.png" alt="Welcome prompt after login" loading="lazy" decoding="async" /><figcaption class="figcap">Welcome prompt.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu34.png" alt="Ubuntu desktop environment" loading="lazy" decoding="async" /><figcaption class="figcap">Desktop environment.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu35.png" alt="Terminal demo" loading="lazy" decoding="async" /><figcaption class="figcap">Terminal.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu36.png" alt="Check for updates" loading="lazy" decoding="async" /><figcaption class="figcap">Check for updates.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ubuntu37.png" alt="Run available upgrades" loading="lazy" decoding="async" /><figcaption class="figcap">Run upgrades.</figcaption></figure></article>
+      <div class="step-section">
+        <ol>
+          <li>On the desktop, click <strong style="color:var(--brand);">Install Ubuntu 24.04.x LTS</strong>.</li>
+          <li>Choose language &amp; keyboard, select install type and applications.</li>
+          <li>Optionally enable third-party/proprietary drivers and media codecs.</li>
+          <li>Partition the disk (guided is fine for a fresh VM) and confirm.</li>
+          <li>Create your user, set timezone, and start installation.</li>
+        </ol>
+        <div class="gallery-wrap">
+          <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+          <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+          <div class="gallery hide-scrollbar" role="region" aria-label="Installation screenshots">
+            <article class="item"><figure class="figure"><img src="Images/ubuntu15.png" alt="Install icon on desktop" loading="lazy" decoding="async"><div class="figcap">1) Start installer.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu16.png" alt="Choose language" loading="lazy" decoding="async"><div class="figcap">2) Language.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu17.png" alt="Installation type" loading="lazy" decoding="async"><div class="figcap">3) Install type.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu18.png" alt="Applications default or extended" loading="lazy" decoding="async"><div class="figcap">4) Apps: Extended.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu19.png" alt="Third party software and codecs" loading="lazy" decoding="async"><div class="figcap">5) Third-party &amp; codecs.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu20.png" alt="Disk setup" loading="lazy" decoding="async"><div class="figcap">6) Disk setup.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu21.png" alt="Create your account" loading="lazy" decoding="async"><div class="figcap">7) User account.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu22.png" alt="Select timezone" loading="lazy" decoding="async"><div class="figcap">8) Timezone.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu23.png" alt="Ready to install summary" loading="lazy" decoding="async"><div class="figcap">9) Confirm &amp; install.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu24.png" alt="Copying files" loading="lazy" decoding="async"><div class="figcap">10) Copying files.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu25.png" alt="Installing system" loading="lazy" decoding="async"><div class="figcap">11) Installing system.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu28.png" alt="Setting up system" loading="lazy" decoding="async"><div class="figcap">12) Setting up.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu29.png" alt="Installation complete restart" loading="lazy" decoding="async"><div class="figcap">13) Complete: Restart.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu30.png" alt="Restarting system" loading="lazy" decoding="async"><div class="figcap">Restarting…</div></figure></article>
+          </div>
         </div>
       </div>
 
-      <h3>Update the system</h3>
-      <pre><code>sudo apt update
+      <!-- Post-Install -->
+      <h2>Post-Installation</h2>
+      <div class="step-section">
+        <div class="gallery-wrap">
+          <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+          <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+          <div class="gallery hide-scrollbar" role="region" aria-label="Post install screenshots">
+            <article class="item"><figure class="figure"><img src="Images/ubuntu31.png" alt="System restart after install" loading="lazy" decoding="async"><div class="figcap">Restart after install.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu32.png" alt="Login screen" loading="lazy" decoding="async"><div class="figcap">Login screen.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu33.png" alt="Welcome prompt after login" loading="lazy" decoding="async"><div class="figcap">Welcome prompt.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu34.png" alt="Ubuntu desktop environment" loading="lazy" decoding="async"><div class="figcap">Desktop environment.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu35.png" alt="Terminal demo" loading="lazy" decoding="async"><div class="figcap">Terminal.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu36.png" alt="Check for updates" loading="lazy" decoding="async"><div class="figcap">Check for updates.</div></figure></article>
+            <article class="item"><figure class="figure"><img src="Images/ubuntu37.png" alt="Run available upgrades" loading="lazy" decoding="async"><div class="figcap">Run upgrades.</div></figure></article>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>Update the System</h4>
+<pre><code>sudo apt update
 sudo apt upgrade -y</code></pre>
+        </div>
 
-      <h3>Optional: Install Guest Additions (better display, clipboard)</h3>
-      <ol>
-        <li>From the VM window menu: <b>Devices → Insert Guest Additions CD image…</b></li>
-        <li>In the guest OS, run:</li>
-      </ol>
-      <pre><code>sudo apt install -y build-essential dkms linux-headers-$(uname -r)
+        <div class="sub-section">
+          <h4>Optional: Install Guest Additions (Better Display &amp; Clipboard)</h4>
+          <ol>
+            <li>From the VM window menu: <strong style="color:var(--brand);">Devices → Insert Guest Additions CD image…</strong></li>
+            <li>In the guest OS, run:</li>
+          </ol>
+<pre><code>sudo apt install -y build-essential dkms linux-headers-$(uname -r)
 sudo mount /dev/cdrom /mnt
 sudo /mnt/VBoxLinuxAdditions.run
 sudo reboot</code></pre>
-    </section>
+        </div>
+      </div>
 
-    <!-- Wrap -->
-    <section class="card">
-      <p>This walkthrough covered downloading the Ubuntu ISO, creating and configuring a VirtualBox VM, booting the installer, completing setup, and applying post‑install updates. You can reuse the gallery pattern above on other pages—just change the container id and image paths.</p>
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+      <!-- Summary -->
+      <h2>Summary</h2>
+      <div class="step-section">
+        <p>This walkthrough covered downloading the Ubuntu ISO, creating and configuring a VirtualBox VM, booting the installer, completing setup, and applying post-install updates.</p>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -254,35 +383,30 @@ sudo reboot</code></pre>
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 
-  <!-- Minimal JS for all galleries on this page -->
+  <!-- Gallery arrows + wheel scroll -->
   <script>
-    (function(){
-      // Attach controls for each gallery‑wrap block
-      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
-        const scroller = wrap.querySelector('.gallery');
-        if(!scroller) return;
-        const left = wrap.querySelector('.gprev');
-        const right = wrap.querySelector('.gnext');
-        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
-        if(left) left.addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
-        if(right) right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
-        scroller.addEventListener('wheel', (e) => {
-          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
-            e.preventDefault();
-            scroller.scrollLeft += e.deltaY; // vertical wheel → horizontal scroll
-          }
-        }, {passive:false});
-      });
-    })();
+    document.querySelectorAll('.gallery-wrap').forEach(wrap => {
+      const scroller = wrap.querySelector('.gallery');
+      if (!scroller) return;
+      const prev = wrap.querySelector('.gprev');
+      const next = wrap.querySelector('.gnext');
+      const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
+      if (prev) prev.addEventListener('click', () => scroller.scrollBy({ left: -step(), behavior: 'smooth' }));
+      if (next) next.addEventListener('click', () => scroller.scrollBy({ left: step(), behavior: 'smooth' }));
+      scroller.addEventListener('wheel', e => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          e.preventDefault();
+          scroller.scrollLeft += e.deltaY;
+        }
+      }, { passive: false });
+    });
   </script>
 
-  <!-- Lightbox / zoom for ALL images (single figures + galleries) -->
+  <!-- Lightbox — per-gallery grouping -->
   <script>
     (function(){
-      // Create lightbox elements
       const lb = document.createElement('div');
       lb.className = 'lightbox';
       lb.innerHTML = `
@@ -295,76 +419,50 @@ sudo reboot</code></pre>
         </div>`;
       document.body.appendChild(lb);
 
-      const imgEl = lb.querySelector('.lb-img');
-      const capEl = lb.querySelector('.lb-cap');
+      const imgEl   = lb.querySelector('.lb-img');
+      const capEl   = lb.querySelector('.lb-cap');
       const btnClose = lb.querySelector('.lb-close');
       const btnPrev  = lb.querySelector('.lb-prev');
       const btnNext  = lb.querySelector('.lb-next');
 
-      // Collect and group images
-      const groups = new Map(); // gid -> [imgElements]
-      let current = { gid:null, idx:0 };
-      let gidCounter = 0;
+      const groups = new Map();
+      let cur = { gid: null, idx: 0 };
+      let gidCtr = 0;
 
-      // 1) Group images inside each gallery-wrap together
-      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
+      document.querySelectorAll('.gallery-wrap').forEach(wrap => {
         const imgs = Array.from(wrap.querySelectorAll('.gallery img'));
-        if(!imgs.length) return;
-        const gid = 'g' + (++gidCounter);
+        if (!imgs.length) return;
+        const gid = 'g' + (++gidCtr);
         groups.set(gid, imgs);
-        imgs.forEach((img, i)=>{
-          img.dataset.gid = gid;
-          img.dataset.gindex = i;
-          img.style.cursor = 'zoom-in';
-          img.addEventListener('click', (e)=>{ e.preventDefault(); open(gid, i); });
+        imgs.forEach((img, i) => {
+          img.dataset.gid = gid; img.dataset.gindex = i;
+          img.addEventListener('click', e => { e.preventDefault(); open(gid, i); });
         });
       });
 
-      // 2) Any remaining standalone images (e.g., in .figure but not a gallery)
-      document.querySelectorAll('.figure img').forEach((img)=>{
-        if(img.dataset.gid) return; // already grouped
-        const gid = 'g' + (++gidCounter);
-        groups.set(gid, [img]);
-        img.dataset.gid = gid; img.dataset.gindex = 0;
-        img.style.cursor = 'zoom-in';
-        img.addEventListener('click', (e)=>{ e.preventDefault(); open(gid, 0); });
-      });
-
-      function open(gid, idx){
-        if(!groups.has(gid)) return;
-        current.gid = gid; current.idx = idx;
-        update();
-        lb.classList.add('open');
-        document.body.style.overflow = 'hidden';
-        btnClose.focus();
-      }
-      function close(){
-        lb.classList.remove('open');
-        document.body.style.overflow = '';
-      }
+      function open(gid, idx){ cur.gid = gid; cur.idx = idx; update(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
       function update(){
-        const list = groups.get(current.gid) || [];
-        const el = list[current.idx];
-        if(!el) return;
+        const list = groups.get(cur.gid) || [];
+        const el = list[cur.idx]; if (!el) return;
         imgEl.src = el.currentSrc || el.src;
         imgEl.alt = el.alt || '';
         capEl.textContent = el.alt || '';
         const multi = list.length > 1;
         btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
-      function prev(){ const list = groups.get(current.gid)||[]; if(!list.length) return; current.idx = (current.idx-1+list.length)%list.length; update(); }
-      function next(){ const list = groups.get(current.gid)||[]; if(!list.length) return; current.idx = (current.idx+1)%list.length; update(); }
+      function prev(){ const list = groups.get(cur.gid)||[]; cur.idx = (cur.idx - 1 + list.length) % list.length; update(); }
+      function next(){ const list = groups.get(cur.gid)||[]; cur.idx = (cur.idx + 1) % list.length; update(); }
 
-      // Controls
       btnClose.addEventListener('click', close);
-      btnPrev .addEventListener('click', prev);
-      btnNext .addEventListener('click', next);
-      lb.addEventListener('click', (e)=>{ if(e.target === lb) close(); });
-      document.addEventListener('keydown', (e)=>{
-        if(!lb.classList.contains('open')) return;
-        if(e.key === 'Escape') close();
-        else if(e.key === 'ArrowLeft') prev();
-        else if(e.key === 'ArrowRight') next();
+      btnPrev .addEventListener('click', e => { e.stopPropagation(); prev(); });
+      btnNext .addEventListener('click', e => { e.stopPropagation(); next(); });
+      lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') prev();
+        else if (e.key === 'ArrowRight') next();
       });
     })();
   </script>
