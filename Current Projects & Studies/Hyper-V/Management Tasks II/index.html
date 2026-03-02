@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hyper-V Administration Tasks II · Mark Thompson Portfolio</title>
+  <title>Hyper-V Administrative Tasks II · Mark Thompson Portfolio</title>
   <meta name="description" content="A continuation of the Hyper-V Administrative Tasks walkthrough, covering VM tasks, Hyper-V settings, Quick Create workflows, and virtual disk editing operations." />
-
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -15,460 +14,436 @@
     html,body{height:100%}
     body{
       margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
 
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
+    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
 
-    .card{
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
       border-radius:var(--radius);
       box-shadow:var(--shadow);
-      padding:18px;
-      margin-top:24px;
+      padding:32px;
+      margin-top:16px;
     }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+
+    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
       padding:8px;
-      margin:14px auto;
-      width:max-content;
+      margin:16px auto;
+      width:min(70%, 820px);
       max-width:100%;
       text-align:center;
     }
     .figure img{
       display:block;
+      width:100%;
       height:auto;
-      max-width:85%;
-      cursor:zoom-in;
       border-radius:10px;
-      margin:auto;
+      cursor:zoom-in;
     }
-    .figcaption{
-      margin-top:6px;
-      font-size:14px;
+    @media (max-width:900px){ .figure{width:92%} }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.86);z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
+    .lb-img{
+      display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;
+      border-radius:12px;box-shadow:var(--shadow);
+    }
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
+    .lb-btn{
+      position:absolute;top:10px;padding:6px 10px;border-radius:10px;
+      border:1px solid #2A3447;background:#0e1220;color:var(--text);
+      cursor:pointer;user-select:none;
+    }
+    .lb-close{right:10px}
+    .lb-prev,.lb-next{
+      top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;
+      border-radius:999px;font-size:20px;line-height:1;
+    }
+    .lb-prev{left:-58px}
+    .lb-next{right:-58px}
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
       color:var(--muted);
-      text-align:center;
+      font-size:0.9rem;
     }
-
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
-
-    .zoom-modal{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,.85)}
-    .zoom-modal[open]{display:block}
-    .zoom-content{position:absolute;inset:40px;display:grid;place-items:center;overflow:auto}
-    .zoom-img{max-width:95vw;max-height:95vh;width:auto;height:auto;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out}
-    .zoom-close{position:absolute;top:14px;right:16px;width:40px;height:40px;border-radius:999px;border:1px solid #3a4a67;background:#0e1220;color:var(--text);display:grid;place-items:center;font-size:22px;cursor:pointer}
-    .zoom-close:hover{background:#121733}
-    .hide-scroll{overflow:hidden}
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-  <!-- NAV -->
-  <nav class="topnav" aria-label="Sections">
-    <a href="/MTPortfolio/">Home</a>
-    <a href="/MTPortfolio/Skills">Networking</a>
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
-    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
-    <a href="/MTPortfolio/Blogs">Blog</a>
-  </nav>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-  <!-- BREADCRUMB -->
-  <div class="crumbs">
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a> ·
-    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> ·
-    <span>Hyper-V Administrative Tasks II</span>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/Hyper-V/">Hyper-V Lab</a> ·
+      <span>Hyper-V Administrative Tasks II</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+      <h1>Hyper-V Administrative Tasks II</h1>
+      <p class="lead">This page continues where the first Administrative Tasks walkthrough left off — going over other VM tasks, Hyper-V host settings, Quick Create workflows, and virtual disk editing operations within Hyper-V Manager.</p>
+    </header>
+
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Section 1: VM Tasks -->
+      <h2>1. VM Tasks</h2>
+      <div class="step-section">
+        <p>General virtual machine tasks commonly performed inside Hyper-V Manager.</p>
+
+        <div class="sub-section">
+          <h4>Opening the VM Task Menu</h4>
+          <p>Right-click on a given VM to access options such as: Connect to VM, Access VM Settings, Turn Off, Shut Down, Reset (Reboot), and more.</p>
+          <figure class="figure"><img src="Images/VM Tasks/vmtask1.png" alt="VM task context menu in Hyper-V Manager" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Managing VM Options</h4>
+          <p>Managing VM options such as Start, Stop, Checkpoints, and Settings.</p>
+          <figure class="figure"><img src="Images/VM Tasks/vmtask2.png" alt="VM options including Start, Stop, Checkpoints, and Settings" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+
+      <!-- Section 2: Hyper-V Settings -->
+      <h2>2. Hyper-V Settings</h2>
+      <div class="step-section">
+        <p>Host-level configuration screens for managing global Hyper-V platform behavior.</p>
+
+        <div class="sub-section">
+          <h4>General Overview Panel</h4>
+          <p>Hyper-V Settings — general overview panel for host configuration.</p>
+          <figure class="figure"><img src="Images/Hyper-V Settings/hvsettings1.png" alt="Hyper-V Settings general overview panel" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Default VM Configuration and Storage Locations</h4>
+          <p>Adjusting default VM configuration and storage locations.</p>
+          <figure class="figure"><img src="Images/Hyper-V Settings/hvsettings2.png" alt="Default VM configuration and storage locations" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Hyper-V Settings/hvsettings3.png" alt="Hyper-V Settings screen 3" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>NUMA Spanning Support</h4>
+          <p>Configuring NUMA spanning support for multi-processor environments.</p>
+          <figure class="figure"><img src="Images/Hyper-V Settings/hvsettings4.png" alt="NUMA spanning support configuration" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Enhanced Session Mode Policy</h4>
+          <p>Configuring Enhanced Session Mode Policy for interactive VM access.</p>
+          <figure class="figure"><img src="Images/Hyper-V Settings/hvsettings5.png" alt="Enhanced Session Mode Policy" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Keyboard &amp; Mouse Console Control</h4>
+          <p>Setting keyboard pass-through options and mouse release key combinations for VM console control.</p>
+          <figure class="figure"><img src="Images/Hyper-V Settings/hvsettings6.png" alt="Keyboard pass-through options for VM console" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Hyper-V Settings/hvsettings7.png" alt="Mouse release key combination for VM console" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Enhanced Session Mode &amp; Reset Check Boxes</h4>
+          <p>Enhanced Session Mode user-level setting, and the Reset Check Boxes option — used to restore the default behavior of confirmation messages and wizard pages.</p>
+          <figure class="figure"><img src="Images/Hyper-V Settings/hvsettings8.png" alt="Enhanced Session Mode setting" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Hyper-V Settings/hvsettings9.png" alt="Reset Check Boxes in Hyper-V Settings" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+
+      <!-- Section 3: Quick Create -->
+      <h2>3. Quick Create</h2>
+      <div class="step-section">
+        <p>The step-by-step workflow for creating a virtual machine using the Quick Create wizard.</p>
+
+        <div class="sub-section">
+          <h4>Launching the Wizard &amp; Selecting an Image</h4>
+          <p>In the upper right-hand side under <strong style="color:var(--brand);">Actions</strong>, click <strong style="color:var(--brand);">Quick Create...</strong> then select a base operating system image.</p>
+          <figure class="figure"><img src="Images/Quick Create/qc1.png" alt="Launching Quick Create from Hyper-V Manager" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc2.png" alt="Selecting a base operating system image" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Downloading the Image</h4>
+          <p>Beginning the Quick Create image download for the Windows 11 dev environment.</p>
+          <figure class="figure"><img src="Images/Quick Create/qc3.png" alt="Beginning Quick Create image download" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc5.png" alt="Downloading Windows 11 dev environment image" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc7.png" alt="Image download in progress" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc8.png" alt="Verifying image" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Extracting &amp; Creating the Disk</h4>
+          <p>Extracting the disk from the image archive and creating the virtual hard drive.</p>
+          <figure class="figure"><img src="Images/Quick Create/qc10.png" alt="Extracting disk from image archive" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc11.png" alt="Extracting disk from image archive progress" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc14.png" alt="Creating hard drive" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc15.png" alt="Creating hard drive progress" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Configuring the VM</h4>
+          <p>Setting up the OS installation environment, allocating processor cores and RAM, and assigning the VM to a vSwitch.</p>
+          <figure class="figure"><img src="Images/Quick Create/qc16.png" alt="Setting up OS installation environment" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc17.png" alt="Allocating processor cores" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc18.png" alt="Allocating RAM" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc19.png" alt="Assigning VM to vSwitch" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc20.png" alt="Windows 11 dev environment listed under Virtual Machines" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Moving the VM to a New Location</h4>
+          <p>To relocate the VM, right-click and select <strong style="color:var(--brand);">Move</strong>, then follow the Move Wizard.</p>
+          <figure class="figure"><img src="Images/Quick Create/qc21.png" alt="Right-click VM to select Move" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc22.png" alt="Move Virtual Machine Wizard" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc23.png" alt="Choose Move Type" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc24.png" alt="Choose Options for Moving Storage" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc25.png" alt="Choose a new location for virtual machine" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc26.png" alt="Move Wizard step" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc27.png" alt="Move Wizard step" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc28.png" alt="Move Wizard step" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc29.png" alt="Specified storage location for virtual machine" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc30.png" alt="Completing Move Wizard Summary - Click Finish" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc31.png" alt="Move in progress" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Quick Create/qc32.png" alt="Move completed" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+
+      <!-- Section 4: Edit Virtual Disk -->
+      <h2>4. Edit Virtual Disk (Edit vDisk)</h2>
+      <div class="step-section">
+        <p>A walkthrough of modifying and managing virtual hard disk files (.vhdx) using the Edit Disk wizard.</p>
+
+        <div class="sub-section">
+          <h4>Launching the Edit Disk Wizard</h4>
+          <p>Right-click on the Hyper-V hostname in the upper-left and select <strong style="color:var(--brand);">Edit Disk...</strong>, or click it in the Hyper-V Manager Actions pane on the right.</p>
+          <figure class="figure"><img src="Images/Edit vDisk/evd1.png" alt="Launching Edit Disk wizard" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Edit vDisk/evd2.png" alt="Edit Virtual Hard Disk Wizard" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Locating the Virtual Hard Disk</h4>
+          <figure class="figure"><img src="Images/Edit vDisk/evd3.png" alt="Locate Virtual Hard Disk" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Choosing the Edit Action</h4>
+          <p>Select the desired action — Expand, Shrink, or Convert. In this example, <strong style="color:var(--brand);">Convert</strong> is selected.</p>
+          <figure class="figure"><img src="Images/Edit vDisk/evd4.png" alt="Choosing the Edit Action - Convert" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Choose Disk Format &amp; Type</h4>
+          <p>Converting from <strong style="color:var(--brand);">VHDX</strong> to <strong style="color:var(--brand);">VHD</strong>, then selecting <strong style="color:var(--brand);">Fixed size</strong> as the disk type.</p>
+          <figure class="figure"><img src="Images/Edit vDisk/evd5.png" alt="Choose Disk Format - VHDX to VHD" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Edit vDisk/evd6.png" alt="Choose Disk Type - Fixed size" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Completing the Conversion</h4>
+          <p>Converting the virtual hard disk and completing the Edit Virtual Hard Disk Wizard.</p>
+          <figure class="figure"><img src="Images/Edit vDisk/evd7.png" alt="Convert Virtual Hard Disk" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Edit vDisk/evd8.png" alt="Completing the Edit Virtual Hard Disk Wizard" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Edit vDisk/evd9.png" alt="Disk conversion in progress" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/Edit vDisk/evd10.png" alt="Disk conversion complete" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
   </div>
 
-  <!-- HEADER -->
-  <header>
-    <h1>Hyper-V Administrative Tasks II</h1>
-    <p class="lead">
-      This page continues where the first Administrative Tasks walkthrough left off. 
-      Going over other VM tasks, Hyper-V host settings, Quick Create workflows, 
-      and virtual disk editing operations within Hyper-V Manager.
-    </p>
-  </header>
-
-  <!-- SECTION 1 — VM TASKS -->
-  <section class="card">
-    <h2>1. VM Tasks</h2>
-    <p>General virtual machine tasks commonly performed inside Hyper-V Manager</p>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Opening the VM task menu inside Hyper-V Manager</strong></div>
-      <div class="figcaption"><p>Right mouse click on given VM to:</p></div>
-      <div class="figcaption">
-      <ol style="list-style-type: none; padding-left: 0;">
-        <li>Connect to VM</li>
-        <li>Access VM Settings</li>
-        <li>Turn Off VM, Shut Down, Reset (Reboot) VM</li>
-        <li>Etc</li>
-      </ol></div>
-      <img src="Images/VM Tasks/vmtask1.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Managing VM options such as Start, Stop, Checkpoints, and Settings</strong></div>
-      <img src="Images/VM Tasks/vmtask2.png" alt="">
-    </div>
-  </section><br><br><br>
-
-
-  <!-- SECTION 2 — HYPER-V SETTINGS -->
-  <section class="card">
-    <h2>2. Hyper-V Settings</h2>
-    <p>Host-level configuration screens for managing global Hyper-V platform behavior.</p>
-
-    <!-- hvsettings1–hvsettings9 -->
-    <div class="figure">
-      <div class="figcaption"><strong>Hyper-V Settings — General overview panel for host configuration</strong></div>
-      <img src="Images/Hyper-V Settings/hvsettings1.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Adjusting default VM configuration and storage locations</strong></div>
-      <img src="Images/Hyper-V Settings/hvsettings2.png" alt="">
-    </div>
-
-    <div class="figure">
-      <img src="Images/Hyper-V Settings/hvsettings3.png" alt="">
-    </div>
-    
-
-    <div class="figure">
-      <div class="figcaption"><strong>Configuring NUMA spanning support for multi-processor environments</strong></div>
-      <img src="Images/Hyper-V Settings/hvsettings4.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Configuring Enhanced Session Mode Policy for interactive VM access</strong></div>
-      <img src="Images/Hyper-V Settings/hvsettings5.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Setting keyboard pass-through options for VM console control</strong></div>
-      <img src="Images/Hyper-V Settings/hvsettings6.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Setting mouse release key combination for VM console control</strong></div>
-      <img src="Images/Hyper-V Settings/hvsettings7.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Enhanced Session Mode</strong></div>
-      <img src="Images/Hyper-V Settings/hvsettings8.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Reset Check Boxes</strong> This button in <strong>Hyper-V</strong> settings is used to <strong>restore the default behavior of confirmation messages and wizard pages</strong>.</div>
-      <img src="Images/Hyper-V Settings/hvsettings9.png" alt="">
-    </div>
-  </section><br><br><br>
-
-
-  <!-- SECTION 3 — QUICK CREATE -->
-  <section class="card">
-    <h2>3. Quick Create</h2>
-    <p>The step-by-step workflow for creating a virtual machine using the Quick Create wizard.</p>
-
-    <!-- qc1–qc35 -->
-    <!-- Looping manually because GitHub Pages does not support server-side loops -->
-
-    <!-- You can paste all qc1–qc35 images in this section.  
-         I will generate them all here in sequence. -->
-
-    <!-- START QUICK CREATE IMAGES -->
-    <!-- (All images follow numbered order exactly.) -->
-
-    <!-- I will generate all 35 entries cleanly and consistently: -->
-
-    <!-- qc1.png -->
-    <div class="figure">
-      <div class="figcaption"><strong>Quick Create — Launching the wizard from Hyper-V Manager</strong></div>
-      <div class="figcaption"><p>In the upper right-hand side under <strong>Actions</strong> click <strong>Quick Create...</strong></p></div>
-      <img src="Images/Quick Create/qc1.png" alt="">
-    </div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Selecting a base operating system image</strong></div>
-  <img src="Images/Quick Create/qc2.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Beginning the Quick Create image download</strong></div>
-  <img src="Images/Quick Create/qc3.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Downloading image 'Windows 11 dev environment'...</strong></div>
-  <div class="figcaption"><strong>Beginning the Quick Create image download</strong></div>
-  <img src="Images/Quick Create/qc5.png">
-</div>
-
-<div class="figure">
-  <img src="Images/Quick Create/qc7.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Verifying image...</strong></div>
-  <img src="Images/Quick Create/qc8.png">
-</div>
-
-<div class="figure">
-  <img src="Images/Quick Create/qc10.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Extracting disk from image archive...</strong></div>
-  <img src="Images/Quick Create/qc11.png">
-</div>
-
-<div class="figure">
-  <img src="Images/Quick Create/qc14.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Creating hard drive...</strong></div>
-  <img src="Images/Quick Create/qc15.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Setting up the OS installation environment</strong></div>
-  <img src="Images/Quick Create/qc16.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Allocating processor cores</strong></div>
-  <img src="Images/Quick Create/qc17.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Allocating RAM</strong></div>
-  <img src="Images/Quick Create/qc18.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Assigning VM to vSwitch</strong></div>
-  <img src="Images/Quick Create/qc19.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Windows 11 dev environment listed under Virtual Machines</strong></div>
-  <img src="Images/Quick Create/qc20.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>To relocate the VM, right-click, select Move</strong></div>
-  <img src="Images/Quick Create/qc21.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Move "Windows 11 dev environment" Wizard</strong></div>
-  <img src="Images/Quick Create/qc22.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Choose Move Type</strong></div>
-  <img src="Images/Quick Create/qc23.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Choose Options for Moving Storage</strong></div>
-  <img src="Images/Quick Create/qc24.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Choose a new location for virtual machine</strong></div>
-  <img src="Images/Quick Create/qc25.png">
-</div>
-
-<div class="figure">
-  <img src="Images/Quick Create/qc26.png">
-</div>
-
-<div class="figure">
-  <img src="Images/Quick Create/qc27.png">
-</div>
-
-<div class="figure">
-  <img src="Images/Quick Create/qc28.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Specified storage location for virtual machine</strong></div>
-  <img src="Images/Quick Create/qc29.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Completing Move Wizard Summary - Click Finish</strong></div>
-  <img src="Images/Quick Create/qc30.png">
-</div>
-
-<div class="figure">
-  <div class="figcaption"><strong>Move in progress</strong></div>
-  <img src="Images/Quick Create/qc31.png">
-</div>
-
-<div class="figure">
-  <img src="Images/Quick Create/qc32.png">
-</div>
-
-
-    <!-- END QUICK CREATE IMAGES -->
-  </section><br><br><br>
-
-
-  <!-- SECTION 4 — EDIT VDISK -->
-  <section class="card">
-    <h2>4. Edit Virtual Disk (Edit vDisk)</h2>
-    <p>A walkthrough of modifying and managing virtual hard disk files (.vhdx) using the Edit Disk wizard</p>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Right-click on Hyper-V hostname in upper-left, select Edit Disk...</strong></div>
-      <div class="figcaption"><p>Or click on Edit Disk... in the Hyper-V Manager Actions pane on the right.</p>
-      <img src="Images/Edit vDisk/evd1.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Edit Virtual Hard Disk Wizard</strong></div>
-      <img src="Images/Edit vDisk/evd2.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Locate Virtual Hard Disk</strong></div>
-      <img src="Images/Edit vDisk/evd3.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Choosing the Edit Action (Expand, Shrink, or Convert)</strong></div>
-      <div class="figcaption"><p>In this example, we'll select <strong>Convert</strong>.</p>
-      <img src="Images/Edit vDisk/evd4.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Choose Disk Format</strong></div>
-      <div class="figcaption"><p>In this example, we'll convert from <strong>VHDX</strong> to <strong>VHD</strong>.</p>
-      <img src="Images/Edit vDisk/evd5.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Choose Disk Type</strong></div>
-      <div class="figcaption"><p>In this example, we'll select <strong>Fixed size</strong>.</p>
-      <img src="Images/Edit vDisk/evd6.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Convert Virtual Hard Disk</strong></div>
-      <img src="Images/Edit vDisk/evd7.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Completing the Edit Virtual Hard Disk Wizard</strong></div>
-      <img src="Images/Edit vDisk/evd8.png" alt="">
-    </div>
-
-    <div class="figure">
-      <div class="figcaption"><strong>Disk conversion in progress...</strong></div>
-      <img src="Images/Edit vDisk/evd9.png" alt="">
-    </div>
-
-    <div class="figure">
-      <img src="Images/Edit vDisk/evd10.png" alt="">
-    </div>
-  </section>
-
-
-  <section>
-    <p><a href="../index.html">Back to Home</a></p>
-  </section>
-
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-    <div class="links">
-      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
-    </div>
-  </footer>
-
-</div>
-
-<!-- ZOOM MODAL -->
-<div class="zoom-modal" id="zoom" aria-hidden="true">
-  <div class="zoom-content" data-close>
-    <img class="zoom-img" id="zoomImg" alt="">
-    <button class="zoom-close" type="button">&times;</button>
-  </div>
-</div>
-
-<script>
-(function(){
-  const modal=document.getElementById('zoom');
-  const zoomImg=document.getElementById('zoomImg');
-  const closeBtn=modal.querySelector('.zoom-close');
-  let lastFocus=null;
-
-  document.querySelectorAll('.figure img').forEach(img=>img.classList.add('zoomable'));
-
-  function openModal(src,alt){
-    lastFocus=document.activeElement;
-    zoomImg.src=src;
-    zoomImg.alt=alt||'';
-    modal.setAttribute('open','');
-    document.body.classList.add('hide-scroll');
-    closeBtn.focus();
-  }
-  function closeModal(){
-    modal.removeAttribute('open');
-    document.body.classList.remove('hide-scroll');
-    zoomImg.removeAttribute('src');
-    if(lastFocus) lastFocus.focus();
-  }
-
-  document.addEventListener('click',e=>{
-    const img=e.target.closest('.figure img.zoomable');
-    if(img){ openModal(img.src,img.alt); }
-  });
-  closeBtn.addEventListener('click',closeModal);
-  modal.addEventListener('click',e=>{
-    if(e.target.hasAttribute('data-close')||e.target===modal) closeModal();
-  });
-  zoomImg.addEventListener('click',closeModal);
-  document.addEventListener('keydown',e=>{
-    if(!modal.hasAttribute('open')) return;
-    if(e.key==='Escape') closeModal();
-  });
-})();
-</script>
-
+  <!-- Lightbox -->
+  <script>
+    (function(){
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = `
+        <div class="lb-stage" role="dialog" aria-modal="true" aria-label="Image preview">
+          <button class="lb-btn lb-close" aria-label="Close (Esc)">✕</button>
+          <button class="lb-btn lb-prev" aria-label="Previous">&#10094;</button>
+          <img class="lb-img" alt="">
+          <button class="lb-btn lb-next" aria-label="Next">&#10095;</button>
+          <div class="lb-cap" aria-live="polite"></div>
+        </div>`;
+      document.body.appendChild(lb);
+
+      const imgEl = lb.querySelector('.lb-img');
+      const capEl = lb.querySelector('.lb-cap');
+      const btnClose = lb.querySelector('.lb-close');
+      const btnPrev  = lb.querySelector('.lb-prev');
+      const btnNext  = lb.querySelector('.lb-next');
+
+      const imgs = Array.from(document.querySelectorAll('.figure img'));
+      let idx = 0;
+
+      function render(i){
+        const el = imgs[i];
+        if(!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.alt || '';
+        const multi = imgs.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
+      }
+      function open(i){ idx=i; render(idx); lb.classList.add('open'); document.body.style.overflow='hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+      function prev(){ idx=(idx-1+imgs.length)%imgs.length; render(idx); }
+      function next(){ idx=(idx+1)%imgs.length; render(idx); }
+
+      imgs.forEach((img,i)=>{ img.addEventListener('click',(e)=>{ e.preventDefault(); open(i); }); });
+      btnClose.addEventListener('click', close);
+      btnPrev .addEventListener('click', (e)=>{ e.stopPropagation(); prev(); });
+      btnNext .addEventListener('click', (e)=>{ e.stopPropagation(); next(); });
+      lb.addEventListener('click', (e)=>{ if(e.target===lb) close(); });
+      document.addEventListener('keydown', (e)=>{
+        if(!lb.classList.contains('open')) return;
+        if(e.key==='Escape') close();
+        else if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
+      });
+    })();
+  </script>
 </body>
 </html>
