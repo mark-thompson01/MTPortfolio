@@ -1,551 +1,506 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Ubuntu Server Post-Install Systems Configuration · Mark Thompson Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ubuntu Server Post-Install Systems Configuration · Mark Thompson Portfolio</title>
+  <meta name="description" content="Ubuntu Server post-installation baseline lab structured into six operational phases covering validation, updates, access control, SSH hardening, networking, and system readiness." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
 
-<meta name="description" content="Ubuntu Server post-installation baseline lab structured into six operational phases covering validation, updates, access control, SSH hardening, networking, and system readiness." />
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
 
-<style>
-:root{
-  --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
-  --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
-  --radius:18px;
-} <h4>Why:</h4>
-  <ul>
-    <li>Clean logs</li>
-    <li>Predictable service identity</li>
-    <li>Easier monitoring & automation</li>
-  </ul><br>
-html,body{height:100%}
-body{
-  margin:0;color:var(--text);
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
-  background:
-    radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
-    radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
-    linear-gradient(180deg,var(--bg-1),var(--bg-2));
-  line-height:1.6;
-}
-.wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
-/* Top nav */
-.topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-.topnav a{
-  color:var(--muted);text-decoration:none;
-  padding:6px 10px;border-radius:10px;border:1px solid transparent
-}
-.topnav a:hover{
-  color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)
-}
-.topnav a.active{
-  color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)
-}
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);text-decoration:none;padding:12px 20px;
+      border-radius:12px;border:1px solid transparent;font-size:16px;font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-/* Breadcrumb */
-.crumbs{color:var(--muted);font-size:14px;margin:2px 0 10px}
-.crumbs a{color:var(--muted);text-decoration:none}
-.crumbs a:hover{color:var(--text)}
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
 
-h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px)}
-h2{margin:0 0 14px;font-size:22px}
-.lead{color:var(--muted);font-size:18px;margin:8px 0 18px}
-   a{color:var(--brand);text-decoration:none}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
+    a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 18px;font-size:clamp(16px,2.2vw,18px)}
 
-/* Cards */
-  .card{
-  background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-  border:1px solid var(--card-border);
-  border-radius:var(--radius);
-  box-shadow:var(--shadow);
-  padding:22px;
-  margin-top:18px;
-}
- 
+    /* Inline code */
+    code{
+      background:rgba(0,0,0,.35);border:1px solid var(--card-border);
+      border-radius:4px;padding:1px 6px;font-size:14px;color:#a8d8ff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
 
-/* Image wrapper */
-.figure{
-  border:1px solid var(--card-border);
-  border-radius:12px;
-  background:#0e1220;
-  padding:8px;
-  margin:14px auto;
-  max-width:720px;
-  cursor:zoom-in;
-}
-.figure img{
-  display:block;
-  max-width:100%;
-  height:auto;
-  border-radius:8px;
-}
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:32px;margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;font-weight:700;margin:48px 0 20px 0;
+      color:var(--text);padding-bottom:12px;border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-/* Lightbox */
-.zb-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.85);
-  display:none;align-items:center;justify-content:center;
-  z-index:9999;
-}
-.zb-overlay.is-open{display:flex}
-.zb-stage{position:relative;max-width:95vw;max-height:92vh;overflow:hidden}
-.zb-img{max-width:100%;max-height:100%;border-radius:12px}
-.zb-close{
-  position:fixed;top:14px;right:14px;
-  background:rgba(255,255,255,.08);
-  border:1px solid #2a2f3f;
-  color:#cfd3e6;padding:8px 10px;border-radius:10px
-}
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;padding:24px;
+      background:rgba(77,163,255,.04);border:1px solid var(--card-border);border-radius:12px;
+    }
+    .step-section p{color:var(--muted);font-size:17px;line-height:1.75;margin:0 0 12px 0}
+    .step-section p:last-child{margin:0}
+    .step-section ul,.step-section ol{
+      color:var(--muted);font-size:17px;line-height:1.9;margin:0 0 12px 0;padding-left:24px;
+    }
+    .step-section li{margin:6px 0}
 
-footer{
-  margin-top:40px;padding-top:20px;
-  border-top:1px solid #232a3a;
-  color:var(--muted);font-size:14px;
-}
-</style>
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;padding:20px;
+      background:rgba(0,0,0,.2);border:1px solid var(--card-border);border-radius:10px;
+    }
+    .sub-section h4{font-size:17px;font-weight:700;color:var(--brand);margin:0 0 12px 0}
+    .sub-section p{color:var(--muted);font-size:17px;line-height:1.75;margin:0 0 10px 0}
+    .sub-section p:last-child{margin:0}
+    .sub-section ul,.sub-section ol{
+      color:var(--muted);font-size:17px;line-height:1.9;margin:0 0 10px 0;padding-left:24px;
+    }
+    .sub-section li{margin:6px 0}
+
+    /* Figures */
+    .figure{
+      border:1px solid var(--card-border);border-radius:12px;
+      background:#0e1220;padding:8px;margin:16px auto;
+      width:min(70%, 820px);max-width:100%;text-align:center;
+    }
+    .figure img{display:block;width:100%;height:auto;border-radius:10px;cursor:zoom-in}
+    @media (max-width:900px){ .figure{width:92%} }
+
+    /* TOC */
+    .toc{
+      background:rgba(77,163,255,.04);border:1px solid var(--card-border);
+      border-radius:12px;padding:20px 24px;margin-top:16px;
+    }
+    .toc h4{font-size:17px;font-weight:700;color:var(--brand);margin:0 0 12px 0}
+    .toc ul{list-style:none;padding:0;margin:0}
+    .toc li{margin:8px 0}
+    .toc a{color:var(--muted);font-size:16px}
+    .toc a:hover{color:var(--brand)}
+
+    /* Lightbox */
+    .lightbox{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.86);z-index:9999}
+    .lightbox.open{display:grid}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
+    .lb-img{display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;border-radius:12px;box-shadow:var(--shadow)}
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
+    .lb-btn{position:absolute;top:10px;padding:6px 10px;border-radius:10px;border:1px solid #2A3447;background:#0e1220;color:var(--text);cursor:pointer;user-select:none}
+    .lb-close{right:10px}
+    .lb-prev,.lb-next{top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;border-radius:999px;font-size:20px;line-height:1}
+    .lb-prev{left:-58px}
+    .lb-next{right:-58px}
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{display:inline-block;margin-top:24px;color:var(--brand);text-decoration:none;font-size:15px}
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{margin-top:48px;padding-top:24px;padding-bottom:2px;border-top:1px solid #232a3a;color:var(--muted);font-size:0.9rem}
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
+  </style>
 </head>
-
 <body>
-<div class="wrap">
+  <div class="wrap">
 
-<!-- NAV -->
-<nav class="topnav">
-  <a href="/MTPortfolio/">Home</a>
-  <a href="/MTPortfolio/Skills">Networking</a>
-  <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
-  <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
-  <a href="/MTPortfolio/Blogs">Blog</a>
-</nav>
-<!-- Breadcrumb -->
-<div class="crumbs">
-  <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a> ·
-  <span>Ubuntu Server Post-Install Systems Configuration</span>
-</div>
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Platforms</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
 
-<header>
-  <h1>Ubuntu Server Post-Install Systems Configuration</h1>
-  <p class="lead">
-    A phase-based systems administration lab that establishes a secure, predictable Ubuntu Server foundation after installing the base server OS prior to service deployment.
-  </p>
-   <p>
-      <a href="https://github.com/mark-thompson01/ubuntu-server-post-install-systems-config/tree/main">
-        View this project on GitHub
-      </a>
-    </p>
-</header>
-
-  <section class="card" id="toc">
-  <h4>Table of Contents:</h4>
-  <ul style="list-style-type: none;">
-    <li><a href="#phase-1"><strong>Phase 1 - Initial Validation & Environment Awareness</strong></a></li>
-    <li><a href="#phase-2"><strong>Phase 2 - Identity, Privilege Management, & Access Control</strong></a></li>
-    <li><a href="#phase-3"><strong>Phase 3 - Networking & Host Identity</strong></a></li>
-    <li><a href="#phase-4"><strong>Phase 4 - Security Baseline</strong></a></li>
-    <li><a href="#phase-5"><strong>Phase 5 - Service & System Management</strong></a></li>
-    <li><a href="#phase-6"><strong>Phase 6 - Logging, Monitoring, & Maintenance</strong></a></li>
-  </ul>
-</section><br><br>
-
-<!-- PHASES (UNCHANGED CONTENT) -->
-<section class="card">
-<h2 id="phase-1">Phase 1 — Initial Validation & Environment Awareness</h2>
-<h3>1. ubuntu-server login:</h3>
-<div class="figure"><img src="Images/phase1-1.png"></div>
-<div class="figure"><img src="Images/phase1-2.png"></div>
-
-<p>After successful authentication, the system loads directly into a user shell. Root access can be obtained using <code>sudo</code>.</p>
-<p>When you download the official Ubuntu Server ISO and install it, 
-you get a headless system by default. A headless system is one to where there is no GUI (Graphical User Interface) to login to and manage the system with, it's all done in the Linux terminal via command-line shell.</p>
-<p>However, even though the system is headless by default, that doesn't mean you're "locked out" of the GUI. If you find that a specific task is too difficult in the terminal, you can run one command: <code>sudo apt install ubuntu-desktop</code>, this will download about 2GB of data and convert the server into a desktop environment. However, it's a best practice to avoid this because it results in the server becoming slower and less secure. </p>
-<p>Even though you can enable a GUI, when it comes to Linux server administration, the ability to be able to effectively and efficiently manage an Ubuntu server system via terminal is widely considered one of the most imperative skills in Linux server administration. </p>
-<div class="figure"><img src="Images/phase1-3.png"></div><br><br>
-
-<h3>2. Verify OS, Kernel, and System Health</h3>
-<p><strong>Immediately confirm what you're running:</strong></p>
-<p>Before proceeding with system configuration, there are some critical verifications to look through, that can really be huge time savers.</p>
-<p>These commands are considered the "vital signs" to check on an Ubuntu server system post OS installation, or any Linux server installation for that matter.</p>
-<p>Especially when there's only a terminal to work with. These commands help to confirm that the hardware and software components of a given system are functioning as expected before continuing to configure the system further.</p><br><br><br>
-<p>I like to start out with commands such as <code>hostname</code>, <code>whoami</code>, <code>pwd</code>, to get an overall feel for the environment that I'm working in.</p>
-<p><strong>After going through those, I then go through the following:</strong></p>
-<ul>
-  <li><code>lsb_release -a & uname -a</code></li>
-  <li><code>uptime</code></li>
-  <li><code>df -h</code></li>
-  <li><code>free -h</code></li>
-</ul><br>
-  
-  
-<h4>The System "Identity Check"</h4>
-<code>lsb_release -a & uname -a</code>
-<ul>
-  <li><strong>Why:</strong> You need to verify exactly which version of Ubuntu and which Linux Kernel were installed.</li><br>
-  <li><strong>The Goal:</strong> If you intended to install a 
-Long Term Support (LTS) version like 24.04 but 
-accidentally installed an interin version, you want
-want to know before you spend hours configuring it. It also confirms if you are running a 64-bit or ARM-based system.</li>
-</ul><br>
-
-<h4>The System "Stability Check"</h4>
-  <code>uptime</code>
-  <ul>
-    <li><strong>Why:</strong> This tells you how long the server has been running and the "load average."</li><br>
-    <li><strong>The Goal:</strong> This helps to confirm that the system didn't experience a silent crash or reboot during the final stages of the installation process. If the load average is high on a brand-new install, something is going on with the background processes.</li>
-  </ul><br>
-
-  <h4>The System "Storage Check"</h4>
-  <code>df -h</code>
-  <ul>
-  <li><strong>Why:</strong> This shows your disk partitions and how much space is used.</li><br>
-  <li><strong>The Goal:</strong> There is a common issue during Ubuntu installations is the "LVM" default, which can sometimes only allocate half of the drive space. Running this command ensures that the server actually sess all the storage you gave it.</li><br>
-  <li>The <code>-h</code> makes the command output "human readable" (showing GB instead of raw blocks).</li>
-  </ul><br>
-
-  <h4>The System "Memory Check"</h4>
-  <code>free -h</code>
-  <ul>
-    <li><strong>Why:</strong> This displays the system RAM usage and system "Swap" space.</li><br>
-    <li><strong>The Goal:</strong> You want to make sure the server is detecting all of the RAM sticks (or the full amount of RAM allocated). If the server is already using 90% of its RAM with nothing installed, that's a sure sign an upgrade is needed well before the deployment stage is reached.</li>
-  </ul>
-  
-<div class="figure"><img src="Images/phase1-4.png"></div><br><br>
-  
-<h3>3. Update the System (Mandatory First Action)</h3>
-<p>After going through the verification of the OS, Kernel, and System Health, updating the system with the latest packages and security patches is an absolute imperative must!</p>
-<p><strong>Never configure a stale system:</strong></p>  
-<h4>Why</h4>
-<ul>
-  <li>Security patches</li>
-  <li>Kernel fixes</li>
-  <li>Package stability before service deployment</li>
-</ul>
-<code>sudo apt update && apt upgrade -y</code>
-  <p>In this example, <code>apt update</code> and <code>apt upgrade</code> are used in a one-line command with the use of the <code>&&</code> (Logical AND) operator, allowing the system to run the two commands sequentially instead of running both commands separately.</p>
-  <p>This command chain performs a two-stage maintenance routine that first synchronizes the local system with official software repositories and then applies all available security and stability patches.</p>
-  
-<div class="figure"><img src="Images/phase1-5.png"></div>
-<div class="figure"><img src="Images/phase1-6.png"></div>
-<div class="figure"><img src="Images/phase1-7.png"></div>
-<div class="figure"><img src="Images/phase1-8.png"></div>
-
-<p>After a significant system upgrade, a <code>sudo reboot</code> is performed to initialize the newly installed Linux Kernel.</p>
-<p>Helping to ensure that the system isn't running an outdated or vulnerable kernel and that all system services have been refreshed to utilize the latest patched libraries.</p>  
-<div class="figure"><img src="Images/phase1-9.png"></div>
-<div class="figure"><img src="Images/phase1-10.png"></div>
-<div class="figure"><img src="Images/phase1-11.png"></div>
-</section><br><br><br><br>
-
-<section class="card">
-<h2 id="phase-2">Phase 2 — Identity, Privilege Management & Access Control</h2>
-<h3>1. Create a Non-Root Admin User</h3>
-<p><strong>Never operate day-to-day as root:</strong></p>
-<code>sudo adduser sysadmin</code>
-<div class="figure"><img src="Images/phase2-1.png"></div>
-<code>groups sysadmin</code>
-<div class="figure"><img src="Images/phase2-2.png"></div>
-<p>Running <code>groups sysadmin</code> command confirms that the automated part
-of the command <code>adduser</code> process works correctly.</p>
-<h4>It Shows:</h4>
-<ul>
-  <li><strong>Primary Group:</strong> The user has their private group ( sysadmin )</li><br>
-  <li><strong>Standard Access:</strong> The user was successfully added to the users group, which is the standard pool for non-0administrative accounts on the system.</li>
-</ul><br><br>
-  
-  
-  
-<p>Creating a Non-Root Admin User account is an action of Account Isolation.</p>
-<p>Instead of doing everything through your personal account or the "root" account, this creates a dedicated service account <code>(sysadmin)</code>. This is a key security-step-if one users becomes compromised, the other user accounts remain protected.</p>
-<h4>Why:</h4>
-  <ul>
-    <li>Least privilege</li>
-    <li>Auditability</li>
-    <li>Industry best practice</li>
-  </ul><br>
-  <div class="figure"><img src="Images/phase2-3.png"></div><br><br>
-
-
-<h3>2. Harden SSH Access</h3>
-  <p><strong>Edit SSH configuration:</strong></p>
-  <code>sudo nano /etc/ssh/sshd_config</code>
-<div class="figure"><img src="Images/phase2-4.png"></div>
-<div class="figure"><img src="Images/phase2-5.png"></div>
-<div class="figure"><img src="Images/phase2-6.png"></div>
-<p><strong>Recommended changes:</strong></p>
-  <ul style="list-style-type: none;">
-    <li>PermitRootlogin no</li>
-    <li>PasswordAuthentication no</li>
-    <li>PubKeyAuthentication yes</li>
-  </ul><br>
-<p>Verify/Make necessary changes, <strong>ctrl + o</strong> to save, <strong>ctrl + x</strong> to exit.</p>
-<p><strong>Here it shows:</strong></p>
-  <ul style="list-style-type: none;">
-    <li>PermitRootLogin prohibit-password (no)</li>
-    <li>PubKeyAuthentication yes</li>
-    <li>PermitRootLogoin prohibit-password (no)-(set-above)</li>
-  </ul>
-<div class="figure"><img src="Images/phase2-7.png"></div><br>
-
-
-
-<p><strong>After making adjustments, restart the ssh service for the changes to take effect:</strong></p>
-<code>sudo systemctl restart ssh</code><br>
-<code>sudo systemctl status ssh</code>
-<div class="figure"><img src="Images/phase2-8.png"></div>
-
-<h4>Why:</h4>
-  <ul>
-    <li>Prevents brute-force attacks</li>
-    <li>Enforces key-based auth</li>
-  </ul>
-</section><br><br><br><br>
-
-
-  
-<section class="card">
-<h2 id="phase-3">Phase 3 — Networking & Host Identity</h2>
-  <h3>1. Verify Network Configuration (Netplan)</h3>
-  <code>ip a</code><br>
-  <code>ip route</code>
-  <p>The <code>ip a</code> command confirms/verifies the IP configuration details to the systems network adapater.</p>
-  <p>Best practice to review the IP configuration details to verify that you have the expected details set for the given configuration.</p>
-  <p>The <code>ip route</code> command lists the default routes that are defined on the given system.</p>
-  <p>It's a good detail to verify, and a good command to run in different troubleshooting scenarios.</p>
-<div class="figure"><img src="Images/phase3-1.png"></div><br>
-
-
-<h4>View Netplan:</h4>
-<code>ls /etc/netplan/</code><br>
-<code>sudo nano /etc/netplan/*.yaml</code>
-<p>Here, things are moving into network administration with the <strong>Netplan</strong> system utility. Netplan is the default way Ubuntu Server manages network settings like IP addresses, DNS, and gateways.</p>
-<p>Running <code>ls /etc/netplan/</code> to see what is available in the /netplan directory.</p>
-<p>In this example, the output file is <code>50-cloud-init.yaml</code>.</p>
-<p>In Ubuntu systems, network configurations are stored in <strong>YAML</strong> files.</p>
-<p>These files are the "instruction manuals" that instruct a <strong>Network Interface Card (NIC)</strong> how to establish an internet connection.</p>
-<div class="figure"><img src="Images/phase3-2.png"></div>
-<div class="figure"><img src="Images/phase3-3.png"></div><br>
-
-
-<h4>Apply safely</h4>
-<code>sudo netplan try</code><br>
-<code>sudo netplan apply</code>
-<p><strong>This right here is the most critical part of network configuration:</strong></p>
-<p><strong>Committing changes safely!</strong></p>
-<p>When you edit network settings on a headless server, there is a high risk of accidentally locking yourself out.</p>
-<p>If you type one wrong number in an IP address and hit "apply," the server might lose its connection, and since you don't have a GUI or a local screen, you'd have no way to get back in to fix it.</p>
-<br>
-<p>The <code>sudo netplan try</code> command applies new network settings temporarily.</p>
-  <ul>
-    <li><strong>The "Timeout" Feature:</strong> In the output it says "Changes will revert in 115 seconds." It starts a countdown. If you don't press <strong>Enter</strong> within that time, the server assumes something went wrong (like you losing your connection) and automatically rolls back to the old, working settings.</li><br>
-    <li><strong>Why it's a lifesaver:</strong> If your new config breaks the internet, you just wait two minutes, and the server "fixes itself" by reverting back to your previous settings.</li>
-  </ul><br>
-
- <p>The <code>sudo netplan apply</code> command is <strong>The "Final Commitment"</strong></p>
-  <ul>
-    <li><strong>What it does:</strong> Once you've confirmed that <code>netplan try</code> worked and you still have access, you run this to make the changes <strong>permanent</strong>.</li><br>
-    <li><stronger>The Result:</stronger> The system writes the configuration to the network stack. These settings will now persist even after the server reboots.</li>
-    
-  </ul>
-  
-
-  
-<div class="figure"><img src="Images/phase3-4.png"></div>
-<h4>Why:</h4>
-  <ul>
-    <li>Static IPs for servers</li>
-    <li>Prevents accidental lockouts</li>
-  </ul>
-
-   <p><strong>Why This is Among One of the First Steps - Post OS Installation:</strong></p>
-  <p>In a headless server configuration, the <strong>Network Configuration</strong> is the most critical file. If the file is set up incorrectly, the server goes offline, and you lose your SSH connection. Admins usually have to:</p>
-  <ul>
-    <li><strong>Set a Static IP:</strong> Ensuring the server's address never changes (so you always know where to SSH).</li><br>
-    <li><strong>Configure DNS:</strong> Telling the server which "phonebook" (like Google or Cloudflare) to use to find websites.</li>
-  </ul>
-  <p>Operational continuity relies heavily on servers with <strong>Network Persistence & Configuration</strong>. To ensure consistent remote access, using <strong>Netplan</strong> to manage the server's network stack, helps to maintain that persistence.</p>
-  <p>By auditing the YAML configuration files in <code>/etc/netplan/</code>, you can define static IP assignments and custom DNS resolvers.</p>
-  <p>The <code>nano</code> or other text editor CLI of your choice can be used to make changes to the file's configuration details, ensuring the server maintains a reliable 'heartbeat' on the local network, ensuring operations are not disrupted.</p><br>
-  
-  
-  <br><br>
-
-
-  
-<h3>2. Set Hostname & Local Name Resolution</h3>
-  <p><strong>Initial System Provisioning</strong></p>
-  
-
-  
-<code>hostname</code><br>
-<code>sudo hostnamectl set-hostname ubuntu-srv01</code><br>
-<code>sudo nano /etc/hosts</code> 
-  <h4>Add:</h4>
-  <ul style="list-style-type: none;">
-    <li>127.0.1.1 ubuntu-srv01</li>
-  </ul>
-  <p>With these commands, the goal is to ensure network clarity and application stability.</p>
-  <p>After the initial system health check, it's time setup a recognizable hostname for the system that will be deployed into production that fits its intended purpose.</p>
-  <p>Listing out the current default hostname, followed by running the <code>sudo hostnamectl set-hostname</code> command to change the system's hostname to <code>ubuntu-srv01</code>.</p>
-  <p>Then mapping the new system hostname to the local loopback address in the <code>/etc/hosts</code> file.</p>
-  <p>This prevents 'DNS-lookup lag' and ensures that local services can resolve the system's identity without external network dependencies.</p>
-  
-<div class="figure"><img src="Images/phase3-5.png"></div>
-<div class="figure"><img src="Images/phase3-6.png"></div>
-<div class="figure"><img src="Images/phase3-7.png"></div>
-    <h4>Why:</h4>
-  <ul>
-    <li>Clean logs</li>
-    <li>Predictable service identity</li>
-    <li>Easier monitoring & automation</li>
-  </ul>
-</section><br><br><br><br>
-
-<section class="card">
-<h2 id="phase-4">Phase 4 — Security Baseline</h2>
-  <h3>1. Configure the Firewall (UFW)</h3>
-  <ul>
-    <li>Deny incoming traffic by default</li>
-    <li>Allow outgoing traffic by default</li>
-    <li>Allow OpenSSH</li>
-    <li>Enable the ufw Firewall</li>
-    <li>List ufw Firewall status</li>
-  </ul>
-  
-  <code>sudo ufw default deny incoming</code><br>
-  <code>sudo ufw default allow outgoing</code><br>
-  <code>sudo ufw allow OpenSSH</code><br>
-  <code>sudo ufw enable</code><br>
-  <code>sudo ufw status verbose</code>
-<div class="figure"><img src="Images/phase4-1.png"></div>
-  <h4>Why:</h4>
-<ul>
-  <li>Immediate attack surface reduction</li>
-  <li>Zero-trust mindset</li>
-</ul><br><br>
- 
-
-<h3>2. Enable Automatic Security Updates</h3>
-<code>sudo apt install unattended-upgrades -y</code>
-<div class="figure"><img src="Images/phase4-2.png"></div>
-<div class="figure"><img src="Images/phase4-3.png"></div>
-<p>To minimize the attack surface and ensure 24/7 security compliance, the <code>unattended-upgrades</code> program can be used to implement <strong>Automated Patch Management</strong>.</p>
-<p>This configuration enables the server to autonomously fetch and apply critical security updates from the official Ubuntu repositories.</p>
-<p>This proactive approach ensures the system remains resilient against emerging threats without requiring manual intervention, balancing high security with operational stability.</p><br>
-
-<code>sudo dpkg-reconfigure unattended-upgrades</code>
-<div class="figure"><img src="Images/phase4-4.png"></div>
-<h4>Select Yes when prompted:</h4>
-                                             
-<div class="figure"><img src="Images/phase4-5.png"></div>
-<p>The <code>sudo dpkg-reconfigure unattended-upgrades</code> command is a major step in <strong>Automated Security Management</strong>.</p>
-<p>By automating patch management workflows you maintain a proactive security posture.</p>
-<p>Enabling automated background delivery of critical security patches.</p>
-<p>This approach ensures the server remains resilient against 'Zero-Day' vulnerabilities by synchronizing with official repositories daily, reducing the need for manual intervention while maintaining system uptime and stability.</p>
-</section><br><br><br><br>
-
-<section class="card">
-<h2 id="phase-5">Phase 5 — Service & System Management</h2>
-  <h3>1. Install Core SysAdmin Tools</h3>
-  <code>sudo apt install -y htop curl wget git net-tools fail2ban</code>
-  <p>Install essential commands:</p>
-  <ul style="list-style-type: none;">
-    <li><code>htop</code></li>
-    <li><code>curl</code></li>
-    <li><code>wget</code></li>
-    <li><code>git</code></li>
-    <li><code>net-tools</code></li>
-    <li><code>fail2ban</code></li>
-  </ul>
-<div class="figure"><img src="Images/phase5-1.png"></div>
-<div class="figure"><img src="Images/phase5-2.png"></div><br>
-
-<p>The Fail2ban service is a critical open-source intrusion 
-prevention service.</p>
-  <p>It's designed to harden a server against brute-force attacks.</p>
-  <p>It does by configuring 'jails,' the system dynamically monitors SSH authentication logs and proactively bans malicious IP addresses.</p>
-  <p>This automation significantly reduces the server's attack surface and ensures that system resources are reserved for legitimate users.</p><br>
-
-  <h4>Enabling fail2ban</h4>
-<code>sudo systemctl enable fail2ban --now</code>
-<div class="figure"><img src="Images/phase5-3.png"></div>
-<div class="figure"><img src="Images/phase5-4.png"></div><br>
-<code>systemctl list-units --type=service --state=running</code>
-<div class="figure"><img src="Images/phase5-5.png"></div>
-  <p>This is the terminal equivalent of opening the <strong>"Processes"</strong> tab in a Windows Taks Manager or Activity Monitor on a Mac.</p>
-<div class="figure"><img src="Images/phase5-6.png"></div>
-</section><br><br><br><br>
-
-<section class="card">
-<h2 id="phase-6">Phase 6 — Logging, Monitoring & Maintenance</h2>
-  <h3>1. Log Inspection</h3>
-  <code>journalctl -p 3 -xb</code>
-<div class="figure"><img src="Images/phase6-1.png"></div>
-<div class="figure"><img src="Images/phase6-2.png"></div>
-  <p>In this example, I utilized <code>journalctl -p 3 -xb</code> as a primary diagnostic tool to run a high-priority log inspection.</p>
-  <p>By filtering for Priority 3 (Error-level) events within the current boot descriptro, to be able to bypass non-critical system telemetry and immediately isolate service failures or kernel exceptions that could impact system stability.</p>
-
-
-  <br>
-
-<h3>2. Check auth logs</h3>
-<code>sudo tail -f /var/log/auth.log</code>
-<div class="figure"><img src="Images/phase6-3.png"></div>
-<div class="figure"><img src="Images/phase6-4.png"></div>
-<p>Simultaneously, I used <code>tail -f</code> on the authentication logs <code>(auth.log)</code> to establish a <strong>Live Security Feed,</strong> allowing for real-time observation of user sessions and authentication attempts.</p>
-<p>This approach ensures total visibility into both system stability and security integrity.</p>
-  <h4>Why:</h4>
-  <ul>
-    <li>Early intrusion detection</li>
-    <li>Debugging misconfigurations</li>
-  </ul><br><br>
-
-  <h3>3. Backup Awareness (Often Ignored)</h3>
-  <p><strong>Even if you don't implement backups yet:</strong></p>
-  <code>ls /etc</code><br>
-  <code>ls /var</code><br>
-
-  <p>In establishing a robust disaster recovery plan, it's absolutely imperative to prioritize the <code>/etc</code> and <code>/var</code> directories.</p>
-  <p>Backing up <code>/etc</code> preserves the <strong>System State</strong>, capturing all custom configurations, security policies, and network definitions.</p>
-  <p>Meanwhile, backing up <code>/var</code> ensures preservation of <strong>Operational Data</strong>, including critical security logs and application databases.</p>
-  <p>Together, these backups allow for a rapid 'Bare Metal' recovery, ensuring that the system can be restored to its exact functional state in the event of hardware failure or data corruption.</p>
-  
-  </section>
-
-  <p><a href="../index.html">Back to Home</a></p>
-
-  <!-- FOOTER -->
-  <footer>
-    <div>Mark Thompson · MTPortfolio</div>
-    <div class="links">
-      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
-      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows &amp; Linux</a> ·
+      <span>Ubuntu Server Post-Install Systems Configuration</span>
     </div>
-  </footer>
 
-</div>
+    <!-- Header -->
+    <header>
+      <h1>Ubuntu Server Post-Install Systems Configuration</h1>
+      <p style="margin-top:16px"><a href="https://github.com/mark-thompson01/ubuntu-server-post-install-systems-config/tree/main" target="_blank" rel="noopener" style="color:var(--brand);font-weight:600">View this project on GitHub</a></p>
+      <p class="lead">A phase-based systems administration lab that establishes a secure, predictable Ubuntu Server foundation after installing the base server OS prior to service deployment.</p>
+    </header>
 
-<!-- Lightbox Script -->
-<script>
-const imgs = document.querySelectorAll('.figure img');
-const overlay = document.createElement('div');
-overlay.className = 'zb-overlay';
-overlay.innerHTML = '<button class="zb-close">Close</button><div class="zb-stage"><img class="zb-img"></div>';
-document.body.appendChild(overlay);
+    <!-- Table of Contents -->
+    <nav class="toc" aria-label="Table of Contents">
+      <h4>Table of Contents</h4>
+      <ul>
+        <li><a href="#phase-1"><strong>Phase 1 — Initial Validation &amp; Environment Awareness</strong></a></li>
+        <li><a href="#phase-2"><strong>Phase 2 — Identity, Privilege Management &amp; Access Control</strong></a></li>
+        <li><a href="#phase-3"><strong>Phase 3 — Networking &amp; Host Identity</strong></a></li>
+        <li><a href="#phase-4"><strong>Phase 4 — Security Baseline</strong></a></li>
+        <li><a href="#phase-5"><strong>Phase 5 — Service &amp; System Management</strong></a></li>
+        <li><a href="#phase-6"><strong>Phase 6 — Logging, Monitoring &amp; Maintenance</strong></a></li>
+      </ul>
+    </nav>
 
-const zimg = overlay.querySelector('.zb-img');
-const close = overlay.querySelector('.zb-close');
+    <!-- Main content -->
+    <main class="content">
 
-imgs.forEach(img=>{
-  img.onclick=()=>{
-    zimg.src=img.src;
-    overlay.classList.add('is-open');
-  };
-});
-close.onclick=()=>overlay.classList.remove('is-open');
-overlay.onclick=e=>{if(e.target===overlay)overlay.classList.remove('is-open');};
-window.onkeydown=e=>{if(e.key==='Escape')overlay.classList.remove('is-open');};
-</script>
+      <!-- PHASE 1 -->
+      <h2 id="phase-1">Phase 1 — Initial Validation &amp; Environment Awareness</h2>
+      <div class="step-section">
 
+        <div class="sub-section">
+          <h4>1. Ubuntu Server Login</h4>
+          <figure class="figure"><img src="Images/phase1-1.png" alt="Ubuntu Server login screen" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase1-2.png" alt="Ubuntu Server shell after login" loading="lazy" decoding="async"></figure>
+          <p>After successful authentication, the system loads directly into a user shell. Root access can be obtained using <code>sudo</code>.</p>
+          <p>When you download the official Ubuntu Server ISO and install it, you get a headless system by default. A headless system is one where there is no GUI (Graphical User Interface) to log in to — it's all done in the Linux terminal via command-line shell.</p>
+          <p>However, even though the system is headless by default, that doesn't mean you're "locked out" of the GUI. If a specific task is too difficult in the terminal, you can run <code>sudo apt install ubuntu-desktop</code>, which will download about 2 GB of data and convert the server into a desktop environment. However, it's best practice to avoid this because it results in the server becoming slower and less secure.</p>
+          <p>When it comes to Linux server administration, the ability to effectively and efficiently manage an Ubuntu Server system via terminal is widely considered one of the most imperative skills in Linux server administration.</p>
+          <figure class="figure"><img src="Images/phase1-3.png" alt="Ubuntu Server terminal environment" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>2. Verify OS, Kernel, and System Health</h4>
+          <p>Before proceeding with system configuration, there are some critical verifications to review — these can be huge time savers. These commands are the "vital signs" to check on an Ubuntu Server post OS installation. They help confirm that the hardware and software components are functioning as expected before continuing to configure the system further.</p>
+          <p>Starting with commands like <code>hostname</code>, <code>whoami</code>, and <code>pwd</code> to get an overall feel for the environment, then proceeding to:</p>
+          <ul>
+            <li><code>lsb_release -a &amp;&amp; uname -a</code></li>
+            <li><code>uptime</code></li>
+            <li><code>df -h</code></li>
+            <li><code>free -h</code></li>
+          </ul>
+
+          <p><strong style="color:var(--brand);">System "Identity Check" — <code>lsb_release -a &amp;&amp; uname -a</code>:</strong> Verify exactly which version of Ubuntu and which Linux Kernel were installed. If you intended to install an LTS version like 24.04 but accidentally installed an interim version, you want to know before spending hours configuring it. It also confirms whether you're running a 64-bit or ARM-based system.</p>
+
+          <p><strong style="color:var(--brand);">System "Stability Check" — <code>uptime</code>:</strong> This tells you how long the server has been running and the load average. It confirms the system didn't experience a silent crash or reboot during the final stages of installation. If the load average is high on a brand-new install, something is going on with background processes.</p>
+
+          <p><strong style="color:var(--brand);">System "Storage Check" — <code>df -h</code>:</strong> Shows disk partitions and how much space is used. A common issue during Ubuntu installations is the "LVM" default, which can sometimes only allocate half of the drive space. Running this ensures the server actually sees all the storage you gave it. The <code>-h</code> flag makes output human-readable (showing GB instead of raw blocks).</p>
+
+          <p><strong style="color:var(--brand);">System "Memory Check" — <code>free -h</code>:</strong> Displays system RAM usage and swap space. You want to make sure the server is detecting all the RAM allocated. If the server is already using 90% of its RAM with nothing installed, that's a sign an upgrade is needed well before the deployment stage.</p>
+
+          <figure class="figure"><img src="Images/phase1-4.png" alt="System health verification commands output" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>3. Update the System (Mandatory First Action)</h4>
+          <p>After verifying the OS, Kernel, and System Health, updating the system with the latest packages and security patches is an absolute must. Never configure a stale system.</p>
+          <ul>
+            <li>Security patches</li>
+            <li>Kernel fixes</li>
+            <li>Package stability before service deployment</li>
+          </ul>
+          <p><code>sudo apt update &amp;&amp; apt upgrade -y</code></p>
+          <p>Here, <code>apt update</code> and <code>apt upgrade</code> are combined in one line using the <code>&amp;&amp;</code> (Logical AND) operator, allowing the system to run the two commands sequentially. This command chain performs a two-stage maintenance routine — first synchronizing the local system with official software repositories, then applying all available security and stability patches.</p>
+          <figure class="figure"><img src="Images/phase1-5.png" alt="apt update running" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase1-6.png" alt="apt upgrade running" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase1-7.png" alt="Upgrade progress" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase1-8.png" alt="Upgrade complete" loading="lazy" decoding="async"></figure>
+          <p>After a significant system upgrade, a <code>sudo reboot</code> is performed to initialize the newly installed Linux Kernel — ensuring the system isn't running an outdated or vulnerable kernel, and that all system services have been refreshed to utilize the latest patched libraries.</p>
+          <figure class="figure"><img src="Images/phase1-9.png" alt="sudo reboot command" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase1-10.png" alt="System rebooting" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase1-11.png" alt="System back online after reboot" loading="lazy" decoding="async"></figure>
+        </div>
+
+      </div>
+
+      <!-- PHASE 2 -->
+      <h2 id="phase-2">Phase 2 — Identity, Privilege Management &amp; Access Control</h2>
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>1. Create a Non-Root Admin User</h4>
+          <p>Never operate day-to-day as root.</p>
+          <p><code>sudo adduser sysadmin</code></p>
+          <figure class="figure"><img src="Images/phase2-1.png" alt="sudo adduser sysadmin" loading="lazy" decoding="async"></figure>
+          <p><code>groups sysadmin</code></p>
+          <figure class="figure"><img src="Images/phase2-2.png" alt="groups sysadmin output" loading="lazy" decoding="async"></figure>
+          <p>Running <code>groups sysadmin</code> confirms that the automated part of the <code>adduser</code> process works correctly.</p>
+          <ul>
+            <li><strong style="color:var(--brand);">Primary Group:</strong> The user has their private group (<code>sysadmin</code>).</li>
+            <li><strong style="color:var(--brand);">Standard Access:</strong> The user was successfully added to the <code>users</code> group, the standard pool for non-administrative accounts on the system.</li>
+          </ul>
+          <p>Creating a Non-Root Admin User is an action of Account Isolation. Instead of doing everything through your personal account or the root account, this creates a dedicated service account. This is a key security step — if one user becomes compromised, the other user accounts remain protected.</p>
+          <ul>
+            <li>Least privilege</li>
+            <li>Auditability</li>
+            <li>Industry best practice</li>
+          </ul>
+          <figure class="figure"><img src="Images/phase2-3.png" alt="sysadmin user created confirmation" loading="lazy" decoding="async"></figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>2. Harden SSH Access</h4>
+          <p>Edit the SSH configuration:</p>
+          <p><code>sudo nano /etc/ssh/sshd_config</code></p>
+          <figure class="figure"><img src="Images/phase2-4.png" alt="Opening sshd_config in nano" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase2-5.png" alt="sshd_config contents" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase2-6.png" alt="sshd_config recommended settings" loading="lazy" decoding="async"></figure>
+          <p>Recommended changes:</p>
+          <ul>
+            <li><code>PermitRootLogin no</code></li>
+            <li><code>PasswordAuthentication no</code></li>
+            <li><code>PubKeyAuthentication yes</code></li>
+          </ul>
+          <p>Verify and make necessary changes, then <strong style="color:var(--brand);">Ctrl + O</strong> to save and <strong style="color:var(--brand);">Ctrl + X</strong> to exit.</p>
+          <figure class="figure"><img src="Images/phase2-7.png" alt="sshd_config changes applied" loading="lazy" decoding="async"></figure>
+          <p>After making adjustments, restart the SSH service for the changes to take effect:</p>
+          <p><code>sudo systemctl restart ssh</code><br><code>sudo systemctl status ssh</code></p>
+          <figure class="figure"><img src="Images/phase2-8.png" alt="SSH service restarted and active" loading="lazy" decoding="async"></figure>
+          <ul>
+            <li>Prevents brute-force attacks</li>
+            <li>Enforces key-based authentication</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- PHASE 3 -->
+      <h2 id="phase-3">Phase 3 — Networking &amp; Host Identity</h2>
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>1. Verify Network Configuration (Netplan)</h4>
+          <p><code>ip a</code> confirms and verifies the IP configuration details for the system's network adapter. It's best practice to review these details to verify you have the expected settings for the given configuration.</p>
+          <p><code>ip route</code> lists the default routes defined on the system — useful both for verification and in various troubleshooting scenarios.</p>
+          <figure class="figure"><img src="Images/phase3-1.png" alt="ip a and ip route output" loading="lazy" decoding="async"></figure>
+          <p>Running <code>ls /etc/netplan/</code> to see what's available in the netplan directory. In this example, the output file is <code>50-cloud-init.yaml</code>. Network configurations in Ubuntu are stored in <strong style="color:var(--brand);">YAML</strong> files — the "instruction manuals" that tell a <strong style="color:var(--brand);">Network Interface Card (NIC)</strong> how to establish an internet connection.</p>
+          <p><code>ls /etc/netplan/</code><br><code>sudo nano /etc/netplan/*.yaml</code></p>
+          <figure class="figure"><img src="Images/phase3-2.png" alt="ls /etc/netplan output" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase3-3.png" alt="Netplan YAML file contents" loading="lazy" decoding="async"></figure>
+          <p>When editing network settings on a headless server, there is a high risk of accidentally locking yourself out. The <code>sudo netplan try</code> command applies new network settings <em>temporarily</em> — with a countdown timer. If you don't press Enter within that time, the server automatically rolls back to the old, working settings. Once confirmed, <code>sudo netplan apply</code> makes the changes permanent.</p>
+          <p><code>sudo netplan try</code><br><code>sudo netplan apply</code></p>
+          <figure class="figure"><img src="Images/phase3-4.png" alt="netplan try and apply" loading="lazy" decoding="async"></figure>
+          <ul>
+            <li>Static IPs for servers</li>
+            <li>Prevents accidental lockouts</li>
+          </ul>
+          <p>In a headless server configuration, the network configuration file is the most critical file. Admins use Netplan to set a <strong style="color:var(--brand);">Static IP</strong> so the server's address never changes, and configure <strong style="color:var(--brand);">DNS</strong> to tell the server which resolver to use. This ensures consistent remote access and operational continuity.</p>
+        </div>
+
+        <div class="sub-section">
+          <h4>2. Set Hostname &amp; Local Name Resolution</h4>
+          <p>After the initial system health check, it's time to set up a recognizable hostname that fits the system's intended purpose.</p>
+          <p><code>hostname</code><br><code>sudo hostnamectl set-hostname ubuntu-srv01</code><br><code>sudo nano /etc/hosts</code></p>
+          <p>Add to <code>/etc/hosts</code>: <code>127.0.1.1 ubuntu-srv01</code></p>
+          <p>This maps the new hostname to the local loopback address, preventing DNS-lookup lag and ensuring local services can resolve the system's identity without external network dependencies.</p>
+          <figure class="figure"><img src="Images/phase3-5.png" alt="hostname and hostnamectl commands" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase3-6.png" alt="hostnamectl set-hostname output" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase3-7.png" alt="/etc/hosts updated with new hostname" loading="lazy" decoding="async"></figure>
+          <ul>
+            <li>Clean logs</li>
+            <li>Predictable service identity</li>
+            <li>Easier monitoring &amp; automation</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- PHASE 4 -->
+      <h2 id="phase-4">Phase 4 — Security Baseline</h2>
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>1. Configure the Firewall (UFW)</h4>
+          <ul>
+            <li>Deny incoming traffic by default</li>
+            <li>Allow outgoing traffic by default</li>
+            <li>Allow OpenSSH</li>
+            <li>Enable the UFW firewall</li>
+            <li>List UFW firewall status</li>
+          </ul>
+          <p><code>sudo ufw default deny incoming</code><br>
+          <code>sudo ufw default allow outgoing</code><br>
+          <code>sudo ufw allow OpenSSH</code><br>
+          <code>sudo ufw enable</code><br>
+          <code>sudo ufw status verbose</code></p>
+          <figure class="figure"><img src="Images/phase4-1.png" alt="UFW firewall configured and enabled" loading="lazy" decoding="async"></figure>
+          <ul>
+            <li>Immediate attack surface reduction</li>
+            <li>Zero-trust mindset</li>
+          </ul>
+        </div>
+
+        <div class="sub-section">
+          <h4>2. Enable Automatic Security Updates</h4>
+          <p><code>sudo apt install unattended-upgrades -y</code></p>
+          <figure class="figure"><img src="Images/phase4-2.png" alt="Installing unattended-upgrades" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase4-3.png" alt="unattended-upgrades installation complete" loading="lazy" decoding="async"></figure>
+          <p>To minimize the attack surface and ensure 24/7 security compliance, the <code>unattended-upgrades</code> package implements Automated Patch Management. It enables the server to autonomously fetch and apply critical security updates from official Ubuntu repositories — ensuring the system remains resilient against emerging threats without requiring manual intervention.</p>
+          <p><code>sudo dpkg-reconfigure unattended-upgrades</code></p>
+          <figure class="figure"><img src="Images/phase4-4.png" alt="dpkg-reconfigure unattended-upgrades prompt" loading="lazy" decoding="async"></figure>
+          <p>Select <strong style="color:var(--brand);">Yes</strong> when prompted:</p>
+          <figure class="figure"><img src="Images/phase4-5.png" alt="Select Yes to enable unattended-upgrades" loading="lazy" decoding="async"></figure>
+          <p>This ensures the server remains resilient against zero-day vulnerabilities by synchronizing with official repositories daily — reducing the need for manual intervention while maintaining system uptime and stability.</p>
+        </div>
+
+      </div>
+
+      <!-- PHASE 5 -->
+      <h2 id="phase-5">Phase 5 — Service &amp; System Management</h2>
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>1. Install Core SysAdmin Tools</h4>
+          <p><code>sudo apt install -y htop curl wget git net-tools fail2ban</code></p>
+          <ul>
+            <li><code>htop</code> — interactive process viewer</li>
+            <li><code>curl</code> — data transfer tool</li>
+            <li><code>wget</code> — file downloader</li>
+            <li><code>git</code> — version control</li>
+            <li><code>net-tools</code> — legacy network utilities</li>
+            <li><code>fail2ban</code> — intrusion prevention service</li>
+          </ul>
+          <figure class="figure"><img src="Images/phase5-1.png" alt="Installing core sysadmin tools" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase5-2.png" alt="Installation of sysadmin tools complete" loading="lazy" decoding="async"></figure>
+          <p><strong style="color:var(--brand);">Fail2ban</strong> is a critical open-source intrusion prevention service designed to harden a server against brute-force attacks. By configuring "jails," it dynamically monitors SSH authentication logs and proactively bans malicious IP addresses — significantly reducing the server's attack surface.</p>
+        </div>
+
+        <div class="sub-section">
+          <h4>Enabling Fail2ban</h4>
+          <p><code>sudo systemctl enable fail2ban --now</code></p>
+          <figure class="figure"><img src="Images/phase5-3.png" alt="Enabling fail2ban service" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase5-4.png" alt="fail2ban service active status" loading="lazy" decoding="async"></figure>
+          <p><code>systemctl list-units --type=service --state=running</code></p>
+          <p>This is the terminal equivalent of opening the <strong style="color:var(--brand);">"Processes"</strong> tab in Windows Task Manager or Activity Monitor on a Mac.</p>
+          <figure class="figure"><img src="Images/phase5-5.png" alt="List of running services" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase5-6.png" alt="Running services list continued" loading="lazy" decoding="async"></figure>
+        </div>
+
+      </div>
+
+      <!-- PHASE 6 -->
+      <h2 id="phase-6">Phase 6 — Logging, Monitoring &amp; Maintenance</h2>
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>1. Log Inspection</h4>
+          <p><code>journalctl -p 3 -xb</code></p>
+          <figure class="figure"><img src="Images/phase6-1.png" alt="journalctl -p 3 -xb output" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase6-2.png" alt="journalctl error-level events" loading="lazy" decoding="async"></figure>
+          <p>Using <code>journalctl -p 3 -xb</code> as a primary diagnostic tool runs a high-priority log inspection. By filtering for Priority 3 (Error-level) events within the current boot descriptor, it bypasses non-critical system telemetry and immediately isolates service failures or kernel exceptions that could impact system stability.</p>
+        </div>
+
+        <div class="sub-section">
+          <h4>2. Check Auth Logs</h4>
+          <p><code>sudo tail -f /var/log/auth.log</code></p>
+          <figure class="figure"><img src="Images/phase6-3.png" alt="auth.log tail output" loading="lazy" decoding="async"></figure>
+          <figure class="figure"><img src="Images/phase6-4.png" alt="auth.log live authentication events" loading="lazy" decoding="async"></figure>
+          <p>Using <code>tail -f</code> on the authentication logs (<code>auth.log</code>) establishes a <strong style="color:var(--brand);">Live Security Feed</strong> — allowing real-time observation of user sessions and authentication attempts. This ensures total visibility into both system stability and security integrity.</p>
+          <ul>
+            <li>Early intrusion detection</li>
+            <li>Debugging misconfigurations</li>
+          </ul>
+        </div>
+
+        <div class="sub-section">
+          <h4>3. Backup Awareness (Often Ignored)</h4>
+          <p>Even if you don't implement backups yet, it's critical to know what to back up:</p>
+          <p><code>ls /etc</code><br><code>ls /var</code></p>
+          <p>In establishing a robust disaster recovery plan, the <code>/etc</code> and <code>/var</code> directories are the priority. Backing up <code>/etc</code> preserves the <strong style="color:var(--brand);">System State</strong> — capturing all custom configurations, security policies, and network definitions. Backing up <code>/var</code> ensures preservation of <strong style="color:var(--brand);">Operational Data</strong>, including critical security logs and application databases. Together, these backups allow for a rapid bare-metal recovery, ensuring the system can be restored to its exact functional state in the event of hardware failure or data corruption.</p>
+        </div>
+
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <script>
+    (function(){
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = `
+        <div class="lb-stage" role="dialog" aria-modal="true" aria-label="Image preview">
+          <button class="lb-btn lb-close" aria-label="Close (Esc)">✕</button>
+          <button class="lb-btn lb-prev" aria-label="Previous">&#10094;</button>
+          <img class="lb-img" alt="">
+          <button class="lb-btn lb-next" aria-label="Next">&#10095;</button>
+          <div class="lb-cap" aria-live="polite"></div>
+        </div>`;
+      document.body.appendChild(lb);
+
+      const imgEl   = lb.querySelector('.lb-img');
+      const capEl   = lb.querySelector('.lb-cap');
+      const btnClose = lb.querySelector('.lb-close');
+      const btnPrev  = lb.querySelector('.lb-prev');
+      const btnNext  = lb.querySelector('.lb-next');
+
+      const imgs = Array.from(document.querySelectorAll('.figure img'));
+      let idx = 0;
+
+      function render(i){
+        const el = imgs[i]; if(!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.alt || '';
+        btnPrev.style.display = btnNext.style.display = imgs.length > 1 ? '' : 'none';
+      }
+      function open(i){ idx=i; render(idx); lb.classList.add('open'); document.body.style.overflow='hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+      function prev(){ idx=(idx-1+imgs.length)%imgs.length; render(idx); }
+      function next(){ idx=(idx+1)%imgs.length; render(idx); }
+
+      imgs.forEach((img,i) => img.addEventListener('click', e => { e.preventDefault(); open(i); }));
+      btnClose.addEventListener('click', close);
+      btnPrev .addEventListener('click', e => { e.stopPropagation(); prev(); });
+      btnNext .addEventListener('click', e => { e.stopPropagation(); next(); });
+      lb.addEventListener('click', e => { if(e.target===lb) close(); });
+      document.addEventListener('keydown', e => {
+        if(!lb.classList.contains('open')) return;
+        if(e.key==='Escape') close();
+        else if(e.key==='ArrowLeft') prev();
+        else if(e.key==='ArrowRight') next();
+      });
+    })();
+  </script>
 </body>
 </html>
