@@ -14,18 +14,29 @@
     html,body{height:100%}
     body{
       margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);text-decoration:none;padding:12px 20px;
+      border-radius:12px;border:1px solid transparent;font-size:16px;font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -34,37 +45,63 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
 
-    /* Cards */
-    .card{
+    /* Inline code */
+    code{
+      background:rgba(0,0,0,.35);border:1px solid var(--card-border);
+      border-radius:4px;padding:1px 6px;font-size:14px;color:#a8d8ff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+
+    /* Content area */
+    .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
+      box-shadow:var(--shadow);padding:32px;margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;font-weight:700;margin:0 0 24px 0;
+      color:var(--text);padding-bottom:12px;border-bottom:2px solid var(--card-border);
     }
 
-    /* Grid of project tiles */
-    .grid{display:grid;gap:14px;margin-top:10px}
-    @media (min-width:700px){ .grid{grid-template-columns:1fr 1fr} }
-    .tile{display:flex;flex-direction:column;gap:8px;padding:16px;border:1px solid var(--card-border);border-radius:14px;background:rgba(255,255,255,.02)}
-    .tile h3{margin:0;font-size:18px}
-    .tile p{margin:0;color:var(--muted)}
-    .tile .actions{margin-top:8px}
-    .btn{
-      display:inline-block;border:1px solid #3a4a67;border-radius:10px;padding:8px 12px;
-      color:var(--text);text-decoration:none;background:rgba(255,255,255,.05)
+    /* Module list (matching hub page style) */
+    .module-list{display:grid;gap:14px;margin-top:8px}
+    @media (min-width:700px){ .module-list{grid-template-columns:1fr 1fr} }
+
+    .module-item{
+      display:flex;flex-direction:column;gap:10px;
+      padding:20px;border:1px solid var(--card-border);
+      border-radius:14px;background:rgba(77,163,255,.04);
+      transition:border-color .2s,background .2s;
     }
-    .btn:hover{background:rgba(255,255,255,.09)}
+    .module-item:hover{border-color:#3a4a67;background:rgba(77,163,255,.07)}
+    .module-item h3{margin:0;font-size:19px;font-weight:700;color:var(--text)}
+    .module-item p{margin:0;color:var(--muted);font-size:16px;line-height:1.7;flex:1}
+    .module-item .actions{margin-top:4px}
+
+    .btn{
+      display:inline-block;border:1px solid #3a4a67;border-radius:10px;
+      padding:9px 16px;color:var(--text);text-decoration:none;
+      background:rgba(255,255,255,.05);font-size:15px;font-weight:500;
+    }
+    .btn:hover{background:rgba(255,255,255,.1);text-decoration:none}
+
+    /* Back link */
+    .back-link{display:inline-block;margin-top:24px;color:var(--brand);text-decoration:none;font-size:15px}
+    .back-link:hover{text-decoration:underline}
 
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{margin-top:48px;padding-top:24px;padding-bottom:2px;border-top:1px solid #232a3a;color:var(--muted);font-size:0.9rem}
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -87,56 +124,51 @@
     <!-- Header -->
     <header>
       <h1>Scripting &amp; Automation with Raspberry Pi 5</h1>
-       <p style="margin-top:22px">
-      <a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" style="color:var(--brand);font-weight:600">
-        View this project on GitHub
-      </a>
-    </p>
-      <p class="lead">A collection of Bash-driven automations for a Raspberry Pi 5: network discovery, diagnostics, patching/health checks, and backups to a NAS—each with step-by-step screenshots.</p>
+      <p style="margin-top:16px"><a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" rel="noopener" style="color:var(--brand);font-weight:600">View this project on GitHub</a></p>
+      <p class="lead">A collection of Bash-driven automations for a Raspberry Pi 5: network discovery, diagnostics, patching/health checks, and backups to a NAS — each with step-by-step screenshots.</p>
     </header>
 
-    <!-- Intro -->
-    <section class="card">
+    <!-- Projects -->
+    <main class="content">
       <h2>Projects</h2>
-      <div class="grid">
-        <article class="tile">
+      <div class="module-list">
+
+        <article class="module-item">
           <h3>Hourly Network Scanner</h3>
           <p>Use <code>nmap</code> to discover new hosts hourly and append results to logs via <code>cron</code>.</p>
           <div class="actions">
-            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Network%20Scanner">Open</a>
+            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Network%20Scanner">Open →</a>
           </div>
         </article>
 
-        <article class="tile">
+        <article class="module-item">
           <h3>Network Command Automation</h3>
           <p>One-shot helpers for host inventory, active sockets, DHCP renewals, DNS tests, tracing, and smart ping.</p>
           <div class="actions">
-            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Network%20Commands">Open</a>
+            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Network%20Commands">Open →</a>
           </div>
         </article>
 
-        <article class="tile">
+        <article class="module-item">
           <h3>System Update &amp; Device Health Monitor</h3>
-          <p>Automated updates plus disk, memory, CPU, and temperature logging—built for unattended hourly runs.</p>
+          <p>Automated updates plus disk, memory, CPU, and temperature logging — built for unattended hourly runs.</p>
           <div class="actions">
-            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/System%20Update%20and%20Device%20Health%20Monitor">Open</a>
+            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/System%20Update%20and%20Device%20Health%20Monitor">Open →</a>
           </div>
         </article>
 
-        <article class="tile">
+        <article class="module-item">
           <h3>Backup to NAS Server</h3>
           <p>Key-based SSH + <code>rsync</code> to mirror your Automation folder to a Raspberry Pi 3 NAS weekly.</p>
           <div class="actions">
-            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Backup%20to%20NAS%20Server">Open</a>
+            <a class="btn" href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/Scripting%20&%20Automation%20Project%20with%20Raspberry%20Pi%205/Backup%20to%20NAS%20Server">Open →</a>
           </div>
         </article>
-      </div>
-    </section>
 
-    <!-- Back link -->
-    <section class="card">
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+      </div>
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -146,7 +178,6 @@
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 </body>
 </html>
