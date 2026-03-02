@@ -14,18 +14,34 @@
     html,body{height:100%}
     body{
       margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav (tabs) */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -34,33 +50,126 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
-
-    /* Cards / sections */
-    .card{
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);border-radius:var(--radius);
-      box-shadow:var(--shadow);padding:18px;margin-top:16px
-    }
 
     /* Inline code */
     code{
-      background:#0f1424;border:1px solid #202a3f;border-radius:6px;
-      padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
     }
 
-    ul,ol{padding-left:22px;margin:8px 0}
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section li{margin:6px 0}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section li{margin:6px 0}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
 
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -83,82 +192,99 @@
     <!-- Header -->
     <header>
       <h1>Linux: An Introduction</h1>
-      <p style="margin-top:22px">
-      <a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" style="color:var(--brand);font-weight:600">
-        View this project on GitHub
-      </a>
-    </p>
-      <p class="lead">What Linux is, why it’s everywhere, how the kernel differs from a distribution, and the core components that make up a Linux system.</p>
+      <p style="margin-top:16px"><a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" rel="noopener" style="color:var(--brand);font-weight:600">View this project on GitHub</a></p>
+      <p class="lead">What Linux is, why it's everywhere, how the kernel differs from a distribution, and the core components that make up a Linux system.</p>
     </header>
 
-    <!-- What is Linux -->
-    <section class="card">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- What is Linux -->
       <h2>What is Linux?</h2>
-      <p>Linux is a family of open-source operating systems built around the Linux kernel. It provides a Unix-like environment and powers everything from laptops and servers to smartphones, routers, smart TVs, and spacecraft. Thanks to its licensing (e.g., the GNU GPL), Linux is collaborative, customizable, and freely distributed.</p>
-    </section>
+      <div class="step-section">
+        <p>Linux is a family of open-source operating systems built around the Linux kernel. It provides a Unix-like environment and powers everything from laptops and servers to smartphones, routers, smart TVs, and spacecraft. Thanks to its licensing (e.g., the GNU GPL), Linux is collaborative, customizable, and freely distributed.</p>
+      </div>
 
-    <!-- History -->
-    <section class="card">
+      <!-- History -->
       <h2>A Brief History of Linux</h2>
-      <p>In 1991, Linus Torvalds released an early version of a free kernel inspired by Unix. Combined with tooling from the GNU Project (started by Richard Stallman in 1983), it grew into a complete operating system used by developers worldwide. Today, Linux is foundational to the internet, cloud platforms, Android devices, embedded systems, and supercomputers.</p>
-    </section>
+      <div class="step-section">
+        <p>In 1991, <strong style="color:var(--brand);">Linus Torvalds</strong> released an early version of a free kernel inspired by Unix. Combined with tooling from the <strong style="color:var(--brand);">GNU Project</strong> (started by Richard Stallman in 1983), it grew into a complete operating system used by developers worldwide. Today, Linux is foundational to the internet, cloud platforms, Android devices, embedded systems, and supercomputers.</p>
+      </div>
 
-    <!-- Where it runs -->
-    <section class="card">
+      <!-- Where it runs -->
       <h2>How Linux is Everywhere</h2>
-      <ul>
-        <li><b>Smartphones:</b> Android is based on the Linux kernel.</li>
-        <li><b>Web Servers:</b> A majority of websites run on Linux.</li>
-        <li><b>Cloud:</b> AWS, Google Cloud, and Azure rely heavily on Linux.</li>
-        <li><b>Supercomputers:</b> All of the Top500 list run Linux.</li>
-        <li><b>IoT/Embedded:</b> Routers, TVs, cars, and appliances often use Linux variants.</li>
-      </ul>
-    </section>
+      <div class="step-section">
+        <div class="sub-section">
+          <h4>Where You'll Find Linux</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Smartphones:</strong> Android is based on the Linux kernel.</li>
+            <li><strong style="color:var(--brand);">Web Servers:</strong> A majority of websites run on Linux.</li>
+            <li><strong style="color:var(--brand);">Cloud:</strong> AWS, Google Cloud, and Azure rely heavily on Linux.</li>
+            <li><strong style="color:var(--brand);">Supercomputers:</strong> All of the Top500 list run Linux.</li>
+            <li><strong style="color:var(--brand);">IoT/Embedded:</strong> Routers, TVs, cars, and appliances often use Linux variants.</li>
+          </ul>
+        </div>
+      </div>
 
-    <!-- Kernel -->
-    <section class="card">
+      <!-- The Kernel -->
       <h2>The Linux Kernel: The Heart of the System</h2>
-      <p>The term “Linux” strictly refers to the <b>kernel</b>—the component that interfaces with hardware and provides low-level services:</p>
-      <ul>
-        <li><b>Process</b> and <b>memory</b> management</li>
-        <li><b>Device</b> drivers and communication</li>
-        <li><b>System calls</b> and security enforcement</li>
-      </ul>
-      <p>What users interact with—shells, graphical desktops, and applications—comes from the surrounding software packaged by a distribution.</p>
-    </section>
+      <div class="step-section">
+        <p>The term "Linux" strictly refers to the <strong style="color:var(--brand);">kernel</strong> — the component that interfaces with hardware and provides low-level services.</p>
 
-    <!-- Distros -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>What the Kernel Handles</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Process</strong> and <strong style="color:var(--brand);">memory</strong> management</li>
+            <li><strong style="color:var(--brand);">Device</strong> drivers and communication</li>
+            <li><strong style="color:var(--brand);">System calls</strong> and security enforcement</li>
+          </ul>
+          <p>What users interact with — shells, graphical desktops, and applications — comes from the surrounding software packaged by a distribution.</p>
+        </div>
+      </div>
+
+      <!-- Distributions -->
       <h2>What is a Linux Distribution?</h2>
-      <p>A <b>distribution</b> (distro) bundles the kernel with system libraries, utilities, a package manager, and, optionally, a desktop environment or server stack. Popular choices include:</p>
-      <ul>
-        <li><b>Ubuntu:</b> User-friendly; common on desktops and servers</li>
-        <li><b>Debian:</b> Stable, community-driven base for many distros</li>
-        <li><b>Fedora:</b> Cutting-edge features</li>
-        <li><b>Arch Linux:</b> Minimal and highly customizable</li>
-        <li><b>RHEL:</b> Enterprise-grade with long-term support</li>
-      </ul>
-    </section>
+      <div class="step-section">
+        <p>A <strong style="color:var(--brand);">distribution</strong> (distro) bundles the kernel with system libraries, utilities, a package manager, and, optionally, a desktop environment or server stack. Popular choices include:</p>
 
-    <!-- Components -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>Common Distributions</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Ubuntu:</strong> User-friendly; common on desktops and servers</li>
+            <li><strong style="color:var(--brand);">Debian:</strong> Stable, community-driven base for many distros</li>
+            <li><strong style="color:var(--brand);">Fedora:</strong> Cutting-edge features</li>
+            <li><strong style="color:var(--brand);">Arch Linux:</strong> Minimal and highly customizable</li>
+            <li><strong style="color:var(--brand);">RHEL:</strong> Enterprise-grade with long-term support</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Components -->
       <h2>Important Components of a Linux System</h2>
-      <ul>
-        <li><b>Kernel:</b> Core that speaks to hardware.</li>
-        <li><b>Shell:</b> Command-line interface (e.g., <code>bash</code>, <code>zsh</code>).</li>
-        <li><b>File System:</b> Hierarchical tree starting at root <code>/</code>.</li>
-        <li><b>System Libraries:</b> Shared code used by apps and services.</li>
-        <li><b>Daemons:</b> Background services (networking, printing, scheduling).</li>
-        <li><b>User Interface:</b> Desktops like GNOME, KDE, XFCE, or server-only CLI.</li>
-        <li><b>Package Manager:</b> Tools such as <code>apt</code>, <code>dnf</code>/<code>yum</code> for software install/updates.</li>
-      </ul>
-    </section>
+      <div class="step-section">
+        <div class="sub-section">
+          <h4>Core Components</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">Kernel:</strong> Core that speaks to hardware.</li>
+            <li><strong style="color:var(--brand);">Shell:</strong> Command-line interface (e.g., <code>bash</code>, <code>zsh</code>).</li>
+            <li><strong style="color:var(--brand);">File System:</strong> Hierarchical tree starting at root <code>/</code>.</li>
+            <li><strong style="color:var(--brand);">System Libraries:</strong> Shared code used by apps and services.</li>
+            <li><strong style="color:var(--brand);">Daemons:</strong> Background services (networking, printing, scheduling).</li>
+            <li><strong style="color:var(--brand);">User Interface:</strong> Desktops like GNOME, KDE, XFCE, or server-only CLI.</li>
+            <li><strong style="color:var(--brand);">Package Manager:</strong> Tools such as <code>apt</code>, <code>dnf</code>/<code>yum</code> for software install/updates.</li>
+          </ul>
+        </div>
+      </div>
 
-    <!-- Wrap -->
-    <section class="card">
-      <p>This intro is a launchpad. Whether you want system administration, development, or security, Linux offers the flexibility and transparency to learn deeply and build confidently.</p>
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+      <!-- Closing -->
+      <h2>Where This Leads</h2>
+      <div class="step-section">
+        <p>This intro is a launchpad. Whether you want system administration, development, or security, Linux offers the flexibility and transparency to learn deeply and build confidently.</p>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
