@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Linux Basics & Fundamentals · Mark Thompson Portfolio</title>
-  <meta name="description" content="Foundational Linux concepts: filesystem hierarchy, Debian/Ubuntu package management (APT & dpkg), managing services with systemd, processes, and system monitoring/logging. Theme‑matched to MTPortfolio." />
+  <title>Linux Basics &amp; Fundamentals · Mark Thompson Portfolio</title>
+  <meta name="description" content="Foundational Linux concepts: filesystem hierarchy, Debian/Ubuntu package management (APT & dpkg), managing services with systemd, processes, and system monitoring/logging." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -14,18 +14,34 @@
     html,body{height:100%}
     body{
       margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -34,33 +50,143 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
-
-    /* Cards / sections */
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:16px}
 
     /* Code */
-    pre{margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;border-radius:12px;overflow:auto;color:#e8eaf6;font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
-    code{background:#0f1424;border:1px solid #202a3f;border-radius:6px;padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
+    pre{
+      margin:12px 0;
+      padding:14px 16px;
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      overflow-x:auto;
+      color:#a8d8ff;
+      font:500 14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+    code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+    pre code{
+      background:none;
+      border:none;
+      padding:0;
+      font-size:inherit;
+      color:inherit;
+    }
 
-    /* Lists */
-    ul,ol{padding-left:22px;margin:8px 0}
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Figures (optional screenshots) */
-    .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;max-width:100%}
-    .figure img{display:block;height:auto;max-width:100%}
-    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section li{margin:6px 0}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 12px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section li{margin:6px 0}
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
 
     /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -83,101 +209,121 @@
     <!-- Header -->
     <header>
       <h1>Linux Basics &amp; Fundamentals</h1>
-       <p style="margin-top:22px">
-      <a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" style="color:var(--brand);font-weight:600">
-        View this project on GitHub
-      </a>
-    </p>
-      <p class="lead">Core admin skills: filesystem hierarchy, Debian/Ubuntu package management, systemd service control, processes, and essential system monitoring & logging.</p>
+      <p style="margin-top:16px"><a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" rel="noopener" style="color:var(--brand);font-weight:600">View this project on GitHub</a></p>
+      <p class="lead">Core admin skills: filesystem hierarchy, Debian/Ubuntu package management, systemd service control, processes, and essential system monitoring &amp; logging.</p>
     </header>
 
-    <!-- Filesystem -->
-    <section class="card" id="filesystem">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Filesystem Hierarchy -->
       <h2>Linux Filesystem Hierarchy Overview</h2>
-      <p>The <b>Filesystem Hierarchy</b> organizes everything as files under the root <code>/</code>. Knowing where things live helps with troubleshooting, backups, and automation.</p>
-      <ul>
-        <li><b>/</b> – Root of the filesystem</li>
-        <li><b>/bin</b> – Essential user binaries</li>
-        <li><b>/sbin</b> – System binaries (admin)</li>
-        <li><b>/boot</b> – Boot loader & kernel</li>
-        <li><b>/etc</b> – System‑wide configuration</li>
-        <li><b>/home</b> – User home directories</li>
-        <li><b>/lib</b>, <b>/lib64</b> – Shared libraries</li>
-        <li><b>/usr</b> – User‑space apps & read‑mostly data</li>
-        <li><b>/var</b> – Variable data (logs, spool, DBs)</li>
-        <li><b>/tmp</b> – Temporary files</li>
-        <li><b>/opt</b> – Optional third‑party software</li>
-        <li><b>/dev</b> – Device files</li>
-        <li><b>/proc</b>, <b>/sys</b> – Virtual kernel & device info</li>
-        <li><b>/mnt</b>, <b>/media</b> – Mount points/removable media</li>
-      </ul>
-      <!-- Optional screenshot placeholder
-      <figure class="figure">
-        <img src="Images/linux/fs-tree.png" alt="Filesystem tree from root /" loading="lazy" decoding="async" />
-        <figcaption class="figcap">A quick look at the Linux filesystem from <code>/</code>.</figcaption>
-      </figure> -->
-    </section>
+      <div class="step-section">
+        <p>The <strong style="color:var(--brand);">Filesystem Hierarchy</strong> organizes everything as files under the root <code>/</code>. Knowing where things live helps with troubleshooting, backups, and automation.</p>
 
-    <!-- Package management -->
-    <section class="card" id="packages">
-      <h2>Package Management on Debian‑based Systems</h2>
-      <p>Debian/Ubuntu use <b>APT (Advanced Package Tool)</b> to query, install, and update software from repositories defined in <code>/etc/apt/sources.list</code> (and files in <code>/etc/apt/sources.list.d/</code>).</p>
+        <div class="sub-section">
+          <h4>Key Directories</h4>
+          <ul>
+            <li><strong style="color:var(--brand);">/</strong> – Root of the filesystem</li>
+            <li><strong style="color:var(--brand);">/bin</strong> – Essential user binaries</li>
+            <li><strong style="color:var(--brand);">/sbin</strong> – System binaries (admin)</li>
+            <li><strong style="color:var(--brand);">/boot</strong> – Boot loader &amp; kernel</li>
+            <li><strong style="color:var(--brand);">/etc</strong> – System-wide configuration</li>
+            <li><strong style="color:var(--brand);">/home</strong> – User home directories</li>
+            <li><strong style="color:var(--brand);">/lib</strong>, <strong style="color:var(--brand);">/lib64</strong> – Shared libraries</li>
+            <li><strong style="color:var(--brand);">/usr</strong> – User-space apps &amp; read-mostly data</li>
+            <li><strong style="color:var(--brand);">/var</strong> – Variable data (logs, spool, DBs)</li>
+            <li><strong style="color:var(--brand);">/tmp</strong> – Temporary files</li>
+            <li><strong style="color:var(--brand);">/opt</strong> – Optional third-party software</li>
+            <li><strong style="color:var(--brand);">/dev</strong> – Device files</li>
+            <li><strong style="color:var(--brand);">/proc</strong>, <strong style="color:var(--brand);">/sys</strong> – Virtual kernel &amp; device info</li>
+            <li><strong style="color:var(--brand);">/mnt</strong>, <strong style="color:var(--brand);">/media</strong> – Mount points / removable media</li>
+          </ul>
+        </div>
+      </div>
 
-      <h3>Common APT commands</h3>
-      <pre><code>sudo apt update            # Refresh package lists
+      <!-- Package Management -->
+      <h2>Package Management on Debian-based Systems</h2>
+      <div class="step-section">
+        <p>Debian/Ubuntu use <strong style="color:var(--brand);">APT (Advanced Package Tool)</strong> to query, install, and update software from repositories defined in <code>/etc/apt/sources.list</code> (and files in <code>/etc/apt/sources.list.d/</code>).</p>
+
+        <div class="sub-section">
+          <h4>Common APT Commands</h4>
+<pre><code>sudo apt update            # Refresh package lists
 sudo apt upgrade           # Upgrade installed packages
 sudo apt install &lt;pkg&gt;    # Install a package
 sudo apt remove &lt;pkg&gt;     # Remove (keep configs)
 sudo apt purge &lt;pkg&gt;      # Remove incl. configs
 apt search &lt;term&gt;         # Search available software</code></pre>
+        </div>
 
-      <h3>Low‑level: dpkg</h3>
-      <p><code>dpkg</code> works directly with <code>.deb</code> files and the local package database.</p>
-      <pre><code>sudo dpkg -i package.deb   # Install a .deb
+        <div class="sub-section">
+          <h4>Low-Level: dpkg</h4>
+          <p><code>dpkg</code> works directly with <code>.deb</code> files and the local package database.</p>
+<pre><code>sudo dpkg -i package.deb   # Install a .deb
 sudo dpkg -r &lt;name&gt;        # Remove (keep configs)
 sudo dpkg -P &lt;name&gt;        # Purge (remove configs)
 dpkg -l                    # List installed packages</code></pre>
-    </section>
+        </div>
+      </div>
 
-    <!-- Services -->
-    <section class="card" id="services">
+      <!-- Services -->
       <h2>Managing System Services (systemd)</h2>
-      <p><b>systemd</b> is the init system & service manager on most modern distros. You interact with it using <code>systemctl</code> and view logs via <code>journalctl</code>.</p>
-      <pre><code>systemctl status &lt;service&gt;             # Check status
-sudo systemctl start|stop|restart &lt;service&gt;
-sudo systemctl enable|disable &lt;service&gt; # Manage autostart
-journalctl -u &lt;service&gt;                # Service logs</code></pre>
-    </section>
+      <div class="step-section">
+        <p><strong style="color:var(--brand);">systemd</strong> is the init system &amp; service manager on most modern distros. You interact with it using <code>systemctl</code> and view logs via <code>journalctl</code>.</p>
 
-    <!-- Processes -->
-    <section class="card" id="processes">
+        <div class="sub-section">
+          <h4>Common systemctl &amp; journalctl Commands</h4>
+<pre><code>systemctl status &lt;service&gt;               # Check status
+sudo systemctl start|stop|restart &lt;service&gt;
+sudo systemctl enable|disable &lt;service&gt;  # Manage autostart
+journalctl -u &lt;service&gt;                  # Service logs</code></pre>
+        </div>
+      </div>
+
+      <!-- Processes -->
       <h2>Process Management</h2>
-      <p>Processes are running programs; each has a PID and consumes CPU/memory. Use these commands to inspect and control them.</p>
-      <pre><code>ps aux                      # Snapshot of processes (BSD style)
+      <div class="step-section">
+        <p>Processes are running programs; each has a PID and consumes CPU/memory. Use these commands to inspect and control them.</p>
+
+        <div class="sub-section">
+          <h4>Process Commands</h4>
+<pre><code>ps aux                      # Snapshot of processes (BSD style)
 top                         # Interactive live view
 htop                        # Nicer top (if installed)
 kill &lt;PID&gt;                  # Terminate by PID
 pkill &lt;name&gt;                # Terminate by name
 jobs; bg; fg                # Manage shell jobs</code></pre>
-    </section>
+        </div>
+      </div>
 
-    <!-- Monitoring & logs -->
-    <section class="card" id="monitoring">
+      <!-- Monitoring & Logging -->
       <h2>System Monitoring and Logging</h2>
-      <pre><code>uname -a        # Kernel and OS info
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>System Info Commands</h4>
+<pre><code>uname -a        # Kernel and OS info
 hostnamectl     # Hostname and chassis info
 lscpu           # CPU details
-free -h         # Memory usage
-</code></pre>
-      <p><b>Key logs</b> (Debian/Ubuntu): <code>/var/log/syslog</code>, <code>/var/log/auth.log</code>, and kernel ring buffer via <code>dmesg</code>.</p>
-    </section>
+free -h         # Memory usage</code></pre>
+        </div>
 
-    <!-- Wrap -->
-    <section class="card">
+        <div class="sub-section">
+          <h4>Key Log Files</h4>
+          <p>On Debian/Ubuntu, the most important logs are <code>/var/log/syslog</code> and <code>/var/log/auth.log</code>. The kernel ring buffer is accessible via <code>dmesg</code>.</p>
+        </div>
+      </div>
+
+      <!-- Conclusion -->
       <h2>Conclusion</h2>
-      <p>These fundamentals—filesystem layout, packages, services, processes, and logs—form the day‑to‑day toolkit for Linux admins. Master them first, then layer on scripting, automation, and security hardening.</p>
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+      <div class="step-section">
+        <p>These fundamentals — filesystem layout, packages, services, processes, and logs — form the day-to-day toolkit for Linux admins. Master them first, then layer on scripting, automation, and security hardening.</p>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -187,7 +333,6 @@ free -h         # Memory usage
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 </body>
 </html>
