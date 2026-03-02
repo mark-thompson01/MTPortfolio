@@ -14,18 +14,29 @@
     html,body{height:100%}
     body{
       margin:0; color:var(--text);
-      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
       background:
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
-    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
-    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);text-decoration:none;padding:12px 20px;
+      border-radius:12px;border:1px solid transparent;font-size:16px;font-weight:500;
+    }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
@@ -34,29 +45,71 @@
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Headings & links */
-    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
-    h2{margin:0 0 10px;font-size:22px}
-    h3{margin:16px 0 8px;font-size:18px}
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
-    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
-
-    /* Cards */
-    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--card-border);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-top:16px}
 
     /* Code */
-    pre{margin:10px 0;padding:12px 14px;background:#0f1424;border:1px solid #202a3f;border-radius:12px;overflow:auto;color:#e8eaf6;font:500 13.5px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;box-shadow:inset 0 0 0 1px rgba(255,255,255,.02)}
-    code{background:#0f1424;border:1px solid #202a3f;border-radius:6px;padding:2px 6px;color:#e8eaf6;font:500 13.5px ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace}
+    pre{
+      margin:12px 0;padding:14px 16px;
+      background:rgba(0,0,0,.35);border:1px solid var(--card-border);
+      border-radius:8px;overflow-x:auto;color:#a8d8ff;
+      font:500 14px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+    code{
+      background:rgba(0,0,0,.35);border:1px solid var(--card-border);
+      border-radius:4px;padding:1px 6px;font-size:14px;color:#a8d8ff;
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,Monaco,"Courier New",monospace;
+    }
+    pre code{background:none;border:none;padding:0;font-size:inherit;color:inherit}
 
-    /* Figures */
-    .figure{border:1px solid var(--card-border);border-radius:12px;background:#0e1220;padding:8px;margin:12px auto;max-width:100%}
-    .figure img{display:block;height:auto;max-width:100%}
-    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:32px;margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;font-weight:700;margin:48px 0 20px 0;
+      color:var(--text);padding-bottom:12px;border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
 
-    /* Scroll galleries */
-    .gallery-wrap{position:relative;margin-top:10px}
-    .gallery{display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;align-items:stretch;overflow-x:auto;overflow-y:hidden;padding:8px 6px 12px;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;padding:24px;
+      background:rgba(77,163,255,.04);border:1px solid var(--card-border);border-radius:12px;
+    }
+    .step-section p{color:var(--muted);font-size:17px;line-height:1.75;margin:0 0 12px 0}
+    .step-section p:last-child{margin:0}
+    .step-section ul,.step-section ol{
+      color:var(--muted);font-size:17px;line-height:1.9;margin:0 0 12px 0;padding-left:24px;
+    }
+    .step-section li{margin:6px 0}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;padding:20px;
+      background:rgba(0,0,0,.2);border:1px solid var(--card-border);border-radius:10px;
+    }
+    .sub-section h4{font-size:17px;font-weight:700;color:var(--brand);margin:0 0 12px 0}
+    .sub-section p{color:var(--muted);font-size:17px;line-height:1.75;margin:0 0 10px 0}
+    .sub-section p:last-child{margin:0}
+    .sub-section ul{color:var(--muted);font-size:17px;line-height:1.9;margin:0 0 10px 0;padding-left:24px}
+    .sub-section li{margin:6px 0}
+
+    /* Galleries */
+    .gallery-wrap{position:relative;margin-top:16px}
+    .gallery{
+      display:grid;gap:12px;grid-auto-flow:column;grid-auto-columns:80%;
+      align-items:stretch;overflow-x:auto;overflow-y:hidden;
+      padding:8px 6px 12px;scroll-snap-type:x mandatory;
+      scroll-behavior:smooth;overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch;
+    }
     .gallery .item{scroll-snap-align:start}
     .gallery .item .figure{height:100%}
     .gallery::-webkit-scrollbar{height:10px}
@@ -66,30 +119,47 @@
     .gallery.hide-scrollbar::-webkit-scrollbar{display:none}
     @media (min-width:700px){ .gallery{grid-auto-columns:58%} }
     @media (min-width:1000px){ .gallery{grid-auto-columns:45%} }
-    .gbtn{position:absolute;top:50%;translate:0 -50%;z-index:2;border:1px solid var(--card-border);background:#0e1220;color:var(--text);box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;user-select:none}
+
+    .gbtn{
+      position:absolute;top:50%;translate:0 -50%;z-index:2;
+      border:1px solid var(--card-border);background:#0e1220;color:var(--text);
+      box-shadow:var(--shadow);border-radius:999px;width:40px;height:40px;
+      display:grid;place-items:center;cursor:pointer;user-select:none;
+    }
     .gbtn:hover{background:#121733}
     .gprev{left:-6px}
     .gnext{right:-6px}
 
-    /* Footer */
-    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
-    footer .links{margin-top:8px}
-    footer a{color:var(--muted)} footer a:hover{color:#4DA3FF}
+    /* Figures */
+    .figure{
+      border:1px solid var(--card-border);border-radius:12px;
+      background:#0e1220;padding:8px;margin:12px auto;max-width:100%;
+    }
+    .figure img{display:block;height:auto;max-width:100%;cursor:zoom-in;border-radius:8px}
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px;padding:0 4px 2px}
 
-    /* ===== Image Zoom (click-to-zoom) ===== */
-    .zoomable{cursor:zoom-in}
-    .zoom-overlay{
-      position:fixed; inset:0; display:none;
-      align-items:center; justify-content:center;
-      background:rgba(0,0,0,.8); z-index:9999; padding:24px;
-    }
-    .zoom-overlay.open{display:flex}
-    .zoom-overlay img{
-      max-width:min(1200px,94vw); max-height:90vh;
-      border-radius:12px; box-shadow:var(--shadow);
-      cursor:zoom-out;
-    }
-    body.zoom-open{overflow:hidden}
+    /* Lightbox */
+    .lightbox{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.86);z-index:9999}
+    .lightbox.open{display:grid}
+    .lb-stage{position:relative;max-width:96vw;max-height:92vh}
+    .lb-img{display:block;width:auto;height:auto;max-width:96vw;max-height:92vh;border-radius:12px;box-shadow:var(--shadow)}
+    .lb-cap{color:#cfd6e6;font-size:13px;text-align:center;margin-top:8px}
+    .lb-btn{position:absolute;top:10px;padding:6px 10px;border-radius:10px;border:1px solid #2A3447;background:#0e1220;color:var(--text);cursor:pointer;user-select:none}
+    .lb-close{right:10px}
+    .lb-prev,.lb-next{top:50%;translate:0 -50%;width:44px;height:44px;display:grid;place-items:center;border-radius:999px;font-size:20px;line-height:1}
+    .lb-prev{left:-58px}
+    .lb-next{right:-58px}
+    @media (max-width:700px){.lb-prev{left:-8px}.lb-next{right:-8px}}
+
+    /* Back link */
+    .back-link{display:inline-block;margin-top:24px;color:var(--brand);text-decoration:none;font-size:15px}
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{margin-top:48px;padding-top:24px;padding-bottom:2px;border-top:1px solid #232a3a;color:var(--muted);font-size:0.9rem}
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
   </style>
 </head>
 <body>
@@ -112,55 +182,59 @@
     <!-- Header -->
     <header>
       <h1>Basic Bash Shell Scripting</h1>
-       <p style="margin-top:22px">
-      <a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" style="color:var(--brand);font-weight:600">
-        View this project on GitHub
-      </a>
-    </p>
-      <p class="lead">Turn repetitive terminal tasks into small, reusable programs. Learn the shebang, variables, conditionals, loops, and functions—then apply them with real examples.</p>
+      <p style="margin-top:16px"><a href="https://github.com/mark-thompson01/linux-labs-and-automation" target="_blank" rel="noopener" style="color:var(--brand);font-weight:600">View this project on GitHub</a></p>
+      <p class="lead">Turn repetitive terminal tasks into small, reusable programs. Learn the shebang, variables, conditionals, loops, and functions — then apply them with real examples.</p>
     </header>
 
-    <!-- What is Bash scripting -->
-    <section class="card" id="what">
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- What is Bash Scripting -->
       <h2>What is Bash Shell Scripting?</h2>
-      <p><b>Bash</b> (Bourne Again Shell) is both a command language and a shell for Unix-like systems. <b>Bash scripting</b> means writing a sequence of commands into a file so they can run together—automating file work, user input, loops, and system admin tasks.</p>
-      <p>Bash scripting turns repeatable steps into clean, versionable scripts that manage systems and solve problems using built-in Unix tools.</p>
-    </section>
+      <div class="step-section">
+        <p><strong style="color:var(--brand);">Bash</strong> (Bourne Again Shell) is both a command language and a shell for Unix-like systems. <strong style="color:var(--brand);">Bash scripting</strong> means writing a sequence of commands into a file so they can run together — automating file work, user input, loops, and system admin tasks.</p>
+        <p>Bash scripting turns repeatable steps into clean, versionable scripts that manage systems and solve problems using built-in Unix tools.</p>
+      </div>
 
-    <!-- Why/When -->
-    <section class="card" id="why">
+      <!-- Why Bash Scripting -->
       <h2>Why and When is Bash Scripting Beneficial?</h2>
-      <ul>
-        <li>Automate repetitive admin tasks (backups, updates).</li>
-        <li>Create quick solutions for monitoring or file manipulation.</li>
-        <li>Run a sequence of commands without human interaction.</li>
-        <li>Configure environments and software setups.</li>
-        <li>Save time and reduce errors through automation.</li>
-      </ul>
-    </section>
+      <div class="step-section">
+        <ul>
+          <li>Automate repetitive admin tasks (backups, updates).</li>
+          <li>Create quick solutions for monitoring or file manipulation.</li>
+          <li>Run a sequence of commands without human interaction.</li>
+          <li>Configure environments and software setups.</li>
+          <li>Save time and reduce errors through automation.</li>
+        </ul>
+      </div>
 
-    <!-- Fundamentals -->
-    <section class="card" id="fundamentals">
+      <!-- Fundamentals -->
       <h2>Bash Scripting Fundamentals</h2>
+      <div class="step-section">
 
-      <h3>Shebang & Execution</h3>
-      <pre><code>#!/bin/bash
+        <div class="sub-section">
+          <h4>Shebang &amp; Execution</h4>
+          <p>The first line <code>#!/bin/bash</code> (the <strong style="color:var(--brand);">shebang</strong>) tells the OS to run the file with Bash. Make it executable and run it:</p>
+<pre><code>#!/bin/bash
 # file: script.sh
 
 echo "Hello from Bash"</code></pre>
-      <p>The first line <code>#!/bin/bash</code> (the <b>shebang</b>) tells the OS to run the file with Bash. Make it executable and run it:</p>
-      <pre><code>chmod +x script.sh
+<pre><code>chmod +x script.sh
 ./script.sh</code></pre>
+        </div>
 
-      <h3>Variables & Read</h3>
-      <pre><code>name="Mark"
+        <div class="sub-section">
+          <h4>Variables &amp; Read</h4>
+<pre><code>name="Mark"
 echo "Hi, $name!"
 
 read -p "Your favorite distro? " distro
 echo "Nice choice: $distro"</code></pre>
+        </div>
 
-      <h3>Conditionals</h3>
-      <pre><code>read -p "Enter a number: " n
+        <div class="sub-section">
+          <h4>Conditionals</h4>
+<pre><code>read -p "Enter a number: " n
 if [ "$n" -gt 10 ]; then
   echo "Greater than 10"
 elif [ "$n" -eq 10 ]; then
@@ -168,18 +242,18 @@ elif [ "$n" -eq 10 ]; then
 else
   echo "Less than 10"
 fi</code></pre>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-conditionals" class="gallery hide-scrollbar" role="region" aria-label="Conditional examples">
-          <article class="item"><figure class="figure"><img src="Images/Conditional.png" alt="If/else code example" loading="lazy" decoding="async" /><figcaption class="figcap">If/else structure.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ConditionalSR.png" alt="If/else output screenshot" loading="lazy" decoding="async" /><figcaption class="figcap">If/else output.</figcaption></figure></article>
+          <div class="gallery-wrap">
+            <div class="gallery hide-scrollbar" role="region" aria-label="Conditional examples">
+              <article class="item"><figure class="figure"><img src="Images/Conditional.png" alt="If/else code example" loading="lazy" decoding="async"><div class="figcap">If/else structure.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/ConditionalSR.png" alt="If/else output screenshot" loading="lazy" decoding="async"><div class="figcap">If/else output.</div></figure></article>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <h3>Loops</h3>
-      <p><b>For</b> — when you know the iteration set; <b>While</b> — continue while condition is true.</p>
-      <pre><code># for over values
+        <div class="sub-section">
+          <h4>Loops</h4>
+          <p><strong style="color:var(--brand);">For</strong> — when you know the iteration set; <strong style="color:var(--brand);">While</strong> — continue while condition is true.</p>
+<pre><code># for over values
 for i in 1 2 3; do
   echo "Number $i"
 done
@@ -195,43 +269,45 @@ while [ $count -lt 3 ]; do
   echo "Count: $count"
   count=$((count+1))
 done</code></pre>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-loops" class="gallery hide-scrollbar" role="region" aria-label="Loop examples">
-          <article class="item"><figure class="figure"><img src="Images/forloopexample.png" alt="for loop code" loading="lazy" decoding="async" /><figcaption class="figcap">For loop.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/forloopexampleSR.png" alt="for loop output" loading="lazy" decoding="async" /><figcaption class="figcap">For loop output.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/loopoverfile.png" alt="loop over files code" loading="lazy" decoding="async" /><figcaption class="figcap">Loop over files.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/loopoverfileSR.png" alt="loop over files output" loading="lazy" decoding="async" /><figcaption class="figcap">Loop over files output.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/whileloop.png" alt="while loop code" loading="lazy" decoding="async" /><figcaption class="figcap">While loop.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/whileloopSR.png" alt="while loop output" loading="lazy" decoding="async" /><figcaption class="figcap">While loop output.</figcaption></figure></article>
+          <div class="gallery-wrap">
+            <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
+            <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
+            <div class="gallery hide-scrollbar" role="region" aria-label="Loop examples">
+              <article class="item"><figure class="figure"><img src="Images/forloopexample.png" alt="for loop code" loading="lazy" decoding="async"><div class="figcap">For loop.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/forloopexampleSR.png" alt="for loop output" loading="lazy" decoding="async"><div class="figcap">For loop output.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/loopoverfile.png" alt="loop over files code" loading="lazy" decoding="async"><div class="figcap">Loop over files.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/loopoverfileSR.png" alt="loop over files output" loading="lazy" decoding="async"><div class="figcap">Loop over files output.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/whileloop.png" alt="while loop code" loading="lazy" decoding="async"><div class="figcap">While loop.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/whileloopSR.png" alt="while loop output" loading="lazy" decoding="async"><div class="figcap">While loop output.</div></figure></article>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <h3>Functions</h3>
-      <pre><code>greet(){
+        <div class="sub-section">
+          <h4>Functions</h4>
+<pre><code>greet(){
   echo "Hello, $1!"
 }
 
 greet "Mark"</code></pre>
-      <p>Functions help you organize code, avoid repetition, and reuse logic across scripts.</p>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-functions" class="gallery hide-scrollbar" role="region" aria-label="Function examples">
-          <article class="item"><figure class="figure"><img src="Images/Function1.png" alt="function code" loading="lazy" decoding="async" /><figcaption class="figcap">Function definition.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/Function1SR.png" alt="function output" loading="lazy" decoding="async" /><figcaption class="figcap">Function output.</figcaption></figure></article>
+          <p>Functions help you organize code, avoid repetition, and reuse logic across scripts.</p>
+          <div class="gallery-wrap">
+            <div class="gallery hide-scrollbar" role="region" aria-label="Function examples">
+              <article class="item"><figure class="figure"><img src="Images/Function1.png" alt="function code" loading="lazy" decoding="async"><div class="figcap">Function definition.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/Function1SR.png" alt="function output" loading="lazy" decoding="async"><div class="figcap">Function output.</div></figure></article>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <h3>Script Structure Tips</h3>
-      <ul>
-        <li>Start with <code>#!/bin/bash</code>, then <code>set -euo pipefail</code> for safer scripts.</li>
-        <li>Quote variables: <code>"$var"</code>. Prefer <code>$(cmd)</code> over backticks.</li>
-        <li>Use functions + <code>main()</code>; return exit codes with <code>exit</code>.</li>
-        <li>Log progress with <code>echo</code> or <code>printf</code>; use comments generously.</li>
-      </ul>
-      <pre><code>#!/bin/bash
+        <div class="sub-section">
+          <h4>Script Structure Tips</h4>
+          <ul>
+            <li>Start with <code>#!/bin/bash</code>, then <code>set -euo pipefail</code> for safer scripts.</li>
+            <li>Quote variables: <code>"$var"</code>. Prefer <code>$(cmd)</code> over backticks.</li>
+            <li>Use functions + <code>main()</code>; return exit codes with <code>exit</code>.</li>
+            <li>Log progress with <code>echo</code> or <code>printf</code>; use comments generously.</li>
+          </ul>
+<pre><code>#!/bin/bash
 set -euo pipefail
 
 log(){ printf "[%s] %s\n" "$(date +%T)" "$*"; }
@@ -241,79 +317,85 @@ main(){
   log "Done"
 }
 main "$@"</code></pre>
-    </section>
+        </div>
 
-    <!-- Examples gallery groups -->
-    <section class="card" id="examples">
+      </div>
+
+      <!-- Script Examples -->
       <h2>Script Examples</h2>
+      <div class="step-section">
 
-      <h3>1) Hello World</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-hello" class="gallery hide-scrollbar" role="region" aria-label="Hello world screenshots">
-          <article class="item"><figure class="figure"><img src="Images/hello.png" alt="hello world code" loading="lazy" decoding="async" /><figcaption class="figcap">Hello world script.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/helloSR.png" alt="hello world output" loading="lazy" decoding="async" /><figcaption class="figcap">Output.</figcaption></figure></article>
+        <div class="sub-section">
+          <h4>1) Hello World</h4>
+          <div class="gallery-wrap">
+            <div class="gallery hide-scrollbar" role="region" aria-label="Hello world screenshots">
+              <article class="item"><figure class="figure"><img src="Images/hello.png" alt="hello world code" loading="lazy" decoding="async"><div class="figcap">Hello world script.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/helloSR.png" alt="hello world output" loading="lazy" decoding="async"><div class="figcap">Output.</div></figure></article>
+            </div>
+          </div>
         </div>
+
+        <div class="sub-section">
+          <h4>2) User Input</h4>
+          <div class="gallery-wrap">
+            <div class="gallery hide-scrollbar" role="region" aria-label="User input screenshots">
+              <article class="item"><figure class="figure"><img src="Images/UserInput.png" alt="read user input code" loading="lazy" decoding="async"><div class="figcap">Prompt with <code>read</code>.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/UserInputSR.png" alt="read user input output" loading="lazy" decoding="async"><div class="figcap">Echoing input.</div></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>3) File Existence Check</h4>
+          <div class="gallery-wrap">
+            <div class="gallery hide-scrollbar" role="region" aria-label="File check screenshots">
+              <article class="item"><figure class="figure"><img src="Images/FileCheck.png" alt="file existence code" loading="lazy" decoding="async"><div class="figcap">Check with <code>-f</code>.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/FileCheckSR.png" alt="file existence output" loading="lazy" decoding="async"><div class="figcap">Results.</div></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>4) For Loop</h4>
+          <div class="gallery-wrap">
+            <div class="gallery hide-scrollbar" role="region" aria-label="For loop screenshots">
+              <article class="item"><figure class="figure"><img src="Images/ForLoop.png" alt="for loop code" loading="lazy" decoding="async"><div class="figcap">Loop over values.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/ForLoopSR.png" alt="for loop output" loading="lazy" decoding="async"><div class="figcap">Output.</div></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>5) Simple Backup Script</h4>
+          <div class="gallery-wrap">
+            <div class="gallery hide-scrollbar" role="region" aria-label="Backup script screenshots">
+              <article class="item"><figure class="figure"><img src="Images/Backup.png" alt="backup script code" loading="lazy" decoding="async"><div class="figcap">Compress &amp; copy.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/BackupSR.png" alt="backup script output" loading="lazy" decoding="async"><div class="figcap">Run results.</div></figure></article>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-section">
+          <h4>6) Function Example</h4>
+          <div class="gallery-wrap">
+            <div class="gallery hide-scrollbar" role="region" aria-label="Function script screenshots">
+              <article class="item"><figure class="figure"><img src="Images/Function.png" alt="function script code" loading="lazy" decoding="async"><div class="figcap">Function script.</div></figure></article>
+              <article class="item"><figure class="figure"><img src="Images/FunctionSR.png" alt="function script output" loading="lazy" decoding="async"><div class="figcap">Execution output.</div></figure></article>
+            </div>
+          </div>
+        </div>
+
       </div>
 
-      <h3>2) User Input</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-input" class="gallery hide-scrollbar" role="region" aria-label="User input screenshots">
-          <article class="item"><figure class="figure"><img src="Images/UserInput.png" alt="read user input code" loading="lazy" decoding="async" /><figcaption class="figcap">Prompt with <code>read</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/UserInputSR.png" alt="read user input output" loading="lazy" decoding="async" /><figcaption class="figcap">Echoing input.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>3) File Existence Check</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-filecheck" class="gallery hide-scrollbar" role="region" aria-label="File check screenshots">
-          <article class="item"><figure class="figure"><img src="Images/FileCheck.png" alt="file existence code" loading="lazy" decoding="async" /><figcaption class="figcap">Check with <code>-f</code>.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/FileCheckSR.png" alt="file existence output" loading="lazy" decoding="async" /><figcaption class="figcap">Results.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>4) For Loop</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-forloop" class="gallery hide-scrollbar" role="region" aria-label="For loop screenshots">
-          <article class="item"><figure class="figure"><img src="Images/ForLoop.png" alt="for loop code" loading="lazy" decoding="async" /><figcaption class="figcap">Loop over values.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/ForLoopSR.png" alt="for loop output" loading="lazy" decoding="async" /><figcaption class="figcap">Output.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>5) Simple Backup Script</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-backup" class="gallery hide-scrollbar" role="region" aria-label="Backup script screenshots">
-          <article class="item"><figure class="figure"><img src="Images/Backup.png" alt="backup script code" loading="lazy" decoding="async" /><figcaption class="figcap">Compress & copy.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/BackupSR.png" alt="backup script output" loading="lazy" decoding="async" /><figcaption class="figcap">Run results.</figcaption></figure></article>
-        </div>
-      </div>
-
-      <h3>6) Function Example</h3>
-      <div class="gallery-wrap">
-        <button class="gbtn gprev" aria-label="Scroll gallery left">&#10094;</button>
-        <button class="gbtn gnext" aria-label="Scroll gallery right">&#10095;</button>
-        <div id="gallery-fn" class="gallery hide-scrollbar" role="region" aria-label="Function script screenshots">
-          <article class="item"><figure class="figure"><img src="Images/Function.png" alt="function script code" loading="lazy" decoding="async" /><figcaption class="figcap">Function script.</figcaption></figure></article>
-          <article class="item"><figure class="figure"><img src="Images/FunctionSR.png" alt="function script output" loading="lazy" decoding="async" /><figcaption class="figcap">Execution output.</figcaption></figure></article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Wrap -->
-    <section class="card">
+      <!-- Conclusion -->
       <h2>Conclusion</h2>
-      <p>We covered the essentials of Bash scripting—shebang, variables, input, conditionals, loops, and functions—then applied them in practical examples. Keep experimenting and check <code>man bash</code> for deeper options.</p>
-      <p><a href="../index.html">Back to Home</a></p>
-    </section>
+      <div class="step-section">
+        <p>We covered the essentials of Bash scripting — shebang, variables, input, conditionals, loops, and functions — then applied them in practical examples. Keep experimenting and check <code>man bash</code> for deeper options.</p>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
 
     <!-- Footer -->
     <footer>
@@ -323,60 +405,86 @@ main "$@"</code></pre>
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 
-  <!-- Minimal JS for galleries on this page -->
+  <!-- Gallery arrows + wheel scroll (only for galleries that have buttons) -->
   <script>
-    (function(){
-      document.querySelectorAll('.gallery-wrap').forEach((wrap)=>{
-        const scroller = wrap.querySelector('.gallery');
-        if(!scroller) return;
-        const left = wrap.querySelector('.gprev');
-        const right = wrap.querySelector('.gnext');
-        const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
-        if(left) left.addEventListener('click', () => scroller.scrollBy({left:-step(), behavior:'smooth'}));
-        if(right) right.addEventListener('click', () => scroller.scrollBy({left: step(), behavior:'smooth'}));
-        scroller.addEventListener('wheel', (e) => {
-          if (Math.abs(e.deltaY) > Math.abs(e.deltaX)){
-            e.preventDefault();
-            scroller.scrollLeft += e.deltaY; // vertical wheel → horizontal scroll
-          }
-        }, {passive:false});
-      });
-    })();
+    document.querySelectorAll('.gallery-wrap').forEach(wrap => {
+      const scroller = wrap.querySelector('.gallery');
+      if (!scroller) return;
+      const prev = wrap.querySelector('.gprev');
+      const next = wrap.querySelector('.gnext');
+      const step = () => Math.max(240, Math.floor(scroller.clientWidth * 0.9));
+      if (prev) prev.addEventListener('click', () => scroller.scrollBy({ left: -step(), behavior: 'smooth' }));
+      if (next) next.addEventListener('click', () => scroller.scrollBy({ left: step(), behavior: 'smooth' }));
+      scroller.addEventListener('wheel', e => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          e.preventDefault();
+          scroller.scrollLeft += e.deltaY;
+        }
+      }, { passive: false });
+    });
   </script>
 
-  <!-- Tiny, reusable click-to-zoom for all images -->
+  <!-- Lightbox — per-gallery grouping -->
   <script>
     (function(){
-      const imgs = document.querySelectorAll('.wrap img');
-      if(!imgs.length) return;
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = `
+        <div class="lb-stage" role="dialog" aria-modal="true" aria-label="Image preview">
+          <button class="lb-btn lb-close" aria-label="Close (Esc)">✕</button>
+          <button class="lb-btn lb-prev" aria-label="Previous">&#10094;</button>
+          <img class="lb-img" alt="">
+          <button class="lb-btn lb-next" aria-label="Next">&#10095;</button>
+          <div class="lb-cap" aria-live="polite"></div>
+        </div>`;
+      document.body.appendChild(lb);
 
-      const overlay = document.createElement('div');
-      overlay.className = 'zoom-overlay';
-      overlay.innerHTML = '<img alt="">';
-      document.body.appendChild(overlay);
-      const ovImg = overlay.querySelector('img');
+      const imgEl   = lb.querySelector('.lb-img');
+      const capEl   = lb.querySelector('.lb-cap');
+      const btnClose = lb.querySelector('.lb-close');
+      const btnPrev  = lb.querySelector('.lb-prev');
+      const btnNext  = lb.querySelector('.lb-next');
 
-      function closeZoom(){
-        overlay.classList.remove('open');
-        document.body.classList.remove('zoom-open');
-        ovImg.removeAttribute('src');
-        ovImg.removeAttribute('srcset');
+      const groups = new Map();
+      let cur = { gid: null, idx: 0 };
+      let gidCtr = 0;
+
+      document.querySelectorAll('.gallery-wrap').forEach(wrap => {
+        const imgs = Array.from(wrap.querySelectorAll('.gallery img'));
+        if (!imgs.length) return;
+        const gid = 'g' + (++gidCtr);
+        groups.set(gid, imgs);
+        imgs.forEach((img, i) => {
+          img.dataset.gid = gid;
+          img.addEventListener('click', e => { e.preventDefault(); open(gid, i); });
+        });
+      });
+
+      function open(gid, idx){ cur.gid = gid; cur.idx = idx; update(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; btnClose.focus(); }
+      function close(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+      function update(){
+        const list = groups.get(cur.gid) || [];
+        const el = list[cur.idx]; if (!el) return;
+        imgEl.src = el.currentSrc || el.src;
+        imgEl.alt = el.alt || '';
+        capEl.textContent = el.alt || '';
+        const multi = list.length > 1;
+        btnPrev.style.display = btnNext.style.display = multi ? '' : 'none';
       }
+      function prev(){ const list = groups.get(cur.gid)||[]; cur.idx = (cur.idx - 1 + list.length) % list.length; update(); }
+      function next(){ const list = groups.get(cur.gid)||[]; cur.idx = (cur.idx + 1) % list.length; update(); }
 
-      overlay.addEventListener('click', closeZoom);
-      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeZoom(); });
-
-      imgs.forEach(img=>{
-        img.classList.add('zoomable');
-        img.addEventListener('click', ()=>{
-          ovImg.alt = img.alt || '';
-          ovImg.src = img.currentSrc || img.src;
-          overlay.classList.add('open');
-          document.body.classList.add('zoom-open');
-        }, {passive:true});
+      btnClose.addEventListener('click', close);
+      btnPrev .addEventListener('click', e => { e.stopPropagation(); prev(); });
+      btnNext .addEventListener('click', e => { e.stopPropagation(); next(); });
+      lb.addEventListener('click', e => { if (e.target === lb) close(); });
+      document.addEventListener('keydown', e => {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape') close();
+        else if (e.key === 'ArrowLeft') prev();
+        else if (e.key === 'ArrowRight') next();
       });
     })();
   </script>
