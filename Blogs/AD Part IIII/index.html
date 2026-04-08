@@ -1,1 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Active Directory Part IV: Security Hardening · Mark Thompson Portfolio</title>
+  <meta name="description" content="A layered approach to Active Directory security hardening covering identity, password policy, Group Policy, auditing, attack surface reduction, and the Tier Admin Model." />
 
+  <style>
+    :root {
+      --bg-1:#0f1115;
+      --bg-2:#141821;
+      --text:#E6E7EE;
+      --muted:#A9ADBE;
+      --brand:#4DA3FF;
+      --card-border:#2A3447;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+
+    html,body { height:100% }
+
+    body {
+      margin:0;
+      color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    .wrap {
+      max-width:1000px;
+      margin:0 auto;
+      padding:40px 20px 64px;
+    }
+
+    /* NAV */
+    .topnav {
+      margin:0 0 18px;
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .topnav a {
+      color:var(--muted);
+      text-decoration:none;
+      padding:6px 10px;
+      border-radius:10px;
+      border:1px solid transparent;
+    }
+
+    .topnav a:hover {
+      color:var(--text);
+      border-color:#2a3447;
+      background:rgba(255,255,255,.04);
+    }
+
+    .topnav a.active {
+      color:var(--text);
+      border-color:#3a4a67;
+      background:rgba(255,255,255,.06);
+    }
+
+    .crumbs {
+      color:var(--muted);
+      font-size:14px;
+      margin:2px 0 8px;
+    }
+
+    .crumbs a {
+      color:var(--muted);
+      text-decoration:none;
+    }
+
+    .crumbs a:hover { color: var(--text); }
+
+    h1 {
+      margin:8px 0 6px;
+      font-size:clamp(26px,4vw,38px);
+      font-weight:800;
+      text-align:left;
+    }
+
+    h2 { margin:0 0 10px; font-size:22px }
+    h3 { margin:18px 0 6px; font-size:18px }
+
+    p {
+      margin:0 0 14px;
+    }
+
+    .card {
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:28px 28px 22px;
+      margin-top:18px;
+    }
+
+    /* Layered approach list */
+    .approach-list {
+      list-style:none;
+      margin:18px 0 0;
+      padding:0;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .approach-list li {
+      display:flex;
+      align-items:center;
+      gap:14px;
+      padding:12px 16px;
+      background:rgba(77,163,255,.05);
+      border:1px solid rgba(77,163,255,.15);
+      border-radius:10px;
+      font-size:15px;
+    }
+
+    .approach-list li .num {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      background:rgba(77,163,255,.15);
+      border:1px solid rgba(77,163,255,.3);
+      color:var(--brand);
+      font-weight:700;
+      font-size:13px;
+      flex-shrink:0;
+    }
+
+    /* Figure / screenshot */
+    .figure {
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:18px auto;
+      max-width:720px;
+    }
+
+    .figure img {
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:8px;
+      cursor:zoom-in;
+    }
+
+    .figure-row {
+      display:grid;
+      gap:14px;
+      margin:18px auto;
+      max-width:720px;
+    }
+
+    .figure-row.two { grid-template-columns:1fr 1fr; }
+    .figure-row.three { grid-template-columns:1fr 1fr 1fr; }
+
+    .figure-row .figure {
+      margin:0;
+      max-width:100%;
+    }
+
+    /* Security approach callout */
+    .security-note {
+      background:rgba(77,163,255,.06);
+      border:1px solid rgba(77,163,255,.2);
+      border-left:4px solid var(--brand);
+      border-radius:10px;
+      padding:16px 18px;
+      margin:20px 0;
+      font-size:14.5px;
+      color:var(--muted);
+    }
+
+    .security-note strong {
+      color:var(--text);
+      display:block;
+      margin-bottom:6px;
+      font-size:15px;
+    }
+
+    footer {
+      margin-top:36px;
+      padding-top:20px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    footer .links { margin-top:8px }
+    footer a { color:var(--muted) }
+    footer a:hover { color:var(--brand) }
+
+    .zoom-overlay {
+      position:fixed;
+      inset:0;
+      background:rgba(10,12,20,.92);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:9999;
+      padding:20px;
+      cursor:zoom-out;
+    }
+
+    .zoom-overlay.active { display:flex }
+
+    .zoom-overlay img {
+      max-width:95vw;
+      max-height:95vh;
+      border-radius:14px;
+    }
+
+    @media (max-width:600px) {
+      .figure-row.two,
+      .figure-row.three { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <nav class="topnav">
+    <a href="/MTPortfolio/">Home</a>
+    <a href="/MTPortfolio/Skills">Networking</a>
+    <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Windows & Linux</a>
+    <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+    <a href="/MTPortfolio/Blogs" class="active">Blog</a>
+  </nav>
+
+  <div class="crumbs">
+    <a href="/MTPortfolio/Blogs">Blog</a> · <span>Active Directory Blog Part IV: AD Security Hardening</span>
+  </div>
+
+  <header>
+    <h1>Active Directory – Blog Part IV: Security Hardening</h1>
+  </header>
+
+  <!-- Intro -->
+  <section class="card">
+    <p>Active Directory can be looked at differently between IT operations, Systems Administration, or Cybersecurity. It's one of those systems that has historically shaped domain management on corporate networks, has continued to keep environments productive and running, and is a complex hierarchical system, identity gatekeeper, and an imperative system to not only properly maintain administratively, but securely as well.</p>
+
+    <p>An out-of-the-box installation of the AD DS (Active Directory Domain Services) server role on a given Windows Server operating system has a lot of set default configurations that leave open a handful of security loopholes.</p>
+
+    <p>These loopholes leave the door open for more achievable brute-force success, accounts with more privileges than needed, weaker password policies, greater potential for successful downgrade attacks, relay attacks, and basic recon through anonymous enumeration — among other settings that increase the overall attack surface on a default setup.</p>
+
+    <p style="margin-bottom:6px;">In this write-up, I go through a layered security approach I put together right after installing the AD DS server role and promoting the Windows Server VM into a domain controller.</p>
+
+    <p style="margin:18px 0 6px;font-weight:600;">The layered approach is as follows:</p>
+
+    <ul class="approach-list">
+      <li><span class="num">1</span> Identity and Access Hardening – Application of Least Privilege</li>
+      <li><span class="num">2</span> Implementing a Strong Password Policy</li>
+      <li><span class="num">3</span> Group Policy Security Hardening</li>
+      <li><span class="num">4</span> Auditing and Visibility</li>
+      <li><span class="num">5</span> Attack Surface Reduction</li>
+      <li><span class="num">6</span> Tiered Admin Model Applied</li>
+    </ul>
+  </section>
+
+  <br>
+
+  <!-- Section 1 -->
+  <section class="card">
+    <h2>1 – Identity and Access Hardening: Application of Least Privilege</h2>
+
+    <p>To start things off, I'm going to create a separate administrative account to manage this domain controller with, instead of using the built-in Administrator account.</p>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec0.png" alt="MT account properties showing the Account tab in Active Directory Users and Computers" loading="lazy" />
+    </div>
+
+    <div class="security-note">
+      <strong>Security Approach</strong>
+      Disable and avoid using a commonly targeted built-in default account commonly used in managing AD environments. This helps prevent attackers from easily targeting a popular default account with elevated privileges, and using a separate administrative account reduces the success of easily carrying out a brute force attack on a common default privileged account.
+    </div>
+
+    <p>Below, the built-in Administrator account is right-clicked to access its options, then disabled. The confirmation dialog confirms the account has been successfully disabled.</p>
+
+    <div class="figure-row two">
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec1.png" alt="Right-clicking the Administrator account in Active Directory Users and Computers" loading="lazy" />
+      </div>
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec2.png" alt="Disabling the Administrator account" loading="lazy" />
+      </div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec3.png" alt="Confirmation dialog: Object Administrator has been disabled" loading="lazy" />
+    </div>
+
+    <p>Here I'm verifying that the Guest account is disabled — it usually is by default, and it is, as indicated by the <em>"Enable account"</em> option appearing when right-clicking on it.</p>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec4.png" alt="Verifying the Guest account is disabled — right-click shows Enable Account option" loading="lazy" />
+    </div>
+
+    <p>Here, I have my separate administrative account as a member of the Domain Admins group to be able to carry out administrative tasks with this account on the domain.</p>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec5.png" alt="Domain Admins Properties showing MT and Test Account as members" loading="lazy" />
+    </div>
+
+    <p>Next, I'm going to rename my admin account from <strong>MT</strong> to <strong>MT.Admin</strong>, then create a non-privileged standard user account called <strong>MT.User</strong>.</p>
+
+    <div class="figure-row two">
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec6.png" alt="Right-clicking MT user account to rename it" loading="lazy" />
+      </div>
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec7.png" alt="Rename User dialog showing MT.Admin as the new name" loading="lazy" />
+      </div>
+    </div>
+
+    <div class="figure-row two">
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec8.png" alt="Active Directory warning prompt when renaming the currently logged-in user" loading="lazy" />
+      </div>
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec9.png" alt="Rename User dialog with updated full name, logon name, and display name fields" loading="lazy" />
+      </div>
+    </div>
+
+    <div class="figure-row two">
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec10.png" alt="MT.Admin user now visible in the IT OU" loading="lazy" />
+      </div>
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec11.png" alt="Windows Start menu showing the logged-in user is still listed as MT" loading="lazy" />
+      </div>
+    </div>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec12.png" alt="MT.Admin account confirmed in Active Directory Users and Computers" loading="lazy" />
+    </div>
+
+    <p>In this example, I have an OU called <strong>Corp</strong> with a child OU called <strong>Users</strong> for the standard user accounts on the domain. Here I'm creating a standard user account called <strong>MT.User</strong> to avoid using my MT.Admin account as a standard login account — configuring a general production account with the concept of least privilege.</p>
+
+    <div class="figure-row two">
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec13.png" alt="Right-clicking the Users OU to create a new user object" loading="lazy" />
+      </div>
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec14.png" alt="New Object - User dialog with MT.User as the logon name" loading="lazy" />
+      </div>
+    </div>
+
+    <div class="figure-row two">
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec15.png" alt="Password configuration screen for the new MT.User account" loading="lazy" />
+      </div>
+      <div class="figure">
+        <img src="Images/1-IAM/ADSec16.png" alt="MT.User account now visible in the Corp/Users OU" loading="lazy" />
+      </div>
+    </div>
+
+    <div class="security-note">
+      <strong>Security Approach</strong>
+      Applying the concept of least privilege by using an administrative account configured with elevated privileges for administrative and configuration management tasks directly on the domain controller. A separate standard non-privileged user account (MT.User) is then used for everyday office-related tasks on standard domain-connected computers — ensuring that elevated credentials are never exposed in low-trust environments.
+    </div>
+  </section>
+
+  <br>
+
+  <p><em>Active Directory is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
+
+  <p><a href="/MTPortfolio/Blogs">← Back to Blog</a></p>
+
+  <footer>
+    <div>Mark Thompson · MTPortfolio</div>
+    <div class="links">
+      <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Zoom Overlay -->
+<div class="zoom-overlay" id="zoomOverlay">
+  <img src="" alt="" />
+</div>
+
+<script>
+  const overlay = document.getElementById("zoomOverlay");
+  const overlayImg = overlay.querySelector("img");
+
+  document.querySelectorAll(".figure img").forEach(img => {
+    img.addEventListener("click", () => {
+      overlayImg.src = img.src;
+      overlay.classList.add("active");
+    });
+  });
+
+  overlay.addEventListener("click", () => {
+    overlay.classList.remove("active");
+    overlayImg.src = "";
+  });
+</script>
+
+</body>
+</html>
