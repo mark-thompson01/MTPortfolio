@@ -559,6 +559,199 @@
 
   <br>
 
+  <!-- Section 3 -->
+  <section class="card">
+    <h2>3 – Group Policy Security Hardening</h2>
+
+    <p>Within the Group Policy Management Editor, navigating to:</p>
+
+    <p><strong>Computer Configuration &gt; Policies &gt; Windows Settings &gt; Security Settings &gt; Local Policies &gt; Security Options</strong></p>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec46.png" alt="Group Policy Management Editor showing Security Options under Local Policies" loading="lazy" />
+    </div>
+
+    <h3>Network security: LAN Manager authentication level</h3>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec47.png" alt="Security Options list showing Network security LAN Manager authentication level" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec48.png" alt="LAN Manager authentication level properties with Send NTLMv2 response only selected" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:500px;">
+      <img src="Images/3-GPSecHardening/ADSec49.png" alt="LAN Manager authentication level set to Send NTLMv2 response only. Refuse LM and NTLM" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec51.png" alt="PowerShell verifying LmCompatibilityLevel set to 5 after gpupdate" loading="lazy" />
+    </div>
+
+    <h3>Microsoft network client: Digitally sign communications (always)</h3>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec52.png" alt="Security Options showing Microsoft network client Digitally sign communications highlighted" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec53.png" alt="Microsoft network client Digitally sign communications properties set to Enabled" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec54.png" alt="Security Options showing Digitally sign communications now set to Enabled" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec55.png" alt="PowerShell gpupdate /force confirming policy update" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec56.png" alt="PowerShell verifying SMB signing enabled with Get-SmbServerConfiguration" loading="lazy" />
+    </div>
+
+    <h3>Network access: Do not allow anonymous enumeration of SAM accounts</h3>
+
+    <p>Enabling these policies to disallow anonymous enumeration makes it really difficult to use tools such as enum4linux, smbclient, or rpcclient to enumerate server detail information, making it extremely difficult to retrieve system details in the event of active reconnaissance during a pentest or cyberattack.</p>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec57.png" alt="Security Options showing Do not allow anonymous enumeration of SAM accounts" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:500px;">
+      <img src="Images/3-GPSecHardening/ADSec58.png" alt="Anonymous enumeration of SAM accounts policy set to Enabled" loading="lazy" />
+    </div>
+
+    <h3>Network access: Do not allow anonymous enumeration of SAM accounts and shares</h3>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec59.png" alt="Security Options showing Do not allow anonymous enumeration of SAM accounts and shares" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:500px;">
+      <img src="Images/3-GPSecHardening/ADSec60.png" alt="Anonymous enumeration of SAM accounts and shares policy set to Enabled" loading="lazy" />
+    </div>
+
+    <h3>Network access: Let Everyone permissions apply to anonymous users</h3>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec61.png" alt="Security Options showing Let Everyone permissions apply to anonymous users" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:500px;">
+      <img src="Images/3-GPSecHardening/ADSec62.png" alt="Let Everyone permissions apply to anonymous users policy properties" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:520px;">
+      <img src="Images/3-GPSecHardening/ADSec63.png" alt="Let Everyone permissions apply to anonymous users policy confirmed" loading="lazy" />
+    </div>
+
+    <h3>Putting These Security Settings to the Test</h3>
+
+    <p>To further test these security settings, I'm going to install the following tools on my Ubuntu server VM to carry out some active reconnaissance on the domain controller.</p>
+
+    <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">enum4linux</strong></li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">smbclient</strong></li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">rpcclient</strong></li>
+      <li><strong style="color:var(--text);">nmap</strong></li>
+    </ul>
+
+    <h3>Run Updates on Ubuntu Server VM</h3>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec64.png" alt="Running apt update on Ubuntu Server VM" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec65.png" alt="Ubuntu Server update completed" loading="lazy" />
+    </div>
+
+    <h3>Install enum4linux</h3>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec66.png" alt="Installing enum4linux on Ubuntu Server" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:620px;">
+      <img src="Images/3-GPSecHardening/ADSec67.png" alt="enum4linux installation completed" loading="lazy" />
+    </div>
+
+    <h3>Install smbclient</h3>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec68.png" alt="Installing smbclient on Ubuntu Server" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec69.png" alt="smbclient installation completed" loading="lazy" />
+    </div>
+
+    <h3>Install rpcclient</h3>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec70.png" alt="Installing rpcclient on Ubuntu Server" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec71.png" alt="rpcclient installation completed" loading="lazy" />
+    </div>
+
+    <h3>Install nmap</h3>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec72.png" alt="Installing nmap on Ubuntu Server" loading="lazy" />
+    </div>
+
+    <h3>Verification</h3>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec73.png" alt="Verifying all tools installed successfully on Ubuntu Server" loading="lazy" />
+    </div>
+
+    <h3>Attempting Active Recon on the Domain Controller</h3>
+
+    <h3>enum4linux</h3>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec74.png" alt="Running enum4linux against the domain controller" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/3-GPSecHardening/ADSec75.png" alt="enum4linux results showing access denied and blocked enumeration" loading="lazy" />
+    </div>
+
+    <h3>smbclient</h3>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec76.png" alt="smbclient showing SMB1 disabled and no workgroup available" loading="lazy" />
+    </div>
+
+    <h3>rpcclient</h3>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec77.png" alt="Running rpcclient against the domain controller" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec78.png" alt="rpcclient enumdomusers returning NT_STATUS_ACCESS_DENIED" loading="lazy" />
+    </div>
+
+    <h3>nmap</h3>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec79.png" alt="Running nmap smb-enum-users and smb-enum-shares scan against the domain controller" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/3-GPSecHardening/ADSec80.png" alt="nmap scan result showing host appears down or blocking ping probes" loading="lazy" />
+    </div>
+
+  </section>
+
+  <br>
+
   <p><em>Active Directory is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
 
   <p><a href="/MTPortfolio/Blogs">← Back to Blog</a></p>
