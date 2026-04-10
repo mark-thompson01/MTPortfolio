@@ -325,7 +325,7 @@
     <div class="figure">
       <img src="Images/1-IAM/ADSec7.png" alt="Rename User dialog showing MT.Admin as the new name" loading="lazy" />
     </div>
-    <p>In this example, I'm renaming the admin account I'm logged in with. Resulting in this message to log off and log back on to reflect the account changes.</p>
+
     <div class="figure">
       <img src="Images/1-IAM/ADSec8.png" alt="Active Directory warning prompt when renaming the currently logged-in user" loading="lazy" />
     </div>
@@ -340,6 +340,10 @@
 
     <div class="figure">
       <img src="Images/1-IAM/ADSec11.png" alt="Windows Start menu showing the logged-in user is still listed as MT" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:520px;">
+      <img src="Images/1-IAM/ADSec12.png" alt="MT.Admin account confirmed in Active Directory Users and Computers" loading="lazy" />
     </div>
 
     <p>In this example, I have an OU called <strong>Corp</strong> with a child OU called <strong>Users</strong> for the standard user accounts on the domain. Here I'm creating a standard user account called <strong>MT.User</strong> to avoid using my MT.Admin account as a standard login account, configuring a general production account with the concept of least privilege.</p>
@@ -362,8 +366,195 @@
 
     <div class="security-note">
       <strong>Security Approach</strong>
-      Applying the concept of least privilege by using an administrative account configured with elevated privileges for administrative and configuration management tasks directly on the domain controller. A separate standard non-privileged user account (MT.User) is then used for everyday office-related tasks on standard domain-connected computers — ensuring that elevated credentials are never exposed in low-trust environments.
+      Applying the concept of least privilege by using an administrative account configured with elevated privileges for administrative and configuration management tasks directly on the domain controller. A separate standard non-privileged user account (MT.User) is then used for everyday office-related tasks on standard domain-connected computers, ensuring that elevated credentials are never exposed in low-trust environments.
     </div>
+  </section>
+
+  <br>
+
+  <!-- Section 2 -->
+  <section class="card">
+    <h2>2 – Implementing a Strong Password Policy</h2>
+
+    <p>You can't go over AD Security Hardening without covering the implementation of a strong password policy for an AD deployment.</p>
+
+    <p>This is something that is set within the Group Policy Manager, under the Computer Configuration hierarchy of the Group Policy Management Editor.</p>
+
+    <p>Group Policy Management can be found under Server Manager &gt; Tools:</p>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec17.png" alt="Server Manager Tools menu showing Group Policy Management" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:460px;">
+      <img src="Images/2-PasswordPolicy/ADSec18.png" alt="Group Policy Management console" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec19.png" alt="Group Policy Management expanded view" loading="lazy" />
+    </div>
+
+    <p>To access the Group Policy Management Editor, right-click where it says Default Domain Policy, then select Edit.</p>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec20.png" alt="Right-clicking Default Domain Policy to select Edit" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec21.png" alt="Group Policy Management Editor opened" loading="lazy" />
+    </div>
+
+    <p>Under Computer Configuration, I'm going to expand the hierarchical structure to:</p>
+
+    <p><strong>Computer Configuration &gt; Windows Settings &gt; Security Settings &gt; Account Policies &gt; Password Policy</strong></p>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec22.png" alt="Navigating the Group Policy hierarchy to Password Policy" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec23.png" alt="Password Policy settings in Group Policy Management Editor" loading="lazy" />
+    </div>
+
+    <p>Here is where a password policy is specified. There are a few different policies that can be applied and enforced for account passwords on the domain accounts.</p>
+
+    <p>In this example, I'm going to set the:</p>
+
+    <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
+      <li style="margin-bottom:6px;"><strong style="color:var(--text);">Maximum password age</strong> – 60 days</li>
+      <li><strong style="color:var(--text);">Minimum password length</strong> – 12 characters</li>
+    </ul>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec24.png" alt="Setting Maximum password age to 60 days" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec25.png" alt="Setting Minimum password length to 12 characters" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:480px;">
+      <img src="Images/2-PasswordPolicy/ADSec26.png" alt="Password policy settings applied" loading="lazy" />
+    </div>
+
+    <p>Another thing that can be set under the Account Policies is the Account Lockout Policy.</p>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec27.png" alt="Navigating to Account Lockout Policy" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec28.png" alt="Account Lockout Policy settings" loading="lazy" />
+    </div>
+
+    <p>I'm going to set the Account lockout threshold to 5 invalid logon attempts to lock out a given domain account.</p>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec29.png" alt="Setting Account lockout threshold to 5 invalid logon attempts" loading="lazy" />
+    </div>
+
+    <p>I'll set the Account lockout duration and Reset account lockout counter after to 30 minutes.</p>
+
+    <div class="figure" style="max-width:500px;">
+      <img src="Images/2-PasswordPolicy/ADSec30.png" alt="Setting Account lockout duration to 30 minutes" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:500px;">
+      <img src="Images/2-PasswordPolicy/ADSec31.png" alt="Setting Reset account lockout counter after to 30 minutes" loading="lazy" />
+    </div>
+
+    <p>Then I'll open an elevated PowerShell session to push out these new domain changes.</p>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/2-PasswordPolicy/ADSec32.png" alt="Opening an elevated PowerShell session" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec33.png" alt="Running gpupdate /force and net accounts to verify policy changes" loading="lazy" />
+    </div>
+
+    <p>To test out these configuration changes, I'm going to purposely lock out my MT.User account.</p>
+
+    <div class="figure" style="max-width:620px;">
+      <img src="Images/2-PasswordPolicy/ADSec34.png" alt="Intentionally triggering account lockout on MT.User at the login screen" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:620px;">
+      <img src="Images/2-PasswordPolicy/ADSec35.png" alt="MT.User account lockout confirmed at the login screen" loading="lazy" />
+    </div>
+
+    <div class="security-note">
+      <strong>Security Approach</strong>
+      Setting up and configuring a Password Policy is one of the most standard best practices in Active Directory domain security. Establishing what policy settings are best applicable to the given environment and putting those settings into effect administratively.
+    </div>
+
+    <p>Both this Password Policy and Account Lockout Policy demonstrated apply domain wide. Prior to Windows Server 2008, a domain could only have one single password policy defined in the Default Domain Policy. FGPP (Fine-Grained Password Policies) were then introduced as a feature in Active Directory to allow different password and account lockout policies to be applied to different sets of users within the same domain.</p>
+
+    <p>FGPP's design gets around this limitation by using two specific object types in the Active Directory schema:</p>
+
+    <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
+      <li style="margin-bottom:10px;"><strong style="color:var(--text);">Password Settings Objects (PSOs):</strong> This is where the actual policy settings are defined, such as minimum password length, complexity requirements, lockout thresholds, and password history. Multiple PSOs can be created, each with different distinctive settings.</li>
+      <li><strong style="color:var(--text);">Password Assignment:</strong> You can link a PSO to specific user accounts or Global Security Groups.</li>
+    </ul>
+
+    <div class="security-note">
+      <strong>Security Approach</strong>
+      In a professional environment, applying the same domain Password Policy and Account Lockout Policy to everyone is considered a security compromise. FGPP allows you to balance things out without one policy compromising another under a single umbrella. You can:
+      <ul style="margin:10px 0 0;padding-left:18px;">
+        <li style="margin-bottom:6px;">Enforce "High-Security" PSOs for members of groups like Domain Admins or Enterprise Admins.</li>
+        <li style="margin-bottom:6px;">Enforce "Standard User" PSOs for general staff.</li>
+        <li>Enforce "Service-Account" PSOs (often with longer, randomized, non-expiring passwords) for automated processes.</li>
+      </ul>
+    </div>
+
+    <h3>Applying a Fine-Grained Password Policy (FGPP)</h3>
+
+    <p>Creating a new Fine-Grained Password Policy using PowerShell.</p>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec36.png" alt="PowerShell command to create a new Fine-Grained Password Policy" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" loading="lazy" />
+    </div>
+
+    <p>In this example, I'm setting the Precedence to 1. This is considered the rule that wins against everything else. It tells Active Directory which policy to apply when a user is assigned to multiple groups that have different password requirements, essentially locking in the FGPP policy as the absolute authority for anyone in that group.</p>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec39.png" alt="FGPP creation completed, running Get-ADUserResultantPasswordPolicy" loading="lazy" />
+    </div>
+
+    <p>The PSO can be found in Active Directory Administrative Center, under the System container in the Password Settings Container.</p>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec40.png" alt="Active Directory Administrative Center showing the System container selected" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec41.png" alt="System container expanded showing the Password Settings Container" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec42.png" alt="Password Settings Container listing FGPP-DomainAdmins PSO" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec43.png" alt="FGPP-DomainAdmins PSO properties with Select Users or Groups dialog" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec44.png" alt="FGPP-DomainAdmins Password Settings showing Directly Applies To Domain Admins" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/2-PasswordPolicy/ADSec45.png" alt="Full FGPP-DomainAdmins policy view confirming all settings and group assignment" loading="lazy" />
+    </div>
+
   </section>
 
   <br>
