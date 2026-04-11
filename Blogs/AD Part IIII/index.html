@@ -940,6 +940,86 @@
 
   <br>
 
+  <!-- Section 5 -->
+  <section class="card">
+    <h2>5 – Attack Surface Reduction</h2>
+
+    <p>To reduce the overall attack surface on the domain controller, I'm going to disable some unnecessary background services that a domain controller typically doesn't need to have running.</p>
+
+    <h3>Stopping and Disabling Unnecessary Services</h3>
+
+    <h3>Print Spooler</h3>
+
+    <!-- ASR1: 760x496 — PowerShell stop-service/set-service Spooler, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/5-ASR/ASR1.png" alt="PowerShell stopping and disabling the Print Spooler service" loading="lazy" />
+    </div>
+
+    <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">RemoteRegistry</strong></li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">WerSvc</strong></li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">Bthserv</strong></li>
+      <li><strong style="color:var(--text);">RemoteAccess</strong></li>
+    </ul>
+
+    <!-- ASR2: 1026x730 — PowerShell disabling RemoteRegistry, WerSvc, bthserv, RemoteAccess, standard width -->
+    <div class="figure">
+      <img src="Images/5-ASR/ASR2.png" alt="PowerShell stopping and disabling RemoteRegistry, WerSvc, Bthserv, and RemoteAccess services" loading="lazy" />
+    </div>
+
+    <h3>Securing Remote Desktop Connections</h3>
+
+    <p>For RDP – Remote Desktop Protocol connections enabled for domain accounts that are members of the built-in domain-wide Remote Desktop Users security group, I'm going to purposely set that up only with my custom administrative domain account MT.Admin, and ensure standard user accounts such as MT.User are not configured with this security group.</p>
+
+    <!-- ASR3: 846x723 — ADUC MT.Admin Properties with Select Groups dialog showing Remote Desktop Users, ~620px -->
+    <div class="figure" style="max-width:620px;">
+      <img src="Images/5-ASR/ASR3.png" alt="ADUC MT.Admin Properties showing Select Groups dialog with Remote Desktop Users being added" loading="lazy" />
+    </div>
+
+    <p>With that in place, I'll try initiating a remote sign-in with the MT.User account. And upon attempting to connect, this message prompts as a result:</p>
+
+    <!-- ASR4: 813x554 — Windows login screen RDP denied message for MT.User, ~580px -->
+    <div class="figure" style="max-width:580px;">
+      <img src="Images/5-ASR/ASR4.png" alt="Windows login screen showing MT.User denied Remote Desktop sign-in due to missing group membership" loading="lazy" />
+    </div>
+
+    <div class="security-note">
+      <strong>Security Approach</strong>
+      Restricting RDP access to only explicitly authorized administrative accounts through the Remote Desktop Users group prevents standard user accounts from being used as a pivot point for lateral movement or remote exploitation via exposed RDP. This limits the remote attack surface to accounts that genuinely require remote access.
+    </div>
+
+    <h3>Local Domain Controller Windows Firewall</h3>
+
+    <p>To first see if the local Windows Firewall is enabled, I'll run the <code style="background:rgba(77,163,255,.1);color:var(--brand);padding:2px 6px;border-radius:4px;font-size:13px;">Get-NetFirewallProfile</code> cmdlet in a PowerShell session.</p>
+
+    <!-- ASR5: 1026x728 — PowerShell Get-NetFirewallProfile output showing all three profiles, standard width -->
+    <div class="figure">
+      <img src="Images/5-ASR/ASR5.png" alt="PowerShell Get-NetFirewallProfile output showing Domain, Private, and Public firewall profiles enabled" loading="lazy" />
+    </div>
+
+    <h3>Set New Local Firewall Rule on the Domain Controller</h3>
+
+    <!-- ASR6: 1026x722 — PowerShell New-NetFirewallRule allowing RDP from Admin Subnet only, standard width -->
+    <div class="figure">
+      <img src="Images/5-ASR/ASR6.png" alt="PowerShell New-NetFirewallRule creating an inbound rule to allow RDP only from the 192.168.50.0/24 admin subnet" loading="lazy" />
+    </div>
+
+    <h3>Disable Remote Desktop Firewall Rule</h3>
+
+    <!-- ASR7: 582x220 — PowerShell Disable-NetFirewallRule one-liner, small ~460px -->
+    <div class="figure" style="max-width:460px;">
+      <img src="Images/5-ASR/ASR7.png" alt="PowerShell Disable-NetFirewallRule disabling the default Remote Desktop firewall rule group" loading="lazy" />
+    </div>
+
+    <div class="security-note">
+      <strong>Security Approach</strong>
+      Creating a scoped inbound firewall rule that restricts RDP access to a specific admin subnet (192.168.50.0/24) and then disabling the broad default Remote Desktop rule ensures that RDP is not openly accessible from any IP on the network. This reduces exposure to network-based brute-force attacks and lateral movement attempts targeting RDP on the domain controller.
+    </div>
+
+  </section>
+
+  <br>
+
   <p><em>Active Directory is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
 
   <p><a href="/MTPortfolio/Blogs">← Back to Blog</a></p>
