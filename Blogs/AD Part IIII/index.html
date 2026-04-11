@@ -752,6 +752,194 @@
 
   <br>
 
+  <!-- Section 4 -->
+  <section class="card">
+    <h2>4 – Auditing &amp; Visibility</h2>
+
+    <h3>Local Audit Policies vs. Advanced Audit Policy Configuration</h3>
+
+    <h3>Traditional Audit Policy (The "Legacy" Way)</h3>
+
+    <p>Here under the Group Policy Management Editor, we have Local Policies &gt; Audit Policy. These are the original auditing categories introduced in the early days of Windows NT.</p>
+
+    <p>The design is limited to an "all or nothing" approach. For example, if you enable the policy for "Audit object access," Windows logs every time a file is accessed, a registry key is touched, or a printer is used, causing the Security event logs to fill up instantly with thousands of useless log entries, making it extremely challenging to locate a legitimate security breach in the log data.</p>
+
+    <!-- ADSec81: 1026x702 — full GPME window, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec81.png" alt="Group Policy Management Editor showing Legacy Audit Policy under Local Policies" loading="lazy" />
+    </div>
+
+    <h3>Advanced Audit Policy Configuration (The "Modern" Way)</h3>
+
+    <p>These policies break those 9 legacy categories down into over 50 sub-categories, breaking things down further to enable more granular and explicit control of the policy settings. Instead of just auditing "Logon events" and recording everything with the legacy all-or-nothing approach, you can drill down into auditing things such as Account Lockout or Logoff.</p>
+
+    <p>This provides more of a precision approach, allowing you to track exactly what you need (like sensitive file changes) while ignoring what you don't (like system background processes), which saves disk space and CPU cycles.</p>
+
+    <!-- ADSec82: 1026x727 — full GPME window showing Advanced Audit summary, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec82.png" alt="Advanced Audit Policy Configuration showing Audit Policies summary with all categories not configured" loading="lazy" />
+    </div>
+
+    <div class="security-note">
+      <strong>The "Golden Rule" of Auditing</strong>
+      With the Advanced Audit Policy Configuration there is one critical thing to keep in mind: these policies do not merge with the legacy ones. Enabling any setting in the Advanced Audit Policy Configuration section causes Windows to ignore the Legacy Audit Policy section entirely. To ensure this is done correctly and prevents any potential conflicts, it is recommended to enable the following security option in your GPO:<br><br>
+      <strong style="color:var(--text);">Computer Configuration &gt; Windows Settings &gt; Security Settings &gt; Local Policies &gt; Security Options</strong><br><br>
+      Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings.<br><br>
+      <strong style="color:var(--text);">Best Practice: Always use Advanced Audit Policy Configuration.</strong>
+    </div>
+
+    <h3>Account Logon</h3>
+
+    <!-- ADSec83: 1026x703 — GPME Account Logon subcategories list, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec83.png" alt="Advanced Audit Policy Account Logon subcategories" loading="lazy" />
+    </div>
+
+    <!-- ADSec84: 1026x728 — GPME with Kerberos Auth Service properties dialog overlaid, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec84.png" alt="Audit Kerberos Authentication Service properties set to Success" loading="lazy" />
+    </div>
+
+    <h3>Account Management</h3>
+
+    <!-- ADSec85: 1026x726 — GPME Account Management subcategories list, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec85.png" alt="Advanced Audit Policy Account Management subcategories" loading="lazy" />
+    </div>
+
+    <!-- ADSec86: 1026x724 — GPME with Security Group Management properties dialog overlaid, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec86.png" alt="Audit Security Group Management properties set to Success" loading="lazy" />
+    </div>
+
+    <h3>Logon/Logoff</h3>
+
+    <!-- ADSec87: 1026x872 — GPME inside full VM window (taller), standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec87.png" alt="Advanced Audit Policy Logon/Logoff subcategories with Audit Logon highlighted" loading="lazy" />
+    </div>
+
+    <!-- ADSec88: 1026x726 — GPME with Audit Logon properties dialog overlaid, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec88.png" alt="Audit Logon properties set to Success" loading="lazy" />
+    </div>
+
+    <!-- ADSec89: 1026x725 — GPME Logon/Logoff subcategories updated with Success entries, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec89.png" alt="Logon/Logoff subcategories showing Audit Logon and related events set to Success" loading="lazy" />
+    </div>
+
+    <h3>Policy Change</h3>
+
+    <!-- ADSec90: 1026x731 — GPME Policy Change subcategories list, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec90.png" alt="Advanced Audit Policy Policy Change subcategories" loading="lazy" />
+    </div>
+
+    <!-- ADSec91: 1026x726 — GPME with Audit Policy Change properties dialog overlaid, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec91.png" alt="Audit Policy Change properties set to Success" loading="lazy" />
+    </div>
+
+    <h3>Privilege Use</h3>
+
+    <!-- ADSec92: 1026x766 — GPME inside full VM window, Privilege Use subcategories, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec92.png" alt="Advanced Audit Policy Privilege Use subcategories" loading="lazy" />
+    </div>
+
+    <!-- ADSec93: 1026x723 — GPME with Audit Non Sensitive Privilege Use properties dialog, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec93.png" alt="Audit Sensitive Privilege Use properties set to Success" loading="lazy" />
+    </div>
+
+    <!-- ADSec94: 1026x703 — GPME Privilege Use subcategories updated view, standard width -->
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec94.png" alt="Privilege Use subcategories updated after configuration" loading="lazy" />
+    </div>
+
+    <h3>Verification</h3>
+
+    <!-- ADSec95: 781x511 — PowerShell auditpol /get /category:* output page 1, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec95.png" alt="Verification of Advanced Audit Policy settings applied" loading="lazy" />
+    </div>
+
+    <!-- ADSec96: 777x512 — PowerShell auditpol /get /category:* output page 2, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec96.png" alt="Further verification of audit policy configuration" loading="lazy" />
+    </div>
+
+    <!-- ADSec97: 778x513 — PowerShell gpupdate /force confirmation, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec97.png" alt="Final audit policy configuration confirmed" loading="lazy" />
+    </div>
+
+    <h3>Purposely Lock Out Account</h3>
+
+    <!-- ADSec98: 628x575 — Windows login screen lockout message, constrained ~460px -->
+    <div class="figure" style="max-width:460px;">
+      <img src="Images/4-A+V/ADSec98.png" alt="Intentionally triggering an account lockout for testing" loading="lazy" />
+    </div>
+
+    <h3>Log Retrieval via PowerShell</h3>
+
+    <h3>Event ID 4625 – Invalid Logins</h3>
+
+    <!-- ADSec99: 762x494 — PowerShell Get-WinEvent command for Event ID 4625, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec99.png" alt="PowerShell query for Event ID 4625 invalid login attempts" loading="lazy" />
+    </div>
+
+    <!-- ADSec100: 760x498 — PowerShell Event ID 4625 results, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec100.png" alt="Event ID 4625 results showing failed login attempts" loading="lazy" />
+    </div>
+
+    <h3>Event ID 4740 – Account Lockouts</h3>
+
+    <!-- ADSec101: 760x498 — PowerShell Event ID 4740 results, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec101.png" alt="PowerShell query results for Event ID 4740 account lockout" loading="lazy" />
+    </div>
+
+    <h3>Event ID 4624 – Successful Logins</h3>
+
+    <!-- ADSec102: 762x499 — PowerShell Event ID 4740 + 4624 combined output, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" loading="lazy" />
+    </div>
+
+    <h3>Event ID 4728 – Adding Users to a Security-Enabled Global Group</h3>
+
+    <h3>Add Domain Admins to Users OU</h3>
+
+    <!-- ADSec103: 709x673 — ADUC MT.User Properties showing Member Of tab, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec103.png" alt="MT.User Properties showing Member Of tab before adding to Domain Admins" loading="lazy" />
+    </div>
+
+    <!-- ADSec104: 770x677 — ADUC Select Groups dialog with Domain Admins entered, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec104.png" alt="Select Groups dialog with Domain Admins entered for MT.User" loading="lazy" />
+    </div>
+
+    <!-- ADSec105: 737x691 — ADUC MT.User Properties now showing Domain Admins membership, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec105.png" alt="MT.User Properties Member Of tab now showing Domain Admins and Domain Users" loading="lazy" />
+    </div>
+
+    <h3>Event Log Data</h3>
+
+    <!-- ADSec106: 761x500 — PowerShell Event ID 4728 results, medium ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" loading="lazy" />
+    </div>
+
+  </section>
+
+  <br>
+
   <p><em>Active Directory is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
 
   <p><a href="/MTPortfolio/Blogs">← Back to Blog</a></p>
