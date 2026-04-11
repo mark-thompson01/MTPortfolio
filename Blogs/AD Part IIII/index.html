@@ -1020,6 +1020,143 @@
 
   <br>
 
+  <!-- Section 6 -->
+  <section class="card">
+    <h2>6 – Tiered Admin Model</h2>
+
+    <p>In my previous blog I talked about the legacy Tier Administrative Model and how it was designed to separate trust boundaries in on-premises environments, built as a bottom-up, server-centric approach geared towards preventing credential theft.</p>
+
+    <p>I'm going to apply that approach in this virtualized environment by only logging into domain controllers with administrative domain accounts and only logging into regular standard domain computers with regular standard user accounts.</p>
+
+    <h3>Tier 0 – Admin</h3>
+
+    <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">Machine:</strong> Windows Domain Controller</li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">System:</strong> Windows Server 2022 Eval VM</li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">Account:</strong> MT.Admin</li>
+      <li><strong style="color:var(--text);">Privileges:</strong> Elevated – Domain Admins</li>
+    </ul>
+
+    <!-- TAM1: 718x609 — ADUC inside VM window showing MT.Admin selected in IT OU, ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/6-TAM/TAM1.png" alt="ADUC inside the domain controller VM showing MT.Admin account selected in the IT OU" loading="lazy" />
+    </div>
+
+    <!-- TAM2: 648x807 — Windows Server Start menu inside VM showing MT.Admin as logged-in user, ~500px -->
+    <div class="figure" style="max-width:500px;">
+      <img src="Images/6-TAM/TAM2.png" alt="Windows Server Start menu showing MT.Admin as the logged-in administrative user on the domain controller" loading="lazy" />
+    </div>
+
+    <p>Administrative domain accounts log into domain controllers and authorized systems.</p>
+
+    <h3>Tier 2 – User</h3>
+
+    <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">Machine:</strong> Standard Windows 11 domain client host</li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">System:</strong> Windows 11 Pro</li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">Account:</strong> MT.User</li>
+      <li><strong style="color:var(--text);">Privileges:</strong> Non-privileged standard user account</li>
+    </ul>
+
+    <!-- TAM3: 713x609 — ADUC inside VM window showing MT.User selected in Users OU, ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/6-TAM/TAM3.png" alt="ADUC inside the domain controller VM showing MT.User account selected in the Corp/Users OU" loading="lazy" />
+    </div>
+
+    <!-- TAM4: 872x856 — Windows 11 Start menu inside VM showing MT.User as logged-in user, ~620px -->
+    <div class="figure" style="max-width:620px;">
+      <img src="Images/6-TAM/TAM4.png" alt="Windows 11 Start menu showing MT.User as the logged-in standard user on the domain client" loading="lazy" />
+    </div>
+
+    <p>Standard domain user accounts log into standard domain-connected computers.</p>
+
+    <div class="security-note">
+      <strong>Note</strong>
+      Tier 1 – Servers would be for servers such as the Ubuntu Server VM in this setup. In a full production deployment, Tier 1 accounts would be scoped specifically to managing those server-class systems, keeping them logically separated from both Tier 0 domain controller administration and Tier 2 end-user workstations.
+    </div>
+
+    <h3>Global Security Groups</h3>
+
+    <p>Under the domain hierarchy in Active Directory Users and Computers, I'm going to create a new Organizational Unit – OU called <strong>Security Groups</strong>. In this OU, I'm going to create the following Global Security Groups:</p>
+
+    <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">SG-Tier0-Admins</strong></li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">SG-Tier1-Servers</strong></li>
+      <li><strong style="color:var(--text);">SG-Tier2-Users</strong></li>
+    </ul>
+
+    <!-- TAM5: 741x617 — ADUC right-click domain root showing New > Organizational Unit, ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/6-TAM/TAM5.png" alt="ADUC right-clicking the domain root to create a new Organizational Unit" loading="lazy" />
+    </div>
+
+    <!-- TAM6: 762x675 — ADUC New Object - OU dialog with Security Groups as the name, ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/6-TAM/TAM6.png" alt="New Object - Organizational Unit dialog with Security Groups as the OU name" loading="lazy" />
+    </div>
+
+    <!-- TAM7: 501x497 — ADUC tree showing Security Groups OU now created at domain root, ~420px -->
+    <div class="figure" style="max-width:420px;">
+      <img src="Images/6-TAM/TAM7.png" alt="ADUC tree view showing the Security Groups OU created at the domain root level" loading="lazy" />
+    </div>
+
+    <!-- TAM8: 682x704 — ADUC right-click Security Groups OU showing New > Group, ~540px -->
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM8.png" alt="ADUC right-clicking the Security Groups OU to create a new Group object" loading="lazy" />
+    </div>
+
+    <!-- TAM9: 669x616 — ADUC New Object - Group dialog with SG-Tier0-Admins, Global, Security, ~520px -->
+    <div class="figure" style="max-width:520px;">
+      <img src="Images/6-TAM/TAM9.png" alt="New Object - Group dialog creating SG-Tier0-Admins as a Global Security Group" loading="lazy" />
+    </div>
+
+    <!-- TAM10: 758x470 — ADUC Security Groups OU showing all three SG groups created, ~560px -->
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/6-TAM/TAM10.png" alt="ADUC Security Groups OU listing SG-Tier0-Admins, SG-Tier1-Servers, and SG-Tier2-Users" loading="lazy" />
+    </div>
+
+    <p>Here, I'm going to attach my MT.Admin administrative domain account to the <strong>SG-Tier0-Admins</strong> Global Security Group to keep the elevated account logically separated.</p>
+
+    <!-- TAM11: 709x557 — ADUC SG-Tier0-Admins Properties with Select Users dialog showing MT.Admin, ~540px -->
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM11.png" alt="SG-Tier0-Admins Properties showing Select Users dialog with MT.Admin being added as a member" loading="lazy" />
+    </div>
+
+    <p>Likewise with adding the standard domain user account MT.User to <strong>SG-Tier2-Users</strong>.</p>
+
+    <!-- TAM12: 722x544 — ADUC SG-Tier2-Users Properties with Select Users dialog showing MT.User, ~540px -->
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM12.png" alt="SG-Tier2-Users Properties showing Select Users dialog with MT.User being added as a member" loading="lazy" />
+    </div>
+
+    <h3>Adding the Security Group SG-Tier0-Admins to the Built-in Domain Admins Security Group</h3>
+
+    <!-- TAM13: 1099x639 — ADUC Domain Admins Properties with nested Select dialog showing SG-Tier0-Admins, full width -->
+    <div class="figure">
+      <img src="Images/6-TAM/TAM13.png" alt="Domain Admins Properties with Select Users dialog adding SG-Tier0-Admins as a nested member" loading="lazy" />
+    </div>
+
+    <!-- TAM14: 652x570 — ADUC Domain Admins Members tab now showing SG-Tier0-Admins listed, ~520px -->
+    <div class="figure" style="max-width:520px;">
+      <img src="Images/6-TAM/TAM14.png" alt="Domain Admins Properties Members tab showing SG-Tier0-Admins successfully added alongside Administrator, MT.Admin, and Test Account" loading="lazy" />
+    </div>
+
+    <h3>Adding the Security Group SG-Tier2-Users to the Built-in Domain Users Security Group</h3>
+
+    <!-- TAM15: 707x608 — ADUC Domain Users Properties with Select dialog showing SG-Tier2-Users, ~540px -->
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM15.png" alt="Domain Users Properties showing Select Users dialog adding SG-Tier2-Users as a nested member" loading="lazy" />
+    </div>
+
+    <div class="security-note">
+      <strong>Security Approach</strong>
+      Nesting tier-specific Security Groups (SG-Tier0-Admins, SG-Tier2-Users) into their respective built-in domain groups rather than assigning accounts directly to Domain Admins or Domain Users provides a clean, scalable structure. It enforces the tier separation at the group level, making it easier to manage access, audit membership, and extend the model as the environment grows — without touching built-in groups directly every time a new account is provisioned.
+    </div>
+
+  </section>
+
+  <br>
+
   <p><em>Active Directory is a trademark of Microsoft Corporation. This content is for educational purposes and is not affiliated with or endorsed by Microsoft.</em></p>
 
   <p><a href="/MTPortfolio/Blogs">← Back to Blog</a></p>
