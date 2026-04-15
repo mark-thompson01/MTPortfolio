@@ -281,7 +281,7 @@
 
     <p>To start things off, I'm going to create a separate administrative account to manage this domain controller with, instead of using the built-in Administrator account.</p>
 
-    <div class="figure">
+    <div class="figure" style="max-width:860px;">
       <img src="Images/1-IAM/ADSec0.png" alt="MT account properties showing the Account tab in Active Directory Users and Computers" loading="lazy" />
     </div>
 
@@ -316,6 +316,35 @@
       <img src="Images/1-IAM/ADSec5.png" alt="Domain Admins Properties showing MT and Test Account as members" loading="lazy" />
     </div>
 
+    <p>Next, I'm going to rename my admin account from <strong>MT</strong> to <strong>MT.Admin</strong>, then create a non-privileged standard user account called <strong>MT.User</strong>.</p>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec6.png" alt="Right-clicking MT user account to rename it" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec7.png" alt="Rename User dialog showing MT.Admin as the new name" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec8.png" alt="Active Directory warning prompt when renaming the currently logged-in user" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec9.png" alt="Rename User dialog with updated full name, logon name, and display name fields" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:520px;">
+      <img src="Images/1-IAM/ADSec10.png" alt="MT.Admin user now visible in the IT OU" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/1-IAM/ADSec11.png" alt="Windows Start menu showing the logged-in user is still listed as MT" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:520px;">
+      <img src="Images/1-IAM/ADSec12.png" alt="MT.Admin account confirmed in Active Directory Users and Computers" loading="lazy" />
+    </div>
 
     <p>In this example, I have an OU called <strong>Corp</strong> with a child OU called <strong>Users</strong> for the standard user accounts on the domain. Here I'm creating a standard user account called <strong>MT.User</strong> to avoid using my MT.Admin account as a standard login account, configuring a general production account with the concept of least privilege.</p>
 
