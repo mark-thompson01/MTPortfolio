@@ -290,6 +290,8 @@
       Disable and avoid using a commonly targeted built-in default account commonly used in managing AD environments. This helps prevent attackers from easily targeting a popular default account with elevated privileges, and using a separate administrative account reduces the success of easily carrying out a brute force attack on a common default privileged account.
     </div>
 
+    
+
     <p>Below, the built-in Administrator account is right-clicked to access its options, then disabled. The confirmation dialog confirms the account has been successfully disabled.</p>
 
     <div class="figure" style="max-width:860px;">
@@ -302,6 +304,18 @@
 
     <div class="figure">
       <img src="Images/1-IAM/ADSec3.png" alt="Confirmation dialog: Object Administrator has been disabled" loading="lazy" />
+    </div>
+
+    <div class="Built-in-account-note">
+      <Strong>Note:</Strong>
+      It is a best practice to disable the built-in domain Administrator account on the domain controller. 
+However, even when the account is disabled, it's still a best practice to keep a strong randomized
+password set for the account. While disabling the account does effectively remove it from the 
+everyday attack surface, there are scenarios where the account can still be targeted by an 
+attacker. It is also worth mentioning here that in certain recovery scenarios, such as booting 
+the DC into DSRM (Directory Services Restore Mode) - does require the use of the built-in
+Administrator account on the domain controller, making it important that the credentials are kept 
+track of even with the account not actively being in use. 
     </div>
 
     <p>Here I'm verifying that the Guest account is disabled. It usually is by default, and it is, as indicated by the <em>"Enable account"</em> option appearing when right-clicking on it.</p>
