@@ -517,9 +517,26 @@
 
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" loading="lazy" />
-    </div>
+    </div>T
 
-    <p>In this example, I'm setting the Precedence to 1. This is considered the rule that wins against everything else. It tells Active Directory which policy to apply when a user is assigned to multiple groups that have different password requirements, essentially locking in the FGPP policy as the absolute authority for anyone in that group.</p>
+    <p>In this example, I'm setting the Precedence to 1. The precedence that is set in a FGPP determines which PSO takes effect when a user account
+object is a member of multiple security groups on the domain, where each is assigned a different
+Fine-Grained Password Policy. </p>
+
+    <p>Active Directory uses the set precedence to resolve this conflict by applying the given PSO
+with the lowest Precedence number. In this example the Precedence for this PSO is set to 1. With
+that in place, Precedence 1 will always win over Precedence 2, 3, and so on. </p>
+
+    <p>In this example, setting Precedence to 1 will ensure that this policy takes the highest priority 
+for any member of the Domain Admins group. </p>
+
+    <p>Note: It's a best practice to avoid assigning the same Precedence number to two different PSOs. 
+If two PSOs are set to the same precedence value and a user account object is assigned 
+to more than one global security group with more than one PSO set to a Precedence of 1, AD 
+falls back to the objects GUID to break the tie, producing an administratively unpredictable 
+result. </p>
+
+    
 
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" loading="lazy" />
