@@ -568,6 +568,12 @@ result. </p>
       <img src="Images/2-PasswordPolicy/ADSec44.png" alt="FGPP-DomainAdmins Password Settings showing Directly Applies To Domain Admins" loading="lazy" />
     </div>
 
+    <p>To further verify that the FGPP is being correctly applied to the Domain Admins Global Security Group, the <code>Get-ADUserResultantPasswordPolicy</code> cmdlet is run against the MT.Admin account. This cmdlet queries AD and returns the resultant PSO that is actively being applied to the specified user object.</p>
+    <p>The output confirms the FGPP is working as intended.</p>
+    <p>The <strong>AppliesTo</strong> field shows <code>CN=Domain Admins, CN=Users</code></p>
+    <p>This confirms that the policy is linked to the <strong>Domain Admins Security Group</strong>.</p>
+    <p>The <strong>Name</strong> field confirms the correct PSO <strong>FGPP-DomainAdmins</strong> is being applied, and the <strong>Precedence</strong> value of 1 confirms it holds the highest priority.</p>
+    <p>The remaining fields reflect the exact policy settings configured earlier, validating that the PSO is active and enforced.</p>
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec45.png" alt="Full FGPP-DomainAdmins policy view confirming all settings and group assignment" loading="lazy" />
     </div>
