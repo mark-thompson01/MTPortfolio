@@ -632,6 +632,27 @@ even when working with direct user assignments.
       <img src="Images/3-GPSecHardening/ADSec51.png" alt="PowerShell verifying LmCompatibilityLevel set to 5 after gpupdate" loading="lazy" />
     </div>
 
+    <div class="security-note">
+      <strong>Security Approach</strong>
+      Setting the LAN Manager authentication level to Send NTLMv2 response only. Refuse LM and NTLM,
+which is linked to a registry value of LmCompabilityLevel = 5<br><br>
+
+      This is one of the more impactful protocol-level hardening steps you can apply to a 
+domain controller.<br><br>
+
+      To understand why this matters, it helps to understand what these protocols are and how they differ. LM (LAN Manager) is the oldest of the three and is considered cryptographically broken. It splits passwords into two 7-character chunks and hashes them independently, making them trivially crackable with modern hardware. NTLM (NTLMv1) improved on LM but still relies on a weak challenge-response mechanism that is vulnerable to pass-the-hash attacks, where an attacker captures a hashed credential from memory or network traffic and uses it directly to authenticate without ever needing to crack the underlying password. NTLMv2 addressed many of these weaknesses by incorporating a client-side timestamp and a more complex HMAC-MD5 based challenge-response, making captured hashes significantly harder to replay or crack offline.
+      <br><br>
+
+      Beyond downgrade attacks, even NTLMv2 carries inherent risk in Windows environments through NTLM relay attacks. In a relay attack, an attacker on the network intercepts an NTLM authentication attempt from a victim machine and forwards it in real time to a different target server — effectively authenticating as that user without ever touching the password hash. Tools like Responder and ntlmrelayx have made this class of attack highly accessible. While refusing LM and NTLMv1 via this policy setting removes the weakest authentication paths entirely, it is worth understanding that NTLMv2 relay attacks remain a concern and are best mitigated in combination with SMB signing (covered in this write-up), EPA (Extended Protection for Authentication), and where possible, moving workloads to Kerberos which is not susceptible to the same relay attack model.
+<br><br>
+
+Enforcing NTLMv2-only at the domain controller level ensures that no client on the domain can negotiate a weaker authentication protocol, closing off a class of attacks that have been a staple of Active Directory penetration testing and real-world breaches for decades.
+    </div><br>
+      
+      
+      
+      
+
     <h3>Microsoft network client: Digitally sign communications (always)</h3>
 
     <div class="figure">
