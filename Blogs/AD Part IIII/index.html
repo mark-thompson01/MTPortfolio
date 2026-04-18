@@ -1116,8 +1116,10 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
     <p>In my previous blog I talked about the legacy Tier Administrative Model and how it was designed to separate trust boundaries in on-premises environments, built as a top-down, privilege-based approach geared towards preventing credential theft.</p>
 
-    <p>I'm going to apply that approach in this virtualized environment by only logging into domain controllers with administrative domain accounts and only logging into regular standard domain computers with regular standard user accounts.</p>
+    <p>It is worth acknowledging that Microsoft has since evolved this model. The classic three-tier approach has been superseded by the Enterprise Access Model (EAM), which reorganizes the trust boundary concept around three planes rather than tiers: the Control Plane (equivalent to the old Tier 0, covering identity and management infrastructure), the Management Plane (covering the tools and systems used to manage resources), and the User Access Plane (covering end-user productivity environments). The EAM is designed to better reflect modern hybrid and cloud-connected environments where the classic on-premises tier boundaries are increasingly difficult to enforce cleanly. For this lab, the legacy tiered model is being applied intentionally as it maps well to a contained on-premises Active Directory environment, and the core principle behind both models remains the same — keep credentials scoped to the trust level of the systems they touch.</p>
 
+    <p>I'm going to apply that approach in this virtualized environment by only logging into domain controllers with administrative domain accounts and only logging into regular standard domain computers with regular standard user accounts.</p>
+ 
     <h3>Tier 0 – Admin</h3>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
