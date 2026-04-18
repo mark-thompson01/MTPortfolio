@@ -511,9 +511,7 @@ track of even with the account not actively in use.
       <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" loading="lazy" />
     </div>
 
-    <p>In this example, I'm setting the Precedence to 1. The precedence that is set in a FGPP determines which PSO takes effect when a user account
-object is a member of multiple security groups on the domain, where each is assigned a different
-Fine-Grained Password Policy. </p>
+    <pIn this example, I'm setting the Precedence to 1. With the PSO Precedence numbering, the lower the number, the higher the priority. So a PSO with a Precedence of 1 will always win over a PSO set with a Precedence of 2, 3, 10, etc., when a user account object is assigned to more than one Global Security Group that has a PSO configured with it.</p>
 
     <p>Active Directory uses the set precedence to resolve this conflict by applying the given PSO
 with the lowest Precedence number. In this example the Precedence for this PSO is set to 1. With
