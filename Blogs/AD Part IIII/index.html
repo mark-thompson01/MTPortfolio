@@ -542,7 +542,18 @@ group membership, regardless of the precedence number that is assigned to each P
 the case that a group linked PSO has a lower precedence number, a PSO tied directly to the 
 user account will always win. Making the direct user assignment the strongest form 
 of PSO application, and it's also something to be intentional about when designing your
-FGPP structure.</div><br>
+FGPP structure.
+
+ With all of that being said, there is one important exception to that rule. If multiple
+PSOs are applied directly to the same user account object, not through group membership, 
+but applied directly, then the direct-assignment rule no longer automatically resolves
+the conflict on its own. In that scenario, AD falls back to the Precedence number to determine
+which PSO wins, with the lowest Precedence number taking the priority. This re-enforces 
+why being deliberate and strategic about your Precedence numbering goes a long way,
+even when working with direct user assignments. 
+     
+    
+    </div><br>
 
     
 
