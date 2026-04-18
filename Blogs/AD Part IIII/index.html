@@ -588,7 +588,7 @@ even when working with direct user assignments.
       <img src="Images/2-PasswordPolicy/ADSec44.png" alt="FGPP-DomainAdmins Password Settings showing Directly Applies To Domain Admins" loading="lazy" />
     </div>
 
-    <p>To further verify that the FGPP is being correctly applied to the Domain Admins Global Security Group, the <code>Get-ADUserResultantPasswordPolicy</code> cmdlet is run against the MT.Admin account. This cmdlet queries AD and returns the resultant PSO that is actively being applied to the specified user object.</p>
+    <p>To further verify that the FGPP is being correctly applied to the Domain Admins Global Security Group, the <strong>Get-ADUserResultantPasswordPolicy</strong> cmdlet is run against the MT.Admin account. This cmdlet queries AD and returns the resultant PSO that is actively being applied to the specified user object.</p>
     <p>The output confirms the FGPP is working as intended.</p>
     <p>The <strong>AppliesTo</strong> field shows <code>CN=Domain Admins, CN=Users</code></p>
     <p>This confirms that the policy is linked to the <strong>Domain Admins Security Group</strong>.</p>
