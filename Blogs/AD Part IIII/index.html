@@ -824,7 +824,8 @@ FGPP structure.</div><br>
       When moving to Advanced Auditing, there is one critical thing to keep in mind: the two policy types do not merge. By default, legacy settings can sometimes interfere with advanced ones. To ensure Windows uses your new granular settings, you must explicitly tell the OS to ignore the legacy categories by enabling this specific security option:<br><br>
       <strong style="color:var(--text);">Computer Configuration &gt; Windows Settings &gt; Security Settings &gt; Local Policies &gt; Security Options</strong><br><br>
       Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings.<br><br>
-      <strong style="color:var(--text);">Why this matters: Enabling this setting (which triggers the <code>SCENoApplyLegacyAuditPolicy</code> registry flag) is what actually "kills" the legacy policy. Without this specific toggle, simply configuring Advanced Audit settings won't guarantee the legacy policies are ignored, which can lead to inconsistent or "double" logging.</strong>
+      <strong style="color:var(--text);">Why this matters:</strong>
+      <p>Enabling this setting (which triggers the <code>SCENoApplyLegacyAuditPolicy</code> registry flag) is what actually "kills" the legacy policy. Without this specific toggle, simply configuring Advanced Audit settings won't guarantee the legacy policies are ignored, which can lead to inconsistent or "double" logging.</p>
     </div>
 
     <h3>Account Logon</h3>
