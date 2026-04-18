@@ -1027,11 +1027,7 @@ Enforcing NTLMv2-only at the domain controller level ensures that no client on t
       <img src="Images/5-ASR/ASR1.png" alt="PowerShell stopping and disabling the Print Spooler service" loading="lazy" />
     </div>
 
-    <p>Disabling the Print Spooler service on a domain controller goes a long way! Disabling this service 
-as a best practice in a Windows domain environment was influenced by the PrintNightmare vulnerability
-(CVE-2021-1675), this was a critical Windows Print Spooler vulnerability that enabled attackers
-to carry out successful remote code execution and local privilege escalation. Operationally on a 
-domain controller, there is almost never a need to have this service enabled and running. 
+    <p>Disabling this service as a best practice in a Windows domain environment was influenced by the PrintNightmare vulnerability (CVE-2021-1675 / CVE-2021-34527), a critical Windows Print Spooler vulnerability that enabled attackers to carry out remote code execution and local privilege escalation.
 </p><br>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
