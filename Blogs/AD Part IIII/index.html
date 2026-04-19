@@ -494,19 +494,19 @@ track of even with the account not actively in use.
     <p>Here, I'm running the <strong>net accounts</strong> command for a quick verification step 
 to confirm that the password and lockout policy changes pushed out by 
 <strong>gpupdate /force</strong> are actively in effect on the domain controller. 
-The output reflects exactly what was configured.</p><br><br>
+The output reflects exactly what was configured.</p><br>
 
   <li>
       <ul>A Minimum password age of 1 day prevents user from immediately cycling
-through passwords to back to a previous one.</ul><br><br>
+through passwords to back to a previous one.</ul><br>
 
       <ul>The maximum password age of 60 days enforces regular password 
-rotation across domain accounts.</ul><br><br>
+rotation across domain accounts.</ul><br>
       
 <ul>The Minimum password length of 12 characters ensures passwords
-meet a baseline complexity threshold.</ul><br><br>
+meet a baseline complexity threshold.</ul><br>
       <ul>The password history of 24 means a user cannot reuse any of their last 24 passwords.</ul>
-  </li><br><br>
+  </li><br>
 
       <p>On the lockout side, the Lockout threshold of 5 confirms that an account will be locked after 5 consecutive failed login attempts. Both the Lockout duration and Lockout observation window are set to 30 minutes, meaning a locked account will automatically unlock after 30 minutes, and the failed attempt counter resets after 30 minutes of no failed attempts.</p>
 <br><br>
