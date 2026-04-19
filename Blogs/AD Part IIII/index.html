@@ -20,8 +20,7 @@
 
     html,body { height:100% }
 
-    html { scroll-behavior: smooth; }Privilege Use
-
+    html { scroll-behavior: smooth; }
 
     body {
       margin:0;
@@ -981,10 +980,7 @@ domain controller.<br><br>
     </div><br>
 
     <h3>Privilege Use</h3>
-    <p>Moving into the Privilege Use audit category, this section tracks when accounts exercise user rights and privileges on the domain controller. Privilege use events are particularly relevant in an Active Directory security context because they capture the actual exercising of elevated rights, not just who has them, but when and how they're being used. This distinction matters because an attacker operating under a compromised privileged account will inevitably need to exercise those privileges to accomplish their objectives, and this category is what captures that activity.</p>
-    <p>The subcategory list here contains three options: Audit Non Sensitive Privilege Use, Audit Other Privilege Use Events, and Audit Sensitive Privilege Use. From these, Audit Non Sensitive Privilege Use is configured to log Success events. This subcategory captures the use of privileges that fall outside the most critical tier, things like bypassing traverse checking, changing system time, or shutting down the system. While individually these may seem minor, patterns of non-sensitive privilege use can surface unusual behavior that warrants closer inspection, particularly when activity is occurring outside of normal administrative hours or from unexpected accounts.+</p>
 
-    
     <div class="figure">
       <img src="Images/4-A+V/ADSec92.png" alt="Advanced Audit Policy Privilege Use subcategories" loading="lazy" />
     </div>
@@ -993,8 +989,6 @@ domain controller.<br><br>
       <img src="Images/4-A+V/ADSec93.png" alt="Audit Sensitive Privilege Use properties set to Success" loading="lazy" />
     </div>
 
-
-    <p>This confirms the configuration has been applied, with Audit Non Sensitive Privilege Use now showing Success in the Audit Events column, completing the Privilege Use category configuration alongside the other audit categories already put in place.</p>
     <div class="figure">
       <img src="Images/4-A+V/ADSec94.png" alt="Privilege Use subcategories updated after configuration" loading="lazy" />
     </div><br>
