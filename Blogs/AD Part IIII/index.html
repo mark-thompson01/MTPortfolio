@@ -1056,8 +1056,7 @@ domain controller.<br><br>
     </div><br>
 
     <h3>Event ID 4728 – Adding Users to a Security-Enabled Global Group</h3>
-    <p>The final log query filters for Event ID 4728, the Windows event generated specifically when a member is added to a security-enabled global group. This is one of the more security-sensitive events in an Active Directory environment, as changes to global security group membership directly affect what resources and privileges accounts have access to across the domain.</p>
-    <p>The output returns 10 events spanning from March 19th through April 17th 2026, each logged with the message "A member was added to a security-enabled global group." These entries correspond to the various group membership changes carried out throughout this lab, including the nesting of the tier-specific security groups into their respective built-in domain groups, and the addition of MT.User to Domain Admins during the auditing test earlier in this section. The breadth of events returned here also reflects how active group membership management was throughout the build, with every single addition being captured and timestamped in the Security log, exactly the kind of accountability trail that matters in a production environment where unauthorized group membership changes are a key indicator of privilege escalation activity.</p><br>
+    
 
     
     <h3>Add Domain Admins to Users OU</h3>
@@ -1075,6 +1074,8 @@ domain controller.<br><br>
     </div>
 
     <h3>Event Log Data</h3>
+    <p>The final log query filters for Event ID 4728, the Windows event generated specifically when a member is added to a security-enabled global group. This is one of the more security-sensitive events in an Active Directory environment, as changes to global security group membership directly affect what resources and privileges accounts have access to across the domain.</p>
+    <p>The output returns 10 events spanning from March 19th through April 17th 2026, each logged with the message "A member was added to a security-enabled global group." These entries correspond to the various group membership changes carried out throughout this lab, including the nesting of the tier-specific security groups into their respective built-in domain groups, and the addition of MT.User to Domain Admins during the auditing test earlier in this section. The breadth of events returned here also reflects how active group membership management was throughout the build, with every single addition being captured and timestamped in the Security log, exactly the kind of accountability trail that matters in a production environment where unauthorized group membership changes are a key indicator of privilege escalation activity.</p>
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" loading="lazy" />
