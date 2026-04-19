@@ -1192,7 +1192,11 @@ best practice to keep these roles separated onto dedicated infrastructure.
     <p>I'm going to apply that approach in this virtualized environment by only logging into domain controllers with administrative domain accounts and only logging into regular standard domain computers with regular standard user accounts.</p>
     <br>
     <p>The Tier Administration Model uses the top-down approach starting at Tier 0, then down to Tier 1, then down to Tier 2. In this approach account logons are logically segmented to the systems in their assigned tier. This approach breaks attack paths, and help to mitigate against attacks like Pass-the-Hash attacks or lateral movement.</p>
-
+    <ul>
+      <li><strong>Tier 0</strong> = Systems that control identity - <strong>Domain Controllers</strong></li>
+      <li><strong>Tier 1</strong> = Systems that run business services - <strong>Servers</strong></li>
+      <li><strong>Tier 2</strong> = Systems that are everyday end user workstations - <strong>Workstation</strong></li> 
+    </ul>
 
 
 
