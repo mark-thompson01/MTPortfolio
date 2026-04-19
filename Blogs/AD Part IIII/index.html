@@ -1049,7 +1049,8 @@ domain controller.<br><br>
     <br><br>
 
     <h3>Event ID 4624 – Successful Logins</h3>
-    
+    <p>The query is now run filtering for Event ID 4624, the Windows event generated every time an account successfully authenticates and logs on. While Event ID 4625 captures failed attempts and 4740 captures lockouts, 4624 completes the picture by providing visibility into successful logon activity on the domain controller, which is just as important from a security monitoring standpoint. A pattern of successful logons at unusual times or from unexpected sources can be just as telling as a string of failures.</p>
+    <p>The output returns 10 Event ID 4624 entries, all timestamped on April 19th 2026 between 9:21 AM and 9:25 AM, each logged with the message "An account was successfully logged on." The cluster of successful logon events within this short timeframe reflects the active administrative session on the domain controller during this phase of the lab. The fact that these events are being captured and are readily queryable via PowerShell confirms that the Audit Logon subcategory configured earlier under the Logon/Logoff audit category is actively doing its job, very successful logon to the domain controller is being recorded, timestamped, and available for review.</p>
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" loading="lazy" />
