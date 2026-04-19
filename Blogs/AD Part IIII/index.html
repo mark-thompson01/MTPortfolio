@@ -1022,7 +1022,8 @@ domain controller.<br><br>
     <h3>Log Retrieval via PowerShell</h3>
 
     <h3>Event ID 4625 – Invalid Logins</h3>
-
+    <p>To retrieve failed logon events from the Security log, <strong>Get-WinEvent</strong> is run targeting the Security log and filtering specifically for Event ID 4625, the Windows event generated every time an account fails to authenticate. The <strong>-MaxEvents 10</strong> parameter pulls the 10 most recent occurrences, and the output is piped through <strong>Select-Object</strong> and <strong>Format-Table</strong> to present the TimeCreated, ID, and Message fields in a clean readable format.</p>
+    <p>The results confirm the auditing is working exactly as intended. Ten Event ID 4625 entries are returned spanning across March 20th and 21st 2026, each logged with a precise timestamp and the message "An account failed to log on", these are the failed login attempts that were deliberately triggered earlier when locking out the MT.User account to test the account lockout policy. The fact that these events were captured and are now retrievable via PowerShell demonstrates the full chain working end to end, from the audit policy configuration, through the GPO enforcement, all the way to actionable log data being available for review and alerting.</p>
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec99.png" alt="PowerShell query for Event ID 4625 invalid login attempts" loading="lazy" />
     </div>
@@ -1031,20 +1032,34 @@ domain controller.<br><br>
       <img src="Images/4-A+V/ADSec100.png" alt="Event ID 4625 results showing failed login attempts" loading="lazy" />
     </div>
 
-    <h3>Event ID 4740 – Account Lockouts</h3>
 
+    <br>
+
+    <h3>Event ID 4740 – Account Lockouts</h3>
+    <p>Following up on the failed logon events, the same <stropng>Get-WinEvent</stropng> query is run this time filtering for Event ID 4740, the specific Windows event generated when a user account is actually locked out. While Event ID 4625 captures each individual failed logon attempt, Event ID 4740 is the event that fires at the moment the lockout threshold is crossed and the account becomes locked, making it a more actionable alert from a security monitoring perspective.</p>
+    <p>The output returns two Event ID 4740 entries, both timestamped on March 21st 2026 — at 3:30 AM and 9:58 AM respectively, each logged with the message "A user account was locked out." These two lockout events correspond directly to the deliberate lockout tests carried out earlier in this write-up. The fact that only two events are returned also neatly illustrates the difference in volume between 4625 and 4740, ten failed logon attempts were captured across two days, but only two actual lockout events resulted, which is exactly how the account lockout threshold of 5 invalid attempts is designed to behave.</p>
+    
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec101.png" alt="PowerShell query results for Event ID 4740 account lockout" loading="lazy" />
     </div>
 
+
+
+
+    <br>
+
     <h3>Event ID 4624 – Successful Logins</h3>
+    
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Event ID 4728 – Adding Users to a Security-Enabled Global Group</h3>
+    <p>The final log query filters for Event ID 4728, the Windows event generated specifically when a member is added to a security-enabled global group. This is one of the more security-sensitive events in an Active Directory environment, as changes to global security group membership directly affect what resources and privileges accounts have access to across the domain.</p>
+    <p>The output returns 10 events spanning from March 19th through April 17th 2026, each logged with the message "A member was added to a security-enabled global group." These entries correspond to the various group membership changes carried out throughout this lab, including the nesting of the tier-specific security groups into their respective built-in domain groups, and the addition of MT.User to Domain Admins during the auditing test earlier in this section. The breadth of events returned here also reflects how active group membership management was throughout the build, with every single addition being captured and timestamped in the Security log, exactly the kind of accountability trail that matters in a production environment where unauthorized group membership changes are a key indicator of privilege escalation activity.</p>
 
+    
     <h3>Add Domain Admins to Users OU</h3>
 
     <div class="figure" style="max-width:560px;">
