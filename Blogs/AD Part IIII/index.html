@@ -924,7 +924,7 @@ domain controller.<br><br>
       Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings.<br><br>
       <strong style="color:var(--text);">Why this matters:</strong>
       <p>Enabling this setting (which triggers the <code>SCENoApplyLegacyAuditPolicy</code> registry flag) is what actually "kills" the legacy policy. Without this specific toggle, simply configuring Advanced Audit settings won't guarantee the legacy policies are ignored, which can lead to inconsistent or "double" logging.</p>
-    </div>
+    </div><br>
 
     <h3>Account Logon</h3>
     <p>Under Advanced Audit Policy Configuration, navigating into Audit Policies and selecting Account Logon reveals the available subcategories for this audit category.</p>
@@ -937,7 +937,7 @@ domain controller.<br><br>
 
     <div class="figure">
       <img src="Images/4-A+V/ADSec84.png" alt="Audit Kerberos Authentication Service properties set to Success" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Account Management</h3>
 
@@ -947,7 +947,7 @@ domain controller.<br><br>
 
     <div class="figure">
       <img src="Images/4-A+V/ADSec86.png" alt="Audit Security Group Management properties set to Success" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Logon/Logoff</h3>
 
@@ -961,7 +961,7 @@ domain controller.<br><br>
 
     <div class="figure">
       <img src="Images/4-A+V/ADSec89.png" alt="Logon/Logoff subcategories showing Audit Logon and related events set to Success" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Policy Change</h3>
 
@@ -971,7 +971,7 @@ domain controller.<br><br>
 
     <div class="figure">
       <img src="Images/4-A+V/ADSec91.png" alt="Audit Policy Change properties set to Success" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Privilege Use</h3>
 
@@ -985,7 +985,7 @@ domain controller.<br><br>
 
     <div class="figure">
       <img src="Images/4-A+V/ADSec94.png" alt="Privilege Use subcategories updated after configuration" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Verification</h3>
 
@@ -999,13 +999,13 @@ domain controller.<br><br>
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec97.png" alt="Final audit policy configuration confirmed" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Purposely Lock Out Account</h3>
 
     <div class="figure" style="max-width:460px;">
       <img src="Images/4-A+V/ADSec98.png" alt="Intentionally triggering an account lockout for testing" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Log Retrieval via PowerShell</h3>
 
