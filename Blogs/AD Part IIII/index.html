@@ -953,7 +953,9 @@ domain controller.<br><br>
     </div><br>
 
     <h3>Logon/Logoff</h3>
-
+    <p>Moving into the Logon/Logoff audit category, this section tracks interactive and network-based logon activity directly on the domain controller. </p>
+    <p>The subcategory list here is notably broader than the previous categories, covering everything from account lockouts and group membership changes at logon time, to IPsec negotiations and special logon events. This granularity is what makes Advanced Audit Policy significantly more useful than the legacy approach, allowing specific logon-related events to be targeted without flooding the Security log with everything at once.</p>
+    <p>From the available subcategories, Audit Logon is configured to log Success events. This is one of the most foundational audit settings in any Active Directory environment, every successful interactive and network logon to the domain controller gets recorded, capturing the account name, logon type, source machine, and timestamp. This creates a reliable trail of who accessed the domain controller and how, which is invaluable both for routine access reviews and for incident response when tracing the movement of a compromised account.</p>
     <div class="figure">
       <img src="Images/4-A+V/ADSec87.png" alt="Advanced Audit Policy Logon/Logoff subcategories with Audit Logon highlighted" loading="lazy" />
     </div>
@@ -961,7 +963,7 @@ domain controller.<br><br>
     <div class="figure">
       <img src="Images/4-A+V/ADSec88.png" alt="Audit Logon properties set to Success" loading="lazy" />
     </div>
-
+    <p>The third image shows the updated subcategory view after applying the configuration, confirming that Audit Logon, Audit Other Logon/Logoff Events, and Audit Special Logon are all now set to Success. The additional subcategories being captured here cover edge cases such as logons using cached credentials, logons with elevated tokens, and other logon types that wouldn't be captured by Audit Logon alone — rounding out visibility across the full logon/logoff activity spectrum on the domain controller.</p>
     <div class="figure">
       <img src="Images/4-A+V/ADSec89.png" alt="Logon/Logoff subcategories showing Audit Logon and related events set to Success" loading="lazy" />
     </div><br>
