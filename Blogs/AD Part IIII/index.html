@@ -927,7 +927,10 @@ domain controller.<br><br>
     </div>
 
     <h3>Account Logon</h3>
-
+    <p>Under Advanced Audit Policy Configuration, navigating into Audit Policies and selecting Account Logon reveals the available subcategories for this audit category.</p>
+    <p> Account Logon events specifically track authentication activity processed by the domain controller, meaning every time a domain account is used to authenticate against the DC, whether successful or not, this is the category responsible for capturing that activity.</p>
+    <p>From the subcategories listed, I'm configuring Audit Kerberos Authentication Service to log Success events. Kerberos is the primary authentication protocol used in Active Directory environments, handling the ticket-granting process that underpins domain logons, service access, and inter-system authentication. </p>
+    <p> Auditing successful Kerberos authentication events gives visibility into who is authenticating against the domain controller and when, establishing a baseline of normal authentication behavior that makes anomalous activity, such as unusual logon times or unexpected account usage, easier to identify.</p>
     <div class="figure">
       <img src="Images/4-A+V/ADSec83.png" alt="Advanced Audit Policy Account Logon subcategories" loading="lazy" />
     </div>
