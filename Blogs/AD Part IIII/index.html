@@ -969,7 +969,8 @@ domain controller.<br><br>
     </div><br>
 
     <h3>Policy Change</h3>
-
+    <p>Moving into the Policy Change audit category, this section tracks modifications made to audit and security policies on the domain controller itself. This is a particularly important category from a security monitoring perspective, if an attacker or malicious insider gains sufficient access to start modifying audit policies, being able to detect that activity is critical. An attacker who can quietly disable auditing effectively goes blind to the defenders monitoring the environment.</p>
+    <p>From the available subcategories, Audit Audit Policy Change is configured to log Success events. This subcategory specifically captures any changes made to the audit policy configuration itself, meaning if anyone modifies, disables, or reconfigures audit settings on the domain controller, that action gets recorded in the Security log. It's essentially the audit policy watching over itself, ensuring that any tampering with the logging configuration leaves a detectable footprint rather than silently disappearing.</p>
     <div class="figure">
       <img src="Images/4-A+V/ADSec90.png" alt="Advanced Audit Policy Policy Change subcategories" loading="lazy" />
     </div>
