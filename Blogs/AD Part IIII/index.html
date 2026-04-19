@@ -842,13 +842,13 @@ domain controller.<br><br>
     <h3>Attempting Active Recon on the Domain Controller</h3>
 
     <h3>enum4linux</h3>
-    <p>Based on this output, the enum4linux tool attempted every enumeration method it has. Groups, group memberships, local groups, domain groups, users via RID cycling, printer info, and no results retrieved with access denied across the board.</p>
-    <p>In this active recon example, the tool was about to reach the DC but could not retrieve anything meaningful with these hardening settings in place.</p>
+  
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec74.png" alt="Running enum4linux against the domain controller" loading="lazy" />
     </div>
-
+      <p>Based on this output, the enum4linux tool attempted every enumeration method it has. Groups, group memberships, local groups, domain groups, users via RID cycling, printer info, and no results retrieved with access denied across the board.</p>
+    <p>In this active recon example, the tool was about to reach the DC but could not retrieve anything meaningful with these hardening settings in place.</p>
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec75.png" alt="enum4linux results showing access denied and blocked enumeration" loading="lazy" />
     </div><br>
