@@ -718,7 +718,7 @@ domain controller.<br><br>
 
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec56.png" alt="PowerShell verifying SMB signing enabled with Get-SmbServerConfiguration" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Network access: Do not allow anonymous enumeration of SAM accounts</h3>
 
@@ -730,7 +730,7 @@ domain controller.<br><br>
 
     <div class="figure" style="max-width:500px;">
       <img src="Images/3-GPSecHardening/ADSec58.png" alt="Anonymous enumeration of SAM accounts policy set to Enabled" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Network access: Do not allow anonymous enumeration of SAM accounts and shares</h3>
     <p>By default, anonymous users are not members of the Everyone group in Windows. This setting, when left enabled, changes that, effectively granting anonymous connections access to any resource that has Everyone permissions applied. Keeping this disabled ensures that unauthenticated connections cannot inherit broad resource access through the Everyone group.
@@ -742,7 +742,7 @@ domain controller.<br><br>
 
     <div class="figure" style="max-width:500px;">
       <img src="Images/3-GPSecHardening/ADSec60.png" alt="Anonymous enumeration of SAM accounts and shares policy set to Enabled" loading="lazy" />
-    </div>
+    </div><br>
 
     <h3>Network access: Let Everyone permissions apply to anonymous users</h3>
 
@@ -831,9 +831,9 @@ domain controller.<br><br>
     
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec72.png" alt="Installing nmap on Ubuntu Server" loading="lazy" />
-    </div>
+    </div><br>
 
-    <h3>Verification</h3>
+    <h3>Verification of Installation</h3>
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec73.png" alt="Verifying all tools installed successfully on Ubuntu Server" loading="lazy" />
