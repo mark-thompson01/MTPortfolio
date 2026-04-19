@@ -1185,17 +1185,16 @@ best practice to keep these roles separated onto dedicated infrastructure.
   <span id="section-6" class="section-anchor"></span>
   <section class="card">
     <h2>6 – Tier Administration Model</h2>
-
-    <p>In my previous blog I talked about the legacy Tier Administration Model and how it was designed to separate trust boundaries in on-premises environments, built as a top-down, privilege-based approach geared towards preventing credential theft.</p>
-    <p>It is worth acknowledging that Microsoft has since evolved this model. The classic three-tier approach has been superseded by the Enterprise Access Model (EAM), which reorganizes the trust boundary concept around three planes rather than tiers: the Control Plane (equivalent to the old Tier 0, covering identity and management infrastructure), the Management Plane (covering the management of business assets and the systems used to administer them), and the User Access Plane (covering end-user productivity environments).</p>
-    <p>The EAM is designed to better reflect modern hybrid and cloud-connected environments where the classic on-premises tier boundaries are increasingly difficult to enforce cleanly. For this lab, the legacy Tier Administration Model is being applied intentionally as it maps well to a contained on-premises Active Directory environment, and the core principle behind both models remains the same, keep credentials scoped to the trust level of the systems they touch.</p>
-    <p>I'm going to apply that approach in this virtualized environment by only logging into domain controllers with administrative domain accounts and only logging into regular standard domain computers with regular standard user accounts.</p>
+    <p>The Tier Administration Model enforces strict administrative boundaries between different levels of the environment. Rather than focusing on a “top-down” structure, the model is designed to isolate privilege and prevent credential exposure across trust boundaries.</p>
+    <p>The core principle is simple but critical:<br>
+    accounts are restricted to operating only within their assigned tier and must never log on to systems outside of it.</p>
+    <p>This reduces the risk of credential theft, particularly from attacks such as Pass-the-Hash, where compromised credentials from a lower-tier system could otherwise be used to escalate privileges and move laterally across the network.</p>
+    <p>By enforcing this separation, the model helps break common attack paths that attackers rely on after gaining initial access.</p>
     <br>
-    <p>The Tier Administration Model uses a top-down approach starting at Tier 0, then down to Tier 1, then down to Tier 2 where the workstations operate. In this approach account logons are logically segmented to the systems in their assigned tier and never initiate logons to systems outside of it. This approach breaks attack paths, and helps to mitigate against attacks like Pass-the-Hash attacks or carrying out the act of lateral moverment on a Windows domain network.</p>
     <ul>
-      <li><strong>Tier 0</strong> = Systems that control identity - <strong>Domain Controllers</strong></li>
-      <li><strong>Tier 1</strong> = Systems that run business services - <strong>Servers</strong></li>
-      <li><strong>Tier 2</strong> = Systems that are everyday end user workstations - <strong>Workstations</strong></li> 
+      <li><strong>Tier 0</strong> – Identity and control systems (e.g., Domain Controllers)</li>
+      <li><strong>Tier 1</strong> – Server infrastructure and business-critical services</li>
+      <li><strong>Tier 2</strong> – End-user systems (workstations)</li> 
     </ul>
 
 
