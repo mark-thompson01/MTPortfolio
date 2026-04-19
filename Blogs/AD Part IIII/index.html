@@ -1208,7 +1208,8 @@ best practice to keep these roles separated onto dedicated infrastructure.
       <img src="Images/6-TAM/TAM2.png" alt="Windows Server Start menu showing MT.Admin as the logged-in administrative user on the domain controller" loading="lazy" />
     </div>
 
-    <p>Administrative domain accounts log into domain controllers and authorized systems.</p>
+    <p>Administrative domain accounts log into domain controllers and authorized systems only.</p>
+    <p>This account does not log into any system that is outside of Tier 0.</p>
     <p>In this example, MT.Admin is the designated account that logs directly and only into the domain controller for identity, domain, and Active Directory management tasks.</p>
     <br>
 
