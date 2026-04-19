@@ -842,6 +842,8 @@ domain controller.<br><br>
     <h3>Attempting Active Recon on the Domain Controller</h3>
 
     <h3>enum4linux</h3>
+    <p>Based on this output, the enum4linux tool attempted every enumeration method it has. Groups, group memberships, local groups, domain groups, users via RID cycling, printer info, and no results retrieved with access denied across the board.</p>
+    <p>In this active recon example, the tool was about to reach the DC but could not retrieve anything meaningful with these hardening settings in place.</p>
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec74.png" alt="Running enum4linux against the domain controller" loading="lazy" />
@@ -852,12 +854,16 @@ domain controller.<br><br>
     </div><br>
 
     <h3>smbclient</h3>
+    <p>Here, we have an output that says "Anonymous login successful", indicating the anonymous session was initiated at the protocol level, but it could not retrieve anything useful because SMB1 is disabled on the domain controller. This mitigates the legacy workgroup browsing mechanism that smbclient relies on for share enumeration.</p>
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec76.png" alt="smbclient showing SMB1 disabled and no workgroup available" loading="lazy" />
     </div><br>
 
     <h3>rpcclient</h3>
+    <p>Similar to the smbclient result, the session technically opened but hit a wall the moment it tried to do something useful.</p>
+    <p>The anonymous enumeration restrictions put in place are blocking the RPC calls that would return meaning directory information.</p>
+    <p>An attacker in this position has an open RPC session they can't actually do anything with, no user list, no group info, nothing to build on.</p>
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec77.png" alt="Running rpcclient against the domain controller" loading="lazy" />
@@ -868,7 +874,8 @@ domain controller.<br><br>
     </div><br>
 
     <h3>nmap</h3>
-
+    <P>The nmap scan was run using the smb-enum-users and smb-enum-shares scripts targeting port 445 on the domain controller. The result came back reporting the host as seemingly down — but this isn't entirely accurate. What's actually happening here is that nmap sends an ICMP ping probe by default to verify a host is reachable before proceeding with any script execution. The Windows Firewall configured on the domain controller is blocking those ICMP probes, causing nmap to interpret the silence as the host being offline and abandoning the scan before the SMB enumeration scripts ever get a chance to run.</P>
+    <p>nmap itself acknowledges this in the output with the note: "If it is really up, but blocking our ping probes, try -Pn" — the -Pn flag tells nmap to skip the ping check entirely and treat the host as up regardless. A more persistent attacker would likely follow that suggestion and rerun the scan with -Pn to force the enumeration attempt through. However, even in that scenario, the anonymous enumeration restrictions and SMB hardening already demonstrated through enum4linux, smbclient, and rpcclient would still be waiting at the next layer, meaning the firewall is simply the first line of defense that stops the attempt here before it even gets that far.</p>
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec79.png" alt="Running nmap smb-enum-users and smb-enum-shares scan against the domain controller" loading="lazy" />
     </div>
