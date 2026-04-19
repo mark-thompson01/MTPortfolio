@@ -1203,7 +1203,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
 
     <br>
-    <h3>Tier 0 – Admin</h3>
+    <h3>Tier 0 – Domain Controller</h3>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">Machine:</strong> Windows Domain Controller</li>
@@ -1225,7 +1225,31 @@ best practice to keep these roles separated onto dedicated infrastructure.
     <p>In this example, MT.Admin is the designated account that logs directly and only into the domain controller for domain, identity & access, and Active Directory management tasks.</p>
     <br>
 
-    <h3>Tier 2 – User</h3>
+    <h3>Tier 1 – Server</h3>
+
+    <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">Machine:</strong> Ubuntu File Serverr</li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">System:</strong> Ubuntu Server 24.04</li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">Account:</strong> mt</li>
+      <li><strong style="color:var(--text);">Privileges:</strong> Standard user account with sudo privileges</li>
+    </ul>
+
+    <div class="figure" style="max-width:400px;">
+      <img src="Images/6-TAM/TAM16.png" alt="Ubuntu Server logon"  loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:500px;">
+      <img src="Images/6-TAM/TAM17.png" alt="Ubuntu Server logon II" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:560px;">
+      <img src="Images/6-TAM/TAM18.png" alt="Ubuntu Server login III" loading="lazy" />
+    </div>
+    
+    
+    <br>
+
+    <h3>Tier 2 – Workstation</h3>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">Machine:</strong> Standard Windows 11 domain client host</li>
