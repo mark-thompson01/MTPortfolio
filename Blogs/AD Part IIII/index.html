@@ -997,7 +997,10 @@ domain controller.<br><br>
     </div><br>
 
     <h3>Verification</h3>
-
+    <p>With all audit subcategories configured, <strong>auditpol /get /category:*</strong> is run to pull a complete readout of the current audit policy state directly from the system, providing a ground-truth verification of what is actually enforced at the OS level, independent of what the Group Policy Management Editor displays.</p>
+    <p>Across the two pages of output, the configured subcategories are confirmed exactly as intended. Under Logon/Logoff, Logon, Special Logon, and Other Logon/Logoff Events all show Success. Under Policy Change, Audit Policy Change shows Success. Under Account Management, Security Group Management and User Account Management both show Success. Under Account Logon, both Kerberos Authentication Service and Kerberos Service Ticket Operations show Success — confirming that Kerberos authentication activity is being captured at both the service and ticket level. Everything not explicitly configured shows No Auditing, which is exactly the precision the Advanced Audit Policy approach is designed to deliver, only logging what has been deliberately chosen, nothing more.</p>
+    <p><strong>gpupdate /force</strong> is then run to ensure the Group Policy changes are fully pushed out and applied across the domain, confirming both Computer Policy and User Policy updated successfully.</p>
+    
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec95.png" alt="Verification of Advanced Audit Policy settings applied" loading="lazy" />
     </div>
