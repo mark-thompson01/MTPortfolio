@@ -491,6 +491,31 @@ track of even with the account not actively in use.
       <img src="Images/2-PasswordPolicy/ADSec32.png" alt="Opening an elevated PowerShell session" loading="lazy" />
     </div>
 
+
+    <p>Here, I'm running the net accounts command for a quick verification step 
+to confirm that the password and lockout policy changes pushed out by 
+gpupdate /force are actively in effect on the domain controller. 
+The output reflects exactly what was configured.<br><br>
+
+      A Minimum password age of 1 day prevents user from immediately cycling
+through passwords to back to a previous one.<br><br>
+
+      The maximum password age of 60 days enforces regular password 
+rotation across domain accounts.<br><br>
+      
+The Minimum password length of 12 characters ensures passwords
+meet a baseline complexity threshold.<br><br>
+      The password history of 24 means a user cannot reuse any of their last 24 passwords.<br><br>
+
+      On the lockout side, the Lockout threshold of 5 confirms that an account will be locked after 5 consecutive failed login attempts. Both the Lockout duration and Lockout observation window are set to 30 minutes, meaning a locked account will automatically unlock after 30 minutes, and the failed attempt counter resets after 30 minutes of no failed attempts.
+<br><br>
+      The Computer role: PRIMARY confirms this output is being read directly from the domain controller, meaning these are the domain-wide enforced values, not a local policy.
+
+      
+
+      
+    
+    </p>
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec33.png" alt="Running gpupdate /force and net accounts to verify policy changes" loading="lazy" />
     </div>
