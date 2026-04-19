@@ -20,6 +20,8 @@
 
     html,body { height:100% }
 
+    html { scroll-behavior: smooth; }
+
     body {
       margin:0;
       color:var(--text);
@@ -119,11 +121,32 @@
       display:flex;
       align-items:center;
       gap:14px;
-      padding:12px 16px;
+      padding:0;
       background:rgba(77,163,255,.05);
       border:1px solid rgba(77,163,255,.15);
       border-radius:10px;
       font-size:15px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .approach-list li:hover {
+      background:rgba(77,163,255,.1);
+      border-color:rgba(77,163,255,.35);
+    }
+
+    .approach-list li a {
+      display:flex;
+      align-items:center;
+      gap:14px;
+      width:100%;
+      padding:12px 16px;
+      text-decoration:none;
+      color:var(--text);
+      border-radius:10px;
+    }
+
+    .approach-list li a:hover {
+      color:#fff;
     }
 
     .approach-list li .num {
@@ -139,6 +162,12 @@
       font-weight:700;
       font-size:13px;
       flex-shrink:0;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .approach-list li:hover .num {
+      background:rgba(77,163,255,.25);
+      border-color:rgba(77,163,255,.5);
     }
 
     /* Figure / screenshot */
@@ -225,6 +254,15 @@
       border-radius:14px;
     }
 
+    /* Offset anchor targets so the section heading isn't hidden behind anything */
+    .section-anchor {
+      display:block;
+      height:0;
+      margin-top:-24px;
+      padding-top:24px;
+      visibility:hidden;
+    }
+
     @media (max-width:600px) {
       .figure-row.two,
       .figure-row.three { grid-template-columns:1fr; }
@@ -264,20 +302,21 @@
     <p style="margin:18px 0 6px;font-weight:600;">The layered approach is as follows:</p>
 
     <ul class="approach-list">
-      <li><span class="num">1</span> Identity and Access Hardening: Account Separation & Default Account Hardening</li>
-      <li><span class="num">2</span> Password Policy Implementation</li>
-      <li><span class="num">3</span> Group Policy Security Hardening</li>
-      <li><span class="num">4</span> Auditing and Visibility</li>
-      <li><span class="num">5</span> Attack Surface Reduction</li>
-      <li><span class="num">6</span> Tiered Admin Model Applied</li>
+      <li><a href="#section-1"><span class="num">1</span> Identity and Access Hardening: Account Separation &amp; Default Account Hardening</a></li>
+      <li><a href="#section-2"><span class="num">2</span> Password Policy Implementation</a></li>
+      <li><a href="#section-3"><span class="num">3</span> Group Policy Security Hardening</a></li>
+      <li><a href="#section-4"><span class="num">4</span> Auditing and Visibility</a></li>
+      <li><a href="#section-5"><span class="num">5</span> Attack Surface Reduction</a></li>
+      <li><a href="#section-6"><span class="num">6</span> Tiered Admin Model Applied</a></li>
     </ul>
   </section>
 
   <br><br>
 
   <!-- Section 1 -->
+  <span id="section-1" class="section-anchor"></span>
   <section class="card">
-    <h2>1 – Identity and Access Hardening: Account Separation & Default Account Hardening</h2>
+    <h2>1 – Identity and Access Hardening: Account Separation &amp; Default Account Hardening</h2>
 
     <p>To start things off, I've created a separate administrative account to manage this domain controller with, instead of using the built-in Administrator account.</p>
 
@@ -289,8 +328,6 @@
       <strong>Security Approach</strong>
       Disable and avoid using a commonly targeted built-in default account commonly used in managing AD environments. This helps prevent attackers from easily targeting a popular default account with elevated privileges, and using a separate administrative account reduces the success of easily carrying out a brute force attack on a common default privileged account.
     </div>
-
-    
 
     <p>Below, the built-in Administrator account is right-clicked to access its options, then disabled. The confirmation dialog confirms the account has been successfully disabled.</p>
 
@@ -307,15 +344,15 @@
     </div>
 
     <div class="security-note">
-      <Strong>Note</Strong>
-      It is a best practice to disable the built-in domain Administrator account on the domain controller. 
+      <strong>Note</strong>
+      It is a best practice to disable the built-in domain Administrator account on the domain controller.
 However, even when the account is disabled, it is still a best practice to keep a strong randomized
-password set for the account. While disabling the account does effectively remove it from the 
-everyday attack surface, there are scenarios where the account can still be targeted by an 
-attacker. It is also worth mentioning here that in certain recovery scenarios, such as booting 
+password set for the account. While disabling the account does effectively remove it from the
+everyday attack surface, there are scenarios where the account can still be targeted by an
+attacker. It is also worth mentioning here that in certain recovery scenarios, such as booting
 the DC into DSRM (Directory Services Restore Mode) - does require the use of the built-in
-Administrator account on the domain controller, making it important that the credentials are kept 
-track of even with the account not actively in use. 
+Administrator account on the domain controller, making it important that the credentials are kept
+track of even with the account not actively in use.
     </div><br><br>
 
     <p>Here I'm verifying that the Guest account is disabled. It usually is by default, and it is, as indicated by the <em>"Enable account"</em> option appearing when right-clicking on it.</p>
@@ -329,14 +366,6 @@ track of even with the account not actively in use.
     <div class="figure">
       <img src="Images/1-IAM/ADSec5.png" alt="Domain Admins Properties showing MT and Test Account as members" loading="lazy" />
     </div><br>
-
-
-
-
-
-
-
-
 
     <p>In this example, I have an OU called <strong>Corp</strong> with a child OU called <strong>Users</strong> for the standard user accounts on the domain. Here I'm creating a standard user account called <strong>MT.User</strong> to avoid using my <strong>MT.Admin</strong> account as a standard login account, configuring a general production account with the concept of least privilege.</p>
 
@@ -365,6 +394,7 @@ track of even with the account not actively in use.
   <br><br><br><br>
 
   <!-- Section 2 -->
+  <span id="section-2" class="section-anchor"></span>
   <section class="card">
     <h2>2 – Password Policy Implementation</h2>
 
@@ -511,52 +541,45 @@ track of even with the account not actively in use.
       <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" loading="lazy" />
     </div>
 
-    <pIn this example, I'm setting the Precedence to 1. With the PSO Precedence numbering, the lower the number, the higher the priority. So a PSO with a Precedence of 1 will always win over a PSO set with a Precedence of 2, 3, 10, etc., when a user account object is assigned to more than one Global Security Group that has a PSO configured with it.</p>
+    <p>In this example, I'm setting the Precedence to 1. With the PSO Precedence numbering, the lower the number, the higher the priority. So a PSO with a Precedence of 1 will always win over a PSO set with a Precedence of 2, 3, 10, etc., when a user account object is assigned to more than one Global Security Group that has a PSO configured with it.</p>
 
-    <p>Active Directory uses the set Precedence to resolve this conflict by applying the given PSO
-with the lowest Precedence number. In this example the Precedence for this PSO is set to 1. With
-that in place, Precedence 1 will always win over Precedence 2, Precedence 2 will always win over Precedence 3, and so on. </p>
+    <p>Active Directory uses the set Precedence to resolve this conflict by applying the given PSO with the lowest Precedence number. In this example the Precedence for this PSO is set to 1. With that in place, Precedence 1 will always win over Precedence 2, Precedence 2 will always win over Precedence 3, and so on.</p>
 
-    <p>In this example, setting Precedence to 1 will ensure that this policy takes the highest priority 
-for any member of the Domain Admins group. </p>
+    <p>In this example, setting Precedence to 1 will ensure that this policy takes the highest priority for any member of the Domain Admins group.</p>
 
     <div class="security-note">
       <strong>Note</strong>
-It's a best practice to avoid assigning the same Precedence number to two different PSOs. 
-If two PSOs are set to the same Precedence value and a user account object is assigned 
-to more than one global security group with more than one PSO set to a Precedence of 1, AD 
-falls back to the objects GUID to break the tie, producing an administratively unpredictable 
-result.</div>
+      It's a best practice to avoid assigning the same Precedence number to two different PSOs.
+If two PSOs are set to the same Precedence value and a user account object is assigned
+to more than one global security group with more than one PSO set to a Precedence of 1, AD
+falls back to the objects GUID to break the tie, producing an administratively unpredictable
+result.
+    </div>
 
     <div class="security-note">
       <strong>Note</strong>
       It is worth clarifying how the Precedence numbering works in conjunction with the PSOs.
-The lower the Precedence number is set on a FGPP, the high the priority. So a PSO with 
-a Precedence of 1 will always win over a PSO that is set with a Precedence of 2, 3, 10, etc, 
-when a user account object is assigned to more than one Global Security group that has a 
+The lower the Precedence number is set on a FGPP, the higher the priority. So a PSO with
+a Precedence of 1 will always win over a PSO that is set with a Precedence of 2, 3, 10, etc,
+when a user account object is assigned to more than one Global Security group that has a
 PSO configured with it.<br><br>
 
-      It is also worth noting that when a PSO is applied directly to a user account object on the 
+      It is also worth noting that when a PSO is applied directly to a user account object on the
 domain, it will always take precedence over any PSO applied to that user account object via
 group membership, regardless of the Precedence number that is assigned to each PSO. So in
-the case that a group linked PSO has a lower precedence number, a PSO tied directly to the 
-user account will always win. Making the direct user assignment the strongest form 
+the case that a group linked PSO has a lower precedence number, a PSO tied directly to the
+user account will always win. Making the direct user assignment the strongest form
 of PSO application, and it's also something to be intentional about when designing your
 FGPP structure.<br><br>
 
- With all of that being said, there is one important exception to that rule. If multiple
-PSOs are applied directly to the same user account object, not through group membership, 
+      With all of that being said, there is one important exception to that rule. If multiple
+PSOs are applied directly to the same user account object, not through group membership,
 but applied directly, then the direct-assignment rule no longer automatically resolves
 the conflict on its own. In that scenario, AD falls back to the Precedence number to determine
-which PSO wins, with the lowest Precedence number taking the priority. This re-enforces 
+which PSO wins, with the lowest Precedence number taking the priority. This re-enforces
 why being deliberate and strategic about your Precedence numbering goes a long way,
-even when working with direct user assignments. 
-     
-    
+even when working with direct user assignments.
     </div><br><br>
-
-    
-
 
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" loading="lazy" />
@@ -603,6 +626,7 @@ even when working with direct user assignments.
   <br><br><br><br>
 
   <!-- Section 3 -->
+  <span id="section-3" class="section-anchor"></span>
   <section class="card">
     <h2>3 – Group Policy Security Hardening</h2>
 
@@ -635,23 +659,19 @@ even when working with direct user assignments.
     <div class="security-note">
       <strong>Security Approach</strong>
       Setting the LAN Manager authentication level to Send NTLMv2 response only. Refuse LM and NTLM,
-which is linked to a registry value of LmCompabilityLevel = 5<br><br>
+which is linked to a registry value of LmCompatibilityLevel = 5<br><br>
 
-      This is one of the more impactful protocol-level hardening steps you can apply to a 
+      This is one of the more impactful protocol-level hardening steps you can apply to a
 domain controller.<br><br>
 
       To understand why this matters, it helps to understand what these protocols are and how they differ. LM (LAN Manager) is the oldest of the three and is considered cryptographically broken. It splits passwords into two 7-character chunks and hashes them independently, making them trivially crackable with modern hardware. NTLM (NTLMv1) improved on LM but still relies on a weak challenge-response mechanism that is vulnerable to pass-the-hash attacks, where an attacker captures a hashed credential from memory or network traffic and uses it directly to authenticate without ever needing to crack the underlying password. NTLMv2 addressed many of these weaknesses by incorporating a client-side timestamp and a more complex HMAC-MD5 based challenge-response, making captured hashes significantly harder to replay or crack offline.
       <br><br>
 
       Beyond downgrade attacks, even NTLMv2 carries inherent risk in Windows environments through NTLM relay attacks. In a relay attack, an attacker on the network intercepts an NTLM authentication attempt from a victim machine and forwards it in real time to a different target server — effectively authenticating as that user without ever touching the password hash. Tools like Responder and ntlmrelayx have made this class of attack highly accessible. While refusing LM and NTLMv1 via this policy setting removes the weakest authentication paths entirely, it is worth understanding that NTLMv2 relay attacks remain a concern and are best mitigated in combination with SMB signing (covered in this write-up), EPA (Extended Protection for Authentication), and where possible, moving workloads to Kerberos which is not susceptible to the same relay attack model.
-<br><br>
+      <br><br>
 
-Enforcing NTLMv2-only at the domain controller level ensures that no client on the domain can negotiate a weaker authentication protocol, closing off a class of attacks that have been a staple of Active Directory penetration testing and real-world breaches for decades.
+      Enforcing NTLMv2-only at the domain controller level ensures that no client on the domain can negotiate a weaker authentication protocol, closing off a class of attacks that have been a staple of Active Directory penetration testing and real-world breaches for decades.
     </div><br>
-      
-      
-      
-      
 
     <h3>Microsoft network client: Digitally sign communications (always)</h3>
 
@@ -822,8 +842,10 @@ Enforcing NTLMv2-only at the domain controller level ensures that no client on t
 
   </section>
 
-<br><br><br><br>
+  <br><br><br><br>
+
   <!-- Section 4 -->
+  <span id="section-4" class="section-anchor"></span>
   <section class="card">
     <h2>4 – Auditing &amp; Visibility</h2>
 
@@ -835,18 +857,16 @@ Enforcing NTLMv2-only at the domain controller level ensures that no client on t
 
     <p>The design is limited to an "all or nothing" approach. For example, if you enable the policy for "Audit object access," Windows logs every time a file is accessed, a registry key is touched, or a printer is used, causing the Security event logs to fill up instantly with thousands of useless log entries, making it extremely challenging to locate a legitimate security breach in the log data.</p>
 
-    <!-- ADSec81: 1026x702 — full GPME window, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec81.png" alt="Group Policy Management Editor showing Legacy Audit Policy under Local Policies" loading="lazy" />
     </div>
 
     <h3>Advanced Audit Policy Configuration (The "Modern" Way)</h3>
 
-    <p>These policies break those 9 legacy categories down into over 50 sub-categories, breaking things down further to enable more granular and explicit control of the policy settings. Instead of just auditing "Logon events" and recording everything with the legacy all-or-nothing approach, you can drill down into auditing things such as Account Lockout or Logoff.</p></p>
+    <p>These policies break those 9 legacy categories down into approximately 53 sub-categories (the exact count can vary slightly depending on the Windows Server version), breaking things down further to enable more granular and explicit control of the policy settings. Instead of just auditing "Logon events" and recording everything with the legacy all-or-nothing approach, you can drill down into auditing things such as Account Lockout or Logoff.</p>
 
     <p>This provides more of a precision approach, allowing you to track exactly what you need (like sensitive file changes) while ignoring what you don't (like system background processes), which saves disk space and CPU cycles.</p>
 
-    <!-- ADSec82: 1026x727 — full GPME window showing Advanced Audit summary, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec82.png" alt="Advanced Audit Policy Configuration showing Audit Policies summary with all categories not configured" loading="lazy" />
     </div>
@@ -862,94 +882,78 @@ Enforcing NTLMv2-only at the domain controller level ensures that no client on t
 
     <h3>Account Logon</h3>
 
-    <!-- ADSec83: 1026x703 — GPME Account Logon subcategories list, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec83.png" alt="Advanced Audit Policy Account Logon subcategories" loading="lazy" />
     </div>
 
-    <!-- ADSec84: 1026x728 — GPME with Kerberos Auth Service properties dialog overlaid, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec84.png" alt="Audit Kerberos Authentication Service properties set to Success" loading="lazy" />
     </div>
 
     <h3>Account Management</h3>
 
-    <!-- ADSec85: 1026x726 — GPME Account Management subcategories list, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec85.png" alt="Advanced Audit Policy Account Management subcategories" loading="lazy" />
     </div>
 
-    <!-- ADSec86: 1026x724 — GPME with Security Group Management properties dialog overlaid, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec86.png" alt="Audit Security Group Management properties set to Success" loading="lazy" />
     </div>
 
     <h3>Logon/Logoff</h3>
 
-    <!-- ADSec87: 1026x872 — GPME inside full VM window (taller), standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec87.png" alt="Advanced Audit Policy Logon/Logoff subcategories with Audit Logon highlighted" loading="lazy" />
     </div>
 
-    <!-- ADSec88: 1026x726 — GPME with Audit Logon properties dialog overlaid, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec88.png" alt="Audit Logon properties set to Success" loading="lazy" />
     </div>
 
-    <!-- ADSec89: 1026x725 — GPME Logon/Logoff subcategories updated with Success entries, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec89.png" alt="Logon/Logoff subcategories showing Audit Logon and related events set to Success" loading="lazy" />
     </div>
 
     <h3>Policy Change</h3>
 
-    <!-- ADSec90: 1026x731 — GPME Policy Change subcategories list, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec90.png" alt="Advanced Audit Policy Policy Change subcategories" loading="lazy" />
     </div>
 
-    <!-- ADSec91: 1026x726 — GPME with Audit Policy Change properties dialog overlaid, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec91.png" alt="Audit Policy Change properties set to Success" loading="lazy" />
     </div>
 
     <h3>Privilege Use</h3>
 
-    <!-- ADSec92: 1026x766 — GPME inside full VM window, Privilege Use subcategories, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec92.png" alt="Advanced Audit Policy Privilege Use subcategories" loading="lazy" />
     </div>
 
-    <!-- ADSec93: 1026x723 — GPME with Audit Non Sensitive Privilege Use properties dialog, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec93.png" alt="Audit Sensitive Privilege Use properties set to Success" loading="lazy" />
     </div>
 
-    <!-- ADSec94: 1026x703 — GPME Privilege Use subcategories updated view, standard width -->
     <div class="figure">
       <img src="Images/4-A+V/ADSec94.png" alt="Privilege Use subcategories updated after configuration" loading="lazy" />
     </div>
 
     <h3>Verification</h3>
 
-    <!-- ADSec95: 781x511 — PowerShell auditpol /get /category:* output page 1, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec95.png" alt="Verification of Advanced Audit Policy settings applied" loading="lazy" />
     </div>
 
-    <!-- ADSec96: 777x512 — PowerShell auditpol /get /category:* output page 2, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec96.png" alt="Further verification of audit policy configuration" loading="lazy" />
     </div>
 
-    <!-- ADSec97: 778x513 — PowerShell gpupdate /force confirmation, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec97.png" alt="Final audit policy configuration confirmed" loading="lazy" />
     </div>
 
     <h3>Purposely Lock Out Account</h3>
 
-    <!-- ADSec98: 628x575 — Windows login screen lockout message, constrained ~460px -->
     <div class="figure" style="max-width:460px;">
       <img src="Images/4-A+V/ADSec98.png" alt="Intentionally triggering an account lockout for testing" loading="lazy" />
     </div>
@@ -958,26 +962,22 @@ Enforcing NTLMv2-only at the domain controller level ensures that no client on t
 
     <h3>Event ID 4625 – Invalid Logins</h3>
 
-    <!-- ADSec99: 762x494 — PowerShell Get-WinEvent command for Event ID 4625, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec99.png" alt="PowerShell query for Event ID 4625 invalid login attempts" loading="lazy" />
     </div>
 
-    <!-- ADSec100: 760x498 — PowerShell Event ID 4625 results, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec100.png" alt="Event ID 4625 results showing failed login attempts" loading="lazy" />
     </div>
 
     <h3>Event ID 4740 – Account Lockouts</h3>
 
-    <!-- ADSec101: 760x498 — PowerShell Event ID 4740 results, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec101.png" alt="PowerShell query results for Event ID 4740 account lockout" loading="lazy" />
     </div>
 
     <h3>Event ID 4624 – Successful Logins</h3>
 
-    <!-- ADSec102: 762x499 — PowerShell Event ID 4740 + 4624 combined output, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" loading="lazy" />
     </div>
@@ -986,24 +986,20 @@ Enforcing NTLMv2-only at the domain controller level ensures that no client on t
 
     <h3>Add Domain Admins to Users OU</h3>
 
-    <!-- ADSec103: 709x673 — ADUC MT.User Properties showing Member Of tab, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec103.png" alt="MT.User Properties showing Member Of tab before adding to Domain Admins" loading="lazy" />
     </div>
 
-    <!-- ADSec104: 770x677 — ADUC Select Groups dialog with Domain Admins entered, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec104.png" alt="Select Groups dialog with Domain Admins entered for MT.User" loading="lazy" />
     </div>
 
-    <!-- ADSec105: 737x691 — ADUC MT.User Properties now showing Domain Admins membership, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec105.png" alt="MT.User Properties Member Of tab now showing Domain Admins and Domain Users" loading="lazy" />
     </div>
 
     <h3>Event Log Data</h3>
 
-    <!-- ADSec106: 761x500 — PowerShell Event ID 4728 results, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" loading="lazy" />
     </div>
@@ -1013,6 +1009,7 @@ Enforcing NTLMv2-only at the domain controller level ensures that no client on t
   <br><br><br><br>
 
   <!-- Section 5 -->
+  <span id="section-5" class="section-anchor"></span>
   <section class="card">
     <h2>5 – Attack Surface Reduction</h2>
 
@@ -1022,13 +1019,11 @@ Enforcing NTLMv2-only at the domain controller level ensures that no client on t
 
     <h3>Print Spooler</h3>
 
-    <!-- ASR1: 760x496 — PowerShell stop-service/set-service Spooler, medium ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/5-ASR/ASR1.png" alt="PowerShell stopping and disabling the Print Spooler service" loading="lazy" />
     </div>
 
-    <p>Disabling this service as a best practice in a Windows domain environment was influenced by the PrintNightmare vulnerability (CVE-2021-1675 / CVE-2021-34527), a critical Windows Print Spooler vulnerability that enabled attackers to carry out remote code execution and local privilege escalation.
-</p><br>
+    <p>Disabling this service as a best practice in a Windows domain environment was influenced by the PrintNightmare vulnerability (CVE-2021-1675 / CVE-2021-34527), a critical Windows Print Spooler vulnerability that enabled attackers to carry out remote code execution and local privilege escalation. Operationally on a domain controller, there is almost never a need to have this service enabled and running.</p><br>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">RemoteRegistry</strong></li>
@@ -1037,18 +1032,17 @@ Enforcing NTLMv2-only at the domain controller level ensures that no client on t
       <li><strong style="color:var(--text);">RemoteAccess</strong></li>
     </ul>
 
-        <div class="security-note">
-      <Strong>Note</Strong>
-          The RemoteAccess service refers to Windows Routing and Remote Access Service (RRAS), separate from
+    <div class="security-note">
+      <strong>Note</strong>
+      The RemoteAccess service refers to Windows Routing and Remote Access Service (RRAS), separate from
 Remote Desktop Protocol (RDP). RRAS handles routing and VPN gateway functionality. On a dedicated
 domain controller, this service isn't always necessary and disabling it goes a long way
 in system hardening. With that being said, in smaller environments where the domain controller
-is also configured as a VPN gateway or router, RemoteAccess needs to be enabled. It isn't 
-really encouraged to have a domain controller also acting as a routing or VPN device. It's a 
-best practice to keep these roles separated onto dedicated infrastructure. 
-        </div>
+is also configured as a VPN gateway or router, RemoteAccess needs to be enabled. It isn't
+really encouraged to have a domain controller also acting as a routing or VPN device. It's a
+best practice to keep these roles separated onto dedicated infrastructure.
+    </div>
 
-    <!-- ASR2: 1026x730 — PowerShell disabling RemoteRegistry, WerSvc, bthserv, RemoteAccess, standard width -->
     <div class="figure">
       <img src="Images/5-ASR/ASR2.png" alt="PowerShell stopping and disabling RemoteRegistry, WerSvc, Bthserv, and RemoteAccess services" loading="lazy" />
     </div><br><br>
@@ -1057,14 +1051,12 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
     <p>For RDP – Remote Desktop Protocol connections enabled for domain accounts that are members of the built-in domain-wide Remote Desktop Users security group, I'm going to purposely set that up only with my custom administrative domain account MT.Admin, and ensure standard user accounts such as MT.User are not configured with this security group.</p>
 
-    <!-- ASR3: 846x723 — ADUC MT.Admin Properties with Select Groups dialog showing Remote Desktop Users, ~620px -->
     <div class="figure" style="max-width:620px;">
       <img src="Images/5-ASR/ASR3.png" alt="ADUC MT.Admin Properties showing Select Groups dialog with Remote Desktop Users being added" loading="lazy" />
     </div>
 
     <p>With that in place, I'll try initiating a remote sign-in with the MT.User account. And upon attempting to connect, this message prompts as a result:</p>
 
-    <!-- ASR4: 813x554 — Windows login screen RDP denied message for MT.User, ~580px -->
     <div class="figure" style="max-width:580px;">
       <img src="Images/5-ASR/ASR4.png" alt="Windows login screen showing MT.User denied Remote Desktop sign-in due to missing group membership" loading="lazy" />
     </div>
@@ -1078,21 +1070,18 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
     <p>To first see if the local Windows Firewall is enabled, I'll run the <code style="background:rgba(77,163,255,.1);color:var(--brand);padding:2px 6px;border-radius:4px;font-size:13px;">Get-NetFirewallProfile</code> cmdlet in a PowerShell session.</p>
 
-    <!-- ASR5: 1026x728 — PowerShell Get-NetFirewallProfile output showing all three profiles, standard width -->
     <div class="figure">
       <img src="Images/5-ASR/ASR5.png" alt="PowerShell Get-NetFirewallProfile output showing Domain, Private, and Public firewall profiles enabled" loading="lazy" />
     </div>
 
     <h3>Set New Local Firewall Rule on the Domain Controller</h3>
 
-    <!-- ASR6: 1026x722 — PowerShell New-NetFirewallRule allowing RDP from Admin Subnet only, standard width -->
     <div class="figure">
       <img src="Images/5-ASR/ASR6.png" alt="PowerShell New-NetFirewallRule creating an inbound rule to allow RDP only from the 192.168.50.0/24 admin subnet" loading="lazy" />
     </div>
 
     <h3>Disable Remote Desktop Firewall Rule</h3>
 
-    <!-- ASR7: 582x220 — PowerShell Disable-NetFirewallRule one-liner, small ~460px -->
     <div class="figure" style="max-width:460px;">
       <img src="Images/5-ASR/ASR7.png" alt="PowerShell Disable-NetFirewallRule disabling the default Remote Desktop firewall rule group" loading="lazy" />
     </div>
@@ -1107,6 +1096,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
   <br><br><br><br>
 
   <!-- Section 6 -->
+  <span id="section-6" class="section-anchor"></span>
   <section class="card">
     <h2>6 – Tiered Admin Model</h2>
 
@@ -1115,7 +1105,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
     <p>It is worth acknowledging that Microsoft has since evolved this model. The classic three-tier approach has been superseded by the Enterprise Access Model (EAM), which reorganizes the trust boundary concept around three planes rather than tiers: the Control Plane (equivalent to the old Tier 0, covering identity and management infrastructure), the Management Plane (covering the tools and systems used to manage resources), and the User Access Plane (covering end-user productivity environments).<br><br> The EAM is designed to better reflect modern hybrid and cloud-connected environments where the classic on-premises tier boundaries are increasingly difficult to enforce cleanly. For this lab, the legacy tiered model is being applied intentionally as it maps well to a contained on-premises Active Directory environment, and the core principle behind both models remains the same — keep credentials scoped to the trust level of the systems they touch.</p>
 
     <p>I'm going to apply that approach in this virtualized environment by only logging into domain controllers with administrative domain accounts and only logging into regular standard domain computers with regular standard user accounts.</p>
- 
+
     <h3>Tier 0 – Admin</h3>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
@@ -1125,12 +1115,10 @@ best practice to keep these roles separated onto dedicated infrastructure.
       <li><strong style="color:var(--text);">Privileges:</strong> Elevated – Domain Admins</li>
     </ul>
 
-    <!-- TAM1: 718x609 — ADUC inside VM window showing MT.Admin selected in IT OU, ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/6-TAM/TAM1.png" alt="ADUC inside the domain controller VM showing MT.Admin account selected in the IT OU" loading="lazy" />
     </div>
 
-    <!-- TAM2: 648x807 — Windows Server Start menu inside VM showing MT.Admin as logged-in user, ~500px -->
     <div class="figure" style="max-width:500px;">
       <img src="Images/6-TAM/TAM2.png" alt="Windows Server Start menu showing MT.Admin as the logged-in administrative user on the domain controller" loading="lazy" />
     </div>
@@ -1146,12 +1134,10 @@ best practice to keep these roles separated onto dedicated infrastructure.
       <li><strong style="color:var(--text);">Privileges:</strong> Non-privileged standard user account</li>
     </ul>
 
-    <!-- TAM3: 713x609 — ADUC inside VM window showing MT.User selected in Users OU, ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/6-TAM/TAM3.png" alt="ADUC inside the domain controller VM showing MT.User account selected in the Corp/Users OU" loading="lazy" />
     </div>
 
-    <!-- TAM4: 872x856 — Windows 11 Start menu inside VM showing MT.User as logged-in user, ~620px -->
     <div class="figure" style="max-width:620px;">
       <img src="Images/6-TAM/TAM4.png" alt="Windows 11 Start menu showing MT.User as the logged-in standard user on the domain client" loading="lazy" />
     </div>
@@ -1173,65 +1159,54 @@ best practice to keep these roles separated onto dedicated infrastructure.
       <li><strong style="color:var(--text);">SG-Tier2-Users</strong></li>
     </ul>
 
-    <!-- TAM5: 741x617 — ADUC right-click domain root showing New > Organizational Unit, ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/6-TAM/TAM5.png" alt="ADUC right-clicking the domain root to create a new Organizational Unit" loading="lazy" />
     </div>
 
-    <!-- TAM6: 762x675 — ADUC New Object - OU dialog with Security Groups as the name, ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/6-TAM/TAM6.png" alt="New Object - Organizational Unit dialog with Security Groups as the OU name" loading="lazy" />
     </div>
 
-    <!-- TAM7: 501x497 — ADUC tree showing Security Groups OU now created at domain root, ~420px -->
     <div class="figure" style="max-width:420px;">
       <img src="Images/6-TAM/TAM7.png" alt="ADUC tree view showing the Security Groups OU created at the domain root level" loading="lazy" />
     </div>
 
-    <!-- TAM8: 682x704 — ADUC right-click Security Groups OU showing New > Group, ~540px -->
     <div class="figure" style="max-width:540px;">
       <img src="Images/6-TAM/TAM8.png" alt="ADUC right-clicking the Security Groups OU to create a new Group object" loading="lazy" />
     </div>
 
-    <!-- TAM9: 669x616 — ADUC New Object - Group dialog with SG-Tier0-Admins, Global, Security, ~520px -->
     <div class="figure" style="max-width:520px;">
       <img src="Images/6-TAM/TAM9.png" alt="New Object - Group dialog creating SG-Tier0-Admins as a Global Security Group" loading="lazy" />
     </div>
 
-    <!-- TAM10: 758x470 — ADUC Security Groups OU showing all three SG groups created, ~560px -->
     <div class="figure" style="max-width:560px;">
       <img src="Images/6-TAM/TAM10.png" alt="ADUC Security Groups OU listing SG-Tier0-Admins, SG-Tier1-Servers, and SG-Tier2-Users" loading="lazy" />
     </div>
 
     <p>Here, I'm going to attach my MT.Admin administrative domain account to the <strong>SG-Tier0-Admins</strong> Global Security Group to keep the elevated account logically separated.</p>
 
-    <!-- TAM11: 709x557 — ADUC SG-Tier0-Admins Properties with Select Users dialog showing MT.Admin, ~540px -->
     <div class="figure" style="max-width:540px;">
       <img src="Images/6-TAM/TAM11.png" alt="SG-Tier0-Admins Properties showing Select Users dialog with MT.Admin being added as a member" loading="lazy" />
     </div>
 
     <p>Likewise with adding the standard domain user account MT.User to <strong>SG-Tier2-Users</strong>.</p>
 
-    <!-- TAM12: 722x544 — ADUC SG-Tier2-Users Properties with Select Users dialog showing MT.User, ~540px -->
     <div class="figure" style="max-width:540px;">
       <img src="Images/6-TAM/TAM12.png" alt="SG-Tier2-Users Properties showing Select Users dialog with MT.User being added as a member" loading="lazy" />
     </div>
 
     <h3>Adding the Security Group SG-Tier0-Admins to the Built-in Domain Admins Security Group</h3>
 
-    <!-- TAM13: 1099x639 — ADUC Domain Admins Properties with nested Select dialog showing SG-Tier0-Admins, full width -->
     <div class="figure">
       <img src="Images/6-TAM/TAM13.png" alt="Domain Admins Properties with Select Users dialog adding SG-Tier0-Admins as a nested member" loading="lazy" />
     </div>
 
-    <!-- TAM14: 652x570 — ADUC Domain Admins Members tab now showing SG-Tier0-Admins listed, ~520px -->
     <div class="figure" style="max-width:520px;">
       <img src="Images/6-TAM/TAM14.png" alt="Domain Admins Properties Members tab showing SG-Tier0-Admins successfully added alongside Administrator, MT.Admin, and Test Account" loading="lazy" />
     </div>
 
     <h3>Adding the Security Group SG-Tier2-Users to the Built-in Domain Users Security Group</h3>
 
-    <!-- TAM15: 707x608 — ADUC Domain Users Properties with Select dialog showing SG-Tier2-Users, ~540px -->
     <div class="figure" style="max-width:540px;">
       <img src="Images/6-TAM/TAM15.png" alt="Domain Users Properties showing Select Users dialog adding SG-Tier2-Users as a nested member" loading="lazy" />
     </div>
