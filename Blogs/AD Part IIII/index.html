@@ -1274,6 +1274,8 @@ best practice to keep these roles separated onto dedicated infrastructure.
     <br><br>
 
     <h3>Global Security Groups</h3>
+    <p>With the tier structure defined and the accounts in place, the next step is to build the organizational framework in Active Directory that supports and enforces that separation. To do that, I'm creating a dedicated Organizational Unit called Security Groups at the domain root level, keeping tier-specific groups logically separated from the default AD containers and making them easy to locate, manage, and audit.</p>
+    <br>
 
     <p>Under the domain hierarchy in Active Directory Users and Computers, I'm going to create a new Organizational Unit – OU called <strong>Security Groups</strong>. In this OU, I'm going to create the following Global Security Groups:</p>
 
