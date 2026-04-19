@@ -940,7 +940,10 @@ domain controller.<br><br>
     </div><br>
 
     <h3>Account Management</h3>
-
+    <p>Moving into the Account Management audit category, this section covers changes made to accounts and groups within the domain.</p>
+    <p> The subcategories here track things like user account creation and deletion, password changes, and group membership modifications, all of which are high-value events from a security monitoring standpoint, as unauthorized changes in any of these areas can be a strong indicator of privilege escalation or insider threat activity.</p>
+    <p> From the subcategories listed, I'm configuring Audit Security Group Management to log Success events. Security groups in Active Directory directly control access to resources and elevated privileges across the domain, so any time a security group is created, deleted, or has its membership modified, that event gets captured in the Security log.</p>
+    <p>  This is particularly valuable for detecting unauthorized privilege escalation, such as a user account being quietly added to Domain Admins or another sensitive group outside of a normal change window.</p>
     <div class="figure">
       <img src="Images/4-A+V/ADSec85.png" alt="Advanced Audit Policy Account Management subcategories" loading="lazy" />
     </div>
