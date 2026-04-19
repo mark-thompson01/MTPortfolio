@@ -1292,11 +1292,16 @@ best practice to keep these roles separated onto dedicated infrastructure.
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">SG-Tier0-Admins</strong></li>
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">SG-Tier1-Servers</strong></li>
       <li><strong style="color:var(--text);">SG-Tier2-Users</strong></li>
-    </ul>
+    </ul><br>
+
+    <p>Right-clicking the domain root, DC01.microsoft.com, to create a new Organizational Unit. By creating the Security Groups OU directly at the domain root level rather than nesting it inside an existing container like Corp, it stays logically separated from department-specific OUs and remains easily accessible for domain-wide group management.</p>
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/6-TAM/TAM5.png" alt="ADUC right-clicking the domain root to create a new Organizational Unit" loading="lazy" />
     </div>
+
+    <p>The New Object - Organizational Unit dialog confirms the OU is being created directly under DC01.microsoft.com with the name Security Groups.</p>
+  
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/6-TAM/TAM6.png" alt="New Object - Organizational Unit dialog with Security Groups as the OU name" loading="lazy" />
@@ -1305,6 +1310,10 @@ best practice to keep these roles separated onto dedicated infrastructure.
     <div class="figure" style="max-width:420px;">
       <img src="Images/6-TAM/TAM7.png" alt="ADUC tree view showing the Security Groups OU created at the domain root level" loading="lazy" />
     </div>
+
+    <p>With the Security Groups OU created, right-clicking it to create the first of the three tier groups. Selecting New > Group opens the New Object - Group dialog, where SG-Tier0-Admins is created with a Group scope of Global and a Group type of Security. The Global scope ensures this group can be used to assign permissions across the entire domain, while the Security type is what allows it to be used for access control and group membership assignments, as opposed to a Distribution group which is used purely for email distribution lists.</p>
+
+    
 
     <div class="figure" style="max-width:540px;">
       <img src="Images/6-TAM/TAM8.png" alt="ADUC right-clicking the Security Groups OU to create a new Group object" loading="lazy" />
