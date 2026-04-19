@@ -788,6 +788,8 @@ domain controller.<br><br>
     </div>
 
     <h3>Install enum4linux</h3>
+    <p>enum4linux is a Linux-based enumeration tool designed specifically for extracting information from Windows and Samba systems.</p>
+    <p> It automates the process of pulling user accounts, group memberships, share listings, password policy details, and OS information from a target, and it doesn't credentials if the target allows anonymous access.</p>
 
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec66.png" alt="Installing enum4linux on Ubuntu Server" loading="lazy" />
@@ -798,6 +800,9 @@ domain controller.<br><br>
     </div>
 
     <h3>Install smbclient</h3>
+    <p>smbclient is a command-line tool that allows Linux systems to interact with SMB/CIFS network shares on Windows machines.</p>
+    <p>In a reconnaissance context, it can be used to list available shares on a target host anonymously, giving an attacker visibility into what resources are exposed on the network without needing to authenticate.</p>
+    
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec68.png" alt="Installing smbclient on Ubuntu Server" loading="lazy" />
@@ -808,7 +813,9 @@ domain controller.<br><br>
     </div>
 
     <h3>Install rpcclient</h3>
-
+    <p>rpcclient is a tool used to execute MS-RPC (Microsoft Remote Procedure Call) functions against a Windows target.</p>
+    <p>From a reconnaissance standpoint, it can be leveraged to enumerate domain users, groups, and other directory information directly over RPC, making it a useful tool for mapping out an Active Directory environment when anonymous RPC access is permitted.</p>
+    
     <div class="figure" style="max-width:683px; width:683px;">
       <img src="Images/3-GPSecHardening/ADSec70.png" alt="Installing rpcclient on Ubuntu Server" loading="lazy" />
     </div>
@@ -818,7 +825,9 @@ domain controller.<br><br>
     </div>
 
     <h3>Install nmap</h3>
-
+    <p>nmap is one of the most widely used network scanning and reconnaissance tools in both penetration testing and defensive security.</p>
+    <p>Beyond basic port scanning, nmap's scripting engine (NSE) includes scripts specifically designed to enumerate SMB shares, users, and vulnerability information from Windows hosts, making it effective at probing the attack surface of a domain controller from the network level.</p>
+    
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec72.png" alt="Installing nmap on Ubuntu Server" loading="lazy" />
     </div>
