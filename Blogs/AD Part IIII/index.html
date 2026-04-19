@@ -661,6 +661,7 @@ even when working with direct user assignments.
     </div>
 
     <h3>Network security: LAN Manager authentication level</h3>
+    <p>This setting controls which authentication protocols the domain controller will accept for network logons. Configuring this to enforce NTLMv2 only while refusing LM and NTLMv1 eliminates the weakest authentication paths on the domain, directly reducing the risk of credential-based attacks such as downgrade attacks and pass-the-hash.</p>
 
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec47.png" alt="Security Options list showing Network security LAN Manager authentication level" loading="lazy" />
@@ -696,6 +697,8 @@ domain controller.<br><br>
     </div><br>
 
     <h3>Microsoft network client: Digitally sign communications (always)</h3>
+    <p>This setting enforces SMB signing on all communications between the domain controller and network clients. SMB signing cryptographically validates that network packets haven't been tampered with in transit, which is a direct countermeasure against SMB relay attacks where an attacker attempts to intercept and forward authentication traffic between hosts.
+</p>
 
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec52.png" alt="Security Options showing Microsoft network client Digitally sign communications highlighted" loading="lazy" />
@@ -730,6 +733,8 @@ domain controller.<br><br>
     </div>
 
     <h3>Network access: Do not allow anonymous enumeration of SAM accounts and shares</h3>
+    <p>By default, anonymous users are not members of the Everyone group in Windows. This setting, when left enabled, changes that, effectively granting anonymous connections access to any resource that has Everyone permissions applied. Keeping this disabled ensures that unauthenticated connections cannot inherit broad resource access through the Everyone group.
+</p>
 
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec59.png" alt="Security Options showing Do not allow anonymous enumeration of SAM accounts and shares" loading="lazy" />
