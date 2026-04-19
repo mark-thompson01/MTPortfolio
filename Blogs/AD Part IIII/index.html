@@ -1191,7 +1191,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
     <p>The EAM is designed to better reflect modern hybrid and cloud-connected environments where the classic on-premises tier boundaries are increasingly difficult to enforce cleanly. For this lab, the legacy Tier Administration Model is being applied intentionally as it maps well to a contained on-premises Active Directory environment, and the core principle behind both models remains the same, keep credentials scoped to the trust level of the systems they touch.</p>
     <p>I'm going to apply that approach in this virtualized environment by only logging into domain controllers with administrative domain accounts and only logging into regular standard domain computers with regular standard user accounts.</p>
     <br>
-    <p>The Tier Administration Model uses the top-down approach starting at Tier 0, then down to Tier 1, then down to Tier 2. In this approach account logons are logically segmented to the systems in their assigned tier. This approach breaks attack paths, and help to mitigate against attacks like Pass-the-Hash attacks or lateral movement.</p>
+    <p>The Tier Administration Model uses a top-down approach starting at Tier 0, then down to Tier 1, then down to Tier 2. In this approach account logons are logically segmented to the systems in their assigned tier. This approach breaks attack paths, and help to mitigate against attacks like Pass-the-Hash attacks or lateral movement.</p>
     <ul>
       <li><strong>Tier 0</strong> = Systems that control identity - <strong>Domain Controllers</strong></li>
       <li><strong>Tier 1</strong> = Systems that run business services - <strong>Servers</strong></li>
