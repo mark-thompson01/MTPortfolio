@@ -1202,7 +1202,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
 
 
-    <br>
+    <br><br>
     <h3>Tier 0 – Domain Controller</h3>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
@@ -1223,7 +1223,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
     <p>Administrative domain accounts log into domain controllers and authorized systems only.</p>
     <p>This account does not log into any system that is outside of Tier 0.</p>
     <p>In this example, MT.Admin is the designated account that logs directly and only into the domain controller for domain, identity & access, and Active Directory management tasks.</p>
-    <br>
+    <br><br>
 
     <h3>Tier 1 – Server</h3>
 
@@ -1247,7 +1247,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
     </div>
     
     
-    <br>
+    <br><br>
 
     <h3>Tier 2 – Workstation</h3>
 
@@ -1271,12 +1271,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
     
     
 
-    <br>
-
-    <div class="security-note">
-      <strong>Note</strong>
-      Tier 1 – Servers would be for servers such as the Ubuntu Server VM in this setup. In a full production deployment, Tier 1 accounts would be scoped specifically to managing those server-class systems, keeping them logically separated from both Tier 0 domain controller administration and Tier 2 end-user workstations.
-    </div>
+    <br><br>
 
     <h3>Global Security Groups</h3>
 
