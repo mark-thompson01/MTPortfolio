@@ -861,13 +861,15 @@ domain controller.<br><br>
     </div><br>
 
     <h3>rpcclient</h3>
-    <p>Similar to the smbclient result, the session technically opened but hit a wall the moment it tried to do something useful.</p>
-    <p>The anonymous enumeration restrictions put in place are blocking the RPC calls that would return meaning directory information.</p>
-    <p>An attacker in this position has an open RPC session they can't actually do anything with, no user list, no group info, nothing to build on.</p>
+
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec77.png" alt="Running rpcclient against the domain controller" loading="lazy" />
     </div>
+
+     <p>Similar to the smbclient result, the session technically opened but hit a wall the moment it tried to do something useful.</p>
+    <p>The anonymous enumeration restrictions put in place are blocking the RPC calls that would return meaning directory information.</p>
+    <p>An attacker in this position has an open RPC session they can't actually do anything with, no user list, no group info, nothing to build on.</p>
 
     <div class="figure" style="max-width:560px;">
       <img src="Images/3-GPSecHardening/ADSec78.png" alt="rpcclient enumdomusers returning NT_STATUS_ACCESS_DENIED" loading="lazy" />
