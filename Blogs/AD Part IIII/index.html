@@ -491,25 +491,26 @@ track of even with the account not actively in use.
       <img src="Images/2-PasswordPolicy/ADSec32.png" alt="Opening an elevated PowerShell session" loading="lazy" />
     </div>
 
-
     <p>Here, I'm running the <strong>net accounts</strong> command for a quick verification step 
 to confirm that the password and lockout policy changes pushed out by 
-gpupdate /force are actively in effect on the domain controller. 
-The output reflects exactly what was configured.<br><br>
+<strong>gpupdate /force</strong> are actively in effect on the domain controller. 
+The output reflects exactly what was configured.</p><br><br>
 
-      A Minimum password age of 1 day prevents user from immediately cycling
-through passwords to back to a previous one.<br><br>
+  <li>
+      <ul>A Minimum password age of 1 day prevents user from immediately cycling
+through passwords to back to a previous one.</ul><br><br>
 
-      The maximum password age of 60 days enforces regular password 
-rotation across domain accounts.<br><br>
+      <ul>The maximum password age of 60 days enforces regular password 
+rotation across domain accounts.</ul><br><br>
       
-The Minimum password length of 12 characters ensures passwords
-meet a baseline complexity threshold.<br><br>
-      The password history of 24 means a user cannot reuse any of their last 24 passwords.<br><br>
+<ul>The Minimum password length of 12 characters ensures passwords
+meet a baseline complexity threshold.</ul><br><br>
+      <ul>The password history of 24 means a user cannot reuse any of their last 24 passwords.</ul>
+  </li><br><br>
 
-      On the lockout side, the Lockout threshold of 5 confirms that an account will be locked after 5 consecutive failed login attempts. Both the Lockout duration and Lockout observation window are set to 30 minutes, meaning a locked account will automatically unlock after 30 minutes, and the failed attempt counter resets after 30 minutes of no failed attempts.
+      <p>On the lockout side, the Lockout threshold of 5 confirms that an account will be locked after 5 consecutive failed login attempts. Both the Lockout duration and Lockout observation window are set to 30 minutes, meaning a locked account will automatically unlock after 30 minutes, and the failed attempt counter resets after 30 minutes of no failed attempts.</p>
 <br><br>
-      The Computer role: PRIMARY confirms this output is being read directly from the domain controller, meaning these are the domain-wide enforced values, not a local policy.
+      <p>The Computer role: PRIMARY confirms this output is being read directly from the domain controller, meaning these are the domain-wide enforced values, not a local policy.</p>
 
       
 
