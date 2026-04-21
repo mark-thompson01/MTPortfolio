@@ -1367,6 +1367,51 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
     <h3>Creating and Setting up MT.srv.mgmt with the Security Group SG-Tier1-Servers</h3>
 
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM19.png" alt="Creating Tier2 account" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM19.png" alt="Creating Tier acocunt" loading="lazy" />
+    </div>div> 
+
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM20.png" alt="Set account password" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM21.png" alt="Set account password" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM22.png" alt="Set account password" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM23.png" alt="Account created" loading="lazy" />
+    </div>
+
+     <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM24.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM25.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM26.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    </div>
+
+    <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM27.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    </div>
+
+      <div class="figure" style="max-width:540px;">
+      <img src="Images/6-TAM/TAM28.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    </div><br>
+
+
     <div class="security-note">
       <strong>Security Approach</strong>
       Nesting tier-specific Security Groups (SG-Tier0-Admins, SG-Tier2-Users) into their respective built-in domain groups rather than assigning accounts directly to Domain Admins or Domain Users provides a clean, scalable structure. It enforces the tier separation at the group level, making it easier to manage access, audit membership, and extend the model as the environment grows, without touching built-in groups directly every time a new account is provisioned.
