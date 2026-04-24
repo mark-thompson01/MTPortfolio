@@ -18,7 +18,7 @@
       --radius:18px;both models remains the same
     }
 
-    html,body { height:100% }Kerberos Security Hardening
+    html,body { height:100% }Kerberos Security HardeningFIOt
 
 
     html { scroll-behavior: smooth; }
@@ -578,11 +578,13 @@ meet a baseline complexity threshold.</li><br>
 
     <div class="security-note">
       <strong>Note</strong>
-      It's a best practice to avoid assigning the same Precedence number to two different PSOs.
-If two PSOs are set to the same Precedence value and a user account object is assigned
-to more than one global security group with more than one PSO set to a Precedence of 1, AD
-falls back to the objects GUID to break the tie, producing an administratively unpredictable
-result.
+    It is a best practice to avoid assigning the same Precedence value to multiple PSOs.
+      If multiple PSOs apply to a user and share the same Precedence, AD will still select
+      one policy to apply, but the selection is not intended to be relied upon and can lead
+      to unpredictable administrative outcomes.
+
+      For this reason, Precedence values should be assigned deliberately to ensure consistent and 
+      predictable policy application.
     </div>
 
     <div class="security-note">
