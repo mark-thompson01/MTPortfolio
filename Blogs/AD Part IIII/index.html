@@ -1151,6 +1151,13 @@ domain controller.<br><br>
       <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" loading="lazy" />
     </div>
 
+    <div class="security-note">
+  <strong>Security Note</strong>
+  In addition to auditing authentication and account activity, monitoring LDAP-related events is an important part of Active Directory security. Event ID 2887 can indicate that unsigned LDAP binds are being performed against a domain controller, which may expose the environment to man-in-the-middle (MITM) attacks.
+  <br><br>
+  In production environments, enforcing LDAP signing and channel binding helps mitigate these risks by requiring secure authentication over LDAP. While this behavior was not explicitly generated in this lab, it represents an additional layer of protocol-level hardening commonly implemented in enterprise environments.
+</div>
+
   </section>
 
   <br><br><br><br>
