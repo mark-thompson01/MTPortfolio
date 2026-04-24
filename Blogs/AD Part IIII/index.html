@@ -605,8 +605,8 @@ FGPP structure.<br><br>
 
       With all of that being said, there is one important exception to that rule. If multiple
 PSOs are applied directly to the same user account object, not through group membership,
-but applied directly, then the direct-assignment rule no longer automatically resolves
-the conflict on its own. In that scenario, AD falls back to the Precedence number to determine
+but applied directly, then the direct-assignment alone does not determine which policy is applied.
+In that scenario, AD falls back to the Precedence number to determine
 which PSO wins, with the lowest Precedence number taking the priority. This re-enforces
 why being deliberate and strategic about your Precedence numbering goes a long way,
 even when working with direct user assignments.
