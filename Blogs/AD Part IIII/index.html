@@ -701,7 +701,7 @@ domain controller.<br><br>
     </div><br>
 
     <h3>Microsoft network client: Digitally sign communications (always)</h3>
-    <p>This setting enforces SMB signing on all communications between the domain controller and network clients. SMB signing cryptographically validates that network packets haven't been tampered with in transit, which is a direct countermeasure against SMB relay attacks where an attacker attempts to intercept and forward authentication traffic between hosts.
+    <p>This setting enforces SMB signing on all communications between the domain controller and network clients. SMB signing helps mitigate certain relay attacks by ensuring message integrity, but should be combined with other controls such as NTLM restrictions and Kerberos where possible.
 </p>
 
     <div class="figure">
