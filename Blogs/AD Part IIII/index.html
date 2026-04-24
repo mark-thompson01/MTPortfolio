@@ -878,6 +878,15 @@ list or a map of available network resources without valid credentials.
 
 
     <h3>Network access: Let Everyone permissions apply to anonymous users</h3>
+    <p>By default, anonymous users are not members of the Everyone group in Windows, and this policy should stay that way. When this setting is enabled, it effectively grants anonymous connections membership in the Everyone group, meaning any resource on the domain controller that has Everyone permissions applied becomes accessible to unauthenticated connections, with no credentials required.
+</p>
+
+    <p>On a domain controller, that's a serious exposure. The Everyone group is broadly applied across many default Windows resources, and quietly extending that access to anonymous connections widens the attack surface significantly without any administrative visibility into who is accessing what.
+</p>
+
+    
+
+    
 
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec61.png" alt="Security Options showing Let Everyone permissions apply to anonymous users" loading="lazy" />
