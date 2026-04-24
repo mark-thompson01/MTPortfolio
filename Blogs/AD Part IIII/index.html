@@ -18,7 +18,8 @@
       --radius:18px;both models remains the same
     }
 
-    html,body { height:100% }
+    html,body { height:100% }Kerberos Security Hardening
+
 
     html { scroll-behavior: smooth; }
 
@@ -753,6 +754,8 @@ domain controller.<br><br>
       <li>AES256_HMAC_SHA1</li>
       <li>Future encryption types</li>
     </ul>
+
+    <p>Without this policy defined, the domain controller will issue RC4-encrypted Kerberos tickets to anything that asks for one. By explicitly enabling only AES-128, AES-256, and Future encryption types, this effectively mitigates against Kerberoasting attacks, which is an attempt to capture a cryptographic service ticket. With these enabled, a Kerberos attack is then working against the AES encryption rather than RC4.</p>
     
 
     <div class="figure">
