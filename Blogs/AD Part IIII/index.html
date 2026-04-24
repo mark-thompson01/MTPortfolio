@@ -735,6 +735,20 @@ domain controller.<br><br>
     <p>In this design, when a user authenticates against a domain, the <strong>KDC (Key Distribution Center)</strong> running on the domain controller issues a <strong>TGT - Ticket Granting Ticket</strong>. That TGT is then used to request service tickets for specific resources. The user's credentials never travel across the network again after that initial exchange. It's this design that makes mitigates against relay attacks that make the NTLM design a liability in the first place.</p>
     <p>With all of that being said, a default AD DS installation does leave a few Kerberos-specific weaknesses on the table that are indeed worth locking down in a clean installation of Active Directory.</p>
 
+    <p>Here, I'm going to configure the policy like so:</p>
+    <strong>Disable</strong>
+    <ul>
+      <li>DES_CBC_CRC</li>
+      <li>DES_CBC_MD5</li>
+      <li>RC4_HMAC_MD5</li>
+    </ul><br>
+    <strong>Enable</strong>
+    <ul>
+      <li>AES128_HMAC_SHA1</li>
+      <li>AES256_HMAC_SHA1</li>
+      <li>Future encryption types</li>
+    </ul>
+    
 
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec59-1.png" alt="Kerberos 1" loading="lazy" />
@@ -754,7 +768,7 @@ domain controller.<br><br>
 
 
 
-<br>
+<br><br>
 
 
 
