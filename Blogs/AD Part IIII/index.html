@@ -767,13 +767,6 @@ client hosts.
     </div>
 
 
-    <p>Running <strong>Get-SmbServerConfiguration</strong> and filtering for <strong>EnableSecuritySignature</strong> and <strong>RequireSecuritySignature</strong> provides a ground-truth confirmation of the SMB signing state directly from the OS.
-</p>
-    <p>The output returns EnableSecuritySignature = False and RequireSecuritySignature = True. These are two distinct settings, RequireSecuritySignature = True is the confirmation that matters here.</p>
-    <p>This tells us that SMB signing is now mandatory on this server, meaning any connection that doesn't support signing will be outright rejected. EnableSecuritySignature controls whether signing is offered as optional for connections that don't require it, with RequireSecuritySignature already set to True, that flag is redundant. The False value next to EnableSecuritySignature is expected and correct, not a misconfiguration.</p>
-
-
-
 
 
     
@@ -781,6 +774,12 @@ client hosts.
     <div class="figure" style="max-width:100%;">
       <img src="Images/3-GPSecHardening/ADSec55.png" alt="Side-by-side view of domain controller and Windows 11 client both running gpupdate and verifying SMB signing" loading="lazy" />
     </div>
+
+        <p>Running <strong>Get-SmbServerConfiguration</strong> and filtering for <strong>EnableSecuritySignature</strong> and <strong>RequireSecuritySignature</strong> provides a ground-truth confirmation of the SMB signing state directly from the OS.
+</p>
+    <p>The output returns EnableSecuritySignature = False and RequireSecuritySignature = True. These are two distinct settings, RequireSecuritySignature = True is the confirmation that matters here.</p>
+    <p>This tells us that SMB signing is now mandatory on this server, meaning any connection that doesn't support signing will be outright rejected. EnableSecuritySignature controls whether signing is offered as optional for connections that don't require it, with RequireSecuritySignature already set to True, that flag is redundant. The False value next to EnableSecuritySignature is expected and correct, not a misconfiguration.</p>
+
 
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec56.png" alt="PowerShell verifying SMB signing enabled with Get-SmbServerConfiguration" loading="lazy" />
