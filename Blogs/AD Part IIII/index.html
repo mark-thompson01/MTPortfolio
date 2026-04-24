@@ -855,9 +855,22 @@ client hosts.
     </div><br>
 
     <h3>Network access: Do not allow anonymous enumeration of SAM accounts and shares</h3>
-    <p>By default, anonymous users are not members of the Everyone group in Windows. This setting, when left enabled, changes that, effectively granting anonymous connections access to any resource that has Everyone permissions applied. Keeping this disabled ensures that unauthenticated connections cannot inherit broad resource access through the Everyone group.
+    <p>By default, anonymous connections to a Windows system can enumerate both
+SAM account names and network share names if this policy is not 
+explicitly enabled. By enabling this setting, it closes both of 
+those doors simultaneously. Effectively mitigating against 
+unauthenticated connections from retrieving a list of user accounts
+or discovering what shares are available on the domain controller.
 </p>
 
+    <p>
+Where the previous policy blocked SAM account enumeration alone, this one
+extends that restriction to shares as well, meaning an attacker 
+performing anonymous reconnaissance has no path to pull either a user
+list or a map of available network resources without valid credentials.
+</p>
+
+    
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec59.png" alt="Security Options showing Do not allow anonymous enumeration of SAM accounts and shares" loading="lazy" />
     </div>
