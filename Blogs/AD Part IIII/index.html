@@ -1165,7 +1165,8 @@ domain controller.<br><br>
     </div>
 
     <p>Disabling this service as a best practice in a Windows domain environment was influenced by the PrintNightmare vulnerability (CVE-2021-1675 / CVE-2021-34527), a critical Windows Print Spooler vulnerability that enabled attackers to carry out remote code execution and local privilege escalation. Operationally on a domain controller, there is almost never a need to have this service enabled and running.</p><br>
-
+    <p>This aligns with the principale of reducing unnecessary services on Tier 0 systems.</p>
+    
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">RemoteRegistry</strong></li>
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">WerSvc</strong></li>
