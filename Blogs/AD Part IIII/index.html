@@ -12,6 +12,7 @@
       --bg-2:#141821;
       --text:#E6E7EE;
       --muted:#A9ADBE;
+      
       --brand:#4DA3FF;
       --card-border:#2A3447;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
@@ -375,7 +376,7 @@
     <div class="security-note">
   <strong>Security Approach</strong>
   To further harden this privileged account, it is added to the Protected Users security group. This group enforces stricter authentication controls by preventing the use of NTLM, disabling credential caching, and requiring Kerberos-based authentication.
-  <br>
+  <br><br>
   These protections help reduce the risk of credential theft from memory (such as LSASS) and limit the exposure of privileged accounts during lateral movement attempts. Because of these restrictions, accounts in the Protected Users group should be used carefully, as certain legacy systems or authentication workflows may no longer function as expected.
 </div>
 
