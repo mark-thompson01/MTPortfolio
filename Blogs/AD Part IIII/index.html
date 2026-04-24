@@ -1397,7 +1397,18 @@ best practice to keep these roles separated onto dedicated infrastructure.
       <img src="Images/6-TAM/TAM11.png" alt="SG-Tier0-Admins Properties showing Select Users dialog with MT.Admin being added as a member" loading="lazy" />
     </div>
 
-    <p>Likewise with adding the standard domain user account MT.User to <strong>SG-Tier2-Users</strong>.</p>
+    <div class="security-note">
+      <strong>Note</strong>
+      Nesting a custom Tier 0 administrative group into built-in groups such as
+Domain Admins effectively grants full domain-level privileges. This is intentional, 
+but also means that strict control over group membership is critical, as any 
+account added to this group inherits complete administrative access to the domain. 
+    </div>
+      
+
+    <br>
+
+    <p>From there, add the standard domain user account MT.User to <strong>SG-Tier2-Users</strong>.</p>
 
     <div class="figure" style="max-width:540px;">
       <img src="Images/6-TAM/TAM12.png" alt="SG-Tier2-Users Properties showing Select Users dialog with MT.User being added as a member" loading="lazy" />
