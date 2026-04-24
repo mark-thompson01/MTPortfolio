@@ -536,8 +536,14 @@ meet a baseline complexity threshold.</li><br>
 
       <p>The Computer role: PRIMARY confirms this output is being read directly from the domain controller, meaning these are the domain-wide enforced values, not a local policy.</p>
 
-      <p>While traditional policies enforce periodic rotation, modern guidance (such as NIST) emphasizes longer passphrases and avoiding unnecessary password changes unless compromise is suspected.</p>
-
+<div class="security-note">
+  <strong>Modern Security Insight</strong>
+  While this configuration reflects a traditional Active Directory password policy, modern guidance (such as NIST) has begun shifting away from frequent password rotation in favor of stronger overall authentication practices.
+  <br><br>
+  Many organizations are moving toward longer passphrases (often 14–15+ characters) with no periodic expiration, combined with additional security controls such as multi-factor authentication (MFA). This approach reduces user fatigue and predictable password changes, while increasing overall resistance to brute-force and credential-based attacks.
+  <br><br>
+  In practice, traditional rotation policies are still widely enforced due to legacy systems and compliance requirements, making it important to understand both models when designing or managing Active Directory environments.
+</div><br>
       
 
       
@@ -669,7 +675,16 @@ even when working with direct user assignments.
     <p>The remaining fields reflect the exact policy settings configured earlier, validating that the PSO is active and enforced.</p>
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec45.png" alt="Full FGPP-DomainAdmins policy view confirming all settings and group assignment" loading="lazy" />
-    </div>
+    </div><br>
+
+    <div class="security-note">
+  <strong>Security Approach</strong>
+  Fine-Grained Password Policies (FGPP) allow different levels of protection to be applied based on account risk. Privileged accounts, such as members of Domain Admins, should be held to stricter standards than standard user accounts.
+  <br><br>
+  In many environments, administrative accounts are configured with more aggressive lockout controls, such as longer lockout durations or requiring manual administrator unlock, to reduce the risk of brute-force or password spraying attacks. Standard user accounts, on the other hand, may use more forgiving lockout settings to balance usability and security.
+  <br><br>
+  This separation ensures that high-value targets receive stronger protection without negatively impacting the day-to-day usability of standard user accounts.
+</div>
 
   </section>
 
