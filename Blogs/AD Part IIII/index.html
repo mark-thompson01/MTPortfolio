@@ -733,10 +733,10 @@ domain controller.<br><br>
     <p>LM and NTLMv1 are legacy protocols that have been deprecated, with the development of NTLMv2. However, NTLMv2 is still NTLM, and NTLM is still a challenge-response protocol with well-documented weaknesses.</P>
     <p>Kerberos has been the default authentication protocol in Active Directory since Windows 2000, and the overall architecture of the protocol's design is fundamentally different from NTLM.</p>
     <p>Unlike the NTLM design, Kerberos doesn't operate by passing credential material across the network, but uses a cryptographic ticketing system.</p>
-    <p>In this design, when a user authenticates against a domain, the <strong>KDC (Key Distribution Center)</strong> running on the domain controller issues a <strong>TGT - Ticket Granting Ticket</strong>. That TGT is then used to request service tickets for specific resources. The user's credentials never travel across the network again after that initial exchange. It's this design that makes mitigates against relay attacks that make the NTLM design a liability in the first place.</p>
+    <p>In this design, when a user authenticates against a domain, the <strong>KDC (Key Distribution Center)</strong> running on the domain controller issues a <strong>TGT - Ticket Granting Ticket</strong>. That TGT is then used to request service tickets for specific resources. The user's credentials never travel across the network again after that initial exchange. It's this design that mitigates against relay attacks that make the NTLM design a liability in the first place.</p>
     <p>With all of that being said, a default AD DS installation does leave a few Kerberos-specific weaknesses on the table that are indeed worth locking down in a clean installation of Active Directory.</p>
 
-    <p>The Policy that is tied to this is the <strong>Network security: Configure encryption types allowed for Kerberos</strong>j, located in the <strong>Group Policy Management Editor</strong>, under <strong>Computer Congfiguration > Policies > Windows Policies > Security Options</strong></p>
+    <p>The Policy that is tied to this is the <strong>Network security: Configure encryption types allowed for Kerberos</strong>j, located in the <strong>Group Policy Management Editor</strong>, under <strong>Computer Configuration > Policies > Windows Policies > Security Options</strong></p>
 
     
 
