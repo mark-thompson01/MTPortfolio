@@ -777,7 +777,7 @@ client hosts.
 
         <p>Running <strong>Get-SmbServerConfiguration</strong> and filtering for <strong>EnableSecuritySignature</strong> and <strong>RequireSecuritySignature</strong> provides a ground-truth confirmation of the SMB signing state directly from the OS.
 </p>
-    <p>The output returns EnableSecuritySignature = False and RequireSecuritySignature = True. These are two distinct settings, RequireSecuritySignature = True is the confirmation that matters here.</p>
+    <p>The output returns <strong>EnableSecuritySignature = False</strong> and <strong>RequireSecuritySignature = True</strong>. These are two distinct settings, RequireSecuritySignature = True is the confirmation that matters here.</p>
     <p>This tells us that SMB signing is now mandatory on this server, meaning any connection that doesn't support signing will be outright rejected. EnableSecuritySignature controls whether signing is offered as optional for connections that don't require it, with RequireSecuritySignature already set to True, that flag is redundant. The False value next to EnableSecuritySignature is expected and correct, not a misconfiguration.</p>
 
 
