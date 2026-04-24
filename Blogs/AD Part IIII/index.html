@@ -718,6 +718,14 @@ even when working with direct user assignments.
       <img src="Images/3-GPSecHardening/ADSec49.png" alt="LAN Manager authentication level set to Send NTLMv2 response only. Refuse LM and NTLM" loading="lazy" />
     </div>
 
+
+    <p>To verify the policy has been applied, I'm running the following PowerShell command directly against the registry before and after running <strong>gpupdate /force</strong>.</p>
+    <p>This command runs a query to the <strong>LSA (Local Security Authority)</strong> registry key directly, where Windows stores authentication and security policy settings, and filters the output down to just the <strong>LmCompatibilityLevel</strong> value.</p>
+    <p>In this example, the first run returns nothing, confirming that the policy has not landed and Windows is still falling back to its default negotiation behavior.</p>
+    <p>After the <strong>gpupdate /force</strong> command pushes the Group Policy change out, the second run returns 5, which
+    is the registry value that maps directly to <strong>Send NTLMv2 response only. Refuse LM & NTLM</strong>. 
+    This confirms the setting has been written to the registry and is actively enforced on the domain controller,
+    not just confiugured in Group Policy,but verified at the OS level where it actually takes effect.</p>
     <div class="figure">
       <img src="Images/3-GPSecHardening/ADSec51.png" alt="PowerShell verifying LmCompatibilityLevel set to 5 after gpupdate" loading="lazy" />
     </div>
