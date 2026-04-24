@@ -370,7 +370,21 @@
 
     <div class="figure">
       <img src="Images/1-IAM/ADSec5.png" alt="Domain Admins Properties showing MT and Test Account as members" loading="lazy" />
-    </div><br>
+    </div>
+
+    <div class="security-note">
+  <strong>Security Approach</strong>
+  To further harden this privileged account, it is added to the Protected Users security group. This group enforces stricter authentication controls by preventing the use of NTLM, disabling credential caching, and requiring Kerberos-based authentication.
+  <br>
+  These protections help reduce the risk of credential theft from memory (such as LSASS) and limit the exposure of privileged accounts during lateral movement attempts. Because of these restrictions, accounts in the Protected Users group should be used carefully, as certain legacy systems or authentication workflows may no longer function as expected.
+</div>
+
+    
+    
+    
+    
+    
+    <br>
 
     <p>In this example, I have an OU called <strong>Corp</strong> with a child OU called <strong>Users</strong> for the standard user accounts on the domain. Here I'm creating a standard user account called <strong>MT.User</strong> to avoid using my <strong>MT.Admin</strong> account as a standard login account, configuring a general production account with the concept of least privilege.</p>
 
@@ -1152,7 +1166,7 @@ domain controller.<br><br>
     </div>
 
     <div class="security-note">
-  <strong>Security Note</strong>
+  <strong>Note</strong>
   In addition to auditing authentication and account activity, monitoring LDAP-related events is an important part of Active Directory security. Event ID 2887 can indicate that unsigned LDAP binds are being performed against a domain controller, which may expose the environment to man-in-the-middle (MITM) attacks.
   <br><br>
   In production environments, enforcing LDAP signing and channel binding helps mitigate these risks by requiring secure authentication over LDAP. While this behavior was not explicitly generated in this lab, it represents an additional layer of protocol-level hardening commonly implemented in enterprise environments.
