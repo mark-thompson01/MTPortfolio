@@ -354,14 +354,7 @@
 
     <div class="security-note">
       <strong>Note</strong>
-      It is a best practice to disable the built-in domain Administrator account on the domain controller.
-However, even when the account is disabled, it is still a best practice to keep a strong randomized
-password set for the account. While disabling the account does effectively remove it from the
-everyday attack surface, there are scenarios where the account can still be targeted by an
-attacker. It is also worth mentioning here that in certain recovery scenarios, such as booting
-the DC into DSRM (Directory Services Restore Mode) - does require the use of the built-in
-Administrator account on the domain controller, making it important that the credentials are kept
-track of even with the account not actively in use.
+    In many environments, the built-in domain Administrator account is either disabled or renamed and heavily locked down and monitored, as it is a well-known target for attackers.
     </div><br><br>
 
     <p>Here I'm verifying that the Guest account is disabled. It usually is by default, and it is, as indicated by the <em>"Enable account"</em> option appearing when right-clicking on it.</p>
