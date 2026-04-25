@@ -394,7 +394,7 @@ on the system, and requiring Kerberos-based authentication.
     
     <br><br>
 
-    <p>In this example, I have an OU called <strong>Corp</strong> with a child OU called <strong>Users</strong> for the standard user accounts on the domain. Here I'm creating a standard user account called <strong>MT.User</strong> to avoid using my <strong>MT.Admin</strong> account as a standard login account, configuring a general production account with the concept of least privilege.</p>
+    <p>In this example, I have an <strong>OU</strong> called <strong>Corp</strong> with a child <strong>OU</strong> called <strong>Users</strong> for the standard user accounts on the domain. Here I'm creating a standard user account called <strong>MT.User</strong> to avoid using my <strong>MT.Admin</strong> account as a standard login account, configuring a general production account with the concept of least privilege.</p>
 
     <div class="figure" style="max-width:520px;">
       <img src="Images/1-IAM/ADSec13.png" alt="Right-clicking the Users OU to create a new user object" loading="lazy" />
@@ -427,15 +427,15 @@ on the system, and requiring Kerberos-based authentication.
 
     <p>You can't go over AD Security Hardening without covering the implementation of a strong password policy for an AD deployment.</p>
 
-    <p>A domain-wide Password Policy can be set within the Group Policy Manager, under the Computer Configuration hierarchy of the Group Policy Management Editor.</p>
+    <p>A domain-wide Password Policy can be set within the <strong>Group Policy Manager</strong>, under the <strong>Computer Configuration</strong> hierarchy of the <strong>Group Policy Management Editor</strong>.</p>
 
-    <p>Group Policy Management can be found under Server Manager &gt; Tools:</p>
+    <p><strong>Group Policy Management</strong> can be found under <strong>Server Manager &gt; Tools:</strong></p>
 
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec17.png" alt="Server Manager Tools menu showing Group Policy Management" loading="lazy" />
     </div>
 
-    <p>Here in the Group Policy Management console, I'm going to expand the domain hierarchy down to Default Domain Policy.</p>
+    <p>Here in the <strong>Group Policy Management console</strong>, I'm going to expand the domain hierarchy down to <strong>Default Domain Policy</strong>.</p>
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec18.png" alt="Group Policy Management console" loading="lazy" />
     </div>
@@ -444,7 +444,7 @@ on the system, and requiring Kerberos-based authentication.
       <img src="Images/2-PasswordPolicy/ADSec19.png" alt="Group Policy Management expanded view" loading="lazy" />
     </div>
 
-    <p>To access the Group Policy Management Editor, right-click where it says Default Domain Policy, then select <strong>Edit</strong>.</p>
+    <p>To access the <strong>Group Policy Management Editor</strong>, right-click where it says <strong>Default Domain Policy</strong>, then select <strong>Edit</strong>.</p>
 
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec20.png" alt="Right-clicking Default Domain Policy to select Edit" loading="lazy" />
@@ -487,7 +487,7 @@ on the system, and requiring Kerberos-based authentication.
       <img src="Images/2-PasswordPolicy/ADSec26.png" alt="Password policy settings applied" loading="lazy" />
     </div>
 
-    <p>Another thing that can be set under the Account Policies is the Account Lockout Policy.</p>
+    <p>Another thing that can be set under the <strong>Account Policies</strong> is the <strong>Account Lockout PolicyM</strong>.</p>
 
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec27.png" alt="Navigating to Account Lockout Policy" loading="lazy" />
