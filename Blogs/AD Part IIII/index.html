@@ -811,7 +811,22 @@ client hosts.
       <li>Future encryption types</li>
     </ul>
 
-    <p>Without this policy defined, the domain controller will issue RC4-encrypted Kerberos tickets to anything that asks for one. By explicitly enabling only AES-128, AES-256, and Future encryption types, this effectively mitigates Kerberoasting attacks, which is an attempt to capture a service ticket then works against AES encryption rather than RC4. That said, encryption type alone isn't the complete picture, a captured AES ticket is still crackable given a weak enough service account password, which is exactly why the FGPP service account PSO configured in Section 2 matters here.</p>
+    <p>Without this policy defined, the domain controller will issue RC4-encrypted Kerberos tickets to anything that asks for one. By explicitly enabling only AES-128, AES-256, and Future encryption types.
+    <p>This makes the activity of performing offline cracking in Kerberoasting attacks 
+a lot more costly. The policy enforcing AES-only encryption makes it where any 
+captured cryptographic ticket must be cracked against that AES encryption. 
+Given how strong AES encryption algorithms are, this makes things a bit more
+computationally expensive. The default RC4-encrypted service tickets are a 
+lot faster to crack in offline cracking. 
+</p>
+
+    <p>That said, the AES enforcement does not completely prevent Kerberoasting. A
+captured AES ticket can still be cracked in a scenario that it's tied to a
+service account with an easy to guess password. 
+</p>
+
+<p>This is exactly why the FGPP service account PSO configured in section 2 matters here.
+</p>
     
 
     <div class="figure">
