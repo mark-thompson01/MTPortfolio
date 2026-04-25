@@ -598,12 +598,11 @@ meet a baseline complexity threshold.</li><br>
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec36.png" alt="PowerShell command to create a new Fine-Grained Password Policy" loading="lazy" />
     </div>
-
+    <p>In this example, I'm going to name this FGPP <strong>FGPP-DomainAdmins</strong></p>
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" loading="lazy" />
     </div>
 
-    <p>In this example, the Precedence is set to 1, giving this PSO the highest priority for any member of the Domain Admins group.</p>
 
     <div class="security-note">
       <strong>Note</strong>
@@ -639,6 +638,10 @@ which PSO wins, with the lowest Precedence number taking the priority. This re-e
 why being deliberate and strategic about your Precedence numbering goes a long way,
 even when working with direct user assignments.
     </div><br><br>
+
+
+    <p>In this example, the <strong>Precedence</strong> is set to <strong>1</strong>, giving this <strong>PSO</strong>
+      the highest priority for any member of the <strong>Domain Admins</strong> group.</p>
 
     <div class="figure">
       <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" loading="lazy" />
