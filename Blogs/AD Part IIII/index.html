@@ -367,7 +367,7 @@
       <img src="Images/1-IAM/ADSec4.png" alt="Verifying the Guest account is disabled — right-click shows Enable Account option" loading="lazy" />
     </div><br>
 
-    <p>Here, I have my separate administrative account as a member of the Built-in Domain Admins Global Security Group to be able to carry out administrative tasks with this account on the domain.</p>
+    <p>Here, I have my separate administrative account as a member of the Built-in <strong>Domain Admins</strong> Global Security Group to be able to carry out administrative tasks with this account on the domain.</p>
 
     <div class="figure">
       <img src="Images/1-IAM/ADSec5.png" alt="Domain Admins Properties showing MT and Test Account as members" loading="lazy" />
@@ -380,7 +380,7 @@ use of NTLM, preventing credential caching so that credentials are never stored 
 on the system, and requiring Kerberos-based authentication.
 
   <br><br>
-  These protections help reduce the risk of credential theft from memory (such as LSASS) and limit the exposure of privileged accounts during lateral movement attempts. Because of these restrictions, accounts in the Protected Users group should be used carefully, as certain legacy systems or authentication workflows may no longer function as expected.
+  These protections help reduce the risk of credential theft from memory (such as LSASS - Local Security Authority Subsystem Service, or lsass.exe) and limit the exposure of privileged accounts during lateral movement attempts. Because of these restrictions, accounts in the Protected Users group should be used carefully, as certain legacy systems or authentication workflows may no longer function as expected.
 </div>
 
     <div class="figure">
