@@ -12,15 +12,13 @@
       --bg-2:#141821;
       --text:#E6E7EE;
       --muted:#A9ADBE;
-      
       --brand:#4DA3FF;
       --card-border:#2A3447;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius:18px;both models remains the same
+      --radius:18px;
     }
 
-    html,body { height:100% }Kerberos Security HardeningFIOt
-
+    html,body { height:100% }
 
     html { scroll-behavior: smooth; }
 
@@ -172,32 +170,44 @@
       border-color:rgba(77,163,255,.5);
     }
 
-    /* Figure / screenshot */
+    /* =============================================
+       FIGURE SYSTEM
+       All images are block-level, sized by class.
+       No inline width/height overrides allowed.
+       ============================================= */
+
     .figure {
       border:1px solid var(--card-border);
       border-radius:12px;
       background:#0e1220;
-      padding:8px;
-      margin:18px auto;
-      max-width:720px;
+      padding:10px;
+      margin:22px auto;
+      max-width:100%;   /* default: full card width */
     }
 
     .figure img {
       display:block;
       width:100%;
-      height:auto;
+      height:auto;        /* always auto — never constrain height */
       border-radius:8px;
       cursor:zoom-in;
     }
 
+    /* Size tiers */
+    .figure.sz-xl  { max-width:960px; }   /* hero / full-width console panes  */
+    .figure.sz-lg  { max-width:860px; }   /* wide dialog / editor windows     */
+    .figure.sz-md  { max-width:700px; }   /* standard single-pane dialogs     */
+    .figure.sz-sm  { max-width:580px; }   /* narrower terminal / wizard steps */
+    .figure.sz-xs  { max-width:460px; }   /* small confirmation dialogs       */
+
     .figure-row {
       display:grid;
       gap:14px;
-      margin:18px auto;
-      max-width:720px;
+      margin:22px auto;
+      max-width:100%;
     }
 
-    .figure-row.two { grid-template-columns:1fr 1fr; }
+    .figure-row.two   { grid-template-columns:1fr 1fr; }
     .figure-row.three { grid-template-columns:1fr 1fr 1fr; }
 
     .figure-row .figure {
@@ -256,7 +266,6 @@
       border-radius:14px;
     }
 
-    /* Offset anchor targets so the section heading isn't hidden behind anything */
     .section-anchor {
       display:block;
       height:0;
@@ -287,15 +296,14 @@
     <a href="/MTPortfolio/Blogs">Blog</a> · <span>Active Directory Blog Part IV: AD Security Hardening</span>
   </div>
 
-    <header>
-    <div class="figure" style="border:none; background:transparent; padding:0;">
+  <header>
+    <div class="figure sz-xl" style="border:none; background:transparent; padding:0;">
       <img src="Images/ADSecurity1.png"
            alt="Active Directory security and attack paths visualization"
            loading="lazy"
            style="border-radius:0;" />
     </div>
 
-  <header>
     <h1>Active Directory – Blog Part IV: Security Hardening</h1>
   </header>
 
@@ -324,14 +332,14 @@
 
   <br><br>
 
-  <!-- Section 1 -->
+  <!-- ═══════════ SECTION 1 ═══════════ -->
   <span id="section-1" class="section-anchor"></span>
   <section class="card">
     <h2>1 – Identity and Access Hardening: Account Separation &amp; Default Account Hardening</h2>
 
     <p>To start things off, I've created a separate administrative account to manage this domain controller with, instead of using the built-in Administrator account.</p>
 
-    <div class="figure" style="max-width:860px;">
+    <div class="figure sz-xl">
       <img src="Images/1-IAM/ADSec0.png" alt="MT account properties showing the Account tab in Active Directory Users and Computers" loading="lazy" />
     </div>
 
@@ -342,73 +350,68 @@
 
     <p>Below, the built-in Administrator account is right-clicked to access its options, then disabled. The confirmation dialog confirms the account has been successfully disabled.</p>
 
-    <div class="figure" style="max-width:860px;">
+    <div class="figure sz-xl">
       <img src="Images/1-IAM/ADSec1.png" alt="Right-clicking the Administrator account in Active Directory Users and Computers" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:860px;">
+    <div class="figure sz-xl">
       <img src="Images/1-IAM/ADSec2.png" alt="Disabling the Administrator account" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/1-IAM/ADSec3.png" alt="Confirmation dialog: Object Administrator has been disabled" loading="lazy" />
     </div>
 
     <div class="security-note">
       <strong>Note</strong>
-    In many environments, the built-in domain Administrator account is either disabled or renamed and heavily locked down and monitored, as it is a well-known target for attackers. 
-    In this lab environment, I chose to disable the account entirely and use a separate administrative account to reduce exposure of a commonly targeted credential. 
-    In production environments, this decision may vary depending on operational and recovery requirements.
+      In many environments, the built-in domain Administrator account is either disabled or renamed and heavily locked down and monitored, as it is a well-known target for attackers. 
+      In this lab environment, I chose to disable the account entirely and use a separate administrative account to reduce exposure of a commonly targeted credential. 
+      In production environments, this decision may vary depending on operational and recovery requirements.
     </div><br><br>
 
     <p>Here I'm verifying that the Guest account is disabled. It usually is by default, and it is, as indicated by the <em>"Enable account"</em> option appearing when right-clicking on it.</p>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/1-IAM/ADSec4.png" alt="Verifying the Guest account is disabled — right-click shows Enable Account option" loading="lazy" />
     </div><br>
 
     <p>Here, I have my separate administrative account as a member of the Built-in <strong>Domain Admins</strong> Global Security Group to be able to carry out administrative tasks with this account on the domain.</p>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/1-IAM/ADSec5.png" alt="Domain Admins Properties showing MT and Test Account as members" loading="lazy" />
     </div><br>
 
     <div class="security-note">
-  <strong>Security Approach</strong>
-  To further harden this privileged account, it is added to the Protected Users security group. The Protected Users group enforces stricter authentication controls by preventing the 
-use of NTLM, preventing credential caching so that credentials are never stored locally
-on the system, and requiring Kerberos-based authentication.
+      <strong>Security Approach</strong>
+      To further harden this privileged account, it is added to the Protected Users security group. The Protected Users group enforces stricter authentication controls by preventing the 
+      use of NTLM, preventing credential caching so that credentials are never stored locally
+      on the system, and requiring Kerberos-based authentication.
 
-  <br><br>
-  These protections help reduce the risk of credential theft from memory (such as LSASS - Local Security Authority Subsystem Service, or lsass.exe) and limit the exposure of privileged accounts during lateral movement attempts. Because of these restrictions, accounts in the Protected Users group should be used carefully, as certain legacy systems or authentication workflows may no longer function as expected.
-</div>
+      <br><br>
+      These protections help reduce the risk of credential theft from memory (such as LSASS - Local Security Authority Subsystem Service, or lsass.exe) and limit the exposure of privileged accounts during lateral movement attempts. Because of these restrictions, accounts in the Protected Users group should be used carefully, as certain legacy systems or authentication workflows may no longer function as expected.
+    </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/1-IAM/ADSec5-5.png" alt="Add to Protected Users Global Security Group" loading="lazy" />
     </div>
 
-    
-    
-    
-    
-    
     <br><br>
 
     <p>In this example, I have an <strong>OU</strong> called <strong>Corp</strong> with a child <strong>OU</strong> called <strong>Users</strong> for the standard user accounts on the domain. Here I'm creating a standard user account called <strong>MT.User</strong> to avoid using my <strong>MT.Admin</strong> account as a standard login account, configuring a general production account with the concept of least privilege.</p>
 
-    <div class="figure" style="max-width:520px;">
+    <div class="figure sz-md">
       <img src="Images/1-IAM/ADSec13.png" alt="Right-clicking the Users OU to create a new user object" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:520px;">
+    <div class="figure sz-md">
       <img src="Images/1-IAM/ADSec14.png" alt="New Object - User dialog with MT.User as the logon name" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:460px;">
+    <div class="figure sz-md">
       <img src="Images/1-IAM/ADSec15.png" alt="Password configuration screen for the new MT.User account" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:520px;">
+    <div class="figure sz-md">
       <img src="Images/1-IAM/ADSec16.png" alt="MT.User account now visible in the Corp/Users OU" loading="lazy" />
     </div>
 
@@ -420,7 +423,7 @@ on the system, and requiring Kerberos-based authentication.
 
   <br><br><br><br>
 
-  <!-- Section 2 -->
+  <!-- ═══════════ SECTION 2 ═══════════ -->
   <span id="section-2" class="section-anchor"></span>
   <section class="card">
     <h2>2 – Password Policy Implementation</h2>
@@ -431,26 +434,27 @@ on the system, and requiring Kerberos-based authentication.
 
     <p><strong>Group Policy Management</strong> can be found under <strong>Server Manager &gt; Tools:</strong></p>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/2-PasswordPolicy/ADSec17.png" alt="Server Manager Tools menu showing Group Policy Management" loading="lazy" />
     </div>
 
     <p>Here in the <strong>Group Policy Management console</strong>, I'm going to expand the domain hierarchy down to <strong>Default Domain Policy</strong>.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec18.png" alt="Group Policy Management console" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec19.png" alt="Group Policy Management expanded view" loading="lazy" />
     </div>
 
     <p>To access the <strong>Group Policy Management Editor</strong>, right-click where it says <strong>Default Domain Policy</strong>, then select <strong>Edit</strong>.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec20.png" alt="Right-clicking Default Domain Policy to select Edit" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec21.png" alt="Group Policy Management Editor opened" loading="lazy" />
     </div>
 
@@ -458,11 +462,11 @@ on the system, and requiring Kerberos-based authentication.
 
     <p><strong>Computer Configuration &gt; Policies &gt; Windows Settings &gt; Security Settings &gt; Account Policies &gt; Password Policy</strong></p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec22.png" alt="Navigating the Group Policy hierarchy to Password Policy" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec23.png" alt="Password Policy settings in Group Policy Management Editor" loading="lazy" />
     </div>
 
@@ -475,95 +479,92 @@ on the system, and requiring Kerberos-based authentication.
       <li><strong style="color:var(--text);">Minimum password length</strong> – 14 characters</li>
     </ul>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/2-PasswordPolicy/ADSec24.png" alt="Setting Maximum password age to 60 days" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/2-PasswordPolicy/ADSec25.png" alt="Setting Minimum password length to 12 characters" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:660px;">
+    <div class="figure sz-md">
       <img src="Images/2-PasswordPolicy/ADSec26.png" alt="Password policy settings applied" loading="lazy" />
     </div>
 
     <p>Another thing that can be set under the <strong>Account Policies</strong> is the <strong>Account Lockout Policy</strong>.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec27.png" alt="Navigating to Account Lockout Policy" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec28.png" alt="Account Lockout Policy settings" loading="lazy" />
     </div>
 
     <p>I'm going to set the Account lockout threshold to 5 invalid logon attempts to lock out a given domain account.</p>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/2-PasswordPolicy/ADSec29.png" alt="Setting Account lockout threshold to 5 invalid logon attempts" loading="lazy" />
     </div>
 
     <p>I'll set the Account lockout duration and Reset account lockout counter after to 30 minutes.</p>
 
-    <div class="figure" style="max-width:500px;">
+    <div class="figure sz-md">
       <img src="Images/2-PasswordPolicy/ADSec30.png" alt="Setting Account lockout duration to 30 minutes" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:500px;">
+    <div class="figure sz-md">
       <img src="Images/2-PasswordPolicy/ADSec31.png" alt="Setting Reset account lockout counter after to 30 minutes" loading="lazy" />
     </div>
 
     <p>Then I'll open an elevated PowerShell session to push out these new domain changes.</p>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/2-PasswordPolicy/ADSec32.png" alt="Opening an elevated PowerShell session" loading="lazy" />
     </div><br>
 
     <p>Below, I'm running the <strong>net accounts</strong> command for a quick verification step 
-to confirm that the password and lockout policy changes pushed out by 
-<strong>gpupdate /force</strong> are actively in effect on the domain controller. 
-The output below reflects exactly what was configured.</p>
+    to confirm that the password and lockout policy changes pushed out by 
+    <strong>gpupdate /force</strong> are actively in effect on the domain controller. 
+    The output below reflects exactly what was configured.</p>
 
-  <ul class="list-none">
+    <ul class="list-none">
       <li>A Minimum password age of 1 day prevents user from immediately cycling
-through passwords to back to a previous one.</li><br>
+      through passwords to back to a previous one.</li><br>
 
       <li>The maximum password age of 42 days enforces regular password 
-rotation across domain accounts.</li><br>
-      
-<li>The Minimum password length of 14 characters ensures passwords
-meet a baseline complexity threshold.</li><br>
+      rotation across domain accounts.</li><br>
+
+      <li>The Minimum password length of 14 characters ensures passwords
+      meet a baseline complexity threshold.</li><br>
+
       <li>The password history of 24 means a user cannot reuse any of their last 24 passwords.</li>
-  </ul>
+    </ul>
 
-      <p>On the lockout side, the Lockout threshold of 5 confirms that an account will be locked after 5 consecutive failed login attempts. Both the Lockout duration and Lockout observation window are set to 30 minutes, meaning a locked account will automatically unlock after 30 minutes, and the failed attempt counter resets after 30 minutes of no failed attempts.</p>
+    <p>On the lockout side, the Lockout threshold of 5 confirms that an account will be locked after 5 consecutive failed login attempts. Both the Lockout duration and Lockout observation window are set to 30 minutes, meaning a locked account will automatically unlock after 30 minutes, and the failed attempt counter resets after 30 minutes of no failed attempts.</p>
 
-      <p>The Computer role: PRIMARY confirms this output is being read directly from the domain controller, meaning these are the domain-wide enforced values, not a local policy.</p>
+    <p>The Computer role: PRIMARY confirms this output is being read directly from the domain controller, meaning these are the domain-wide enforced values, not a local policy.</p>
 
-<div class="security-note">
-  <strong>Modern Security Insight</strong>
-  While this configuration reflects a traditional Active Directory password policy, modern security guidance has moved away from frequent password rotation in favor of stronger overall authentication practices.
-  <br><br>
-  Many organizations are moving toward longer passphrases (often 14–15+ characters) with no periodic expiration, combined with additional security controls such as multi-factor authentication (MFA). This approach reduces user fatigue and predictable password changes, while increasing overall resistance to brute-force and credential-based attacks.
-  <br><br>
-  In practice, traditional rotation policies are still widely enforced due to legacy systems and compliance requirements, making it important to understand both models when designing or managing Active Directory environments.
-</div><br>
-      
+    <div class="security-note">
+      <strong>Modern Security Insight</strong>
+      While this configuration reflects a traditional Active Directory password policy, modern security guidance has moved away from frequent password rotation in favor of stronger overall authentication practices.
+      <br><br>
+      Many organizations are moving toward longer passphrases (often 14–15+ characters) with no periodic expiration, combined with additional security controls such as multi-factor authentication (MFA). This approach reduces user fatigue and predictable password changes, while increasing overall resistance to brute-force and credential-based attacks.
+      <br><br>
+      In practice, traditional rotation policies are still widely enforced due to legacy systems and compliance requirements, making it important to understand both models when designing or managing Active Directory environments.
+    </div><br>
 
-      
-    
-    </p>
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/2-PasswordPolicy/ADSec33.png" alt="Running gpupdate /force and net accounts to verify policy changes" loading="lazy" />
     </div>
 
     <p>To test out these configuration changes, I'm going to purposely lock out my MT.User account on my domain connected Windows 11 VM.</p>
 
-    <div class="figure" style="max-width:620px;">
+    <div class="figure sz-md">
       <img src="Images/2-PasswordPolicy/ADSec34.png" alt="Intentionally triggering account lockout on MT.User at the login screen" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:620px;">
+    <div class="figure sz-md">
       <img src="Images/2-PasswordPolicy/ADSec35.png" alt="MT.User account lockout confirmed at the login screen" loading="lazy" />
     </div><br><br>
 
@@ -595,18 +596,19 @@ meet a baseline complexity threshold.</li><br>
 
     <p>Creating a new <strong>Fine-Grained Password Policy</strong> using PowerShell by running the <strong>New-ADFineGrainedPasswordPolicy</strong> cmdlet.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec36.png" alt="PowerShell command to create a new Fine-Grained Password Policy" loading="lazy" />
     </div>
+
     <p>In this example, I'm going to name this FGPP <strong>FGPP-DomainAdmins</strong></p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" loading="lazy" />
     </div>
 
-
     <div class="security-note">
       <strong>Note</strong>
-    It is a best practice to avoid assigning the same Precedence value to multiple PSOs.
+      It is a best practice to avoid assigning the same Precedence value to multiple PSOs.
       If multiple PSOs apply to a user and share the same Precedence, AD will still select
       one policy to apply, but the selection is not intended to be relied upon and can lead
       to unpredictable administrative outcomes.
@@ -618,59 +620,61 @@ meet a baseline complexity threshold.</li><br>
     <div class="security-note">
       <strong>Note</strong>
       It is worth clarifying how the Precedence numbering works in conjunction with the PSOs.
-The lower the Precedence number is set on a FGPP, the higher the priority. So a PSO with
-a Precedence of 1 will always win over a PSO that is set with a Precedence of 2, 3, 10, etc,
-when a user account object is assigned to more than one Global Security group that has a
-PSO configured with it.<br><br>
+      The lower the Precedence number is set on a FGPP, the higher the priority. So a PSO with
+      a Precedence of 1 will always win over a PSO that is set with a Precedence of 2, 3, 10, etc,
+      when a user account object is assigned to more than one Global Security group that has a
+      PSO configured with it.<br><br>
 
       It is also worth noting that when a PSO is applied directly to a user account object on the
-domain, it will always take precedence over any PSO applied to that user account object via
-group membership, regardless of the Precedence number that is assigned to each PSO. So in
-the case that a group linked PSO has a lower precedence number, a PSO tied directly to the
-user account will always win. Making the direct user assignment the strongest form
-of PSO application, and it's also something to be intentional about when designing your
-FGPP structure.<br><br>
+      domain, it will always take precedence over any PSO applied to that user account object via
+      group membership, regardless of the Precedence number that is assigned to each PSO. So in
+      the case that a group linked PSO has a lower precedence number, a PSO tied directly to the
+      user account will always win. Making the direct user assignment the strongest form
+      of PSO application, and it's also something to be intentional about when designing your
+      FGPP structure.<br><br>
 
       With all of that being said, there is one important exception to that rule. 
       If multiple PSOs are applied directly to the same user account object, not through group membership but assigned directly, then direct assignment no longer automatically wins.
-In that scenario, AD falls back to the Precedence number to determine
-which PSO wins, with the lowest Precedence number taking the priority. This re-enforces
-why being deliberate and strategic about your Precedence numbering goes a long way,
-even when working with direct user assignments.
+      In that scenario, AD falls back to the Precedence number to determine
+      which PSO wins, with the lowest Precedence number taking the priority. This re-enforces
+      why being deliberate and strategic about your Precedence numbering goes a long way,
+      even when working with direct user assignments.
     </div><br><br>
-
 
     <p>In this example, the <strong>Precedence</strong> is set to <strong>1</strong>, giving this <strong>PSO</strong>
       the highest priority for any member of the <strong>Domain Admins</strong> group.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec39.png" alt="FGPP creation completed, running Get-ADUserResultantPasswordPolicy" loading="lazy" />
     </div>
 
-    <p>The PSO can be found in <strong>Active Directory Administrative Center</strong>, under <strong>[Domain Name] > System > Password Settings Container</strong>
+    <p>The PSO can be found in <strong>Active Directory Administrative Center</strong>, under <strong>[Domain Name] > System > Password Settings Container</strong></p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec40.png" alt="Active Directory Administrative Center showing the System container selected" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec41.png" alt="System container expanded showing the Password Settings Container" loading="lazy" />
     </div>
 
     <p>FGPPs listing under <strong>DC01 (local) > System > Password Settings Container</strong></p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec42.png" alt="Password Settings Container listing FGPP-DomainAdmins PSO" loading="lazy" />
     </div>
+
     <p>Manually adding the <strong>FGPP-DomainAdmins</strong> PSO to the <strong>Domain Admins</strong> Global Security Group.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec43.png" alt="FGPP-DomainAdmins PSO properties with Select Users or Groups dialog" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec44.png" alt="FGPP-DomainAdmins Password Settings showing Directly Applies To Domain Admins" loading="lazy" />
     </div>
 
@@ -680,24 +684,25 @@ even when working with direct user assignments.
     <p>This confirms that the policy is linked to the <strong>Domain Admins Security Group</strong>.</p>
     <p>The <strong>Name</strong> field confirms the correct PSO <strong>FGPP-DomainAdmins</strong> is being applied, and the <strong>Precedence</strong> value of <strong>1</strong> confirms it holds the highest priority.</p>
     <p>The remaining fields reflect the exact policy settings configured earlier, validating that the PSO is active and enforced.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/2-PasswordPolicy/ADSec45.png" alt="Full FGPP-DomainAdmins policy view confirming all settings and group assignment" loading="lazy" />
     </div><br>
 
     <div class="security-note">
-  <strong>Security Approach</strong>
-  Fine-Grained Password Policies (FGPP) allow different levels of protection to be applied based on account risk. Privileged accounts, such as members of Domain Admins, should be held to stricter standards than standard user accounts.
-  <br><br>
-  In many environments, administrative accounts are configured with more aggressive lockout controls, such as longer lockout durations or requiring manual administrator unlock, to reduce the risk of brute-force or password spraying attacks. Standard user accounts, on the other hand, may use more forgiving lockout settings to balance usability and security.
-  <br><br>
-  This separation ensures that high-value targets receive stronger protection without negatively impacting the day-to-day usability of standard user accounts.
-</div>
+      <strong>Security Approach</strong>
+      Fine-Grained Password Policies (FGPP) allow different levels of protection to be applied based on account risk. Privileged accounts, such as members of Domain Admins, should be held to stricter standards than standard user accounts.
+      <br><br>
+      In many environments, administrative accounts are configured with more aggressive lockout controls, such as longer lockout durations or requiring manual administrator unlock, to reduce the risk of brute-force or password spraying attacks. Standard user accounts, on the other hand, may use more forgiving lockout settings to balance usability and security.
+      <br><br>
+      This separation ensures that high-value targets receive stronger protection without negatively impacting the day-to-day usability of standard user accounts.
+    </div>
 
   </section>
 
   <br><br><br><br>
 
-  <!-- Section 3 -->
+  <!-- ═══════════ SECTION 3 ═══════════ -->
   <span id="section-3" class="section-anchor"></span>
   <section class="card">
     <h2>3 – Group Policy Security Hardening</h2>
@@ -706,25 +711,24 @@ even when working with direct user assignments.
 
     <p><strong>Computer Configuration &gt; Policies &gt; Windows Settings &gt; Security Settings &gt; Local Policies &gt; Security Options</strong></p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec46.png" alt="Group Policy Management Editor showing Security Options under Local Policies" loading="lazy" />
     </div><br>
 
     <h3>Network security: LAN Manager authentication level</h3>
     <p>This setting controls which authentication protocols the domain controller will accept for network logons. Configuring this to enforce NTLMv2 only while refusing LM and NTLMv1 eliminates the weakest authentication paths on the domain, directly reducing the risk of credential-based attacks such as downgrade attacks and pass-the-hash.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec47.png" alt="Security Options list showing Network security LAN Manager authentication level" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec48.png" alt="LAN Manager authentication level properties with Send NTLMv2 response only selected" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:500px;">
+    <div class="figure sz-md">
       <img src="Images/3-GPSecHardening/ADSec49.png" alt="LAN Manager authentication level set to Send NTLMv2 response only. Refuse LM and NTLM" loading="lazy" />
     </div>
-
 
     <p>To verify the policy has been applied, I'm running the following PowerShell command directly against the registry before and after running <strong>gpupdate /force</strong>.</p>
     <p>This command runs a query to the <strong>LSA (Local Security Authority)</strong> registry key directly, where Windows stores authentication and security policy settings, and filters the output down to just the <strong>LmCompatibilityLevel</strong> value.</p>
@@ -733,17 +737,18 @@ even when working with direct user assignments.
     is the registry value that maps directly to <strong>Send NTLMv2 response only. Refuse LM & NTLM</strong>. 
     This confirms the setting has been written to the registry and is actively enforced on the domain controller,
     not just confiugured in Group Policy,but verified at the OS level where it actually takes effect.</p>
-    <div class="figure">
+
+    <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec51.png" alt="PowerShell verifying LmCompatibilityLevel set to 5 after gpupdate" loading="lazy" />
     </div>
 
     <div class="security-note">
       <strong>Security Approach</strong>
       Setting the LAN Manager authentication level to Send NTLMv2 response only. Refuse LM and NTLM,
-which is linked to a registry value of LmCompatibilityLevel = 5<br><br>
+      which is linked to a registry value of LmCompatibilityLevel = 5<br><br>
 
       This is one of the more impactful protocol-level hardening steps you can apply to a
-domain controller.<br><br>
+      domain controller.<br><br>
 
       To understand why this matters, it helps to understand what these protocols are and how they differ. LM (LAN Manager) is the oldest of the three and is considered cryptographically broken. It splits passwords into two 7-character chunks and hashes them independently, making them easily crackable with modern hardware. Passwords shorter than 14 characters are null-byte padded before splitting, making the second chunk trivially crackable and immediately revealing to an attacker that the password was seven characters or fewer. NTLM (NTLMv1) improved on LM but still relies on a weak challenge-response mechanism that is vulnerable to pass-the-hash attacks, where an attacker captures a hashed credential from memory or network traffic and uses it directly to authenticate without ever needing to crack the underlying password. NTLMv2 addressed many of these weaknesses by incorporating a client-side timestamp and a more complex HMAC-MD5 based challenge-response that incorporates a client nonce and timestamp alongside the user's NT hash, making captured hashes significantly harder to replay or crack offline.
       <br><br>
@@ -755,45 +760,39 @@ domain controller.<br><br>
     </div><br>
 
     <h3>Microsoft network client: Digitally sign communications (always)</h3>
-    <P>This setting is associated wtih SMB signing, a direct countermeasure to mitigate against SMB relay attacks.
-Enabling this policy cryptographically validates that packets haven't been 
-tampered with in transition between the domain controller and network connected
-client hosts. 
-</P>
+    <p>This setting is associated wtih SMB signing, a direct countermeasure to mitigate against SMB relay attacks.
+    Enabling this policy cryptographically validates that packets haven't been 
+    tampered with in transition between the domain controller and network connected
+    client hosts. 
+    </p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec52.png" alt="Security Options showing Microsoft network client Digitally sign communications highlighted" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec53.png" alt="Microsoft network client Digitally sign communications properties set to Enabled" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec54.png" alt="Security Options showing Digitally sign communications now set to Enabled" loading="lazy" />
     </div>
 
-
-
-
-    
-
-    <div class="figure" style="max-width:100%;">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec55.png" alt="Side-by-side view of domain controller and Windows 11 client both running gpupdate and verifying SMB signing" loading="lazy" />
     </div>
 
-        <p>Running <strong>Get-SmbServerConfiguration</strong> and filtering for <strong>EnableSecuritySignature</strong> and <strong>RequireSecuritySignature</strong> provides a ground-truth confirmation of the SMB signing state directly from the OS.
-</p>
+    <p>Running <strong>Get-SmbServerConfiguration</strong> and filtering for <strong>EnableSecuritySignature</strong> and <strong>RequireSecuritySignature</strong> provides a ground-truth confirmation of the SMB signing state directly from the OS.
+    </p>
     <p>The output returns <strong>EnableSecuritySignature = False</strong> and <strong>RequireSecuritySignature = True</strong>. These are two distinct settings, RequireSecuritySignature = True is the confirmation that matters here.</p>
     <p>This tells us that SMB signing is now mandatory on this server, meaning any connection that doesn't support signing will be outright rejected. <strong>EnableSecuritySignature</strong> controls whether signing is offered as optional for connections that don't require it, with RequireSecuritySignature already set to True, that flag is redundant. The False value next to <strong>EnableSecuritySignature</strong> is expected and correct, not a misconfiguration.</p>
 
-
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec56.png" alt="PowerShell verifying SMB signing enabled with Get-SmbServerConfiguration" loading="lazy" />
     </div><br>
 
     <h3>Kerberos Security Hardening</h3>
-    <p>LM and NTLMv1 are legacy protocols that have been deprecated, with the development of NTLMv2. However, NTLMv2 is still NTLM, and NTLM is still a challenge-response protocol with well-documented weaknesses.</P>
+    <p>LM and NTLMv1 are legacy protocols that have been deprecated, with the development of NTLMv2. However, NTLMv2 is still NTLM, and NTLM is still a challenge-response protocol with well-documented weaknesses.</p>
     <p>Kerberos has been the default authentication protocol in Active Directory since Windows 2000, and the overall architecture of the protocol's design is fundamentally different from NTLM.</p>
     <p>Unlike the NTLM design, Kerberos doesn't operate by passing credential material across the network, but uses a cryptographic ticketing system.</p>
     <p>In this design, when a user authenticates against a domain, the <strong>KDC (Key Distribution Center)</strong> running on the domain controller issues a <strong>TGT - Ticket Granting Ticket</strong>. That TGT is then used to request service tickets for specific resources. The user's credentials never travel across the network again after that initial exchange. It's this design that mitigates against relay attacks that make the NTLM design a liability in the first place.</p>
@@ -801,10 +800,8 @@ client hosts.
 
     <p>The Policy that is tied to this is the <strong>Network security: Configure encryption types allowed for Kerberos</strong>, located in the <strong>Group Policy Management Editor</strong>, under <strong>Computer Configuration > Policies > Windows Settings > Security Settings > Local Policies > Security Options</strong></p>
 
-    
-
     <p><strong>Here, I'm going to configure the policy like so:</strong></p>
-    
+
     <strong>Disable</strong>
     <ul>
       <li>DES_CBC_CRC</li>
@@ -818,117 +815,96 @@ client hosts.
       <li>Future encryption types</li>
     </ul>
 
-    <p>Without this policy defined, the domain controller will issue RC4-encrypted Kerberos tickets to anything that asks for one. By explicitly enabling only AES-128, AES-256, and Future encryption types.
+    <p>Without this policy defined, the domain controller will issue RC4-encrypted Kerberos tickets to anything that asks for one. By explicitly enabling only AES-128, AES-256, and Future encryption types.</p>
     <p>This makes the activity of performing offline cracking in Kerberoasting attacks 
-a lot more costly. The policy enforcing AES-only encryption makes it where any 
-captured cryptographic ticket must be cracked against that AES encryption. 
-Given how strong AES encryption algorithms are, this makes things a bit more
-computationally expensive. The default RC4-encrypted service tickets are a 
-lot faster to crack in offline cracking. 
-</p>
+    a lot more costly. The policy enforcing AES-only encryption makes it where any 
+    captured cryptographic ticket must be cracked against that AES encryption. 
+    Given how strong AES encryption algorithms are, this makes things a bit more
+    computationally expensive. The default RC4-encrypted service tickets are a 
+    lot faster to crack in offline cracking. 
+    </p>
 
     <p>That said, the AES enforcement does not completely prevent Kerberoasting. A
-captured AES ticket can still be cracked in a scenario that it's tied to a
-service account with an easy to guess password. 
-</p>
+    captured AES ticket can still be cracked in a scenario that it's tied to a
+    service account with an easy to guess password. 
+    </p>
 
-<p>This is exactly why the FGPP service account PSO configured in section 2 matters here.
-</p>
-    
+    <p>This is exactly why the FGPP service account PSO configured in section 2 matters here.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec59-1.png" alt="Kerberos 1" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec59-2.png" alt="Kerberos 2" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec59-3.png" alt="Kerberos 3" loading="lazy" />
     </div>
 
-    <div class="figure">
-        <img src="Images/3-GPSecHardening/ADSec59-4.png" alt="Kerberos 4" loading="lazy" />
+    <div class="figure sz-xl">
+      <img src="Images/3-GPSecHardening/ADSec59-4.png" alt="Kerberos 4" loading="lazy" />
     </div>
 
-
-
-<br><br>
-
-
-
-
-
-
-
-    
+    <br><br>
 
     <h3>Network access: Do not allow anonymous enumeration of SAM accounts</h3>
 
     <p>Enabling this policy disallows anonymous enumeration making it really difficult to use tools such as enum4linux, smbclient, or rpcclient to enumerate server detail information. This significantly reduces unauthenticated enumeration, though authenticated enumeration and other attack paths may still exist.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec57.png" alt="Security Options showing Do not allow anonymous enumeration of SAM accounts" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:500px;">
+    <div class="figure sz-md">
       <img src="Images/3-GPSecHardening/ADSec58.png" alt="Anonymous enumeration of SAM accounts policy set to Enabled" loading="lazy" />
     </div><br>
 
     <h3>Network access: Do not allow anonymous enumeration of SAM accounts and shares</h3>
     <p>By default, anonymous connections to a Windows system can enumerate both
-SAM account names and network share names if this policy is not 
-explicitly enabled. By enabling this setting, it closes both of 
-those doors simultaneously. Effectively mitigating against 
-unauthenticated connections from retrieving a list of user accounts
-or discovering what shares are available on the domain controller.
-</p>
+    SAM account names and network share names if this policy is not 
+    explicitly enabled. By enabling this setting, it closes both of 
+    those doors simultaneously. Effectively mitigating against 
+    unauthenticated connections from retrieving a list of user accounts
+    or discovering what shares are available on the domain controller.
+    </p>
 
     <p>
-Where the previous policy blocked SAM account enumeration alone, this one
-extends that restriction to shares as well, meaning an attacker 
-performing anonymous reconnaissance has no path to pull either a user
-list or a map of available network resources without valid credentials.
-</p>
+    Where the previous policy blocked SAM account enumeration alone, this one
+    extends that restriction to shares as well, meaning an attacker 
+    performing anonymous reconnaissance has no path to pull either a user
+    list or a map of available network resources without valid credentials.
+    </p>
 
-    
-    <div class="figure">
-      <img src="Images/3-GPSecHardening/ADSec59.png" alt="Security Options showing Do not allow anonymous enumeration of SAM accounts and shares" style="height: 500px;" loading="lazy" />
+    <div class="figure sz-xl">
+      <img src="Images/3-GPSecHardening/ADSec59.png" alt="Security Options showing Do not allow anonymous enumeration of SAM accounts and shares" loading="lazy" />
     </div>
 
-    <div class="figure">
-      <img src="Images/3-GPSecHardening/ADSec60.png" alt="Enable Do not allow anonymous enumerationo of SAM accounts and shares" style="width: 400px; height: 500px;" loading="lazy" />
+    <div class="figure sz-md">
+      <img src="Images/3-GPSecHardening/ADSec60.png" alt="Enable Do not allow anonymous enumeration of SAM accounts and shares" loading="lazy" />
     </div>
-    
-    
+
     <br>
-
-
 
     <h3>Network access: Let Everyone permissions apply to anonymous users</h3>
     <p>By default, anonymous users are not members of the Everyone group in Windows, and this policy should stay that way. When this setting is enabled, it effectively grants anonymous connections membership in the Everyone group, meaning any resource on the domain controller that has Everyone permissions applied becomes accessible to unauthenticated connections, with no credentials required.
-</p>
+    </p>
 
     <p>On a domain controller, that's a serious exposure. The Everyone group is broadly applied across many default Windows resources, and quietly extending that access to anonymous connections widens the attack surface significantly without any administrative visibility into who is accessing what.
-</p>
+    </p>
 
     <p>This policy is disabled by default and is being verified here to confirm it remains that way. In a hardened AD environment, this setting should never be enabled.</p>
 
-    
-
-    
-
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec61.png" alt="Security Options showing Let Everyone permissions apply to anonymous users" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:500px;">
+    <div class="figure sz-md">
       <img src="Images/3-GPSecHardening/ADSec62.png" alt="Anonymous enumeration of SAM accounts and shares policy set to Enabled" loading="lazy" />
     </div>
 
- 
-    <div class="figure" style="max-width:520px;">
+    <div class="figure sz-md">
       <img src="Images/3-GPSecHardening/ADSec63.5.5.png" alt="Let Everyone permissions apply to anonymous users policy confirmed disable II" loading="lazy" />
     </div><br>
 
@@ -951,11 +927,11 @@ list or a map of available network resources without valid credentials.
     synchronizes the system's local package index with remote reposityories and ensures that any newer software installations
     against the most stable, secure, and compatible version of existing system dependencies.</p>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec64.png" alt="Running apt update on Ubuntu Server VM" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec65.png" alt="Ubuntu Server update completed" loading="lazy" />
     </div><br>
 
@@ -963,79 +939,76 @@ list or a map of available network resources without valid credentials.
     <p>enum4linux is a Linux-based enumeration tool designed specifically for extracting information from Windows and Samba systems.</p>
     <p> It automates the process of pulling user accounts, group memberships, share listings, password policy details, and OS information from a target, and it doesn't require credentials if the target allows anonymous access.</p>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec66.png" alt="Installing enum4linux on Ubuntu Server" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:741px; width:741px;">
+    <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec67.png" alt="enum4linux installation completed" loading="lazy" />
     </div><br>
-  
 
     <h3>Install smbclient</h3>
     <p>smbclient is a command-line tool that allows Linux systems to interact with SMB/CIFS network shares on Windows machines.</p>
     <p>In a reconnaissance context, it can be used to list available shares on a target host anonymously, giving an attacker visibility into what resources are exposed on the network without needing to authenticate.</p>
-    
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec68.png" alt="Installing smbclient on Ubuntu Server" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec69.png" alt="smbclient installation completed" loading="lazy" />
     </div><br>
 
     <h3>Install rpcclient</h3>
     <p>rpcclient is a tool used to execute MS-RPC (Microsoft Remote Procedure Call) functions against a Windows target.</p>
     <p>From a reconnaissance standpoint, it can be leveraged to enumerate domain users, groups, and other directory information directly over RPC, making it a useful tool for mapping out an Active Directory environment when anonymous RPC access is permitted.</p>
-    
-    <div class="figure" style="max-width:683px; width:683px;">
+
+    <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec70.png" alt="Installing rpcclient on Ubuntu Server" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec71.png" alt="rpcclient installation completed" loading="lazy" />
     </div><br>
 
     <h3>Install nmap</h3>
     <p>nmap is one of the most widely used network scanning and reconnaissance tools in both penetration testing and defensive security.</p>
     <p>Beyond basic port scanning, nmap's scripting engine (NSE) includes scripts specifically designed to enumerate SMB shares, users, and vulnerability information from Windows hosts, making it effective at probing the attack surface of a domain controller from the network level.</p>
-    
-    <div class="figure" style="max-width:560px;">
+
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec72.png" alt="Installing nmap on Ubuntu Server" loading="lazy" />
     </div><br>
 
     <h3>Verification of Installation</h3>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec73.png" alt="Verifying all tools installed successfully on Ubuntu Server" loading="lazy" />
     </div><br>
 
     <h3>Attempting Active Recon on the Domain Controller</h3>
 
     <h3>enum4linux</h3>
-  
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec74.png" alt="Running enum4linux against the domain controller" loading="lazy" />
     </div>
-      <p>Based on this output, the enum4linux tool attempted every enumeration method it has. Groups, group memberships, local groups, domain groups, users via RID cycling, printer info, and no results retrieved with access denied across the board.</p>
+    <p>Based on this output, the enum4linux tool attempted every enumeration method it has. Groups, group memberships, local groups, domain groups, users via RID cycling, printer info, and no results retrieved with access denied across the board.</p>
     <p>In this active recon example, the tool was about to reach the DC but could not retrieve anything meaningful with these hardening settings in place.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec75.png" alt="enum4linux results showing access denied and blocked enumeration" loading="lazy" />
     </div><br>
 
     <h3>smbclient</h3>
     <p>Here, we have an output that says "Anonymous login successful", indicating the anonymous session was initiated at the protocol level, but it could not retrieve anything useful because SMB1 is disabled on the domain controller. This mitigates the legacy workgroup browsing mechanism that smbclient relies on for share enumeration.</p>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec76.png" alt="smbclient showing SMB1 disabled and no workgroup available" loading="lazy" />
     </div><br>
 
     <h3>rpcclient</h3>
 
-
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec77.png" alt="Running rpcclient against the domain controller" loading="lazy" />
     </div>
 
@@ -1043,20 +1016,20 @@ list or a map of available network resources without valid credentials.
     <p>The anonymous enumeration restrictions put in place are blocking the RPC calls that would return meaning directory information.</p>
     <p>An attacker in this position has an open RPC session they can't actually do anything with, no user list, no group info, nothing to build on.</p>
     <p>This output below indicates that anonymous (null session) access is restricted, mitigating against unauthenticated enumeration of domain information through RPC.</p>
-    
-    <div class="figure" style="max-width:560px;">
+
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec78.png" alt="rpcclient enumdomusers returning NT_STATUS_ACCESS_DENIED" loading="lazy" />
-      
     </div><br>
 
     <h3>nmap</h3>
-    <P>The nmap scan was run using the <strong>smb-enum-users</strong> and <strong>smb-enum-shares</strong> scripts targeting port 445 on the domain controller. The result came back reporting the host as seemingly down, but this isn't entirely accurate. What's actually happening here is that nmap sends an ICMP ping probe by default to verify a host is reachable before proceeding with any script execution. The Windows Firewall configured on the domain controller is blocking those ICMP probes, causing nmap to interpret the silence as the host being offline and abandoning the scan before the SMB enumeration scripts ever get a chance to run.</P>
+    <p>The nmap scan was run using the <strong>smb-enum-users</strong> and <strong>smb-enum-shares</strong> scripts targeting port 445 on the domain controller. The result came back reporting the host as seemingly down, but this isn't entirely accurate. What's actually happening here is that nmap sends an ICMP ping probe by default to verify a host is reachable before proceeding with any script execution. The Windows Firewall configured on the domain controller is blocking those ICMP probes, causing nmap to interpret the silence as the host being offline and abandoning the scan before the SMB enumeration scripts ever get a chance to run.</p>
     <p>nmap itself acknowledges this in the output with the note: "If it is really up, but blocking our ping probes, try -Pn", the -Pn flag tells nmap to skip the ping check entirely and treat the host as up regardless. A more persistent attacker would likely follow that suggestion and rerun the scan with -Pn to force the enumeration attempt through. However, even in that scenario, the anonymous enumeration restrictions and SMB hardening already demonstrated through enum4linux, smbclient, and rpcclient would still be waiting at the next layer, meaning the firewall is simply the first line of defense that stops the attempt here before it even gets that far.</p>
-    <div class="figure" style="max-width:560px;">
+
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec79.png" alt="Running nmap smb-enum-users and smb-enum-shares scan against the domain controller" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec80.png" alt="nmap scan result showing host appears down or blocking ping probes" loading="lazy" />
     </div>
 
@@ -1064,7 +1037,7 @@ list or a map of available network resources without valid credentials.
 
   <br><br><br><br>
 
-  <!-- Section 4 -->
+  <!-- ═══════════ SECTION 4 ═══════════ -->
   <span id="section-4" class="section-anchor"></span>
   <section class="card">
     <h2>4 – Auditing &amp; Visibility</h2>
@@ -1077,7 +1050,7 @@ list or a map of available network resources without valid credentials.
 
     <p>The design is limited to an "all or nothing" approach. For example, if you enable the policy for "Audit object access," Windows logs every time a file is accessed, a registry key is touched, or a printer is used, causing the Security event logs to fill up instantly with thousands of useless log entries, making it extremely challenging to locate a legitimate security breach in the log data.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec81.png" alt="Group Policy Management Editor showing Legacy Audit Policy under Local Policies" loading="lazy" />
     </div>
 
@@ -1087,7 +1060,7 @@ list or a map of available network resources without valid credentials.
 
     <p>This provides more of a precision approach, allowing you to track exactly what you need (like sensitive file changes) while ignoring what you don't (like system background processes), which saves disk space and CPU cycles.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec82.png" alt="Advanced Audit Policy Configuration showing Audit Policies summary with all categories not configured" loading="lazy" />
     </div>
 
@@ -1100,15 +1073,15 @@ list or a map of available network resources without valid credentials.
       <p>Enabling this setting (which triggers the <code>SCENoApplyLegacyAuditPolicy</code> registry flag) is what actually "kills" the legacy policy. Without this specific toggle, simply configuring Advanced Audit settings won't guarantee the legacy policies are ignored, which can lead to inconsistent or "double" logging.</p>
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec82-1.png" alt="Golden Rule Advanced Setting 1" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec82-2.png" alt="Golden Rule Advanced Setting 2" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/4-A+V/ADSec82-3.png" alt="Golden Rule Advanced Setting 3" loading="lazy" />
     </div>
     <br>
@@ -1118,11 +1091,12 @@ list or a map of available network resources without valid credentials.
     <p> Account Logon events specifically track authentication activity processed by the domain controller, meaning every time a domain account is used to authenticate against the DC, whether successful or not, this is the category responsible for capturing that activity.</p>
     <p>From the subcategories listed, I'm configuring Audit Kerberos Authentication Service to log Success events. Kerberos is the primary authentication protocol used in Active Directory environments, handling the ticket-granting process that underpins domain logons, service access, and inter-system authentication. </p>
     <p> Auditing successful Kerberos authentication events gives visibility into who is authenticating against the domain controller and when, establishing a baseline of normal authentication behavior that makes anomalous activity, such as unusual logon times or unexpected account usage, easier to identify.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec83.png" alt="Advanced Audit Policy Account Logon subcategories" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/4-A+V/ADSec84.png" alt="Audit Kerberos Authentication Service properties set to Success" loading="lazy" />
     </div><br>
 
@@ -1131,11 +1105,12 @@ list or a map of available network resources without valid credentials.
     <p> The subcategories here track things like user account creation and deletion, password changes, and group membership modifications, all of which are high-value events from a security monitoring standpoint, as unauthorized changes in any of these areas can be a strong indicator of privilege escalation or insider threat activity.</p>
     <p> From the subcategories listed, I'm configuring Audit Security Group Management to log Success events. Security groups in Active Directory directly control access to resources and elevated privileges across the domain, so any time a security group is created, deleted, or has its membership modified, that event gets captured in the Security log.</p>
     <p>  This is particularly valuable for detecting unauthorized privilege escalation, such as a user account being quietly added to Domain Admins or another sensitive group outside of a normal change window.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec85.png" alt="Advanced Audit Policy Account Management subcategories" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/4-A+V/ADSec86.png" alt="Audit Security Group Management properties set to Success" loading="lazy" />
     </div><br>
 
@@ -1143,43 +1118,48 @@ list or a map of available network resources without valid credentials.
     <p>Moving into the Logon/Logoff audit category, this section tracks interactive and network-based logon activity directly on the domain controller. </p>
     <p>The subcategory list here is notably broader than the previous categories, covering everything from account lockouts and group membership changes at logon time, to IPsec negotiations and special logon events. This granularity is what makes Advanced Audit Policy significantly more useful than the legacy approach, allowing specific logon-related events to be targeted without flooding the Security log with everything at once.</p>
     <p>From the available subcategories, Audit Logon is configured to log Success events. This is one of the most foundational audit settings in any Active Directory environment, every successful interactive and network logon to the domain controller gets recorded, capturing the account name, logon type, source machine, and timestamp. This creates a reliable trail of who accessed the domain controller and how, which is invaluable both for routine access reviews and for incident response when tracing the movement of a compromised account.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec87.png" alt="Advanced Audit Policy Logon/Logoff subcategories with Audit Logon highlighted" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/4-A+V/ADSec88.png" alt="Audit Logon properties set to Success" loading="lazy" />
     </div>
+
     <p>Here, it shows the updated subcategory view after applying the configuration, confirming that Audit Logon, Audit Other Logon/Logoff Events, and Audit Special Logon are all now set to Success. The additional subcategories being captured here cover edge cases such as logons using cached credentials, logons with elevated tokens, and other logon types that wouldn't be captured by Audit Logon alone, rounding out visibility across the full logon/logoff activity spectrum on the domain controller.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec89.png" alt="Logon/Logoff subcategories showing Audit Logon and related events set to Success" loading="lazy" />
     </div><br>
 
     <h3>Policy Change</h3>
     <p>Moving into the Policy Change audit category, this section tracks modifications made to audit and security policies on the domain controller itself. This is a particularly important category from a security monitoring perspective, if an attacker or malicious insider gains sufficient access to start modifying audit policies, being able to detect that activity is critical. An attacker who can quietly disable auditing effectively goes blind to the defenders monitoring the environment.</p>
     <p>From the available subcategories, Audit Audit Policy Change is configured to log Success events. This subcategory specifically captures any changes made to the audit policy configuration itself, meaning if anyone modifies, disables, or reconfigures audit settings on the domain controller, that action gets recorded in the Security log. It's essentially the audit policy watching over itself, ensuring that any tampering with the logging configuration leaves a detectable footprint rather than silently disappearing.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec90.png" alt="Advanced Audit Policy Policy Change subcategories" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/4-A+V/ADSec91.png" alt="Audit Policy Change properties set to Success" loading="lazy" />
     </div><br>
 
     <h3>Privilege Use</h3>
     <p>Moving into the Privilege Use audit category, this section tracks when accounts exercise user rights and privileges on the domain controller. Privilege use events are particularly relevant in an Active Directory security context because they capture the actual exercising of elevated rights, not just who has them, but when and how they're being used. This distinction matters because an attacker operating under a compromised privileged account will inevitably need to exercise those privileges to accomplish their objectives, and this category is what captures that activity.</p>
     <p>The subcategory list here contains three options: Audit Non Sensitive Privilege Use, Audit Other Privilege Use Events, and Audit Sensitive Privilege Use. From these, Audit Non Sensitive Privilege Use is configured to log Success events. This subcategory captures the use of privileges that fall outside the most critical tier, things like bypassing traverse checking, changing system time, or shutting down the system. While individually these may seem minor, patterns of non-sensitive privilege use can surface unusual behavior that warrants closer inspection, particularly when activity is occurring outside of normal administrative hours or from unexpected accounts.</p>
-    <div class="figure">
+
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec92.png" alt="Advanced Audit Policy Privilege Use subcategories" loading="lazy" />
     </div>
 
-    <div class="figure">
+    <div class="figure sz-lg">
       <img src="Images/4-A+V/ADSec93.png" alt="Audit Sensitive Privilege Use properties set to Success" loading="lazy" />
     </div>
 
     <p> This confirms the configuration has been applied, with Audit Non Sensitive Privilege Use now showing Success in the Audit Events column, completing the Privilege Use category configuration alongside the other audit categories already put in place.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/4-A+V/ADSec94.png" alt="Privilege Use subcategories updated after configuration" loading="lazy" />
     </div><br>
 
@@ -1187,22 +1167,22 @@ list or a map of available network resources without valid credentials.
     <p>With all audit subcategories configured, <strong>auditpol /get /category:*</strong> is run to pull a complete readout of the current audit policy state directly from the system, providing a ground-truth verification of what is actually enforced at the OS level, independent of what the Group Policy Management Editor displays.</p>
     <p>Across the two pages of output, the configured subcategories are confirmed exactly as intended. Under Logon/Logoff, Logon, Special Logon, and Other Logon/Logoff Events all show Success. Under Policy Change, Audit Policy Change shows Success. Under Account Management, Security Group Management and User Account Management both show Success. Under Account Logon, both Kerberos Authentication Service and Kerberos Service Ticket Operations show Success — confirming that Kerberos authentication activity is being captured at both the service and ticket level. Everything not explicitly configured shows No Auditing, which is exactly the precision the Advanced Audit Policy approach is designed to deliver, only logging what has been deliberately chosen, nothing more.</p>
     <p><strong>gpupdate /force</strong> is then run to ensure the Group Policy changes are fully pushed out and applied across the domain, confirming both Computer Policy and User Policy updated successfully.</p>
-    
-    <div class="figure" style="max-width:560px;">
+
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec95.png" alt="Verification of Advanced Audit Policy settings applied" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec96.png" alt="Further verification of audit policy configuration" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec97.png" alt="Final audit policy configuration confirmed" loading="lazy" />
     </div><br>
 
     <h3>Purposely Lock Out Account</h3>
 
-    <div class="figure" style="max-width:460px;">
+    <div class="figure sz-xs">
       <img src="Images/4-A+V/ADSec98.png" alt="Intentionally triggering an account lockout for testing" loading="lazy" />
     </div><br>
 
@@ -1211,27 +1191,24 @@ list or a map of available network resources without valid credentials.
     <h3>Event ID 4625 – Invalid Logins</h3>
     <p>To retrieve failed logon events from the Security log, <strong>Get-WinEvent</strong> is run targeting the Security log and filtering specifically for Event ID 4625, the Windows event generated every time an account fails to authenticate. The <strong>-MaxEvents 10</strong> parameter pulls the 10 most recent occurrences, and the output is piped through <strong>Select-Object</strong> and <strong>Format-Table</strong> to present the TimeCreated, ID, and Message fields in a clean readable format.</p>
     <p>The results confirm the auditing is working exactly as intended. Ten Event ID 4625 entries are returned spanning across March 20th and 21st 2026, each logged with a precise timestamp and the message "An account failed to log on", these are the failed login attempts that were deliberately triggered earlier when locking out the MT.User account to test the account lockout policy. The fact that these events were captured and are now retrievable via PowerShell demonstrates the full chain working end to end, from the audit policy configuration, through the GPO enforcement, all the way to actionable log data being available for review and alerting.</p>
-    <div class="figure" style="max-width:560px;">
+
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec99.png" alt="PowerShell query for Event ID 4625 invalid login attempts" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec100.png" alt="Event ID 4625 results showing failed login attempts" loading="lazy" />
     </div>
-
 
     <br>
 
     <h3>Event ID 4740 – Account Lockouts</h3>
-    <p>Following up on the failed logon events, the same <stropng>Get-WinEvent</stropng> query is run this time filtering for Event ID 4740, the specific Windows event generated when a user account is actually locked out. While Event ID 4625 captures each individual failed logon attempt, Event ID 4740 is the event that fires at the moment the lockout threshold is crossed and the account becomes locked, making it a more actionable alert from a security monitoring perspective.</p>
+    <p>Following up on the failed logon events, the same <strong>Get-WinEvent</strong> query is run this time filtering for Event ID 4740, the specific Windows event generated when a user account is actually locked out. While Event ID 4625 captures each individual failed logon attempt, Event ID 4740 is the event that fires at the moment the lockout threshold is crossed and the account becomes locked, making it a more actionable alert from a security monitoring perspective.</p>
     <p>The output returns two Event ID 4740 entries, both timestamped on March 21st 2026 — at 3:30 AM and 9:58 AM respectively, each logged with the message "A user account was locked out." These two lockout events correspond directly to the deliberate lockout tests carried out earlier in this write-up. The fact that only two events are returned also neatly illustrates the difference in volume between 4625 and 4740, ten failed logon attempts were captured across two days, but only two actual lockout events resulted, which is exactly how the account lockout threshold of 5 invalid attempts is designed to behave.</p>
-    
-    <div class="figure" style="max-width:560px;">
+
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec101.png" alt="PowerShell query results for Event ID 4740 account lockout" loading="lazy" />
     </div>
-
-
-
 
     <br><br>
 
@@ -1239,25 +1216,23 @@ list or a map of available network resources without valid credentials.
     <p>The query is now run filtering for Event ID 4624, the Windows event generated every time an account successfully authenticates and logs on. While Event ID 4625 captures failed attempts and 4740 captures lockouts, 4624 completes the picture by providing visibility into successful logon activity on the domain controller, which is just as important from a security monitoring standpoint. A pattern of successful logons at unusual times or from unexpected sources can be just as telling as a string of failures.</p>
     <p>The output returns 10 Event ID 4624 entries, all timestamped on April 19th 2026 between 9:21 AM and 9:25 AM, each logged with the message "An account was successfully logged on." The cluster of successful logon events within this short timeframe reflects the active administrative session on the domain controller during this phase of the lab. The fact that these events are being captured and are readily queryable via PowerShell confirms that the Audit Logon subcategory configured earlier under the Logon/Logoff audit category is actively doing its job, very successful logon to the domain controller is being recorded, timestamped, and available for review.</p>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" loading="lazy" />
     </div><br><br>
 
     <h3>Event ID 4728 – Adding Users to a Security-Enabled Global Group</h3>
-    
 
-    
     <h3>Add Domain Admins to Users OU</h3>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec103.png" alt="MT.User Properties showing Member Of tab before adding to Domain Admins" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec104.png" alt="Select Groups dialog with Domain Admins entered for MT.User" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec105.png" alt="MT.User Properties Member Of tab now showing Domain Admins and Domain Users" loading="lazy" />
     </div>
 
@@ -1265,40 +1240,40 @@ list or a map of available network resources without valid credentials.
     <p>The final log query filters for Event ID 4728, the Windows event generated specifically when a member is added to a security-enabled global group. This is one of the more security-sensitive events in an Active Directory environment, as changes to global security group membership directly affect what resources and privileges accounts have access to across the domain.</p>
     <p>The output returns 10 events spanning from March 19th through April 17th 2026, each logged with the message "A member was added to a security-enabled global group." These entries correspond to the various group membership changes carried out throughout this lab, including the nesting of the tier-specific security groups into their respective built-in domain groups, and the addition of MT.User to Domain Admins during the auditing test earlier in this section. The breadth of events returned here also reflects how active group membership management was throughout the build, with every single addition being captured and timestamped in the Security log, exactly the kind of accountability trail that matters in a production environment where unauthorized group membership changes are a key indicator of privilege escalation activity.</p>
     <p>These logs become significantly more valuable when forwarded to a centralized logging platform such as a SIEM, where correlation and alerting can detect suspicious patterns in real-time.</p>
-    
-    <div class="figure" style="max-width:560px;">
+
+    <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" loading="lazy" />
     </div>
 
     <div class="security-note">
-  <strong>Note</strong>
-  In addition to auditing authentication and account activity, monitoring LDAP-related events is an important part of Active Directory security. Event ID 2887 can indicate that unsigned LDAP binds are being performed against a domain controller, which may expose the environment to man-in-the-middle (MITM) attacks.
-  <br><br>
-  In production environments, enforcing LDAP signing and channel binding helps mitigate these risks by requiring secure authentication over LDAP. While this behavior was not explicitly generated in this lab, it represents an additional layer of protocol-level hardening commonly implemented in enterprise environments.
-</div>
+      <strong>Note</strong>
+      In addition to auditing authentication and account activity, monitoring LDAP-related events is an important part of Active Directory security. Event ID 2887 can indicate that unsigned LDAP binds are being performed against a domain controller, which may expose the environment to man-in-the-middle (MITM) attacks.
+      <br><br>
+      In production environments, enforcing LDAP signing and channel binding helps mitigate these risks by requiring secure authentication over LDAP. While this behavior was not explicitly generated in this lab, it represents an additional layer of protocol-level hardening commonly implemented in enterprise environments.
+    </div>
 
   </section>
 
   <br><br><br><br>
 
-  <!-- Section 5 -->
+  <!-- ═══════════ SECTION 5 ═══════════ -->
   <span id="section-5" class="section-anchor"></span>
   <section class="card">
     <h2>5 – Attack Surface Reduction</h2>
 
     <p>To reduce the overall attack surface on the domain controller, I'm going to disable some unnecessary background services that a domain controller typically doesn't need to have running.</p>
-<br>
+    <br>
     <h3>Stopping and Disabling Unnecessary Services</h3>
 
     <h3>Print Spooler</h3>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/5-ASR/ASR1.png" alt="PowerShell stopping and disabling the Print Spooler service" loading="lazy" />
     </div>
 
     <p>Disabling this service as a best practice in a Windows domain environment was influenced by the PrintNightmare vulnerability (CVE-2021-1675 / CVE-2021-34527), a critical Windows Print Spooler vulnerability that enabled attackers to carry out remote code execution and local privilege escalation. Operationally on a domain controller, there is almost never a need to have this service enabled and running.</p>
     <p>This aligns with the principale of reducing unnecessary services on Tier 0 systems.</p><br>
-    
+
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">RemoteRegistry</strong></li>
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">WerSvc</strong></li>
@@ -1309,15 +1284,15 @@ list or a map of available network resources without valid credentials.
     <div class="security-note">
       <strong>Note</strong>
       The RemoteAccess service refers to Windows Routing and Remote Access Service (RRAS), separate from
-Remote Desktop Protocol (RDP). RRAS handles routing and VPN gateway functionality. On a dedicated
-domain controller, this service isn't always necessary and disabling it goes a long way
-in system hardening. With that being said, in smaller environments where the domain controller
-is also configured as a VPN gateway or router, RemoteAccess needs to be enabled. It isn't
-really encouraged to have a domain controller also acting as a routing or VPN device. It's a
-best practice to keep these roles separated onto dedicated infrastructure.
+      Remote Desktop Protocol (RDP). RRAS handles routing and VPN gateway functionality. On a dedicated
+      domain controller, this service isn't always necessary and disabling it goes a long way
+      in system hardening. With that being said, in smaller environments where the domain controller
+      is also configured as a VPN gateway or router, RemoteAccess needs to be enabled. It isn't
+      really encouraged to have a domain controller also acting as a routing or VPN device. It's a
+      best practice to keep these roles separated onto dedicated infrastructure.
     </div>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/5-ASR/ASR2.png" alt="PowerShell stopping and disabling RemoteRegistry, WerSvc, Bthserv, and RemoteAccess services" loading="lazy" />
     </div><br><br>
 
@@ -1325,13 +1300,13 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
     <p>For RDP, Remote Desktop Protocol connections enabled for domain accounts that are members of the built-in domain-wide Remote Desktop Users security group, I'm going to purposely set that up only with my custom administrative domain account MT.Admin, and ensure standard user accounts such as MT.User are not configured with this security group.</p>
 
-    <div class="figure" style="max-width:620px;">
+    <div class="figure sz-md">
       <img src="Images/5-ASR/ASR3.png" alt="ADUC MT.Admin Properties showing Select Groups dialog with Remote Desktop Users being added" loading="lazy" />
     </div>
 
     <p>With that in place, I'll try initiating a remote sign-in with the MT.User account. And upon attempting to connect, this message prompts as a result:</p>
 
-    <div class="figure" style="max-width:580px;">
+    <div class="figure sz-md">
       <img src="Images/5-ASR/ASR4.png" alt="Windows login screen showing MT.User denied Remote Desktop sign-in due to missing group membership" loading="lazy" />
     </div>
 
@@ -1344,19 +1319,19 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
     <p>To first see if the local Windows Firewall is enabled, I'll run the <code style="background:rgba(77,163,255,.1);color:var(--brand);padding:2px 6px;border-radius:4px;font-size:13px;">Get-NetFirewallProfile</code> cmdlet in a PowerShell session.</p>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/5-ASR/ASR5.png" alt="PowerShell Get-NetFirewallProfile output showing Domain, Private, and Public firewall profiles enabled" loading="lazy" />
     </div>
 
     <h3>RDP Firewall Rule on the Domain Controller</h3>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/5-ASR/ASR6.png" alt="PowerShell New-NetFirewallRule creating an inbound rule to allow RDP only from the 192.168.50.0/24 admin subnet" loading="lazy" />
     </div>
 
     <h3>Disable Remote Desktop Firewall Rule</h3>
 
-    <div class="figure" style="max-width:460px;">
+    <div class="figure sz-xs">
       <img src="Images/5-ASR/ASR7.png" alt="PowerShell Disable-NetFirewallRule disabling the default Remote Desktop firewall rule group" loading="lazy" />
     </div>
 
@@ -1369,7 +1344,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
   <br><br><br><br>
 
-  <!-- Section 6 -->
+  <!-- ═══════════ SECTION 6 ═══════════ -->
   <span id="section-6" class="section-anchor"></span>
   <section class="card">
     <h2>6 – Tier Administration Model</h2>
@@ -1382,15 +1357,11 @@ best practice to keep these roles separated onto dedicated infrastructure.
     <ul>
       <li><strong>Tier 0</strong> – Identity and control systems (e.g., DCs / AD)</li>
       <li><strong>Tier 1</strong> – Server infrastructure and business-critical services</li>
-      <li><strong>Tier 2</strong> – End-user systems (workstations)</li> 
+      <li><strong>Tier 2</strong> – End-user systems (workstations)</li>
     </ul>
 
-
-
-
-
-
     <br><br>
+
     <h3>Tier 0 – Domain Controller</h3>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
@@ -1400,11 +1371,11 @@ best practice to keep these roles separated onto dedicated infrastructure.
       <li><strong style="color:var(--text);">Privileges:</strong> Elevated – Domain Admins</li>
     </ul>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM1.png" alt="ADUC inside the domain controller VM showing MT.Admin account selected in the IT OU" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:500px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM2.png" alt="Windows Server Start menu showing MT.Admin as the logged-in administrative user on the domain controller" loading="lazy" />
     </div>
 
@@ -1416,25 +1387,24 @@ best practice to keep these roles separated onto dedicated infrastructure.
     <h3>Tier 1 – Server</h3>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
-      <li style="margin-bottom:4px;"><strong style="color:var(--text);">Machine:</strong> Ubuntu File Serverr</li>
+      <li style="margin-bottom:4px;"><strong style="color:var(--text);">Machine:</strong> Ubuntu File Server</li>
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">System:</strong> Ubuntu Server 24.04</li>
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">Account:</strong> mt</li>
       <li><strong style="color:var(--text);">Privileges:</strong> Standard user account with sudo privileges</li>
     </ul>
 
-    <div class="figure" style="max-width:400px;">
-      <img src="Images/6-TAM/TAM16.png" alt="Ubuntu Server logon"  loading="lazy" />
+    <div class="figure sz-xs">
+      <img src="Images/6-TAM/TAM16.png" alt="Ubuntu Server logon" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:500px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM17.png" alt="Ubuntu Server logon II" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM18.png" alt="Ubuntu Server login III" loading="lazy" />
     </div>
-    
-    
+
     <br><br>
 
     <h3>Tier 2 – Workstation</h3>
@@ -1446,18 +1416,16 @@ best practice to keep these roles separated onto dedicated infrastructure.
       <li><strong style="color:var(--text);">Privileges:</strong> Non-privileged standard user account</li>
     </ul>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM3.png" alt="ADUC inside the domain controller VM showing MT.User account selected in the Corp/Users OU" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:620px;">
+    <div class="figure sz-md">
       <img src="Images/6-TAM/TAM4.png" alt="Windows 11 Start menu showing MT.User as the logged-in standard user on the domain client" loading="lazy" />
     </div>
 
     <p>Standard domain user accounts with no administrative privileges log into standard domain-connected computers, everyday end user workstations.</p>
     <p>For workstation administration tasks, using a local admin account is a best practice that goes a long way in preventing password hashes of administrative domain accounts from being left behind. The local admin account that isn't tied to the domain gets everything that is needed done. Modern setups extend this functionality further with the implementation and use of an RMM (Remote Monitoring & Management) tool for endpoint administration.</p>
-    
-    
 
     <br><br>
 
@@ -1471,7 +1439,7 @@ best practice to keep these roles separated onto dedicated infrastructure.
     </ul>
 
     <p>Rather than assigning accounts directly to built-in groups like Domain Admins or Domain Users, these tier-specific security groups act as the management layer, accounts get assigned to the appropriate tier group, and those groups get nested into the relevant built-in domain groups. This approach keeps the structure clean, scalable, and easier to audit as the environment grows.</p>
-    
+
     <br>
 
     <p>Under the domain hierarchy in Active Directory Users and Computers, I'm going to create a new Organizational Unit – OU called <strong>Security Groups</strong>. In this OU, I'm going to create the following Global Security Groups:</p>
@@ -1484,69 +1452,65 @@ best practice to keep these roles separated onto dedicated infrastructure.
 
     <p>Right-clicking the domain root, DC01.microsoft.com, to create a new Organizational Unit. By creating the Security Groups OU directly at the domain root level rather than nesting it inside an existing container like Corp, it stays logically separated from department-specific OUs and remains easily accessible for domain-wide group management.</p>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM5.png" alt="ADUC right-clicking the domain root to create a new Organizational Unit" loading="lazy" />
     </div>
 
     <p>The New Object - Organizational Unit dialog confirms the OU is being created directly under DC01.microsoft.com with the name Security Groups.</p>
-  
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM6.png" alt="New Object - Organizational Unit dialog with Security Groups as the OU name" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:420px;">
+    <div class="figure sz-xs">
       <img src="Images/6-TAM/TAM7.png" alt="ADUC tree view showing the Security Groups OU created at the domain root level" loading="lazy" />
     </div>
 
     <p>With the Security Groups OU created, right-clicking it to create the first of the three tier groups. Selecting New > Group opens the New Object - Group dialog, where SG-Tier0-Admins is created with a Group scope of Global and a Group type of Security. The Global scope ensures this group can be used to assign permissions across the entire domain, while the Security type is what allows it to be used for access control and group membership assignments, as opposed to a Distribution group which is used purely for email distribution lists.</p>
 
-    
-
-    <div class="figure" style="max-width:540px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM8.png" alt="ADUC right-clicking the Security Groups OU to create a new Group object" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:520px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM9.png" alt="New Object - Group dialog creating SG-Tier0-Admins as a Global Security Group" loading="lazy" />
     </div>
 
     <p>With all three groups created, the Security Groups OU now contains SG-Tier0-Admins, SG-Tier1-Servers, and SG-Tier2-Users, all confirmed as Security Group - Global type. The tier structure is now represented as a clean, organized group framework within Active Directory, ready to have accounts assigned and then nested into their respective built-in domain groups.</p>
 
-    <div class="figure" style="max-width:560px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM10.png" alt="ADUC Security Groups OU listing SG-Tier0-Admins, SG-Tier1-Servers, and SG-Tier2-Users" loading="lazy" />
     </div>
 
     <p>Here, I'm going to attach my MT.Admin administrative domain account to the <strong>SG-Tier0-Admins</strong> Global Security Group to keep the elevated account logically separated.</p>
 
-    <div class="figure" style="max-width:540px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM11.png" alt="SG-Tier0-Admins Properties showing Select Users dialog with MT.Admin being added as a member" loading="lazy" />
     </div>
 
     <div class="security-note">
       <strong>Note</strong>
       Nesting a custom Tier 0 administrative group into built-in groups such as
-Domain Admins effectively grants full domain-level privileges. This is intentional, 
-but also means that strict control over group membership is critical, as any 
-account added to this group inherits complete administrative access to the domain. 
+      Domain Admins effectively grants full domain-level privileges. This is intentional, 
+      but also means that strict control over group membership is critical, as any 
+      account added to this group inherits complete administrative access to the domain.
     </div>
-      
 
     <br>
 
     <p>From there, add the standard domain user account MT.User to <strong>SG-Tier2-Users</strong>.</p>
 
-    <div class="figure" style="max-width:540px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM12.png" alt="SG-Tier2-Users Properties showing Select Users dialog with MT.User being added as a member" loading="lazy" />
     </div><br>
 
     <h3>Adding the Security Group SG-Tier0-Admins to the Built-in Domain Admins Security Group</h3>
 
-    <div class="figure">
+    <div class="figure sz-xl">
       <img src="Images/6-TAM/TAM13.png" alt="Domain Admins Properties with Select Users dialog adding SG-Tier0-Admins as a nested member" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:520px;">
+    <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM14.png" alt="Domain Admins Properties Members tab showing SG-Tier0-Admins successfully added alongside Administrator, MT.Admin, and Test Account" loading="lazy" />
     </div>
 
@@ -1554,65 +1518,63 @@ account added to this group inherits complete administrative access to the domai
       <strong>Note</strong>
       The Test Account visible in the Domain Admins members list is a disposable test account created during the initial setup of this Windows Server 2022 Evaluation environment and is not part of the production administrative structure being demonstrated here. In a real deployment, Domain Admins membership should be tightly controlled and limited only to explicitly authorized administrative accounts.
     </div>
-    
-    
+
     <br>
 
     <h3>Adding the Security Group SG-Tier2-Users to the Built-in Domain Users Security Group</h3>
 
-    <div class="figure" style="max-width:600px;">
+    <div class="figure sz-md">
       <img src="Images/6-TAM/TAM15.png" alt="Domain Users Properties showing Select Users dialog adding SG-Tier2-Users as a nested member" loading="lazy" />
     </div><br>
 
     <h3>Creating and Setting up MT.srv.mgmt with the Security Group SG-Tier1-Servers</h3>
     <p>Here I'm going to create a dedicated non-privileged domain account called MT.srv.mgmt for server administration in Tier 1. This account will login to servers in Tier 1 that provide services to standard workstations.</p>
 
-    <div class="figure" style="max-width:600px;">
+    <div class="figure sz-md">
       <img src="Images/6-TAM/TAM19.png" alt="Creating Tier2 account" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:600px;">
-      <img src="Images/6-TAM/TAM19.png" alt="Creating Tier acocunt" loading="lazy" />
+    <div class="figure sz-md">
+      <img src="Images/6-TAM/TAM19.png" alt="Creating Tier account" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:600px;">
+    <div class="figure sz-md">
       <img src="Images/6-TAM/TAM20.png" alt="Set account password" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:600px;">
+    <div class="figure sz-md">
       <img src="Images/6-TAM/TAM21.png" alt="Set account password" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:600px;">
+    <div class="figure sz-md">
       <img src="Images/6-TAM/TAM22.png" alt="Set account password" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:600px;">
+    <div class="figure sz-md">
       <img src="Images/6-TAM/TAM23.png" alt="Account created" loading="lazy" />
     </div><br>
 
     <h3>Adding the MT.srv.mgmt domain account to the SG-Tier1-Servers Security Group</h3>
 
-     <div class="figure" style="max-width:600px;">
-      <img src="Images/6-TAM/TAM24.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    <div class="figure sz-md">
+      <img src="Images/6-TAM/TAM24.png" alt="Add account to Security Group - Global" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:600px;">
-      <img src="Images/6-TAM/TAM25.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    <div class="figure sz-md">
+      <img src="Images/6-TAM/TAM25.png" alt="Add account to Security Group - Global" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:600px;">
-      <img src="Images/6-TAM/TAM26.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    <div class="figure sz-md">
+      <img src="Images/6-TAM/TAM26.png" alt="Add account to Security Group - Global" loading="lazy" />
     </div>
 
-    <div class="figure" style="max-width:600px;">
-      <img src="Images/6-TAM/TAM27.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    <div class="figure sz-md">
+      <img src="Images/6-TAM/TAM27.png" alt="Add account to Security Group - Global" loading="lazy" />
     </div>
 
-      <div class="figure" style="max-width:600px;">
-      <img src="Images/6-TAM/TAM28.png" alt="Add acount to Security Group - Global" loading="lazy" />
+    <div class="figure sz-md">
+      <img src="Images/6-TAM/TAM28.png" alt="Add account to Security Group - Global" loading="lazy" />
     </div><br>
-
 
     <div class="security-note">
       <strong>Security Approach</strong>
