@@ -1098,7 +1098,20 @@ list or a map of available network resources without valid credentials.
       Audit: Force audit policy subcategory settings (Windows Vista or later) to override audit policy category settings.<br><br>
       <strong style="color:var(--text);">Why this matters:</strong>
       <p>Enabling this setting (which triggers the <code>SCENoApplyLegacyAuditPolicy</code> registry flag) is what actually "kills" the legacy policy. Without this specific toggle, simply configuring Advanced Audit settings won't guarantee the legacy policies are ignored, which can lead to inconsistent or "double" logging.</p>
-    </div><br>
+    </div>
+
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec82-1.png" alt="Golden Rule Advanced Setting 1" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec82-2.png" alt="Golden Rule Advanced Setting 2" loading="lazy" />
+    </div>
+
+    <div class="figure">
+      <img src="Images/4-A+V/ADSec82-3.png" alt="Golden Rule Advanced Setting 3" loading="lazy" />
+    </div>
+    <br>
 
     <h3>Account Logon</h3>
     <p>Under Advanced Audit Policy Configuration, navigating into Audit Policies and selecting Account Logon reveals the available subcategories for this audit category.</p>
