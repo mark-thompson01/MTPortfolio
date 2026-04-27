@@ -300,8 +300,7 @@
     <div class="figure sz-xl" style="border:none; background:transparent; padding:0;">
       <img src="Images/ADSecurity1.png"
            alt="Active Directory security and attack paths visualization"
-           loading="lazy"
-           style="border-radius:0;" />
+           loading="lazy" />
     </div>
 
     <h1>Active Directory – Blog Part IV: Security Hardening</h1>
@@ -408,7 +407,7 @@
     </div>
 
     <div class="figure sz-md">
-      <img src="Images/1-IAM/ADSec15.png" alt="Password configuration screen for the new MT.User account" style="width: 430px; height: 430px" loading="lazy" />
+      <img src="Images/1-IAM/ADSec15.png" alt="Password configuration screen for the new MT.User account" loading="lazy" />
     </div>
 
     <div class="figure sz-md">
@@ -510,17 +509,17 @@
     <p>I'll set the Account lockout duration and Reset account lockout counter after to 30 minutes.</p>
 
     <div class="figure sz-md">
-      <img src="Images/2-PasswordPolicy/ADSec30.png" alt="Setting Account lockout duration to 30 minutes" style="width: auto; height: 550px;" loading="lazy" />
+      <img src="Images/2-PasswordPolicy/ADSec30.png" alt="Setting Account lockout duration to 30 minutes" loading="lazy" />
     </div>
 
     <div class="figure sz-md">
-      <img src="Images/2-PasswordPolicy/ADSec31.png" alt="Setting Reset account lockout counter after to 30 minutes" style="width: auto; height: 500px;" loading="lazy" />
+      <img src="Images/2-PasswordPolicy/ADSec31.png" alt="Setting Reset account lockout counter after to 30 minutes" loading="lazy" />
     </div>
 
     <p>Then I'll open an elevated PowerShell session to push out these new domain changes.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/2-PasswordPolicy/ADSec32.png" alt="Opening an elevated PowerShell session" style="width: auto; height: 400px" loading="lazy" />
+      <img src="Images/2-PasswordPolicy/ADSec32.png" alt="Opening an elevated PowerShell session" loading="lazy" />
     </div><br>
 
     <p>Below, I'm running the <strong>net accounts</strong> command for a quick verification step 
@@ -555,7 +554,7 @@
     </div><br>
 
     <div class="figure sz-lg">
-      <img src="Images/2-PasswordPolicy/ADSec33.png" alt="Running gpupdate /force and net accounts to verify policy changes" style="width: auto; height: 400px" loading="lazy" />
+      <img src="Images/2-PasswordPolicy/ADSec33.png" alt="Running gpupdate /force and net accounts to verify policy changes" loading="lazy" />
     </div>
 
     <p>To test out these configuration changes, I'm going to purposely lock out my MT.User account on my domain connected Windows 11 VM.</p>
@@ -597,13 +596,13 @@
     <p>Creating a new <strong>Fine-Grained Password Policy</strong> using PowerShell by running the <strong>New-ADFineGrainedPasswordPolicy</strong> cmdlet.</p>
 
     <div class="figure sz-xl">
-      <img src="Images/2-PasswordPolicy/ADSec36.png" alt="PowerShell command to create a new Fine-Grained Password Policy" style="width: auto; height: 475px;" loading="lazy" />
+      <img src="Images/2-PasswordPolicy/ADSec36.png" alt="PowerShell command to create a new Fine-Grained Password Policy" loading="lazy" />
     </div>
 
     <p>In this example, I'm going to name this FGPP <strong>FGPP-DomainAdmins</strong></p>
 
     <div class="figure sz-xl">
-      <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" style="width: auto; height: 475px;" loading="lazy" />
+      <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" loading="lazy" />
     </div>
 
     <div class="security-note">
@@ -645,11 +644,11 @@
       the highest priority for any member of the <strong>Domain Admins</strong> group.</p>
 
     <div class="figure sz-xl">
-      <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" style="width: auto; height: 475px;" loading="lazy" />
+      <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" loading="lazy" />
     </div>
 
     <div class="figure sz-xl">
-      <img src="Images/2-PasswordPolicy/ADSec39.png" alt="FGPP creation completed, running Get-ADUserResultantPasswordPolicy" style="width: auto; height: 475px;" loading="lazy" />
+      <img src="Images/2-PasswordPolicy/ADSec39.png" alt="FGPP creation completed, running Get-ADUserResultantPasswordPolicy" loading="lazy" />
     </div>
 
     <p>The PSO can be found in <strong>Active Directory Administrative Center</strong>, under <strong>[Domain Name] > System > Password Settings Container</strong></p>
@@ -686,7 +685,7 @@
     <p>The remaining fields reflect the exact policy settings configured earlier, validating that the PSO is active and enforced.</p>
 
     <div class="figure sz-xl">
-      <img src="Images/2-PasswordPolicy/ADSec45.png" alt="Full FGPP-DomainAdmins policy view confirming all settings and group assignment" style="width: auto; height: 475px;" loading="lazy" />
+      <img src="Images/2-PasswordPolicy/ADSec45.png" alt="Full FGPP-DomainAdmins policy view confirming all settings and group assignment" loading="lazy" />
     </div><br>
 
     <div class="security-note">
@@ -727,7 +726,7 @@
     </div>
 
     <div class="figure sz-md">
-      <img src="Images/3-GPSecHardening/ADSec49.png" alt="LAN Manager authentication level set to Send NTLMv2 response only. Refuse LM and NTLM" style="width: 410px; height: 500px;" loading="lazy" />
+      <img src="Images/3-GPSecHardening/ADSec49.png" alt="LAN Manager authentication level set to Send NTLMv2 response only. Refuse LM and NTLM" loading="lazy" />
     </div>
 
     <p>To verify the policy has been applied, I'm running the following PowerShell command directly against the registry before and after running <strong>gpupdate /force</strong>.</p>
@@ -788,7 +787,7 @@
     <p>This tells us that SMB signing is now mandatory on this server, meaning any connection that doesn't support signing will be outright rejected. <strong>EnableSecuritySignature</strong> controls whether signing is offered as optional for connections that don't require it, with RequireSecuritySignature already set to True, that flag is redundant. The False value next to <strong>EnableSecuritySignature</strong> is expected and correct, not a misconfiguration.</p>
 
     <div class="figure sz-lg">
-      <img src="Images/3-GPSecHardening/ADSec56.png" alt="PowerShell verifying SMB signing enabled with Get-SmbServerConfiguration" style="width: auto; height: 475px;" loading="lazy" />
+      <img src="Images/3-GPSecHardening/ADSec56.png" alt="PowerShell verifying SMB signing enabled with Get-SmbServerConfiguration" loading="lazy" />
     </div><br>
 
     <h3>Kerberos Security Hardening</h3>
@@ -858,7 +857,7 @@
     </div>
 
     <div class="figure sz-md">
-      <img src="Images/3-GPSecHardening/ADSec58.png" alt="Anonymous enumeration of SAM accounts policy set to Enabled" style="width: auto; height: 500px;" loading="lazy" />
+      <img src="Images/3-GPSecHardening/ADSec58.png" alt="Anonymous enumeration of SAM accounts policy set to Enabled" loading="lazy" />
     </div><br>
 
     <h3>Network access: Do not allow anonymous enumeration of SAM accounts and shares</h3>
@@ -882,7 +881,7 @@
     </div>
 
     <div class="figure sz-md">
-      <img src="Images/3-GPSecHardening/ADSec60.png" alt="Enable Do not allow anonymous enumeration of SAM accounts and shares" style="width: auto; height: 500px;" loading="lazy" />
+      <img src="Images/3-GPSecHardening/ADSec60.png" alt="Enable Do not allow anonymous enumeration of SAM accounts and shares" loading="lazy" />
     </div>
 
     <br>
@@ -1169,15 +1168,15 @@
     <p><strong>gpupdate /force</strong> is then run to ensure the Group Policy changes are fully pushed out and applied across the domain, confirming both Computer Policy and User Policy updated successfully.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec95.png" alt="Verification of Advanced Audit Policy settings applied" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec95.png" alt="Verification of Advanced Audit Policy settings applied" loading="lazy" />
     </div>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec96.png" alt="Further verification of audit policy configuration" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec96.png" alt="Further verification of audit policy configuration" loading="lazy" />
     </div>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec97.png" alt="Final audit policy configuration confirmed" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec97.png" alt="Final audit policy configuration confirmed" loading="lazy" />
     </div><br>
 
     <h3>Purposely Lock Out Account</h3>
@@ -1193,11 +1192,11 @@
     <p>The results confirm the auditing is working exactly as intended. Ten Event ID 4625 entries are returned spanning across March 20th and 21st 2026, each logged with a precise timestamp and the message "An account failed to log on", these are the failed login attempts that were deliberately triggered earlier when locking out the MT.User account to test the account lockout policy. The fact that these events were captured and are now retrievable via PowerShell demonstrates the full chain working end to end, from the audit policy configuration, through the GPO enforcement, all the way to actionable log data being available for review and alerting.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec99.png" alt="PowerShell query for Event ID 4625 invalid login attempts" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec99.png" alt="PowerShell query for Event ID 4625 invalid login attempts" loading="lazy" />
     </div>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec100.png" alt="Event ID 4625 results showing failed login attempts" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec100.png" alt="Event ID 4625 results showing failed login attempts" loading="lazy" />
     </div>
 
     <br>
@@ -1207,7 +1206,7 @@
     <p>The output returns two Event ID 4740 entries, both timestamped on March 21st 2026 — at 3:30 AM and 9:58 AM respectively, each logged with the message "A user account was locked out." These two lockout events correspond directly to the deliberate lockout tests carried out earlier in this write-up. The fact that only two events are returned also neatly illustrates the difference in volume between 4625 and 4740, ten failed logon attempts were captured across two days, but only two actual lockout events resulted, which is exactly how the account lockout threshold of 5 invalid attempts is designed to behave.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec101.png" alt="PowerShell query results for Event ID 4740 account lockout" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec101.png" alt="PowerShell query results for Event ID 4740 account lockout" loading="lazy" />
     </div>
 
     <br><br>
@@ -1217,7 +1216,7 @@
     <p>The output returns 10 Event ID 4624 entries, all timestamped on April 19th 2026 between 9:21 AM and 9:25 AM, each logged with the message "An account was successfully logged on." The cluster of successful logon events within this short timeframe reflects the active administrative session on the domain controller during this phase of the lab. The fact that these events are being captured and are readily queryable via PowerShell confirms that the Audit Logon subcategory configured earlier under the Logon/Logoff audit category is actively doing its job, very successful logon to the domain controller is being recorded, timestamped, and available for review.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" loading="lazy" />
     </div><br><br>
 
     <h3>Event ID 4728 – Adding Users to a Security-Enabled Global Group</h3>
@@ -1242,7 +1241,7 @@
     <p>These logs become significantly more valuable when forwarded to a centralized logging platform such as a SIEM, where correlation and alerting can detect suspicious patterns in real-time.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" loading="lazy" />
     </div>
 
     <div class="security-note">
@@ -1268,7 +1267,7 @@
     <h3>Print Spooler</h3>
 
     <div class="figure sz-sm">
-      <img src="Images/5-ASR/ASR1.png" alt="PowerShell stopping and disabling the Print Spooler service" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/5-ASR/ASR1.png" alt="PowerShell stopping and disabling the Print Spooler service" loading="lazy" />
     </div>
 
     <p>Disabling this service as a best practice in a Windows domain environment was influenced by the PrintNightmare vulnerability (CVE-2021-1675 / CVE-2021-34527), a critical Windows Print Spooler vulnerability that enabled attackers to carry out remote code execution and local privilege escalation. Operationally on a domain controller, there is almost never a need to have this service enabled and running.</p>
@@ -1540,6 +1539,14 @@
 
     <div class="figure sz-md">
       <img src="Images/6-TAM/TAM20.png" alt="Set account password" loading="lazy" />
+    </div>
+
+    <div class="figure sz-md">
+      <img src="Images/6-TAM/TAM21.png" alt="Set account password" loading="lazy" />
+    </div>
+
+    <div class="figure sz-md">
+      <img src="Images/6-TAM/TAM22.png" alt="Set account password" loading="lazy" />
     </div>
 
     <div class="figure sz-md">
