@@ -1174,15 +1174,15 @@
     <p><strong>gpupdate /force</strong> is then run to ensure the Group Policy changes are fully pushed out and applied across the domain, confirming both Computer Policy and User Policy updated successfully.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec95.png" alt="Verification of Advanced Audit Policy settings applied" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec95.png" alt="Verification of Advanced Audit Policy settings applied" style="width: auto; height: 475px;" loading="lazy" />
     </div>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec96.png" alt="Further verification of audit policy configuration" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec96.png" alt="Further verification of audit policy configuration" style="width: auto; height: 475px;" loading="lazy" />
     </div>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec97.png" alt="Final audit policy configuration confirmed" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec97.png" alt="Final audit policy configuration confirmed" style="width: auto; height: 475px;" loading="lazy" />
     </div><br>
 
     <h3>Purposely Lock Out Account</h3>
@@ -1198,11 +1198,11 @@
     <p>The results confirm the auditing is working exactly as intended. Ten Event ID 4625 entries are returned spanning across March 20th and 21st 2026, each logged with a precise timestamp and the message "An account failed to log on", these are the failed login attempts that were deliberately triggered earlier when locking out the MT.User account to test the account lockout policy. The fact that these events were captured and are now retrievable via PowerShell demonstrates the full chain working end to end, from the audit policy configuration, through the GPO enforcement, all the way to actionable log data being available for review and alerting.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec99.png" alt="PowerShell query for Event ID 4625 invalid login attempts" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec99.png" alt="PowerShell query for Event ID 4625 invalid login attempts" style="width: auto; height: 475px;" loading="lazy" />
     </div>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec100.png" alt="Event ID 4625 results showing failed login attempts" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec100.png" alt="Event ID 4625 results showing failed login attempts" style="width: auto; height: 475px;" loading="lazy" />
     </div>
 
     <br>
@@ -1212,7 +1212,7 @@
     <p>The output returns two Event ID 4740 entries, both timestamped on March 21st 2026 — at 3:30 AM and 9:58 AM respectively, each logged with the message "A user account was locked out." These two lockout events correspond directly to the deliberate lockout tests carried out earlier in this write-up. The fact that only two events are returned also neatly illustrates the difference in volume between 4625 and 4740, ten failed logon attempts were captured across two days, but only two actual lockout events resulted, which is exactly how the account lockout threshold of 5 invalid attempts is designed to behave.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec101.png" alt="PowerShell query results for Event ID 4740 account lockout" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec101.png" alt="PowerShell query results for Event ID 4740 account lockout" style="width: auto; height: 475px;" loading="lazy" />
     </div>
 
     <br><br>
@@ -1222,7 +1222,7 @@
     <p>The output returns 10 Event ID 4624 entries, all timestamped on April 19th 2026 between 9:21 AM and 9:25 AM, each logged with the message "An account was successfully logged on." The cluster of successful logon events within this short timeframe reflects the active administrative session on the domain controller during this phase of the lab. The fact that these events are being captured and are readily queryable via PowerShell confirms that the Audit Logon subcategory configured earlier under the Logon/Logoff audit category is actively doing its job, very successful logon to the domain controller is being recorded, timestamped, and available for review.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" style="width: auto; height: 475px;" loading="lazy" />
     </div><br><br>
 
     <h3>Event ID 4728 – Adding Users to a Security-Enabled Global Group</h3>
@@ -1247,7 +1247,7 @@
     <p>These logs become significantly more valuable when forwarded to a centralized logging platform such as a SIEM, where correlation and alerting can detect suspicious patterns in real-time.</p>
 
     <div class="figure sz-sm">
-      <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" style="width: auto; height: 475px;" loading="lazy" />
     </div>
 
     <div class="security-note">
@@ -1273,7 +1273,7 @@
     <h3>Print Spooler</h3>
 
     <div class="figure sz-sm">
-      <img src="Images/5-ASR/ASR1.png" alt="PowerShell stopping and disabling the Print Spooler service" style="width: auto; height: 400px;" loading="lazy" />
+      <img src="Images/5-ASR/ASR1.png" alt="PowerShell stopping and disabling the Print Spooler service" style="width: auto; height: 475px;" loading="lazy" />
     </div>
 
     <p>Disabling this service as a best practice in a Windows domain environment was influenced by the PrintNightmare vulnerability (CVE-2021-1675 / CVE-2021-34527), a critical Windows Print Spooler vulnerability that enabled attackers to carry out remote code execution and local privilege escalation. Operationally on a domain controller, there is almost never a need to have this service enabled and running.</p>
