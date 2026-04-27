@@ -406,7 +406,7 @@
       <img src="Images/1-IAM/ADSec14.png" alt="New Object - User dialog with MT.User as the logon name" loading="lazy" />
     </div>
 
-    <div class="figure sz-md">
+    <div class="figure sz-xs">
       <img src="Images/1-IAM/ADSec15.png" alt="Password configuration screen for the new MT.User account" loading="lazy" />
     </div>
 
@@ -508,17 +508,17 @@
 
     <p>I'll set the Account lockout duration and Reset account lockout counter after to 30 minutes.</p>
 
-    <div class="figure sz-md">
+    <div class="figure sz-sm">
       <img src="Images/2-PasswordPolicy/ADSec30.png" alt="Setting Account lockout duration to 30 minutes" loading="lazy" />
     </div>
 
-    <div class="figure sz-md">
+    <div class="figure sz-sm">
       <img src="Images/2-PasswordPolicy/ADSec31.png" alt="Setting Reset account lockout counter after to 30 minutes" loading="lazy" />
     </div>
 
     <p>Then I'll open an elevated PowerShell session to push out these new domain changes.</p>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/2-PasswordPolicy/ADSec32.png" alt="Opening an elevated PowerShell session" loading="lazy" />
     </div><br>
 
@@ -553,7 +553,7 @@
       In practice, traditional rotation policies are still widely enforced due to legacy systems and compliance requirements, making it important to understand both models when designing or managing Active Directory environments.
     </div><br>
 
-    <div class="figure sz-lg">
+    <div class="figure sz-sm">
       <img src="Images/2-PasswordPolicy/ADSec33.png" alt="Running gpupdate /force and net accounts to verify policy changes" loading="lazy" />
     </div>
 
@@ -595,13 +595,13 @@
 
     <p>Creating a new <strong>Fine-Grained Password Policy</strong> using PowerShell by running the <strong>New-ADFineGrainedPasswordPolicy</strong> cmdlet.</p>
 
-    <div class="figure sz-xl">
+    <div class="figure sz-sm">
       <img src="Images/2-PasswordPolicy/ADSec36.png" alt="PowerShell command to create a new Fine-Grained Password Policy" loading="lazy" />
     </div>
 
     <p>In this example, I'm going to name this FGPP <strong>FGPP-DomainAdmins</strong></p>
 
-    <div class="figure sz-xl">
+    <div class="figure sz-sm">
       <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" loading="lazy" />
     </div>
 
@@ -643,11 +643,11 @@
     <p>In this example, the <strong>Precedence</strong> is set to <strong>1</strong>, giving this <strong>PSO</strong>
       the highest priority for any member of the <strong>Domain Admins</strong> group.</p>
 
-    <div class="figure sz-xl">
+    <div class="figure sz-sm">
       <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" loading="lazy" />
     </div>
 
-    <div class="figure sz-xl">
+    <div class="figure sz-sm">
       <img src="Images/2-PasswordPolicy/ADSec39.png" alt="FGPP creation completed, running Get-ADUserResultantPasswordPolicy" loading="lazy" />
     </div>
 
@@ -684,7 +684,7 @@
     <p>The <strong>Name</strong> field confirms the correct PSO <strong>FGPP-DomainAdmins</strong> is being applied, and the <strong>Precedence</strong> value of <strong>1</strong> confirms it holds the highest priority.</p>
     <p>The remaining fields reflect the exact policy settings configured earlier, validating that the PSO is active and enforced.</p>
 
-    <div class="figure sz-xl">
+    <div class="figure sz-sm">
       <img src="Images/2-PasswordPolicy/ADSec45.png" alt="Full FGPP-DomainAdmins policy view confirming all settings and group assignment" loading="lazy" />
     </div><br>
 
@@ -725,7 +725,7 @@
       <img src="Images/3-GPSecHardening/ADSec48.png" alt="LAN Manager authentication level properties with Send NTLMv2 response only selected" loading="lazy" />
     </div>
 
-    <div class="figure sz-md">
+    <div class="figure sz-xs">
       <img src="Images/3-GPSecHardening/ADSec49.png" alt="LAN Manager authentication level set to Send NTLMv2 response only. Refuse LM and NTLM" loading="lazy" />
     </div>
 
@@ -786,7 +786,7 @@
     <p>The output returns <strong>EnableSecuritySignature = False</strong> and <strong>RequireSecuritySignature = True</strong>. These are two distinct settings, RequireSecuritySignature = True is the confirmation that matters here.</p>
     <p>This tells us that SMB signing is now mandatory on this server, meaning any connection that doesn't support signing will be outright rejected. <strong>EnableSecuritySignature</strong> controls whether signing is offered as optional for connections that don't require it, with RequireSecuritySignature already set to True, that flag is redundant. The False value next to <strong>EnableSecuritySignature</strong> is expected and correct, not a misconfiguration.</p>
 
-    <div class="figure sz-lg">
+    <div class="figure sz-sm">
       <img src="Images/3-GPSecHardening/ADSec56.png" alt="PowerShell verifying SMB signing enabled with Get-SmbServerConfiguration" loading="lazy" />
     </div><br>
 
@@ -856,7 +856,7 @@
       <img src="Images/3-GPSecHardening/ADSec57.png" alt="Security Options showing Do not allow anonymous enumeration of SAM accounts" loading="lazy" />
     </div>
 
-    <div class="figure sz-md">
+    <div class="figure sz-xs">
       <img src="Images/3-GPSecHardening/ADSec58.png" alt="Anonymous enumeration of SAM accounts policy set to Enabled" loading="lazy" />
     </div><br>
 
@@ -880,7 +880,7 @@
       <img src="Images/3-GPSecHardening/ADSec59.png" alt="Security Options showing Do not allow anonymous enumeration of SAM accounts and shares" loading="lazy" />
     </div>
 
-    <div class="figure sz-md">
+    <div class="figure sz-xs">
       <img src="Images/3-GPSecHardening/ADSec60.png" alt="Enable Do not allow anonymous enumeration of SAM accounts and shares" loading="lazy" />
     </div>
 
@@ -1167,15 +1167,15 @@
     <p>Across the two pages of output, the configured subcategories are confirmed exactly as intended. Under Logon/Logoff, Logon, Special Logon, and Other Logon/Logoff Events all show Success. Under Policy Change, Audit Policy Change shows Success. Under Account Management, Security Group Management and User Account Management both show Success. Under Account Logon, both Kerberos Authentication Service and Kerberos Service Ticket Operations show Success — confirming that Kerberos authentication activity is being captured at both the service and ticket level. Everything not explicitly configured shows No Auditing, which is exactly the precision the Advanced Audit Policy approach is designed to deliver, only logging what has been deliberately chosen, nothing more.</p>
     <p><strong>gpupdate /force</strong> is then run to ensure the Group Policy changes are fully pushed out and applied across the domain, confirming both Computer Policy and User Policy updated successfully.</p>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/4-A+V/ADSec95.png" alt="Verification of Advanced Audit Policy settings applied" loading="lazy" />
     </div>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/4-A+V/ADSec96.png" alt="Further verification of audit policy configuration" loading="lazy" />
     </div>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/4-A+V/ADSec97.png" alt="Final audit policy configuration confirmed" loading="lazy" />
     </div><br>
 
@@ -1191,11 +1191,11 @@
     <p>To retrieve failed logon events from the Security log, <strong>Get-WinEvent</strong> is run targeting the Security log and filtering specifically for Event ID 4625, the Windows event generated every time an account fails to authenticate. The <strong>-MaxEvents 10</strong> parameter pulls the 10 most recent occurrences, and the output is piped through <strong>Select-Object</strong> and <strong>Format-Table</strong> to present the TimeCreated, ID, and Message fields in a clean readable format.</p>
     <p>The results confirm the auditing is working exactly as intended. Ten Event ID 4625 entries are returned spanning across March 20th and 21st 2026, each logged with a precise timestamp and the message "An account failed to log on", these are the failed login attempts that were deliberately triggered earlier when locking out the MT.User account to test the account lockout policy. The fact that these events were captured and are now retrievable via PowerShell demonstrates the full chain working end to end, from the audit policy configuration, through the GPO enforcement, all the way to actionable log data being available for review and alerting.</p>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/4-A+V/ADSec99.png" alt="PowerShell query for Event ID 4625 invalid login attempts" loading="lazy" />
     </div>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/4-A+V/ADSec100.png" alt="Event ID 4625 results showing failed login attempts" loading="lazy" />
     </div>
 
@@ -1205,7 +1205,7 @@
     <p>Following up on the failed logon events, the same <strong>Get-WinEvent</strong> query is run this time filtering for Event ID 4740, the specific Windows event generated when a user account is actually locked out. While Event ID 4625 captures each individual failed logon attempt, Event ID 4740 is the event that fires at the moment the lockout threshold is crossed and the account becomes locked, making it a more actionable alert from a security monitoring perspective.</p>
     <p>The output returns two Event ID 4740 entries, both timestamped on March 21st 2026 — at 3:30 AM and 9:58 AM respectively, each logged with the message "A user account was locked out." These two lockout events correspond directly to the deliberate lockout tests carried out earlier in this write-up. The fact that only two events are returned also neatly illustrates the difference in volume between 4625 and 4740, ten failed logon attempts were captured across two days, but only two actual lockout events resulted, which is exactly how the account lockout threshold of 5 invalid attempts is designed to behave.</p>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/4-A+V/ADSec101.png" alt="PowerShell query results for Event ID 4740 account lockout" loading="lazy" />
     </div>
 
@@ -1215,7 +1215,7 @@
     <p>The query is now run filtering for Event ID 4624, the Windows event generated every time an account successfully authenticates and logs on. While Event ID 4625 captures failed attempts and 4740 captures lockouts, 4624 completes the picture by providing visibility into successful logon activity on the domain controller, which is just as important from a security monitoring standpoint. A pattern of successful logons at unusual times or from unexpected sources can be just as telling as a string of failures.</p>
     <p>The output returns 10 Event ID 4624 entries, all timestamped on April 19th 2026 between 9:21 AM and 9:25 AM, each logged with the message "An account was successfully logged on." The cluster of successful logon events within this short timeframe reflects the active administrative session on the domain controller during this phase of the lab. The fact that these events are being captured and are readily queryable via PowerShell confirms that the Audit Logon subcategory configured earlier under the Logon/Logoff audit category is actively doing its job, very successful logon to the domain controller is being recorded, timestamped, and available for review.</p>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" loading="lazy" />
     </div><br><br>
 
@@ -1240,7 +1240,7 @@
     <p>The output returns 10 events spanning from March 19th through April 17th 2026, each logged with the message "A member was added to a security-enabled global group." These entries correspond to the various group membership changes carried out throughout this lab, including the nesting of the tier-specific security groups into their respective built-in domain groups, and the addition of MT.User to Domain Admins during the auditing test earlier in this section. The breadth of events returned here also reflects how active group membership management was throughout the build, with every single addition being captured and timestamped in the Security log, exactly the kind of accountability trail that matters in a production environment where unauthorized group membership changes are a key indicator of privilege escalation activity.</p>
     <p>These logs become significantly more valuable when forwarded to a centralized logging platform such as a SIEM, where correlation and alerting can detect suspicious patterns in real-time.</p>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/4-A+V/ADSec106.png" alt="PowerShell query results for Event ID 4728 group membership change" loading="lazy" />
     </div>
 
@@ -1266,7 +1266,7 @@
 
     <h3>Print Spooler</h3>
 
-    <div class="figure sz-sm">
+    <div class="figure sz-xs">
       <img src="Images/5-ASR/ASR1.png" alt="PowerShell stopping and disabling the Print Spooler service" loading="lazy" />
     </div>
 
