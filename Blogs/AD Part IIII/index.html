@@ -611,6 +611,19 @@
       <img src="Images/2-PasswordPolicy/ADSec37.png" alt="FGPP name set to FGPP-DomainAdmins in PowerShell" style="width: auto; height: 475px;" loading="lazy" />
     </div>
 
+    
+    <p>In this example, the <strong>Precedence</strong> is set to <strong>1</strong>, giving this <strong>PSO</strong>
+      the highest priority for any member of the <strong>Domain Admins</strong> group.</p>
+
+    <div class="figure sz-xl">
+      <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" style="width: auto; height: 475px;" loading="lazy" />
+    </div>
+
+    <div class="figure sz-xl">
+      <img src="Images/2-PasswordPolicy/ADSec39.png" alt="FGPP creation completed, running Get-ADUserResultantPasswordPolicy" style="width: auto; height: 475px;" loading="lazy" />
+    </div>
+
+
     <div class="security-note">
       <strong>Note</strong>
       It is a best practice to avoid assigning the same Precedence value to multiple PSOs.
@@ -645,17 +658,6 @@
       why being deliberate and strategic about your Precedence numbering goes a long way,
       even when working with direct user assignments.
     </div><br><br>
-
-    <p>In this example, the <strong>Precedence</strong> is set to <strong>1</strong>, giving this <strong>PSO</strong>
-      the highest priority for any member of the <strong>Domain Admins</strong> group.</p>
-
-    <div class="figure sz-xl">
-      <img src="Images/2-PasswordPolicy/ADSec38.png" alt="Setting PSO Precedence to 1 in PowerShell" style="width: auto; height: 475px;" loading="lazy" />
-    </div>
-
-    <div class="figure sz-xl">
-      <img src="Images/2-PasswordPolicy/ADSec39.png" alt="FGPP creation completed, running Get-ADUserResultantPasswordPolicy" style="width: auto; height: 475px;" loading="lazy" />
-    </div>
 
     <p>The PSO can be found in <strong>Active Directory Administrative Center</strong>, under <strong>[Domain Name] > System > Password Settings Container</strong></p>
 
