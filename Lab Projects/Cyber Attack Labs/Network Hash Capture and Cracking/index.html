@@ -285,6 +285,7 @@
       <div class="step-section">
         <p>In this example, I'm demonstrating how the Responder tool can be used to capture a password hash value over the network by initiating a fake authentication request that captures it in transition.</p>
         <p>This walkthrough demonstrates using the Responder tool to help carry out an NTLMv2 hash value capture. Once the NTLMv2 authentication hash is captured, the tool Hashcat is then used to crack the NTLMv2 hash value to expose the password.</p>
+        <p>It is worth noting that NTLM as a protocol is actively being deprecated by Microsoft, with Kerberos serving as the modern authentication standard. However, NTLM persists across legacy systems, older applications, and mixed enterprise environments, which is what makes understanding this attack chain still relevant today.</p>
         <p><em>Environment:</em> Windows 10 target and attacker tooling on a segmented lab LAN (to avoid production impact).</p>
         <div class="note">
           <strong>Note:</strong> This is a very simple and easy demonstration carried out in a contained environment, where everything is "loud" and the passwords are chosen for simplicity for the ease of tool demonstration.
