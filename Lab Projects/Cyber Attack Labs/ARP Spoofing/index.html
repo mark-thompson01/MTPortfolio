@@ -195,6 +195,50 @@
     }
     .back-link:hover{text-decoration:underline}
 
+    /* Mitigation bullet list */
+    .mitigate-list{
+      list-style:none;
+      padding:0;
+      margin:16px 0 0 0;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .mitigate-list li{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+    }
+    .mitigate-list li::before{
+      content:'›';
+      color:var(--brand);
+      font-size:20px;
+      line-height:1.5;
+      flex-shrink:0;
+      font-weight:700;
+    }
+    .mitigate-list li strong{
+      color:var(--text);
+      font-weight:600;
+    }
+
+    /* Takeaway callout */
+    .takeaway{
+      margin-top:28px;
+      padding:20px 24px;
+      background:rgba(77,163,255,.07);
+      border:1px solid rgba(77,163,255,.25);
+      border-left:4px solid var(--brand);
+      border-radius:10px;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+    }
+    .takeaway strong{color:var(--text);font-weight:600;}
+
     /* Footer */
     footer{
       margin-top:48px;
@@ -350,6 +394,101 @@
         </div>
 
       </div>
+
+      <!-- ============================================================ -->
+      <!-- MITIGATION SECTION                                           -->
+      <!-- ============================================================ -->
+      <h2>Ways to Mitigate Against ARP Spoofing</h2>
+      <div class="step-section">
+        <p>
+          There are a handful of network-security approaches when it comes to mitigating against an ARP Spoofing
+          or Man-in-the-Middle attack.
+        </p>
+
+        <!-- DAI -->
+        <div class="sub-section">
+          <h4>Dynamic ARP Inspection (DAI)</h4>
+          <p>
+            One of the most effective countermeasures is <strong>Dynamic ARP Inspection (DAI)</strong>, a feature
+            available on managed switches. DAI validates ARP packets against a DHCP snooping binding table. Any
+            ARP reply that doesn't match the known IP-to-MAC mapping is dropped before it can poison a host's
+            cache. The tool <code>arpspoof</code> works by flooding gratuitous ARP replies — DAI terminates
+            this directly at the source.
+          </p>
+        </div>
+
+        <!-- DHCP Snooping -->
+        <div class="sub-section">
+          <h4>DHCP Snooping</h4>
+          <p>
+            DAI is foundationally dependent on <strong>DHCP Snooping</strong>, another feature on managed
+            switches. DHCP snooping tracks which IP addresses were legitimately assigned to which MAC/port
+            combinations, providing DAI with the authoritative IP-to-MAC mapping it uses to validate ARP traffic.
+          </p>
+        </div>
+
+        <!-- Static ARP -->
+        <div class="sub-section">
+          <h4>Static ARP Entries</h4>
+          <p>
+            Depending on the criticality of what you're trying to secure, implementing <strong>static ARP
+            entries</strong> is another consideration. Manually configured static ARP entries cause incoming
+            ARP replies to be ignored entirely — they cannot be overwritten. This is very tedious and
+            operationally painful at scale, but highly effective for small, fixed infrastructure.
+          </p>
+        </div>
+
+        <!-- Encryption -->
+        <div class="sub-section">
+          <h4>Encryption — Limiting What Interception Reveals</h4>
+          <p>
+            The packets captured in Wireshark during this lab show exactly why encryption matters. A successful
+            on-path position was achieved, but encrypted traffic in the flow limits what's immediately useful.
+            That said, it doesn't mean bits and pieces of metadata can't be collected and pieced together over
+            time — encryption is a layer of defense, not a complete fix on its own.
+          </p>
+        </div>
+
+        <!-- Protocol-Level -->
+        <div class="sub-section">
+          <h4>Protocol-Level Mitigations</h4>
+          <ul class="mitigate-list">
+            <li>
+              <span><strong>Disable LLMNR and NetBIOS over TCP/IP via Group Policy:</strong>
+              The Wireshark enumeration section demonstrates these protocols broadcasting host information freely across the network.</span>
+            </li>
+            <li>
+              <span><strong>Restrict SSDP/UPnP</strong> on network segments where it isn't needed — SSDP enumeration above shows how much device and service information leaks through these protocols.</span>
+            </li>
+            <li>
+              <span><strong>Network Segmentation with VLANs:</strong> Limits the broadcast domain that ARP operates within, containing the blast radius of any poisoning attempt.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Detection -->
+        <div class="sub-section">
+          <h4>Detection</h4>
+          <ul class="mitigate-list">
+            <li>
+              <span><strong>ARP Monitoring Tools (XArp, arpwatch):</strong> Alert on unexpected ARP reply floods or IP-to-MAC mapping changes in real time.</span>
+            </li>
+            <li>
+              <span><strong>IDS/IPS Rules (Snort, Suricata):</strong> Can flag anomalous ARP traffic patterns consistent with poisoning attempts.</span>
+            </li>
+            <li>
+              <span><strong>Switch Port Security:</strong> Can limit the number of MACs per port, disrupting some attack variations before they gain an on-path position.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Takeaway -->
+        <div class="takeaway">
+          <strong>Core Takeaway:</strong> ARP was designed with zero authentication built in. <strong>DAI + DHCP Snooping</strong> is the only robust fix at the protocol level — with <strong>encryption</strong> serving as the essential fallback defense for scenarios where the network layer has already been compromised.
+        </div>
+
+      </div>
+      <!-- end mitigation section -->
 
     </main>
 
