@@ -433,7 +433,7 @@
           <p>
             Depending on the criticality of what you're trying to secure, implementing <strong>static ARP
             entries</strong> is another consideration. Manually configured static ARP entries cause incoming
-            ARP replies to be ignored entirely — they cannot be overwritten. This is very tedious and
+            ARP replies to be ignored entirely, they cannot be overwritten. This is very tedious and
             operationally painful at scale, but highly effective for small, fixed infrastructure.
           </p>
         </div>
@@ -445,7 +445,7 @@
             The packets captured in Wireshark during this lab show exactly why encryption matters. A successful
             on-path position was achieved, but encrypted traffic in the flow limits what's immediately useful.
             That said, it doesn't mean bits and pieces of metadata can't be collected and pieced together over
-            time — encryption is a layer of defense, not a complete fix on its own.
+            time, encryption is a layer of defense, not a complete fix on its own.
           </p>
         </div>
 
@@ -458,7 +458,7 @@
               The Wireshark enumeration section demonstrates these protocols broadcasting host information freely across the network.</span>
             </li>
             <li>
-              <span><strong>Restrict SSDP/UPnP</strong> on network segments where it isn't needed — SSDP enumeration above shows how much device and service information leaks through these protocols.</span>
+              <span><strong>Restrict SSDP/UPnP</strong> on network segments where it isn't needed, SSDP enumeration above shows how much device and service information leaks through these protocols.</span>
             </li>
             <li>
               <span><strong>Network Segmentation with VLANs:</strong> Limits the broadcast domain that ARP operates within, containing the blast radius of any poisoning attempt.</span>
@@ -484,7 +484,7 @@
 
         <!-- Takeaway -->
         <div class="takeaway">
-          <strong>Core Takeaway:</strong> ARP was designed with zero authentication built in. <strong>DAI + DHCP Snooping</strong> is the only robust fix at the protocol level — with <strong>encryption</strong> serving as the essential fallback defense for scenarios where the network layer has already been compromised.
+          <strong>Core Takeaway:</strong> ARP was designed with zero authentication built in. <strong>DAI + DHCP Snooping</strong> is the only robust fix at the protocol level, along with <strong>encryption</strong> serving as the essential fallback defense for scenarios where the network layer has already been compromised.
         </div>
 
       </div>
