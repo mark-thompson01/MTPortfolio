@@ -22,7 +22,6 @@
       line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
 
-    /* Custom Scrollbar */
     ::-webkit-scrollbar{width:12px}
     ::-webkit-scrollbar-track{background:var(--bg-2)}
     ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
@@ -31,7 +30,6 @@
 
     .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
     .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
     .topnav a{
       color:var(--muted);
@@ -45,20 +43,16 @@
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
     .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
     .crumbs a{color:var(--muted);text-decoration:none}
     .crumbs a:hover{color:var(--text)}
 
-    /* Page header */
     h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
     .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
 
-    /* Links */
     a{color:var(--brand);text-decoration:none}
     a:hover{text-decoration:underline}
 
-    /* Content area */
     .content{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
@@ -77,7 +71,6 @@
     }
     .content h2:first-of-type{margin-top:32px}
 
-    /* Step Section Cards */
     .step-section{
       margin:40px 0;
       padding:24px;
@@ -102,7 +95,6 @@
       color:#a8d8ff;
     }
 
-    /* Figures */
     .figure{
       border:1px solid var(--card-border);
       border-radius:12px;
@@ -124,12 +116,10 @@
     }
     .figcap{color:var(--muted);font-size:13px;margin-top:6px}
 
-    /* Side-by-side pair */
     .pair{display:grid;gap:12px;margin:16px 0}
     @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
     .pair .figure{margin:0}
 
-    /* Image grid */
     .img-grid{display:grid;gap:12px;margin:16px 0}
     .img-grid.cols-2{grid-template-columns:1fr 1fr}
     .img-grid.cols-3{grid-template-columns:1fr 1fr 1fr}
@@ -138,7 +128,6 @@
     }
     .img-grid .figure{margin:0}
 
-    /* Lightbox */
     .lightbox{
       position:fixed;inset:0;display:none;place-items:center;
       background:rgba(0,0,0,.85);z-index:9999;
@@ -152,7 +141,6 @@
       margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
     }
 
-    /* Back link */
     .back-link{
       display:inline-block;
       margin-top:24px;
@@ -162,7 +150,94 @@
     }
     .back-link:hover{text-decoration:underline}
 
-    /* Footer */
+    /* Sub-section cards */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
+
+    /* Bullet list */
+    .mitigate-list{
+      list-style:none;
+      padding:0;
+      margin:12px 0 0 0;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .mitigate-list li{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+    }
+    .mitigate-list li::before{
+      content:'>';
+      color:var(--brand);
+      font-size:17px;
+      line-height:1.75;
+      flex-shrink:0;
+      font-weight:700;
+    }
+    .mitigate-list li strong{
+      color:var(--text);
+      font-weight:600;
+    }
+
+    /* Note callout */
+    .note{
+      margin-top:16px;
+      padding:16px 20px;
+      background:rgba(77,163,255,.06);
+      border:1px solid rgba(77,163,255,.2);
+      border-left:4px solid var(--brand);
+      border-radius:10px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.75;
+    }
+    .note strong{color:var(--text);font-weight:600;}
+
+    /* Takeaway callout */
+    .takeaway{
+      margin-top:28px;
+      padding:20px 24px;
+      background:rgba(77,163,255,.07);
+      border:1px solid rgba(77,163,255,.25);
+      border-left:4px solid var(--brand);
+      border-radius:10px;
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+    }
+    .takeaway strong{color:var(--text);font-weight:600;}
+
     footer{
       margin-top:48px;
       padding-top:24px;
@@ -185,7 +260,6 @@
 <body>
   <div class="wrap">
 
-    <!-- Site nav -->
     <nav class="topnav" aria-label="Sections">
       <a href="/MTPortfolio/">Home</a>
       <a href="/MTPortfolio/Skills">Networking</a>
@@ -194,30 +268,32 @@
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
 
-    <!-- Breadcrumb -->
     <div class="crumbs">
       <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a> · <span>Network Hash Capture and Cracking</span>
     </div>
 
-    <!-- Header -->
     <header>
       <h1>Network Hash Capture and Cracking</h1>
       <p class="lead">Capture an NTLMv2 hash with Responder on a segmented LAN and crack it with Hashcat.</p>
       <p><a href="https://github.com/mark-thompson01/Network-Hash-Capture-and-Cracking" target="_blank" rel="noopener">View this project on GitHub</a></p>
     </header>
 
-    <!-- Main content -->
     <main class="content">
 
       <!-- Overview -->
       <h2>Overview</h2>
       <div class="step-section">
-        <p>This lab demonstrates how <strong style="color:var(--brand);font-weight:600;">Responder</strong> captures NTLMv2 authentication over the network, and how <strong style="color:var(--brand);font-weight:600;">Hashcat</strong> can be used to attempt password recovery from the captured hash.</p>
+        <p>In this example, I'm demonstrating how the Responder tool can be used to capture a password hash value over the network by initiating a fake authentication request that captures it in transition.</p>
+        <p>This walkthrough demonstrates using the Responder tool to help carry out an NTLMv2 hash value capture. Once the NTLMv2 authentication hash is captured, the tool Hashcat is then used to crack the NTLMv2 hash value to expose the password.</p>
         <p><em>Environment:</em> Windows 10 target and attacker tooling on a segmented lab LAN (to avoid production impact).</p>
+        <div class="note">
+          <strong>Note:</strong> This is a very simple and easy demonstration carried out in a contained environment, where everything is "loud" and the passwords are chosen for simplicity for the ease of tool demonstration.
+          In a production enterprise network, an attacker would have to jump through several hoops for this to be successful. Often, with different technical layers and defensive configurations in place, this 10 minute demonstration would turn into a significant challenge.
+        </div>
       </div>
 
       <!-- Step 1 -->
-      <h2>Step 1 — Start Responder (Listening)</h2>
+      <h2>Step 1 - Start Responder (Listening)</h2>
       <div class="step-section">
         <p>Launch Responder on the attack host (e.g., interface <code>eth0</code>) to poison LLMNR/NetBIOS and await authentication attempts.</p>
         <div class="pair">
@@ -233,7 +309,7 @@
       </div>
 
       <!-- Step 2 -->
-      <h2>Step 2 — Trigger &amp; Capture NTLMv2 Hash</h2>
+      <h2>Step 2 - Trigger &amp; Capture NTLMv2 Hash</h2>
       <div class="step-section">
         <p>From the Windows target, attempt to access a nonexistent host (e.g., <code>\\server01\share</code>). Responder poisons the broadcast resolution and intercepts the authentication to capture the NTLMv2 hash.</p>
         <figure class="figure"><img src="Images/ResponderLabAdd1.PNG" alt="Triggering authentication to nonexistent server" loading="lazy"></figure>
@@ -243,7 +319,7 @@
       </div>
 
       <!-- Step 3 -->
-      <h2>Step 3 — Crack with Hashcat</h2>
+      <h2>Step 3 - Crack with Hashcat</h2>
       <div class="step-section">
         <p>Copy the captured NTLMv2 hash into a text file and run Hashcat with a wordlist to attempt recovery of the plaintext password.</p>
         <figure class="figure"><img src="Images/ResponderLab7.PNG" alt="Hashcat: preparing input hash file" loading="lazy"></figure>
@@ -255,11 +331,74 @@
         <figure class="figure"><img src="Images/ResponderLab13.PNG" alt="Hashcat: final output verification" loading="lazy"></figure>
       </div>
 
+      <!-- Mitigations -->
+      <h2>Why This Wouldn't Be as Straightforward in a Real-World Scenario</h2>
+      <div class="step-section">
+        <p>In a production enterprise network, an attacker would have to jump through several hoops for this to be successful. Often, with different technical layers and defensive configurations in place, this 10 minute demonstration would turn into a significant challenge.</p>
+
+        <!-- SMB Signing -->
+        <div class="sub-section">
+          <h4>1. SMB Signing</h4>
+          <p>The biggest barrier for Responder is SMB Signing. If SMB signing is "Required" (which is the default for Domain Controllers and often enforced by a GPO for workstations), an On-Path attack or relay attempt will fail. The client and server will refuse to communicate if the digital signature of the packet isn't verified.</p>
+        </div>
+
+        <!-- Modern Windows Defenses -->
+        <div class="sub-section">
+          <h4>2. Modern Windows Defenses</h4>
+          <ul class="mitigate-list">
+            <li>
+              <span><strong>LLMNR/NBT-NS Disabling:</strong> Disabling these legacy protocols goes a long way in mitigating against an attack like this. If the machine doesn't broadcast these requests when DNS fails, the Responder tool simply has nothing to "poison" in that case.</span>
+            </li>
+            <li>
+              <span><strong>mDNS:</strong> Windows has moved toward mDNS, which is more secure and harder to spoof than the older broadcast protocols that the Responder tool targets.</span>
+            </li>
+            <li>
+              <span><strong>LSA Protection:</strong> Modern Windows versions can run the Local Security Authority (LSA) as a protected process, making it much more difficult to dump credentials even if you have local admin rights.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Network Segmentation -->
+        <div class="sub-section">
+          <h4>3. Network Segmentation</h4>
+          <p>Typically, in these demonstrations, not only are a lot of these mitigations and security configurations not in place, the contained environment is often configured on a single flat subnet whether segmented, or virtually configured.</p>
+          <p>In a corporate environment, users, servers, and sensitive Tier-0 assets (like Domain Controllers) are generally isolated in different VLANs. Broadcast traffic is generally contained within a single VLAN, which significantly reduces what the Responder tool is able to see.</p>
+        </div>
+
+        <!-- Detection -->
+        <div class="sub-section">
+          <h4>4. Detection (EDR and SIEM)</h4>
+          <p>A lot of the modern Endpoint Detection and Response (EDR) tools that are in use today are really good at spotting the patterns of tools like Responder. Often configured in conjunction with EDR systems are SIEMs - Security Information and Event Management systems that look for sudden bursts of LLMNR/NetBIOS traffic coming from a single host.</p>
+          <p>Windows Event ID 4776 also logs NTLM authentication attempts, which can surface anomalous patterns to analysts reviewing SIEM alerts.</p>
+        </div>
+
+        <!-- Hash Complexity -->
+        <div class="sub-section">
+          <h4>5. Hash Complexity and Iterations</h4>
+          <p>Realistically, the jump from captured hash to a cracked password depends entirely on the NTLMv2 complexity. This example used a simplified password to make the process easier.</p>
+          <ul class="mitigate-list">
+            <li>
+              <span><strong>Salted Hashes:</strong> NTLMv2 hashes include a salt, that makes the hash value more randomized than just hashing the password alone. This makes it so you can't effectively rely on pre-computed Rainbow tables to crack the hash, but must brute force or use a word list for every single capture. In this example, the Hashcat tool was used in conjunction with a wordlist that contained the password.</span>
+            </li>
+            <li>
+              <span><strong>MFA:</strong> Even if you successfully crack the password, Multi-Factor Authentication (MFA) often prevents you from actually using that password to log in to external or sensitive internal services.</span>
+            </li>
+          </ul>
+          <div class="note">
+            <strong>Note:</strong> When performing an automated brute force like this with Hashcat, the password must be within the wordlist in order for it to be successful.
+          </div>
+        </div>
+
+        <div class="takeaway">
+          <strong>Core Takeaway:</strong> While capturing an NTLMv2 hash with Responder is straightforward in a flat, unprotected lab environment, a properly hardened enterprise network with SMB signing enforced, legacy broadcast protocols disabled, network segmentation, and modern EDR/SIEM coverage raises the bar considerably. Password complexity and MFA add further layers that can make a captured hash useless even if the crack succeeds.
+        </div>
+
+      </div>
+
     </main>
 
     <a class="back-link" href="../index.html">← Back to Home</a>
 
-    <!-- Footer -->
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
@@ -269,7 +408,6 @@
     </footer>
   </div>
 
-  <!-- Lightbox -->
   <script>
     (function(){
       const lb = document.createElement('div');
