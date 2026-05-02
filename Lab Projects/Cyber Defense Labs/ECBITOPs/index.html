@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Establishing a Cybersecurity Baseline for IT Operations · Mark Thompson Portfolio</title>
-  <meta name="description" content="A practical guide to establishing a cybersecurity baseline for IT operations — the minimum acceptable security posture every organization should meet." />
+  <meta name="description" content="A practical guide to establishing a cybersecurity baseline for IT operations the minimum acceptable security posture every organization should meet." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -216,12 +216,15 @@
 
     <header>
       <h1>Establishing a Cybersecurity Baseline for IT Operations</h1>
-      <p class="lead">The following is a layout of how I would apply cybersecurity fundamentals with the approach of building a bare minimum cybersecurity checklist for basic IT operations.</p>
-      <p class="lead">My approach in building/establishing a Minimum Acceptable Security Posture for a given environment.</p>
-      
+      <p class="lead">The Minimum Acceptable Security Posture Every Organization Should Meet</p>
     </header>
 
     <main class="content">
+
+      <div class="intro-block">
+        <p>The following is a layout of how I would apply cybersecurity fundamentals with the approach of building a bare minimum cybersecurity checklist for basic IT operations.</p>
+        <p>My approach in building/establishing a Minimum Acceptable Security Posture for a given environment.</p>
+      </div>
 
       <div class="toc">
         <h3>Table of Contents</h3>
@@ -240,10 +243,10 @@
       <h2 id="identity">1. Identity &amp; Access</h2>
       <div class="checklist-card">
         <ul class="checklist">
-          <li><span class="item-num">1.</span><span><strong>Unique accounts for every user</strong> — no shared logins under any circumstances.</span></li>
-          <li><span class="item-num">2.</span><span><strong>Strong password policy enforced</strong> — minimum 12 characters with complexity requirements.</span></li>
-          <li><span class="item-num">3.</span><span><strong>MFA enabled on all critical systems</strong> — email, VPN, and admin accounts at minimum.</span></li>
-          <li><span class="item-num">4.</span><span><strong>Least privilege principle applied</strong> — users only receive the access required to perform their specific role.</span></li>
+          <li><span class="item-num">1.</span><span><strong>Unique accounts for every user</strong> no shared logins under any circumstances.</span></li>
+          <li><span class="item-num">2.</span><span><strong>Strong password policy enforced</strong> minimum 12 characters with complexity requirements.</span></li>
+          <li><span class="item-num">3.</span><span><strong>MFA enabled on all critical systems</strong> email, VPN, and admin accounts at minimum.</span></li>
+          <li><span class="item-num">4.</span><span><strong>Least privilege principle applied</strong> users only receive the access required to perform their specific role.</span></li>
           <li><span class="item-num">5.</span><span><strong>Accounts disabled or removed immediately</strong> when employees leave the organization.</span></li>
         </ul>
       </div>
@@ -253,10 +256,10 @@
       <div class="checklist-card">
         <ul class="checklist">
           <li><span class="item-num">6.</span><span><strong>Antivirus or EDR installed and actively monitored</strong> on all devices.</span></li>
-          <li><span class="item-num">7.</span><span><strong>Automatic OS and software updates enabled</strong> — patching applied consistently across all endpoints.</span></li>
+          <li><span class="item-num">7.</span><span><strong>Automatic OS and software updates enabled</strong> patching applied consistently across all endpoints.</span></li>
           <li><span class="item-num">8.</span><span><strong>Full-disk encryption enabled</strong> on all devices (BitLocker for Windows, FileVault for macOS).</span></li>
-          <li><span class="item-num">9.</span><span><strong>Screen lock after inactivity</strong> — configured for 5 to 15 minutes.</span></li>
-          <li><span class="item-num">10.</span><span><strong>Unauthorized software installs restricted</strong> — admin rights limited to those who require them.</span></li>
+          <li><span class="item-num">9.</span><span><strong>Screen lock after inactivity</strong> configured for 5 to 15 minutes.</span></li>
+          <li><span class="item-num">10.</span><span><strong>Unauthorized software installs restricted</strong> admin rights limited to those who require them.</span></li>
         </ul>
       </div>
 
@@ -267,8 +270,8 @@
           <li><span class="item-num">11.</span><span><strong>Firewall enabled</strong> at the network perimeter and on all endpoints.</span></li>
           <li><span class="item-num">12.</span><span><strong>Guest Wi-Fi separated</strong> from the corporate network via segmentation.</span></li>
           <li><span class="item-num">13.</span><span><strong>VPN required for all remote access</strong> to internal systems and resources.</span></li>
-          <li><span class="item-num">14.</span><span><strong>Default router and switch credentials changed</strong> — vendor defaults are never left in place.</span></li>
-          <li><span class="item-num">15.</span><span><strong>Unused ports and services disabled</strong> — reduce the attack surface at the network level.</span></li>
+          <li><span class="item-num">14.</span><span><strong>Default router and switch credentials changed</strong> vendor defaults are never left in place.</span></li>
+          <li><span class="item-num">15.</span><span><strong>Unused ports and services disabled</strong> reduce the attack surface at the network level.</span></li>
         </ul>
       </div>
 
@@ -276,10 +279,10 @@
       <h2 id="data">4. Data &amp; Backups</h2>
       <div class="checklist-card">
         <ul class="checklist">
-          <li><span class="item-num">16.</span><span><strong>Regular backups scheduled</strong> — daily or weekly at minimum depending on data criticality.</span></li>
-          <li><span class="item-num">17.</span><span><strong>Backups stored offsite or in the cloud</strong> — following the 3-2-1 rule: three copies, two media types, one offsite.</span></li>
-          <li><span class="item-num">18.</span><span><strong>Backup restoration tested at least annually</strong> — an untested backup is an unreliable backup.</span></li>
-          <li><span class="item-num">19.</span><span><strong>Sensitive data identified and access restricted</strong> — know what you have and who can reach it.</span></li>
+          <li><span class="item-num">16.</span><span><strong>Regular backups scheduled</strong> daily or weekly at minimum depending on data criticality.</span></li>
+          <li><span class="item-num">17.</span><span><strong>Backups stored offsite or in the cloud</strong> following the 3-2-1 rule: three copies, two media types, one offsite.</span></li>
+          <li><span class="item-num">18.</span><span><strong>Backup restoration tested at least annually</strong> an untested backup is an unreliable backup.</span></li>
+          <li><span class="item-num">19.</span><span><strong>Sensitive data identified and access restricted</strong> know what you have and who can reach it.</span></li>
         </ul>
       </div>
 
@@ -289,8 +292,8 @@
         <ul class="checklist">
           <li><span class="item-num">20.</span><span><strong>Spam and phishing filtering active</strong> on all mail services.</span></li>
           <li><span class="item-num">21.</span><span><strong>SPF, DKIM, and DMARC configured</strong> for your organization's domain.</span></li>
-          <li><span class="item-num">22.</span><span><strong>Users trained to recognize phishing</strong> — at least annually, with simulations where possible.</span></li>
-          <li><span class="item-num">23.</span><span><strong>External email warning banners enabled</strong> — alerts users when mail originates outside the organization.</span></li>
+          <li><span class="item-num">22.</span><span><strong>Users trained to recognize phishing</strong> at least annually, with simulations where possible.</span></li>
+          <li><span class="item-num">23.</span><span><strong>External email warning banners enabled</strong> alerts users when mail originates outside the organization.</span></li>
         </ul>
       </div>
 
@@ -299,9 +302,9 @@
       <div class="checklist-card">
         <ul class="checklist">
           <li><span class="item-num">24.</span><span><strong>Acceptable Use Policy documented and signed</strong> by all staff members.</span></li>
-          <li><span class="item-num">25.</span><span><strong>Incident response plan exists</strong> — even a basic one-page document outlining roles and steps.</span></li>
-          <li><span class="item-num">26.</span><span><strong>Asset inventory maintained</strong> — a current record of all hardware and devices in the environment.</span></li>
-          <li><span class="item-num">27.</span><span><strong>Software and license inventory maintained</strong> — know what is installed and where.</span></li>
+          <li><span class="item-num">25.</span><span><strong>Incident response plan exists</strong> even a basic one-page document outlining roles and steps.</span></li>
+          <li><span class="item-num">26.</span><span><strong>Asset inventory maintained</strong> a current record of all hardware and devices in the environment.</span></li>
+          <li><span class="item-num">27.</span><span><strong>Software and license inventory maintained</strong> know what is installed and where.</span></li>
         </ul>
       </div>
 
@@ -309,18 +312,18 @@
       <h2 id="monitoring">7. Monitoring &amp; Logging</h2>
       <div class="checklist-card">
         <ul class="checklist">
-          <li><span class="item-num">28.</span><span><strong>Login and authentication logs collected and retained</strong> — minimum 90-day retention.</span></li>
-          <li><span class="item-num">29.</span><span><strong>Failed login alerts configured</strong> — automated notification on repeated or suspicious failures.</span></li>
-          <li><span class="item-num">30.</span><span><strong>Admin and privileged activity logged</strong> — all elevated-access actions should be recorded.</span></li>
-          <li><span class="item-num">31.</span><span><strong>Someone is actively reviewing alerts</strong> — a person or tool must be assigned to monitor and respond.</span></li>
+          <li><span class="item-num">28.</span><span><strong>Login and authentication logs collected and retained</strong> minimum 90-day retention.</span></li>
+          <li><span class="item-num">29.</span><span><strong>Failed login alerts configured</strong> automated notification on repeated or suspicious failures.</span></li>
+          <li><span class="item-num">30.</span><span><strong>Admin and privileged activity logged</strong> all elevated-access actions should be recorded.</span></li>
+          <li><span class="item-num">31.</span><span><strong>Someone is actively reviewing alerts</strong> a person or tool must be assigned to monitor and respond.</span></li>
         </ul>
       </div>
 
       <!-- Closing -->
       <div class="closing-block">
-        <p>Most breaches exploit failures in just a handful of these areas — weak passwords, no MFA, unpatched systems, and phishing. If your organization is just getting started, lock those four down first and work outward from there.</p>
-        <p>A baseline is not the finish line — it is the starting line. Once these controls are consistently met across your environment, the next step is hardening specific systems, adopting risk-based controls aligned to your organization's threat model, and working toward any applicable compliance frameworks such as <strong>NIST CSF</strong>, <strong>SOC 2</strong>, <strong>HIPAA</strong>, or <strong>CMMC</strong>.</p>
-        <p>Implementing and maintaining a security baseline demonstrates not only technical discipline, but also a commitment to responsible information security management — an essential mindset for any IT professional operating in today's threat landscape.</p>
+        <p>Most breaches exploit failures in just a handful of these areas weak passwords, no MFA, unpatched systems, and phishing. If your organization is just getting started, lock those four down first and work outward from there.</p>
+        <p>A baseline is not the finish line it is the starting line. Once these controls are consistently met across your environment, the next step is hardening specific systems, adopting risk-based controls aligned to your organization's threat model, and working toward any applicable compliance frameworks such as <strong>NIST CSF</strong>, <strong>SOC 2</strong>, <strong>HIPAA</strong>, or <strong>CMMC</strong>.</p>
+        <p>Implementing and maintaining a security baseline demonstrates not only technical discipline, but also a commitment to responsible information security management an essential mindset for any IT professional operating in today's threat landscape.</p>
       </div>
 
     </main>
