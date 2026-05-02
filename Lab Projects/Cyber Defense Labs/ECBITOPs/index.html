@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Establishing a Cybersecurity Baseline for IT Operations · Mark Thompson Portfolio</title>
+  <meta name="description" content="A practical guide to establishing a cybersecurity baseline for IT operations — the minimum acceptable security posture every organization should meet." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(28px,4vw,42px);font-weight:800;letter-spacing:.2px;line-height:1.2}
+    .lead{color:var(--muted);margin:0 0 28px;font-size:clamp(16px,2.2vw,19px)}
+
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:26px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .content h2:first-of-type{margin-top:32px}
+    .section-num{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:32px;
+      height:32px;
+      background:rgba(77,163,255,0.15);
+      border:1px solid rgba(77,163,255,0.3);
+      border-radius:8px;
+      color:var(--brand);
+      font-size:14px;
+      font-weight:700;
+      flex-shrink:0;
+    }
+    .content p{
+      color:var(--text);
+      font-size:16px;
+      line-height:1.7;
+      margin:0 0 16px 0;
+    }
+    .content strong{
+      color:var(--brand);
+      font-weight:600;
+    }
+
+    /* Intro block */
+    .intro-block{
+      margin:0 0 32px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .intro-block p{
+      color:var(--muted);
+      font-size:17px;
+      margin:0 0 12px 0;
+      line-height:1.75;
+    }
+    .intro-block p:last-child{margin:0}
+
+    /* Baseline callout */
+    .baseline-callout{
+      margin:0 0 32px 0;
+      padding:20px 24px;
+      background:rgba(77,163,255,.08);
+      border:1px solid rgba(77,163,255,.35);
+      border-radius:12px;
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+    }
+    .baseline-callout .icon{font-size:24px;flex-shrink:0;margin-top:2px}
+    .baseline-callout p{
+      color:var(--muted);
+      font-size:16px;
+      margin:0;
+      line-height:1.7;
+    }
+    .baseline-callout strong{color:var(--brand)}
+
+    /* TOC */
+    .toc{
+      margin:0 0 32px 0;
+      padding:24px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .toc h3{
+      font-size:18px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 14px 0;
+    }
+    .toc ol{
+      margin:0;
+      padding-left:22px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:2.1;
+    }
+    .toc a{color:var(--brand);text-decoration:none}
+    .toc a:hover{text-decoration:underline}
+
+    /* Category groups */
+    .category-label{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:0.08em;
+      text-transform:uppercase;
+      color:var(--brand);
+      background:rgba(77,163,255,.08);
+      border:1px solid rgba(77,163,255,.2);
+      border-radius:6px;
+      padding:4px 10px;
+      margin-bottom:8px;
+    }
+
+    /* Step Section Cards */
+    .step-section{
+      margin:16px 0 0 0;
+      padding:24px;
+      background:rgba(77,163,255,.03);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:16px;
+      margin:0 0 12px 0;
+      line-height:1.75;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section em{color:var(--text);font-style:italic}
+
+    /* Closing section */
+    .closing-block{
+      margin:40px 0 0 0;
+      padding:24px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .closing-block p{
+      color:var(--muted);
+      font-size:17px;
+      margin:0 0 12px 0;
+      line-height:1.75;
+    }
+    .closing-block p:last-child{margin:0}
+
+    /* Priority badge */
+    .priority-note{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-top:16px;
+      padding:12px 16px;
+      background:rgba(255,180,0,.05);
+      border:1px solid rgba(255,180,0,.2);
+      border-radius:8px;
+      font-size:14px;
+      color:#c8a84b;
+    }
+    .priority-note .dot{width:8px;height:8px;border-radius:50%;background:#c8a84b;flex-shrink:0}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none}
+    footer a:hover{color:var(--brand)}
+
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Divider between category groups */
+    .group-spacer{margin-top:40px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/">Platforms</a>
+      <a href="/MTPortfolio/Lab%20Projects" class="active">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <header>
+      <h1>Establishing a Cybersecurity Baseline for IT Operations</h1>
+      <p class="lead">The Minimum Acceptable Security Posture Every Organization Should Meet</p>
+    </header>
+
+    <main class="content">
+
+      <!-- Intro -->
+      <div class="intro-block">
+        <p>Cybersecurity is a broad and continuously evolving field that has gained significant attention and even a level of glorification over the years. As a result, it has inspired a wide range of interpretations—each with different approaches, implementations, and cultural perspectives on what "security" truly means.</p>
+        <p>Through my own journey studying cybersecurity as an IT professional, I've learned that what's effective in one environment may not be suitable in another. Factors such as an organization's mission, what it is trying to protect, the organization's risk appetite, and overall priorities ultimately shape how cybersecurity is applied.</p>
+        <p>That said, there are universal best practices that serve as essential building blocks for establishing a strong security posture in any environment. The following checklist represents a <strong>Security Baseline</strong> — the floor, not the ceiling — the "no excuses" set of controls that should be true across the board before anything else is layered on top.</p>
+      </div>
+
+      <!-- Baseline callout -->
+      <div class="baseline-callout">
+        <div class="icon">🛡️</div>
+        <p><strong>What is a Security Baseline?</strong> A baseline is the minimum acceptable security posture that every system and user in your environment should meet. It serves as your audit starting point, onboarding standard, gap analysis tool, and a simple way to communicate security expectations to leadership. If your environment doesn't consistently meet the baseline, investing in advanced tools is largely wasted — you'd be building on a shaky foundation.</p>
+      </div>
+
+      <!-- TOC -->
+      <div class="toc">
+        <h3>Table of Contents</h3>
+        <ol>
+          <li><a href="#identity">Identity &amp; Access</a>
+            <ol style="padding-left:18px;line-height:2;font-size:15px;color:var(--muted)">
+              <li value="1"><a href="#password">Implement Password Complexity Requirements</a></li>
+              <li value="2"><a href="#mfa">Enable Multi-Factor Authentication (MFA)</a></li>
+              <li value="3"><a href="#leastprivilege">Limit Access and Apply Least Privilege</a></li>
+            </ol>
+          </li>
+          <li><a href="#endpoint">Endpoint &amp; Infrastructure Protection</a>
+            <ol style="padding-left:18px;line-height:2;font-size:15px;color:var(--muted)">
+              <li value="4"><a href="#did">Implement a Defense-in-Depth Strategy</a></li>
+              <li value="5"><a href="#hardening">Infrastructure and Systems Hardening</a></li>
+              <li value="6"><a href="#patch">Effective Patch Management</a></li>
+            </ol>
+          </li>
+          <li><a href="#data">Data Protection</a>
+            <ol style="padding-left:18px;line-height:2;font-size:15px;color:var(--muted)">
+              <li value="7"><a href="#encrypt">Encrypt Sensitive Data</a></li>
+              <li value="8"><a href="#backup">Backup Data Regularly</a></li>
+            </ol>
+          </li>
+          <li><a href="#monitor">Monitoring &amp; Detection</a>
+            <ol style="padding-left:18px;line-height:2;font-size:15px;color:var(--muted)">
+              <li value="9"><a href="#logs">Event Log Analysis and Vulnerability Scans</a></li>
+            </ol>
+          </li>
+          <li><a href="#human">Human Layer</a>
+            <ol style="padding-left:18px;line-height:2;font-size:15px;color:var(--muted)">
+              <li value="10"><a href="#phishing">Phishing Simulation Training</a></li>
+              <li value="11"><a href="#awareness">Annual Cybersecurity Awareness Training</a></li>
+            </ol>
+          </li>
+          <li><a href="#governance">Governance &amp; Policy</a>
+            <ol style="padding-left:18px;line-height:2;font-size:15px;color:var(--muted)">
+              <li value="12"><a href="#policies">Continuous Improvement and Review of Security Policies</a></li>
+            </ol>
+          </li>
+        </ol>
+      </div>
+
+      <!-- ── CATEGORY 1: Identity & Access ── -->
+      <div id="identity" class="group-spacer">
+        <div class="category-label">🔐 Category 1 · Identity &amp; Access</div>
+      </div>
+
+      <h2 id="password"><span class="section-num">1</span> Implement Password Complexity Requirements</h2>
+      <div class="step-section">
+        <p>Passwords are the longstanding gatekeepers that serve as an account's first line of defense. Through the use of system policies, password complexity requirements can be configured to ensure end users create strong, hard-to-guess passwords by enforcing rules for minimum length, character variety, and blocking weak or breached passwords.</p>
+        <p>This helps prevent the reuse of common passwords, mitigating unauthorized access to accounts. It also reduces the success rate of brute-force and dictionary attacks, strengthening overall account security.</p>
+        <div class="priority-note"><div class="dot"></div> Minimum recommended: 12+ characters, complexity enforced, block known breached passwords</div>
+      </div>
+
+      <h2 id="mfa"><span class="section-num">2</span> Enable Multi-Factor Authentication (MFA)</h2>
+      <div class="step-section">
+        <p>Enabling Multi-Factor Authentication (MFA) adds an extra layer of security by requiring users to verify their identity through multiple factors. These include <em>something you know</em> (password), <em>something you have</em> (authentication app, hardware token, or code), and <em>something you are</em> (biometric data).</p>
+        <p>By combining these factors, MFA significantly reduces the risk of unauthorized access from stolen or compromised credentials. Implementing MFA across all critical systems, cloud services, and administrative accounts is one of the most effective ways to strengthen authentication security and prevent account takeover attacks.</p>
+        <div class="priority-note"><div class="dot"></div> Priority: Enable on email, VPN, admin accounts, and cloud services first</div>
+      </div>
+
+      <h2 id="leastprivilege"><span class="section-num">3</span> Limit Access and Apply Least Privilege</h2>
+      <div class="step-section">
+        <p>Limiting access and applying the principle of least privilege ensures that users, applications, and systems only have the minimum level of access necessary to perform their specific tasks. This minimizes the potential impact of compromised accounts or insider misuse by reducing unnecessary permissions and attack surfaces.</p>
+        <p>Implementing least privilege involves regularly reviewing user roles, access rights, and administrative privileges to ensure they align with current job responsibilities and organizational needs. This approach helps to strengthen overall security posture by preventing unauthorized access to critical systems and sensitive data.</p>
+        <div class="priority-note"><div class="dot"></div> Also: Disable or remove accounts immediately when employees leave the organization</div>
+      </div>
+
+      <!-- ── CATEGORY 2: Endpoint & Infrastructure ── -->
+      <div id="endpoint" class="group-spacer">
+        <div class="category-label">🖥️ Category 2 · Endpoint &amp; Infrastructure Protection</div>
+      </div>
+
+      <h2 id="did"><span class="section-num">4</span> Implement a Defense-in-Depth Strategy</h2>
+      <div class="step-section">
+        <p>Implementing a defense-in-depth strategy involves layering multiple security controls throughout an organization's technology stack to provide redundancy and reduce the likelihood of a single point of failure. This approach focuses on ensuring that if one layer of defense is bypassed, additional safeguards remain in place to detect, delay, or block an attack.</p>
+        <p>A defense-in-depth strategy typically combines preventive, detective, and responsive measures — such as firewalls, endpoint protection, network segmentation, intrusion detection systems, and user awareness training — to create a comprehensive and resilient security posture.</p>
+      </div>
+
+      <h2 id="hardening"><span class="section-num">5</span> Infrastructure and Systems Hardening</h2>
+      <div class="step-section">
+        <p>Infrastructure and systems hardening is the process of securing servers, networks, endpoints, and applications by reducing their attack surface and eliminating unnecessary vulnerabilities. This can include disabling or removing unused services, accounts, and ports, applying secure configurations, enforcing strong authentication methods, and keeping systems updated with the latest patches.</p>
+        <p>The goal of hardening is to create a stable, resilient environment that resists exploitation, ensuring that each component of the IT infrastructure operates with minimal exposure to threats while maintaining necessary functionality.</p>
+        <div class="priority-note"><div class="dot"></div> Reference CIS Benchmarks or NIST guidelines for hardening standards by system type</div>
+      </div>
+
+      <h2 id="patch"><span class="section-num">6</span> Effective Patch Management to Reduce Attack Surface</h2>
+      <div class="step-section">
+        <p>Keeping systems, servers, infrastructure, endpoints, and applications updated with the latest security patches and fixes minimizes exploitable weaknesses and reduces the overall attack surface. A strong patch management process includes maintaining an accurate asset inventory, prioritizing updates based on risk, and verifying successful deployments.</p>
+        <p>This proactive approach is essential for preventing threat actors from exploiting known vulnerabilities and for maintaining a secure, reliable infrastructure.</p>
+        <div class="priority-note"><div class="dot"></div> Automatic OS and software updates should be enabled across all endpoints at minimum</div>
+      </div>
+
+      <!-- ── CATEGORY 3: Data Protection ── -->
+      <div id="data" class="group-spacer">
+        <div class="category-label">💾 Category 3 · Data Protection</div>
+      </div>
+
+      <h2 id="encrypt"><span class="section-num">7</span> Encrypt Sensitive Data</h2>
+      <div class="step-section">
+        <p>Encrypting sensitive data ensures that information remains confidential and secure by converting it into an unreadable format that can only be deciphered with the correct encryption key. This protects data both at rest (stored on servers, databases, or devices) and in transit (transferred across networks or the internet) from unauthorized access or interception.</p>
+        <p>Implementing strong encryption standards — such as AES-256 for storage and TLS for communication — helps safeguard personal, financial, and proprietary information against data breaches and insider threats. Effective encryption also includes sound key management practices, ensuring keys are securely stored, rotated regularly, and managed in a way that maintains data integrity and confidentiality.</p>
+        <div class="priority-note"><div class="dot"></div> Baseline minimum: Full-disk encryption on all endpoints (BitLocker, FileVault)</div>
+      </div>
+
+      <h2 id="backup"><span class="section-num">8</span> Backup Data Regularly</h2>
+      <div class="step-section">
+        <p>Backing up data regularly ensures that critical information can be restored in the event of data loss, corruption, ransomware, or hardware failure. A reliable backup strategy follows the <strong>3-2-1 rule</strong>: keeping three copies of data, stored on two different media types, with one copy kept offsite or in the cloud.</p>
+        <p>Backups should be encrypted, automated, and tested periodically to confirm their integrity and availability when needed most.</p>
+        <div class="priority-note"><div class="dot"></div> Test backup restoration at least annually — an untested backup is an unreliable backup</div>
+      </div>
+
+      <!-- ── CATEGORY 4: Monitoring ── -->
+      <div id="monitor" class="group-spacer">
+        <div class="category-label">👁️ Category 4 · Monitoring &amp; Detection</div>
+      </div>
+
+      <h2 id="logs"><span class="section-num">9</span> Conduct Frequent Event Log Analysis and Vulnerability Scans</h2>
+      <div class="step-section">
+        <p>Conducting frequent event log analysis and vulnerability scans is essential for maintaining visibility into system activity and identifying potential weaknesses before they can be exploited. Event log analysis helps detect suspicious behavior, policy violations, or system anomalies by reviewing logs from servers, endpoints, and network devices.</p>
+        <p>Regular vulnerability scans proactively identify outdated software, misconfigurations, and exploitable flaws across the environment. Together, these practices provide early warning indicators of compromise, support faster incident response, and ensure systems remain aligned with security baselines and compliance requirements.</p>
+        <div class="priority-note"><div class="dot"></div> Logs should be retained for a minimum of 90 days; failed login alerts should be configured</div>
+      </div>
+
+      <!-- ── CATEGORY 5: Human Layer ── -->
+      <div id="human" class="group-spacer">
+        <div class="category-label">📧 Category 5 · Human Layer</div>
+      </div>
+
+      <h2 id="phishing"><span class="section-num">10</span> Implement Phishing Simulation Training</h2>
+      <div class="step-section">
+        <p>Phishing simulation training strengthens an organization's human firewall by teaching employees how to recognize and properly respond to phishing attempts. It involves sending safe, simulated phishing emails that mimic real-world attack tactics to test user awareness and identify areas for improvement.</p>
+        <p>By analyzing results and providing targeted follow-up training, organizations can reduce the likelihood of credential theft, malware infections, and data breaches caused by social engineering. Regular simulations not only build user vigilance but also promote a culture of accountability and continuous cybersecurity awareness.</p>
+      </div>
+
+      <h2 id="awareness"><span class="section-num">11</span> Conduct Mandatory Annual Cybersecurity Awareness Training</h2>
+      <div class="step-section">
+        <p>Conducting mandatory annual cybersecurity awareness training helps to ensure that all employees remain informed, vigilant, and capable of recognizing potential threats that target human behavior. This training reinforces key topics such as password hygiene, phishing prevention, data handling, social engineering, and incident reporting.</p>
+        <p>By updating employees each year on emerging threats and evolving security policies, organizations strengthen their human defense layer and promote a culture of shared responsibility. Regular awareness training helps reduce user-related security incidents and ensures cybersecurity becomes an active, ongoing part of daily operations.</p>
+        <div class="priority-note"><div class="dot"></div> One of the most effective and lowest-cost controls available — no technical expertise required to implement</div>
+      </div>
+
+      <!-- ── CATEGORY 6: Governance ── -->
+      <div id="governance" class="group-spacer">
+        <div class="category-label">📋 Category 6 · Governance &amp; Policy</div>
+      </div>
+
+      <h2 id="policies"><span class="section-num">12</span> Continuous Improvement and Review of Security Policies</h2>
+      <div class="step-section">
+        <p>Continuous improvement and review of security policies focuses on ensuring that an organization's cybersecurity framework remains effective, relevant, and aligned with evolving threats, technologies, and business objectives. This process involves routinely evaluating existing controls, updating procedures, and integrating lessons learned from audits, incidents, and industry developments.</p>
+        <p>By regularly revising policies, organizations can close security gaps, adapt to regulatory changes, and reinforce a culture of accountability and resilience. Continuous improvement transforms cybersecurity from a static requirement into a proactive, evolving discipline that strengthens long-term risk management.</p>
+        <div class="priority-note"><div class="dot"></div> A baseline is the floor — from here, build toward hardening, risk-based controls, and compliance frameworks</div>
+      </div>
+
+      <!-- Closing -->
+      <div class="closing-block">
+        <p>A cybersecurity baseline is not the finish line — it's the starting line. These controls work together to create a security posture that is defensible, auditable, and adaptable. Each category builds on the others: strong identity controls limit blast radius, hardened systems reduce entry points, backups ensure recovery, and trained users close the human gap.</p>
+        <p>Once your baseline is consistently met across your environment, the next step is hardening specific systems, adopting risk-based controls aligned to your organization's threat model, and working toward any applicable compliance frameworks (SOC 2, NIST CSF, HIPAA, CMMC, etc.).</p>
+        <p>Implementing and maintaining these practices demonstrates not only technical discipline but also a commitment to responsible information security management — an essential mindset for professionals in today's interconnected world.</p>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="../index.html">← Back to Home</a>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
