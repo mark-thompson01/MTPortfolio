@@ -480,8 +480,8 @@
     <p>In this example, I'm going to set the:</p>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
-      <li style="margin-bottom:6px;"><strong style="color:var(--text);">Maximum password age</strong> – 42 days</li>
-      <li><strong style="color:var(--text);">Minimum password length</strong> – 14 characters</li>
+      <li style="margin-bottom:6px;"><strong style="color:var(--text);">Maximum password age</strong> – 60 days</li>
+      <li><strong style="color:var(--text);">Minimum password length</strong> – 12 characters</li>
     </ul>
 
     <div class="figure sz-lg">
@@ -537,10 +537,10 @@
       <li>A Minimum password age of 1 day prevents user from immediately cycling
       through passwords to back to a previous one.</li><br>
 
-      <li>The maximum password age of 42 days enforces regular password 
+      <li>The maximum password age of 60 days enforces regular password 
       rotation across domain accounts.</li><br>
 
-      <li>The Minimum password length of 14 characters ensures passwords
+      <li>The Minimum password length of 12 characters ensures passwords
       meet a baseline complexity threshold.</li><br>
 
       <li>The password history of 24 means a user cannot reuse any of their last 24 passwords.</li>
@@ -743,7 +743,7 @@
     <p>After the <strong>gpupdate /force</strong> command pushes the Group Policy change out, the second run returns 5, which
     is the registry value that maps directly to <strong>Send NTLMv2 response only. Refuse LM & NTLM</strong>. 
     This confirms the setting has been written to the registry and is actively enforced on the domain controller,
-    not just confiugured in Group Policy,but verified at the OS level where it actually takes effect.</p>
+    not just configured in Group Policy, but verified at the OS level where it actually takes effect.</p>
 
     <div class="figure sz-lg">
       <img src="Images/3-GPSecHardening/ADSec51.png" alt="PowerShell verifying LmCompatibilityLevel set to 5 after gpupdate" loading="lazy" />
@@ -767,7 +767,7 @@
     </div><br>
 
     <h3>Microsoft network client: Digitally sign communications (always)</h3>
-    <p>This setting is associated wtih SMB signing, a direct countermeasure to mitigate against SMB relay attacks.
+    <p>This setting is associated with SMB signing, a direct countermeasure to mitigate against SMB relay attacks.
     Enabling this policy cryptographically validates that packets haven't been 
     tampered with in transition between the domain controller and network connected
     client hosts. 
@@ -931,7 +931,7 @@
     on the Linux Ubuntu server to run any available updates and upgrades beforehand. Then the same utility will be utilized to carry out the installation of 
     these tools.</p>
     <p>Running any available updates/upgrades on your Linux system prior to installing new software is a best practice as it 
-    synchronizes the system's local package index with remote reposityories and ensures that any newer software installations
+    synchronizes the system's local package index with remote repositories and ensures that any newer software installations
     against the most stable, secure, and compatible version of existing system dependencies.</p>
 
     <div class="figure sz-sm">
@@ -1000,7 +1000,7 @@
       <img src="Images/3-GPSecHardening/ADSec74.png" alt="Running enum4linux against the domain controller" loading="lazy" />
     </div>
     <p>Based on this output, the enum4linux tool attempted every enumeration method it has. Groups, group memberships, local groups, domain groups, users via RID cycling, printer info, and no results retrieved with access denied across the board.</p>
-    <p>In this active recon example, the tool was about to reach the DC but could not retrieve anything meaningful with these hardening settings in place.</p>
+    <p>In this active recon example, the tool was able to reach the DC but could not retrieve anything meaningful with these hardening settings in place.</p>
 
     <div class="figure sz-xl">
       <img src="Images/3-GPSecHardening/ADSec75.png" alt="enum4linux results showing access denied and blocked enumeration" loading="lazy" />
@@ -1020,7 +1020,7 @@
     </div>
 
     <p>Similar to the smbclient result, the session technically opened but hit a wall the moment it tried to do something useful.</p>
-    <p>The anonymous enumeration restrictions put in place are blocking the RPC calls that would return meaning directory information.</p>
+    <p>The anonymous enumeration restrictions put in place are blocking the RPC calls that would return meaningful directory information.</p>
     <p>An attacker in this position has an open RPC session they can't actually do anything with, no user list, no group info, nothing to build on.</p>
     <p>This output below indicates that anonymous (null session) access is restricted, mitigating against unauthenticated enumeration of domain information through RPC.</p>
 
@@ -1221,7 +1221,7 @@
 
     <h3>Event ID 4624 – Successful Logins</h3>
     <p>The query is now run filtering for Event ID 4624, the Windows event generated every time an account successfully authenticates and logs on. While Event ID 4625 captures failed attempts and 4740 captures lockouts, 4624 completes the picture by providing visibility into successful logon activity on the domain controller, which is just as important from a security monitoring standpoint. A pattern of successful logons at unusual times or from unexpected sources can be just as telling as a string of failures.</p>
-    <p>The output returns 10 Event ID 4624 entries, all timestamped on April 19th 2026 between 9:21 AM and 9:25 AM, each logged with the message "An account was successfully logged on." The cluster of successful logon events within this short timeframe reflects the active administrative session on the domain controller during this phase of the lab. The fact that these events are being captured and are readily queryable via PowerShell confirms that the Audit Logon subcategory configured earlier under the Logon/Logoff audit category is actively doing its job, very successful logon to the domain controller is being recorded, timestamped, and available for review.</p>
+    <p>The output returns 10 Event ID 4624 entries, all timestamped on April 19th 2026 between 9:21 AM and 9:25 AM, each logged with the message "An account was successfully logged on." The cluster of successful logon events within this short timeframe reflects the active administrative session on the domain controller during this phase of the lab. The fact that these events are being captured and are readily queryable via PowerShell confirms that the Audit Logon subcategory configured earlier under the Logon/Logoff audit category is actively doing its job, every successful logon to the domain controller is being recorded, timestamped, and available for review.</p>
 
     <div class="figure sz-sm">
       <img src="Images/4-A+V/ADSec102.png" alt="PowerShell query results for Event ID 4624 successful logins" style="width: auto; height: 475px;" loading="lazy" />
@@ -1279,7 +1279,7 @@
     </div>
 
     <p>Disabling this service as a best practice in a Windows domain environment was influenced by the PrintNightmare vulnerability (CVE-2021-1675 / CVE-2021-34527), a critical Windows Print Spooler vulnerability that enabled attackers to carry out remote code execution and local privilege escalation. Operationally on a domain controller, there is almost never a need to have this service enabled and running.</p>
-    <p>This aligns with the principale of reducing unnecessary services on Tier 0 systems.</p><br>
+    <p>This aligns with the principle of reducing unnecessary services on Tier 0 systems.</p><br>
 
     <ul style="margin:0 0 14px;padding-left:20px;color:var(--muted);">
       <li style="margin-bottom:4px;"><strong style="color:var(--text);">RemoteRegistry</strong></li>
@@ -1457,13 +1457,13 @@
       <li><strong style="color:var(--text);">SG-Tier2-Users</strong></li>
     </ul><br>
 
-    <p>Right-clicking the domain root, DC01.microsoft.com, to create a new Organizational Unit. By creating the Security Groups OU directly at the domain root level rather than nesting it inside an existing container like Corp, it stays logically separated from department-specific OUs and remains easily accessible for domain-wide group management.</p>
+    <p>Right-clicking the domain root, mtlab.local, to create a new Organizational Unit. By creating the Security Groups OU directly at the domain root level rather than nesting it inside an existing container like Corp, it stays logically separated from department-specific OUs and remains easily accessible for domain-wide group management.</p>
 
     <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM5.png" alt="ADUC right-clicking the domain root to create a new Organizational Unit" loading="lazy" />
     </div>
 
-    <p>The New Object - Organizational Unit dialog confirms the OU is being created directly under DC01.microsoft.com with the name Security Groups.</p>
+    <p>The New Object - Organizational Unit dialog confirms the OU is being created directly under mtlab.local with the name Security Groups.</p>
 
     <div class="figure sz-sm">
       <img src="Images/6-TAM/TAM6.png" alt="New Object - Organizational Unit dialog with Security Groups as the OU name" loading="lazy" />
