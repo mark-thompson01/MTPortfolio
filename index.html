@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <title>Mark Thompson Portfolio | MTPortfolio</title>
-<meta name="description" content="Hands-on labs and tutorials in system administration, networking, scripting, and network security by Mark Thompson." />
+<meta name="description" content="Systems Administration portfolio documenting a home lab environment built from the ground up — on-prem infrastructure, hybrid cloud, security, and automation." />
 
 <style>
 /* =========================================================
@@ -22,7 +22,6 @@
   --radius:20px;
 }
 
-/* Base scale - optimized for filling screen */
 html{
   font-size:125%;
 }
@@ -71,7 +70,7 @@ body{
 }
 
 /* =========================================================
-   WRAPPER (OPTIMIZED FOR NO SCROLL)
+   WRAPPER
    ========================================================= */
 .wrap{
   max-width:1240px;
@@ -95,7 +94,7 @@ body{
    ========================================================= */
 header{
   display:grid;
-  grid-template-columns:110px 1fr;
+  grid-template-columns:140px 1fr;
   gap:52px;
   align-items:center;
   margin-bottom:18px;
@@ -118,6 +117,7 @@ header{
   background:#000 url("Images/ME2.jpg") center/cover no-repeat;
   border:2px solid #2b3549;
   box-shadow:var(--shadow);
+  flex-shrink:0;
 }
 
 @media (max-width:640px){
@@ -130,48 +130,55 @@ header{
 
 /* Titles */
 .title{
-  margin:0 0 8px;
+  margin:0 0 4px;
   font-size:clamp(2.3rem,4.6vw,2.9rem);
   font-weight:800;
   letter-spacing:.2px;
 }
+
 .brand-tag{
-  font-size:0.98rem;
-  color:var(--muted);
+  font-size:0.88rem;
+  color:var(--brand);
+  letter-spacing:0.5px;
+  margin-bottom:10px;
+  opacity:0.85;
 }
 
 /* Intro */
 .intro{
-  margin:12px 0 18px;
-  font-size:1.06rem;
-  line-height:1.5;
+  margin:10px 0 6px;
+  font-size:1.0rem;
+  line-height:1.55;
+  color:var(--muted);
+  max-width:680px;
 }
-.intro b{
+
+.intro strong{
   color:#C9CBDA;
 }
 
 @media (max-width:640px){
   .intro{
-    font-size:1rem;
-    margin:10px 0 14px;
-    line-height:1.48;
+    font-size:0.95rem;
+    margin:8px 0 6px;
   }
 }
 
 /* =========================================================
-   LINKS (IMPROVED RESPONSIVE BEHAVIOR)
+   LINKS / PILLS
    ========================================================= */
 .links{
   display:flex;
-  gap:12px;
+  gap:10px;
   flex-wrap:wrap;
   margin-top:14px;
 }
 
 @media (max-width:640px){
   .links{
-    gap:10px;
-    margin-top:12px;
+    gap:8px;
+    margin-top:10px;
+    justify-content:center;
   }
 }
 
@@ -179,29 +186,14 @@ header{
   display:inline-flex;
   align-items:center;
   gap:8px;
-  padding:10px 16px;
+  padding:8px 14px;
   background:rgba(255,255,255,.03);
   border:1px solid var(--card-border);
   border-radius:999px;
   color:var(--text);
   text-decoration:none;
-  font-size:0.88rem;
+  font-size:0.82rem;
   transition:.18s;
-}
-
-@media (max-width:900px){
-  .link-pill{
-    padding:9px 14px;
-    font-size:0.85rem;
-  }
-}
-
-@media (max-width:640px){
-  .link-pill{
-    padding:8px 12px;
-    font-size:0.82rem;
-    gap:6px;
-  }
 }
 
 .link-pill:hover{
@@ -209,39 +201,60 @@ header{
   border-color:#3a4a67;
   background:rgba(255,255,255,.06);
 }
+
 .link-pill small{
   color:var(--muted);
+  font-size:0.75rem;
 }
 
 @media (max-width:640px){
-  .link-pill small{
-    font-size:0.78rem;
-  }
+  .link-pill small{display:none}
 }
 
 /* =========================================================
-   SECTIONS GRID
+   SECTION LABELS
    ========================================================= */
-.sections{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px;
-  margin:20px 0 2px;
+.section-label{
+  font-size:0.68rem;
+  font-weight:600;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+  color:var(--brand);
+  opacity:0.75;
+  margin-bottom:12px;
+  margin-top:22px;
 }
 
-@media (max-width:950px){
-  .sections{
+/* =========================================================
+   CARD GRIDS
+   ========================================================= */
+.cards-primary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-bottom:10px;
+}
+
+.cards-secondary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-bottom:4px;
+}
+
+@media (max-width:900px){
+  .cards-primary,
+  .cards-secondary{
     grid-template-columns:repeat(2,1fr);
-    gap:16px;
-    margin:18px 0 2px;
+    gap:14px;
   }
 }
 
 @media (max-width:520px){
-  .sections{
+  .cards-primary,
+  .cards-secondary{
     grid-template-columns:1fr;
-    gap:14px;
-    margin:16px 0 2px;
+    gap:12px;
   }
 }
 
@@ -256,17 +269,11 @@ header{
   box-shadow:var(--shadow);
   display:flex;
   flex-direction:column;
-  gap:12px;
-  min-height:140px;
+  gap:10px;
+  min-height:150px;
   transition:.18s;
-}
-
-@media (max-width:640px){
-  .card{
-    padding:16px 16px 20px;
-    min-height:120px;
-    gap:10px;
-  }
+  text-decoration:none;
+  color:var(--text);
 }
 
 .card:hover{
@@ -274,98 +281,87 @@ header{
   border-color:#3a4a67;
   box-shadow:0 18px 44px rgba(0,0,0,.48);
 }
-.card a{
-  text-decoration:none;
-  color:var(--text);
+
+.card.featured{
+  border:1.5px solid var(--brand);
+  background:rgba(77,163,255,0.05);
+}
+
+@media (max-width:640px){
+  .card{
+    padding:16px 16px 20px;
+    min-height:120px;
+  }
+}
+
+.card-badge{
+  display:inline-block;
+  font-size:0.58rem;
+  font-weight:600;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  background:rgba(77,163,255,0.15);
+  color:var(--brand);
+  border-radius:4px;
+  padding:2px 7px;
+  width:fit-content;
+}
+
+.card-icon{
+  font-size:1.2rem;
+  margin-top:2px;
 }
 
 .card-title{
-  font-size:1.15rem;
+  font-size:1.05rem;
   font-weight:700;
-}
-
-@media (max-width:640px){
-  .card-title{
-    font-size:1.08rem;
-  }
+  color:var(--text);
 }
 
 .card-desc{
-  font-size:0.95rem;
+  font-size:0.82rem;
   color:var(--muted);
-  line-height:1.5;
-}
-
-@media (max-width:640px){
-  .card-desc{
-    font-size:0.92rem;
-    line-height:1.48;
-  }
+  line-height:1.55;
+  flex:1;
 }
 
 .card-cta{
   margin-top:auto;
   font-weight:600;
   color:var(--brand);
-  font-size:0.95rem;
-}
-
-@media (max-width:640px){
-  .card-cta{
-    font-size:0.92rem;
-  }
+  font-size:0.85rem;
 }
 
 /* =========================================================
-   FOOTER (COMPACT & ALWAYS VISIBLE)
+   FOOTER
    ========================================================= */
 footer{
-  margin-top:24px;
-  padding-top:18px;
-  padding-bottom:2px;
+  margin-top:28px;
+  padding-top:16px;
+  padding-bottom:4px;
   border-top:1px solid #232a3a;
   color:var(--muted);
-  font-size:0.9rem;
-  background:linear-gradient(
-    to bottom,
-    rgba(20,24,33,0) 0%,
-    rgba(20,24,33,0.65) 100%
-  );
+  font-size:0.82rem;
   flex-shrink:0;
-}
-
-@media (max-width:640px){
-  footer{
-    font-size:0.86rem;
-    padding-top:16px;
-    padding-bottom:2px;
-    margin-top:20px;
-  }
-}
-
-footer .links{
-  margin-top:6px;
-  gap:8px;
   display:flex;
-  flex-wrap:wrap;
+  justify-content:space-between;
   align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
 }
 
-@media (max-width:640px){
-  footer .links{
-    margin-top:5px;
-    gap:6px;
-  }
+footer .footer-links{
+  display:flex;
+  gap:16px;
 }
 
 footer a{
   color:var(--muted);
   text-decoration:none;
-  white-space:nowrap;
 }
+
 footer a:hover{
   color:var(--brand);
-  text-decoration:none;
 }
 </style>
 </head>
@@ -380,17 +376,15 @@ footer a:hover{
   <div class="avatar" aria-label="Photo of Mark Thompson"></div>
   <div>
     <h1 class="title">Mark Thompson Portfolio</h1>
-    <div class="brand-tag">MTPortfolio · Hands-On IT Labs · Tutorials · Blog</div>
+    <div class="brand-tag">MTPortfolio · Systems Administration · Hybrid Cloud · Security</div>
 
     <p class="intro">
-      I'm <b>Mark Thompson</b>, an <b>IT professional</b> focused primarily on
-      IT Support, Systems Administration, and standard best practices in IT operations.
-      This portfolio is a collection of personal lab projects
-      and blogs I've built over the course of time. Intended  to be a showcase of hands-on
-      ability, a learning resource, and demonstrated knowledge in diverse areas.
-      Each project reflects my goal of continuously learning, experimenting, and expanding my technical skill set.
+      I'm <strong>Mark Thompson</strong>, an IT professional transitioning into
+      <strong>Systems Administration</strong>. This portfolio documents a home lab
+      environment built from the ground up — spanning on-prem infrastructure,
+      hybrid cloud with Azure, security hardening, and automation.
+      Everything here is interconnected, not isolated.
     </p>
-     <p>This portfolio is currently being redesigned with a Systems Administration focus. New content coming soon.</p>
 
     <nav class="links" aria-label="Quick links">
       <a class="link-pill" href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">
@@ -409,61 +403,84 @@ footer a:hover{
   </div>
 </header>
 
-<section class="sections" aria-label="Portfolio sections">
+<!-- ── PRIMARY ROW ── -->
+<div class="section-label">The Environment — Start Here</div>
+<div class="cards-primary">
 
-  <article class="card">
-    <a href="https://mark-thompson01.github.io/MTPortfolio/Skills">
-      <div class="card-title">Networking</div>
-      <div class="card-desc">
-        Cross-platform network commands, ports, protocols, and scanners,
-        Cisco Catalyst managed switch configuration, Raspberry Pi DNS server
-        setup &amp; configuration.
-      </div>
-      <div class="card-cta">Explore →</div>
-    </a>
-  </article>
+  <a class="card featured" href="lab-environment/index.html">
+    <div class="card-badge">Foundation</div>
+    <div class="card-icon">🖧</div>
+    <div class="card-title">The Lab Environment</div>
+    <div class="card-desc">
+      Home lab overview, hardware inventory, network topology, and Hyper-V
+      virtualization backbone. The foundation everything else builds on.
+    </div>
+    <div class="card-cta">Start here →</div>
+  </a>
 
-  <article class="card">
-    <a href="https://mark-thompson01.github.io/MTPortfolio/Current%20Projects%20&%20Studies/">
-      <div class="card-title">Platforms</div>
-      <div class="card-desc">
-        A diverse set of hands-on labs and tutorials
-        between Windows & Linux, Active Directory, PowerShell,
-        Bash, Oracle VirtualBox, Hyper-V, Raspberry Pi, and more.
-      </div>
-      <div class="card-cta">Explore →</div>
-    </a>
-  </article>
+  <a class="card" href="infrastructure/index.html">
+    <div class="card-icon">🏗</div>
+    <div class="card-title">Infrastructure &amp; Sysadmin</div>
+    <div class="card-desc">
+      Active Directory, Windows Server, DNS &amp; DHCP, Group Policy,
+      Ubuntu Server, and PowerShell administration.
+    </div>
+    <div class="card-cta">Explore →</div>
+  </a>
 
-  <article class="card">
-    <a href="https://mark-thompson01.github.io/MTPortfolio/Lab%20Projects">
-      <div class="card-title">Cybersecurity</div>
-      <div class="card-desc">
-        Cybersecurity best practices, endpoint hardening, log monitoring,
-        network traffic analysis, network & endpoint security, 
-         exploitation examples &amp; mitigation.
-      </div>
-      <div class="card-cta">Explore →</div>
-    </a>
-  </article>
+  <a class="card" href="hybrid-cloud/index.html">
+    <div class="card-badge">In Progress</div>
+    <div class="card-icon">☁️</div>
+    <div class="card-title">Hybrid Cloud — Azure</div>
+    <div class="card-desc">
+      Entra ID, on-prem AD to Azure via Entra Connect, virtual networking,
+      RBAC, and AZ-104 labs.
+    </div>
+    <div class="card-cta">Explore →</div>
+  </a>
 
-  <article class="card">
-    <a href="https://mark-thompson01.github.io/MTPortfolio/Blogs">
-      <div class="card-title">Blog</div>
-      <div class="card-desc">
-        Industry reflections, tutorials, and short, practical posts that connect
-        theory with real tooling and workflows.
-      </div>
-      <div class="card-cta">Read posts →</div>
-    </a>
-  </article>
+</div>
 
-</section>
+<!-- ── SECONDARY ROW ── -->
+<div class="section-label">Operations</div>
+<div class="cards-secondary">
+
+  <a class="card" href="security/index.html">
+    <div class="card-icon">🛡</div>
+    <div class="card-title">Security</div>
+    <div class="card-desc">
+      Hardening the environment — AD security, endpoint hardening,
+      event log monitoring, and simulated attack &amp; mitigation labs.
+    </div>
+    <div class="card-cta">Explore →</div>
+  </a>
+
+  <a class="card" href="automation/index.html">
+    <div class="card-icon">⚙️</div>
+    <div class="card-title">Automation &amp; Scripting</div>
+    <div class="card-desc">
+      PowerShell admin scripts, Bash scripting, and ongoing
+      Raspberry Pi automation project.
+    </div>
+    <div class="card-cta">Explore →</div>
+  </a>
+
+  <a class="card" href="https://mark-thompson01.github.io/MTPortfolio/Blogs">
+    <div class="card-icon">📝</div>
+    <div class="card-title">Blog</div>
+    <div class="card-desc">
+      Practical writeups connecting lab work to real-world tooling —
+      Active Directory, PowerShell, Linux, and more.
+    </div>
+    <div class="card-cta">Read posts →</div>
+  </a>
+
+</div>
 
 <footer>
   <div>Mark Thompson · MTPortfolio</div>
-  <div class="links">
-    <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+  <div class="footer-links">
+    <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a>
     <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
   </div>
 </footer>
