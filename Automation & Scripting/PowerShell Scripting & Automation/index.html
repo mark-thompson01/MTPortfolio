@@ -1,1 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PowerShell Scripting & Automation · Mark Thompson Portfolio</title>
+  <meta name="description" content="Seven PowerShell scripts for AD provisioning, password resets, GPO backup/reporting, system reporting, health checks, and scheduled task automation." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px; --code-bg:#0b0e14;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 40px;font-size:clamp(17px,2.4vw,19px);text-align:center}
+
+    /* Script sections */
+    .script-list{
+      display:flex;
+      flex-direction:column;
+      gap:26px;
+      max-width:900px;
+      margin:8px auto 0;
+    }
+
+    .script-item{
+      width:100%;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:28px 30px;
+    }
+
+    .script-head{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      margin-bottom:14px;
+    }
+
+    .script-num{
+      flex:0 0 auto;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:1.15rem;
+      color:var(--brand);
+      background:rgba(77,163,255,.08);
+      border:1px solid #2a3a55;
+    }
+
+    .script-title{
+      font:700 1.35rem/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      margin:0;
+      color:#e6e7ee;
+    }
+
+    .script-desc{
+      color:#a9b0c3;
+      font-size:0.98rem;
+      margin:0 0 18px 0;
+    }
+
+    pre.code-block{
+      background:var(--code-bg);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      padding:18px 20px;
+      overflow-x:auto;
+      margin:0 0 18px 0;
+    }
+    pre.code-block code{
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      font-size:0.85rem;
+      line-height:1.6;
+      color:#c9d1e6;
+      white-space:pre;
+    }
+
+    .shot-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      justify-content:center;
+    }
+    .shot{
+      display:block;
+      border:1px solid var(--card-border);
+      border-radius:10px;
+      overflow:hidden;
+      background:#0b0e14;
+      text-decoration:none;
+      transition:border-color .18s ease, transform .18s ease;
+    }
+    .shot:hover{border-color:#3a4a67;transform:translateY(-2px)}
+    .shot img{
+      display:block;
+      width:260px;
+      height:auto;
+    }
+    .shot-caption{
+      display:block;
+      text-align:center;
+      font-size:0.78rem;
+      color:#7f8599;
+      padding:6px 8px;
+      border-top:1px solid var(--card-border);
+    }
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting" class="active">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <header>
+      <h1>PowerShell Scripting & Automation</h1>
+      <p class="lead">Seven PowerShell scripts written for the home lab, covering AD provisioning, password resets, GPO backup and reporting, system reporting, health monitoring, and scheduled task automation. Click any screenshot to view it full size.</p>
+    </header>
+
+    <section class="script-list" aria-label="PowerShell scripts">
+
+      <!-- 1: AD User Provisioning -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">1</span>
+          <h3 class="script-title">AD User Provisioning and Management</h3>
+        </div>
+        <p class="script-desc">Bulk-onboards new hires by importing a CSV of names, usernames, and target OUs, then creates each account in Active Directory with a temporary password and a forced change at next logon.</p>
+        <pre class="code-block"><code># New-BulkADUsers.ps1
+# Run as MT.AdminScripts on SRV-ADMIN01
+# Use case: onboarding a batch of new hires into Corp/Users
+
+$csvPath = "C:\Scripts\NewUsers.csv"
+$users = Import-Csv -Path $csvPath
+
+foreach ($user in $users) {
+    $newUserParams = @{
+        Name                  = $user.Name
+        SamAccountName        = $user.Username
+        UserPrincipalName     = "$($user.Username)@mtlab.local"
+        Path                  = $user.OU
+        AccountPassword       = (ConvertTo-SecureString "TempPass2026!" -AsPlainText -Force)
+        Enabled               = $true
+        ChangePasswordAtLogon = $true
+    }
+    New-ADUser @newUserParams
+}
+Write-Output "Bulk provisioning complete: $($users.Count) Users processed."</code></pre>
+        <div class="shot-row">
+          <a class="shot" href="Images/aduserprov-script.png" target="_blank" rel="noopener">
+            <img src="Images/aduserprov-script.png" alt="New-BulkADUsers.ps1 script in PowerShell ISE" />
+            <span class="shot-caption">Script — ISE</span>
+          </a>
+          <a class="shot" href="Images/aduserprov-csv.png" target="_blank" rel="noopener">
+            <img src="Images/aduserprov-csv.png" alt="NewUsers.csv input file" />
+            <span class="shot-caption">Input CSV</span>
+          </a>
+          <a class="shot" href="Images/aduserprov-run.png" target="_blank" rel="noopener">
+            <img src="Images/aduserprov-run.png" alt="PowerShell output showing bulk provisioning complete" />
+            <span class="shot-caption">Script run</span>
+          </a>
+          <a class="shot" href="Images/aduserprov-aduc.png" target="_blank" rel="noopener">
+            <img src="Images/aduserprov-aduc.png" alt="Active Directory Users and Computers showing new accounts" />
+            <span class="shot-caption">Result in AD Users &amp; Computers</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- 2: Password Reset -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">2</span>
+          <h3 class="script-title">Password Reset</h3>
+        </div>
+        <p class="script-desc">Resets a single AD user's password to a known temporary value and enforces a change at next logon, taking the target username as a parameter for quick help-desk-style use.</p>
+        <pre class="code-block"><code>param(
+    [parameter(Mandatory=$true)][string]$Username
+)
+
+$newPass = ConvertTo-SecureString "Reset2026!" -AsPlainText -Force
+Set-ADAccountPassword -Identity $Username -NewPassword $newPass -Reset
+Set-ADUser -Identity $Username -ChangePasswordAtLogon $true
+
+Write-Output "Password reset for $Username. Change-at-next-logon enforced."</code></pre>
+        <div class="shot-row">
+          <a class="shot" href="Images/passreset-script.png" target="_blank" rel="noopener">
+            <img src="Images/passreset-script.png" alt="Reset-UserPassword.ps1 script in PowerShell ISE" />
+            <span class="shot-caption">Script — ISE</span>
+          </a>
+          <a class="shot" href="Images/passreset-run.png" target="_blank" rel="noopener">
+            <img src="Images/passreset-run.png" alt="PowerShell output confirming password reset" />
+            <span class="shot-caption">Script run</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- 3: GPO Backup -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">3</span>
+          <h3 class="script-title">GPO Backup</h3>
+        </div>
+        <p class="script-desc">Backs up every GPO in the domain into a timestamped folder and exports a manifest CSV mapping each policy's display name and GUID to its backup location, for easy restore reference.</p>
+        <pre class="code-block"><code>$backupRoot = "C:\GPOBackups"
+$timestamp = Get-Date -Format "yyyy-MM-dd_HHmm"
+$backupFolder = Join-Path $backupRoot $timestamp
+
+New-Item -ItemType Directory -Path $backupFolder -Force | Out-Null
+
+Backup-GPO -All -Path $backupFolder | Select-Object DisplayName, Id, BackupDirectory |
+    Export-Csv -Path "$backupFolder\BackupManifest.csv" -NoTypeInformation
+
+Write-Output "GPO backup completed: $backupFolder"</code></pre>
+        <div class="shot-row">
+          <a class="shot" href="Images/gpobackup-script.png" target="_blank" rel="noopener">
+            <img src="Images/gpobackup-script.png" alt="GPO-Backup.ps1 script in PowerShell ISE" />
+            <span class="shot-caption">Script — ISE</span>
+          </a>
+          <a class="shot" href="Images/gpobackup-run.png" target="_blank" rel="noopener">
+            <img src="Images/gpobackup-run.png" alt="PowerShell output confirming GPO backup completed" />
+            <span class="shot-caption">Script run</span>
+          </a>
+          <a class="shot" href="Images/gpobackup-manifest.png" target="_blank" rel="noopener">
+            <img src="Images/gpobackup-manifest.png" alt="BackupManifest.csv listing backed-up GPOs" />
+            <span class="shot-caption">Backup manifest CSV</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- 4: GPO Report -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">4</span>
+          <h3 class="script-title">GPO Report</h3>
+        </div>
+        <p class="script-desc">Generates an HTML settings report for every GPO in the domain, saving each one into a date-stamped folder with a sanitized filename based on the policy's display name.</p>
+        <pre class="code-block"><code>$reportFolder = "C:\GPOReports\$(Get-Date -Format 'yyyy-MM-dd')"
+New-Item -ItemType Directory -Path $reportFolder -Force | Out-Null
+
+$allGPOs = Get-GPO -All
+foreach ($gpo in $allGPOs) {
+    $reportPath = Join-Path $reportFolder "$($gpo.DisplayName -replace '[\\/:*?"&lt;&gt;|]','_').html"
+    Get-GPOReport -Guid $gpo.Id -ReportType Html -Path $reportPath
+}
+Write-Output "Generated $($allGPOs.Count) GPO reports in $reportFolder"</code></pre>
+        <div class="shot-row">
+          <a class="shot" href="Images/gporeport-script.png" target="_blank" rel="noopener">
+            <img src="Images/gporeport-script.png" alt="GPO-Report.ps1 script in PowerShell ISE" />
+            <span class="shot-caption">Script — ISE</span>
+          </a>
+          <a class="shot" href="Images/gporeport-run.png" target="_blank" rel="noopener">
+            <img src="Images/gporeport-run.png" alt="PowerShell output confirming GPO reports generated" />
+            <span class="shot-caption">Script run</span>
+          </a>
+          <a class="shot" href="Images/gporeport-folder.png" target="_blank" rel="noopener">
+            <img src="Images/gporeport-folder.png" alt="Folder of generated GPO HTML reports" />
+            <span class="shot-caption">Generated reports</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- 5: AD System Report -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">5</span>
+          <h3 class="script-title">AD System Report</h3>
+        </div>
+        <p class="script-desc">Pulls inactive user accounts, group membership counts, and disk space across key lab servers, then compiles all three into a single date-stamped HTML report for a quick environment snapshot.</p>
+        <pre class="code-block"><code>$reportDate = Get-Date -Format "yyyy-MM-dd_HHmm"
+$reportPath = "C:\Reports\AD-SystemReport_$reportDate.html"
+
+$inactiveUsers = Search-ADAccount -AccountInactive -TimeSpan 30.00:00:00 -UsersOnly |
+    Select-Object Name, SamAccountName, LastLogonDate, Enabled
+
+$groups = Get-ADGroup -Filter * | Select-Object -ExcludeProperty Name
+$groupSummary = foreach ($group in $groups) {
+    $members = (Get-ADGroupMember -Identity $group -ErrorAction SilentlyContinue).Count
+    [PSCustomObject]@{ GroupName = $group; MemberCount = $members }
+}
+
+$targets = @("DC01", "SRV-ADMIN01")
+$diskReport = foreach ($computer in $targets) {
+    Get-CimInstance -ComputerName $computer -ClassName Win32_LogicalDisk -Filter "DriveType=3" |
+        Select-Object @{N="Computer";E={$computer}}, DeviceID,
+            @{N="FreeGB";E={[math]::Round($_.FreeSpace/1GB,2)}},
+            @{N="SizeGB";E={[math]::Round($_.Size/1GB,2)}}
+}
+
+$html = @"
+&lt;html&gt;&lt;head&gt;&lt;title&gt;AD &amp; System Report - $reportDate&lt;/title&gt;&lt;/head&gt;&lt;body&gt;
+&lt;h2&gt;Inactive User Accounts (30+ days)&lt;/h2&gt;
+$($inactiveUsers | ConvertTo-Html -Fragment)
+&lt;h2&gt;Group Membership Summary&lt;/h2&gt;
+$($groupSummary | ConvertTo-Html -Fragment)
+&lt;h2&gt;Disk Space&lt;/h2&gt;
+$($diskReport | ConvertTo-Html -Fragment)
+&lt;/body&gt;&lt;/html&gt;
+"@
+
+$html | Out-File -FilePath $reportPath -Encoding UTF8
+Write-Output "Report generated: $reportPath"</code></pre>
+        <div class="shot-row">
+          <a class="shot" href="Images/adsysreport-script.png" target="_blank" rel="noopener">
+            <img src="Images/adsysreport-script.png" alt="AD-SystemReport.ps1 script in PowerShell ISE" />
+            <span class="shot-caption">Script — ISE</span>
+          </a>
+          <a class="shot" href="Images/adsysreport-run.png" target="_blank" rel="noopener">
+            <img src="Images/adsysreport-run.png" alt="PowerShell output confirming report generated" />
+            <span class="shot-caption">Script run</span>
+          </a>
+          <a class="shot" href="Images/adsysreport-contextmenu.png" target="_blank" rel="noopener">
+            <img src="Images/adsysreport-contextmenu.png" alt="File Explorer context menu opening the generated report" />
+            <span class="shot-caption">Opening the report</span>
+          </a>
+          <a class="shot" href="Images/adsysreport-html.png" target="_blank" rel="noopener">
+            <img src="Images/adsysreport-html.png" alt="Rendered AD and System Report HTML output" />
+            <span class="shot-caption">Rendered report</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- 6: AD Daily Health Check -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">6</span>
+          <h3 class="script-title">AD Daily Health Check</h3>
+        </div>
+        <p class="script-desc">Pings a defined list of core lab hosts — the domain controller, admin server, client, NAS units, DNS Pi, and firewall — and appends an UP/DOWN status line for each to a daily log file.</p>
+        <pre class="code-block"><code>$targets = @{
+    "DC01"        = "192.168.20.10"
+    "SRV-ADMIN01" = "192.168.20.12"
+    "MTCLIENT1"   = "192.168.50.20"
+    "Pi3-NAS"     = "192.168.10.20"
+    "Pi5-DNS"     = "192.168.10.5"
+    "FortiGate"   = "192.168.100.1"
+    "TrueNAS"     = "192.168.10.10"
+}
+
+$logPath = "C:\Scripts\Logs\Healthcheck_$(Get-Date -Format 'yyyy-MM-dd').log"
+$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+
+foreach ($name in $targets.Keys) {
+    $ip = $targets[$name]
+    $result = Test-Connection -ComputerName $ip -Count 2 -Quiet
+    $status = if ($result) { "UP" } else { "DOWN" }
+    "$timestamp`t$name ($ip)`t$status" | Out-File -FilePath $logPath -Append
+}</code></pre>
+        <div class="shot-row">
+          <a class="shot" href="Images/healthcheck-script.png" target="_blank" rel="noopener">
+            <img src="Images/healthcheck-script.png" alt="Daily-HealthCheck.ps1 script in PowerShell ISE" />
+            <span class="shot-caption">Script — ISE</span>
+          </a>
+          <a class="shot" href="Images/healthcheck-run.png" target="_blank" rel="noopener">
+            <img src="Images/healthcheck-run.png" alt="PowerShell prompt after running the health check script" />
+            <span class="shot-caption">Script run</span>
+          </a>
+          <a class="shot" href="Images/healthcheck-log.png" target="_blank" rel="noopener">
+            <img src="Images/healthcheck-log.png" alt="Daily health check log file showing UP status for all hosts" />
+            <span class="shot-caption">Health check log</span>
+          </a>
+        </div>
+      </article>
+
+      <!-- 7: Scheduled Task Automation -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">7</span>
+          <h3 class="script-title">Scheduled Task Automation</h3>
+        </div>
+        <p class="script-desc">Registers the health check and GPO backup scripts as native Windows scheduled tasks — the health check daily and the GPO backup weekly — so both run unattended under a limited service account.</p>
+        <pre class="code-block"><code># Register the health check on a daily trigger
+$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -File C:\Scripts\Daily-HealthCheck.ps1"
+$trigger = New-ScheduledTaskTrigger -Daily -At 7pm
+
+$healthTaskParams = @{
+    TaskName = "Daily Lab Health Check"
+    Action   = $action
+    Trigger  = $trigger
+    User     = "LAB\MT.AdminScripts"
+    RunLevel = "Limited"
+}
+Register-ScheduledTask @healthTaskParams
+
+# Register weekly GPO backup
+$gpoAction = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-NoProfile -ExecutionPolicy Bypass -File C:\Scripts\GPO-Backup.ps1"
+$gpoTrigger = New-ScheduledTaskTrigger -Weekly -DaysOfWeek Friday -At 7pm
+
+$gpoTaskParams = @{
+    TaskName = "Weekly GPO Backup"
+    Action   = $gpoAction
+    Trigger  = $gpoTrigger
+    User     = "LAB\MT.AdminScripts"
+    RunLevel = "Limited"
+}
+Register-ScheduledTask @gpoTaskParams</code></pre>
+        <div class="shot-row">
+          <a class="shot" href="Images/schedtask-script.png" target="_blank" rel="noopener">
+            <img src="Images/schedtask-script.png" alt="ScheduledTaskAutomation.ps1 script in PowerShell ISE" />
+            <span class="shot-caption">Script — ISE</span>
+          </a>
+          <a class="shot" href="Images/schedtask-run.png" target="_blank" rel="noopener">
+            <img src="Images/schedtask-run.png" alt="PowerShell output listing the two registered scheduled tasks" />
+            <span class="shot-caption">Registered tasks</span>
+          </a>
+        </div>
+      </article>
+
+    </section>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
