@@ -21,7 +21,7 @@
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
       line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+    .wrap{max-width:1280px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
     .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
@@ -45,7 +45,7 @@
       display:flex;
       flex-direction:column;
       gap:26px;
-      max-width:900px;
+      max-width:1160px;
       margin:8px auto 0;
     }
 
@@ -111,7 +111,7 @@
     .shot-row{
       display:flex;
       flex-wrap:wrap;
-      gap:14px;
+      gap:18px;
       justify-content:center;
     }
     .shot{
@@ -121,21 +121,86 @@
       overflow:hidden;
       background:#0b0e14;
       text-decoration:none;
+      cursor:zoom-in;
       transition:border-color .18s ease, transform .18s ease;
     }
     .shot:hover{border-color:#3a4a67;transform:translateY(-2px)}
     .shot img{
       display:block;
-      width:260px;
+      width:440px;
+      max-width:100%;
       height:auto;
     }
     .shot-caption{
-      display:block;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
       text-align:center;
-      font-size:0.78rem;
+      font-size:0.8rem;
       color:#7f8599;
-      padding:6px 8px;
+      padding:8px 10px;
       border-top:1px solid var(--card-border);
+    }
+    .shot-caption .zoom-hint{
+      color:var(--brand);
+      font-size:0.9rem;
+      line-height:1;
+    }
+
+    /* Lightbox */
+    .lightbox-overlay{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(8,10,14,.88);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:40px 20px;
+      cursor:zoom-out;
+    }
+    .lightbox-overlay.open{display:flex}
+    .lightbox-overlay img{
+      max-width:min(94vw,1400px);
+      max-height:88vh;
+      width:auto;
+      height:auto;
+      border-radius:10px;
+      border:1px solid #3a4a67;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      cursor:zoom-out;
+    }
+    .lightbox-close{
+      position:fixed;
+      top:22px;
+      right:28px;
+      width:42px;
+      height:42px;
+      border-radius:10px;
+      border:1px solid #3a4a67;
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-size:1.3rem;
+      line-height:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      z-index:1001;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.12);border-color:#4DA3FF}
+    .lightbox-caption{
+      position:fixed;
+      bottom:24px;
+      left:50%;
+      transform:translateX(-50%);
+      color:var(--muted);
+      font-size:0.9rem;
+      background:rgba(15,17,21,.7);
+      padding:6px 14px;
+      border-radius:8px;
+      z-index:1001;
     }
 
     /* Footer */
@@ -219,22 +284,22 @@ foreach ($user in $users) {
 }
 Write-Output "Bulk provisioning complete: $($users.Count) Users processed."</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/ADUserProv1.png" target="_blank" rel="noopener">
-            <img src="Images/ADUserProv1.png" alt="New-BulkADUsers.ps1 script in PowerShell ISE" />
-            <span class="shot-caption">Script — ISE</span>
-          </a>
-          <a class="shot" href="Images/ADUserProv2.png" target="_blank" rel="noopener">
-            <img src="Images/ADUserProv2.png" alt="NewUsers.csv input file" />
-            <span class="shot-caption">Input CSV</span>
-          </a>
-          <a class="shot" href="Images/ADUserProv3.png" target="_blank" rel="noopener">
-            <img src="Images/ADUserProv3.png" alt="PowerShell output showing bulk provisioning complete" />
-            <span class="shot-caption">Script run</span>
-          </a>
-          <a class="shot" href="Images/ADUserProv4.png" target="_blank" rel="noopener">
-            <img src="Images/ADUserProv4.png" alt="Active Directory Users and Computers showing new accounts" />
-            <span class="shot-caption">Result in AD Users &amp; Computers</span>
-          </a>
+          <div class="shot" onclick="openLightbox('Images/ADUserProv1.png', 'Script — ISE')">
+            <img src="Images/ADUserProv1.png" alt="New-BulkADUsers.ps1 script in PowerShell ISE" loading="lazy" />
+            <span class="shot-caption">Script — ISE <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/ADUserProv2.png', 'Input CSV')">
+            <img src="Images/ADUserProv2.png" alt="NewUsers.csv input file" loading="lazy" />
+            <span class="shot-caption">Input CSV <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/ADUserProv3.png', 'Script run')">
+            <img src="Images/ADUserProv3.png" alt="PowerShell output showing bulk provisioning complete" loading="lazy" />
+            <span class="shot-caption">Script run <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/ADUserProv4.png', 'Result in AD Users &amp; Computers')">
+            <img src="Images/ADUserProv4.png" alt="Active Directory Users and Computers showing new accounts" loading="lazy" />
+            <span class="shot-caption">Result in AD Users &amp; Computers <span class="zoom-hint">&#128269;</span></span>
+          </div>
         </div>
       </article>
 
@@ -255,14 +320,14 @@ Set-ADUser -Identity $Username -ChangePasswordAtLogon $true
 
 Write-Output "Password reset for $Username. Change-at-next-logon enforced."</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/passreset1.png" target="_blank" rel="noopener">
-            <img src="Images/passreset1.png" alt="Reset-UserPassword.ps1 script in PowerShell ISE" />
-            <span class="shot-caption">Script — ISE</span>
-          </a>
-          <a class="shot" href="Images/passreset2.png" target="_blank" rel="noopener">
-            <img src="Images/passreset2.png" alt="PowerShell output confirming password reset" />
-            <span class="shot-caption">Script run</span>
-          </a>
+          <div class="shot" onclick="openLightbox('Images/passreset1.png', 'Script — ISE')">
+            <img src="Images/passreset1.png" alt="Reset-UserPassword.ps1 script in PowerShell ISE" loading="lazy" />
+            <span class="shot-caption">Script — ISE <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/passreset2.png', 'Script run')">
+            <img src="Images/passreset2.png" alt="PowerShell output confirming password reset" loading="lazy" />
+            <span class="shot-caption">Script run <span class="zoom-hint">&#128269;</span></span>
+          </div>
         </div>
       </article>
 
@@ -284,18 +349,18 @@ Backup-GPO -All -Path $backupFolder | Select-Object DisplayName, Id, BackupDirec
 
 Write-Output "GPO backup completed: $backupFolder"</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/gpobackup1.png" target="_blank" rel="noopener">
-            <img src="Images/gpobackup1.png" alt="GPO-Backup.ps1 script in PowerShell ISE" />
-            <span class="shot-caption">Script — ISE</span>
-          </a>
-          <a class="shot" href="Images/gpobackup2.png" target="_blank" rel="noopener">
-            <img src="Images/gpobackup2.png" alt="PowerShell output confirming GPO backup completed" />
-            <span class="shot-caption">Script run</span>
-          </a>
-          <a class="shot" href="Images/gpobackup3.png" target="_blank" rel="noopener">
-            <img src="Images/gpobackup3.png" alt="BackupManifest.csv listing backed-up GPOs" />
-            <span class="shot-caption">Backup manifest CSV</span>
-          </a>
+          <div class="shot" onclick="openLightbox('Images/gpobackup1.png', 'Script — ISE')">
+            <img src="Images/gpobackup1.png" alt="GPO-Backup.ps1 script in PowerShell ISE" loading="lazy" />
+            <span class="shot-caption">Script — ISE <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/gpobackup2.png', 'Script run')">
+            <img src="Images/gpobackup2.png" alt="PowerShell output confirming GPO backup completed" loading="lazy" />
+            <span class="shot-caption">Script run <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/gpobackup3.png', 'Backup manifest CSV')">
+            <img src="Images/gpobackup3.png" alt="BackupManifest.csv listing backed-up GPOs" loading="lazy" />
+            <span class="shot-caption">Backup manifest CSV <span class="zoom-hint">&#128269;</span></span>
+          </div>
         </div>
       </article>
 
@@ -316,18 +381,18 @@ foreach ($gpo in $allGPOs) {
 }
 Write-Output "Generated $($allGPOs.Count) GPO reports in $reportFolder"</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/gporeport1.png" target="_blank" rel="noopener">
-            <img src="Images/gporeport1.png" alt="GPO-Report.ps1 script in PowerShell ISE" />
-            <span class="shot-caption">Script — ISE</span>
-          </a>
-          <a class="shot" href="Images/gporeport2.png" target="_blank" rel="noopener">
-            <img src="Images/gporeport2.png" alt="PowerShell output confirming GPO reports generated" />
-            <span class="shot-caption">Script run</span>
-          </a>
-          <a class="shot" href="Images/gporeport3.png" target="_blank" rel="noopener">
-            <img src="Images/gporeport3.png" alt="Folder of generated GPO HTML reports" />
-            <span class="shot-caption">Generated reports</span>
-          </a>
+          <div class="shot" onclick="openLightbox('Images/gporeport1.png', 'Script — ISE')">
+            <img src="Images/gporeport1.png" alt="GPO-Report.ps1 script in PowerShell ISE" loading="lazy" />
+            <span class="shot-caption">Script — ISE <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/gporeport2.png', 'Script run')">
+            <img src="Images/gporeport2.png" alt="PowerShell output confirming GPO reports generated" loading="lazy" />
+            <span class="shot-caption">Script run <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/gporeport3.png', 'Generated reports')">
+            <img src="Images/gporeport3.png" alt="Folder of generated GPO HTML reports" loading="lazy" />
+            <span class="shot-caption">Generated reports <span class="zoom-hint">&#128269;</span></span>
+          </div>
         </div>
       </article>
 
@@ -372,22 +437,22 @@ $($diskReport | ConvertTo-Html -Fragment)
 $html | Out-File -FilePath $reportPath -Encoding UTF8
 Write-Output "Report generated: $reportPath"</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/adsysreport1.png" target="_blank" rel="noopener">
-            <img src="Images/adsysreport1.png" alt="AD-SystemReport.ps1 script in PowerShell ISE" />
-            <span class="shot-caption">Script — ISE</span>
-          </a>
-          <a class="shot" href="Images/adsysreport2.png" target="_blank" rel="noopener">
-            <img src="Images/adsysreport2.png" alt="PowerShell output confirming report generated" />
-            <span class="shot-caption">Script run</span>
-          </a>
-          <a class="shot" href="Images/adsysreport3.png" target="_blank" rel="noopener">
-            <img src="Images/adsysreport3.png" alt="File Explorer context menu opening the generated report" />
-            <span class="shot-caption">Opening the report</span>
-          </a>
-          <a class="shot" href="Images/adsysreport4.png" target="_blank" rel="noopener">
-            <img src="Images/adsysreport4.png" alt="Rendered AD and System Report HTML output" />
-            <span class="shot-caption">Rendered report</span>
-          </a>
+          <div class="shot" onclick="openLightbox('Images/adsysreport1.png', 'Script — ISE')">
+            <img src="Images/adsysreport1.png" alt="AD-SystemReport.ps1 script in PowerShell ISE" loading="lazy" />
+            <span class="shot-caption">Script — ISE <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/adsysreport2.png', 'Script run')">
+            <img src="Images/adsysreport2.png" alt="PowerShell output confirming report generated" loading="lazy" />
+            <span class="shot-caption">Script run <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/adsysreport3.png', 'Opening the report')">
+            <img src="Images/adsysreport3.png" alt="File Explorer context menu opening the generated report" loading="lazy" />
+            <span class="shot-caption">Opening the report <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/adsysreport4.png', 'Rendered report')">
+            <img src="Images/adsysreport4.png" alt="Rendered AD and System Report HTML output" loading="lazy" />
+            <span class="shot-caption">Rendered report <span class="zoom-hint">&#128269;</span></span>
+          </div>
         </div>
       </article>
 
@@ -418,18 +483,18 @@ foreach ($name in $targets.Keys) {
     "$timestamp`t$name ($ip)`t$status" | Out-File -FilePath $logPath -Append
 }</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/healthcheck1.png" target="_blank" rel="noopener">
-            <img src="Images/healthcheck1.png" alt="Daily-HealthCheck.ps1 script in PowerShell ISE" />
-            <span class="shot-caption">Script — ISE</span>
-          </a>
-          <a class="shot" href="Images/healthcheck2.png" target="_blank" rel="noopener">
-            <img src="Images/healthcheck2.png" alt="PowerShell prompt after running the health check script" />
-            <span class="shot-caption">Script run</span>
-          </a>
-          <a class="shot" href="Images/healthcheck3.png" target="_blank" rel="noopener">
-            <img src="Images/healthcheck3.png" alt="Daily health check log file showing UP status for all hosts" />
-            <span class="shot-caption">Health check log</span>
-          </a>
+          <div class="shot" onclick="openLightbox('Images/healthcheck1.png', 'Script — ISE')">
+            <img src="Images/healthcheck1.png" alt="Daily-HealthCheck.ps1 script in PowerShell ISE" loading="lazy" />
+            <span class="shot-caption">Script — ISE <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/healthcheck2.png', 'Script run')">
+            <img src="Images/healthcheck2.png" alt="PowerShell prompt after running the health check script" loading="lazy" />
+            <span class="shot-caption">Script run <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/healthcheck3.png', 'Health check log')">
+            <img src="Images/healthcheck3.png" alt="Daily health check log file showing UP status for all hosts" loading="lazy" />
+            <span class="shot-caption">Health check log <span class="zoom-hint">&#128269;</span></span>
+          </div>
         </div>
       </article>
 
@@ -466,14 +531,14 @@ $gpoTaskParams = @{
 }
 Register-ScheduledTask @gpoTaskParams</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/schedau1.png" target="_blank" rel="noopener">
-            <img src="Images/schedau1.png" alt="ScheduledTaskAutomation.ps1 script in PowerShell ISE" />
-            <span class="shot-caption">Script — ISE</span>
-          </a>
-          <a class="shot" href="Images/schedau2.png" target="_blank" rel="noopener">
-            <img src="Images/schedau2.png" alt="PowerShell output listing the two registered scheduled tasks" />
-            <span class="shot-caption">Registered tasks</span>
-          </a>
+          <div class="shot" onclick="openLightbox('Images/schedau1.png', 'Script — ISE')">
+            <img src="Images/schedau1.png" alt="ScheduledTaskAutomation.ps1 script in PowerShell ISE" loading="lazy" />
+            <span class="shot-caption">Script — ISE <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/schedau2.png', 'Registered tasks')">
+            <img src="Images/schedau2.png" alt="PowerShell output listing the two registered scheduled tasks" loading="lazy" />
+            <span class="shot-caption">Registered tasks <span class="zoom-hint">&#128269;</span></span>
+          </div>
         </div>
       </article>
 
@@ -487,5 +552,33 @@ Register-ScheduledTask @gpoTaskParams</code></pre>
       </div>
     </footer>
   </div>
+
+  <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close">&times;</button>
+    <img id="lightboxImg" src="" alt="" />
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <script>
+    function openLightbox(src, caption) {
+      const overlay = document.getElementById('lightboxOverlay');
+      const img = document.getElementById('lightboxImg');
+      const cap = document.getElementById('lightboxCaption');
+      img.src = src;
+      img.alt = caption;
+      cap.textContent = caption;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(e) {
+      if (e) e.stopPropagation();
+      const overlay = document.getElementById('lightboxOverlay');
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
 </body>
 </html>
