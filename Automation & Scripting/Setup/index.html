@@ -1,1 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Setup · Automation & Scripting · Mark Thompson Portfolio</title>
+  <meta name="description" content="Setting up a dedicated Privileged Access Workstation and service account for running PowerShell automation against the lab domain controller." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px; --code-bg:#0b0e14;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1280px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 40px;font-size:clamp(17px,2.4vw,19px);text-align:center}
+
+    /* Setup sections */
+    .script-list{
+      display:flex;
+      flex-direction:column;
+      gap:26px;
+      max-width:1180px;
+      margin:8px auto 0;
+    }
+
+    .script-item{
+      width:100%;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      padding:28px 30px;
+    }
+
+    .script-head{
+      display:flex;
+      align-items:center;
+      gap:18px;
+      margin-bottom:14px;
+    }
+
+    .script-num{
+      flex:0 0 auto;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:1.15rem;
+      color:var(--brand);
+      background:rgba(77,163,255,.08);
+      border:1px solid #2a3a55;
+    }
+
+    .script-title{
+      font:700 1.35rem/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      margin:0;
+      color:#e6e7ee;
+    }
+
+    .script-desc{
+      color:#a9b0c3;
+      font-size:0.98rem;
+      margin:0 0 18px 0;
+    }
+
+    pre.code-block{
+      background:var(--code-bg);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      padding:18px 20px;
+      overflow-x:auto;
+      margin:0 0 18px 0;
+    }
+    pre.code-block code{
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      font-size:0.85rem;
+      line-height:1.6;
+      color:#c9d1e6;
+      white-space:pre;
+    }
+
+    .shot-row{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:22px;
+    }
+    .shot{
+      display:block;
+      width:100%;
+      max-width:1100px;
+      border:1px solid var(--card-border);
+      border-radius:10px;
+      overflow:hidden;
+      background:#0b0e14;
+      text-decoration:none;
+      cursor:zoom-in;
+      transition:border-color .18s ease, transform .18s ease;
+    }
+    .shot:hover{border-color:#3a4a67;transform:translateY(-2px)}
+    .shot img{
+      display:block;
+      width:100%;
+      height:auto;
+    }
+    .shot-caption{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      text-align:center;
+      font-size:0.8rem;
+      color:#7f8599;
+      padding:8px 10px;
+      border-top:1px solid var(--card-border);
+    }
+    .shot-caption .zoom-hint{
+      color:var(--brand);
+      font-size:0.9rem;
+      line-height:1;
+    }
+
+    /* Lightbox */
+    .lightbox-overlay{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(8,10,14,.88);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:40px 20px;
+      cursor:zoom-out;
+    }
+    .lightbox-overlay.open{display:flex}
+    .lightbox-overlay img{
+      max-width:min(94vw,1400px);
+      max-height:88vh;
+      width:auto;
+      height:auto;
+      border-radius:10px;
+      border:1px solid #3a4a67;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      cursor:zoom-out;
+    }
+    .lightbox-close{
+      position:fixed;
+      top:22px;
+      right:28px;
+      width:42px;
+      height:42px;
+      border-radius:10px;
+      border:1px solid #3a4a67;
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-size:1.3rem;
+      line-height:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      z-index:1001;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.12);border-color:#4DA3FF}
+    .lightbox-caption{
+      position:fixed;
+      bottom:24px;
+      left:50%;
+      transform:translateX(-50%);
+      color:var(--muted);
+      font-size:0.9rem;
+      background:rgba(15,17,21,.7);
+      padding:6px 14px;
+      border-radius:8px;
+      z-index:1001;
+    }
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting" class="active">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <header>
+      <h1>Setup</h1>
+      <p class="lead">Before any scripts ran against the domain, a dedicated Privileged Access Workstation and a scoped service account were stood up so automation never touched the lab as a Domain Admin. Click any screenshot to view it larger.</p>
+    </header>
+
+    <section class="script-list" aria-label="Setup steps">
+
+      <!-- 1: PAW -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">1</span>
+          <h3 class="script-title">PAW — Privileged Access Workstation</h3>
+        </div>
+        <p class="script-desc">A dedicated virtual machine used specifically for running these scripts against the domain controller, kept separate from any day-to-day admin or personal login. All automation in this section is executed from this workstation.</p>
+        <div class="shot-row">
+          <div class="shot" onclick="openLightbox('Images/setup4.png', 'PAW login screen')">
+            <img src="Images/setup4.png" alt="PAW virtual machine login screen showing the MT.AdminScripts account" loading="lazy" />
+            <span class="shot-caption">PAW login screen <span class="zoom-hint">&#128269;</span></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2: Dedicated Automation Account -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">2</span>
+          <h3 class="script-title">Dedicated Automation Service Account</h3>
+        </div>
+        <p class="script-desc">A domain account created specifically to run these scripts, added to the built-in Server Operators security group rather than Domain Admins — enough access to manage AD objects and GPOs, without full domain-level privileges.</p>
+        <div class="shot-row">
+          <div class="shot" onclick="openLightbox('Images/setup5.png', 'whoami confirming the scoped service account')">
+            <img src="Images/setup5.png" alt="PowerShell whoami output confirming the lab mt.adminscripts account" loading="lazy" />
+            <span class="shot-caption">Confirming identity with whoami <span class="zoom-hint">&#128269;</span></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3: Installing RSAT Tools -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">3</span>
+          <h3 class="script-title">Installing RSAT Tools</h3>
+        </div>
+        <p class="script-desc">Installed the RSAT Active Directory PowerShell module and Group Policy Management Console on the PAW, giving the workstation the tools it needs to manage AD and GPOs remotely against the domain controller.</p>
+        <pre class="code-block"><code>Install-WindowsFeature RSAT-AD-PowerShell, GPMC</code></pre>
+        <div class="shot-row">
+          <div class="shot" onclick="openLightbox('Images/setup1.png', 'RSAT installation in progress')">
+            <img src="Images/setup1.png" alt="PowerShell showing RSAT installation in progress" loading="lazy" />
+            <span class="shot-caption">Installation in progress <span class="zoom-hint">&#128269;</span></span>
+          </div>
+          <div class="shot" onclick="openLightbox('Images/setup2.png', 'RSAT installation completed successfully')">
+            <img src="Images/setup2.png" alt="PowerShell output confirming RSAT features installed successfully" loading="lazy" />
+            <span class="shot-caption">Installation complete <span class="zoom-hint">&#128269;</span></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4: Importing & Testing the AD Module -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">4</span>
+          <h3 class="script-title">Importing & Testing the Active Directory Module</h3>
+        </div>
+        <p class="script-desc">Imported the ActiveDirectory module and ran a quick Get-ADDomain query to confirm the PAW could reach and query the domain controller before writing any of the automation scripts.</p>
+        <pre class="code-block"><code>Import-Module ActiveDirectory
+Get-ADDomain</code></pre>
+        <div class="shot-row">
+          <div class="shot" onclick="openLightbox('Images/setup3.png', 'Get-ADDomain output confirming domain connectivity')">
+            <img src="Images/setup3.png" alt="PowerShell output of Get-ADDomain confirming connectivity to mtlab.local" loading="lazy" />
+            <span class="shot-caption">Get-ADDomain output <span class="zoom-hint">&#128269;</span></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5: Scripts Folder -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">5</span>
+          <h3 class="script-title">Scripts Folder</h3>
+        </div>
+        <p class="script-desc">All automation scripts live together in C:\Scripts on the PAW, alongside their supporting CSV input and a Logs subfolder for health check output.</p>
+        <div class="shot-row">
+          <div class="shot" onclick="openLightbox('Images/setup6.png', 'C:\\Scripts folder contents')">
+            <img src="Images/setup6.png" alt="File Explorer showing the C:\Scripts folder with all automation scripts" loading="lazy" />
+            <span class="shot-caption">C:\Scripts contents <span class="zoom-hint">&#128269;</span></span>
+          </div>
+        </div>
+      </article>
+
+      <!-- 6: Scheduled Task Automation Script -->
+      <article class="script-item">
+        <div class="script-head">
+          <span class="script-num">6</span>
+          <h3 class="script-title">Scheduled Task Automation Script</h3>
+        </div>
+        <p class="script-desc">The last script in the folder — ScheduledTaskAutomation.ps1 — registers the health check and GPO backup scripts as native Windows scheduled tasks, shown here open in the PowerShell ISE.</p>
+        <div class="shot-row">
+          <div class="shot" onclick="openLightbox('Images/setup7.png', 'ScheduledTaskAutomation.ps1 in PowerShell ISE')">
+            <img src="Images/setup7.png" alt="ScheduledTaskAutomation.ps1 script open in PowerShell ISE" loading="lazy" />
+            <span class="shot-caption">Script — ISE <span class="zoom-hint">&#128269;</span></span>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close">&times;</button>
+    <img id="lightboxImg" src="" alt="" />
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <script>
+    function openLightbox(src, caption) {
+      const overlay = document.getElementById('lightboxOverlay');
+      const img = document.getElementById('lightboxImg');
+      const cap = document.getElementById('lightboxCaption');
+      img.src = src;
+      img.alt = caption;
+      cap.textContent = caption;
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(e) {
+      if (e) e.stopPropagation();
+      const overlay = document.getElementById('lightboxOverlay');
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
