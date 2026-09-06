@@ -95,8 +95,22 @@
       background:rgba(77,163,255,.08);border:1px solid #2a3a55;
     }
     .step-title{margin:0;font-size:1rem;font-weight:600;color:var(--text)}
-    .step-shot{display:block;width:100%;background:#000}
+    .step-shot{display:block;width:100%;background:#000;cursor:zoom-in;position:relative}
     .step-shot img{display:block;width:100%;height:auto}
+    .step-shot::after{
+      content:"⤢";
+      position:absolute; top:12px; right:12px;
+      width:34px;height:34px;border-radius:9px;
+      background:rgba(15,17,21,.72);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--text);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;
+      opacity:0; transition:opacity .15s ease;
+      pointer-events:none;
+    }
+    .step-shot:hover::after,.step-shot:focus-visible::after{opacity:1}
+    .step-shot:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
     .step-caption{padding:16px 22px 20px;color:var(--muted);font-size:.92rem;margin:0}
 
     /* Footer */
@@ -129,6 +143,42 @@
     footer a:hover{
       color:var(--brand);
       text-decoration:none;
+    }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0; z-index:1000;
+      background:rgba(6,7,10,.92);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:min(6vh,60px) min(6vw,60px);
+      cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:100%; max-height:100%;
+      width:auto; height:auto;
+      border-radius:10px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      border:1px solid rgba(255,255,255,.1);
+      cursor:default;
+    }
+    .lightbox-close{
+      position:fixed; top:20px; right:24px;
+      width:44px;height:44px;border-radius:12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.16);
+      color:var(--text);
+      font-size:1.4rem; line-height:1;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.12)}
+    .lightbox-caption{
+      position:fixed; left:0; right:0; bottom:18px;
+      text-align:center; color:var(--muted);
+      font-size:.9rem; padding:0 24px;
+      pointer-events:none;
     }
   </style>
 </head>
@@ -178,79 +228,79 @@
       <div class="steps">
         <article class="step">
           <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Cold start &amp; setup dialog prompt</h3></div>
-          <a class="step-shot" href="Images/switch001-1.png"><img src="Images/switch001-1.png" alt="Switch001 cold start showing hardware details and initial configuration dialog prompt"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-1.png', 'Switch001 cold start showing hardware details and initial configuration dialog prompt')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-1.png', 'Switch001 cold start showing hardware details and initial configuration dialog prompt')" aria-label="Zoom image: Switch001 cold start showing hardware details and initial configuration dialog prompt"><img src="Images/switch001-1.png" alt="Switch001 cold start showing hardware details and initial configuration dialog prompt"></div>
           <p class="step-caption">Switch boots cold, displaying the WS-C2950G-48-EI hardware details, then prompts to enter the initial configuration dialog. Answered <code>yes</code> to begin.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Basic management setup &amp; hostname</h3></div>
-          <a class="step-shot" href="Images/switch001-2.png"><img src="Images/switch001-2.png" alt="Entering basic management setup and setting hostname to Switch001"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-2.png', 'Entering basic management setup and setting hostname to Switch001')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-2.png', 'Entering basic management setup and setting hostname to Switch001')" aria-label="Zoom image: Entering basic management setup and setting hostname to Switch001"><img src="Images/switch001-2.png" alt="Entering basic management setup and setting hostname to Switch001"></div>
           <p class="step-caption">Enabled basic management setup and assigned the hostname <code>Switch001</code>, then moved into the enable secret prompt.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Enable secret, enable password &amp; VTY password</h3></div>
-          <a class="step-shot" href="Images/switch001-3.png"><img src="Images/switch001-3.png" alt="Enable secret, enable password, and virtual terminal password prompts, SNMP disabled, interface summary begins"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-3.png', 'Enable secret, enable password, and virtual terminal password prompts, SNMP disabled, interface summary begins')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-3.png', 'Enable secret, enable password, and virtual terminal password prompts, SNMP disabled, interface summary begins')" aria-label="Zoom image: Enable secret, enable password, and virtual terminal password prompts, SNMP disabled, interface summary begins"><img src="Images/switch001-3.png" alt="Enable secret, enable password, and virtual terminal password prompts, SNMP disabled, interface summary begins"></div>
           <p class="step-caption">Set the enable secret, legacy enable password, and virtual terminal (VTY) password, declined SNMP management, and the interface summary begins.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Interface summary (Fa0/1–0/19)</h3></div>
-          <a class="step-shot" href="Images/switch001-4.png"><img src="Images/switch001-4.png" alt="Current interface summary listing FastEthernet0/1 through 0/19"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-4.png', 'Current interface summary listing FastEthernet0/1 through 0/19')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-4.png', 'Current interface summary listing FastEthernet0/1 through 0/19')" aria-label="Zoom image: Current interface summary listing FastEthernet0/1 through 0/19"><img src="Images/switch001-4.png" alt="Current interface summary listing FastEthernet0/1 through 0/19"></div>
           <p class="step-caption">Dialog lists the current interface summary — every FastEthernet port unassigned and down, VLAN1 flagged as needing a valid configuration.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Interface summary (Fa0/26–0/48, Gi0/1–0/2)</h3></div>
-          <a class="step-shot" href="Images/switch001-5.png"><img src="Images/switch001-5.png" alt="Interface summary continuing through FastEthernet0/26 to GigabitEthernet0/2, prompt for management interface"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-5.png', 'Interface summary continuing through FastEthernet0/26 to GigabitEthernet0/2, prompt for management interface')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-5.png', 'Interface summary continuing through FastEthernet0/26 to GigabitEthernet0/2, prompt for management interface')" aria-label="Zoom image: Interface summary continuing through FastEthernet0/26 to GigabitEthernet0/2, prompt for management interface"><img src="Images/switch001-5.png" alt="Interface summary continuing through FastEthernet0/26 to GigabitEthernet0/2, prompt for management interface"></div>
           <p class="step-caption">Summary continues through the remaining Fast Ethernet ports and both Gigabit uplinks, then prompts for which interface to use for management connectivity.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Selecting VLAN1 as the management interface</h3></div>
-          <a class="step-shot" href="Images/switch001-6.png"><img src="Images/switch001-6.png" alt="Selecting VLAN1 as the management interface after declining the default"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-6.png', 'Selecting VLAN1 as the management interface after declining the default')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-6.png', 'Selecting VLAN1 as the management interface after declining the default')" aria-label="Zoom image: Selecting VLAN1 as the management interface after declining the default"><img src="Images/switch001-6.png" alt="Selecting VLAN1 as the management interface after declining the default"></div>
           <p class="step-caption">Declined defaulting to all interfaces, then explicitly named <code>vlan1</code> as the management interface.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Configuring the VLAN1 IP address</h3></div>
-          <a class="step-shot" href="Images/switch001-7.png"><img src="Images/switch001-7.png" alt="Configuring IP address 192.168.50.2 and subnet mask 255.255.255.0 on interface VLAN1"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-7.png', 'Configuring IP address 192.168.50.2 and subnet mask 255.255.255.0 on interface VLAN1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-7.png', 'Configuring IP address 192.168.50.2 and subnet mask 255.255.255.0 on interface VLAN1')" aria-label="Zoom image: Configuring IP address 192.168.50.2 and subnet mask 255.255.255.0 on interface VLAN1"><img src="Images/switch001-7.png" alt="Configuring IP address 192.168.50.2 and subnet mask 255.255.255.0 on interface VLAN1"></div>
           <p class="step-caption">Assigned <code>192.168.50.2</code> with a <code>255.255.255.0</code> (/24) mask to VLAN1, and opted in to enabling the switch as a cluster command switch.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Confirming the /24 mask &amp; cluster prompt</h3></div>
-          <a class="step-shot" href="Images/switch001-8.png"><img src="Images/switch001-8.png" alt="Confirming subnet mask, class C network detection, and cluster command switch prompt"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-8.png', 'Confirming subnet mask, class C network detection, and cluster command switch prompt')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-8.png', 'Confirming subnet mask, class C network detection, and cluster command switch prompt')" aria-label="Zoom image: Confirming subnet mask, class C network detection, and cluster command switch prompt"><img src="Images/switch001-8.png" alt="Confirming subnet mask, class C network detection, and cluster command switch prompt"></div>
           <p class="step-caption">Dialog confirms the Class C network (192.168.50.0, /24) and re-confirms enabling the switch as a cluster command switch.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Naming the cluster: MTLabs</h3></div>
-          <a class="step-shot" href="Images/switch001-9.png"><img src="Images/switch001-9.png" alt="Entering cluster name MTLabs"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-9.png', 'Entering cluster name MTLabs')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-9.png', 'Entering cluster name MTLabs')" aria-label="Zoom image: Entering cluster name MTLabs"><img src="Images/switch001-9.png" alt="Entering cluster name MTLabs"></div>
           <p class="step-caption">Named the cluster <code>MTLabs</code> to group the lab's managed switches under one command switch.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Generated configuration script (part 1)</h3></div>
-          <a class="step-shot" href="Images/switch001-10.png"><img src="Images/switch001-10.png" alt="Generated configuration script showing hostname, enable secret, password, VLAN1 config"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-10.png', 'Generated configuration script showing hostname, enable secret, password, VLAN1 config')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-10.png', 'Generated configuration script showing hostname, enable secret, password, VLAN1 config')" aria-label="Zoom image: Generated configuration script showing hostname, enable secret, password, VLAN1 config"><img src="Images/switch001-10.png" alt="Generated configuration script showing hostname, enable secret, password, VLAN1 config"></div>
           <p class="step-caption">Cisco generates the resulting configuration script from the dialog answers — hostname, enable secret, VTY lines, and the VLAN1 IP address.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">11</span><h3 class="step-title">Generated configuration script (part 2)</h3></div>
-          <a class="step-shot" href="Images/switch001-11.png"><img src="Images/switch001-11.png" alt="Generated configuration script continuing through FastEthernet interfaces"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-11.png', 'Generated configuration script continuing through FastEthernet interfaces')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-11.png', 'Generated configuration script continuing through FastEthernet interfaces')" aria-label="Zoom image: Generated configuration script continuing through FastEthernet interfaces"><img src="Images/switch001-11.png" alt="Generated configuration script continuing through FastEthernet interfaces"></div>
           <p class="step-caption">Script continues, stubbing out each FastEthernet interface for later per-port configuration.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Saving the configuration to NVRAM</h3></div>
-          <a class="step-shot" href="Images/switch001-12.png"><img src="Images/switch001-12.png" alt="Saving the generated configuration to NVRAM and exiting the setup dialog"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-12.png', 'Saving the generated configuration to NVRAM and exiting the setup dialog')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-12.png', 'Saving the generated configuration to NVRAM and exiting the setup dialog')" aria-label="Zoom image: Saving the generated configuration to NVRAM and exiting the setup dialog"><img src="Images/switch001-12.png" alt="Saving the generated configuration to NVRAM and exiting the setup dialog"></div>
           <p class="step-caption">Selected option <code>[2] Save this configuration to nvram and exit</code> to commit the initial setup.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">13</span><h3 class="step-title">Configuration saved &amp; ready for login</h3></div>
-          <a class="step-shot" href="Images/switch001-13.png"><img src="Images/switch001-13.png" alt="Configuration built and saved successfully, switch ready for login"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-13.png', 'Configuration built and saved successfully, switch ready for login')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-13.png', 'Configuration built and saved successfully, switch ready for login')" aria-label="Zoom image: Configuration built and saved successfully, switch ready for login"><img src="Images/switch001-13.png" alt="Configuration built and saved successfully, switch ready for login"></div>
           <p class="step-caption">Configuration builds successfully (<code>[OK]</code>), VLAN1's line protocol comes up, and the switch is ready to log in for lab configuration.</p>
         </article>
       </div>
@@ -267,103 +317,103 @@
       <div class="steps">
         <article class="step">
           <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Back at the CLI</h3></div>
-          <a class="step-shot" href="Images/switch001-14.png"><img src="Images/switch001-14.png" alt="Switch001 user EXEC prompt ready for login"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-14.png', 'Switch001 user EXEC prompt ready for login')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-14.png', 'Switch001 user EXEC prompt ready for login')" aria-label="Zoom image: Switch001 user EXEC prompt ready for login"><img src="Images/switch001-14.png" alt="Switch001 user EXEC prompt ready for login"></div>
           <p class="step-caption">Returning to the CLI with a clean <code>Switch001&gt;</code> prompt, ready to begin the lab-specific configuration.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Entering privileged EXEC mode</h3></div>
-          <a class="step-shot" href="Images/switch001-15.png"><img src="Images/switch001-15.png" alt="Entering enable mode with password"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-15.png', 'Entering enable mode with password')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-15.png', 'Entering enable mode with password')" aria-label="Zoom image: Entering enable mode with password"><img src="Images/switch001-15.png" alt="Entering enable mode with password"></div>
           <p class="step-caption">Authenticated into privileged EXEC mode with <code>enable</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Entering global configuration mode</h3></div>
-          <a class="step-shot" href="Images/switch001-16.png"><img src="Images/switch001-16.png" alt="Entering global configuration mode with conf t"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-16.png', 'Entering global configuration mode with conf t')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-16.png', 'Entering global configuration mode with conf t')" aria-label="Zoom image: Entering global configuration mode with conf t"><img src="Images/switch001-16.png" alt="Entering global configuration mode with conf t"></div>
           <p class="step-caption">Dropped into global configuration mode with <code>conf t</code> to begin building out VLANs and interfaces.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Setting the MOTD banner</h3></div>
-          <a class="step-shot" href="Images/switch001-17.png"><img src="Images/switch001-17.png" alt="Setting banner motd to MTPortfolio Lab Network"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-17.png', 'Setting banner motd to MTPortfolio Lab Network')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-17.png', 'Setting banner motd to MTPortfolio Lab Network')" aria-label="Zoom image: Setting banner motd to MTPortfolio Lab Network"><img src="Images/switch001-17.png" alt="Setting banner motd to MTPortfolio Lab Network"></div>
           <p class="step-caption">Set a message-of-the-day banner: <code>MTPortfolio Lab Network</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Creating the lab VLANs</h3></div>
-          <a class="step-shot" href="Images/switch001-18.png"><img src="Images/switch001-18.png" alt="Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-18.png', 'Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-18.png', 'Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native')" aria-label="Zoom image: Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native"><img src="Images/switch001-18.png" alt="Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native"></div>
           <p class="step-caption">Created and named the lab's VLANs: <code>10 – Servers</code>, <code>20 – Infrastructure</code>, <code>40 – Clients</code>, and <code>99 – Native</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Management interface IP &amp; default gateway</h3></div>
-          <a class="step-shot" href="Images/switch001-19.png"><img src="Images/switch001-19.png" alt="Configuring interface VLAN1 with description Management, IP 192.168.50.2, and default gateway 192.168.50.3"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-19.png', 'Configuring interface VLAN1 with description Management, IP 192.168.50.2, and default gateway 192.168.50.3')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-19.png', 'Configuring interface VLAN1 with description Management, IP 192.168.50.2, and default gateway 192.168.50.3')" aria-label="Zoom image: Configuring interface VLAN1 with description Management, IP 192.168.50.2, and default gateway 192.168.50.3"><img src="Images/switch001-19.png" alt="Configuring interface VLAN1 with description Management, IP 192.168.50.2, and default gateway 192.168.50.3"></div>
           <p class="step-caption">Configured <code>interface vlan 1</code> with description <em>Management</em>, IP <code>192.168.50.2/24</code>, and set the default gateway to <code>192.168.50.3</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Fa0/1 — Management access port</h3></div>
-          <a class="step-shot" href="Images/switch001-20.png"><img src="Images/switch001-20.png" alt="Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-20.png', 'Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-20.png', 'Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled')" aria-label="Zoom image: Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled"><img src="Images/switch001-20.png" alt="Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled"></div>
           <p class="step-caption">Configured <code>Fa0/1</code> as an access port on VLAN 1 for management, enabling PortFast (correcting a typo on the <code>switchport access vlan</code> command along the way).</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Fa0/2 — Hyper-V host</h3></div>
-          <a class="step-shot" href="Images/switch001-21.png"><img src="Images/switch001-21.png" alt="Configuring FastEthernet0/2 as an access port on VLAN 20 for the Hyper-V host"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-21.png', 'Configuring FastEthernet0/2 as an access port on VLAN 20 for the Hyper-V host')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-21.png', 'Configuring FastEthernet0/2 as an access port on VLAN 20 for the Hyper-V host')" aria-label="Zoom image: Configuring FastEthernet0/2 as an access port on VLAN 20 for the Hyper-V host"><img src="Images/switch001-21.png" alt="Configuring FastEthernet0/2 as an access port on VLAN 20 for the Hyper-V host"></div>
           <p class="step-caption">Configured <code>Fa0/2</code> as an access port on VLAN 20 (Infrastructure) for the Hyper-V host, with PortFast enabled.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Fa0/3 — TrueNAS server</h3></div>
-          <a class="step-shot" href="Images/switch001-22.png"><img src="Images/switch001-22.png" alt="Configuring FastEthernet0/3 as an access port on VLAN 10 for the TrueNAS server"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-22.png', 'Configuring FastEthernet0/3 as an access port on VLAN 10 for the TrueNAS server')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-22.png', 'Configuring FastEthernet0/3 as an access port on VLAN 10 for the TrueNAS server')" aria-label="Zoom image: Configuring FastEthernet0/3 as an access port on VLAN 10 for the TrueNAS server"><img src="Images/switch001-22.png" alt="Configuring FastEthernet0/3 as an access port on VLAN 10 for the TrueNAS server"></div>
           <p class="step-caption">Configured <code>Fa0/3</code> as an access port on VLAN 10 (Servers) for the TrueNAS server.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Fa0/4 — Raspberry Pi 5 DNS server</h3></div>
-          <a class="step-shot" href="Images/switch001-23.png"><img src="Images/switch001-23.png" alt="Configuring FastEthernet0/4 as an access port on VLAN 10 for the Raspberry Pi 5 DNS server"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-23.png', 'Configuring FastEthernet0/4 as an access port on VLAN 10 for the Raspberry Pi 5 DNS server')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-23.png', 'Configuring FastEthernet0/4 as an access port on VLAN 10 for the Raspberry Pi 5 DNS server')" aria-label="Zoom image: Configuring FastEthernet0/4 as an access port on VLAN 10 for the Raspberry Pi 5 DNS server"><img src="Images/switch001-23.png" alt="Configuring FastEthernet0/4 as an access port on VLAN 10 for the Raspberry Pi 5 DNS server"></div>
           <p class="step-caption">Configured <code>Fa0/4</code> as an access port on VLAN 10 for the Raspberry Pi 5 DNS server, with PortFast enabled.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">11</span><h3 class="step-title">Fa0/5 — Raspberry Pi 3 NAS</h3></div>
-          <a class="step-shot" href="Images/switch001-24.png"><img src="Images/switch001-24.png" alt="Configuring FastEthernet0/5 as an access port on VLAN 10 for the Raspberry Pi 3 NAS"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-24.png', 'Configuring FastEthernet0/5 as an access port on VLAN 10 for the Raspberry Pi 3 NAS')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-24.png', 'Configuring FastEthernet0/5 as an access port on VLAN 10 for the Raspberry Pi 3 NAS')" aria-label="Zoom image: Configuring FastEthernet0/5 as an access port on VLAN 10 for the Raspberry Pi 3 NAS"><img src="Images/switch001-24.png" alt="Configuring FastEthernet0/5 as an access port on VLAN 10 for the Raspberry Pi 3 NAS"></div>
           <p class="step-caption">Configured <code>Fa0/5</code> as an access port on VLAN 10 for the Raspberry Pi 3 NAS (again correcting a typo on the access VLAN command).</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Fa0/23 — 802.1Q trunk to Switch002</h3></div>
-          <a class="step-shot" href="Images/switch001-25-Trunk.png"><img src="Images/switch001-25-Trunk.png" alt="Configuring FastEthernet0/23 as an 802.1Q trunk to Switch002 3550, native VLAN 99, allowed VLANs 1,10,20,40,99"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-25-Trunk.png', 'Configuring FastEthernet0/23 as an 802.1Q trunk to Switch002 3550, native VLAN 99, allowed VLANs 1,10,20,40,99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-25-Trunk.png', 'Configuring FastEthernet0/23 as an 802.1Q trunk to Switch002 3550, native VLAN 99, allowed VLANs 1,10,20,40,99')" aria-label="Zoom image: Configuring FastEthernet0/23 as an 802.1Q trunk to Switch002 3550, native VLAN 99, allowed VLANs 1,10,20,40,99"><img src="Images/switch001-25-Trunk.png" alt="Configuring FastEthernet0/23 as an 802.1Q trunk to Switch002 3550, native VLAN 99, allowed VLANs 1,10,20,40,99"></div>
           <p class="step-caption">Configured <code>Fa0/23</code> as a trunk to Switch002 (3550): trunk mode, native VLAN 99, and allowed VLANs <code>1, 10, 20, 40, 99</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">13</span><h3 class="step-title">Console &amp; VTY passwords, saving to NVRAM</h3></div>
-          <a class="step-shot" href="Images/switch001-26.png"><img src="Images/switch001-26.png" alt="Setting console and VTY line passwords, then saving configuration with write memory"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-26.png', 'Setting console and VTY line passwords, then saving configuration with write memory')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-26.png', 'Setting console and VTY line passwords, then saving configuration with write memory')" aria-label="Zoom image: Setting console and VTY line passwords, then saving configuration with write memory"><img src="Images/switch001-26.png" alt="Setting console and VTY line passwords, then saving configuration with write memory"></div>
           <p class="step-caption">Set console and VTY line passwords with synchronous logging, then saved the running configuration with <code>write memory</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">14</span><h3 class="step-title">Verifying VLANs (before trunk cleanup)</h3></div>
-          <a class="step-shot" href="Images/switch001-27.png"><img src="Images/switch001-27.png" alt="show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-27.png', 'show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-27.png', 'show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports')" aria-label="Zoom image: show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports"><img src="Images/switch001-27.png" alt="show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports"></div>
           <p class="step-caption"><code>show vlan brief</code> confirms VLANs 10 (Servers), 20 (Infrastructure), 40 (Clients), and 99 (Native) with their assigned ports.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">15</span><h3 class="step-title">Verifying VLANs (after trunk configuration)</h3></div>
-          <a class="step-shot" href="Images/switch001-28.png"><img src="Images/switch001-28.png" alt="show vlan brief output after trunk configuration, Fa0/23 no longer listed under VLAN 1"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-28.png', 'show vlan brief output after trunk configuration, Fa0/23 no longer listed under VLAN 1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-28.png', 'show vlan brief output after trunk configuration, Fa0/23 no longer listed under VLAN 1')" aria-label="Zoom image: show vlan brief output after trunk configuration, Fa0/23 no longer listed under VLAN 1"><img src="Images/switch001-28.png" alt="show vlan brief output after trunk configuration, Fa0/23 no longer listed under VLAN 1"></div>
           <p class="step-caption">Re-running <code>show vlan brief</code> after the trunk was configured — Fa0/23 has moved off the default VLAN 1 port list as expected.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">16</span><h3 class="step-title">Verifying the trunk</h3></div>
-          <a class="step-shot" href="Images/switch001-29.png"><img src="Images/switch001-29.png" alt="show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-29.png', 'show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-29.png', 'show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99')" aria-label="Zoom image: show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99"><img src="Images/switch001-29.png" alt="show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99"></div>
           <p class="step-caption"><code>show interfaces trunk</code> confirms Fa0/23 is trunking with 802.1Q encapsulation, native VLAN 99, and VLANs 1, 10, 20, 40, 99 allowed and active.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">17</span><h3 class="step-title">Verifying spanning tree</h3></div>
-          <a class="step-shot" href="Images/switch001-30.png"><img src="Images/switch001-30.png" alt="show spanning-tree summary output confirming PVST mode and all five VLANs forwarding"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch001-30.png', 'show spanning-tree summary output confirming PVST mode and all five VLANs forwarding')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch001-30.png', 'show spanning-tree summary output confirming PVST mode and all five VLANs forwarding')" aria-label="Zoom image: show spanning-tree summary output confirming PVST mode and all five VLANs forwarding"><img src="Images/switch001-30.png" alt="show spanning-tree summary output confirming PVST mode and all five VLANs forwarding"></div>
           <p class="step-caption"><code>show spanning-tree summary</code> confirms the switch is running PVST with all five VLAN instances in a forwarding state — no blocking, no loops.</p>
         </article>
       </div>
@@ -391,61 +441,61 @@
       <div class="steps">
         <article class="step">
           <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Cold start &amp; setup dialog prompt</h3></div>
-          <a class="step-shot" href="Images/switch002-1.png"><img src="Images/switch002-1.png" alt="Switch002 cold start showing System Configuration Dialog and hostname prompt"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-1.png', 'Switch002 cold start showing System Configuration Dialog and hostname prompt')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-1.png', 'Switch002 cold start showing System Configuration Dialog and hostname prompt')" aria-label="Zoom image: Switch002 cold start showing System Configuration Dialog and hostname prompt"><img src="Images/switch002-1.png" alt="Switch002 cold start showing System Configuration Dialog and hostname prompt"></div>
           <p class="step-caption">Switch reboots cold into the System Configuration Dialog. Answered <code>yes</code> to enter the dialog and <code>yes</code> to basic management setup, then set the hostname to <code>Switch002</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Enable secret prompt</h3></div>
-          <a class="step-shot" href="Images/switch002-2.png"><img src="Images/switch002-2.png" alt="Setup dialog continuing to the enable secret prompt"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-2.png', 'Setup dialog continuing to the enable secret prompt')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-2.png', 'Setup dialog continuing to the enable secret prompt')" aria-label="Zoom image: Setup dialog continuing to the enable secret prompt"><img src="Images/switch002-2.png" alt="Setup dialog continuing to the enable secret prompt"></div>
           <p class="step-caption">Dialog continues from the hostname entry into the enable secret prompt.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Enable secret, enable password &amp; VTY password</h3></div>
-          <a class="step-shot" href="Images/switch002-3.png"><img src="Images/switch002-3.png" alt="Enable secret, enable password, and VTY password prompts, SNMP disabled, interface summary begins"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-3.png', 'Enable secret, enable password, and VTY password prompts, SNMP disabled, interface summary begins')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-3.png', 'Enable secret, enable password, and VTY password prompts, SNMP disabled, interface summary begins')" aria-label="Zoom image: Enable secret, enable password, and VTY password prompts, SNMP disabled, interface summary begins"><img src="Images/switch002-3.png" alt="Enable secret, enable password, and VTY password prompts, SNMP disabled, interface summary begins"></div>
           <p class="step-caption">Set the enable secret, enable password, and VTY password, declined SNMP management, and the interface summary begins (VLAN1, Fa0/1–0/8).</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Interface summary (Fa0/3–0/19)</h3></div>
-          <a class="step-shot" href="Images/switch002-4.png"><img src="Images/switch002-4.png" alt="Interface summary continuing through FastEthernet0/3 to 0/19"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-4.png', 'Interface summary continuing through FastEthernet0/3 to 0/19')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-4.png', 'Interface summary continuing through FastEthernet0/3 to 0/19')" aria-label="Zoom image: Interface summary continuing through FastEthernet0/3 to 0/19"><img src="Images/switch002-4.png" alt="Interface summary continuing through FastEthernet0/3 to 0/19"></div>
           <p class="step-caption">Summary continues through the Fast Ethernet ports, all unassigned and down.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Interface summary &amp; management interface prompt</h3></div>
-          <a class="step-shot" href="Images/switch002-5.png"><img src="Images/switch002-5.png" alt="Interface summary continuing through FastEthernet0/24 and GigabitEthernet0/1-0/2, prompt for management interface"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-5.png', 'Interface summary continuing through FastEthernet0/24 and GigabitEthernet0/1-0/2, prompt for management interface')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-5.png', 'Interface summary continuing through FastEthernet0/24 and GigabitEthernet0/1-0/2, prompt for management interface')" aria-label="Zoom image: Interface summary continuing through FastEthernet0/24 and GigabitEthernet0/1-0/2, prompt for management interface"><img src="Images/switch002-5.png" alt="Interface summary continuing through FastEthernet0/24 and GigabitEthernet0/1-0/2, prompt for management interface"></div>
           <p class="step-caption">Summary finishes through Fa0/24 and both Gigabit uplinks, then prompts for the management interface — declined defaulting to all interfaces.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Configuring the VLAN1 IP address</h3></div>
-          <a class="step-shot" href="Images/switch002-6.png"><img src="Images/switch002-6.png" alt="Selecting VLAN1 as management interface and configuring IP 192.168.50.3, cluster command switch prompt"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-6.png', 'Selecting VLAN1 as management interface and configuring IP 192.168.50.3, cluster command switch prompt')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-6.png', 'Selecting VLAN1 as management interface and configuring IP 192.168.50.3, cluster command switch prompt')" aria-label="Zoom image: Selecting VLAN1 as management interface and configuring IP 192.168.50.3, cluster command switch prompt"><img src="Images/switch002-6.png" alt="Selecting VLAN1 as management interface and configuring IP 192.168.50.3, cluster command switch prompt"></div>
           <p class="step-caption">Named <code>vlan1</code> as the management interface, assigned <code>192.168.50.3/24</code>, confirmed the Class C /24 mask, and opted in to enabling the switch as a cluster command switch.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Naming the cluster &amp; generated script (part 1)</h3></div>
-          <a class="step-shot" href="Images/switch002-7.png"><img src="Images/switch002-7.png" alt="Entering cluster name MTLabs and generated configuration script showing hostname, enable secret, password, VLAN1 config"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-7.png', 'Entering cluster name MTLabs and generated configuration script showing hostname, enable secret, password, VLAN1 config')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-7.png', 'Entering cluster name MTLabs and generated configuration script showing hostname, enable secret, password, VLAN1 config')" aria-label="Zoom image: Entering cluster name MTLabs and generated configuration script showing hostname, enable secret, password, VLAN1 config"><img src="Images/switch002-7.png" alt="Entering cluster name MTLabs and generated configuration script showing hostname, enable secret, password, VLAN1 config"></div>
           <p class="step-caption">Joined the existing <code>MTLabs</code> cluster. Cisco generates the resulting configuration script — hostname, enable secret, enable password, VTY password, and the VLAN1 IP address.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Generated configuration script (part 2)</h3></div>
-          <a class="step-shot" href="Images/switch002-8.png"><img src="Images/switch002-8.png" alt="Generated configuration script continuing through FastEthernet interfaces"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-8.png', 'Generated configuration script continuing through FastEthernet interfaces')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-8.png', 'Generated configuration script continuing through FastEthernet interfaces')" aria-label="Zoom image: Generated configuration script continuing through FastEthernet interfaces"><img src="Images/switch002-8.png" alt="Generated configuration script continuing through FastEthernet interfaces"></div>
           <p class="step-caption">Script continues, stubbing out each FastEthernet interface for later per-port configuration.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Saving the configuration to NVRAM</h3></div>
-          <a class="step-shot" href="Images/switch002-9.png"><img src="Images/switch002-9.png" alt="Generated script finishing through Gigabit uplinks and cluster enable, selecting option to save to NVRAM"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-9.png', 'Generated script finishing through Gigabit uplinks and cluster enable, selecting option to save to NVRAM')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-9.png', 'Generated script finishing through Gigabit uplinks and cluster enable, selecting option to save to NVRAM')" aria-label="Zoom image: Generated script finishing through Gigabit uplinks and cluster enable, selecting option to save to NVRAM"><img src="Images/switch002-9.png" alt="Generated script finishing through Gigabit uplinks and cluster enable, selecting option to save to NVRAM"></div>
           <p class="step-caption">Script finishes through the Gigabit uplinks with <code>cluster enable MTLabs</code>, then selected option <code>[2] Save this configuration to nvram and exit</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Configuration saved &amp; ready for login</h3></div>
-          <a class="step-shot" href="Images/switch002-10.png"><img src="Images/switch002-10.png" alt="Configuration built and saved successfully, switch ready for login"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-10.png', 'Configuration built and saved successfully, switch ready for login')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-10.png', 'Configuration built and saved successfully, switch ready for login')" aria-label="Zoom image: Configuration built and saved successfully, switch ready for login"><img src="Images/switch002-10.png" alt="Configuration built and saved successfully, switch ready for login"></div>
           <p class="step-caption">Configuration builds successfully (<code>[OK]</code>), and the switch is ready to log in for lab configuration.</p>
         </article>
       </div>
@@ -461,103 +511,103 @@
       <div class="steps">
         <article class="step">
           <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Back at the CLI</h3></div>
-          <a class="step-shot" href="Images/switch002-11.png"><img src="Images/switch002-11.png" alt="Switch002 user EXEC prompt ready for login"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-11.png', 'Switch002 user EXEC prompt ready for login')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-11.png', 'Switch002 user EXEC prompt ready for login')" aria-label="Zoom image: Switch002 user EXEC prompt ready for login"><img src="Images/switch002-11.png" alt="Switch002 user EXEC prompt ready for login"></div>
           <p class="step-caption">Returning to the CLI with a clean <code>Switch002&gt;</code> prompt, ready to begin the lab-specific configuration.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Entering configuration mode</h3></div>
-          <a class="step-shot" href="Images/switch002-12.png"><img src="Images/switch002-12.png" alt="Entering enable mode and global configuration mode"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-12.png', 'Entering enable mode and global configuration mode')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-12.png', 'Entering enable mode and global configuration mode')" aria-label="Zoom image: Entering enable mode and global configuration mode"><img src="Images/switch002-12.png" alt="Entering enable mode and global configuration mode"></div>
           <p class="step-caption">Authenticated into privileged EXEC mode with <code>enable</code>, then dropped into global configuration mode with <code>conf t</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Setting the MOTD banner</h3></div>
-          <a class="step-shot" href="Images/switch002-13.png"><img src="Images/switch002-13.png" alt="Setting banner motd to MTPortfolio Lab Network"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-13.png', 'Setting banner motd to MTPortfolio Lab Network')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-13.png', 'Setting banner motd to MTPortfolio Lab Network')" aria-label="Zoom image: Setting banner motd to MTPortfolio Lab Network"><img src="Images/switch002-13.png" alt="Setting banner motd to MTPortfolio Lab Network"></div>
           <p class="step-caption">Set a message-of-the-day banner: <code>MTPortfolio Lab Network</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Enabling IP routing</h3></div>
-          <a class="step-shot" href="Images/switch002-14.png"><img src="Images/switch002-14.png" alt="Enabling ip routing on the Catalyst 3550"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-14.png', 'Enabling ip routing on the Catalyst 3550')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-14.png', 'Enabling ip routing on the Catalyst 3550')" aria-label="Zoom image: Enabling ip routing on the Catalyst 3550"><img src="Images/switch002-14.png" alt="Enabling ip routing on the Catalyst 3550"></div>
           <p class="step-caption">Enabled <code>ip routing</code> — the Catalyst 3550 is a Layer 3 switch, so it handles inter-VLAN routing for the lab rather than relying on an external router-on-a-stick.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Creating the lab VLANs</h3></div>
-          <a class="step-shot" href="Images/switch002-15.png"><img src="Images/switch002-15.png" alt="Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-15.png', 'Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-15.png', 'Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native')" aria-label="Zoom image: Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native"><img src="Images/switch002-15.png" alt="Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native"></div>
           <p class="step-caption">Created and named the same lab VLANs as Switch001: <code>10 – Servers</code>, <code>20 – Infrastructure</code>, <code>40 – Clients</code>, and <code>99 – Native</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Configuring SVIs for inter-VLAN routing</h3></div>
-          <a class="step-shot" href="Images/switch002-16.png"><img src="Images/switch002-16.png" alt="Configuring SVIs for VLAN1 Management, VLAN10 Servers, VLAN20 Infrastructure, and VLAN40 Clients with IP addresses"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-16.png', 'Configuring SVIs for VLAN1 Management, VLAN10 Servers, VLAN20 Infrastructure, and VLAN40 Clients with IP addresses')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-16.png', 'Configuring SVIs for VLAN1 Management, VLAN10 Servers, VLAN20 Infrastructure, and VLAN40 Clients with IP addresses')" aria-label="Zoom image: Configuring SVIs for VLAN1 Management, VLAN10 Servers, VLAN20 Infrastructure, and VLAN40 Clients with IP addresses"><img src="Images/switch002-16.png" alt="Configuring SVIs for VLAN1 Management, VLAN10 Servers, VLAN20 Infrastructure, and VLAN40 Clients with IP addresses"></div>
           <p class="step-caption">Gave each VLAN a routable gateway via SVIs: <code>VLAN1</code> (Management, 192.168.50.3), <code>VLAN10</code> (Servers, 192.168.10.1), <code>VLAN20</code> (Infrastructure, 192.168.20.1), and <code>VLAN40</code> (Clients, 192.168.40.1).</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Adding a static default route</h3></div>
-          <a class="step-shot" href="Images/switch002-17.png"><img src="Images/switch002-17.png" alt="Adding a static default route pointing to 192.168.50.1"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-17.png', 'Adding a static default route pointing to 192.168.50.1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-17.png', 'Adding a static default route pointing to 192.168.50.1')" aria-label="Zoom image: Adding a static default route pointing to 192.168.50.1"><img src="Images/switch002-17.png" alt="Adding a static default route pointing to 192.168.50.1"></div>
           <p class="step-caption">Added a static default route (<code>0.0.0.0/0</code> via <code>192.168.50.1</code>) so lab traffic has a path out toward the SOHO router.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Fa0/1 — Management access port</h3></div>
-          <a class="step-shot" href="Images/switch002-18.png"><img src="Images/switch002-18.png" alt="Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-18.png', 'Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-18.png', 'Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled')" aria-label="Zoom image: Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled"><img src="Images/switch002-18.png" alt="Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled"></div>
           <p class="step-caption">Configured <code>Fa0/1</code> as an access port on VLAN 1 for management, with PortFast enabled.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Fa0/2 — Win11 client</h3></div>
-          <a class="step-shot" href="Images/switch002-19.png"><img src="Images/switch002-19.png" alt="Configuring FastEthernet0/2 as an access port on VLAN 40 for a Windows 11 client"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-19.png', 'Configuring FastEthernet0/2 as an access port on VLAN 40 for a Windows 11 client')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-19.png', 'Configuring FastEthernet0/2 as an access port on VLAN 40 for a Windows 11 client')" aria-label="Zoom image: Configuring FastEthernet0/2 as an access port on VLAN 40 for a Windows 11 client"><img src="Images/switch002-19.png" alt="Configuring FastEthernet0/2 as an access port on VLAN 40 for a Windows 11 client"></div>
           <p class="step-caption">Configured <code>Fa0/2</code> as an access port on VLAN 40 (Clients) for a Windows 11 client machine, with PortFast enabled.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Fa0/23 — 802.1Q trunk to Switch001</h3></div>
-          <a class="step-shot" href="Images/switch002-20.png"><img src="Images/switch002-20.png" alt="Configuring FastEthernet0/23 as an 802.1Q trunk to Switch001 2950, native VLAN 99, allowed VLANs 1,10,20,40,99"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-20.png', 'Configuring FastEthernet0/23 as an 802.1Q trunk to Switch001 2950, native VLAN 99, allowed VLANs 1,10,20,40,99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-20.png', 'Configuring FastEthernet0/23 as an 802.1Q trunk to Switch001 2950, native VLAN 99, allowed VLANs 1,10,20,40,99')" aria-label="Zoom image: Configuring FastEthernet0/23 as an 802.1Q trunk to Switch001 2950, native VLAN 99, allowed VLANs 1,10,20,40,99"><img src="Images/switch002-20.png" alt="Configuring FastEthernet0/23 as an 802.1Q trunk to Switch001 2950, native VLAN 99, allowed VLANs 1,10,20,40,99"></div>
           <p class="step-caption">Configured <code>Fa0/23</code> as the trunk back to Switch001 (2950): 802.1Q encapsulation, trunk mode, native VLAN 99, and allowed VLANs <code>1, 10, 20, 40, 99</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">11</span><h3 class="step-title">Fa0/24 — Routed uplink to the SOHO router</h3></div>
-          <a class="step-shot" href="Images/switch002-21.png"><img src="Images/switch002-21.png" alt="Converting FastEthernet0/24 to a routed port with IP address 192.168.1.2 as the uplink to the SOHO router"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-21.png', 'Converting FastEthernet0/24 to a routed port with IP address 192.168.1.2 as the uplink to the SOHO router')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-21.png', 'Converting FastEthernet0/24 to a routed port with IP address 192.168.1.2 as the uplink to the SOHO router')" aria-label="Zoom image: Converting FastEthernet0/24 to a routed port with IP address 192.168.1.2 as the uplink to the SOHO router"><img src="Images/switch002-21.png" alt="Converting FastEthernet0/24 to a routed port with IP address 192.168.1.2 as the uplink to the SOHO router"></div>
           <p class="step-caption">Converted <code>Fa0/24</code> to a routed port (<code>no switchport</code>) and assigned <code>192.168.1.2/24</code> as the uplink to the SOHO router.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Setting spanning-tree priority (root bridge)</h3></div>
-          <a class="step-shot" href="Images/switch002-22.png"><img src="Images/switch002-22.png" alt="Setting spanning-tree priority 4096 on VLANs 1, 10, 20, 40, and 99"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-22.png', 'Setting spanning-tree priority 4096 on VLANs 1, 10, 20, 40, and 99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-22.png', 'Setting spanning-tree priority 4096 on VLANs 1, 10, 20, 40, and 99')" aria-label="Zoom image: Setting spanning-tree priority 4096 on VLANs 1, 10, 20, 40, and 99"><img src="Images/switch002-22.png" alt="Setting spanning-tree priority 4096 on VLANs 1, 10, 20, 40, and 99"></div>
           <p class="step-caption">Set spanning-tree priority to <code>4096</code> on VLANs 1, 10, 20, 40, and 99, making Switch002 the root bridge for the lab topology.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">13</span><h3 class="step-title">Console &amp; VTY passwords, saving to NVRAM</h3></div>
-          <a class="step-shot" href="Images/switch002-23.png"><img src="Images/switch002-23.png" alt="Setting console and VTY line passwords, then saving configuration with write memory"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-23.png', 'Setting console and VTY line passwords, then saving configuration with write memory')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-23.png', 'Setting console and VTY line passwords, then saving configuration with write memory')" aria-label="Zoom image: Setting console and VTY line passwords, then saving configuration with write memory"><img src="Images/switch002-23.png" alt="Setting console and VTY line passwords, then saving configuration with write memory"></div>
           <p class="step-caption">Set console and VTY line passwords with synchronous logging, then saved the running configuration with <code>write memory</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">14</span><h3 class="step-title">Verifying VLANs</h3></div>
-          <a class="step-shot" href="Images/switch002-24.png"><img src="Images/switch002-24.png" alt="show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-24.png', 'show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-24.png', 'show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports')" aria-label="Zoom image: show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports"><img src="Images/switch002-24.png" alt="show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports"></div>
           <p class="step-caption"><code>show vlan brief</code> confirms VLANs 10 (Servers), 20 (Infrastructure), 40 (Clients), and 99 (Native) with their assigned ports.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">15</span><h3 class="step-title">Verifying the trunk</h3></div>
-          <a class="step-shot" href="Images/switch002-25.png"><img src="Images/switch002-25.png" alt="show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-25.png', 'show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-25.png', 'show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99')" aria-label="Zoom image: show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99"><img src="Images/switch002-25.png" alt="show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99"></div>
           <p class="step-caption"><code>show interfaces trunk</code> confirms Fa0/23 is trunking with 802.1Q encapsulation, native VLAN 99, and VLANs 1, 10, 20, 40, 99 allowed and active.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">16</span><h3 class="step-title">Verifying the routing table</h3></div>
-          <a class="step-shot" href="Images/switch002-26.png"><img src="Images/switch002-26.png" alt="show ip route output listing directly connected VLAN subnets and a static default route"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-26.png', 'show ip route output listing directly connected VLAN subnets and a static default route')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-26.png', 'show ip route output listing directly connected VLAN subnets and a static default route')" aria-label="Zoom image: show ip route output listing directly connected VLAN subnets and a static default route"><img src="Images/switch002-26.png" alt="show ip route output listing directly connected VLAN subnets and a static default route"></div>
           <p class="step-caption"><code>show ip route</code> confirms the directly connected VLAN 1, 10, 20, and 40 subnets, plus the static default route out via 192.168.50.1.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">17</span><h3 class="step-title">Verifying spanning tree</h3></div>
-          <a class="step-shot" href="Images/switch002-27.png"><img src="Images/switch002-27.png" alt="show spanning-tree summary output confirming Switch002 as root bridge for all five VLANs, all forwarding"></a>
+          <div class="step-shot" onclick="openLightbox('Images/switch002-27.png', 'show spanning-tree summary output confirming Switch002 as root bridge for all five VLANs, all forwarding')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/switch002-27.png', 'show spanning-tree summary output confirming Switch002 as root bridge for all five VLANs, all forwarding')" aria-label="Zoom image: show spanning-tree summary output confirming Switch002 as root bridge for all five VLANs, all forwarding"><img src="Images/switch002-27.png" alt="show spanning-tree summary output confirming Switch002 as root bridge for all five VLANs, all forwarding"></div>
           <p class="step-caption"><code>show spanning-tree summary</code> confirms Switch002 is now the root bridge for all five VLAN instances, with everything in a forwarding state.</p>
         </article>
       </div>
@@ -584,61 +634,61 @@
       <div class="steps">
         <article class="step">
           <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Restoring factory defaults from the Boot Menu</h3></div>
-          <a class="step-shot" href="Images/dell1.png"><img src="Images/dell1.png" alt="Dell Boot Menu options list, selecting option 10 to restore configuration to factory defaults"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell1.png', 'Dell Boot Menu options list, selecting option 10 to restore configuration to factory defaults')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell1.png', 'Dell Boot Menu options list, selecting option 10 to restore configuration to factory defaults')" aria-label="Zoom image: Dell Boot Menu options list, selecting option 10 to restore configuration to factory defaults"><img src="Images/dell1.png" alt="Dell Boot Menu options list, selecting option 10 to restore configuration to factory defaults"></div>
           <p class="step-caption">The full Boot Menu option list appears. Selected <code>10 – Restore configuration to factory defaults</code>, confirmed <code>y</code>, then selected <code>1</code> to start the operational code.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Setup Wizard begins</h3></div>
-          <a class="step-shot" href="Images/dell2.png"><img src="Images/dell2.png" alt="Setup Wizard prompt, declining SNMP setup and beginning the privilege account username entry"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell2.png', 'Setup Wizard prompt, declining SNMP setup and beginning the privilege account username entry')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell2.png', 'Setup Wizard prompt, declining SNMP setup and beginning the privilege account username entry')" aria-label="Zoom image: Setup Wizard prompt, declining SNMP setup and beginning the privilege account username entry"><img src="Images/dell2.png" alt="Setup Wizard prompt, declining SNMP setup and beginning the privilege account username entry"></div>
           <p class="step-caption">On boot, the Setup Wizard offers to run — answered <code>Y</code>. Declined SNMP management setup in Step 1, then began Step 2 by entering the privilege-15 username <code>MT</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Volume info &amp; default boot prompt</h3></div>
-          <a class="step-shot" href="Images/dell3.png"><img src="Images/dell3.png" alt="Tail of file system volume configuration details followed by the default Boot Menu prompt"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell3.png', 'Tail of file system volume configuration details followed by the default Boot Menu prompt')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell3.png', 'Tail of file system volume configuration details followed by the default Boot Menu prompt')" aria-label="Zoom image: Tail of file system volume configuration details followed by the default Boot Menu prompt"><img src="Images/dell3.png" alt="Tail of file system volume configuration details followed by the default Boot Menu prompt"></div>
           <p class="step-caption">Tail end of a file-system/volume configuration display, followed by the default Boot Menu prompt — selected <code>1</code> to start the operational code.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Password &amp; management IP prompt</h3></div>
-          <a class="step-shot" href="Images/dell4.png"><img src="Images/dell4.png" alt="Setup Wizard Step 2 password entry, then Step 3 prompting for the management IP address"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell4.png', 'Setup Wizard Step 2 password entry, then Step 3 prompting for the management IP address')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell4.png', 'Setup Wizard Step 2 password entry, then Step 3 prompting for the management IP address')" aria-label="Zoom image: Setup Wizard Step 2 password entry, then Step 3 prompting for the management IP address"><img src="Images/dell4.png" alt="Setup Wizard Step 2 password entry, then Step 3 prompting for the management IP address"></div>
           <p class="step-caption">Step 2 continues with the password entry, then Step 3 begins — prompted for the switch's management IP address on the default VLAN, with a DHCP option offered.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Back at the Boot Menu</h3></div>
-          <a class="step-shot" href="Images/dell5.png"><img src="Images/dell5.png" alt="Boot Menu options list again, restoring factory defaults a second time"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell5.png', 'Boot Menu options list again, restoring factory defaults a second time')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell5.png', 'Boot Menu options list again, restoring factory defaults a second time')" aria-label="Zoom image: Boot Menu options list again, restoring factory defaults a second time"><img src="Images/dell5.png" alt="Boot Menu options list again, restoring factory defaults a second time"></div>
           <p class="step-caption">The Boot Menu's full option list appears again. Selected <code>10</code> to restore factory defaults, confirmed <code>y</code>, then <code>1</code> to reboot into the operational code.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Setup Wizard runs again</h3></div>
-          <a class="step-shot" href="Images/dell6.png"><img src="Images/dell6.png" alt="Setup Wizard running again, declining SNMP and re-entering the username MT"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell6.png', 'Setup Wizard running again, declining SNMP and re-entering the username MT')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell6.png', 'Setup Wizard running again, declining SNMP and re-entering the username MT')" aria-label="Zoom image: Setup Wizard running again, declining SNMP and re-entering the username MT"><img src="Images/dell6.png" alt="Setup Wizard running again, declining SNMP and re-entering the username MT"></div>
           <p class="step-caption">Setup Wizard runs again — <code>Y</code> to proceed, SNMP declined, and Step 2 begins with the username <code>MT</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Volume &amp; file-system configuration</h3></div>
-          <a class="step-shot" href="Images/dell7.png"><img src="Images/dell7.png" alt="Full volume and file system configuration details followed by the Boot Menu banner"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell7.png', 'Full volume and file system configuration details followed by the Boot Menu banner')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell7.png', 'Full volume and file system configuration details followed by the Boot Menu banner')" aria-label="Zoom image: Full volume and file system configuration details followed by the Boot Menu banner"><img src="Images/dell7.png" alt="Full volume and file system configuration details followed by the Boot Menu banner"></div>
           <p class="step-caption">Full volume/file-system configuration details are displayed — volume label, sector counts, FAT entry size, directory structure — followed by the Boot Menu banner.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Entering the Boot Menu manually</h3></div>
-          <a class="step-shot" href="Images/dell8.png"><img src="Images/dell8.png" alt="Volume information continues, then selecting option 2 to enter the Boot Menu manually"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell8.png', 'Volume information continues, then selecting option 2 to enter the Boot Menu manually')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell8.png', 'Volume information continues, then selecting option 2 to enter the Boot Menu manually')" aria-label="Zoom image: Volume information continues, then selecting option 2 to enter the Boot Menu manually"><img src="Images/dell8.png" alt="Volume information continues, then selecting option 2 to enter the Boot Menu manually"></div>
           <p class="step-caption">Volume information continues (bytes per sector, FAT table copies, free space), then at the default prompt selected <code>2</code> to enter the Boot Menu manually rather than let the operational code auto-start.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Selecting factory reset again</h3></div>
-          <a class="step-shot" href="Images/dell9.png"><img src="Images/dell9.png" alt="Full Boot Menu option list, beginning to enter option 10 to restore factory defaults"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell9.png', 'Full Boot Menu option list, beginning to enter option 10 to restore factory defaults')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell9.png', 'Full Boot Menu option list, beginning to enter option 10 to restore factory defaults')" aria-label="Zoom image: Full Boot Menu option list, beginning to enter option 10 to restore factory defaults"><img src="Images/dell9.png" alt="Full Boot Menu option list, beginning to enter option 10 to restore factory defaults"></div>
           <p class="step-caption">Inside the Boot Menu, the full 13-option list is shown; began entering <code>10</code> to restore factory defaults.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Confirming the factory reset</h3></div>
-          <a class="step-shot" href="Images/dell10.png"><img src="Images/dell10.png" alt="Confirming the factory reset with a y at the delete configuration prompt"></a>
+          <div class="step-shot" onclick="openLightbox('Images/dell10.png', 'Confirming the factory reset with a y at the delete configuration prompt')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/dell10.png', 'Confirming the factory reset with a y at the delete configuration prompt')" aria-label="Zoom image: Confirming the factory reset with a y at the delete configuration prompt"><img src="Images/dell10.png" alt="Confirming the factory reset with a y at the delete configuration prompt"></div>
           <p class="step-caption">Confirmed selection <code>10</code>, with <code>y</code> ready at the <code>Are you SURE you want to delete the configuration?</code> prompt.</p>
         </article>
       </div>
@@ -654,37 +704,37 @@
       <div class="steps">
         <article class="step">
           <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Entering configuration mode</h3></div>
-          <a class="step-shot" href="Images/6248P1.png"><img src="Images/6248P1.png" alt="Logging into the console, entering enable mode and configuration mode"></a>
+          <div class="step-shot" onclick="openLightbox('Images/6248P1.png', 'Logging into the console, entering enable mode and configuration mode')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/6248P1.png', 'Logging into the console, entering enable mode and configuration mode')" aria-label="Zoom image: Logging into the console, entering enable mode and configuration mode"><img src="Images/6248P1.png" alt="Logging into the console, entering enable mode and configuration mode"></div>
           <p class="step-caption">Logged in via console, entered privileged EXEC mode with <code>enable</code>, then global configuration mode with <code>configure</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Setting the hostname</h3></div>
-          <a class="step-shot" href="Images/6248P2.png"><img src="Images/6248P2.png" alt="Setting hostname to Switch003"></a>
+          <div class="step-shot" onclick="openLightbox('Images/6248P2.png', 'Setting hostname to Switch003')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/6248P2.png', 'Setting hostname to Switch003')" aria-label="Zoom image: Setting hostname to Switch003"><img src="Images/6248P2.png" alt="Setting hostname to Switch003"></div>
           <p class="step-caption">Set the hostname to <code>Switch003</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Creating the lab VLANs</h3></div>
-          <a class="step-shot" href="Images/6248P3.png"><img src="Images/6248P3.png" alt="Entering VLAN database mode and creating VLANs 10, 20, 40, and 99"></a>
+          <div class="step-shot" onclick="openLightbox('Images/6248P3.png', 'Entering VLAN database mode and creating VLANs 10, 20, 40, and 99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/6248P3.png', 'Entering VLAN database mode and creating VLANs 10, 20, 40, and 99')" aria-label="Zoom image: Entering VLAN database mode and creating VLANs 10, 20, 40, and 99"><img src="Images/6248P3.png" alt="Entering VLAN database mode and creating VLANs 10, 20, 40, and 99"></div>
           <p class="step-caption">Entered VLAN database mode and created the same lab VLANs used on Switch001 and Switch002: <code>10, 20, 40, 99</code>.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Ethernet 1/g11 — Client-1</h3></div>
-          <a class="step-shot" href="Images/6248P4.png"><img src="Images/6248P4.png" alt="Configuring interface Ethernet 1/g11 as an access port on VLAN 40 for Client-1, with PortFast enabled"></a>
+          <div class="step-shot" onclick="openLightbox('Images/6248P4.png', 'Configuring interface Ethernet 1/g11 as an access port on VLAN 40 for Client-1, with PortFast enabled')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/6248P4.png', 'Configuring interface Ethernet 1/g11 as an access port on VLAN 40 for Client-1, with PortFast enabled')" aria-label="Zoom image: Configuring interface Ethernet 1/g11 as an access port on VLAN 40 for Client-1, with PortFast enabled"><img src="Images/6248P4.png" alt="Configuring interface Ethernet 1/g11 as an access port on VLAN 40 for Client-1, with PortFast enabled"></div>
           <p class="step-caption">Finished the VLAN creation, then configured <code>Ethernet 1/g11</code> as an access port on VLAN 40 for <em>Client-1</em>, with PortFast enabled.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Ethernet 1/g25 — Client-2</h3></div>
-          <a class="step-shot" href="Images/6248P5.png"><img src="Images/6248P5.png" alt="Configuring interface Ethernet 1/g25 as an access port on VLAN 40 for Client-2, with PortFast enabled"></a>
+          <div class="step-shot" onclick="openLightbox('Images/6248P5.png', 'Configuring interface Ethernet 1/g25 as an access port on VLAN 40 for Client-2, with PortFast enabled')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/6248P5.png', 'Configuring interface Ethernet 1/g25 as an access port on VLAN 40 for Client-2, with PortFast enabled')" aria-label="Zoom image: Configuring interface Ethernet 1/g25 as an access port on VLAN 40 for Client-2, with PortFast enabled"><img src="Images/6248P5.png" alt="Configuring interface Ethernet 1/g25 as an access port on VLAN 40 for Client-2, with PortFast enabled"></div>
           <p class="step-caption">Configured <code>Ethernet 1/g25</code> as an access port on VLAN 40 for <em>Client-2</em>, with PortFast enabled.</p>
         </article>
 
         <article class="step">
           <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Ethernet 1/g48 — Trunk to Switch002, save</h3></div>
-          <a class="step-shot" href="Images/6248P6.png"><img src="Images/6248P6.png" alt="Configuring interface Ethernet 1/g48 as a general-mode trunk to Switch002, then saving with copy running-config startup-config"></a>
+          <div class="step-shot" onclick="openLightbox('Images/6248P6.png', 'Configuring interface Ethernet 1/g48 as a general-mode trunk to Switch002, then saving with copy running-config startup-config')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/6248P6.png', 'Configuring interface Ethernet 1/g48 as a general-mode trunk to Switch002, then saving with copy running-config startup-config')" aria-label="Zoom image: Configuring interface Ethernet 1/g48 as a general-mode trunk to Switch002, then saving with copy running-config startup-config"><img src="Images/6248P6.png" alt="Configuring interface Ethernet 1/g48 as a general-mode trunk to Switch002, then saving with copy running-config startup-config"></div>
           <p class="step-caption">Configured <code>Ethernet 1/g48</code> as a general-mode trunk to Switch002 (3550) — PVID 99 untagged, VLANs 10, 20, 40 tagged — then saved the configuration with <code>copy running-config startup-config</code>.</p>
         </article>
       </div>
@@ -698,5 +748,32 @@
       </div>
     </footer>
   </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()" aria-label="Close">✕</button>
+    <img id="lightbox-img" src="" alt="">
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <script>
+    function openLightbox(src, alt){
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      img.src = src;
+      img.alt = alt;
+      cap.textContent = alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+  </script>
 </body>
 </html>
