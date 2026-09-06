@@ -320,17 +320,17 @@
 sudo apt install samba samba-common-bin -y</code></pre>
 
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas1.png" alt="sudo apt update returning a 404 on the Buster release file">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas1.png" alt="sudo apt update returning a 404 on the Buster release file">
         <figcaption>sudo apt update — the Buster repo mirror returns a 404, a known issue on this end-of-life Raspbian release.</figcaption>
       </figure>
 
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas2_2.png" alt="samba and samba-common-bin already installed at the newest version">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas2_2.png" alt="samba and samba-common-bin already installed at the newest version">
         <figcaption>Samba install — packages already present on this image, confirmed at the newest available version.</figcaption>
       </figure>
 
       <figure>
-        <img class="zoomable shot-md" onclick="openLightbox(this.src)" src="/Images/nas2.png" alt="apt update failing on the disabled buster repo, followed by apt upgrade completing cleanly">
+        <img class="zoomable shot-md" onclick="openLightbox(this.src)" src="Images/nas2.png" alt="apt update failing on the disabled buster repo, followed by apt upgrade completing cleanly">
         <figcaption>Repo cleanup — apt disables the dead buster line under apt-secure, and apt upgrade completes with nothing outstanding.</figcaption>
       </figure>
 
@@ -343,22 +343,22 @@ sudo mount /dev/sda1 /mnt/nasdrive
 /dev/sda1  /mnt/nasdrive  ext4  defaults  0  2</code></pre>
 
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas3.png" alt="Terminal creating the /mnt/nasdrive directory with mkdir -p">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas3.png" alt="Terminal creating the /mnt/nasdrive directory with mkdir -p">
         <figcaption>Mount point created at /mnt/nasdrive.</figcaption>
       </figure>
 
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas4.png" alt="df -h output followed by mounting the NAS drive">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas4.png" alt="df -h output followed by mounting the NAS drive">
         <figcaption>df -h confirms available disk space before mounting the drive to /mnt/nasdrive.</figcaption>
       </figure>
 
       <figure>
-        <img class="zoomable shot-md" onclick="openLightbox(this.src)" src="/Images/nas5.png" alt="Nano editor open on /etc/fstab with a new line mounting the NAS drive at boot">
+        <img class="zoomable shot-md" onclick="openLightbox(this.src)" src="Images/nas5.png" alt="Nano editor open on /etc/fstab with a new line mounting the NAS drive at boot">
         <figcaption>/etc/fstab — adding the mount entry so the NAS drive comes back on every reboot.</figcaption>
       </figure>
 
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas6.png" alt="cat /etc/fstab showing the saved NAS drive mount entry">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas6.png" alt="cat /etc/fstab showing the saved NAS drive mount entry">
         <figcaption>Verifying the write — cat /etc/fstab shows the new mount line saved cleanly.</figcaption>
       </figure>
 
@@ -378,11 +378,11 @@ sudo mount /dev/sda1 /mnt/nasdrive
 
       <div class="shot-row">
         <figure>
-          <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas7.png" alt="Terminal opening /etc/samba/smb.conf in the nano editor">
+          <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas7.png" alt="Terminal opening /etc/samba/smb.conf in the nano editor">
           <figcaption>Opening smb.conf to append the share definition.</figcaption>
         </figure>
         <figure>
-          <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas8.png" alt="Nano editor showing the [NAS] share block in smb.conf">
+          <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas8.png" alt="Nano editor showing the [NAS] share block in smb.conf">
           <figcaption>[NAS] share block — path, permissions, and access flags for the share.</figcaption>
         </figure>
       </div>
@@ -392,7 +392,7 @@ sudo mount /dev/sda1 /mnt/nasdrive
 sudo systemctl start smbd nmbd</code></pre>
 
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas9.png" alt="Terminal enabling and starting the smbd and nmbd systemd services">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas9.png" alt="Terminal enabling and starting the smbd and nmbd systemd services">
         <figcaption>smbd &amp; nmbd enabled at boot and started immediately.</figcaption>
       </figure>
     </section>
@@ -413,11 +413,11 @@ static domain_name_servers=192.168.10.5 192.168.20.10</code></pre>
 
       <div class="shot-row">
         <figure>
-          <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas10.png" alt="Terminal opening /etc/dhcpcd.conf in the nano editor">
+          <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas10.png" alt="Terminal opening /etc/dhcpcd.conf in the nano editor">
           <figcaption>Opening dhcpcd.conf to add the static interface block.</figcaption>
         </figure>
         <figure>
-          <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas11.png" alt="eth0 configured with a static IP, router, and DNS servers at the bottom of dhcpcd.conf">
+          <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas11.png" alt="eth0 configured with a static IP, router, and DNS servers at the bottom of dhcpcd.conf">
           <figcaption>eth0 static block — IP, gateway, and DNS pinned for VLAN 10.</figcaption>
         </figure>
       </div>
@@ -426,7 +426,7 @@ static domain_name_servers=192.168.10.5 192.168.20.10</code></pre>
       <pre><code>sudo systemctl restart dhcpcd</code></pre>
 
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="/Images/nas12.png" alt="Terminal restarting the dhcpcd service to apply the new static IP">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/nas12.png" alt="Terminal restarting the dhcpcd service to apply the new static IP">
         <figcaption>dhcpcd restarted — the static IP configuration takes effect.</figcaption>
       </figure>
 
