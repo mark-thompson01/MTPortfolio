@@ -1,1 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Managed Switch Configuration · Mark Thompson Portfolio</title>
+  <meta name="description" content="Cisco Catalyst 2950 initial setup and lab VLAN/trunk configuration walkthrough." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumb{
+      display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+      color:var(--muted); font-size:14px; margin:0 0 18px;
+    }
+    .crumb a{color:var(--muted);text-decoration:none}
+    .crumb a:hover{color:var(--brand)}
+    .crumb span.sep{color:#4a5268}
+    .crumb span.here{color:var(--text)}
+
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,40px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 40px;font-size:clamp(16px,2.2vw,18px);text-align:center;max-width:820px;margin-left:auto;margin-right:auto}
+
+    /* Device summary card */
+    .device-card{
+      max-width:900px;margin:0 auto 48px;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:24px 28px;
+    }
+    .device-card h2{margin:0 0 6px;font-size:1.3rem;color:var(--text)}
+    .device-card .model{color:var(--brand);font-weight:600;font-size:.95rem;margin:0 0 14px}
+    .device-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:10px 20px;margin:0;
+    }
+    .device-grid dt{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;margin:0}
+    .device-grid dd{color:var(--text);font-size:.95rem;margin:2px 0 10px}
+
+    /* Section headers */
+    .section-block{max-width:900px;margin:0 auto 56px}
+    .section-head{margin:0 0 8px;display:flex;align-items:baseline;gap:12px}
+    .section-head h2{margin:0;font-size:1.5rem;font-weight:700;color:var(--text)}
+    .section-head .step-count{color:var(--muted);font-size:.9rem}
+    .section-desc{color:var(--muted);margin:0 0 28px;font-size:.98rem}
+
+    /* Screenshot steps */
+    .steps{display:flex;flex-direction:column;gap:28px}
+    .step{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .step-header{
+      display:flex;align-items:center;gap:14px;
+      padding:16px 22px;border-bottom:1px solid var(--card-border);
+    }
+    .step-num{
+      flex:0 0 auto;width:32px;height:32px;border-radius:9px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:.9rem;color:var(--brand);
+      background:rgba(77,163,255,.08);border:1px solid #2a3a55;
+    }
+    .step-title{margin:0;font-size:1rem;font-weight:600;color:var(--text)}
+    .step-shot{display:block;width:100%;background:#000}
+    .step-shot img{display:block;width:100%;height:auto}
+    .step-caption{padding:16px 22px 20px;color:var(--muted);font-size:.92rem;margin:0}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin" class="active">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <p class="crumb">
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <span class="sep">/</span>
+      <span class="here">Managed Switch Configuration</span>
+    </p>
+
+    <header>
+      <h1>Managed Switch Configuration</h1>
+      <p class="lead">Initial setup and lab VLAN/trunk configuration for the Cisco Catalyst switching layer, walked through step by step with terminal output.</p>
+    </header>
+
+    <div class="device-card">
+      <h2>Switch001</h2>
+      <p class="model">Cisco Catalyst 2950G-48-EI (WS-C2950G-48-EI)</p>
+      <dl class="device-grid">
+        <dt>IOS Version</dt><dd>12.1(22)EA4a, RELEASE SOFTWARE (fc1)</dd>
+        <dt>Management IP</dt><dd>192.168.50.2 /24 (VLAN 1)</dd>
+        <dt>Cluster</dt><dd>MTLabs</dd>
+        <dt>Role</dt><dd>Access layer switch — trunked uplink to Switch002 (3550)</dd>
+      </dl>
+    </div>
+
+    <!-- ===================== INITIAL CONFIGURATION ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Initial Configuration Dialog</h2>
+        <span class="step-count">13 steps</span>
+      </div>
+      <p class="section-desc">First boot of Switch001. Working through Cisco's System Configuration Dialog to set the hostname, enable secret, line passwords, management VLAN IP, and cluster settings before saving to NVRAM.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Cold start &amp; setup dialog prompt</h3></div>
+          <a class="step-shot" href="Images/switch001-1.png"><img src="Images/switch001-1.png" alt="Switch001 cold start showing hardware details and initial configuration dialog prompt"></a>
+          <p class="step-caption">Switch boots cold, displaying the WS-C2950G-48-EI hardware details, then prompts to enter the initial configuration dialog. Answered <code>yes</code> to begin.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Basic management setup &amp; hostname</h3></div>
+          <a class="step-shot" href="Images/switch001-2.png"><img src="Images/switch001-2.png" alt="Entering basic management setup and setting hostname to Switch001"></a>
+          <p class="step-caption">Enabled basic management setup and assigned the hostname <code>Switch001</code>, then moved into the enable secret prompt.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Enable secret, enable password &amp; VTY password</h3></div>
+          <a class="step-shot" href="Images/switch001-3.png"><img src="Images/switch001-3.png" alt="Enable secret, enable password, and virtual terminal password prompts, SNMP disabled, interface summary begins"></a>
+          <p class="step-caption">Set the enable secret, legacy enable password, and virtual terminal (VTY) password, declined SNMP management, and the interface summary begins.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Interface summary (Fa0/1–0/19)</h3></div>
+          <a class="step-shot" href="Images/switch001-4.png"><img src="Images/switch001-4.png" alt="Current interface summary listing FastEthernet0/1 through 0/19"></a>
+          <p class="step-caption">Dialog lists the current interface summary — every FastEthernet port unassigned and down, VLAN1 flagged as needing a valid configuration.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Interface summary (Fa0/26–0/48, Gi0/1–0/2)</h3></div>
+          <a class="step-shot" href="Images/switch001-5.png"><img src="Images/switch001-5.png" alt="Interface summary continuing through FastEthernet0/26 to GigabitEthernet0/2, prompt for management interface"></a>
+          <p class="step-caption">Summary continues through the remaining Fast Ethernet ports and both Gigabit uplinks, then prompts for which interface to use for management connectivity.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Selecting VLAN1 as the management interface</h3></div>
+          <a class="step-shot" href="Images/switch001-6.png"><img src="Images/switch001-6.png" alt="Selecting VLAN1 as the management interface after declining the default"></a>
+          <p class="step-caption">Declined defaulting to all interfaces, then explicitly named <code>vlan1</code> as the management interface.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Configuring the VLAN1 IP address</h3></div>
+          <a class="step-shot" href="Images/switch001-7.png"><img src="Images/switch001-7.png" alt="Configuring IP address 192.168.50.2 and subnet mask 255.255.255.0 on interface VLAN1"></a>
+          <p class="step-caption">Assigned <code>192.168.50.2</code> with a <code>255.255.255.0</code> (/24) mask to VLAN1, and opted in to enabling the switch as a cluster command switch.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Confirming the /24 mask &amp; cluster prompt</h3></div>
+          <a class="step-shot" href="Images/switch001-8.png"><img src="Images/switch001-8.png" alt="Confirming subnet mask, class C network detection, and cluster command switch prompt"></a>
+          <p class="step-caption">Dialog confirms the Class C network (192.168.50.0, /24) and re-confirms enabling the switch as a cluster command switch.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Naming the cluster: MTLabs</h3></div>
+          <a class="step-shot" href="Images/switch001-9.png"><img src="Images/switch001-9.png" alt="Entering cluster name MTLabs"></a>
+          <p class="step-caption">Named the cluster <code>MTLabs</code> to group the lab's managed switches under one command switch.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Generated configuration script (part 1)</h3></div>
+          <a class="step-shot" href="Images/switch001-10.png"><img src="Images/switch001-10.png" alt="Generated configuration script showing hostname, enable secret, password, VLAN1 config"></a>
+          <p class="step-caption">Cisco generates the resulting configuration script from the dialog answers — hostname, enable secret, VTY lines, and the VLAN1 IP address.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">11</span><h3 class="step-title">Generated configuration script (part 2)</h3></div>
+          <a class="step-shot" href="Images/switch001-11.png"><img src="Images/switch001-11.png" alt="Generated configuration script continuing through FastEthernet interfaces"></a>
+          <p class="step-caption">Script continues, stubbing out each FastEthernet interface for later per-port configuration.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Saving the configuration to NVRAM</h3></div>
+          <a class="step-shot" href="Images/switch001-12.png"><img src="Images/switch001-12.png" alt="Saving the generated configuration to NVRAM and exiting the setup dialog"></a>
+          <p class="step-caption">Selected option <code>[2] Save this configuration to nvram and exit</code> to commit the initial setup.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">13</span><h3 class="step-title">Configuration saved &amp; ready for login</h3></div>
+          <a class="step-shot" href="Images/switch001-13.png"><img src="Images/switch001-13.png" alt="Configuration built and saved successfully, switch ready for login"></a>
+          <p class="step-caption">Configuration builds successfully (<code>[OK]</code>), VLAN1's line protocol comes up, and the switch is ready to log in for lab configuration.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== LAB CONFIGURATION ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Lab VLAN, Interface &amp; Trunk Configuration</h2>
+        <span class="step-count">17 steps</span>
+      </div>
+      <p class="section-desc">With the base setup complete, built out the lab's VLAN structure, assigned access ports to each device, configured the 802.1Q trunk to Switch002, and verified the result.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Back at the CLI</h3></div>
+          <a class="step-shot" href="Images/switch001-14.png"><img src="Images/switch001-14.png" alt="Switch001 user EXEC prompt ready for login"></a>
+          <p class="step-caption">Returning to the CLI with a clean <code>Switch001&gt;</code> prompt, ready to begin the lab-specific configuration.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Entering privileged EXEC mode</h3></div>
+          <a class="step-shot" href="Images/switch001-15.png"><img src="Images/switch001-15.png" alt="Entering enable mode with password"></a>
+          <p class="step-caption">Authenticated into privileged EXEC mode with <code>enable</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Entering global configuration mode</h3></div>
+          <a class="step-shot" href="Images/switch001-16.png"><img src="Images/switch001-16.png" alt="Entering global configuration mode with conf t"></a>
+          <p class="step-caption">Dropped into global configuration mode with <code>conf t</code> to begin building out VLANs and interfaces.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Setting the MOTD banner</h3></div>
+          <a class="step-shot" href="Images/switch001-17.png"><img src="Images/switch001-17.png" alt="Setting banner motd to MTPortfolio Lab Network"></a>
+          <p class="step-caption">Set a message-of-the-day banner: <code>MTPortfolio Lab Network</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Creating the lab VLANs</h3></div>
+          <a class="step-shot" href="Images/switch001-18.png"><img src="Images/switch001-18.png" alt="Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native"></a>
+          <p class="step-caption">Created and named the lab's VLANs: <code>10 – Servers</code>, <code>20 – Infrastructure</code>, <code>40 – Clients</code>, and <code>99 – Native</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Management interface IP &amp; default gateway</h3></div>
+          <a class="step-shot" href="Images/switch001-19.png"><img src="Images/switch001-19.png" alt="Configuring interface VLAN1 with description Management, IP 192.168.50.2, and default gateway 192.168.50.3"></a>
+          <p class="step-caption">Configured <code>interface vlan 1</code> with description <em>Management</em>, IP <code>192.168.50.2/24</code>, and set the default gateway to <code>192.168.50.3</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Fa0/1 — Management access port</h3></div>
+          <a class="step-shot" href="Images/switch001-20.png"><img src="Images/switch001-20.png" alt="Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled"></a>
+          <p class="step-caption">Configured <code>Fa0/1</code> as an access port on VLAN 1 for management, enabling PortFast (correcting a typo on the <code>switchport access vlan</code> command along the way).</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Fa0/2 — Hyper-V host</h3></div>
+          <a class="step-shot" href="Images/switch001-21.png"><img src="Images/switch001-21.png" alt="Configuring FastEthernet0/2 as an access port on VLAN 20 for the Hyper-V host"></a>
+          <p class="step-caption">Configured <code>Fa0/2</code> as an access port on VLAN 20 (Infrastructure) for the Hyper-V host, with PortFast enabled.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Fa0/3 — TrueNAS server</h3></div>
+          <a class="step-shot" href="Images/switch001-22.png"><img src="Images/switch001-22.png" alt="Configuring FastEthernet0/3 as an access port on VLAN 10 for the TrueNAS server"></a>
+          <p class="step-caption">Configured <code>Fa0/3</code> as an access port on VLAN 10 (Servers) for the TrueNAS server.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Fa0/4 — Raspberry Pi 5 DNS server</h3></div>
+          <a class="step-shot" href="Images/switch001-23.png"><img src="Images/switch001-23.png" alt="Configuring FastEthernet0/4 as an access port on VLAN 10 for the Raspberry Pi 5 DNS server"></a>
+          <p class="step-caption">Configured <code>Fa0/4</code> as an access port on VLAN 10 for the Raspberry Pi 5 DNS server, with PortFast enabled.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">11</span><h3 class="step-title">Fa0/5 — Raspberry Pi 3 NAS</h3></div>
+          <a class="step-shot" href="Images/switch001-24.png"><img src="Images/switch001-24.png" alt="Configuring FastEthernet0/5 as an access port on VLAN 10 for the Raspberry Pi 3 NAS"></a>
+          <p class="step-caption">Configured <code>Fa0/5</code> as an access port on VLAN 10 for the Raspberry Pi 3 NAS (again correcting a typo on the access VLAN command).</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Fa0/23 — 802.1Q trunk to Switch002</h3></div>
+          <a class="step-shot" href="Images/switch001-25-Trunk.png"><img src="Images/switch001-25-Trunk.png" alt="Configuring FastEthernet0/23 as an 802.1Q trunk to Switch002 3550, native VLAN 99, allowed VLANs 1,10,20,40,99"></a>
+          <p class="step-caption">Configured <code>Fa0/23</code> as a trunk to Switch002 (3550): trunk mode, native VLAN 99, and allowed VLANs <code>1, 10, 20, 40, 99</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">13</span><h3 class="step-title">Console &amp; VTY passwords, saving to NVRAM</h3></div>
+          <a class="step-shot" href="Images/switch001-26.png"><img src="Images/switch001-26.png" alt="Setting console and VTY line passwords, then saving configuration with write memory"></a>
+          <p class="step-caption">Set console and VTY line passwords with synchronous logging, then saved the running configuration with <code>write memory</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">14</span><h3 class="step-title">Verifying VLANs (before trunk cleanup)</h3></div>
+          <a class="step-shot" href="Images/switch001-27.png"><img src="Images/switch001-27.png" alt="show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports"></a>
+          <p class="step-caption"><code>show vlan brief</code> confirms VLANs 10 (Servers), 20 (Infrastructure), 40 (Clients), and 99 (Native) with their assigned ports.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">15</span><h3 class="step-title">Verifying VLANs (after trunk configuration)</h3></div>
+          <a class="step-shot" href="Images/switch001-28.png"><img src="Images/switch001-28.png" alt="show vlan brief output after trunk configuration, Fa0/23 no longer listed under VLAN 1"></a>
+          <p class="step-caption">Re-running <code>show vlan brief</code> after the trunk was configured — Fa0/23 has moved off the default VLAN 1 port list as expected.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">16</span><h3 class="step-title">Verifying the trunk</h3></div>
+          <a class="step-shot" href="Images/switch001-29.png"><img src="Images/switch001-29.png" alt="show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99"></a>
+          <p class="step-caption"><code>show interfaces trunk</code> confirms Fa0/23 is trunking with 802.1Q encapsulation, native VLAN 99, and VLANs 1, 10, 20, 40, 99 allowed and active.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">17</span><h3 class="step-title">Verifying spanning tree</h3></div>
+          <a class="step-shot" href="Images/switch001-30.png"><img src="Images/switch001-30.png" alt="show spanning-tree summary output confirming PVST mode and all five VLANs forwarding"></a>
+          <p class="step-caption"><code>show spanning-tree summary</code> confirms the switch is running PVST with all five VLAN instances in a forwarding state — no blocking, no loops.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== SWITCH002 ===================== -->
+    <div class="device-card">
+      <h2>Switch002</h2>
+      <p class="model">Cisco Catalyst 3550 (C3550-I9Q3L2-M)</p>
+      <dl class="device-grid">
+        <dt>IOS Version</dt><dd>12.1(20)EA1a, RELEASE SOFTWARE (fc1)</dd>
+        <dt>Management IP</dt><dd>192.168.50.3 /24 (VLAN 1)</dd>
+        <dt>Cluster</dt><dd>MTLabs</dd>
+        <dt>Role</dt><dd>Distribution layer switch — trunked link to Switch001</dd>
+      </dl>
+    </div>
+
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Initial Configuration Dialog</h2>
+        <span class="step-count">10 steps</span>
+      </div>
+      <p class="section-desc">First boot of Switch002. Same System Configuration Dialog walkthrough as Switch001 — hostname, enable secret, line passwords, management VLAN IP, and cluster settings — before saving to NVRAM.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Cold start &amp; setup dialog prompt</h3></div>
+          <a class="step-shot" href="Images/switch002-1.png"><img src="Images/switch002-1.png" alt="Switch002 cold start showing System Configuration Dialog and hostname prompt"></a>
+          <p class="step-caption">Switch reboots cold into the System Configuration Dialog. Answered <code>yes</code> to enter the dialog and <code>yes</code> to basic management setup, then set the hostname to <code>Switch002</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Enable secret prompt</h3></div>
+          <a class="step-shot" href="Images/switch002-2.png"><img src="Images/switch002-2.png" alt="Setup dialog continuing to the enable secret prompt"></a>
+          <p class="step-caption">Dialog continues from the hostname entry into the enable secret prompt.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Enable secret, enable password &amp; VTY password</h3></div>
+          <a class="step-shot" href="Images/switch002-3.png"><img src="Images/switch002-3.png" alt="Enable secret, enable password, and VTY password prompts, SNMP disabled, interface summary begins"></a>
+          <p class="step-caption">Set the enable secret, enable password, and VTY password, declined SNMP management, and the interface summary begins (VLAN1, Fa0/1–0/8).</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Interface summary (Fa0/3–0/19)</h3></div>
+          <a class="step-shot" href="Images/switch002-4.png"><img src="Images/switch002-4.png" alt="Interface summary continuing through FastEthernet0/3 to 0/19"></a>
+          <p class="step-caption">Summary continues through the Fast Ethernet ports, all unassigned and down.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Interface summary &amp; management interface prompt</h3></div>
+          <a class="step-shot" href="Images/switch002-5.png"><img src="Images/switch002-5.png" alt="Interface summary continuing through FastEthernet0/24 and GigabitEthernet0/1-0/2, prompt for management interface"></a>
+          <p class="step-caption">Summary finishes through Fa0/24 and both Gigabit uplinks, then prompts for the management interface — declined defaulting to all interfaces.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Configuring the VLAN1 IP address</h3></div>
+          <a class="step-shot" href="Images/switch002-6.png"><img src="Images/switch002-6.png" alt="Selecting VLAN1 as management interface and configuring IP 192.168.50.3, cluster command switch prompt"></a>
+          <p class="step-caption">Named <code>vlan1</code> as the management interface, assigned <code>192.168.50.3/24</code>, confirmed the Class C /24 mask, and opted in to enabling the switch as a cluster command switch.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Naming the cluster &amp; generated script (part 1)</h3></div>
+          <a class="step-shot" href="Images/switch002-7.png"><img src="Images/switch002-7.png" alt="Entering cluster name MTLabs and generated configuration script showing hostname, enable secret, password, VLAN1 config"></a>
+          <p class="step-caption">Joined the existing <code>MTLabs</code> cluster. Cisco generates the resulting configuration script — hostname, enable secret, enable password, VTY password, and the VLAN1 IP address.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Generated configuration script (part 2)</h3></div>
+          <a class="step-shot" href="Images/switch002-8.png"><img src="Images/switch002-8.png" alt="Generated configuration script continuing through FastEthernet interfaces"></a>
+          <p class="step-caption">Script continues, stubbing out each FastEthernet interface for later per-port configuration.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Saving the configuration to NVRAM</h3></div>
+          <a class="step-shot" href="Images/switch002-9.png"><img src="Images/switch002-9.png" alt="Generated script finishing through Gigabit uplinks and cluster enable, selecting option to save to NVRAM"></a>
+          <p class="step-caption">Script finishes through the Gigabit uplinks with <code>cluster enable MTLabs</code>, then selected option <code>[2] Save this configuration to nvram and exit</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Configuration saved &amp; ready for login</h3></div>
+          <a class="step-shot" href="Images/switch002-10.png"><img src="Images/switch002-10.png" alt="Configuration built and saved successfully, switch ready for login"></a>
+          <p class="step-caption">Configuration builds successfully (<code>[OK]</code>), and the switch is ready to log in for lab configuration.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Lab VLAN, Routing &amp; Trunk Configuration</h2>
+        <span class="step-count">17 steps</span>
+      </div>
+      <p class="section-desc">Switch002 operates at Layer 3, so beyond VLANs and trunking this build also covers inter-VLAN routing via SVIs, a static default route, a routed uplink to the SOHO router, and root bridge priority tuning.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Back at the CLI</h3></div>
+          <a class="step-shot" href="Images/switch002-11.png"><img src="Images/switch002-11.png" alt="Switch002 user EXEC prompt ready for login"></a>
+          <p class="step-caption">Returning to the CLI with a clean <code>Switch002&gt;</code> prompt, ready to begin the lab-specific configuration.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Entering configuration mode</h3></div>
+          <a class="step-shot" href="Images/switch002-12.png"><img src="Images/switch002-12.png" alt="Entering enable mode and global configuration mode"></a>
+          <p class="step-caption">Authenticated into privileged EXEC mode with <code>enable</code>, then dropped into global configuration mode with <code>conf t</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Setting the MOTD banner</h3></div>
+          <a class="step-shot" href="Images/switch002-13.png"><img src="Images/switch002-13.png" alt="Setting banner motd to MTPortfolio Lab Network"></a>
+          <p class="step-caption">Set a message-of-the-day banner: <code>MTPortfolio Lab Network</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Enabling IP routing</h3></div>
+          <a class="step-shot" href="Images/switch002-14.png"><img src="Images/switch002-14.png" alt="Enabling ip routing on the Catalyst 3550"></a>
+          <p class="step-caption">Enabled <code>ip routing</code> — the Catalyst 3550 is a Layer 3 switch, so it handles inter-VLAN routing for the lab rather than relying on an external router-on-a-stick.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Creating the lab VLANs</h3></div>
+          <a class="step-shot" href="Images/switch002-15.png"><img src="Images/switch002-15.png" alt="Creating VLAN 10 Servers, VLAN 20 Infrastructure, VLAN 40 Clients, VLAN 99 Native"></a>
+          <p class="step-caption">Created and named the same lab VLANs as Switch001: <code>10 – Servers</code>, <code>20 – Infrastructure</code>, <code>40 – Clients</code>, and <code>99 – Native</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Configuring SVIs for inter-VLAN routing</h3></div>
+          <a class="step-shot" href="Images/switch002-16.png"><img src="Images/switch002-16.png" alt="Configuring SVIs for VLAN1 Management, VLAN10 Servers, VLAN20 Infrastructure, and VLAN40 Clients with IP addresses"></a>
+          <p class="step-caption">Gave each VLAN a routable gateway via SVIs: <code>VLAN1</code> (Management, 192.168.50.3), <code>VLAN10</code> (Servers, 192.168.10.1), <code>VLAN20</code> (Infrastructure, 192.168.20.1), and <code>VLAN40</code> (Clients, 192.168.40.1).</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Adding a static default route</h3></div>
+          <a class="step-shot" href="Images/switch002-17.png"><img src="Images/switch002-17.png" alt="Adding a static default route pointing to 192.168.50.1"></a>
+          <p class="step-caption">Added a static default route (<code>0.0.0.0/0</code> via <code>192.168.50.1</code>) so lab traffic has a path out toward the SOHO router.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Fa0/1 — Management access port</h3></div>
+          <a class="step-shot" href="Images/switch002-18.png"><img src="Images/switch002-18.png" alt="Configuring FastEthernet0/1 as an access port on VLAN 1 for management, with PortFast enabled"></a>
+          <p class="step-caption">Configured <code>Fa0/1</code> as an access port on VLAN 1 for management, with PortFast enabled.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Fa0/2 — Win11 client</h3></div>
+          <a class="step-shot" href="Images/switch002-19.png"><img src="Images/switch002-19.png" alt="Configuring FastEthernet0/2 as an access port on VLAN 40 for a Windows 11 client"></a>
+          <p class="step-caption">Configured <code>Fa0/2</code> as an access port on VLAN 40 (Clients) for a Windows 11 client machine, with PortFast enabled.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Fa0/23 — 802.1Q trunk to Switch001</h3></div>
+          <a class="step-shot" href="Images/switch002-20.png"><img src="Images/switch002-20.png" alt="Configuring FastEthernet0/23 as an 802.1Q trunk to Switch001 2950, native VLAN 99, allowed VLANs 1,10,20,40,99"></a>
+          <p class="step-caption">Configured <code>Fa0/23</code> as the trunk back to Switch001 (2950): 802.1Q encapsulation, trunk mode, native VLAN 99, and allowed VLANs <code>1, 10, 20, 40, 99</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">11</span><h3 class="step-title">Fa0/24 — Routed uplink to the SOHO router</h3></div>
+          <a class="step-shot" href="Images/switch002-21.png"><img src="Images/switch002-21.png" alt="Converting FastEthernet0/24 to a routed port with IP address 192.168.1.2 as the uplink to the SOHO router"></a>
+          <p class="step-caption">Converted <code>Fa0/24</code> to a routed port (<code>no switchport</code>) and assigned <code>192.168.1.2/24</code> as the uplink to the SOHO router.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Setting spanning-tree priority (root bridge)</h3></div>
+          <a class="step-shot" href="Images/switch002-22.png"><img src="Images/switch002-22.png" alt="Setting spanning-tree priority 4096 on VLANs 1, 10, 20, 40, and 99"></a>
+          <p class="step-caption">Set spanning-tree priority to <code>4096</code> on VLANs 1, 10, 20, 40, and 99, making Switch002 the root bridge for the lab topology.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">13</span><h3 class="step-title">Console &amp; VTY passwords, saving to NVRAM</h3></div>
+          <a class="step-shot" href="Images/switch002-23.png"><img src="Images/switch002-23.png" alt="Setting console and VTY line passwords, then saving configuration with write memory"></a>
+          <p class="step-caption">Set console and VTY line passwords with synchronous logging, then saved the running configuration with <code>write memory</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">14</span><h3 class="step-title">Verifying VLANs</h3></div>
+          <a class="step-shot" href="Images/switch002-24.png"><img src="Images/switch002-24.png" alt="show vlan brief output listing VLANs 1, 10, 20, 40, and 99 with their assigned ports"></a>
+          <p class="step-caption"><code>show vlan brief</code> confirms VLANs 10 (Servers), 20 (Infrastructure), 40 (Clients), and 99 (Native) with their assigned ports.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">15</span><h3 class="step-title">Verifying the trunk</h3></div>
+          <a class="step-shot" href="Images/switch002-25.png"><img src="Images/switch002-25.png" alt="show interfaces trunk output confirming Fa0/23 trunking with 802.1Q encapsulation, native VLAN 99, and allowed VLANs 1,10,20,40,99"></a>
+          <p class="step-caption"><code>show interfaces trunk</code> confirms Fa0/23 is trunking with 802.1Q encapsulation, native VLAN 99, and VLANs 1, 10, 20, 40, 99 allowed and active.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">16</span><h3 class="step-title">Verifying the routing table</h3></div>
+          <a class="step-shot" href="Images/switch002-26.png"><img src="Images/switch002-26.png" alt="show ip route output listing directly connected VLAN subnets and a static default route"></a>
+          <p class="step-caption"><code>show ip route</code> confirms the directly connected VLAN 1, 10, 20, and 40 subnets, plus the static default route out via 192.168.50.1.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">17</span><h3 class="step-title">Verifying spanning tree</h3></div>
+          <a class="step-shot" href="Images/switch002-27.png"><img src="Images/switch002-27.png" alt="show spanning-tree summary output confirming Switch002 as root bridge for all five VLANs, all forwarding"></a>
+          <p class="step-caption"><code>show spanning-tree summary</code> confirms Switch002 is now the root bridge for all five VLAN instances, with everything in a forwarding state.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== SWITCH003 ===================== -->
+    <div class="device-card">
+      <h2>Switch003</h2>
+      <p class="model">Dell PowerConnect 6248P</p>
+      <dl class="device-grid">
+        <dt>Boot/OS Version</dt><dd>Boot Menu 3.3.18.1</dd>
+        <dt>Management IP</dt><dd>Configured via Setup Wizard (VLAN 1)</dd>
+        <dt>Role</dt><dd>Access layer switch — trunked uplink to Switch002 (3550)</dd>
+      </dl>
+    </div>
+
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Initial Boot &amp; Setup Wizard</h2>
+        <span class="step-count">10 steps</span>
+      </div>
+      <p class="section-desc">Dell's PowerConnect boot process differs from Cisco's — a Boot Menu handles factory resets and code loading, while an on-box Setup Wizard walks through the initial privilege account and management IP.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Restoring factory defaults from the Boot Menu</h3></div>
+          <a class="step-shot" href="Images/dell1.png"><img src="Images/dell1.png" alt="Dell Boot Menu options list, selecting option 10 to restore configuration to factory defaults"></a>
+          <p class="step-caption">The full Boot Menu option list appears. Selected <code>10 – Restore configuration to factory defaults</code>, confirmed <code>y</code>, then selected <code>1</code> to start the operational code.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Setup Wizard begins</h3></div>
+          <a class="step-shot" href="Images/dell2.png"><img src="Images/dell2.png" alt="Setup Wizard prompt, declining SNMP setup and beginning the privilege account username entry"></a>
+          <p class="step-caption">On boot, the Setup Wizard offers to run — answered <code>Y</code>. Declined SNMP management setup in Step 1, then began Step 2 by entering the privilege-15 username <code>MT</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Volume info &amp; default boot prompt</h3></div>
+          <a class="step-shot" href="Images/dell3.png"><img src="Images/dell3.png" alt="Tail of file system volume configuration details followed by the default Boot Menu prompt"></a>
+          <p class="step-caption">Tail end of a file-system/volume configuration display, followed by the default Boot Menu prompt — selected <code>1</code> to start the operational code.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Password &amp; management IP prompt</h3></div>
+          <a class="step-shot" href="Images/dell4.png"><img src="Images/dell4.png" alt="Setup Wizard Step 2 password entry, then Step 3 prompting for the management IP address"></a>
+          <p class="step-caption">Step 2 continues with the password entry, then Step 3 begins — prompted for the switch's management IP address on the default VLAN, with a DHCP option offered.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Back at the Boot Menu</h3></div>
+          <a class="step-shot" href="Images/dell5.png"><img src="Images/dell5.png" alt="Boot Menu options list again, restoring factory defaults a second time"></a>
+          <p class="step-caption">The Boot Menu's full option list appears again. Selected <code>10</code> to restore factory defaults, confirmed <code>y</code>, then <code>1</code> to reboot into the operational code.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Setup Wizard runs again</h3></div>
+          <a class="step-shot" href="Images/dell6.png"><img src="Images/dell6.png" alt="Setup Wizard running again, declining SNMP and re-entering the username MT"></a>
+          <p class="step-caption">Setup Wizard runs again — <code>Y</code> to proceed, SNMP declined, and Step 2 begins with the username <code>MT</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Volume &amp; file-system configuration</h3></div>
+          <a class="step-shot" href="Images/dell7.png"><img src="Images/dell7.png" alt="Full volume and file system configuration details followed by the Boot Menu banner"></a>
+          <p class="step-caption">Full volume/file-system configuration details are displayed — volume label, sector counts, FAT entry size, directory structure — followed by the Boot Menu banner.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Entering the Boot Menu manually</h3></div>
+          <a class="step-shot" href="Images/dell8.png"><img src="Images/dell8.png" alt="Volume information continues, then selecting option 2 to enter the Boot Menu manually"></a>
+          <p class="step-caption">Volume information continues (bytes per sector, FAT table copies, free space), then at the default prompt selected <code>2</code> to enter the Boot Menu manually rather than let the operational code auto-start.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Selecting factory reset again</h3></div>
+          <a class="step-shot" href="Images/dell9.png"><img src="Images/dell9.png" alt="Full Boot Menu option list, beginning to enter option 10 to restore factory defaults"></a>
+          <p class="step-caption">Inside the Boot Menu, the full 13-option list is shown; began entering <code>10</code> to restore factory defaults.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Confirming the factory reset</h3></div>
+          <a class="step-shot" href="Images/dell10.png"><img src="Images/dell10.png" alt="Confirming the factory reset with a y at the delete configuration prompt"></a>
+          <p class="step-caption">Confirmed selection <code>10</code>, with <code>y</code> ready at the <code>Are you SURE you want to delete the configuration?</code> prompt.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Lab VLAN &amp; Trunk Configuration</h2>
+        <span class="step-count">6 steps</span>
+      </div>
+      <p class="section-desc">With the Setup Wizard complete, moved into the CLI to set the hostname, build out the same lab VLANs, assign client access ports, and trunk to Switch002.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Entering configuration mode</h3></div>
+          <a class="step-shot" href="Images/6248P1.png"><img src="Images/6248P1.png" alt="Logging into the console, entering enable mode and configuration mode"></a>
+          <p class="step-caption">Logged in via console, entered privileged EXEC mode with <code>enable</code>, then global configuration mode with <code>configure</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Setting the hostname</h3></div>
+          <a class="step-shot" href="Images/6248P2.png"><img src="Images/6248P2.png" alt="Setting hostname to Switch003"></a>
+          <p class="step-caption">Set the hostname to <code>Switch003</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Creating the lab VLANs</h3></div>
+          <a class="step-shot" href="Images/6248P3.png"><img src="Images/6248P3.png" alt="Entering VLAN database mode and creating VLANs 10, 20, 40, and 99"></a>
+          <p class="step-caption">Entered VLAN database mode and created the same lab VLANs used on Switch001 and Switch002: <code>10, 20, 40, 99</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Ethernet 1/g11 — Client-1</h3></div>
+          <a class="step-shot" href="Images/6248P4.png"><img src="Images/6248P4.png" alt="Configuring interface Ethernet 1/g11 as an access port on VLAN 40 for Client-1, with PortFast enabled"></a>
+          <p class="step-caption">Finished the VLAN creation, then configured <code>Ethernet 1/g11</code> as an access port on VLAN 40 for <em>Client-1</em>, with PortFast enabled.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Ethernet 1/g25 — Client-2</h3></div>
+          <a class="step-shot" href="Images/6248P5.png"><img src="Images/6248P5.png" alt="Configuring interface Ethernet 1/g25 as an access port on VLAN 40 for Client-2, with PortFast enabled"></a>
+          <p class="step-caption">Configured <code>Ethernet 1/g25</code> as an access port on VLAN 40 for <em>Client-2</em>, with PortFast enabled.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Ethernet 1/g48 — Trunk to Switch002, save</h3></div>
+          <a class="step-shot" href="Images/6248P6.png"><img src="Images/6248P6.png" alt="Configuring interface Ethernet 1/g48 as a general-mode trunk to Switch002, then saving with copy running-config startup-config"></a>
+          <p class="step-caption">Configured <code>Ethernet 1/g48</code> as a general-mode trunk to Switch002 (3550) — PVID 99 untagged, VLANs 10, 20, 40 tagged — then saved the configuration with <code>copy running-config startup-config</code>.</p>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
