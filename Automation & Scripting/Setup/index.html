@@ -265,8 +265,8 @@
         </div>
         <p class="script-desc">A dedicated virtual machine used specifically for running these scripts against the domain controller, kept separate from any day-to-day admin or personal login. All automation in this section is executed from this workstation.</p>
         <div class="shot-row">
-          <div class="shot" onclick="openLightbox('Images/setup4.png', 'PAW login screen')">
-            <img src="Images/setup4.png" alt="PAW virtual machine login screen showing the MT.AdminScripts account" loading="lazy" />
+          <div class="shot" onclick="openLightbox('Images/setup1.png', 'PAW login screen')">
+            <img src="Images/setup1.png" alt="PAW virtual machine login screen showing the MT.AdminScripts account" loading="lazy" />
             <span class="shot-caption">PAW login screen <span class="zoom-hint">&#128269;</span></span>
           </div>
         </div>
@@ -280,8 +280,8 @@
         </div>
         <p class="script-desc">A domain account created specifically to run these scripts, added to the built-in Server Operators security group rather than Domain Admins — enough access to manage AD objects and GPOs, without full domain-level privileges.</p>
         <div class="shot-row">
-          <div class="shot" onclick="openLightbox('Images/setup5.png', 'whoami confirming the scoped service account')">
-            <img src="Images/setup5.png" alt="PowerShell whoami output confirming the lab mt.adminscripts account" loading="lazy" />
+          <div class="shot" onclick="openLightbox('Images/setup2.png', 'whoami confirming the scoped service account')">
+            <img src="Images/setup2.png" alt="PowerShell whoami output confirming the lab mt.adminscripts account" loading="lazy" />
             <span class="shot-caption">Confirming identity with whoami <span class="zoom-hint">&#128269;</span></span>
           </div>
         </div>
@@ -296,12 +296,12 @@
         <p class="script-desc">Installed the RSAT Active Directory PowerShell module and Group Policy Management Console on the PAW, giving the workstation the tools it needs to manage AD and GPOs remotely against the domain controller.</p>
         <pre class="code-block"><code>Install-WindowsFeature RSAT-AD-PowerShell, GPMC</code></pre>
         <div class="shot-row">
-          <div class="shot" onclick="openLightbox('Images/setup1.png', 'RSAT installation in progress')">
-            <img src="Images/setup1.png" alt="PowerShell showing RSAT installation in progress" loading="lazy" />
+          <div class="shot" onclick="openLightbox('Images/setup5.png', 'RSAT installation in progress')">
+            <img src="Images/setup5.png" alt="PowerShell showing RSAT installation in progress" loading="lazy" />
             <span class="shot-caption">Installation in progress <span class="zoom-hint">&#128269;</span></span>
           </div>
-          <div class="shot" onclick="openLightbox('Images/setup2.png', 'RSAT installation completed successfully')">
-            <img src="Images/setup2.png" alt="PowerShell output confirming RSAT features installed successfully" loading="lazy" />
+          <div class="shot" onclick="openLightbox('Images/setup6.png', 'RSAT installation completed successfully')">
+            <img src="Images/setup6.png" alt="PowerShell output confirming RSAT features installed successfully" loading="lazy" />
             <span class="shot-caption">Installation complete <span class="zoom-hint">&#128269;</span></span>
           </div>
         </div>
@@ -317,8 +317,8 @@
         <pre class="code-block"><code>Import-Module ActiveDirectory
 Get-ADDomain</code></pre>
         <div class="shot-row">
-          <div class="shot" onclick="openLightbox('Images/setup3.png', 'Get-ADDomain output confirming domain connectivity')">
-            <img src="Images/setup3.png" alt="PowerShell output of Get-ADDomain confirming connectivity to mtlab.local" loading="lazy" />
+          <div class="shot" onclick="openLightbox('Images/setup7.png', 'Get-ADDomain output confirming domain connectivity')">
+            <img src="Images/setup7.png" alt="PowerShell output of Get-ADDomain confirming connectivity to mtlab.local" loading="lazy" />
             <span class="shot-caption">Get-ADDomain output <span class="zoom-hint">&#128269;</span></span>
           </div>
         </div>
@@ -332,8 +332,8 @@ Get-ADDomain</code></pre>
         </div>
         <p class="script-desc">All automation scripts live together in C:\Scripts on the PAW, alongside their supporting CSV input and a Logs subfolder for health check output.</p>
         <div class="shot-row">
-          <div class="shot" onclick="openLightbox('Images/setup6.png', 'C:\\Scripts folder contents')">
-            <img src="Images/setup6.png" alt="File Explorer showing the C:\Scripts folder with all automation scripts" loading="lazy" />
+          <div class="shot" onclick="openLightbox('Images/setup3.png', 'C:\\Scripts folder contents')">
+            <img src="Images/setup3.png" alt="File Explorer showing the C:\Scripts folder with all automation scripts" loading="lazy" />
             <span class="shot-caption">C:\Scripts contents <span class="zoom-hint">&#128269;</span></span>
           </div>
         </div>
@@ -347,8 +347,8 @@ Get-ADDomain</code></pre>
         </div>
         <p class="script-desc">The last script in the folder — ScheduledTaskAutomation.ps1 — registers the health check and GPO backup scripts as native Windows scheduled tasks, shown here open in the PowerShell ISE.</p>
         <div class="shot-row">
-          <div class="shot" onclick="openLightbox('Images/setup7.png', 'ScheduledTaskAutomation.ps1 in PowerShell ISE')">
-            <img src="Images/setup7.png" alt="ScheduledTaskAutomation.ps1 script open in PowerShell ISE" loading="lazy" />
+          <div class="shot" onclick="openLightbox('Images/setup4.png', 'ScheduledTaskAutomation.ps1 in PowerShell ISE')">
+            <img src="Images/setup4.png" alt="ScheduledTaskAutomation.ps1 script open in PowerShell ISE" loading="lazy" />
             <span class="shot-caption">Script — ISE <span class="zoom-hint">&#128269;</span></span>
           </div>
         </div>
