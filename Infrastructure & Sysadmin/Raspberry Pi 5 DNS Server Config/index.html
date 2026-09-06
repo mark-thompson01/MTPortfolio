@@ -334,13 +334,13 @@
       <h3>4.1 Configure Static IP via dhclient</h3>
       <pre><code>sudo nano /etc/dhcp/dhclient.conf</code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns1.png" alt="Terminal command opening /etc/dhcp/dhclient.conf in nano">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns1.png" alt="Terminal command opening /etc/dhcp/dhclient.conf in nano">
         <figcaption>Opening dhclient.conf to configure the static interface settings.</figcaption>
       </figure>
 
       <p>Reviewing the default configuration file before adding the static interface block:</p>
       <figure>
-        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns2.png" alt="dhclient.conf default file contents in nano">
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="Images/rpdns2.png" alt="dhclient.conf default file contents in nano">
         <figcaption>Default dhclient.conf contents — request/send directives and commented-out examples.</figcaption>
       </figure>
 
@@ -353,7 +353,7 @@
     fixed-address 192.168.10.5;
 }</code></pre>
       <figure>
-        <img class="zoomable shot-md" onclick="openLightbox(this.src)" src="images/rpdns3.png" alt="Static eth0 interface block added to dhclient.conf">
+        <img class="zoomable shot-md" onclick="openLightbox(this.src)" src="Images/rpdns3.png" alt="Static eth0 interface block added to dhclient.conf">
         <figcaption>Static interface block appended to dhclient.conf — fixed address 192.168.10.5, DNS pointed to itself (127.0.0.1) with the Windows Server DC as secondary.</figcaption>
       </figure>
       <p class="note">Note: The DNS server points to itself (127.0.0.1) as primary since it runs BIND9, with the Windows Server DC as secondary.</p>
@@ -361,7 +361,7 @@
       <h3>4.2 Reboot and Verify</h3>
       <pre><code>reboot</code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns4.png" alt="Terminal reboot command">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns4.png" alt="Terminal reboot command">
         <figcaption>Rebooting to apply the new static network configuration.</figcaption>
       </figure>
 
@@ -370,7 +370,7 @@
 <span class="cmt"># Expected output:</span>
 <span class="cmt"># inet 192.168.10.5/24 brd 192.168.10.255 scope global noprefixroute eth0</span></code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns5.png" alt="ip addr show eth0 output confirming static IP 192.168.10.5">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns5.png" alt="ip addr show eth0 output confirming static IP 192.168.10.5">
         <figcaption>Verifying the static IP assignment — 192.168.10.5/24 on eth0.</figcaption>
       </figure>
     </section>
@@ -380,13 +380,13 @@
       <h2><span class="num">5</span>BIND9 Installation</h2>
       <pre><code>sudo apt update &amp;&amp; sudo apt upgrade -y</code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns6.png" alt="Running apt update and upgrade">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns6.png" alt="Running apt update and upgrade">
         <figcaption>Updating the system before installing BIND9.</figcaption>
       </figure>
 
       <pre><code>sudo apt install bind9 bind9utils bind9-doc -y</code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns7.png" alt="Installing bind9, bind9utils, and bind9-doc packages">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns7.png" alt="Installing bind9, bind9utils, and bind9-doc packages">
         <figcaption>Installing the BIND9 DNS server and supporting packages.</figcaption>
       </figure>
 
@@ -395,7 +395,7 @@
 
 <span class="cmt"># Should return: BIND version information</span></code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns8.png" alt="named -v output showing BIND version 9.18.49">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns8.png" alt="named -v output showing BIND version 9.18.49">
         <figcaption>Confirming BIND9 9.18.49 (Debian Extended Support Version) is installed.</figcaption>
       </figure>
     </section>
@@ -412,13 +412,13 @@
       <h3>6.1 Configure named.conf.options</h3>
       <pre><code>sudo nano /etc/bind/named.conf.options</code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns9.png" alt="Terminal command opening named.conf.options in nano">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns9.png" alt="Terminal command opening named.conf.options in nano">
         <figcaption>Opening named.conf.options to set forwarders and query restrictions.</figcaption>
       </figure>
 
       <p>The default template before edits:</p>
       <figure>
-        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns10.png" alt="Default named.conf.options template with commented forwarder examples">
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="Images/rpdns10.png" alt="Default named.conf.options template with commented forwarder examples">
         <figcaption>Default named.conf.options template, prior to setting forwarders and locking down allow-query.</figcaption>
       </figure>
 
@@ -449,18 +449,18 @@
         };
 };</code></pre>
       <figure>
-        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns11.png" alt="named.conf.options edited in nano with forwarders and allow-query restricted to lab subnets">
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="Images/rpdns11.png" alt="named.conf.options edited in nano with forwarders and allow-query restricted to lab subnets">
         <figcaption>Final named.conf.options — forwarders and allow-query restrictions in place.</figcaption>
       </figure>
       <figure>
-        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns12.png" alt="cat output confirming named.conf.options contents">
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="Images/rpdns12.png" alt="cat output confirming named.conf.options contents">
         <figcaption>Confirming the saved configuration with <code>cat /etc/bind/named.conf.options</code>.</figcaption>
       </figure>
 
       <h3>6.2 Configure named.conf.local</h3>
       <pre><code>sudo nano /etc/bind/named.conf.local</code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns13.png" alt="Terminal command opening named.conf.local in nano">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns13.png" alt="Terminal command opening named.conf.local in nano">
         <figcaption>Opening named.conf.local to define (or intentionally omit) internal zones.</figcaption>
       </figure>
 
@@ -469,7 +469,7 @@
 // No internal zones defined — Pi handles external resolution only
 // Internal mtlab.local resolution is handled by the Windows Server DC</span></code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns14.png" alt="named.conf.local with no zones defined, comments explaining internal resolution is handled elsewhere">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns14.png" alt="named.conf.local with no zones defined, comments explaining internal resolution is handled elsewhere">
         <figcaption>named.conf.local left with no zone definitions — internal mtlab.local resolution stays with the Windows Server DC.</figcaption>
       </figure>
       <p class="note">Note: The named.conf.local file contains no zone definitions. The Pi does not handle internal mtlab.local resolution — that remains the responsibility of the Windows Server DC as the authoritative primary DNS. The Pi forwards all external queries to upstream public resolvers and serves as a failover DNS only.</p>
@@ -486,7 +486,7 @@
 <span class="cmt"># No output means configuration is valid
 # Any errors will be displayed with line numbers</span></code></pre>
       <figure>
-        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns15.png" alt="named-checkconf run with no output, confirming valid syntax">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns15.png" alt="named-checkconf run with no output, confirming valid syntax">
         <figcaption>No output from named-checkconf — configuration syntax is valid.</figcaption>
       </figure>
 
@@ -500,7 +500,7 @@ sudo systemctl status named
 
 <span class="cmt"># Both bind9 and named should show active (running)</span></code></pre>
       <figure>
-        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns17.png" alt="systemctl status named showing the service active and running, with all zones loaded">
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="Images/rpdns17.png" alt="systemctl status named showing the service active and running, with all zones loaded">
         <figcaption>named.service active (running) — zones loaded, service started successfully.</figcaption>
       </figure>
       <p class="note">The "Unable to fetch DNSKEY" line at the bottom is a routine root-key refresh timeout and does not affect DNS resolution.</p>
