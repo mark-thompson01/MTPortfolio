@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Network Command Automation · Mark Thompson Portfolio</title>
+  <meta name="description" content="Raspberry Pi 5 scripting & automation: Bash scripts to gather network info, list active connections, refresh DHCP, troubleshoot DNS, trace routes, and smart ping. Scroll-friendly screenshots." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 18px;display:flex;gap:14px;flex-wrap:wrap}
+    .topnav a{color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:10px;border:1px solid transparent}
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Headings & links */
+    h1{margin:8px 0 6px;font-size:clamp(28px,4vw,40px);font-weight:800}
+    h2{margin:0 0 10px;font-size:22px}
+    h3{margin:16px 0 8px;font-size:18px}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .lead{color:var(--muted);margin:8px 0 14px;font-size:clamp(16px,2.2vw,18px)}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);border-radius:var(--radius);
+      box-shadow:var(--shadow);padding:18px;margin-top:16px
+    }
+
+    /* Figures */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:24px auto;
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      margin:0 auto;
+      width:clamp(480px, 85%, 960px);
+      max-height:70vh;
+      height:auto;
+      border-radius:10px;
+      object-fit:contain;
+    }
+    /* Bigger treatment for Smart Ping code */
+    .figure--code img{
+      width:clamp(720px, 95%, 1200px);
+      max-height:85vh;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Footer */
+    footer{margin-top:36px;padding-top:20px;border-top:1px solid #232a3a;color:var(--muted);font-size:14px}
+    footer .links{margin-top:8px}
+    footer a{color:var(--muted)} footer a:hover{color:var(--brand)}
+
+    /* ===== Image Zoom (click-to-zoom) ===== */
+    .zoomable{cursor:zoom-in}
+    .zoom-overlay{
+      position:fixed; inset:0; display:none;
+      align-items:center; justify-content:center;
+      background:rgba(0,0,0,.8); z-index:9999; padding:24px;
+    }
+    .zoom-overlay.open{display:flex}
+    .zoom-overlay img{
+      max-width:min(1200px,94vw); max-height:90vh;
+      border-radius:12px; box-shadow:var(--shadow);
+      cursor:zoom-out;
+    }
+    body.zoom-open{overflow:hidden}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/Skills">Networking</a>
+      <a href="/MTPortfolio/Current%20Projects%20&%20Studies/" class="active">Windows &amp; Linux</a>
+      <a href="/MTPortfolio/Lab%20Projects">Cybersecurity</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Lab%20Projects">Scripting &amp; Automation (Raspberry Pi 5)</a> · <span>Network Command Automation</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+      <h1>Network Command Automation</h1>
+      <p class="lead">Bash scripts to quickly gather host network data, list active connections, refresh interfaces, troubleshoot DNS, and trace paths — optimized for Raspberry Pi 5.</p>
+    </header>
+
+    <section class="card">
+      <p>These helpers let you run multiple network commands automatically for troubleshooting and audits. They’re handy for checking connectivity, IP configuration, routing, suspicious connections, DNS resolution, and path latency.</p>
+    </section>
+
+    <!-- Gather Basic Network Information -->
+    <section class="card" id="basic-info">
+      <h2>Gather Basic Network Information</h2>
+      <figure class="figure"><img src="Images/scriptcode.png" alt="Script code to gather basic network information"></figure>
+      <figure class="figure"><img src="Images/scriptrun.png" alt="Running the basic network information script 1"></figure>
+      <figure class="figure"><img src="Images/scriptrun1.png" alt="Running the basic network information script 2"></figure>
+      <h3>Schedule to run every hour</h3>
+      <figure class="figure"><img src="Images/crontab.png" alt="Opening crontab editor"><figcaption class="figcap">Open crontab to schedule the job.</figcaption></figure>
+      <figure class="figure"><img src="Images/crontab 2.png" alt="Crontab entry example for hourly run"><figcaption class="figcap">Example entry: <code>0 * * * * /path/to/net-info.sh</code></figcaption></figure>
+    </section>
+
+    <!-- Listing Active Network Connections -->
+    <section class="card" id="active-connections">
+      <h2>Listing Active Network Connections</h2>
+      <figure class="figure"><img src="Images/active_connectionscode.png" alt="Script code to list active connections"></figure>
+      <figure class="figure"><img src="Images/active_connectionsrun.png" alt="Script output of active connections"></figure>
+      <figure class="figure"><img src="Images/activeconnecctionsmodify1.png" alt="Refining the active connections output"></figure>
+    </section>
+
+    <!-- DHCP Refresh -->
+    <section class="card" id="dhcp-refresh">
+      <h2>DHCP Refresh</h2>
+      <figure class="figure"><img src="Images/dhcprefreshcode.png" alt="Script code to refresh DHCP"></figure>
+      <figure class="figure"><img src="Images/dhcprefreshrun.png" alt="DHCP refresh script run output"></figure>
+    </section>
+
+    <!-- DNS Troubleshooting -->
+    <section class="card" id="dns">
+      <h2>DNS Troubleshooting</h2>
+      <figure class="figure"><img src="Images/dnsscriptcode.png" alt="Script code for DNS troubleshooting"></figure>
+      <figure class="figure"><img src="Images/dnsscriptrun1.png" alt="DNS troubleshooting script run output 1"></figure>
+      <figure class="figure"><img src="Images/dnsscriptrun2.png" alt="DNS troubleshooting script run output 2"></figure>
+    </section>
+
+    <!-- traceroute and mtr -->
+    <section class="card" id="tracing">
+      <h2>traceroute and mtr</h2>
+      <figure class="figure"><img src="Images/mtrscriptcode.png" alt="Script code using traceroute and mtr"></figure>
+    </section>
+
+    <!-- Smart Ping -->
+    <section class="card" id="smart-ping">
+      <h2>Smart Ping</h2>
+      <p>A slightly smarter ping wrapper for quick health checks.</p>
+      <figure class="figure figure--code">
+        <img src="Images/smartpingcode.png" alt="Smart ping script code">
+      </figure>
+    </section>
+
+    <!-- Wrap -->
+    <section class="card">
+      <p><a href="../index.html">Back to Home</a></p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Tiny, reusable click-to-zoom for all images -->
+  <script>
+    (function(){
+      const imgs = document.querySelectorAll('.wrap img');
+      if(!imgs.length) return;
+
+      const overlay = document.createElement('div');
+      overlay.className = 'zoom-overlay';
+      overlay.setAttribute('aria-hidden','true');
+      overlay.innerHTML = '<img alt="">';
+      document.body.appendChild(overlay);
+      const ovImg = overlay.querySelector('img');
+
+      function closeZoom(){
+        overlay.classList.remove('open');
+        document.body.classList.remove('zoom-open');
+        ovImg.removeAttribute('src');
+        ovImg.removeAttribute('srcset');
+      }
+
+      overlay.addEventListener('click', closeZoom);
+      document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeZoom(); });
+
+      imgs.forEach(img=>{
+        img.classList.add('zoomable');
+        img.addEventListener('click', ()=>{
+          ovImg.alt = img.alt || '';
+          ovImg.src = img.currentSrc || img.src;
+          overlay.classList.add('open');
+          document.body.classList.add('zoom-open');
+        }, {passive:true});
+      });
+    })();
+  </script>
+</body>
+</html>
