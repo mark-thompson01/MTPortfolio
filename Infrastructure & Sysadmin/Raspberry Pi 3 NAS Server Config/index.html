@@ -1,1 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Raspberry Pi 3 NAS Server Config · Mark Thompson Portfolio</title>
+  <meta name="description" content="Turning a Raspberry Pi 3 into a lightweight Samba NAS for lab storage and backups, integrated into VLAN 10." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+      --code-bg:#0a0d13; --code-border:#232c3d; --code-text:#c9d3e6;
+      --table-head:#161c29;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumb{max-width:820px;margin:0 auto 28px;color:var(--muted);font-size:15px;text-align:center}
+    .crumb a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent}
+    .crumb a:hover{color:var(--text);border-bottom-color:#3a4a67}
+
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,42px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 auto 40px;font-size:clamp(16px,2.2vw,18px);text-align:center;max-width:760px}
+
+    main{max-width:820px;margin:0 auto}
+
+    section{margin:0 0 56px}
+    section > h2{
+      font-size:1.5rem;
+      font-weight:800;
+      margin:0 0 6px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    section > h2 .step-badge{
+      flex:0 0 auto;width:34px;height:34px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:.95rem;color:var(--brand);
+      background:rgba(77,163,255,.08);border:1px solid #2a3a55;
+    }
+    section > .section-sub{color:var(--muted);margin:0 0 22px;font-size:.98rem;max-width:640px}
+    section > h3{font-size:1.05rem;font-weight:700;margin:26px 0 10px;color:#dfe2ee}
+
+    p{color:#c7cbdb;margin:0 0 14px}
+
+    /* Card wrapper for grouped content */
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:26px 28px;
+    }
+
+    /* Tables */
+    table{width:100%;border-collapse:collapse;font-size:.94rem}
+    caption{text-align:left;color:var(--muted);font-size:.85rem;margin-bottom:8px}
+    th,td{padding:11px 14px;border-bottom:1px solid #232b3c;text-align:left;vertical-align:top}
+    th{background:var(--table-head);color:#dfe2ee;font-weight:700;font-size:.85rem;text-transform:uppercase;letter-spacing:.03em}
+    tr:last-child td{border-bottom:none}
+    td:first-child{color:#dfe2ee;font-weight:600;white-space:nowrap}
+    td code, th code{background:rgba(77,163,255,.08);border:1px solid #2a3a55;color:#bcdcff;padding:1px 6px;border-radius:6px;font-size:.85em}
+
+    /* Code blocks */
+    pre{
+      background:var(--code-bg);
+      border:1px solid var(--code-border);
+      border-radius:12px;
+      padding:16px 18px;
+      overflow-x:auto;
+      margin:0 0 18px;
+    }
+    pre code{
+      color:var(--code-text);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+      font-size:.88rem;
+      line-height:1.6;
+      white-space:pre;
+    }
+    pre .cmt{color:#6b7896}
+    .inline-code{
+      background:rgba(77,163,255,.08);border:1px solid #2a3a55;color:#bcdcff;
+      padding:1px 6px;border-radius:6px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font-size:.88em;
+    }
+
+    /* Screenshot figures */
+    .shot{
+      margin:0 0 22px;
+      border:1px solid var(--card-border);
+      border-radius:14px;
+      overflow:hidden;
+      background:#0a0d13;
+      box-shadow:var(--shadow);
+    }
+    .shot button.shot-btn{
+      all:unset;
+      display:block;
+      width:100%;
+      cursor:zoom-in;
+      position:relative;
+    }
+    .shot img{display:block;width:100%;height:auto}
+    .shot .zoom-hint{
+      position:absolute; top:10px; right:10px;
+      background:rgba(10,13,19,.75); color:var(--muted);
+      border:1px solid #2a3447; border-radius:8px;
+      padding:5px 9px; font-size:.75rem; font-weight:600;
+      display:flex; align-items:center; gap:5px;
+      opacity:0; transition:opacity .15s ease;
+    }
+    .shot button.shot-btn:hover .zoom-hint,
+    .shot button.shot-btn:focus-visible .zoom-hint{opacity:1}
+    figcaption{
+      padding:10px 16px 14px;
+      color:var(--muted);
+      font-size:.85rem;
+      border-top:1px solid var(--code-border);
+      background:rgba(255,255,255,.015);
+    }
+    figcaption strong{color:#c7cbdb;font-weight:600}
+
+    .shot-grid{display:grid;grid-template-columns:1fr;gap:0}
+    @media(min-width:640px){
+      .shot-row-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0; z-index:100;
+      background:rgba(6,8,12,.92);
+      display:none; align-items:center; justify-content:center;
+      padding:32px; cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:min(94vw,1200px); max-height:88vh;
+      border-radius:10px; border:1px solid #2a3447;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      cursor:default;
+    }
+    .lightbox .lb-caption{
+      position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+      color:var(--muted); font-size:.88rem; text-align:center; max-width:80vw;
+    }
+    .lightbox .lb-close{
+      all:unset; position:absolute; top:20px; right:26px;
+      color:var(--text); font-size:1.6rem; cursor:pointer;
+      width:40px;height:40px;border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid #2a3447; background:rgba(20,24,33,.7);
+    }
+    .lightbox .lb-close:hover{border-color:#3a4a67}
+
+    .note{
+      border-left:3px solid var(--brand);
+      background:rgba(77,163,255,.06);
+      padding:12px 16px;
+      border-radius:0 10px 10px 0;
+      color:#c7cbdb;
+      font-size:.92rem;
+      margin:0 0 18px;
+    }
+
+    /* Prev/Next footer nav */
+    .page-nav{
+      display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+      margin:8px 0 48px; padding-top:28px; border-top:1px solid #232a3a;
+    }
+    .page-nav a{
+      color:var(--muted); text-decoration:none; font-size:.95rem;
+      padding:12px 18px; border:1px solid var(--card-border); border-radius:12px;
+      max-width:46%;
+    }
+    .page-nav a:hover{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.04)}
+    .page-nav .dir{display:block;color:#7f8599;font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+
+    /* Footer */
+    footer{
+      margin-top:0;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin" class="active">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <p class="crumb"><a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a> / Raspberry Pi 3 NAS Server Config</p>
+
+    <header>
+      <h1>Raspberry Pi 3 NAS Server Config</h1>
+      <p class="lead">Turning a Raspberry Pi 3 into a lightweight, low-power NAS with a manual Samba build — centralized file storage and backups reachable by every device on the lab network.</p>
+    </header>
+
+    <main>
+
+      <section id="overview">
+        <h2><span class="step-badge">1</span>Overview</h2>
+        <p>The Raspberry Pi 3 NAS serves as a lightweight, low-power network attached storage device within the MTPortfolio lab environment. It provides centralized file storage and backup capabilities accessible to all devices across the network via SMB/CIFS file sharing.</p>
+        <p>Rather than deploying a full NAS platform such as OpenMediaVault or TrueNAS on this device, a manual Samba configuration was chosen to keep the setup lightweight and demonstrate foundational Linux networking and file sharing skills.</p>
+      </section>
+
+      <section id="hardware">
+        <h2><span class="step-badge">2</span>Hardware &amp; Software</h2>
+        <div class="card">
+          <table>
+            <thead><tr><th>Component</th><th>Details</th></tr></thead>
+            <tbody>
+              <tr><td>Hardware</td><td>Raspberry Pi 3 Model B</td></tr>
+              <tr><td>Operating System</td><td>Raspbian GNU/Linux 10 (Buster)</td></tr>
+              <tr><td>NAS Software</td><td>Samba 2.4.9 (SMB/CIFS)</td></tr>
+              <tr><td>File Services</td><td><code>smbd</code> (SMB Daemon), <code>nmbd</code> (NetBIOS Name Daemon)</td></tr>
+              <tr><td>Storage</td><td>28GB drive mounted at <code>/mnt/nasdrive</code></td></tr>
+              <tr><td>Network Interface</td><td><code>eth0</code> (wired Ethernet)</td></tr>
+              <tr><td>Switch Port</td><td>2950 (Switch001) Fa0/5</td></tr>
+              <tr><td>VLAN</td><td>VLAN 10 — Servers (192.168.10.0/24)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="network">
+        <h2><span class="step-badge">3</span>Network / IP Configuration</h2>
+        <p class="section-sub">The Pi 3 NAS is assigned a static IP address on VLAN 10 (Servers) so it's always reachable at a predictable address — required since clients map network drives by IP or hostname.</p>
+        <div class="card">
+          <table>
+            <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+            <tbody>
+              <tr><td>IP Address</td><td>192.168.10.20</td></tr>
+              <tr><td>Subnet Mask</td><td>255.255.255.0 (/24)</td></tr>
+              <tr><td>Default Gateway</td><td>192.168.10.1 (3550 VLAN 10 SVI)</td></tr>
+              <tr><td>Primary DNS</td><td>192.168.10.5 (Raspberry Pi 5 DNS)</td></tr>
+              <tr><td>Secondary DNS</td><td>192.168.20.10 (Windows Server DC)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="configured">
+        <h2><span class="step-badge">4</span>How It Was Configured</h2>
+
+        <h3>4.1 Operating System</h3>
+        <p>Raspbian Buster was flashed to the Pi 3's SD card using Raspberry Pi Imager. SSH was enabled via a blank <span class="inline-code">ssh</span> file placed in the <span class="inline-code">/boot</span> partition, allowing headless management from the desktop.</p>
+
+        <h3>4.2 Samba Installation</h3>
+        <p>Samba was installed from the Raspbian package repository and configured to share the mounted NAS drive with appropriate permissions for network access:</p>
+        <pre><code>sudo apt update &amp;&amp; sudo apt upgrade -y
+sudo apt install samba samba-common-bin -y</code></pre>
+
+        <figure class="shot">
+          <button class="shot-btn" data-full="/Images/nas1.png" data-caption="sudo apt update — the Buster repo mirror returns a 404, a known issue on end-of-life Raspbian releases.">
+            <img src="/Images/nas1.png" alt="Terminal running sudo apt update against Raspbian Buster, returning a 404 Not Found on the buster Release file" loading="lazy">
+            <span class="zoom-hint">🔍 Click to zoom</span>
+          </button>
+          <figcaption><strong>apt update</strong> hitting a dead Buster mirror — the <span class="inline-code">buster Release</span> file is 404, since the Buster archive has since been retired upstream.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <button class="shot-btn" data-full="/Images/nas2_2.png" data-caption="sudo apt install samba samba-common-bin -y — both packages already present and reporting as the newest version.">
+            <img src="/Images/nas2_2.png" alt="Terminal showing samba and samba-common-bin already installed at the newest version" loading="lazy">
+            <span class="zoom-hint">🔍 Click to zoom</span>
+          </button>
+          <figcaption><strong>Samba install</strong> — packages already present on this image, confirmed at the newest available version.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <button class="shot-btn" data-full="/Images/nas2.png" data-caption="A second sudo apt update / apt upgrade pass — the dead buster repo is disabled by apt-secure, and the upgrade check completes cleanly against what remains.">
+            <img src="/Images/nas2.png" alt="Terminal showing apt update failing on the disabled buster repo, followed by apt upgrade completing with 0 upgraded packages" loading="lazy">
+            <span class="zoom-hint">🔍 Click to zoom</span>
+          </button>
+          <figcaption><strong>Repo cleanup</strong> — apt disables the dead <span class="inline-code">buster</span> line under apt-secure, and <span class="inline-code">apt upgrade</span> completes with nothing outstanding.</figcaption>
+        </figure>
+
+        <h3>4.3 Drive Mounting</h3>
+        <p>The NAS drive was formatted and mounted at <span class="inline-code">/mnt/nasdrive</span>, with the mount made persistent across reboots via <span class="inline-code">/etc/fstab</span>:</p>
+        <pre><code>sudo mkdir -p /mnt/nasdrive
+sudo mount /dev/sda1 /mnt/nasdrive
+
+<span class="cmt"># Add to /etc/fstab for persistence:</span>
+/dev/sda1  /mnt/nasdrive  ext4  defaults  0  2</code></pre>
+
+        <figure class="shot">
+          <button class="shot-btn" data-full="/Images/nas3.png" data-caption="sudo mkdir -p /mnt/nasdrive — creating the mount point for the NAS drive.">
+            <img src="/Images/nas3.png" alt="Terminal creating the /mnt/nasdrive directory with mkdir -p" loading="lazy">
+            <span class="zoom-hint">🔍 Click to zoom</span>
+          </button>
+          <figcaption><strong>Mount point created</strong> at <span class="inline-code">/mnt/nasdrive</span>.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <button class="shot-btn" data-full="/Images/nas4.png" data-caption="df -h to review existing filesystems, followed by mounting the NAS drive.">
+            <img src="/Images/nas4.png" alt="Terminal output of df -h listing mounted filesystems, followed by a mount command targeting /mnt/nasdrive" loading="lazy">
+            <span class="zoom-hint">🔍 Click to zoom</span>
+          </button>
+          <figcaption><strong>df -h</strong> confirms available disk space before mounting the drive to <span class="inline-code">/mnt/nasdrive</span>.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <button class="shot-btn" data-full="/Images/nas5.png" data-caption="Editing /etc/fstab in nano to add the persistent mount entry for the NAS drive.">
+            <img src="/Images/nas5.png" alt="Nano editor open on /etc/fstab with a new line mounting the NAS drive at boot" loading="lazy">
+            <span class="zoom-hint">🔍 Click to zoom</span>
+          </button>
+          <figcaption><strong>/etc/fstab</strong> — adding the mount entry so the NAS drive comes back on every reboot.</figcaption>
+        </figure>
+
+        <figure class="shot">
+          <button class="shot-btn" data-full="/Images/nas6.png" data-caption="cat /etc/fstab confirming the new NAS mount line was saved correctly.">
+            <img src="/Images/nas6.png" alt="Terminal output of cat /etc/fstab showing the saved NAS drive mount entry" loading="lazy">
+            <span class="zoom-hint">🔍 Click to zoom</span>
+          </button>
+          <figcaption><strong>Verifying the write</strong> — <span class="inline-code">cat /etc/fstab</span> shows the new mount line saved cleanly.</figcaption>
+        </figure>
+
+        <h3>4.4 Samba Share Configuration</h3>
+        <p>The Samba config file was edited to define the shared folder:</p>
+        <pre><code>sudo nano /etc/samba/smb.conf
+
+<span class="cmt"># Add to bottom of smb.conf:</span>
+[NAS]
+   path = /mnt/nasdrive
+   browseable = yes
+   writeable = yes
+   only guest = no
+   create mask = 0777
+   directory mask = 0777
+   public = no</code></pre>
+
+        <div class="shot-row-2">
+          <figure class="shot">
+            <button class="shot-btn" data-full="/Images/nas7.png" data-caption="Opening /etc/samba/smb.conf in nano to append the NAS share block.">
+              <img src="/Images/nas7.png" alt="Terminal opening /etc/samba/smb.conf in the nano editor" loading="lazy">
+              <span class="zoom-hint">🔍 Click to zoom</span>
+            </button>
+            <figcaption><strong>Opening smb.conf</strong> to append the share definition.</figcaption>
+          </figure>
+
+          <figure class="shot">
+            <button class="shot-btn" data-full="/Images/nas8.png" data-caption="The [NAS] share block added to the bottom of smb.conf, defining path, permissions, and access flags.">
+              <img src="/Images/nas8.png" alt="Nano editor showing the [NAS] share block in smb.conf with path, browseable, writeable, and mask settings" loading="lazy">
+              <span class="zoom-hint">🔍 Click to zoom</span>
+            </button>
+            <figcaption><strong>[NAS] share block</strong> — path, permissions, and access flags for the share.</figcaption>
+          </figure>
+        </div>
+
+        <p>Samba services were then enabled and started:</p>
+        <pre><code>sudo systemctl enable smbd nmbd
+sudo systemctl start smbd nmbd</code></pre>
+
+        <figure class="shot">
+          <button class="shot-btn" data-full="/Images/nas9.png" data-caption="Enabling and starting the smbd and nmbd services so the share is active and persists across reboots.">
+            <img src="/Images/nas9.png" alt="Terminal enabling and starting the smbd and nmbd systemd services" loading="lazy">
+            <span class="zoom-hint">🔍 Click to zoom</span>
+          </button>
+          <figcaption><strong>smbd &amp; nmbd</strong> enabled at boot and started immediately.</figcaption>
+        </figure>
+      </section>
+
+      <section id="vlan">
+        <h2><span class="step-badge">5</span>VLAN Integration — Commands to Run</h2>
+        <p class="section-sub">These commands integrate the Pi 3 NAS into the MTPortfolio VLAN infrastructure by configuring a static IP on the network interface, placing the device correctly on VLAN 10.</p>
+
+        <h3>5.1 Set Static IP via dhcpcd</h3>
+        <pre><code>sudo nano /etc/dhcpcd.conf
+
+<span class="cmt"># Add to the bottom of the file:</span>
+interface eth0
+static ip_address=192.168.10.20/24
+static routers=192.168.10.1
+static domain_name_servers=192.168.10.5 192.168.20.10</code></pre>
+
+        <div class="shot-row-2">
+          <figure class="shot">
+            <button class="shot-btn" data-full="/Images/nas10.png" data-caption="Opening /etc/dhcpcd.conf in nano to add the static interface configuration.">
+              <img src="/Images/nas10.png" alt="Terminal opening /etc/dhcpcd.conf in the nano editor" loading="lazy">
+              <span class="zoom-hint">🔍 Click to zoom</span>
+            </button>
+            <figcaption><strong>Opening dhcpcd.conf</strong> to add the static interface block.</figcaption>
+          </figure>
+
+          <figure class="shot">
+            <button class="shot-btn" data-full="/Images/nas11.png" data-caption="Static IP, gateway, and DNS servers configured for eth0 at the bottom of dhcpcd.conf, placing the Pi on VLAN 10.">
+              <img src="/Images/nas11.png" alt="Nano editor showing eth0 configured with a static IP, router, and DNS servers at the bottom of dhcpcd.conf" loading="lazy">
+              <span class="zoom-hint">🔍 Click to zoom</span>
+            </button>
+            <figcaption><strong>eth0 static block</strong> — IP, gateway, and DNS pinned for VLAN 10.</figcaption>
+          </figure>
+        </div>
+
+        <h3>5.2 Restart Networking</h3>
+        <pre><code>sudo systemctl restart dhcpcd</code></pre>
+
+        <figure class="shot">
+          <button class="shot-btn" data-full="/Images/nas12.png" data-caption="Restarting the dhcpcd service to apply the new static IP configuration.">
+            <img src="/Images/nas12.png" alt="Terminal restarting the dhcpcd service to apply the new static IP" loading="lazy">
+            <span class="zoom-hint">🔍 Click to zoom</span>
+          </button>
+          <figcaption><strong>dhcpcd restarted</strong> — the static IP configuration takes effect.</figcaption>
+        </figure>
+
+        <h3>5.3 Verify IP Configuration</h3>
+        <pre><code>ip addr show eth0
+ip route show
+ping 192.168.10.1    <span class="cmt"># ping gateway</span>
+ping 192.168.20.10   <span class="cmt"># ping Windows Server DC</span></code></pre>
+
+        <h3>5.4 Verify Samba Services Still Running</h3>
+        <pre><code>sudo systemctl status smbd
+sudo systemctl status nmbd</code></pre>
+
+        <h3>5.5 Verify Share Is Accessible</h3>
+        <p>From a Windows client on the network, open Run (<span class="inline-code">Win+R</span>) and enter:</p>
+        <pre><code>\\192.168.10.20\NAS</code></pre>
+        <div class="note">You should be prompted for Samba credentials and then see the NAS share contents.</div>
+      </section>
+
+      <section id="service-status">
+        <h2><span class="step-badge">6</span>Service Status Reference</h2>
+        <p class="section-sub">Use these commands at any time to check the health of the NAS.</p>
+        <div class="card">
+          <table>
+            <thead><tr><th>Command</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>sudo systemctl status smbd</code></td><td>Check SMB file sharing daemon</td></tr>
+              <tr><td><code>sudo systemctl status nmbd</code></td><td>Check NetBIOS name daemon</td></tr>
+              <tr><td><code>df -h</code></td><td>Check disk usage on NAS drive</td></tr>
+              <tr><td><code>ip addr show eth0</code></td><td>Verify current IP address</td></tr>
+              <tr><td><code>ping 192.168.10.1</code></td><td>Test gateway connectivity</td></tr>
+              <tr><td><code>sudo smbstatus</code></td><td>Show active Samba connections</td></tr>
+              <tr><td><code>cat /etc/samba/smb.conf</code></td><td>Review Samba configuration</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <nav class="page-nav" aria-label="Sibling pages">
+        <a href="https://mark-thompson01.github.io/MTPortfolio/Infrastructure%20%26%20Sysadmin/Raspberry%20Pi%205%20DNS%20Server%20Config">
+          <span class="dir">← Previous</span>
+          Raspberry Pi 5 DNS Server Config
+        </a>
+        <a href="https://mark-thompson01.github.io/MTPortfolio/Infrastructure%20%26%20Sysadmin/PowerShell%20Administration" style="text-align:right">
+          <span class="dir">Next →</span>
+          PowerShell Administration
+        </a>
+      </nav>
+
+    </main>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot zoom view">
+    <button class="lb-close" id="lbClose" aria-label="Close zoomed image">&times;</button>
+    <img id="lbImg" src="" alt="">
+    <div class="lb-caption" id="lbCaption"></div>
+  </div>
+
+  <script>
+    (function(){
+      var lightbox = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lbImg');
+      var lbCaption = document.getElementById('lbCaption');
+      var lbClose = document.getElementById('lbClose');
+
+      function openLightbox(src, alt, caption){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCaption.textContent = caption || '';
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        lbClose.focus();
+      }
+      function closeLightbox(){
+        lightbox.classList.remove('open');
+        lbImg.src = '';
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('.shot-btn').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var img = btn.querySelector('img');
+          openLightbox(btn.getAttribute('data-full'), img ? img.getAttribute('alt') : '', btn.getAttribute('data-caption'));
+        });
+      });
+
+      lightbox.addEventListener('click', function(e){
+        if(e.target === lightbox){ closeLightbox(); }
+      });
+      lbClose.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && lightbox.classList.contains('open')){ closeLightbox(); }
+      });
+    })();
+  </script>
+</body>
+</html>
