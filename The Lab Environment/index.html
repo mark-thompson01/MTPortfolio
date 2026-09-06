@@ -66,6 +66,19 @@
     padding-bottom: 20px;
   }
 
+  .topnav { margin: 0 0 24px; display: flex; gap: 18px; flex-wrap: wrap; }
+  .topnav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .topnav a:hover { color: var(--text-bright); border-color: var(--border); background: rgba(255,255,255,.04); }
+  .topnav a.active { color: var(--text-bright); border-color: #3a4a67; background: rgba(255,255,255,.06); }
+
   .page-header .breadcrumb {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 11px;
@@ -348,6 +361,16 @@
 </style>
 </head>
 <body>
+
+<nav class="topnav" aria-label="Sections">
+  <a href="/MTPortfolio/">Home</a>
+  <a href="/MTPortfolio/The%20Lab%20Environment" class="active">The Lab Environment</a>
+  <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure &amp; Sysadmin</a>
+  <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+  <a href="/MTPortfolio/Security">Security</a>
+  <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation &amp; Scripting</a>
+  <a href="/MTPortfolio/Blogs">Blog</a>
+</nav>
 
 <div class="page-header">
   <div>
