@@ -1,1 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTPortfolio Lab | Reference Charts</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e14;
+    --surface: #111820;
+    --surface2: #1a2332;
+    --border: #1e2d3d;
+    --accent: #4fc3f7;
+    --accent2: #81d4a0;
+    --accent3: #ffb74d;
+    --accent4: #ce93d8;
+    --accent5: #ef9a9a;
+    --text: #cdd6e0;
+    --text-dim: #637a8a;
+    --text-bright: #e8f0f8;
 
+    --v10: #1a3a2a;
+    --v10-text: #81d4a0;
+    --v10-border: #2d6b4a;
+
+    --v20: #2a1a3a;
+    --v20-text: #ce93d8;
+    --v20-border: #5a3a7a;
+
+    --v40: #3a2a1a;
+    --v40-text: #ffb74d;
+    --v40-border: #7a5a2a;
+
+    --mgmt: #1a2a3a;
+    --mgmt-text: #4fc3f7;
+    --mgmt-border: #2a5a7a;
+
+    --transit: #1a3238;
+    --transit-text: #4dd0e1;
+    --transit-border: #2a5a62;
+
+    --blackhole: #1a1a1a;
+    --blackhole-text: #4a5a68;
+    --blackhole-border: #2a2f35;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 40px;
+    min-width: 1100px;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 40px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+
+  .page-header .breadcrumb {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--text-bright);
+    letter-spacing: -0.02em;
+  }
+
+  .page-header h1 span { color: var(--accent); }
+
+  .network-badges {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+  }
+
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+  }
+
+  .badge.home { background: #1a2838; color: var(--accent); border: 1px solid var(--mgmt-border); }
+  .badge.lab { background: #1a2838; color: var(--accent2); border: 1px solid var(--v10-border); }
+  .badge.transit { background: #142a2e; color: var(--transit-text); border: 1px solid var(--transit-border); }
+
+  /* Section */
+  .section { margin-bottom: 56px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .section-header h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-bright);
+  }
+
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Tables */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+
+  .diagram-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    padding: 20px;
+  }
+
+  .diagram-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .diagram-note {
+    padding: 10px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-top: -16px;
+    margin-bottom: 16px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .table-title {
+    padding: 12px 20px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .table-subtitle {
+    margin-left: auto;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 10px 16px;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(79,195,247,0.03); }
+
+  tr.retired td { opacity: 0.55; }
+  tr.retired .device-name { text-decoration: line-through; text-decoration-color: var(--text-dim); }
+
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+  }
+
+  .device-name {
+    font-weight: 500;
+    color: var(--text-bright);
+  }
+
+  /* Type badges */
+  .type-badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .type-vm { background: #1a1a3a; color: #9fa8da; border: 1px solid #3a3a6a; }
+  .type-physical { background: #1a2a1a; color: var(--accent2); border: 1px solid var(--v10-border); }
+  .type-storage { background: #2a1a1a; color: var(--accent5); border: 1px solid #6a3a3a; }
+  .type-switch { background: #1a2838; color: var(--accent); border: 1px solid var(--mgmt-border); }
+  .type-router { background: #2a2a1a; color: var(--accent3); border: 1px solid var(--v40-border); }
+  .type-firewall { background: #2a1a2a; color: #f48fb1; border: 1px solid #6a3a5a; }
+  .type-retired { background: #1a1a1a; color: var(--text-dim); border: 1px solid var(--border); }
+
+  /* VLAN pills */
+  .vlan {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-weight: 500;
+  }
+
+  .vlan-10 { background: var(--v10); color: var(--v10-text); border: 1px solid var(--v10-border); }
+  .vlan-20 { background: var(--v20); color: var(--v20-text); border: 1px solid var(--v20-border); }
+  .vlan-40 { background: var(--v40); color: var(--v40-text); border: 1px solid var(--v40-border); }
+  .vlan-50 { background: var(--mgmt); color: var(--mgmt-text); border: 1px solid var(--mgmt-border); }
+  .vlan-999 { background: var(--blackhole); color: var(--blackhole-text); border: 1px solid var(--blackhole-border); }
+  .vlan-trunk { background: #2a1a1a; color: var(--accent5); border: 1px solid #6a3a3a; }
+  .vlan-uplink { background: #2a1a2a; color: #f48fb1; border: 1px solid #6a3a5a; }
+  .vlan-span { background: #1a1a1a; color: #ffcc80; border: 1px solid #6a5a2a; }
+  .vlan-transit { background: var(--transit); color: var(--transit-text); border: 1px solid var(--transit-border); }
+
+  .ip-static { color: var(--text-bright); }
+  .ip-dhcp { color: var(--accent3); }
+  .ip-dim { color: var(--text-dim); }
+
+  .role-text { color: var(--text-dim); font-size: 12px; }
+
+  /* Footer note */
+  .table-note {
+    padding: 10px 16px;
+    background: var(--surface2);
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* VLAN scope blocks */
+  .scope-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .scope-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .scope-header {
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .scope-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .scope-body { padding: 14px 16px; }
+
+  .scope-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+
+  .scope-row:last-child { border-bottom: none; }
+  .scope-key { color: var(--text-dim); font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; }
+  .scope-val { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-bright); }
+
+  /* Page footer */
+  .page-footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div>
+    <div class="breadcrumb">MTPortfolio · Lab Environment</div>
+    <h1>Reference <span>Charts</span></h1>
+  </div>
+  <div class="network-badges">
+    <span class="badge home">HOME NETWORK · 192.168.1.0/24</span>
+    <span class="badge lab">LAB NETWORK · 192.168.x.0/24</span>
+    <span class="badge transit">TRANSIT · 192.168.100.0/30</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 0: NETWORK DIAGRAM
+════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-label">00</span>
+    <h2>Network Diagram</h2>
+  </div>
+
+  <div class="diagram-card">
+    <svg viewBox="0 0 2200 1500" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#333333"/>
+        </marker>
+        <marker id="arrowsm" markerWidth="8" markerHeight="8" refX="6" refY="2.5" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,5 L7,2.5 z" fill="#555555"/>
+        </marker>
+      </defs>
+    
+      <rect x="0" y="0" width="2200" height="1500" fill="#ffffff"/>
+    
+      <!-- ===================== TITLE ===================== -->
+      <text x="1080" y="55" font-size="44" font-weight="700" fill="#111111" text-anchor="middle">Home Lab Network Layout</text>
+    
+      <!-- ===================== INTERNET ICON ===================== -->
+      <g transform="translate(50,20)">
+        <circle cx="55" cy="50" r="38" fill="none" stroke="#111111" stroke-width="4"/>
+        <ellipse cx="55" cy="50" rx="38" ry="16" fill="none" stroke="#111111" stroke-width="2.3"/>
+        <line x1="17" y1="50" x2="93" y2="50" stroke="#111111" stroke-width="2.3"/>
+        <line x1="55" y1="12" x2="55" y2="88" stroke="#111111" stroke-width="2.3"/>
+        <path d="M23,28 Q55,50 23,72" fill="none" stroke="#111111" stroke-width="1.8"/>
+        <path d="M87,28 Q55,50 87,72" fill="none" stroke="#111111" stroke-width="1.8"/>
+        <path d="M0,18 L18,18 L18,0" fill="none" stroke="#111111" stroke-width="4.5" marker-end="url(#arrow)"/>
+        <path d="M110,82 L92,82 L92,100" fill="none" stroke="#111111" stroke-width="4.5" marker-end="url(#arrow)"/>
+      </g>
+      <text x="185" y="45" font-size="22" font-weight="700" fill="#111111">Internet Connectivity</text>
+    
+      <!-- ===================== HYPER-V HOST CHARACTERISTICS BOX ===================== -->
+      <g transform="translate(20,260)">
+        <text x="0" y="0" font-size="19" font-weight="700" fill="#111111">Hyper-V Host Characteristics:</text>
+        <text x="28" y="28" font-size="15.5" fill="#222222">Main VM Host</text>
+        <text x="8" y="56" font-size="15" font-weight="700" fill="#222222">Ethernet 1, Built-in NIC</text>
+        <text x="8" y="75" font-size="14.5" fill="#444444">(Cat6 Straight-Through to SOHO Router)</text>
+        <text x="8" y="103" font-size="15" font-weight="700" fill="#222222">Ethernet 2, USB to Ethernet Adapter</text>
+        <text x="8" y="122" font-size="14.5" fill="#444444">(Cat6 Straight-Through to Fa0/2, Switch001)</text>
+        <text x="8" y="150" font-size="15" font-weight="700" fill="#222222">Ethernet 3, USB to Ethernet Adapter</text>
+        <text x="8" y="169" font-size="14.5" fill="#444444">(Cat6 Straight-Through to Fa0/6, Switch001)</text>
+        <text x="8" y="188" font-size="14.5" fill="#444444">Wireshark, SPAN Monitor</text>
+        <text x="8" y="207" font-size="14.5" fill="#444444">SPAN-Monitor vSwitch</text>
+      </g>
+    
+      <!-- ===================== MAIN ROUTER (Network 1) ===================== -->
+      <g transform="translate(330,150)">
+        <rect x="0" y="0" width="90" height="60" rx="10" fill="#1f6fa8"/>
+        <circle cx="45" cy="30" r="19" fill="none" stroke="#ffffff" stroke-width="3"/>
+        <path d="M28,30 L62,30 M45,14 L45,46 M33,18 L57,42 M57,18 L33,42" stroke="#ffffff" stroke-width="2.3"/>
+      </g>
+      <text x="375" y="138" font-size="16.5" font-weight="700" fill="#111111" text-anchor="middle">Network 1</text>
+    
+      <!-- Internet -> Main Router -->
+      <path d="M108,128 L108,180 L328,180" fill="none" stroke="#333333" stroke-width="2.3" marker-end="url(#arrow)"/>
+    
+      <!-- ===================== SOHO ROUTER ===================== -->
+      <g transform="translate(570,150)">
+        <rect x="0" y="0" width="90" height="60" rx="10" fill="#1f6fa8"/>
+        <circle cx="45" cy="30" r="19" fill="none" stroke="#ffffff" stroke-width="3"/>
+        <path d="M28,30 L62,30 M45,14 L45,46 M33,18 L57,42 M57,18 L33,42" stroke="#ffffff" stroke-width="2.3"/>
+      </g>
+      <text x="615" y="118" font-size="16.5" font-weight="700" fill="#111111" text-anchor="middle">192.168.1.1</text>
+      <text x="615" y="134" font-size="15" font-weight="700" fill="#111111" text-anchor="middle">External SOHO Router</text>
+    
+      <!-- Main Router -> SOHO -->
+      <path d="M420,180 L568,180" fill="none" stroke="#333333" stroke-width="2.3" marker-end="url(#arrow)"/>
+      <text x="494" y="172" font-size="15.5" fill="#444444" text-anchor="middle">Cat6 Ethernet</text>
+    
+      <!-- ===================== FORTIGATE 60E ===================== -->
+      <g transform="translate(810,145)">
+        <rect x="0" y="0" width="110" height="65" rx="8" fill="#d1495b"/>
+        <rect x="14" y="14" width="82" height="37" fill="none" stroke="#ffffff" stroke-width="2.3"/>
+        <line x1="14" y1="24" x2="96" y2="24" stroke="#ffffff" stroke-width="1.8"/>
+        <line x1="14" y1="34" x2="96" y2="34" stroke="#ffffff" stroke-width="1.8"/>
+        <line x1="14" y1="44" x2="96" y2="44" stroke="#ffffff" stroke-width="1.8"/>
+      </g>
+      <text x="865" y="128" font-size="16.5" font-weight="700" fill="#111111" text-anchor="middle">FortiGate 60E</text>
+      <text x="935" y="168" font-size="15.5" font-weight="700" fill="#111111">Perimeter Firewall</text>
+      <text x="935" y="189" font-size="15" fill="#444444">Replaced pfSense</text>
+      <text x="935" y="209" font-size="15" fill="#444444">WAN1: 192.168.1.148 (DHCP)</text>
+      <text x="935" y="229" font-size="15" fill="#444444">Internal: 192.168.100.1/30</text>
+    
+      <!-- SOHO -> FortiGate -->
+      <path d="M660,180 L808,180" fill="none" stroke="#333333" stroke-width="2.3" marker-end="url(#arrow)"/>
+      <text x="734" y="172" font-size="15.5" fill="#444444" text-anchor="middle">Ethernet</text>
+    
+      <!-- ===================== LAN GROUP (below Hyper-V Characteristics box, connected to Main Router) ===================== -->
+      <path d="M375,210 L375,500" fill="none" stroke="#333333" stroke-width="1.6"/>
+      <g transform="translate(285,515) scale(0.62)" fill="#c9d3e0" stroke="#333333" stroke-width="2.2">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="1"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <g transform="translate(345,515) scale(0.62)" fill="#c9d3e0" stroke="#333333" stroke-width="2.2">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="1"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <g transform="translate(315,565) scale(0.62)" fill="#c9d3e0" stroke="#333333" stroke-width="2.2">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="1"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <path d="M310,541 L310,557 L345,557 M370,541 L370,557" fill="none" stroke="#333333" stroke-width="1.6"/>
+      <text x="345" y="630" font-size="16.5" font-weight="700" fill="#111111" text-anchor="middle">LAN</text>
+    
+      <!-- ===================== SEGMENTED LAN GROUP (below SOHO/FortiGate gap) ===================== -->
+      <path d="M600,210 L600,500 L620,500" fill="none" stroke="#333333" stroke-width="1.6"/>
+      <g transform="translate(560,515) scale(0.62)" fill="#c9d3e0" stroke="#333333" stroke-width="2.2">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="1"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <g transform="translate(620,515) scale(0.62)" fill="#c9d3e0" stroke="#333333" stroke-width="2.2">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="1"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <g transform="translate(590,565) scale(0.62)" fill="#c9d3e0" stroke="#333333" stroke-width="2.2">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="1"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <path d="M585,541 L585,557 L620,557 M645,541 L645,557" fill="none" stroke="#333333" stroke-width="1.6"/>
+      <text x="620" y="630" font-size="16.5" font-weight="700" fill="#111111" text-anchor="middle">Segmented LAN</text>
+    
+      <!-- ===================== VLAN 10 SERVERS ZONE ===================== -->
+      <rect x="1280" y="130" width="520" height="270" fill="#e7f4ea" stroke="#4d9a63" stroke-width="1.5"/>
+      <text x="1540" y="158" font-size="21" font-weight="700" fill="#2e6b3e" text-anchor="middle">VLAN 10, Servers</text>
+    
+      <!-- Raspberry Pi DNS -->
+      <g transform="translate(1397,195)" fill="#c8c8c8" stroke="#333333" stroke-width="1.5">
+        <rect x="0" y="0" width="26" height="34" rx="3"/>
+        <rect x="4" y="6" width="18" height="4" fill="#333333" stroke="none"/>
+        <rect x="4" y="13" width="18" height="4" fill="#333333" stroke="none"/>
+      </g>
+      <text x="1410" y="180" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">192.168.10.5</text>
+      <text x="1410" y="253" font-size="15" font-weight="700" fill="#111111" text-anchor="middle">Raspberry Pi 5</text>
+      <text x="1410" y="270" font-size="15.5" fill="#444444" text-anchor="middle">Secondary/Backup DNS</text>
+      <text x="1410" y="286" font-size="15" fill="#444444" text-anchor="middle">Switch001, Fa0/4, VLAN 10</text>
+    
+      <!-- Raspberry Pi NAS -->
+      <g transform="translate(1657,195)" fill="#c8c8c8" stroke="#333333" stroke-width="1.5">
+        <rect x="0" y="0" width="26" height="34" rx="3"/>
+        <rect x="4" y="6" width="18" height="4" fill="#333333" stroke="none"/>
+        <rect x="4" y="13" width="18" height="4" fill="#333333" stroke="none"/>
+      </g>
+      <text x="1670" y="180" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">192.168.10.20</text>
+      <text x="1670" y="253" font-size="15" font-weight="700" fill="#111111" text-anchor="middle">Raspberry Pi 3</text>
+      <text x="1670" y="270" font-size="15.5" fill="#444444" text-anchor="middle">Secondary NAS, Samba</text>
+      <text x="1670" y="286" font-size="15" fill="#444444" text-anchor="middle">Switch001, Fa0/5, VLAN 10</text>
+    
+      <!-- Cable lines: VLAN10 devices down into rack -->
+      <path d="M1410,229 L1410,400 L1010,400 L1010,658 L1050,658" fill="none" stroke="#4d9a63" stroke-width="1.6" marker-end="url(#arrowsm)"/>
+      <path d="M1670,229 L1670,405 L1020,405 L1020,676 L1050,676" fill="none" stroke="#4d9a63" stroke-width="1.6" marker-end="url(#arrowsm)"/>
+    
+      <!-- ===================== RACK WITH MONITOR + DESKTOP TOWER ON TOP ===================== -->
+      <!-- Desktop tower, sitting on rack surface next to the monitor -->
+      <g transform="translate(1139,434)" fill="#c9d3e0" stroke="#333333" stroke-width="1.6">
+        <rect x="0" y="0" width="26" height="46" rx="2"/>
+        <rect x="4" y="6" width="18" height="8" fill="#eef2f7" stroke="#333333" stroke-width="0.8"/>
+        <line x1="4" y1="21" x2="22" y2="21" stroke="#333333" stroke-width="0.8"/>
+        <line x1="4" y1="25" x2="22" y2="25" stroke="#333333" stroke-width="0.8"/>
+        <circle cx="13" cy="37" r="3" fill="none" stroke="#333333" stroke-width="1.2"/>
+      </g>
+      <!-- Monitor, sitting on rack surface -->
+      <g transform="translate(1085,440)" fill="#c9d3e0" stroke="#333333" stroke-width="1.8">
+        <rect x="0" y="0" width="46" height="30" rx="3"/>
+        <rect x="4" y="4" width="38" height="22" fill="#eef2f7" stroke="#333333" stroke-width="0.8"/>
+        <rect x="19" y="30" width="8" height="6"/>
+        <rect x="12" y="36" width="22" height="4" rx="1"/>
+      </g>
+      <text x="1240" y="450" font-size="16" font-weight="700" fill="#111111">TrueNAS, Custom Desktop Server</text>
+      <text x="1240" y="468" font-size="15.5" fill="#444444">192.168.10.10 &#183; Switch001, Fa0/3, VLAN 10</text>
+      <text x="1240" y="484" font-size="15" fill="#777777">Sits directly on top of the rack unit</text>
+      <path d="M1165,455 L1237,455" fill="none" stroke="#333333" stroke-width="1.4" marker-end="url(#arrowsm)"/>
+      <!-- Rack frame -->
+      <g transform="translate(1050,480)">
+        <rect x="0" y="0" width="150" height="230" rx="4" fill="#dbe2ea" stroke="#333333" stroke-width="1.8"/>
+        <!-- Bay 1: Switch003 6248P -->
+        <rect x="10" y="14" width="130" height="58" rx="2" fill="#eef1f5" stroke="#333333" stroke-width="1.4"/>
+        <g fill="#7d94a8"><rect x="18" y="24" width="9" height="12"/><rect x="30" y="24" width="9" height="12"/><rect x="42" y="24" width="9" height="12"/><rect x="54" y="24" width="9" height="12"/><rect x="66" y="24" width="9" height="12"/><rect x="78" y="24" width="9" height="12"/></g>
+        <circle cx="122" cy="43" r="9" fill="none" stroke="#333333" stroke-width="1.3"/>
+        <path d="M119,43 L126,43 M123,40 L127,43 L123,46" fill="none" stroke="#333333" stroke-width="1.3"/>
+        <!-- Bay 2: Switch002 3550 -->
+        <rect x="10" y="86" width="130" height="58" rx="2" fill="#eef1f5" stroke="#333333" stroke-width="1.4"/>
+        <g fill="#7d94a8"><rect x="18" y="96" width="9" height="12"/><rect x="30" y="96" width="9" height="12"/><rect x="42" y="96" width="9" height="12"/><rect x="54" y="96" width="9" height="12"/><rect x="66" y="96" width="9" height="12"/><rect x="78" y="96" width="9" height="12"/></g>
+        <circle cx="122" cy="115" r="9" fill="none" stroke="#333333" stroke-width="1.3"/>
+        <path d="M119,115 L126,115 M123,112 L127,115 L123,118" fill="none" stroke="#333333" stroke-width="1.3"/>
+        <!-- Bay 3: Switch001 2950 -->
+        <rect x="10" y="158" width="130" height="58" rx="2" fill="#eef1f5" stroke="#333333" stroke-width="1.4"/>
+        <g fill="#7d94a8"><rect x="18" y="168" width="9" height="12"/><rect x="30" y="168" width="9" height="12"/><rect x="42" y="168" width="9" height="12"/><rect x="54" y="168" width="9" height="12"/><rect x="66" y="168" width="9" height="12"/><rect x="78" y="168" width="9" height="12"/></g>
+        <circle cx="122" cy="187" r="9" fill="none" stroke="#333333" stroke-width="1.3"/>
+        <path d="M119,187 L126,187 M123,184 L127,187 L123,190" fill="none" stroke="#333333" stroke-width="1.3"/>
+      </g>
+    
+      <!-- FortiGate -> Rack (Transit Subnet) -->
+      <path d="M865,210 L865,350 L990,350 L990,595 L1050,595" fill="none" stroke="#333333" stroke-width="2.3" marker-end="url(#arrow)"/>
+      <rect x="704" y="300" width="320" height="44" fill="#e8f6f7" stroke="#2aa4ac" stroke-width="1.5" rx="4"/>
+      <text x="864" y="316" font-size="16" font-weight="700" fill="#0e6e75" text-anchor="middle">Transit Subnet</text>
+      <text x="864" y="335" font-size="15.5" fill="#0e6e75" text-anchor="middle">192.168.100.0/30 &#183; Switch002 Fa0/24</text>
+    
+      <!-- ===================== SPAN NOTE ===================== -->
+      <g transform="translate(1850,270)">
+        <text x="0" y="0" font-size="16" font-weight="700" fill="#111111">2950, Switch001</text>
+        <text x="0" y="23" font-size="15" font-weight="700" fill="#111111">SPAN Session 1</text>
+        <text x="0" y="45" font-size="16" fill="#444444">Sources: Fa0/2-5, Fa0/23</text>
+        <text x="0" y="67" font-size="16" fill="#444444">Destination: Fa0/6</text>
+      </g>
+      <path d="M1900,330 L1900,729 L1205,729 L1205,667 L1200,667" fill="none" stroke="#333333" stroke-width="1.6" marker-end="url(#arrow)"/>
+    
+      <!-- ===================== SWITCH LABELS ===================== -->
+      <text x="1230" y="505" font-size="16" font-weight="700" fill="#111111">Dell PowerConnect 6248P, Switch003</text>
+      <text x="1230" y="528" font-size="16" fill="#444444">192.168.50.4, VLAN 50 &#183; PoE</text>
+    
+      <text x="1230" y="568" font-size="16" font-weight="700" fill="#111111">Cisco Catalyst 3550, Switch002</text>
+      <text x="1230" y="591" font-size="16" fill="#444444">Inter-VLAN Routing, Gateway via FortiGate transit</text>
+      <text x="1230" y="613" font-size="16" fill="#444444">VLAN 50 SVI: 192.168.50.6</text>
+    
+      <text x="1230" y="646" font-size="16" font-weight="700" fill="#111111">Cisco Catalyst 2950, Switch001</text>
+      <text x="1230" y="669" font-size="16" fill="#444444">192.168.50.2, VLAN 50, Dedicated Mgmt IP</text>
+    
+      <!-- Blackhole note -->
+      <rect x="1230" y="690" width="410" height="32" fill="#f2f2f2" stroke="#999999" stroke-width="1" rx="3"/>
+      <text x="1237" y="711" font-size="15.5" fill="#555555">Unused ports &#8594; VLAN 999, Blackhole (shut down)</text>
+    
+      <!-- ===================== TRUNK NOTES ===================== -->
+      <text x="1140" y="750" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">Switch002 Port 20 connects to Switch003 Port 48</text>
+      <text x="1140" y="772" font-size="16" fill="#444444" text-anchor="middle">via straight-through, Auto-MDIX trunk port</text>
+    
+      <text x="1140" y="802" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">Switch001 port Fa0/23 connects to Switch002 port Fa0/23</text>
+      <text x="1140" y="824" font-size="16" fill="#444444" text-anchor="middle">via crossover cable trunk port</text>
+    
+      <!-- decorative long connector (mirrors original layout) -->
+      <path d="M20,515 L20,860 L640,860" fill="none" stroke="#333333" stroke-width="1.4"/>
+      <!-- ===================== HYPER-V HOST (PHYSICAL) ===================== -->
+      <text x="657" y="488" font-size="15" fill="#444444" text-anchor="middle">Eth1: 192.168.1.120</text>
+      <path d="M700,915 L700,500 L615,500 L615,212" fill="none" stroke="#333333" stroke-width="1.8" marker-end="url(#arrow)"/>
+    
+      <text x="950" y="898" font-size="15" fill="#444444" text-anchor="middle">Eth2 &#8594; Fa0/2</text>
+      <path d="M765,915 L900,915 L900,652 L1050,652" fill="none" stroke="#333333" stroke-width="1.8" marker-end="url(#arrow)"/>
+    
+      <text x="985" y="955" font-size="15" fill="#444444" text-anchor="middle">Eth3 &#8594; Fa0/6 (SPAN)</text>
+      <path d="M765,940 L925,940 L925,682 L1050,682" fill="none" stroke="#333333" stroke-width="1.8" marker-end="url(#arrow)"/>
+    
+      <text x="690" y="895" font-size="16" font-weight="700" fill="#111111" text-anchor="end">Hostname: SRV-HYPERV-01</text>
+      <text x="690" y="913" font-size="15.5" fill="#444444" text-anchor="end">192.168.20.11, LAB_INTERNAL vSwitch</text>
+      <text x="690" y="943" font-size="16" font-weight="700" fill="#111111" text-anchor="end">Hyper-V Host, Dell Pro Slim QSC</text>
+      <text x="690" y="962" font-size="15.5" fill="#444444" text-anchor="end">Windows 11 Pro &#183; Switch001, Fa0/2, VLAN 20</text>
+    
+      <g transform="translate(700,893) scale(1.3)" fill="#c9d3e0" stroke="#333333" stroke-width="1.6">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="0.8"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+    
+      <!-- Win11-Client, moved to VLAN 50 Management -->
+      <text x="1325" y="838" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">192.168.50.20</text>
+      <g transform="translate(1300,850)" fill="#c9d3e0" stroke="#333333" stroke-width="1.6">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="0.8"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <text x="1325" y="912" font-size="15" font-weight="700" fill="#111111" text-anchor="middle">Win11-Client</text>
+      <text x="1325" y="927" font-size="14" fill="#444444" text-anchor="middle">Management network access, VLAN 50</text>
+      <path d="M1325,850 L1325,730 L1150,730 L1150,710" fill="none" stroke="#7d94a8" stroke-width="1.6" marker-end="url(#arrowsm)"/>
+    
+      <!-- ===================== VLAN 20 INFRASTRUCTURE ZONE ===================== -->
+      <rect x="350" y="980" width="930" height="460" fill="#f2eaf7" stroke="#8e5fae" stroke-width="1.5"/>
+      <text x="450" y="1013" font-size="22" font-weight="700" fill="#6b3d8c">VLAN 20, Infrastructure</text>
+    
+      <!-- Windows Server 2022 VM (dashed = VM) -->
+      <rect x="567" y="1042" width="66" height="62" rx="8" fill="none" stroke="#8899aa" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <g transform="translate(575,1050)" fill="#c9d3e0" stroke="#333333" stroke-width="1.6">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="0.8"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <text x="600" y="1035" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">192.168.20.10</text>
+      <text x="600" y="1130" font-size="15" font-weight="700" fill="#111111" text-anchor="middle">Windows Server 2022 Eval VM</text>
+      <text x="600" y="1148" font-size="15" fill="#444444" text-anchor="middle">DC01, AD DS, DHCP and DNS</text>
+    
+      <!-- SRV-ADMIN01, PAW (dashed = VM) -->
+      <rect x="867" y="1042" width="66" height="62" rx="8" fill="none" stroke="#8899aa" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <g transform="translate(875,1050)" fill="#c9d3e0" stroke="#333333" stroke-width="1.6">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="0.8"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <text x="900" y="1035" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">192.168.20.12</text>
+      <text x="900" y="1130" font-size="15" font-weight="700" fill="#111111" text-anchor="middle">SRV-ADMIN01</text>
+      <text x="900" y="1148" font-size="15" fill="#444444" text-anchor="middle">PAW, Privileged Access Workstation</text>
+    
+      <!-- Retired pfSense note -->
+      <g transform="translate(430,1230)">
+        <rect x="0" y="0" width="340" height="44" fill="#eeeeee" stroke="#999999" stroke-width="1.3" stroke-dasharray="5,3" rx="4"/>
+        <text x="10" y="18" font-size="16" font-weight="700" fill="#666666" text-decoration="line-through">pfSense Router/Firewall VM</text>
+        <text x="10" y="37" font-size="15" fill="#777777">Retired, replaced by FortiGate 60E</text>
+      </g>
+    
+      <!-- ===================== VLAN 40 CLIENTS ZONE ===================== -->
+      <rect x="1280" y="980" width="850" height="460" fill="#faf1de" stroke="#c98f2b" stroke-width="1.5"/>
+      <text x="1705" y="1013" font-size="22" font-weight="700" fill="#8a5f10" text-anchor="middle">VLAN 40, Clients</text>
+    
+      <!-- HT Technology Mini PC (solid = physical) -->
+      <g transform="translate(1400,1050)" fill="#c9d3e0" stroke="#333333" stroke-width="1.6">
+        <rect x="0" y="0" width="50" height="32" rx="3"/>
+        <rect x="4" y="4" width="42" height="24" fill="#eef2f7" stroke="#333333" stroke-width="0.8"/>
+        <rect x="21" y="32" width="8" height="7"/>
+        <rect x="13" y="39" width="24" height="4" rx="1"/>
+      </g>
+      <text x="1425" y="1035" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">192.168.40.11 (DHCP)</text>
+      <text x="1425" y="1130" font-size="15" font-weight="700" fill="#111111" text-anchor="middle">HT Technology Mini PC</text>
+      <text x="1425" y="1148" font-size="15" fill="#444444" text-anchor="middle">Switch002, Fa0/2, VLAN 40</text>
+      <path d="M1425,1066 L1320,1066 L1320,730 L1210,730 L1210,595 L1200,595" fill="none" stroke="#c98f2b" stroke-width="1.6" marker-end="url(#arrowsm)"/>
+    
+      <!-- ThinkPad #1 (laptop, solid) -->
+      <g transform="translate(1677,1055)" fill="#c9d3e0" stroke="#333333" stroke-width="1.6">
+        <path d="M6,0 L50,0 L50,24 L6,24 Z"/>
+        <rect x="10" y="4" width="36" height="16" fill="#eef2f7" stroke="#333333" stroke-width="0.7"/>
+        <path d="M0,24 L56,24 L50,38 L6,38 Z" fill="#b7c2d1"/>
+      </g>
+      <text x="1705" y="1040" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">192.168.40.12 (DHCP)</text>
+      <text x="1705" y="1135" font-size="15" font-weight="700" fill="#111111" text-anchor="middle">Lenovo ThinkPad E15 #1</text>
+      <text x="1705" y="1153" font-size="15" fill="#444444" text-anchor="middle">Switch003, Port 11, VLAN 40</text>
+      <path d="M1705,1066 L1590,1066 L1590,731 L1215,731 L1215,520 L1200,520" fill="none" stroke="#c98f2b" stroke-width="1.6" marker-end="url(#arrowsm)"/>
+    
+      <!-- ThinkPad #2 (laptop, solid) -->
+      <g transform="translate(1957,1150)" fill="#c9d3e0" stroke="#333333" stroke-width="1.6">
+        <path d="M6,0 L50,0 L50,24 L6,24 Z"/>
+        <rect x="10" y="4" width="36" height="16" fill="#eef2f7" stroke="#333333" stroke-width="0.7"/>
+        <path d="M0,24 L56,24 L50,38 L6,38 Z" fill="#b7c2d1"/>
+      </g>
+      <text x="1985" y="1135" font-size="16" font-weight="700" fill="#111111" text-anchor="middle">192.168.40.10 (DHCP)</text>
+      <text x="1985" y="1210" font-size="15" font-weight="700" fill="#111111" text-anchor="middle">Lenovo ThinkPad E15 #2</text>
+      <text x="1985" y="1228" font-size="15" fill="#444444" text-anchor="middle">Switch003, Port 25, VLAN 40</text>
+      <path d="M1985,1169 L1865,1169 L1865,732 L1220,732 L1220,528 L1200,528" fill="none" stroke="#c98f2b" stroke-width="1.6" marker-end="url(#arrowsm)"/>
+    
+      <!-- ===================== LEGEND ===================== -->
+      <g transform="translate(1650,1265)">
+        <text x="0" y="0" font-size="17" font-weight="700" fill="#111111">VLANs:</text>
+        <rect x="0" y="12" width="16" height="16" fill="#e7f4ea" stroke="#4d9a63"/>
+        <text x="22" y="25" font-size="16" fill="#333333">VLAN 10, Servers (192.168.10.0/24)</text>
+        <rect x="0" y="36" width="16" height="16" fill="#f2eaf7" stroke="#8e5fae"/>
+        <text x="22" y="49" font-size="16" fill="#333333">VLAN 20, Infrastructure (192.168.20.0/24)</text>
+        <rect x="0" y="60" width="16" height="16" fill="#faf1de" stroke="#c98f2b"/>
+        <text x="22" y="73" font-size="16" fill="#333333">VLAN 40, Clients (192.168.40.0/24)</text>
+        <rect x="0" y="84" width="16" height="16" fill="#eef1f5" stroke="#7d94a8"/>
+        <text x="22" y="97" font-size="16" fill="#333333">VLAN 50, Management (switch mgmt only)</text>
+        <rect x="0" y="108" width="16" height="16" fill="#eeeeee" stroke="#999999" stroke-dasharray="3,2"/>
+        <text x="22" y="121" font-size="16" fill="#333333">Retired / Historical</text>
+        <rect x="0" y="132" width="16" height="16" fill="none" stroke="#8899aa" stroke-dasharray="3,2"/>
+        <text x="22" y="145" font-size="16" fill="#333333">Dashed border = Virtual Machine</text>
+      </g>
+    
+    </svg>
+    
+  </div>
+  <div class="diagram-note">Full topology: internet &#8594; SOHO router &#8594; FortiGate 60E &#8594; switch stack &#8594; VLANs 10/20/40. Cable runs are routed to their actual switch bay (top: Switch003 6248P, middle: Switch002 3550, bottom: Switch001 2950).</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 1: ASSET INVENTORY
+════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-label">01</span>
+    <h2>Asset Inventory</h2>
+  </div>
+
+  <!-- VMs -->
+  <div class="table-wrap">
+    <div class="table-title">
+      Virtual Machines: Hyper-V Host (SRV-HYPERV-01)
+      <span class="table-subtitle">Host: Dell Pro Slim QSC1250 · Windows 11 Pro · i5-14500 · 32GB RAM · 1TB SSD</span>
+    </div>
+    <table>
+      <thead><tr>
+        <th>Device / Hostname</th><th>Type</th><th>OS / Platform</th><th>Role</th><th>IP Address</th><th>VLAN</th><th>Network</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="device-name">Windows Server 2022 Eval</span><br><span style="font-size:11px;color:var(--text-dim)">DC01 · mtlab.local</span></td>
+          <td><span class="type-badge type-vm">VM</span></td>
+          <td>Windows Server 2022 Eval</td>
+          <td class="role-text">Domain Controller · AD DS · DNS · DHCP</td>
+          <td class="mono ip-static">192.168.20.10</td>
+          <td><span class="vlan vlan-20">VLAN 20</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">Win11-Client</span></td>
+          <td><span class="type-badge type-vm">VM</span></td>
+          <td>Windows 11 Pro 64-bit</td>
+          <td class="role-text">Infrastructure admin workstation &#183; Wireshark SPAN capture</td>
+          <td class="mono ip-static">192.168.50.20</td>
+          <td><span class="vlan vlan-50">VLAN 50</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">SRV-ADMIN01</span><br><span style="font-size:11px;color:var(--text-dim)">PAW, Privileged Access Workstation</span></td>
+          <td><span class="type-badge type-vm">VM</span></td>
+          <td>Windows Server 2022 Eval</td>
+          <td class="role-text">Privileged Access Workstation &#183; admin scripting host</td>
+          <td class="mono ip-static">192.168.20.12</td>
+          <td><span class="vlan vlan-20">VLAN 20</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr class="retired">
+          <td><span class="device-name">pfSense VM</span><br><span style="font-size:11px;color:var(--text-dim)">Retired</span></td>
+          <td><span class="type-badge type-retired">Retired</span></td>
+          <td>pfSense 2.8.1</td>
+          <td class="role-text">Former router/firewall, replaced by FortiGate 60E due to a USB-adapter shared-medium routing conflict</td>
+          <td class="mono"><span class="ip-dim">Historical:<br>WAN 192.168.1.153<br>LAN 192.168.50.1</span></td>
+          <td class="ip-dim">N/A</td>
+          <td>Historical</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Physical Machines -->
+  <div class="table-wrap">
+    <div class="table-title">Physical Machines</div>
+    <table>
+      <thead><tr>
+        <th>Device / Hostname</th><th>Type</th><th>OS / Platform</th><th>Role</th><th>IP Address</th><th>VLAN</th><th>Network</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="device-name">Dell Pro Slim QSC1250</span><br><span style="font-size:11px;color:var(--text-dim)">SRV-HYPERV-01</span></td>
+          <td><span class="type-badge type-physical">Physical</span></td>
+          <td>Windows 11 Pro 64-bit</td>
+          <td class="role-text">Hyper-V host · i5-14500 · 32GB RAM · 1TB SSD</td>
+          <td class="mono"><span class="ip-static">192.168.20.11</span><br><span style="font-size:10px;color:var(--text-dim)">Eth1: 192.168.1.120 (SOHO)</span></td>
+          <td><span class="vlan vlan-20">VLAN 20</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">HT Technology Mini PC</span></td>
+          <td><span class="type-badge type-physical">Physical</span></td>
+          <td>Windows 11 Pro 64-bit</td>
+          <td class="role-text">External domain-joined workstation</td>
+          <td class="mono ip-dhcp">192.168.40.x (DHCP)</td>
+          <td><span class="vlan vlan-40">VLAN 40</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">Lenovo ThinkPad E15 #1</span></td>
+          <td><span class="type-badge type-physical">Physical</span></td>
+          <td>Windows 11</td>
+          <td class="role-text">Domain-joined client laptop</td>
+          <td class="mono ip-dhcp">192.168.40.x (DHCP)</td>
+          <td><span class="vlan vlan-40">VLAN 40</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">Lenovo ThinkPad E15 #2</span></td>
+          <td><span class="type-badge type-physical">Physical</span></td>
+          <td>Windows 11</td>
+          <td class="role-text">Domain-joined client laptop</td>
+          <td class="mono ip-dhcp">192.168.40.x (DHCP)</td>
+          <td><span class="vlan vlan-40">VLAN 40</span></td>
+          <td>Lab</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Servers & Storage -->
+  <div class="table-wrap">
+    <div class="table-title">Servers &amp; Storage</div>
+    <table>
+      <thead><tr>
+        <th>Device / Hostname</th><th>Type</th><th>OS / Platform</th><th>Role</th><th>IP Address</th><th>VLAN</th><th>Network</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="device-name">TrueNAS File Server</span></td>
+          <td><span class="type-badge type-storage">Storage</span></td>
+          <td>TrueNAS</td>
+          <td class="role-text">Primary NAS, centralized lab storage</td>
+          <td class="mono ip-static">192.168.10.10</td>
+          <td><span class="vlan vlan-10">VLAN 10</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">Raspberry Pi 5</span></td>
+          <td><span class="type-badge type-physical">Physical</span></td>
+          <td>Raspberry Pi OS</td>
+          <td class="role-text">Secondary / backup DNS server, BIND9 · lab network</td>
+          <td class="mono ip-static">192.168.10.5</td>
+          <td><span class="vlan vlan-10">VLAN 10</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">Raspberry Pi 3</span></td>
+          <td><span class="type-badge type-storage">Storage</span></td>
+          <td>Raspbian GNU/Linux 10</td>
+          <td class="role-text">Secondary NAS, Samba file sharing</td>
+          <td class="mono ip-static">192.168.10.20</td>
+          <td><span class="vlan vlan-10">VLAN 10</span></td>
+          <td>Lab</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Network Infrastructure -->
+  <div class="table-wrap">
+    <div class="table-title">Network Infrastructure &amp; Perimeter</div>
+    <table>
+      <thead><tr>
+        <th>Device</th><th>Type</th><th>Platform</th><th>Role</th><th>Management / Interface IP</th><th>Network</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="device-name">FortiGate 60E</span></td>
+          <td><span class="type-badge type-firewall">Firewall</span></td>
+          <td>FortiOS</td>
+          <td class="role-text">Perimeter firewall/router, WAN &amp; LAN gateway. Replaced pfSense</td>
+          <td class="mono"><span class="ip-dhcp">WAN1: 192.168.1.148 (DHCP)</span><br><span class="ip-static">Internal: 192.168.100.1/30 (transit only)</span></td>
+          <td>Both zones</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">Cisco Catalyst 2950</span><br><span style="font-size:11px;color:var(--text-dim)">Switch001</span></td>
+          <td><span class="type-badge type-switch">Switch</span></td>
+          <td>Cisco IOS</td>
+          <td class="role-text">Access layer · SPAN Session 1 · Sources: Fa0/2-5, Fa0/23 · Destination: Fa0/6</td>
+          <td class="mono ip-static">192.168.50.2 <span class="vlan vlan-50" style="margin-left:6px">VLAN 50</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">Cisco Catalyst 3550</span><br><span style="font-size:11px;color:var(--text-dim)">Switch002</span></td>
+          <td><span class="type-badge type-switch">Switch</span></td>
+          <td>Cisco IOS</td>
+          <td class="role-text">Core L3 · inter-VLAN routing · VLAN 1 SVI removed · gateway via FortiGate transit (192.168.100.1) · reachable via SVIs</td>
+          <td class="mono ip-static">192.168.50.6 <span class="vlan vlan-50" style="margin-left:6px">VLAN 50 SVI</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">Dell PowerConnect 6248P</span><br><span style="font-size:11px;color:var(--text-dim)">Switch003</span></td>
+          <td><span class="type-badge type-switch">Switch</span></td>
+          <td>Dell OS</td>
+          <td class="role-text">Access layer · computer lab · PoE</td>
+          <td class="mono ip-static">192.168.50.4 <span class="vlan vlan-50" style="margin-left:6px">VLAN 50</span></td>
+          <td>Lab</td>
+        </tr>
+        <tr>
+          <td><span class="device-name">SOHO Router</span></td>
+          <td><span class="type-badge type-router">Router</span></td>
+          <td>N/A</td>
+          <td class="role-text">Home internet gateway, upstream from FortiGate WAN1</td>
+          <td class="mono ip-static">192.168.1.1</td>
+          <td>Home</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="table-note">The FortiGate 60E replaced the pfSense VM as the perimeter firewall. Its internal interface connects to Switch002 (3550) Fa0/24 over a dedicated point-to-point transit subnet (192.168.100.0/30) rather than sitting directly on the 192.168.50.0/24 management subnet. Switch002 handles inter-VLAN routing and forwards default-route traffic to the FortiGate; Switch001 and Switch003 reach the internet by routing through Switch002's VLAN 50 SVI.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 2: SWITCH PORT REFERENCE
+════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-label">02</span>
+    <h2>Switch Port Reference</h2>
+  </div>
+
+  <!-- Switch001 -->
+  <div class="table-wrap">
+    <div class="table-title">
+      Switch001: Cisco Catalyst 2950
+      <span class="table-subtitle">Access layer · Mgmt IP: 192.168.50.2 (VLAN 50) · Layer 2 only</span>
+    </div>
+    <table>
+      <thead><tr><th>Port</th><th>Device / Description</th><th>VLAN</th><th>IP Address</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr class="retired"><td class="mono">Fa0/1</td><td>Unused</td><td><span class="vlan vlan-999">VLAN 999</span></td><td class="ip-dim">N/A</td><td class="role-text">Blackhole, shut down</td></tr>
+        <tr><td class="mono">Fa0/2</td><td class="device-name">Hyper-V Host (SRV-HYPERV-01)</td><td><span class="vlan vlan-20">VLAN 20</span></td><td class="mono ip-static">192.168.20.11</td><td class="role-text">Infrastructure</td></tr>
+        <tr><td class="mono">Fa0/3</td><td class="device-name">TrueNAS</td><td><span class="vlan vlan-10">VLAN 10</span></td><td class="mono ip-static">192.168.10.10</td><td class="role-text">Server</td></tr>
+        <tr><td class="mono">Fa0/4</td><td class="device-name">Raspberry Pi 5 DNS</td><td><span class="vlan vlan-10">VLAN 10</span></td><td class="mono ip-static">192.168.10.5</td><td class="role-text">Server</td></tr>
+        <tr><td class="mono">Fa0/5</td><td class="device-name">Raspberry Pi 3 NAS</td><td><span class="vlan vlan-10">VLAN 10</span></td><td class="mono ip-static">192.168.10.20</td><td class="role-text">Server</td></tr>
+        <tr><td class="mono">Fa0/6</td><td class="device-name">SPAN Destination → Hyper-V Ethernet 3</td><td><span class="vlan vlan-span">SPAN</span></td><td class="ip-dim">N/A</td><td class="role-text">Security Monitoring</td></tr>
+        <tr class="retired"><td class="mono">Fa0/7 - 22</td><td>Unused</td><td><span class="vlan vlan-999">VLAN 999</span></td><td class="ip-dim">N/A</td><td class="role-text">Blackhole, shut down</td></tr>
+        <tr><td class="mono">Fa0/23</td><td>Trunk → Switch002 (3550)</td><td><span class="vlan vlan-trunk">Trunk</span></td><td class="ip-dim">N/A</td><td class="role-text">Uplink, crossover cable · VLANs 10,20,40,50,99,999</td></tr>
+        <tr class="retired"><td class="mono">Fa0/24 - 48, Gi0/1 - 2</td><td>Unused</td><td><span class="vlan vlan-999">VLAN 999</span></td><td class="ip-dim">N/A</td><td class="role-text">Blackhole, shut down</td></tr>
+      </tbody>
+    </table>
+    <div class="table-note">SPAN Session 1 · Sources: Fa0/2, Fa0/3, Fa0/4, Fa0/5, Fa0/23 (both directions) · Destination: Fa0/6 · Wireshark on Hyper-V Ethernet 3. Management IP 192.168.50.2 is assigned via a VLAN 50 SVI, migrated off VLAN 1. Unused ports were consolidated into blackhole VLAN 999 and administratively shut down.</div>
+  </div>
+
+  <!-- Switch002 -->
+  <div class="table-wrap">
+    <div class="table-title">
+      Switch002: Cisco Catalyst 3550
+      <span class="table-subtitle">Core / Distribution · Mgmt via VLAN 50 SVI (192.168.50.6) · Layer 3 inter-VLAN routing</span>
+    </div>
+    <table>
+      <thead><tr><th>Port</th><th>Device / Description</th><th>VLAN</th><th>SVI / IP</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">Fa0/1</td><td>Management (reserved)</td><td><span class="vlan vlan-50">VLAN 50</span></td><td class="ip-dim">N/A</td><td class="role-text">Management, migrated from VLAN 1 during hardening</td></tr>
+        <tr><td class="mono">Fa0/2</td><td class="device-name">HT Technology Mini PC</td><td><span class="vlan vlan-40">VLAN 40</span></td><td class="mono ip-dhcp">192.168.40.x (DHCP)</td><td class="role-text">Client</td></tr>
+        <tr><td class="mono">Fa0/20</td><td>Trunk → Switch003 (6248P)</td><td><span class="vlan vlan-trunk">Trunk</span></td><td class="ip-dim">N/A</td><td class="role-text">Uplink, straight-through · VLANs 10,20,40,50,99,999</td></tr>
+        <tr><td class="mono">Fa0/23</td><td>Trunk → Switch001 (2950)</td><td><span class="vlan vlan-trunk">Trunk</span></td><td class="ip-dim">N/A</td><td class="role-text">Uplink, crossover cable · VLANs 10,20,40,50,99,999</td></tr>
+        <tr><td class="mono">Fa0/24</td><td class="device-name">FortiGate 60E (Internal)</td><td><span class="vlan vlan-transit">Transit</span></td><td class="mono ip-static">192.168.100.2/30</td><td class="role-text">Uplink, point-to-point transit link. Replaced direct SOHO uplink</td></tr>
+      </tbody>
+    </table>
+    <div class="table-note">SVIs: VLAN 10 → 192.168.10.1 · VLAN 20 → 192.168.20.1 · VLAN 40 → 192.168.40.1 · VLAN 50 (Management) → 192.168.50.6 · IP Helper → 192.168.20.10 on VLAN 10/20/40 SVIs · VLAN 1 SVI removed (conflict with legacy pfSense LAN 192.168.50.1) · Gateway of last resort → 192.168.100.1 (FortiGate 60E, via Fa0/24 transit link)</div>
+  </div>
+
+  <!-- Switch003 -->
+  <div class="table-wrap">
+    <div class="table-title">
+      Switch003: Dell PowerConnect 6248P
+      <span class="table-subtitle">Access layer (computer lab) · Mgmt IP: 192.168.50.4 (VLAN 50) · PoE enabled</span>
+    </div>
+    <table>
+      <thead><tr><th>Port</th><th>Device / Description</th><th>VLAN</th><th>IP Address</th><th>Role</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">1/g11</td><td class="device-name">Lenovo ThinkPad E15 #1</td><td><span class="vlan vlan-40">VLAN 40</span></td><td class="mono ip-dhcp">192.168.40.x (DHCP)</td><td class="role-text">Client</td></tr>
+        <tr><td class="mono">1/g25</td><td class="device-name">Lenovo ThinkPad E15 #2</td><td><span class="vlan vlan-40">VLAN 40</span></td><td class="mono ip-dhcp">192.168.40.x (DHCP)</td><td class="role-text">Client</td></tr>
+        <tr><td class="mono">1/g48</td><td>Trunk → Switch002 (3550) Fa0/20</td><td><span class="vlan vlan-trunk">Trunk</span></td><td class="ip-dim">N/A</td><td class="role-text">Uplink, straight-through · Auto-MDIX · PVID corrected from 1 to 99</td></tr>
+      </tbody>
+    </table>
+    <div class="table-note">Trunk carries VLANs 10, 20, 40, 50, 99, 999 · Native VLAN 99 · Management VLAN 50 · Gateway 192.168.50.6 (Switch002 VLAN 50 SVI). VLAN 50 was initially missing from Switch003 entirely and was added during the VLAN 999 blackhole audit; remaining unused ports were moved to VLAN 999 and shut down.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     SECTION 3: IP SCHEME / ADDRESSING TABLE
+════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header">
+    <span class="section-label">03</span>
+    <h2>IP Scheme &amp; Addressing Table</h2>
+  </div>
+
+  <!-- VLAN Scopes summary -->
+  <div class="scope-grid">
+    <div class="scope-card">
+      <div class="scope-header" style="background:var(--v10);border-color:var(--v10-border)">
+        <span class="vlan vlan-10">VLAN 10</span>
+        <span class="scope-title" style="color:var(--v10-text)">Servers</span>
+      </div>
+      <div class="scope-body">
+        <div class="scope-row"><span class="scope-key">Subnet</span><span class="scope-val">192.168.10.0/24</span></div>
+        <div class="scope-row"><span class="scope-key">Gateway (SVI)</span><span class="scope-val">192.168.10.1</span></div>
+        <div class="scope-row"><span class="scope-key">DHCP Range</span><span class="scope-val">192.168.10.50-100</span></div>
+        <div class="scope-row"><span class="scope-key">Static Reserved</span><span class="scope-val">.1-.49</span></div>
+        <div class="scope-row"><span class="scope-key">DHCP Server</span><span class="scope-val">192.168.20.10</span></div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-header" style="background:var(--v20);border-color:var(--v20-border)">
+        <span class="vlan vlan-20">VLAN 20</span>
+        <span class="scope-title" style="color:var(--v20-text)">Infrastructure</span>
+      </div>
+      <div class="scope-body">
+        <div class="scope-row"><span class="scope-key">Subnet</span><span class="scope-val">192.168.20.0/24</span></div>
+        <div class="scope-row"><span class="scope-key">Gateway (SVI)</span><span class="scope-val">192.168.20.1</span></div>
+        <div class="scope-row"><span class="scope-key">DHCP Range</span><span class="scope-val">192.168.20.50-100</span></div>
+        <div class="scope-row"><span class="scope-key">Static Reserved</span><span class="scope-val">.1-.49</span></div>
+        <div class="scope-row"><span class="scope-key">DHCP Server</span><span class="scope-val">192.168.20.10</span></div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-header" style="background:var(--v40);border-color:var(--v40-border)">
+        <span class="vlan vlan-40">VLAN 40</span>
+        <span class="scope-title" style="color:var(--v40-text)">Clients</span>
+      </div>
+      <div class="scope-body">
+        <div class="scope-row"><span class="scope-key">Subnet</span><span class="scope-val">192.168.40.0/24</span></div>
+        <div class="scope-row"><span class="scope-key">Gateway (SVI)</span><span class="scope-val">192.168.40.1</span></div>
+        <div class="scope-row"><span class="scope-key">DHCP Range</span><span class="scope-val">192.168.40.50-100</span></div>
+        <div class="scope-row"><span class="scope-key">Static Reserved</span><span class="scope-val">.1-.49</span></div>
+        <div class="scope-row"><span class="scope-key">DHCP Server</span><span class="scope-val">192.168.20.10</span></div>
+      </div>
+    </div>
+    <div class="scope-card">
+      <div class="scope-header" style="background:var(--mgmt);border-color:var(--mgmt-border)">
+        <span class="vlan vlan-50">VLAN 50</span>
+        <span class="scope-title" style="color:var(--mgmt-text)">Management</span>
+      </div>
+      <div class="scope-body">
+        <div class="scope-row"><span class="scope-key">Subnet</span><span class="scope-val">192.168.50.0/24</span></div>
+        <div class="scope-row"><span class="scope-key">Gateway (SVI)</span><span class="scope-val">192.168.50.6</span></div>
+        <div class="scope-row"><span class="scope-key">DHCP Range</span><span class="scope-val">N/A</span></div>
+        <div class="scope-row"><span class="scope-key">Static Reserved</span><span class="scope-val">All (static only)</span></div>
+        <div class="scope-row"><span class="scope-key">DHCP Server</span><span class="scope-val">N/A</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full addressing table -->
+  <div class="table-wrap">
+    <div class="table-title">Static IP Assignments</div>
+    <table>
+      <thead><tr><th>Device</th><th>IP Address</th><th>Subnet</th><th>Gateway</th><th>Primary DNS</th><th>Secondary DNS</th><th>VLAN</th></tr></thead>
+      <tbody>
+        <tr style="background:rgba(129,212,160,0.04)">
+          <td colspan="7" style="padding:8px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--v10-text);letter-spacing:0.1em;border-bottom:1px solid var(--border)">VLAN 10: SERVERS</td>
+        </tr>
+        <tr><td class="device-name">Raspberry Pi 5 DNS</td><td class="mono ip-static">192.168.10.5</td><td class="mono">255.255.255.0</td><td class="mono">192.168.10.1</td><td class="mono">127.0.0.1</td><td class="mono">192.168.20.10</td><td><span class="vlan vlan-10">VLAN 10</span></td></tr>
+        <tr><td class="device-name">TrueNAS</td><td class="mono ip-static">192.168.10.10</td><td class="mono">255.255.255.0</td><td class="mono">192.168.10.1</td><td class="mono">192.168.10.5</td><td class="mono">192.168.20.10</td><td><span class="vlan vlan-10">VLAN 10</span></td></tr>
+        <tr><td class="device-name">Raspberry Pi 3 NAS</td><td class="mono ip-static">192.168.10.20</td><td class="mono">255.255.255.0</td><td class="mono">192.168.10.1</td><td class="mono">192.168.10.5</td><td class="mono">192.168.20.10</td><td><span class="vlan vlan-10">VLAN 10</span></td></tr>
+
+        <tr style="background:rgba(206,147,216,0.04)">
+          <td colspan="7" style="padding:8px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--v20-text);letter-spacing:0.1em;border-bottom:1px solid var(--border)">VLAN 20: INFRASTRUCTURE</td>
+        </tr>
+        <tr><td class="device-name">Windows Server DC (VM)</td><td class="mono ip-static">192.168.20.10</td><td class="mono">255.255.255.0</td><td class="mono">192.168.20.1</td><td class="mono">127.0.0.1</td><td class="mono">192.168.10.5</td><td><span class="vlan vlan-20">VLAN 20</span></td></tr>
+        <tr><td class="device-name">Hyper-V Host (SRV-HYPERV-01)</td><td class="mono ip-static">192.168.20.11</td><td class="mono">255.255.255.0</td><td class="mono">192.168.20.1</td><td class="mono">192.168.10.5</td><td class="mono">192.168.20.10</td><td><span class="vlan vlan-20">VLAN 20</span></td></tr>
+        <tr><td class="device-name">SRV-ADMIN01 (PAW)</td><td class="mono ip-static">192.168.20.12</td><td class="mono">255.255.255.0</td><td class="mono">192.168.20.1</td><td class="mono">192.168.10.5</td><td class="mono">192.168.20.10</td><td><span class="vlan vlan-20">VLAN 20</span></td></tr>
+
+        <tr style="background:rgba(255,183,77,0.04)">
+          <td colspan="7" style="padding:8px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--v40-text);letter-spacing:0.1em;border-bottom:1px solid var(--border)">VLAN 40: CLIENTS (DHCP)</td>
+        </tr>
+        <tr><td class="device-name">HT Technology Mini PC</td><td class="mono ip-dhcp">192.168.40.x (DHCP)</td><td class="mono">255.255.255.0</td><td class="mono">192.168.40.1</td><td class="mono">192.168.10.5</td><td class="mono">192.168.20.10</td><td><span class="vlan vlan-40">VLAN 40</span></td></tr>
+        <tr><td class="device-name">Lenovo ThinkPad E15 #1</td><td class="mono ip-dhcp">192.168.40.x (DHCP)</td><td class="mono">255.255.255.0</td><td class="mono">192.168.40.1</td><td class="mono">192.168.10.5</td><td class="mono">192.168.20.10</td><td><span class="vlan vlan-40">VLAN 40</span></td></tr>
+        <tr><td class="device-name">Lenovo ThinkPad E15 #2</td><td class="mono ip-dhcp">192.168.40.x (DHCP)</td><td class="mono">255.255.255.0</td><td class="mono">192.168.40.1</td><td class="mono">192.168.10.5</td><td class="mono">192.168.20.10</td><td><span class="vlan vlan-40">VLAN 40</span></td></tr>
+
+        <tr style="background:rgba(79,195,247,0.04)">
+          <td colspan="7" style="padding:8px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--mgmt-text);letter-spacing:0.1em;border-bottom:1px solid var(--border)">VLAN 50: MANAGEMENT</td>
+        </tr>
+        <tr><td class="device-name">Switch001 (2950) Mgmt</td><td class="mono ip-static">192.168.50.2</td><td class="mono">255.255.255.0</td><td class="mono">192.168.50.6</td><td class="mono">N/A</td><td class="mono">N/A</td><td><span class="vlan vlan-50">VLAN 50</span></td></tr>
+        <tr><td class="device-name">Switch002 (3550), VLAN 50 SVI</td><td class="mono ip-static">192.168.50.6</td><td class="mono">255.255.255.0</td><td class="mono">192.168.100.1</td><td class="mono">N/A</td><td class="mono">N/A</td><td><span class="vlan vlan-50">VLAN 50</span></td></tr>
+        <tr><td class="device-name">Switch003 (6248P) Mgmt</td><td class="mono ip-static">192.168.50.4</td><td class="mono">255.255.255.0</td><td class="mono">192.168.50.6</td><td class="mono">N/A</td><td class="mono">N/A</td><td><span class="vlan vlan-50">VLAN 50</span></td></tr>
+        <tr><td class="device-name">Win11-Client VM</td><td class="mono ip-static">192.168.50.20</td><td class="mono">255.255.255.0</td><td class="mono">192.168.50.6</td><td class="mono">192.168.10.5</td><td class="mono">192.168.20.10</td><td><span class="vlan vlan-50">VLAN 50</span></td></tr>
+
+        <tr style="background:rgba(77,208,225,0.05)">
+          <td colspan="7" style="padding:8px 16px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--transit-text);letter-spacing:0.1em;border-bottom:1px solid var(--border)">TRANSIT &amp; PERIMETER (192.168.100.0/30, WAN)</td>
+        </tr>
+        <tr><td class="device-name">FortiGate 60E, Internal</td><td class="mono ip-static">192.168.100.1</td><td class="mono">255.255.255.252</td><td class="mono">N/A</td><td class="mono">N/A</td><td class="mono">N/A</td><td><span class="vlan vlan-transit">Transit</span></td></tr>
+        <tr><td class="device-name">Switch002 (3550) Fa0/24</td><td class="mono ip-static">192.168.100.2</td><td class="mono">255.255.255.252</td><td class="mono">192.168.100.1</td><td class="mono">N/A</td><td class="mono">N/A</td><td><span class="vlan vlan-transit">Transit</span></td></tr>
+        <tr><td class="device-name">FortiGate 60E, WAN1</td><td class="mono ip-dhcp">192.168.1.148 (DHCP)</td><td class="mono">255.255.255.0</td><td class="mono">192.168.1.1</td><td class="mono">N/A</td><td class="mono">N/A</td><td><span class="vlan vlan-uplink">WAN</span></td></tr>
+        <tr><td class="device-name">SOHO Router</td><td class="mono ip-static">192.168.1.1</td><td class="mono">255.255.255.0</td><td class="mono">N/A</td><td class="mono">N/A</td><td class="mono">N/A</td><td><span class="vlan vlan-uplink">WAN</span></td></tr>
+      </tbody>
+    </table>
+    <div class="table-note">pfSense (retired) previously occupied 192.168.50.1 as its LAN address and 192.168.1.153 as its DHCP-assigned WAN address. Neither address is reused by the FortiGate: its internal interface lives entirely on the new 192.168.100.0/30 transit subnet, and Switch002's VLAN 50 SVI (192.168.50.6) now serves as the management gateway in its place.</div>
+  </div>
+
+  <!-- DNS Chain -->
+  <div class="table-wrap">
+    <div class="table-title">DNS Resolution Chain</div>
+    <table>
+      <thead><tr><th>Query Type</th><th>Client Queries</th><th>Forwards To</th><th>Resolves</th></tr></thead>
+      <tbody>
+        <tr><td class="device-name">Internal domain (mtlab.local)</td><td class="mono ip-static">192.168.10.5 (BIND9)</td><td class="mono ip-static">192.168.20.10 (Windows Server DNS)</td><td class="role-text">AD domain names, hostnames</td></tr>
+        <tr><td class="device-name">Internet / external</td><td class="mono ip-static">192.168.10.5 (BIND9)</td><td class="mono">8.8.8.8 / 1.1.1.1</td><td class="role-text">Public internet names</td></tr>
+        <tr><td class="device-name">Windows Server DC (self)</td><td class="mono">127.0.0.1</td><td class="mono">N/A</td><td class="role-text">Authoritative for mtlab.local zone</td></tr>
+      </tbody>
+    </table>
+    <div class="table-note">All client devices use 192.168.10.5 (secondary/backup role) as Primary DNS and 192.168.20.10 as Secondary DNS · IP Helper configured on Switch002's VLAN 10/20/40 SVIs → 192.168.20.10</div>
+  </div>
+</div>
+
+<div class="page-footer">
+  <span>MTPortfolio · The Lab Environment · Reference Charts</span>
+  <span>Home Network · 192.168.1.0/24 · Lab Network · 192.168.x.0/24 · Transit · 192.168.100.0/30</span>
+</div>
+
+</body>
+</html>
