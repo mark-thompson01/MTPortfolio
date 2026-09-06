@@ -740,6 +740,461 @@
       </div>
     </section>
 
+    <!-- ===================== CONNECTIVITY TROUBLESHOOTING ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Lab Connectivity Troubleshooting</h2>
+        <span class="step-count">24 steps</span>
+      </div>
+      <p class="section-desc">After the initial switch builds, end-to-end connectivity testing surfaced several issues spanning routing, DHCP relay, and — ultimately — the lab's pfSense VM router itself. Documented here in the order they were found and resolved.</p>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Default Route Pointing to Wrong Gateway</h3>
+        <span class="step-count">4 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Issue found: gateway of last resort is 192.168.1.1</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td8Forgot192_168_50_1.png', 'show ip route on Switch002 showing gateway of last resort incorrectly set to 192.168.1.1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td8Forgot192_168_50_1.png', 'show ip route on Switch002 showing gateway of last resort incorrectly set to 192.168.1.1')" aria-label="Zoom image: show ip route on Switch002 showing gateway of last resort incorrectly set to 192.168.1.1"><img src="Images/td8Forgot192_168_50_1.png" alt="show ip route on Switch002 showing gateway of last resort incorrectly set to 192.168.1.1"></div>
+          <p class="step-caption">Switch002 could not reach the internet. <code>show ip route</code> revealed the default route pointing directly to <code>192.168.1.1</code> (the SOHO router) via FastEthernet0/24, instead of to pfSense at <code>192.168.50.1</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Fix: correcting the default route</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td9Forgot192_168_50_1Fix.png', 'Removing the incorrect default route and adding the correct one pointing to pfSense at 192.168.50.1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td9Forgot192_168_50_1Fix.png', 'Removing the incorrect default route and adding the correct one pointing to pfSense at 192.168.50.1')" aria-label="Zoom image: Removing the incorrect default route and adding the correct one pointing to pfSense at 192.168.50.1"><img src="Images/td9Forgot192_168_50_1Fix.png" alt="Removing the incorrect default route and adding the correct one pointing to pfSense at 192.168.50.1"></div>
+          <p class="step-caption">Removed the incorrect route with <code>no ip route 0.0.0.0 0.0.0.0 192.168.1.1</code> and added <code>ip route 0.0.0.0 0.0.0.0 192.168.50.1</code>, then saved with <code>write memory</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Re-adding the interim route during follow-up checks</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/SwitchInternetConnectivityFix.png', 'Show ip route with no gateway of last resort set, then re-entering enable mode and adding a default route via 192.168.1.1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/SwitchInternetConnectivityFix.png', 'Show ip route with no gateway of last resort set, then re-entering enable mode and adding a default route via 192.168.1.1')" aria-label="Zoom image: Show ip route with no gateway of last resort set, then re-entering enable mode and adding a default route via 192.168.1.1"><img src="Images/SwitchInternetConnectivityFix.png" alt="Show ip route with no gateway of last resort set, then re-entering enable mode and adding a default route via 192.168.1.1"></div>
+          <p class="step-caption">A follow-up check found the gateway of last resort not set at all. Re-entered enable mode and configuration mode, and added <code>ip route 0.0.0.0 0.0.0.0 192.168.1.1</code> as an interim measure while the pfSense side was investigated.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Internet connectivity confirmed</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/SwitchInternetConnectivityFix2.png', 'Successful pings from Switch002 to 8.8.8.8 and 192.168.1.1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/SwitchInternetConnectivityFix2.png', 'Successful pings from Switch002 to 8.8.8.8 and 192.168.1.1')" aria-label="Zoom image: Successful pings from Switch002 to 8.8.8.8 and 192.168.1.1"><img src="Images/SwitchInternetConnectivityFix2.png" alt="Successful pings from Switch002 to 8.8.8.8 and 192.168.1.1"></div>
+          <p class="step-caption">Pings from Switch002 to <code>8.8.8.8</code> (100%, 12–16ms RTT) and <code>192.168.1.1</code> (100%, 1–4ms RTT) confirmed the route correction restored internet connectivity.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Hyper-V Host Port Verification (Switch001 Fa0/2)</h3>
+        <span class="step-count">2 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Interface status check</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td1.png', 'show interfaces fa0/2 and show interfaces fa0/2 status confirming full-duplex 100Mbps, connected, description HyperV-Host, VLAN 20')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td1.png', 'show interfaces fa0/2 and show interfaces fa0/2 status confirming full-duplex 100Mbps, connected, description HyperV-Host, VLAN 20')" aria-label="Zoom image: show interfaces fa0/2 and show interfaces fa0/2 status confirming full-duplex 100Mbps, connected, description HyperV-Host, VLAN 20"><img src="Images/td1.png" alt="show interfaces fa0/2 and show interfaces fa0/2 status confirming full-duplex 100Mbps, connected, description HyperV-Host, VLAN 20"></div>
+          <p class="step-caption"><code>show interfaces fa0/2</code> confirmed full-duplex 100Mbps, connected, description <code>HyperV-Host</code>; <code>show interfaces fa0/2 status</code> confirmed Status: connected, VLAN: 20, Duplex: a-full, Speed: a-100.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">VLAN assignment check</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td2.png', 'show vlan brief confirming Fa0/2 correctly assigned to VLAN 20 Infrastructure')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td2.png', 'show vlan brief confirming Fa0/2 correctly assigned to VLAN 20 Infrastructure')" aria-label="Zoom image: show vlan brief confirming Fa0/2 correctly assigned to VLAN 20 Infrastructure"><img src="Images/td2.png" alt="show vlan brief confirming Fa0/2 correctly assigned to VLAN 20 Infrastructure"></div>
+          <p class="step-caption"><code>show vlan brief</code> confirmed Fa0/2 correctly assigned to VLAN 20 (Infrastructure), verifying the Hyper-V host's uplink was healthy.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">DHCP Not Reaching Devices on Multiple VLANs</h3>
+        <span class="step-count">3 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">First relay attempt — invalid input</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td5-GetWin11Hostworkingon3550.png', 'Configuring ip helper-address 192.168.20.10 on interface VLAN 40, hitting an invalid input error before a successful write')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td5-GetWin11Hostworkingon3550.png', 'Configuring ip helper-address 192.168.20.10 on interface VLAN 40, hitting an invalid input error before a successful write')" aria-label="Zoom image: Configuring ip helper-address 192.168.20.10 on interface VLAN 40, hitting an invalid input error before a successful write"><img src="Images/td5-GetWin11Hostworkingon3550.png" alt="Configuring ip helper-address 192.168.20.10 on interface VLAN 40, hitting an invalid input error before a successful write"></div>
+          <p class="step-caption">Devices on VLANs 10 and 40 weren't receiving DHCP addresses — the root cause was a missing <code>ip helper-address</code> on the Switch002 SVIs. The first attempt configured VLAN 40 only and hit an invalid input error on the command entry before completing with a successful write.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Completing the relay on VLANs 10 and 20</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td6-IPHelperConfiog.png', 'Adding ip helper-address 192.168.20.10 to interface VLAN 10 and interface VLAN 20')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td6-IPHelperConfiog.png', 'Adding ip helper-address 192.168.20.10 to interface VLAN 10 and interface VLAN 20')" aria-label="Zoom image: Adding ip helper-address 192.168.20.10 to interface VLAN 10 and interface VLAN 20"><img src="Images/td6-IPHelperConfiog.png" alt="Adding ip helper-address 192.168.20.10 to interface VLAN 10 and interface VLAN 20"></div>
+          <p class="step-caption">A second CLI sequence added <code>ip helper-address 192.168.20.10</code> to VLANs 10 and 20 as well, completing the DHCP relay configuration across all three SVIs pointing at the Windows Server DC.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Refreshing DNS registration</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td7.png', 'Running ipconfig /registerdns on the Windows Server DC')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td7.png', 'Running ipconfig /registerdns on the Windows Server DC')" aria-label="Zoom image: Running ipconfig /registerdns on the Windows Server DC"><img src="Images/td7.png" alt="Running ipconfig /registerdns on the Windows Server DC"></div>
+          <p class="step-caption">With relay functional across all VLANs, ran <code>ipconfig /registerdns</code> on the Windows Server DC to refresh its DNS records.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Trunk Verification</h3>
+        <span class="step-count">2 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Switch001 Fa0/23</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td3.png', 'show interfaces fa0/23 trunk on Switch001 confirming 802.1q trunking, native VLAN 99, VLANs 1,10,20,40,99 active')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td3.png', 'show interfaces fa0/23 trunk on Switch001 confirming 802.1q trunking, native VLAN 99, VLANs 1,10,20,40,99 active')" aria-label="Zoom image: show interfaces fa0/23 trunk on Switch001 confirming 802.1q trunking, native VLAN 99, VLANs 1,10,20,40,99 active"><img src="Images/td3.png" alt="show interfaces fa0/23 trunk on Switch001 confirming 802.1q trunking, native VLAN 99, VLANs 1,10,20,40,99 active"></div>
+          <p class="step-caption">Switch001 Fa0/23 confirmed: Mode on, 802.1q, trunking, native VLAN 99, VLANs 1, 10, 20, 40, 99 all active.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Switch001 all trunks</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td4.png', 'show interfaces trunk on Switch001 confirming the same trunk state via the general trunk summary command')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td4.png', 'show interfaces trunk on Switch001 confirming the same trunk state via the general trunk summary command')" aria-label="Zoom image: show interfaces trunk on Switch001 confirming the same trunk state via the general trunk summary command"><img src="Images/td4.png" alt="show interfaces trunk on Switch001 confirming the same trunk state via the general trunk summary command"></div>
+          <p class="step-caption">Cross-checked with the general <code>show interfaces trunk</code> command — same result, confirming Fa0/23 was healthy and correctly configured.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Switch001 Management IP &amp; pfSense Gateway Unreachable</h3>
+        <span class="step-count">7 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">VLAN state on Switch002</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td10.png', 'show vlan brief on Switch002 at this stage of troubleshooting')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td10.png', 'show vlan brief on Switch002 at this stage of troubleshooting')" aria-label="Zoom image: show vlan brief on Switch002 at this stage of troubleshooting"><img src="Images/td10.png" alt="show vlan brief on Switch002 at this stage of troubleshooting"></div>
+          <p class="step-caption">Switch001 and Switch002 could reach each other internally, but neither could reach the pfSense gateway at <code>192.168.50.1</code> or the internet. <code>show vlan brief</code> confirmed VLAN state on Switch002 as a starting point for isolating the problem.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Assigning a diagnostic IP to Vlan1</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td11.png', 'Assigning IP 192.168.50.5 to interface VLAN1 on Switch002 in an attempt to establish management reachability')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td11.png', 'Assigning IP 192.168.50.5 to interface VLAN1 on Switch002 in an attempt to establish management reachability')" aria-label="Zoom image: Assigning IP 192.168.50.5 to interface VLAN1 on Switch002 in an attempt to establish management reachability"><img src="Images/td11.png" alt="Assigning IP 192.168.50.5 to interface VLAN1 on Switch002 in an attempt to establish management reachability"></div>
+          <p class="step-caption">On Switch002, assigned <code>192.168.50.5</code> to the Vlan1 SVI as a diagnostic step. The interface came up successfully.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">pfSense LAN unreachable from Switch002</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td12PingTest.png', 'Pings from Switch002 to 192.168.50.1 failing at 0 percent success, twice')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td12PingTest.png', 'Pings from Switch002 to 192.168.50.1 failing at 0 percent success, twice')" aria-label="Zoom image: Pings from Switch002 to 192.168.50.1 failing at 0 percent success, twice"><img src="Images/td12PingTest.png" alt="Pings from Switch002 to 192.168.50.1 failing at 0 percent success, twice"></div>
+          <p class="step-caption">Despite the correct IP being assigned, pings to <code>192.168.50.1</code> (pfSense LAN) returned 0% success from Switch002 — the pfSense LAN interface wasn't reachable from the switch management VLAN.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Trunk state cross-check</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td13.png', 'show interface trunk on Switch002 confirming Fa0/20 and Fa0/23 both trunking correctly')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td13.png', 'show interface trunk on Switch002 confirming Fa0/20 and Fa0/23 both trunking correctly')" aria-label="Zoom image: show interface trunk on Switch002 confirming Fa0/20 and Fa0/23 both trunking correctly"><img src="Images/td13.png" alt="show interface trunk on Switch002 confirming Fa0/20 and Fa0/23 both trunking correctly"></div>
+          <p class="step-caption">With the ping failing, re-checked trunk health — <code>show interface trunk</code> confirmed both Fa0/20 and Fa0/23 trunking correctly, ruling out the trunks as the cause.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Diagnostic port change on Switch001</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td14.png', 'Temporarily reconfiguring Switch001 Fa0/2 to access VLAN 1 and pinging 192.168.50.1 successfully with unstable RTT')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td14.png', 'Temporarily reconfiguring Switch001 Fa0/2 to access VLAN 1 and pinging 192.168.50.1 successfully with unstable RTT')" aria-label="Zoom image: Temporarily reconfiguring Switch001 Fa0/2 to access VLAN 1 and pinging 192.168.50.1 successfully with unstable RTT"><img src="Images/td14.png" alt="Temporarily reconfiguring Switch001 Fa0/2 to access VLAN 1 and pinging 192.168.50.1 successfully with unstable RTT"></div>
+          <p class="step-caption">On Switch001, Fa0/2 was temporarily reconfigured to access VLAN 1 as a diagnostic step. Pings to <code>192.168.50.1</code> succeeded (100%, but with an unstable 4–1000ms RTT range).</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Internet still unreachable from Switch001</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td15.png', 'Ping to 8.8.8.8 from Switch001 failing at 0 percent success, confirming pfSense itself has no internet path')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td15.png', 'Ping to 8.8.8.8 from Switch001 failing at 0 percent success, confirming pfSense itself has no internet path')" aria-label="Zoom image: Ping to 8.8.8.8 from Switch001 failing at 0 percent success, confirming pfSense itself has no internet path"><img src="Images/td15.png" alt="Ping to 8.8.8.8 from Switch001 failing at 0 percent success, confirming pfSense itself has no internet path"></div>
+          <p class="step-caption">Pings to <code>8.8.8.8</code> failed — the switch could reach the pfSense LAN IP, but pfSense itself had no internet path.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Confirming the problem sits upstream</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td16.png', 'Switch002 pinging 192.168.50.1 successfully but 8.8.8.8 returning all U for unreachable')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td16.png', 'Switch002 pinging 192.168.50.1 successfully but 8.8.8.8 returning all U for unreachable')" aria-label="Zoom image: Switch002 pinging 192.168.50.1 successfully but 8.8.8.8 returning all U for unreachable"><img src="Images/td16.png" alt="Switch002 pinging 192.168.50.1 successfully but 8.8.8.8 returning all U for unreachable"></div>
+          <p class="step-caption">Switch002 pings to <code>192.168.50.1</code> also succeeded (100%, 1–4ms RTT), but <code>8.8.8.8</code> returned all <code>U</code> (unreachable) — confirming the problem was upstream in pfSense itself, not the switches.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">pfSense Routing and NAT Failure</h3>
+        <span class="step-count">6 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Accessing the pfSense shell</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td17.png', 'pfSense console menu showing WAN hm0 at 192.168.1.153/24, LAN hm1 at 192.168.50.1/24, selecting option 8 for shell')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td17.png', 'pfSense console menu showing WAN hm0 at 192.168.1.153/24, LAN hm1 at 192.168.50.1/24, selecting option 8 for shell')" aria-label="Zoom image: pfSense console menu showing WAN hm0 at 192.168.1.153/24, LAN hm1 at 192.168.50.1/24, selecting option 8 for shell"><img src="Images/td17.png" alt="pfSense console menu showing WAN hm0 at 192.168.1.153/24, LAN hm1 at 192.168.50.1/24, selecting option 8 for shell"></div>
+          <p class="step-caption">With the switches confirmed healthy, troubleshooting moved to the pfSense VM (2.8.1-RELEASE, WAN hm0 at <code>192.168.1.153/24</code>, LAN hm1 at <code>192.168.50.1/24</code>). Selected option 8 to drop into the shell.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Firewall disabled, internet still unreachable</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td18.png', 'pfctl -d disabling the firewall, then ping 8.8.8.8 failing with sendto no route to host, 100 percent packet loss')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td18.png', 'pfctl -d disabling the firewall, then ping 8.8.8.8 failing with sendto no route to host, 100 percent packet loss')" aria-label="Zoom image: pfctl -d disabling the firewall, then ping 8.8.8.8 failing with sendto no route to host, 100 percent packet loss"><img src="Images/td18.png" alt="pfctl -d disabling the firewall, then ping 8.8.8.8 failing with sendto no route to host, 100 percent packet loss"></div>
+          <p class="step-caption">Disabled the firewall entirely with <code>pfctl -d</code> and pinged <code>8.8.8.8</code> — result: <code>sendto: No route to host</code>, 100% packet loss. This ruled out firewall rules and pointed to a routing problem inside pfSense.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Inspecting the pfSense routing table</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td20.png', 'netstat -rn -f inet showing VLANs routed out via hm1 with no default route to the internet on hm0')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td20.png', 'netstat -rn -f inet showing VLANs routed out via hm1 with no default route to the internet on hm0')" aria-label="Zoom image: netstat -rn -f inet showing VLANs routed out via hm1 with no default route to the internet on hm0"><img src="Images/td20.png" alt="netstat -rn -f inet showing VLANs routed out via hm1 with no default route to the internet on hm0"></div>
+          <p class="step-caption"><code>netstat -rn -f inet</code> revealed VLANs 10, 20, 40, and 50 routing out via hm1 (LAN) toward <code>192.168.50.3</code> (Switch002's Vlan1 SVI at the time) — with no default route pointing to the SOHO router on the WAN side.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Checking existing NAT state</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td21.png', 'Successful ping to 8.8.8.8 followed by pfctl -e and pfctl -s nat showing default anchors and an existing rdr rule')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td21.png', 'Successful ping to 8.8.8.8 followed by pfctl -e and pfctl -s nat showing default anchors and an existing rdr rule')" aria-label="Zoom image: Successful ping to 8.8.8.8 followed by pfctl -e and pfctl -s nat showing default anchors and an existing rdr rule"><img src="Images/td21.png" alt="Successful ping to 8.8.8.8 followed by pfctl -e and pfctl -s nat showing default anchors and an existing rdr rule"></div>
+          <p class="step-caption">Re-enabled the firewall (<code>pfctl -e</code>, already enabled) and checked existing NAT state with <code>pfctl -s nat</code> — only default anchors and an existing redirect rule were present, no outbound NAT covering the internal subnets.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Writing a temporary NAT rule</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td22.png', 'Writing NAT rules for all four internal subnets to /tmp/nat.conf via printf and cat')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td22.png', 'Writing NAT rules for all four internal subnets to /tmp/nat.conf via printf and cat')" aria-label="Zoom image: Writing NAT rules for all four internal subnets to /tmp/nat.conf via printf and cat"><img src="Images/td22.png" alt="Writing NAT rules for all four internal subnets to /tmp/nat.conf via printf and cat"></div>
+          <p class="step-caption">Manually wrote a temporary outbound NAT rule to <code>/tmp/nat.conf</code> covering all four internal subnets (10.0/24, 20.0/24, 40.0/24, 50.0/24) outbound on hm0.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Loading the rule — connectivity restored</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/td23.png', 'pfctl -f loading nat.conf, pfctl -e re-enabling the firewall, and a successful ping to 8.8.8.8')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/td23.png', 'pfctl -f loading nat.conf, pfctl -e re-enabling the firewall, and a successful ping to 8.8.8.8')" aria-label="Zoom image: pfctl -f loading nat.conf, pfctl -e re-enabling the firewall, and a successful ping to 8.8.8.8"><img src="Images/td23.png" alt="pfctl -f loading nat.conf, pfctl -e re-enabling the firewall, and a successful ping to 8.8.8.8"></div>
+          <p class="step-caption">Loaded the rule with <code>pfctl -f /tmp/nat.conf</code>, re-enabled the firewall with <code>pfctl -e</code>, and confirmed internet connectivity from pfSense itself (100%, ~14–23ms RTT). This exposed a deeper problem: pfSense's LAN interface was sharing a USB adapter with other VM traffic on the Hyper-V host, causing persistent instability — the root cause that ultimately led to replacing pfSense with a dedicated FortiGate 60E.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== BLACKHOLE VLAN 999 ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Blackhole VLAN 999 — Unused Port Security</h2>
+        <span class="step-count">24 steps</span>
+      </div>
+      <p class="section-desc">Per security best practices, every switch port not assigned an active role was moved off VLAN 1 into a dedicated blackhole VLAN (999) and administratively shut down, preventing unauthorized devices from gaining network access via unused ports. This pass on Switch003 also surfaced a gap in the VLAN 50 (Management) migration that needed fixing first.</p>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Switch001 (Cisco Catalyst 2950)</h3>
+        <span class="step-count">8 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Creating VLAN 999</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch001vlan999-1.png', 'Creating VLAN 999 and naming it Blackhole')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch001vlan999-1.png', 'Creating VLAN 999 and naming it Blackhole')" aria-label="Zoom image: Creating VLAN 999 and naming it Blackhole"><img src="Images/Switch001vlan999-1.png" alt="Creating VLAN 999 and naming it Blackhole"></div>
+          <p class="step-caption">Created <code>vlan 999</code> and named it <code>Blackhole</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Auditing VLAN 1 before the move</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch001vlan999-2.png', 'show vlan id 1 listing every default port before the blackhole migration')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch001vlan999-2.png', 'show vlan id 1 listing every default port before the blackhole migration')" aria-label="Zoom image: show vlan id 1 listing every default port before the blackhole migration"><img src="Images/Switch001vlan999-2.png" alt="show vlan id 1 listing every default port before the blackhole migration"></div>
+          <p class="step-caption"><code>show vlan id 1</code> confirmed the full list of ports still sitting on default VLAN 1 before the migration — everything except Fa0/2, Fa0/3, Fa0/4, Fa0/5, and Fa0/23.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Moving Fa0/1 to VLAN 999</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch001vlan999-3.png', 'Moving interface range fa0/1 to VLAN 999 access mode and shutting it down')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch001vlan999-3.png', 'Moving interface range fa0/1 to VLAN 999 access mode and shutting it down')" aria-label="Zoom image: Moving interface range fa0/1 to VLAN 999 access mode and shutting it down"><img src="Images/Switch001vlan999-3.png" alt="Moving interface range fa0/1 to VLAN 999 access mode and shutting it down"></div>
+          <p class="step-caption"><code>interface range fa0/1 - 1</code>: set access mode, moved to VLAN 999, and administratively shut down.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Moving Fa0/6–22</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch001vlan999-4.png', 'Moving interface range fa0/6 to 22 to VLAN 999 and shutting down, with link state change messages beginning')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch001vlan999-4.png', 'Moving interface range fa0/6 to 22 to VLAN 999 and shutting down, with link state change messages beginning')" aria-label="Zoom image: Moving interface range fa0/6 to 22 to VLAN 999 and shutting down, with link state change messages beginning"><img src="Images/Switch001vlan999-4.png" alt="Moving interface range fa0/6 to 22 to VLAN 999 and shutting down, with link state change messages beginning"></div>
+          <p class="step-caption"><code>interface range fa0/6 - 22</code>: same treatment — access mode, VLAN 999, shutdown. Link-state change messages begin scrolling as each port goes administratively down.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Link-down confirmations continue</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch001vlan999-5.png', 'Continuing LINK-5-CHANGED and LINEPROTO-5-UPDOWN messages for fa0/6 through 0/16')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch001vlan999-5.png', 'Continuing LINK-5-CHANGED and LINEPROTO-5-UPDOWN messages for fa0/6 through 0/16')" aria-label="Zoom image: Continuing LINK-5-CHANGED and LINEPROTO-5-UPDOWN messages for fa0/6 through 0/16"><img src="Images/Switch001vlan999-5.png" alt="Continuing LINK-5-CHANGED and LINEPROTO-5-UPDOWN messages for fa0/6 through 0/16"></div>
+          <p class="step-caption">Console output continues confirming each port in the fa0/6–22 range going administratively down.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Moving Fa0/24–48</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch001vlan999-6.png', 'Moving interface range fa0/24 to 48 to VLAN 999 and shutting down')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch001vlan999-6.png', 'Moving interface range fa0/24 to 48 to VLAN 999 and shutting down')" aria-label="Zoom image: Moving interface range fa0/24 to 48 to VLAN 999 and shutting down"><img src="Images/Switch001vlan999-6.png" alt="Moving interface range fa0/24 to 48 to VLAN 999 and shutting down"></div>
+          <p class="step-caption"><code>interface range fa0/24 - 48</code>: access mode, VLAN 999, shutdown — the third of the three FastEthernet ranges.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Moving Gi0/1–2</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch001vlan999-7.png', 'Moving interface range gi0/1 to 2 to VLAN 999 and shutting down')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch001vlan999-7.png', 'Moving interface range gi0/1 to 2 to VLAN 999 and shutting down')" aria-label="Zoom image: Moving interface range gi0/1 to 2 to VLAN 999 and shutting down"><img src="Images/Switch001vlan999-7.png" alt="Moving interface range gi0/1 to 2 to VLAN 999 and shutting down"></div>
+          <p class="step-caption"><code>interface range gi0/1 - 2</code>: the unused Gigabit uplinks got the same treatment — access mode, VLAN 999, shutdown.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Saving the configuration</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch001vlan999-8.png', 'Ending configuration mode and saving with write memory')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch001vlan999-8.png', 'Ending configuration mode and saving with write memory')" aria-label="Zoom image: Ending configuration mode and saving with write memory"><img src="Images/Switch001vlan999-8.png" alt="Ending configuration mode and saving with write memory"></div>
+          <p class="step-caption">Exited configuration mode and saved with <code>write memory</code> — <code>[OK]</code>. Active ports (Fa0/2, Fa0/3, Fa0/4, Fa0/5, Fa0/23) were left untouched throughout.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Switch002 (Cisco Catalyst 3550)</h3>
+        <span class="step-count">5 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Auditing VLAN 1 before the move</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch002vlan999-9.png', 'show vlan id 1 on Switch002 listing all default ports before migration')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch002vlan999-9.png', 'show vlan id 1 on Switch002 listing all default ports before migration')" aria-label="Zoom image: show vlan id 1 on Switch002 listing all default ports before migration"><img src="Images/Switch002vlan999-9.png" alt="show vlan id 1 on Switch002 listing all default ports before migration"></div>
+          <p class="step-caption"><code>show vlan id 1</code> confirmed the ports still on default VLAN 1 — everything except Fa0/1, Fa0/2, Fa0/20, Fa0/23, and Fa0/24.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Creating VLAN 999</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch002vlan999-10.png', 'Creating VLAN 999 and naming it Blackhole on Switch002')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch002vlan999-10.png', 'Creating VLAN 999 and naming it Blackhole on Switch002')" aria-label="Zoom image: Creating VLAN 999 and naming it Blackhole on Switch002"><img src="Images/Switch002vlan999-10.png" alt="Creating VLAN 999 and naming it Blackhole on Switch002"></div>
+          <p class="step-caption">Created <code>vlan 999</code> and named it <code>Blackhole</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Moving Fa0/3–19</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch002vlan999-11.png', 'Moving interface range fa0/3 to 19 to VLAN 999 access mode and shutting down')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch002vlan999-11.png', 'Moving interface range fa0/3 to 19 to VLAN 999 access mode and shutting down')" aria-label="Zoom image: Moving interface range fa0/3 to 19 to VLAN 999 access mode and shutting down"><img src="Images/Switch002vlan999-11.png" alt="Moving interface range fa0/3 to 19 to VLAN 999 access mode and shutting down"></div>
+          <p class="step-caption"><code>interface range fa0/3 - 19</code>: access mode, VLAN 999, shutdown.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Moving Fa0/21–22</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch002vlan999-12.png', 'Moving interface range fa0/21 to 22 to VLAN 999 and shutting down')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch002vlan999-12.png', 'Moving interface range fa0/21 to 22 to VLAN 999 and shutting down')" aria-label="Zoom image: Moving interface range fa0/21 to 22 to VLAN 999 and shutting down"><img src="Images/Switch002vlan999-12.png" alt="Moving interface range fa0/21 to 22 to VLAN 999 and shutting down"></div>
+          <p class="step-caption"><code>interface range fa0/21 - 22</code>: the two remaining unused FastEthernet ports, same treatment.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Moving Gi0/1–2 &amp; saving</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch002vlan999-13.png', 'Moving interface range gi0/1 to 2 to VLAN 999, shutting down, ending configuration, and saving with write memory')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch002vlan999-13.png', 'Moving interface range gi0/1 to 2 to VLAN 999, shutting down, ending configuration, and saving with write memory')" aria-label="Zoom image: Moving interface range gi0/1 to 2 to VLAN 999, shutting down, ending configuration, and saving with write memory"><img src="Images/Switch002vlan999-13.png" alt="Moving interface range gi0/1 to 2 to VLAN 999, shutting down, ending configuration, and saving with write memory"></div>
+          <p class="step-caption"><code>interface range gi0/1 - 2</code>: moved to VLAN 999 and shut down, then <code>end</code> and <code>write memory</code> — <code>[OK]</code>. Active ports (Fa0/1, Fa0/2, Fa0/20, Fa0/23, Fa0/24) were left untouched.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Switch003 (Dell PowerConnect 6248P) — VLAN 50 Gap &amp; Trunk Remediation</h3>
+        <span class="step-count">7 steps</span>
+      </div>
+      <p class="section-desc" style="margin-bottom:20px">Before Switch003 could get its own blackhole pass, a VLAN 1 audit turned up a bigger gap: trunk port 1/g48 was still in Trunk mode with PVID 1 (not 99), VLAN 1 was still in its allowed list, and VLAN 50 (Management) hadn't been created on this switch at all — meaning its management IP had no path across the trunk. That had to be fixed first.</p>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">VLAN 1 audit reveals the gap</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-14.png', 'show vlan id 1 on Switch003 showing the default VLAN membership including trunk port 1/g48')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-14.png', 'show vlan id 1 on Switch003 showing the default VLAN membership including trunk port 1/g48')" aria-label="Zoom image: show vlan id 1 on Switch003 showing the default VLAN membership including trunk port 1/g48"><img src="Images/Switch003vlan999-14.png" alt="show vlan id 1 on Switch003 showing the default VLAN membership including trunk port 1/g48"></div>
+          <p class="step-caption"><code>show vlan id 1</code> confirmed 1/g48 (the trunk to Switch002) was still carrying VLAN 1, and VLAN 50 didn't exist on this switch yet.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Fixing 1/g48: general mode, PVID 99</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-15.png', 'Converting interface ethernet 1/g48 to general mode, PVID 99, adding VLANs 10,20,40,99 tagged, removing VLAN 1, and saving')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-15.png', 'Converting interface ethernet 1/g48 to general mode, PVID 99, adding VLANs 10,20,40,99 tagged, removing VLAN 1, and saving')" aria-label="Zoom image: Converting interface ethernet 1/g48 to general mode, PVID 99, adding VLANs 10,20,40,99 tagged, removing VLAN 1, and saving"><img src="Images/Switch003vlan999-15.png" alt="Converting interface ethernet 1/g48 to general mode, PVID 99, adding VLANs 10,20,40,99 tagged, removing VLAN 1, and saving"></div>
+          <p class="step-caption">Converted <code>1/g48</code> from Trunk mode to General mode, set PVID to 99, added VLANs 10, 20, 40, 99 as tagged, and removed VLAN 1 from the allowed list — then saved with <code>copy running-config startup-config</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Creating VLAN 50 (Management)</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-15-VLAN50Create.png', 'Creating VLAN 50 in the VLAN database and naming it Management')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-15-VLAN50Create.png', 'Creating VLAN 50 in the VLAN database and naming it Management')" aria-label="Zoom image: Creating VLAN 50 in the VLAN database and naming it Management"><img src="Images/Switch003vlan999-15-VLAN50Create.png" alt="Creating VLAN 50 in the VLAN database and naming it Management"></div>
+          <p class="step-caption">Created VLAN 50 in the VLAN database and named it <code>Management</code>, bringing Switch003 in line with the dedicated management VLAN already running on Switch001 and Switch002.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Checking the management interface</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-16VLAN50Create.png', 'show ip interface confirming the management IP 192.168.50.4 and Management VLAN ID 50')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-16VLAN50Create.png', 'show ip interface confirming the management IP 192.168.50.4 and Management VLAN ID 50')" aria-label="Zoom image: show ip interface confirming the management IP 192.168.50.4 and Management VLAN ID 50"><img src="Images/Switch003vlan999-16VLAN50Create.png" alt="show ip interface confirming the management IP 192.168.50.4 and Management VLAN ID 50"></div>
+          <p class="step-caption"><code>show ip interface</code> confirmed the management IP <code>192.168.50.4</code> was now bound to Management VLAN ID 50.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Adding VLAN 50 to the trunk &amp; binding the management IP</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-17-VLAN50Create.png', 'Adding VLAN 50 tagged to interface ethernet 1/g48, assigning IP 192.168.50.4, setting default gateway, and binding the IP address to VLAN 50')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-17-VLAN50Create.png', 'Adding VLAN 50 tagged to interface ethernet 1/g48, assigning IP 192.168.50.4, setting default gateway, and binding the IP address to VLAN 50')" aria-label="Zoom image: Adding VLAN 50 tagged to interface ethernet 1/g48, assigning IP 192.168.50.4, setting default gateway, and binding the IP address to VLAN 50"><img src="Images/Switch003vlan999-17-VLAN50Create.png" alt="Adding VLAN 50 tagged to interface ethernet 1/g48, assigning IP 192.168.50.4, setting default gateway, and binding the IP address to VLAN 50"></div>
+          <p class="step-caption">Added VLAN 50 tagged to <code>1/g48</code>, assigned the management IP <code>192.168.50.4/24</code>, set the default gateway to <code>192.168.50.1</code>, and bound the switch's IP address to VLAN 50 — then saved.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Verifying the trunk carries VLAN 50</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-18-VLAN50Create.png', 'show interfaces switchport ethernet 1/g48 confirming PVID 99 and tagged membership in VLANs 10, 20, 40, 50, and 99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-18-VLAN50Create.png', 'show interfaces switchport ethernet 1/g48 confirming PVID 99 and tagged membership in VLANs 10, 20, 40, 50, and 99')" aria-label="Zoom image: show interfaces switchport ethernet 1/g48 confirming PVID 99 and tagged membership in VLANs 10, 20, 40, 50, and 99"><img src="Images/Switch003vlan999-18-VLAN50Create.png" alt="show interfaces switchport ethernet 1/g48 confirming PVID 99 and tagged membership in VLANs 10, 20, 40, 50, and 99"></div>
+          <p class="step-caption"><code>show interfaces switchport ethernet 1/g48</code> confirmed PVID 99, General mode, and VLANs 10, 20, 40, 50, and 99 all tagged — VLAN 1 no longer present.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Final VLAN 1 check</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-19.png', 'show vlan id 1 confirming remaining default VLAN 1 port membership after the fixes')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-19.png', 'show vlan id 1 confirming remaining default VLAN 1 port membership after the fixes')" aria-label="Zoom image: show vlan id 1 confirming remaining default VLAN 1 port membership after the fixes"><img src="Images/Switch003vlan999-19.png" alt="show vlan id 1 confirming remaining default VLAN 1 port membership after the fixes"></div>
+          <p class="step-caption">With the trunk and management gap corrected, a final <code>show vlan id 1</code> confirmed the remaining default-VLAN port membership ahead of the blackhole pass — 1/g11, 1/g25, and 1/g48 excluded as active ports.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Post-Configuration Trunk Verification — VLAN 50 Gap Found &amp; Closed</h3>
+        <span class="step-count">4 steps</span>
+      </div>
+      <p class="section-desc" style="margin-bottom:20px">With VLAN 999 in place on all three switches, both inter-switch trunks were re-verified end to end to confirm VLAN 50 was carried consistently — and one more gap turned up on Switch002's link to Switch003.</p>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Switch002 Fa0/20 — VLAN 50 missing</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-24-Switch002Check.png', 'show interfaces fa0/20 trunk on Switch002 showing only VLANs 1,10,20,40,99 allowed, VLAN 50 missing')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-24-Switch002Check.png', 'show interfaces fa0/20 trunk on Switch002 showing only VLANs 1,10,20,40,99 allowed, VLAN 50 missing')" aria-label="Zoom image: show interfaces fa0/20 trunk on Switch002 showing only VLANs 1,10,20,40,99 allowed, VLAN 50 missing"><img src="Images/Switch003vlan999-24-Switch002Check.png" alt="show interfaces fa0/20 trunk on Switch002 showing only VLANs 1,10,20,40,99 allowed, VLAN 50 missing"></div>
+          <p class="step-caption"><code>show interfaces fa0/20 trunk</code> on Switch002 (the trunk to Switch003) showed only VLANs 1, 10, 20, 40, and 99 allowed — VLAN 50 was missing, meaning Switch003's management traffic at <code>192.168.50.4</code> had no path across this link.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Fix: adding VLAN 50 to Fa0/20</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-25-Switch002Correct.png', 'Adding VLAN 50 to the allowed list on Fa0/20 and saving with write memory')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-25-Switch002Correct.png', 'Adding VLAN 50 to the allowed list on Fa0/20 and saving with write memory')" aria-label="Zoom image: Adding VLAN 50 to the allowed list on Fa0/20 and saving with write memory"><img src="Images/Switch003vlan999-25-Switch002Correct.png" alt="Adding VLAN 50 to the allowed list on Fa0/20 and saving with write memory"></div>
+          <p class="step-caption">Applied <code>switchport trunk allowed vlan add 50</code> on Fa0/20, then <code>end</code> and <code>write memory</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Verifying the fix</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-26Switch002Verify.png', 'show interfaces fa0/20 trunk confirming VLANs 1,10,20,40,50,99 now all allowed and active')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-26Switch002Verify.png', 'show interfaces fa0/20 trunk confirming VLANs 1,10,20,40,50,99 now all allowed and active')" aria-label="Zoom image: show interfaces fa0/20 trunk confirming VLANs 1,10,20,40,50,99 now all allowed and active"><img src="Images/Switch003vlan999-26Switch002Verify.png" alt="show interfaces fa0/20 trunk confirming VLANs 1,10,20,40,50,99 now all allowed and active"></div>
+          <p class="step-caption">Re-running <code>show interfaces fa0/20 trunk</code> confirmed Fa0/20 now carries VLANs 1, 10, 20, 40, 50, and 99 — matching Switch001's Fa0/23 and Switch003's 1/g48.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Confirming Switch001 needed no changes</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Switch003vlan999-27-Switch001Check.png', 'show interfaces fa0/23 trunk on Switch001 already showing VLANs 1,10,20,40,50,99 correctly')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Switch003vlan999-27-Switch001Check.png', 'show interfaces fa0/23 trunk on Switch001 already showing VLANs 1,10,20,40,50,99 correctly')" aria-label="Zoom image: show interfaces fa0/23 trunk on Switch001 already showing VLANs 1,10,20,40,50,99 correctly"><img src="Images/Switch003vlan999-27-Switch001Check.png" alt="show interfaces fa0/23 trunk on Switch001 already showing VLANs 1,10,20,40,50,99 correctly"></div>
+          <p class="step-caption">Switch001's Fa0/23 was already carrying VLANs 1, 10, 20, 40, 50, and 99 correctly — no changes required, completing a consistent VLAN 50 management path across the entire switching infrastructure.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Final Verification</h2>
+        <span class="step-count">19 steps</span>
+      </div>
+      <p class="section-desc">With VLAN 50 (Management) migrated in, VLAN 999 (Blackhole) applied, and the lab's original pfSense VM router replaced by a dedicated FortiGate 60E, a full verification pass was run end to end. Two issues turned up on Switch002 and one on Switch003 — all caught and corrected here.</p>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Switch001 — Verification</h3>
+        <span class="step-count">4 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Verifying VLANs</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify1.png', 'show vlan brief output confirming VLANs 1, 10, 20, 40, 50, 99, and 999 all present and correctly assigned')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify1.png', 'show vlan brief output confirming VLANs 1, 10, 20, 40, 50, 99, and 999 all present and correctly assigned')" aria-label="Zoom image: show vlan brief output confirming VLANs 1, 10, 20, 40, 50, 99, and 999 all present and correctly assigned"><img src="Images/Verify1.png" alt="show vlan brief output confirming VLANs 1, 10, 20, 40, 50, 99, and 999 all present and correctly assigned"></div>
+          <p class="step-caption"><code>show vlan brief</code> confirms VLANs 1, 10, 20, 40, 50, 99, and 999 all present and correctly assigned, with no unexpected ports left on VLAN 1.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Verifying the trunk</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify2.png', 'show interfaces fa0/23 trunk output confirming VLANs 1, 10, 20, 40, 50, and 99 allowed and active, native VLAN 99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify2.png', 'show interfaces fa0/23 trunk output confirming VLANs 1, 10, 20, 40, 50, and 99 allowed and active, native VLAN 99')" aria-label="Zoom image: show interfaces fa0/23 trunk output confirming VLANs 1, 10, 20, 40, 50, and 99 allowed and active, native VLAN 99"><img src="Images/Verify2.png" alt="show interfaces fa0/23 trunk output confirming VLANs 1, 10, 20, 40, 50, and 99 allowed and active, native VLAN 99"></div>
+          <p class="step-caption"><code>show interfaces fa0/23 trunk</code> confirms VLANs 1, 10, 20, 40, 50, and 99 all allowed and active, with native VLAN 99 — VLAN 50 (Management) has been added to the trunk since the initial build.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Verifying the management interface</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify3.png', 'show ip interface brief output confirming Vlan50 at 192.168.50.2 up/up')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify3.png', 'show ip interface brief output confirming Vlan50 at 192.168.50.2 up/up')" aria-label="Zoom image: show ip interface brief output confirming Vlan50 at 192.168.50.2 up/up"><img src="Images/Verify3.png" alt="show ip interface brief output confirming Vlan50 at 192.168.50.2 up/up"></div>
+          <p class="step-caption"><code>show ip interface brief</code> confirms <code>Vlan50</code> is up/up at <code>192.168.50.2</code> — management has migrated off VLAN 1 onto the dedicated VLAN 50.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Verifying connectivity</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify4.png', 'Successful pings from Switch001 to Switch003, Switch002, FortiGate, and 8.8.8.8')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify4.png', 'Successful pings from Switch001 to Switch003, Switch002, FortiGate, and 8.8.8.8')" aria-label="Zoom image: Successful pings from Switch001 to Switch003, Switch002, FortiGate, and 8.8.8.8"><img src="Images/Verify4.png" alt="Successful pings from Switch001 to Switch003, Switch002, FortiGate, and 8.8.8.8"></div>
+          <p class="step-caption">Pings succeed to <code>192.168.50.4</code> (Switch003), <code>192.168.50.6</code> (Switch002), <code>192.168.100.1</code> (FortiGate), and <code>8.8.8.8</code> (internet) — all at 100% success. No changes required on Switch001.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Switch002 — Verification &amp; Fixes</h3>
+        <span class="step-count">7 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Verifying VLANs — Fa0/1 issue found</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify5.png', 'show vlan brief output revealing FastEthernet0/1 still assigned to VLAN 1 instead of VLAN 50')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify5.png', 'show vlan brief output revealing FastEthernet0/1 still assigned to VLAN 1 instead of VLAN 50')" aria-label="Zoom image: show vlan brief output revealing FastEthernet0/1 still assigned to VLAN 1 instead of VLAN 50"><img src="Images/Verify5.png" alt="show vlan brief output revealing FastEthernet0/1 still assigned to VLAN 1 instead of VLAN 50"></div>
+          <p class="step-caption"><code>show vlan brief</code> reveals an issue: <code>Fa0/1</code> (the management port) is still assigned to VLAN 1 rather than VLAN 50.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Fix: reassigning Fa0/1 to VLAN 50</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify15-FixSwitch002-1.png', 'Reconfiguring FastEthernet0/1 as an access port on VLAN 50 and saving')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify15-FixSwitch002-1.png', 'Reconfiguring FastEthernet0/1 as an access port on VLAN 50 and saving')" aria-label="Zoom image: Reconfiguring FastEthernet0/1 as an access port on VLAN 50 and saving"><img src="Images/Verify15-FixSwitch002-1.png" alt="Reconfiguring FastEthernet0/1 as an access port on VLAN 50 and saving"></div>
+          <p class="step-caption">Corrected: <code>Fa0/1</code> reconfigured as an access port on VLAN 50, then saved with <code>write memory</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Fix: removing the stale default route</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify16-FixSwitch002-2.png', 'Removing the stale default route pointing to the old pfSense LAN IP 192.168.50.1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify16-FixSwitch002-2.png', 'Removing the stale default route pointing to the old pfSense LAN IP 192.168.50.1')" aria-label="Zoom image: Removing the stale default route pointing to the old pfSense LAN IP 192.168.50.1"><img src="Images/Verify16-FixSwitch002-2.png" alt="Removing the stale default route pointing to the old pfSense LAN IP 192.168.50.1"></div>
+          <p class="step-caption">A second issue surfaced: a stale default route via <code>192.168.50.1</code> (the old pfSense LAN IP, since replaced by the FortiGate 60E) was still present. Removed with <code>no ip route 0.0.0.0 0.0.0.0 192.168.50.1</code>, then saved.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Verifying both trunks</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify6.png', 'show interfaces trunk output confirming both Fa0/23 and Fa0/20 carrying VLANs 1, 10, 20, 40, 50, and 99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify6.png', 'show interfaces trunk output confirming both Fa0/23 and Fa0/20 carrying VLANs 1, 10, 20, 40, 50, and 99')" aria-label="Zoom image: show interfaces trunk output confirming both Fa0/23 and Fa0/20 carrying VLANs 1, 10, 20, 40, 50, and 99"><img src="Images/Verify6.png" alt="show interfaces trunk output confirming both Fa0/23 and Fa0/20 carrying VLANs 1, 10, 20, 40, 50, and 99"></div>
+          <p class="step-caption">Both trunks — <code>Fa0/23</code> to Switch001 and <code>Fa0/20</code> to Switch003 — confirmed carrying VLANs 1, 10, 20, 40, 50, and 99.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Verifying the management interface</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify7.png', 'show ip interface brief output confirming Vlan50 at 192.168.50.6 up/up')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify7.png', 'show ip interface brief output confirming Vlan50 at 192.168.50.6 up/up')" aria-label="Zoom image: show ip interface brief output confirming Vlan50 at 192.168.50.6 up/up"><img src="Images/Verify7.png" alt="show ip interface brief output confirming Vlan50 at 192.168.50.6 up/up"></div>
+          <p class="step-caption"><code>show ip interface brief</code> confirms <code>Vlan50</code> is up/up at <code>192.168.50.6</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Verifying the routing table</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify8.png', 'show ip route output showing two default routes present, via both 192.168.50.1 and 192.168.100.1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify8.png', 'show ip route output showing two default routes present, via both 192.168.50.1 and 192.168.100.1')" aria-label="Zoom image: show ip route output showing two default routes present, via both 192.168.50.1 and 192.168.100.1"><img src="Images/Verify8.png" alt="show ip route output showing two default routes present, via both 192.168.50.1 and 192.168.100.1"></div>
+          <p class="step-caption"><code>show ip route</code> at this point still shows <em>two</em> default routes — one via <code>192.168.50.1</code> (pfSense) and one via <code>192.168.100.1</code> (FortiGate). This capture was taken mid-cutover, before the pfSense route was removed in the fix above — pfSense had been running as a VM handling this role until it was replaced.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Verifying connectivity &amp; the case for the FortiGate</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify9.png', 'Pings from Switch002 to Switch001, Switch003, FortiGate succeeding, with partial success to 8.8.8.8')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify9.png', 'Pings from Switch002 to Switch001, Switch003, FortiGate succeeding, with partial success to 8.8.8.8')" aria-label="Zoom image: Pings from Switch002 to Switch001, Switch003, FortiGate succeeding, with partial success to 8.8.8.8"><img src="Images/Verify9.png" alt="Pings from Switch002 to Switch001, Switch003, FortiGate succeeding, with partial success to 8.8.8.8"></div>
+          <p class="step-caption">Pings succeed to <code>192.168.50.2</code> (Switch001), <code>192.168.50.4</code> (Switch003), and <code>192.168.100.1</code> (FortiGate). The <code>8.8.8.8</code> test shows a 40% success rate (2 of 5) here — a symptom of exactly why pfSense got replaced. As a VM, pfSense's router-on-a-stick interface shared a single physical Ethernet adapter with all the other VM traffic on that host, and contention for that adapter under load produced intermittent loss like this. Moving routing duties to the FortiGate 60E — a dedicated hardware appliance with its own interfaces — eliminated that shared-adapter bottleneck entirely.</p>
+        </article>
+      </div>
+
+      <div class="section-head" style="margin-top:36px">
+        <h3 style="margin:0;font-size:1.15rem;font-weight:700;color:var(--brand)">Switch003 — Verification &amp; Fix</h3>
+        <span class="step-count">8 steps</span>
+      </div>
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Verifying VLAN assignments by ID</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify10.png', 'show vlan id output for VLANs 50, 40, and 999 confirming port membership')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify10.png', 'show vlan id output for VLANs 50, 40, and 999 confirming port membership')" aria-label="Zoom image: show vlan id output for VLANs 50, 40, and 999 confirming port membership"><img src="Images/Verify10.png" alt="show vlan id output for VLANs 50, 40, and 999 confirming port membership"></div>
+          <p class="step-caption"><code>show vlan id</code> confirms VLAN 50 (Management) on <code>1/g48</code>, VLAN 40 (Clients) on <code>1/g11</code>, <code>1/g25</code>, and <code>1/g48</code>, and VLAN 999 (Blackhole) covering the remaining unused ports.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Verifying trunk port membership</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify11.png', 'show interfaces switchport ethernet 1/g48 confirming tagged membership in VLANs 10, 20, 40, 50, and 99')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify11.png', 'show interfaces switchport ethernet 1/g48 confirming tagged membership in VLANs 10, 20, 40, 50, and 99')" aria-label="Zoom image: show interfaces switchport ethernet 1/g48 confirming tagged membership in VLANs 10, 20, 40, 50, and 99"><img src="Images/Verify11.png" alt="show interfaces switchport ethernet 1/g48 confirming tagged membership in VLANs 10, 20, 40, 50, and 99"></div>
+          <p class="step-caption"><code>show interfaces switchport ethernet 1/g48</code> confirms the trunk carries VLANs 10, 20, 40, 50, and 99 all tagged, with PVID 99 — matching Switch002's Fa0/20 on the other end.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Verifying the management interface — gateway issue found</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify12.png', 'show ip interface output showing IP 192.168.50.4 correctly assigned but default gateway still 192.168.50.1')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify12.png', 'show ip interface output showing IP 192.168.50.4 correctly assigned but default gateway still 192.168.50.1')" aria-label="Zoom image: show ip interface output showing IP 192.168.50.4 correctly assigned but default gateway still 192.168.50.1"><img src="Images/Verify12.png" alt="show ip interface output showing IP 192.168.50.4 correctly assigned but default gateway still 192.168.50.1"></div>
+          <p class="step-caption"><code>show ip interface</code> confirms the management IP <code>192.168.50.4</code> is correctly on VLAN 50 — but the default gateway is still <code>192.168.50.1</code>, the old pfSense LAN IP that no longer exists.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Local subnet reachable</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify13.png', 'Pings from Switch003 to 192.168.50.2 and 192.168.50.6 succeeding at 0% packet loss')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify13.png', 'Pings from Switch003 to 192.168.50.2 and 192.168.50.6 succeeding at 0% packet loss')" aria-label="Zoom image: Pings from Switch003 to 192.168.50.2 and 192.168.50.6 succeeding at 0% packet loss"><img src="Images/Verify13.png" alt="Pings from Switch003 to 192.168.50.2 and 192.168.50.6 succeeding at 0% packet loss"></div>
+          <p class="step-caption">Pings to <code>192.168.50.2</code> (Switch001) and <code>192.168.50.6</code> (Switch002) succeed — the local management subnet is reachable.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Beyond the subnet — unreachable</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify14.png', 'Pings from Switch003 to 192.168.100.1 and 8.8.8.8 failing with Destination Unreachable')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify14.png', 'Pings from Switch003 to 192.168.100.1 and 8.8.8.8 failing with Destination Unreachable')" aria-label="Zoom image: Pings from Switch003 to 192.168.100.1 and 8.8.8.8 failing with Destination Unreachable"><img src="Images/Verify14.png" alt="Pings from Switch003 to 192.168.100.1 and 8.8.8.8 failing with Destination Unreachable"></div>
+          <p class="step-caption">Pings to <code>192.168.100.1</code> (FortiGate) and <code>8.8.8.8</code> (internet) fail with <em>Destination Unreachable</em>, sourced from Switch003 itself — confirming it has no valid path beyond the local subnet.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Fix: correcting the default gateway</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify17-FixSwitch003-1.png', 'Changing the default gateway to 192.168.50.6 and saving the configuration')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify17-FixSwitch003-1.png', 'Changing the default gateway to 192.168.50.6 and saving the configuration')" aria-label="Zoom image: Changing the default gateway to 192.168.50.6 and saving the configuration"><img src="Images/Verify17-FixSwitch003-1.png" alt="Changing the default gateway to 192.168.50.6 and saving the configuration"></div>
+          <p class="step-caption">Corrected: default gateway changed to <code>192.168.50.6</code> (Switch002's VLAN 50 SVI, the actual L3 routing device), then saved with <code>copy running-config startup-config</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Verifying the fix</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify18-FixSwitch003-2.png', 'show ip interface confirming the default gateway is now 192.168.50.6')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify18-FixSwitch003-2.png', 'show ip interface confirming the default gateway is now 192.168.50.6')" aria-label="Zoom image: show ip interface confirming the default gateway is now 192.168.50.6"><img src="Images/Verify18-FixSwitch003-2.png" alt="show ip interface confirming the default gateway is now 192.168.50.6"></div>
+          <p class="step-caption"><code>show ip interface</code> confirms the default gateway is now <code>192.168.50.6</code>.</p>
+        </article>
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Connectivity restored</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/Verify19-FixSwitch003-3.png', 'Pings from Switch003 to 192.168.100.1 and 8.8.8.8 now succeeding at 0% packet loss')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/Verify19-FixSwitch003-3.png', 'Pings from Switch003 to 192.168.100.1 and 8.8.8.8 now succeeding at 0% packet loss')" aria-label="Zoom image: Pings from Switch003 to 192.168.100.1 and 8.8.8.8 now succeeding at 0% packet loss"><img src="Images/Verify19-FixSwitch003-3.png" alt="Pings from Switch003 to 192.168.100.1 and 8.8.8.8 now succeeding at 0% packet loss"></div>
+          <p class="step-caption">Pings to <code>192.168.100.1</code> (FortiGate) and <code>8.8.8.8</code> (internet) now succeed at 0% packet loss — full connectivity restored.</p>
+        </article>
+      </div>
+
+    </section>
+
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
       <div class="links">
