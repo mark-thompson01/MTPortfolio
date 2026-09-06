@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -158,12 +157,25 @@
       border:1px solid var(--card-border);
       box-shadow:0 8px 24px rgba(0,0,0,.4);
       background:#000;
+      cursor:zoom-in;
+      transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     }
+    figure img:hover{
+      transform:translateY(-2px);
+      box-shadow:0 14px 34px rgba(0,0,0,.55);
+      border-color:#3a4a67;
+    }
+    figure img.shot-md{max-height:640px}
+    figure img.shot-lg{max-height:820px}
     figure figcaption{
       color:var(--muted);
       font-size:0.85rem;
       margin-top:10px;
       font-style:italic;
+    }
+    figure figcaption .zoom-hint{
+      color:#7f8599;
+      font-style:normal;
     }
     .shot-row{
       display:grid;
@@ -173,6 +185,42 @@
     }
     .shot-row figure{margin:0}
     .shot-row figure img{max-height:400px;width:100%;object-fit:contain;background:#000}
+
+    /* Lightbox */
+    .lightbox{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(6,8,12,.92);
+      z-index:1000;
+      align-items:center;
+      justify-content:center;
+      padding:40px 20px;
+      cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:96vw;
+      max-height:92vh;
+      border-radius:10px;
+      border:1px solid var(--card-border);
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
+    .lightbox .lb-close{
+      position:fixed;
+      top:20px;
+      right:28px;
+      color:var(--text);
+      font-size:32px;
+      line-height:1;
+      cursor:pointer;
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+      width:44px;height:44px;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .lightbox .lb-close:hover{border-color:#3a4a67;color:var(--brand)}
 
     /* IP summary highlight */
     .ip-pill{
@@ -286,13 +334,13 @@
       <h3>4.1 Configure Static IP via dhclient</h3>
       <pre><code>sudo nano /etc/dhcp/dhclient.conf</code></pre>
       <figure>
-        <img src="Images/rpdns1.png" alt="Terminal command opening /etc/dhcp/dhclient.conf in nano">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns1.png" alt="Terminal command opening /etc/dhcp/dhclient.conf in nano">
         <figcaption>Opening dhclient.conf to configure the static interface settings.</figcaption>
       </figure>
 
       <p>Reviewing the default configuration file before adding the static interface block:</p>
       <figure>
-        <img src="Images/rpdns2.png" alt="dhclient.conf default file contents in nano">
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns2.png" alt="dhclient.conf default file contents in nano">
         <figcaption>Default dhclient.conf contents — request/send directives and commented-out examples.</figcaption>
       </figure>
 
@@ -305,7 +353,7 @@
     fixed-address 192.168.10.5;
 }</code></pre>
       <figure>
-        <img src="Images/rpdns3.png" alt="Static eth0 interface block added to dhclient.conf">
+        <img class="zoomable shot-md" onclick="openLightbox(this.src)" src="images/rpdns3.png" alt="Static eth0 interface block added to dhclient.conf">
         <figcaption>Static interface block appended to dhclient.conf — fixed address 192.168.10.5, DNS pointed to itself (127.0.0.1) with the Windows Server DC as secondary.</figcaption>
       </figure>
       <p class="note">Note: The DNS server points to itself (127.0.0.1) as primary since it runs BIND9, with the Windows Server DC as secondary.</p>
@@ -313,7 +361,7 @@
       <h3>4.2 Reboot and Verify</h3>
       <pre><code>reboot</code></pre>
       <figure>
-        <img src="Images/rpdns4.png" alt="Terminal reboot command">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns4.png" alt="Terminal reboot command">
         <figcaption>Rebooting to apply the new static network configuration.</figcaption>
       </figure>
 
@@ -322,7 +370,7 @@
 <span class="cmt"># Expected output:</span>
 <span class="cmt"># inet 192.168.10.5/24 brd 192.168.10.255 scope global noprefixroute eth0</span></code></pre>
       <figure>
-        <img src="Images/rpdns5.png" alt="ip addr show eth0 output confirming static IP 192.168.10.5">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns5.png" alt="ip addr show eth0 output confirming static IP 192.168.10.5">
         <figcaption>Verifying the static IP assignment — 192.168.10.5/24 on eth0.</figcaption>
       </figure>
     </section>
@@ -332,13 +380,13 @@
       <h2><span class="num">5</span>BIND9 Installation</h2>
       <pre><code>sudo apt update &amp;&amp; sudo apt upgrade -y</code></pre>
       <figure>
-        <img src="Images/rpdns6.png" alt="Running apt update and upgrade">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns6.png" alt="Running apt update and upgrade">
         <figcaption>Updating the system before installing BIND9.</figcaption>
       </figure>
 
       <pre><code>sudo apt install bind9 bind9utils bind9-doc -y</code></pre>
       <figure>
-        <img src="Images/rpdns7.png" alt="Installing bind9, bind9utils, and bind9-doc packages">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns7.png" alt="Installing bind9, bind9utils, and bind9-doc packages">
         <figcaption>Installing the BIND9 DNS server and supporting packages.</figcaption>
       </figure>
 
@@ -347,7 +395,7 @@
 
 <span class="cmt"># Should return: BIND version information</span></code></pre>
       <figure>
-        <img src="Images/rpdns8.png" alt="named -v output showing BIND version 9.18.49">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns8.png" alt="named -v output showing BIND version 9.18.49">
         <figcaption>Confirming BIND9 9.18.49 (Debian Extended Support Version) is installed.</figcaption>
       </figure>
     </section>
@@ -364,13 +412,13 @@
       <h3>6.1 Configure named.conf.options</h3>
       <pre><code>sudo nano /etc/bind/named.conf.options</code></pre>
       <figure>
-        <img src="Images/rpdns9.png" alt="Terminal command opening named.conf.options in nano">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns9.png" alt="Terminal command opening named.conf.options in nano">
         <figcaption>Opening named.conf.options to set forwarders and query restrictions.</figcaption>
       </figure>
 
       <p>The default template before edits:</p>
       <figure>
-        <img src="Images/rpdns10.png" alt="Default named.conf.options template with commented forwarder examples">
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns10.png" alt="Default named.conf.options template with commented forwarder examples">
         <figcaption>Default named.conf.options template, prior to setting forwarders and locking down allow-query.</figcaption>
       </figure>
 
@@ -400,21 +448,19 @@
                 127.0.0.1;        <span class="cmt">// Localhost</span>
         };
 };</code></pre>
-      <div class="shot-row">
-        <figure>
-          <img src="Images/rpdns11.png" alt="named.conf.options edited in nano with forwarders and allow-query restricted to lab subnets">
-          <figcaption>Final named.conf.options — forwarders and allow-query restrictions in place.</figcaption>
-        </figure>
-        <figure>
-          <img src="Images/rpdns12.png" alt="cat output confirming named.conf.options contents">
-          <figcaption>Confirming the saved configuration with <code>cat /etc/bind/named.conf.options</code>.</figcaption>
-        </figure>
-      </div>
+      <figure>
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns11.png" alt="named.conf.options edited in nano with forwarders and allow-query restricted to lab subnets">
+        <figcaption>Final named.conf.options — forwarders and allow-query restrictions in place.</figcaption>
+      </figure>
+      <figure>
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns12.png" alt="cat output confirming named.conf.options contents">
+        <figcaption>Confirming the saved configuration with <code>cat /etc/bind/named.conf.options</code>.</figcaption>
+      </figure>
 
       <h3>6.2 Configure named.conf.local</h3>
       <pre><code>sudo nano /etc/bind/named.conf.local</code></pre>
       <figure>
-        <img src="Images/rpdns13.png" alt="Terminal command opening named.conf.local in nano">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns13.png" alt="Terminal command opening named.conf.local in nano">
         <figcaption>Opening named.conf.local to define (or intentionally omit) internal zones.</figcaption>
       </figure>
 
@@ -423,7 +469,7 @@
 // No internal zones defined — Pi handles external resolution only
 // Internal mtlab.local resolution is handled by the Windows Server DC</span></code></pre>
       <figure>
-        <img src="Images/rpdns14.png" alt="named.conf.local with no zones defined, comments explaining internal resolution is handled elsewhere">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns14.png" alt="named.conf.local with no zones defined, comments explaining internal resolution is handled elsewhere">
         <figcaption>named.conf.local left with no zone definitions — internal mtlab.local resolution stays with the Windows Server DC.</figcaption>
       </figure>
       <p class="note">Note: The named.conf.local file contains no zone definitions. The Pi does not handle internal mtlab.local resolution — that remains the responsibility of the Windows Server DC as the authoritative primary DNS. The Pi forwards all external queries to upstream public resolvers and serves as a failover DNS only.</p>
@@ -440,7 +486,7 @@
 <span class="cmt"># No output means configuration is valid
 # Any errors will be displayed with line numbers</span></code></pre>
       <figure>
-        <img src="Images/rpdns15.png" alt="named-checkconf run with no output, confirming valid syntax">
+        <img class="zoomable" onclick="openLightbox(this.src)" src="images/rpdns15.png" alt="named-checkconf run with no output, confirming valid syntax">
         <figcaption>No output from named-checkconf — configuration syntax is valid.</figcaption>
       </figure>
 
@@ -454,7 +500,7 @@ sudo systemctl status named
 
 <span class="cmt"># Both bind9 and named should show active (running)</span></code></pre>
       <figure>
-        <img src="Images/rpdns17.png" alt="systemctl status named showing the service active and running, with all zones loaded">
+        <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="images/rpdns17.png" alt="systemctl status named showing the service active and running, with all zones loaded">
         <figcaption>named.service active (running) — zones loaded, service started successfully.</figcaption>
       </figure>
       <p class="note">The "Unable to fetch DNSKEY" line at the bottom is a routine root-key refresh timeout and does not affect DNS resolution.</p>
@@ -522,5 +568,29 @@ dig @192.168.10.5 google.com</code></pre>
       </div>
     </footer>
   </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lb-close" onclick="closeLightbox(event)">&times;</span>
+    <img id="lightbox-img" src="" alt="Enlarged screenshot" onclick="event.stopPropagation()">
+  </div>
+
+  <script>
+    function openLightbox(src){
+      var lb = document.getElementById('lightbox');
+      var img = document.getElementById('lightbox-img');
+      img.src = src;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(e){
+      if(e) e.stopPropagation();
+      var lb = document.getElementById('lightbox');
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+  </script>
 </body>
 </html>
