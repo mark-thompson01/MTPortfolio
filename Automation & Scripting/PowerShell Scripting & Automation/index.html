@@ -219,20 +219,20 @@ foreach ($user in $users) {
 }
 Write-Output "Bulk provisioning complete: $($users.Count) Users processed."</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/aduserprov-script.png" target="_blank" rel="noopener">
-            <img src="Images/aduserprov-script.png" alt="New-BulkADUsers.ps1 script in PowerShell ISE" />
+          <a class="shot" href="Images/ADUserProv1.png" target="_blank" rel="noopener">
+            <img src="Images/ADUserProv1.png" alt="New-BulkADUsers.ps1 script in PowerShell ISE" />
             <span class="shot-caption">Script — ISE</span>
           </a>
-          <a class="shot" href="Images/aduserprov-csv.png" target="_blank" rel="noopener">
-            <img src="Images/aduserprov-csv.png" alt="NewUsers.csv input file" />
+          <a class="shot" href="Images/ADUserProv2.png" target="_blank" rel="noopener">
+            <img src="Images/ADUserProv2.png" alt="NewUsers.csv input file" />
             <span class="shot-caption">Input CSV</span>
           </a>
-          <a class="shot" href="Images/aduserprov-run.png" target="_blank" rel="noopener">
-            <img src="Images/aduserprov-run.png" alt="PowerShell output showing bulk provisioning complete" />
+          <a class="shot" href="Images/ADUserProv3.png" target="_blank" rel="noopener">
+            <img src="Images/ADUserProv3.png" alt="PowerShell output showing bulk provisioning complete" />
             <span class="shot-caption">Script run</span>
           </a>
-          <a class="shot" href="Images/aduserprov-aduc.png" target="_blank" rel="noopener">
-            <img src="Images/aduserprov-aduc.png" alt="Active Directory Users and Computers showing new accounts" />
+          <a class="shot" href="Images/ADUserProv4.png" target="_blank" rel="noopener">
+            <img src="Images/ADUserProv4.png" alt="Active Directory Users and Computers showing new accounts" />
             <span class="shot-caption">Result in AD Users &amp; Computers</span>
           </a>
         </div>
@@ -255,12 +255,12 @@ Set-ADUser -Identity $Username -ChangePasswordAtLogon $true
 
 Write-Output "Password reset for $Username. Change-at-next-logon enforced."</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/passreset-script.png" target="_blank" rel="noopener">
-            <img src="Images/passreset-script.png" alt="Reset-UserPassword.ps1 script in PowerShell ISE" />
+          <a class="shot" href="Images/passreset1.png" target="_blank" rel="noopener">
+            <img src="Images/passreset1.png" alt="Reset-UserPassword.ps1 script in PowerShell ISE" />
             <span class="shot-caption">Script — ISE</span>
           </a>
-          <a class="shot" href="Images/passreset-run.png" target="_blank" rel="noopener">
-            <img src="Images/passreset-run.png" alt="PowerShell output confirming password reset" />
+          <a class="shot" href="Images/passreset2.png" target="_blank" rel="noopener">
+            <img src="Images/passreset2.png" alt="PowerShell output confirming password reset" />
             <span class="shot-caption">Script run</span>
           </a>
         </div>
@@ -284,16 +284,16 @@ Backup-GPO -All -Path $backupFolder | Select-Object DisplayName, Id, BackupDirec
 
 Write-Output "GPO backup completed: $backupFolder"</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/gpobackup-script.png" target="_blank" rel="noopener">
-            <img src="Images/gpobackup-script.png" alt="GPO-Backup.ps1 script in PowerShell ISE" />
+          <a class="shot" href="Images/gpobackup1.png" target="_blank" rel="noopener">
+            <img src="Images/gpobackup1.png" alt="GPO-Backup.ps1 script in PowerShell ISE" />
             <span class="shot-caption">Script — ISE</span>
           </a>
-          <a class="shot" href="Images/gpobackup-run.png" target="_blank" rel="noopener">
-            <img src="Images/gpobackup-run.png" alt="PowerShell output confirming GPO backup completed" />
+          <a class="shot" href="Images/gpobackup2.png" target="_blank" rel="noopener">
+            <img src="Images/gpobackup2.png" alt="PowerShell output confirming GPO backup completed" />
             <span class="shot-caption">Script run</span>
           </a>
-          <a class="shot" href="Images/gpobackup-manifest.png" target="_blank" rel="noopener">
-            <img src="Images/gpobackup-manifest.png" alt="BackupManifest.csv listing backed-up GPOs" />
+          <a class="shot" href="Images/gpobackup3.png" target="_blank" rel="noopener">
+            <img src="Images/gpobackup3.png" alt="BackupManifest.csv listing backed-up GPOs" />
             <span class="shot-caption">Backup manifest CSV</span>
           </a>
         </div>
@@ -316,16 +316,16 @@ foreach ($gpo in $allGPOs) {
 }
 Write-Output "Generated $($allGPOs.Count) GPO reports in $reportFolder"</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/gporeport-script.png" target="_blank" rel="noopener">
-            <img src="Images/gporeport-script.png" alt="GPO-Report.ps1 script in PowerShell ISE" />
+          <a class="shot" href="Images/gporeport1.png" target="_blank" rel="noopener">
+            <img src="Images/gporeport1.png" alt="GPO-Report.ps1 script in PowerShell ISE" />
             <span class="shot-caption">Script — ISE</span>
           </a>
-          <a class="shot" href="Images/gporeport-run.png" target="_blank" rel="noopener">
-            <img src="Images/gporeport-run.png" alt="PowerShell output confirming GPO reports generated" />
+          <a class="shot" href="Images/gporeport2.png" target="_blank" rel="noopener">
+            <img src="Images/gporeport2.png" alt="PowerShell output confirming GPO reports generated" />
             <span class="shot-caption">Script run</span>
           </a>
-          <a class="shot" href="Images/gporeport-folder.png" target="_blank" rel="noopener">
-            <img src="Images/gporeport-folder.png" alt="Folder of generated GPO HTML reports" />
+          <a class="shot" href="Images/gporeport3.png" target="_blank" rel="noopener">
+            <img src="Images/gporeport3.png" alt="Folder of generated GPO HTML reports" />
             <span class="shot-caption">Generated reports</span>
           </a>
         </div>
@@ -372,20 +372,20 @@ $($diskReport | ConvertTo-Html -Fragment)
 $html | Out-File -FilePath $reportPath -Encoding UTF8
 Write-Output "Report generated: $reportPath"</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/adsysreport-script.png" target="_blank" rel="noopener">
-            <img src="Images/adsysreport-script.png" alt="AD-SystemReport.ps1 script in PowerShell ISE" />
+          <a class="shot" href="Images/adsysreport1.png" target="_blank" rel="noopener">
+            <img src="Images/adsysreport1.png" alt="AD-SystemReport.ps1 script in PowerShell ISE" />
             <span class="shot-caption">Script — ISE</span>
           </a>
-          <a class="shot" href="Images/adsysreport-run.png" target="_blank" rel="noopener">
-            <img src="Images/adsysreport-run.png" alt="PowerShell output confirming report generated" />
+          <a class="shot" href="Images/adsysreport2.png" target="_blank" rel="noopener">
+            <img src="Images/adsysreport2.png" alt="PowerShell output confirming report generated" />
             <span class="shot-caption">Script run</span>
           </a>
-          <a class="shot" href="Images/adsysreport-contextmenu.png" target="_blank" rel="noopener">
-            <img src="Images/adsysreport-contextmenu.png" alt="File Explorer context menu opening the generated report" />
+          <a class="shot" href="Images/adsysreport3.png" target="_blank" rel="noopener">
+            <img src="Images/adsysreport3.png" alt="File Explorer context menu opening the generated report" />
             <span class="shot-caption">Opening the report</span>
           </a>
-          <a class="shot" href="Images/adsysreport-html.png" target="_blank" rel="noopener">
-            <img src="Images/adsysreport-html.png" alt="Rendered AD and System Report HTML output" />
+          <a class="shot" href="Images/adsysreport4.png" target="_blank" rel="noopener">
+            <img src="Images/adsysreport4.png" alt="Rendered AD and System Report HTML output" />
             <span class="shot-caption">Rendered report</span>
           </a>
         </div>
@@ -418,16 +418,16 @@ foreach ($name in $targets.Keys) {
     "$timestamp`t$name ($ip)`t$status" | Out-File -FilePath $logPath -Append
 }</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/healthcheck-script.png" target="_blank" rel="noopener">
-            <img src="Images/healthcheck-script.png" alt="Daily-HealthCheck.ps1 script in PowerShell ISE" />
+          <a class="shot" href="Images/healthcheck1.png" target="_blank" rel="noopener">
+            <img src="Images/healthcheck1.png" alt="Daily-HealthCheck.ps1 script in PowerShell ISE" />
             <span class="shot-caption">Script — ISE</span>
           </a>
-          <a class="shot" href="Images/healthcheck-run.png" target="_blank" rel="noopener">
-            <img src="Images/healthcheck-run.png" alt="PowerShell prompt after running the health check script" />
+          <a class="shot" href="Images/healthcheck2.png" target="_blank" rel="noopener">
+            <img src="Images/healthcheck2.png" alt="PowerShell prompt after running the health check script" />
             <span class="shot-caption">Script run</span>
           </a>
-          <a class="shot" href="Images/healthcheck-log.png" target="_blank" rel="noopener">
-            <img src="Images/healthcheck-log.png" alt="Daily health check log file showing UP status for all hosts" />
+          <a class="shot" href="Images/healthcheck3.png" target="_blank" rel="noopener">
+            <img src="Images/healthcheck3.png" alt="Daily health check log file showing UP status for all hosts" />
             <span class="shot-caption">Health check log</span>
           </a>
         </div>
@@ -466,12 +466,12 @@ $gpoTaskParams = @{
 }
 Register-ScheduledTask @gpoTaskParams</code></pre>
         <div class="shot-row">
-          <a class="shot" href="Images/schedtask-script.png" target="_blank" rel="noopener">
-            <img src="Images/schedtask-script.png" alt="ScheduledTaskAutomation.ps1 script in PowerShell ISE" />
+          <a class="shot" href="Images/schedau1.png" target="_blank" rel="noopener">
+            <img src="Images/schedau1.png" alt="ScheduledTaskAutomation.ps1 script in PowerShell ISE" />
             <span class="shot-caption">Script — ISE</span>
           </a>
-          <a class="shot" href="Images/schedtask-run.png" target="_blank" rel="noopener">
-            <img src="Images/schedtask-run.png" alt="PowerShell output listing the two registered scheduled tasks" />
+          <a class="shot" href="Images/schedau2.png" target="_blank" rel="noopener">
+            <img src="Images/schedau2.png" alt="PowerShell output listing the two registered scheduled tasks" />
             <span class="shot-caption">Registered tasks</span>
           </a>
         </div>
