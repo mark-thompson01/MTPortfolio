@@ -72,6 +72,7 @@
     pre code{background:none;border:none;padding:0;color:inherit}
 
     figure{margin:24px auto 32px;max-width:820px}
+    figure.figure-wide{max-width:1000px}
     figure img{
       width:100%; display:block; border-radius:var(--radius);
       border:1px solid var(--card-border); box-shadow:var(--shadow);
@@ -230,18 +231,18 @@ Switch001#write memory</code></pre>
 
     <h2><span class="step-num">4</span>Capturing Traffic with Wireshark</h2>
     <p>With the capture path in place, Wireshark was pointed at Ethernet 3 inside the capture VM to start pulling in the mirrored traffic.</p>
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span10.png" alt="Wireshark interface selection screen with Ethernet 3 available" onclick="openLightbox(this)">
       <figcaption>Wireshark's interface list, with Ethernet 3 (the SPAN feed) ready to capture on.</figcaption>
     </figure>
 
     <h3>First look: unfiltered capture</h3>
     <p>An unfiltered capture immediately showed a healthy amount of Layer 2 control-plane noise mixed in with real traffic — PVST+ BPDUs advertising the STP root bridge, ARP requests, and ICMP echo traffic between lab hosts.</p>
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span11.png" alt="Unfiltered Wireshark capture showing mixed STP, ARP, and ICMP traffic" onclick="openLightbox(this)">
       <figcaption>Unfiltered capture — STP, ARP, and ICMP all visible on the mirrored trunk.</figcaption>
     </figure>
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span12.png" alt="Wireshark capture showing PVST+ configuration BPDUs and an ARP who-has request" onclick="openLightbox(this)">
       <figcaption>PVST+ configuration BPDUs advertising root bridge priority per VLAN, alongside an ARP "who has" broadcast.</figcaption>
     </figure>
@@ -249,15 +250,15 @@ Switch001#write memory</code></pre>
     <h3>Cutting the noise: filtering out STP and ARP</h3>
     <p>Since Fa0/23 (the inter-switch trunk) was one of the mirrored sources, STP BPDUs and ARP broadcasts dominated the capture. A simple display filter cleared that out and left the traffic actually worth reading:</p>
     <pre><code>not stp and not arp</code></pre>
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span13.png" alt="Wireshark filtered to exclude STP and ARP, showing TCP retransmissions and DNS/TLS traffic" onclick="openLightbox(this)">
       <figcaption>With STP and ARP filtered out, TCP retransmissions and TLS application data stand out clearly.</figcaption>
     </figure>
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span14.png" alt="Filtered capture showing DNS queries and ICMP echo traffic" onclick="openLightbox(this)">
       <figcaption>DNS queries to Cloudflare (1.1.1.1) alongside ICMP echo request/reply pairs between lab hosts.</figcaption>
     </figure>
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span15.png" alt="Filtered capture showing SSDP notify traffic and DNS queries with TCP retransmissions" onclick="openLightbox(this)">
       <figcaption>SSDP discovery traffic and DNS queries, with TCP retransmissions to 192.168.10.5 worth a closer look.</figcaption>
     </figure>
@@ -280,19 +281,19 @@ Switch001#write memory</code></pre>
       </div>
     </div>
 
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span16icmp.png" alt="Wireshark ICMP filter showing echo request and reply traffic plus a destination unreachable response" onclick="openLightbox(this)">
       <figcaption>ICMP filter: steady echo traffic, with one Destination Unreachable (Port Unreachable) response.</figcaption>
     </figure>
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span17.png" alt="Wireshark DNS filter showing standard queries and Server failure responses for NTP pool hostnames" onclick="openLightbox(this)">
       <figcaption>DNS filter: NTP pool hostname lookups returning Server failure from the internal resolver.</figcaption>
     </figure>
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span18.png" alt="Wireshark SMB filter showing Host Announcement browser traffic naming DC01" onclick="openLightbox(this)">
       <figcaption>SMB filter: NetBIOS Host Announcements identifying DC01 as Workstation, Server, and Domain Controller.</figcaption>
     </figure>
-    <figure>
+    <figure class="figure-wide">
       <img src="Images/span19.png" alt="Wireshark SMB2 filter showing a negotiate and NTLMSSP authentication exchange ending in STATUS_LOGON_FAILURE" onclick="openLightbox(this)">
       <figcaption>SMB2 filter: negotiate → NTLMSSP authentication → STATUS_LOGON_FAILURE for a lab service account.</figcaption>
     </figure>
