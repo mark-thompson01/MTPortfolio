@@ -98,13 +98,34 @@
       margin:0 0 20px; border:1px solid var(--card-border); border-radius:12px;
       overflow:hidden; background:var(--term-bg); box-shadow:var(--shadow);
     }
-    figure.shot img{width:100%;display:block}
+    figure.shot img{width:100%;display:block;cursor:zoom-in;transition:opacity .15s ease}
+    figure.shot img:hover{opacity:.92}
     figure.shot figcaption{
       padding:9px 16px; font-size:0.78rem; color:var(--muted); border-top:1px solid var(--card-border);
       font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
       display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
     }
     figure.shot figcaption .file{color:#7f8ec9}
+
+    /* Enlarged screenshots: break out of the narrow content column for readability */
+    figure.shot.shot-lg{
+      width:92vw; max-width:1040px;
+      margin-left:50%; margin-right:0;
+      transform:translateX(-50%);
+    }
+
+    /* Lightbox zoom overlay */
+    #lightbox-overlay{
+      position:fixed; inset:0; background:rgba(6,8,12,0.92);
+      display:none; align-items:center; justify-content:center;
+      z-index:9999; padding:30px; cursor:zoom-out;
+    }
+    #lightbox-overlay.active{display:flex}
+    #lightbox-overlay img{
+      max-width:95vw; max-height:92vh; display:block;
+      border-radius:10px; border:1px solid var(--card-border);
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
 
     .summary-list{color:#c7cbd9;padding-left:22px;margin:0 0 18px}
     .summary-list li{margin-bottom:9px}
@@ -190,14 +211,14 @@
             <figcaption><span>Session opens on DC01</span><span class="file">start8.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>Get-ExecutionPolicy -List</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start9.png" alt="Get-ExecutionPolicy -List output showing LocalMachine RemoteSigned" loading="lazy" />
             <figcaption><span>Checking the current execution policy</span><span class="file">start9.png</span></figcaption>
           </figure>
           <p>LocalMachine is already set to RemoteSigned, meaning scripts downloaded from the internet must be signed, while locally created scripts run without restriction. This is the correct enterprise baseline. The policy is explicitly confirmed and set to ensure consistency.</p>
           <pre class="cmd-block"><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
 Get-ExecutionPolicy</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start10.png" alt="Set-ExecutionPolicy RemoteSigned confirmation and Get-ExecutionPolicy result" loading="lazy" />
             <figcaption><span>Setting and confirming RemoteSigned at LocalMachine scope</span><span class="file">start10.png</span></figcaption>
           </figure>
@@ -207,7 +228,7 @@ Get-ExecutionPolicy</code></pre>
           <h3>1.2 Module Verification</h3>
           <p>The key RSAT management modules are confirmed before proceeding. ActiveDirectory and DhcpServer were installed as part of the AD DS role setup. DnsServer is verified separately after importing the ActiveDirectory module.</p>
           <pre class="cmd-block"><code>Get-Module -ListAvailable | Where-Object {$_.Name -in @('ActiveDirectory','DHCPServer')} | Select-Object Name, Version, ModuleType</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start11.png" alt="Get-Module output listing ActiveDirectory and DhcpServer modules" loading="lazy" />
             <figcaption><span>Confirming ActiveDirectory and DhcpServer modules</span><span class="file">start11.png</span></figcaption>
           </figure>
@@ -224,51 +245,51 @@ Get-Module -ListAvailable | Where-Object {$_.Name -in @('ActiveDirectory','DHCPS
           <p>SRV-HYPERV-01 runs Windows 11 Pro and is not domain-joined. Establishing a remote PowerShell session requires two prerequisites: WinRM must be enabled on the host itself, and DC01 must trust it via the TrustedHosts list. Without TrustedHosts configured, Kerberos authentication fails because the host is outside the domain.</p>
           <p>The initial PSSession attempt fails with a Kerberos error because the switches were powered off, cutting the L2 path between the DC01 VM and SRV-HYPERV-01. Once network connectivity is restored, TrustedHosts is configured on DC01 and Enable-PSRemoting is run on the host.</p>
           <pre class="cmd-block"><code>Enter-PSSession -ComputerName SRV-HYPERV-01 -Credential (Get-Credential)</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start13.png" alt="Credential prompt for MT.Admin before the initial PSSession attempt" loading="lazy" />
             <figcaption><span>Initial attempt &mdash; credential prompt</span><span class="file">start13.png</span></figcaption>
           </figure>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start14.png" alt="Enter-PSSession failing with a Kerberos WinRM error, PSRemotingTransportException" loading="lazy" />
             <figcaption><span>Attempt fails &mdash; Kerberos error, switches were down</span><span class="file">start14.png</span></figcaption>
           </figure>
           <p>After powering on the switches and restoring network connectivity, Enable-PSRemoting is run on SRV-HYPERV-01 and TrustedHosts is configured on DC01.</p>
           <pre class="cmd-block"><code><span class="cmt"># On SRV-HYPERV-01 (run locally on the host):</span>
 Enable-PSRemoting -Force</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start1.png" alt="Enable-PSRemoting -Force run locally on SRV-HYPERV-01" loading="lazy" />
             <figcaption><span>Enabling PSRemoting on the host</span><span class="file">start1.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code><span class="cmt"># On DC01:</span>
 Set-Item WSMan:\localhost\Client\TrustedHosts -Value 'SRV-HYPERV-01' -Force
 Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start2.png" alt="Set-Item and Get-Item confirming TrustedHosts value SRV-HYPERV-01 on DC01" loading="lazy" />
             <figcaption><span>Adding SRV-HYPERV-01 to DC01's TrustedHosts</span><span class="file">start2.png</span></figcaption>
           </figure>
           <p>The PSSession is retried using the local Lab-Client account on SRV-HYPERV-01, since the host is not domain-joined and cannot authenticate domain credentials.</p>
           <pre class="cmd-block"><code>Enter-PSSession -ComputerName SRV-HYPERV-01 -Credential (Get-Credential)</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start3.png" alt="Credential prompt for the local Lab-Client account" loading="lazy" />
             <figcaption><span>Retry &mdash; credential prompt for local Lab-Client account</span><span class="file">start3.png</span></figcaption>
           </figure>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start4.png" alt="Remote session established, hostname confirms SRV-HYPERV-01" loading="lazy" />
             <figcaption><span>Session established &mdash; hostname confirms SRV-HYPERV-01</span><span class="file">start4.png</span></figcaption>
           </figure>
           <p>With the remote session established, a quick VM inventory is run to confirm Hyper-V management is accessible before exiting.</p>
           <pre class="cmd-block"><code>Get-VM</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start5.png" alt="Get-VM output listing pfSense, Ubuntu Server, Win11-Client, and Windows Server 2022 Eval" loading="lazy" />
             <figcaption><span>VM inventory via remote session</span><span class="file">start5.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>Get-VM | Select-Object Name, State, CPUUsage, MemoryAssigned, Uptime</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start6.png" alt="Get-VM piped to Select-Object showing formatted VM details" loading="lazy" />
             <figcaption><span>Formatted VM detail view</span><span class="file">start6.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>Exit-PSSession</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start7.png" alt="Exit-PSSession returns to DC01, hostname confirms DC01" loading="lazy" />
             <figcaption><span>Exiting the session &mdash; back on DC01</span><span class="file">start7.png</span></figcaption>
           </figure>
@@ -285,7 +306,7 @@ Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
           <h3>2.1 Domain Structure Query</h3>
           <p>The OU structure is queried to confirm the organizational layout built during the AD environment setup. This returns the full distinguished name path for each OU, which is important for GPO targeting and user placement.</p>
           <pre class="cmd-block"><code>Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/AD1.png" alt="Get-ADOrganizationalUnit output listing the OU structure" loading="lazy" />
             <figcaption><span>OU structure: Corp, Users, Engineering, HR, IT, Sales</span><span class="file">AD1.png</span></figcaption>
           </figure>
@@ -310,7 +331,7 @@ Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
             <figcaption><span>Domain Admins membership</span><span class="file">AD3.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>Get-ADGroupMember -Identity 'Protected Users' | Select-Object Name, SamAccountName</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/AD4.png" alt="Get-ADGroupMember for Protected Users showing MT.Admin, followed by detailed Get-ADUser query" loading="lazy" />
             <figcaption><span>Protected Users membership, plus MT.Admin attribute query below</span><span class="file">AD4.png</span></figcaption>
           </figure>
@@ -320,11 +341,11 @@ Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
           <h3>2.4 Full Group Inventory</h3>
           <p>All AD security groups are listed with their scope and category. This provides a complete view of the group structure including default built-in groups and the DHCP-related groups added when the DHCP Server role was installed.</p>
           <pre class="cmd-block"><code>Get-ADGroup -Filter * | Select-Object Name, GroupScope, GroupCategory</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/AD5.png" alt="Get-ADGroup output listing the full set of built-in and default AD security groups" loading="lazy" />
             <figcaption><span>Full group inventory (top of output)</span><span class="file">AD5.png</span></figcaption>
           </figure>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/AD6.png" alt="Get-ADGroup output continued, including DHCP Users and DHCP Administrators groups" loading="lazy" />
             <figcaption><span>Full group inventory (scrolled), including DHCP-related groups</span><span class="file">AD6.png</span></figcaption>
           </figure>
@@ -348,7 +369,7 @@ Get-ADUser -Identity 'Test.User' | Select-Object Name, SamAccountName, Enabled
 
 Set-ADUser -Identity 'Test.User' -Department 'IT' -Title 'Lab-Technician'
 Get-ADUser -Identity 'Test.User' -Properties Department, Title | Select-Object Name, Department, Title</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/usermgmt1.png" alt="New-ADUser creating Test.User, followed by Set-ADUser updating Department and Title" loading="lazy" />
             <figcaption><span>Provisioning Test.User and setting Department/Title</span><span class="file">usermgmt1.png</span></figcaption>
           </figure>
@@ -371,7 +392,7 @@ Get-ADUser -Identity 'Test.User' | Select-Object Name, Enabled</code></pre>
           <h3>3.1 Scope Inventory</h3>
           <p>All three VLAN scopes are returned with their subnet mask, state, lease range, and duration. Each scope maps directly to a VLAN SVI configured on the Cisco Catalyst 3550.</p>
           <pre class="cmd-block"><code>Get-DhcpServerv4Scope</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/dhcpadmin1.png" alt="Get-DhcpServerv4Scope output listing VLAN10-Servers, VLAN20-Infrastructure, and VLAN40-Clients scopes" loading="lazy" />
             <figcaption><span>Three VLAN scopes: Servers, Infrastructure, Clients</span><span class="file">dhcpadmin1.png</span></figcaption>
           </figure>
@@ -382,7 +403,7 @@ Get-ADUser -Identity 'Test.User' | Select-Object Name, Enabled</code></pre>
           <p>Scope statistics show current utilization across all three VLANs. VLAN 10 (Servers) shows zero leases as expected, since all server addresses are statically assigned. VLAN 20 (Infrastructure) and VLAN 40 (Clients) show active leases, confirming the DHCP relay configuration on the 3550 is functioning correctly.</p>
           <pre class="cmd-block"><code>Get-DhcpServerv4ScopeStatistics
 Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/dhcpadmin2.png" alt="Get-DhcpServerv4ScopeStatistics and Get-DhcpServerv4Lease output for the VLAN 40 client scope" loading="lazy" />
             <figcaption><span>Scope utilization and active leases on VLAN 40</span><span class="file">dhcpadmin2.png</span></figcaption>
           </figure>
@@ -409,7 +430,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
           <h3>4.1 Zone Inventory</h3>
           <p>All configured DNS zones are returned with their type, integration status, and direction. The mtlab.local forward zone is AD-integrated (IsDsIntegrated: True), which means zone data is stored in Active Directory and replicated automatically.</p>
           <pre class="cmd-block"><code>Get-DnsServerZone | Select-Object ZoneName, ZoneType, IsAutoCreated, IsDsIntegrated, IsReverseLookupZone</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/dnsadmin1.png" alt="Get-DnsServerZone output listing forward and reverse lookup zones" loading="lazy" />
             <figcaption><span>DNS zone inventory</span><span class="file">dnsadmin1.png</span></figcaption>
           </figure>
@@ -429,7 +450,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
           <h3>4.3 Resource Record Query</h3>
           <p>Resource records in the mtlab.local forward zone are listed. The output includes the standard AD SRV records for Kerberos, LDAP, and Global Catalog services, as well as A records for domain-joined machines including AGENT11, dc01, labclient0E, and MTClient1.</p>
           <pre class="cmd-block"><code>Get-DnsServerResourceRecord -ZoneName 'mtlab.local' | Select-Object HostName, RecordType, TimeToLive</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/dnsadmin3.png" alt="Get-DnsServerResourceRecord output listing SRV and A records for the mtlab.local zone" loading="lazy" />
             <figcaption><span>SRV and A records in the mtlab.local zone</span><span class="file">dnsadmin3.png</span></figcaption>
           </figure>
@@ -446,11 +467,11 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
           <h3>5.1 Remote Session</h3>
           <p>A new PSSession is opened to SRV-HYPERV-01 for Hyper-V management. The credential prompt accepts the local Lab-Client account. Connection is confirmed with hostname.</p>
           <pre class="cmd-block"><code>Enter-PSSession -ComputerName SRV-HYPERV-01 -Credential (Get-Credential)</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/hypervadmin1.png" alt="Credential prompt for the local Lab-Client account when opening the Hyper-V session" loading="lazy" />
             <figcaption><span>Credential prompt for Lab-Client</span><span class="file">hypervadmin1.png</span></figcaption>
           </figure>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/hypervadmin2.png" alt="Session established, hostname confirms SRV-HYPERV-01" loading="lazy" />
             <figcaption><span>Session confirmed via hostname</span><span class="file">hypervadmin2.png</span></figcaption>
           </figure>
@@ -460,7 +481,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
           <h3>5.2 VM Inventory</h3>
           <p>All four VMs on the Hyper-V host are returned with state, CPU usage, memory, and uptime. pfSense and Ubuntu Server are powered off. Win11-Client and Windows Server 2022 Eval are running with confirmed uptime and memory allocation.</p>
           <pre class="cmd-block"><code>Get-VM | Select-Object Name, State, CPUUsage, MemoryAssigned, Uptime</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/hypervadmin3.png" alt="Get-VM output listing pfSense (Off), Ubuntu Server (Off), Win11-Client (Running), and Windows Server 2022 Eval (Running)" loading="lazy" />
             <figcaption><span>VM inventory with state, CPU, memory, and uptime</span><span class="file">hypervadmin3.png</span></figcaption>
           </figure>
@@ -470,7 +491,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
           <h3>5.3 Virtual Switch Inventory</h3>
           <p>All virtual switches are returned with their type and bound physical adapter. This confirms the Hyper-V networking configuration documented in the Hyper-V Configuration section.</p>
           <pre class="cmd-block"><code>Get-VMSwitch | Select-Object Name, SwitchType, NetAdapterInterfaceDescription</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/hypervadmin4.png" alt="Get-VMSwitch output listing SPAN-Monitor, WAN_SWITCH, LAB_INTERNAL, and the default internal switch" loading="lazy" />
             <figcaption><span>Virtual switch configuration</span><span class="file">hypervadmin4.png</span></figcaption>
           </figure>
@@ -480,7 +501,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
           <h3>5.4 VM Disk Path</h3>
           <p>The VHDX path for the Ubuntu Server VM is queried to confirm the virtual disk location on the D: drive of SRV-HYPERV-01.</p>
           <pre class="cmd-block"><code>Get-VMHardDiskDrive -VMName 'Ubuntu Server' | Select-Object VMName, Path</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/hypervadmin5.png" alt="Get-VMHardDiskDrive output showing the Ubuntu Server VHDX path on the D: drive" loading="lazy" />
             <figcaption><span>Ubuntu Server VHDX location</span><span class="file">hypervadmin5.png</span></figcaption>
           </figure>
@@ -492,7 +513,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
           <pre class="cmd-block"><code>Exit-PSSession
 hostname
 whoami</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/hypervadmin6.png" alt="Exit-PSSession returns to DC01, hostname and whoami confirm DC01 and lab\mt.admin" loading="lazy" />
             <figcaption><span>Back on DC01 as lab\mt.admin</span><span class="file">hypervadmin6.png</span></figcaption>
           </figure>
@@ -571,7 +592,7 @@ Enable-PSRemoting -Force</code></pre>
           <h3>7.2 GPO Inventory</h3>
           <p>All GPOs in the domain are returned with their status and creation/modification timestamps. Six GPOs are confirmed: the two default policies created at domain promotion, and four custom GPOs configured for the lab environment.</p>
           <pre class="cmd-block"><code>Get-GPO -All | Select-Object DisplayName, GpoStatus, CreationTime, ModificationTime</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/gppsadmin1.png" alt="Get-GPO -All output listing six GPOs including default and custom policies" loading="lazy" />
             <figcaption><span>Full GPO inventory</span><span class="file">gppsadmin1.png</span></figcaption>
           </figure>
@@ -612,7 +633,7 @@ Get-GPO -Name 'Corp-Drive-Mapping' | Select-Object DisplayName, Id, GpoStatus</c
           <h3>7.6 Remote Policy Verification</h3>
           <p>The applied Group Policy result set is queried remotely from MTClient1 using Invoke-Command. This confirms which GPOs have been applied to both the computer and the currently logged-in user, and identifies any policies that were filtered out.</p>
           <pre class="cmd-block"><code>Invoke-Command -ComputerName MTClient1 -ScriptBlock { gpresult /r }</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/gppsadmin5.png" alt="Remote gpresult output showing computer settings and applied GPOs on MTClient1" loading="lazy" />
             <figcaption><span>Remote gpresult &mdash; computer settings</span><span class="file">gppsadmin5.png</span></figcaption>
           </figure>
@@ -657,5 +678,31 @@ Get-GPO -Name 'Corp-Drive-Mapping' | Select-Object DisplayName, Id, GpoStatus</c
       </div>
     </footer>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var overlay = document.createElement('div');
+      overlay.id = 'lightbox-overlay';
+      var lbImg = document.createElement('img');
+      lbImg.id = 'lightbox-img';
+      overlay.appendChild(lbImg);
+      document.body.appendChild(overlay);
+
+      document.querySelectorAll('figure.shot img').forEach(function (img) {
+        img.addEventListener('click', function () {
+          lbImg.src = img.getAttribute('src');
+          lbImg.alt = img.getAttribute('alt') || '';
+          overlay.classList.add('active');
+        });
+      });
+
+      overlay.addEventListener('click', function () {
+        overlay.classList.remove('active');
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') overlay.classList.remove('active');
+      });
+    });
+  </script>
 </body>
 </html>
