@@ -1,1 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Group Policy Administration · Mark Thompson Portfolio</title>
+  <meta name="description" content="Five Group Policy administration demonstrations in the mtlab.local domain: logon banner, account lockout policy, Control Panel restriction with security filtering, USB lockdown, and GPO-mapped network drives." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted); text-decoration:none; padding:12px 20px;
+      border-radius:12px; border:1px solid transparent; font-size:16px; font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .crumb{
+      max-width:820px;margin:0 auto 18px;text-align:center;
+      color:var(--muted);font-size:14px;
+    }
+    .crumb a{color:var(--muted);text-decoration:none}
+    .crumb a:hover{color:var(--brand)}
+    .crumb span.sep{margin:0 8px;color:#4a5573}
+
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,40px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(16px,2.2vw,18px);text-align:center}
+    .meta{color:var(--muted);font-size:14px;text-align:center;margin:0 0 40px}
+    .meta span{margin:0 10px}
+
+    .article{max-width:820px;margin:0 auto}
+    .article h2{
+      font-size:1.55rem; font-weight:800; color:var(--text);
+      margin:52px 0 6px; padding-bottom:12px; border-bottom:1px solid var(--card-border);
+    }
+    .article h2:first-child{margin-top:0}
+    .article h3{font-size:1.15rem;font-weight:700;color:var(--brand);margin:32px 0 10px}
+    .article h4{font-size:1rem;font-weight:700;color:var(--text);margin:24px 0 10px}
+    .article p{color:#c7cadb;font-size:1rem;margin:0 0 16px}
+    .article ul{color:#c7cadb;margin:0 0 16px;padding-left:22px}
+    .article li{margin:0 0 8px}
+    .article strong{color:var(--text)}
+    .article code{
+      background:rgba(77,163,255,.1); color:#8fc2ff; padding:2px 6px;
+      border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    }
+    .article pre{
+      background:#0c0e13; border:1px solid var(--card-border); border-radius:12px;
+      padding:14px 18px; overflow-x:auto; margin:0 0 20px;
+    }
+    .article pre code{background:none;padding:0;color:#8fc2ff}
+
+    .info-table{
+      width:100%; border-collapse:collapse; margin:12px 0 24px;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border); border-radius:14px; overflow:hidden;
+    }
+    .info-table th, .info-table td{
+      text-align:left; padding:12px 18px; font-size:.95rem; border-bottom:1px solid var(--card-border);
+    }
+    .info-table tr:last-child th, .info-table tr:last-child td{border-bottom:none}
+    .info-table th{color:var(--brand);font-weight:700;width:42%;background:rgba(77,163,255,.05)}
+    .info-table td{color:#c7cadb}
+
+    .shot{
+      margin:20px 0 28px; border:1px solid var(--card-border); border-radius:var(--radius);
+      overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      box-shadow:var(--shadow);
+    }
+    .shot img{display:block;width:100%;height:auto;border-bottom:1px solid var(--card-border);cursor:zoom-in;transition:opacity .15s ease}
+    .shot img:hover{opacity:.92}
+    .shot figcaption{padding:12px 18px;color:var(--muted);font-size:.9rem;line-height:1.5}
+
+    .lightbox{
+      display:none;position:fixed;inset:0;z-index:1000;background:rgba(8,10,14,.92);
+      align-items:center;justify-content:center;padding:40px 20px;cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:min(1400px,94vw); max-height:90vh; width:auto; height:auto;
+      border-radius:10px; border:1px solid var(--card-border); box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
+    .lightbox .lb-close{
+      position:fixed;top:22px;right:28px;width:44px;height:44px;border-radius:12px;
+      border:1px solid var(--card-border);background:rgba(255,255,255,.06);color:var(--text);
+      font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    }
+    .lightbox .lb-close:hover{background:rgba(255,255,255,.12)}
+
+    .callout{
+      border:1px solid #3a4a67; background:rgba(77,163,255,.06); border-radius:14px;
+      padding:14px 18px; margin:0 0 20px; color:#c7cadb; font-size:.95rem;
+    }
+    .callout strong{color:var(--brand)}
+
+    .lesson{
+      border:1px solid #55482a; background:rgba(255,193,77,.07); border-radius:14px;
+      padding:14px 18px; margin:20px 0; color:#d8cfc0; font-size:.95rem;
+    }
+    .lesson strong{color:#ffcf6b}
+
+    .pending{
+      border:1px dashed #4a5573; border-radius:14px; padding:16px 18px;
+      margin:16px 0 24px; color:var(--muted); font-size:.92rem; font-style:italic;
+    }
+
+    .summary-card{
+      border:1px solid var(--card-border); border-radius:var(--radius);
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      box-shadow:var(--shadow); padding:24px 28px; margin-top:16px;
+    }
+    .summary-card ul{margin-bottom:0}
+
+    footer{
+      margin-top:64px;padding-top:24px;padding-bottom:2px;border-top:1px solid #232a3a;
+      color:var(--muted);font-size:0.9rem;
+      background:linear-gradient(to bottom, rgba(20,24,33,0) 0%, rgba(20,24,33,0.65) 100%);
+      flex-shrink:0;
+    }
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin" class="active">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <p class="crumb">
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <span class="sep">/</span>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin/Active%20Directory%2C%20Group%20Policy%2C%20DNS%20%26%20DHCP%20Setup">Active Directory, Group Policy, DNS & DHCP Setup</a>
+      <span class="sep">/</span>
+      Group Policy Setup
+    </p>
+
+    <header>
+      <h1>Group Policy Administration</h1>
+      <p class="lead">Five day-to-day Group Policy demonstrations configured and verified in the mtlab.local domain.</p>
+      <p class="meta">
+        <span>Domain: mtlab.local</span>·
+        <span>Domain Controller: DC01</span>·
+        <span>OS: Windows Server 2022</span>
+      </p>
+    </header>
+
+    <article class="article">
+
+      <h2>Overview</h2>
+      <p>Group Policy is one of the most powerful administrative tools in a Windows domain environment. It allows a systems administrator to enforce settings, restrictions, and behaviors across users and computers from a central management console: the Group Policy Management Console (GPMC).</p>
+      <p>With that power comes an important lesson learned hands-on in this lab: Group Policy should be applied carefully, deliberately, and with a clear understanding of scope. Overly broad GPO links, misconfigured settings, or policies applied without proper security filtering can quickly cascade into unintended consequences across the domain. In this lab, that became evident when a Control Panel restriction initially blocked access for both standard users and administrative accounts, including access to Credential Manager, which in turn disrupted the mapped drive configuration workflow.</p>
+      <p>This document covers five fundamental Group Policy demonstrations configured in the mtlab.local domain, each representing day-to-day administrative use of Group Policy in a real-world environment. These demonstrations are intentionally administrative and operational in nature, distinct from the security-hardening GPO configurations covered separately in the AD Security Hardening lab.</p>
+
+      <h3>Demonstrations Covered</h3>
+      <ul>
+        <li>Logon Banner (Workstation-Logon-Banner GPO)</li>
+        <li>Account Lockout Policy (Default Domain Policy)</li>
+        <li>Restrict Control Panel for Standard Users (Corp-Users-Restrictions GPO)</li>
+        <li>Block Removable Storage, USB Lockdown (Corp-Workstation-Policy GPO)</li>
+        <li>Mapped Network Drive via GPO Preferences (Corp-Drive-Mapping GPO)</li>
+      </ul>
+
+      <table class="info-table">
+        <tr><th>Domain</th><td>mtlab.local</td></tr>
+        <tr><th>Domain Controller</th><td>DC01 (Windows Server 2022)</td></tr>
+        <tr><th>Client</th><td>Win11-Client (domain-joined Windows 11 Pro)</td></tr>
+        <tr><th>NAS</th><td>Raspberry Pi 3, Samba share, 192.168.10.20</td></tr>
+      </table>
+
+      <h2>1. Logon Banner</h2>
+      <h3>GPO: Workstation-Logon-Banner</h3>
+      <p>A logon banner is a standard administrative control used across enterprise environments to display a legal notice or usage policy before a user is permitted to log in. In this demonstration, a dedicated GPO is created and configured to display an "Authorized Use Only" message on the Windows 11 domain-joined client at the login screen.</p>
+
+      <p>Group Policy Management is accessed from Server Manager under Tools.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin1.png" alt="Server Manager Tools menu, Group Policy Management highlighted" loading="lazy">
+        <figcaption>Server Manager Tools menu — Group Policy Management highlighted.</figcaption>
+      </figure>
+
+      <p>With Group Policy Management open, right-clicking the domain (mtlab.local) presents the option to create a new GPO and link it here. This is where the Workstation-Logon-Banner GPO originates.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin2.png" alt="Right-click mtlab.local, Create a GPO in this domain and Link it here" loading="lazy">
+        <figcaption>Right-click mtlab.local — Create a GPO in this domain, and Link it here.</figcaption>
+      </figure>
+
+      <p>The New GPO dialog is used to name the policy. The name Workstation-Logon-Banner is entered and the GPO is created.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin3.png" alt="New GPO dialog, Name: Workstation-Logon-Banner" loading="lazy">
+        <figcaption>New GPO dialog — Name: Workstation-Logon-Banner.</figcaption>
+      </figure>
+
+      <p>The GPMC tree now shows the Workstation-Logon-Banner GPO linked at the domain level, visible alongside the Default Domain Policy.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin4.png" alt="GPMC tree showing Workstation-Logon-Banner linked at domain level" loading="lazy">
+        <figcaption>Workstation-Logon-Banner now linked at the domain level.</figcaption>
+      </figure>
+
+      <p>Right-clicking the GPO presents the context menu. Selecting Edit opens the Group Policy Management Editor for this policy.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin5.png" alt="Right-click Workstation-Logon-Banner, Edit option" loading="lazy">
+        <figcaption>Right-click Workstation-Logon-Banner — Edit.</figcaption>
+      </figure>
+
+      <p>The Group Policy Management Editor opens for the Workstation-Logon-Banner policy, showing the Computer Configuration and User Configuration hierarchy.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin6.png" alt="Group Policy Management Editor, Computer and User Configuration hierarchy" loading="lazy">
+        <figcaption>Group Policy Management Editor — Computer Configuration and User Configuration.</figcaption>
+      </figure>
+
+      <p>Navigating to Computer Configuration, Policies, Windows Settings, Security Settings, Local Policies, Security Options reveals the full list of security option policies. The two Interactive logon settings are located here: Message title for users attempting to log on and Message text for users attempting to log on.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin7.png" alt="Security Options list, Interactive logon message title and message text settings" loading="lazy">
+        <figcaption>Security Options — Interactive logon message title / message text settings.</figcaption>
+      </figure>
+
+      <p>Double-clicking the Message title setting opens its properties dialog. Define this policy setting is checked to activate it.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin8.png" alt="Message title properties dialog, Define this policy setting unchecked" loading="lazy">
+        <figcaption>Message title properties — before Define this policy setting is checked.</figcaption>
+      </figure>
+
+      <p>The title text "Authorized Use Only" is entered in the field below the checkbox.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin9.png" alt="Message title properties dialog, Authorized Use Only entered" loading="lazy">
+        <figcaption>Message title set to "Authorized Use Only."</figcaption>
+      </figure>
+
+      <p>Back in the Security Options list, the Message title now shows "Authorized Use Only" in the Policy Setting column. The Message text setting is highlighted next for configuration.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin10.png" alt="Security Options list, Message title now Authorized Use Only" loading="lazy">
+        <figcaption>Security Options list — Message title confirmed as "Authorized Use Only."</figcaption>
+      </figure>
+
+      <p>The Message text properties dialog is opened and the banner message is entered: "This system is for authorized users only. Unauthorized access is prohibited."</p>
+      <figure class="shot">
+        <img src="Images/gpadmin11.png" alt="Message text properties dialog, banner message entered" loading="lazy">
+        <figcaption>Message text properties — banner message entered.</figcaption>
+      </figure>
+
+      <p>Both settings are now configured. The Security Options list confirms the Message text truncated preview and the Message title set to "Authorized Use Only."</p>
+      <figure class="shot">
+        <img src="Images/gpadmin12.png" alt="Security Options list, both message title and message text configured" loading="lazy">
+        <figcaption>Both Interactive logon message settings now configured.</figcaption>
+      </figure>
+
+      <h4>Client-Side Verification</h4>
+      <p>With the GPO configured, <code>gpupdate /force</code> is run on the Windows 11 client to immediately pull the updated policy from the domain controller rather than waiting for the background refresh interval.</p>
+      <figure class="shot">
+        <img src="Images/gpupdate13.png" alt="gpupdate /force run on Win11 client, policy updated successfully" loading="lazy">
+        <figcaption>gpupdate /force — computer and user policy updated successfully.</figcaption>
+      </figure>
+
+      <p>After signing out, the logon banner appears on the Windows 11 client login screen before the user is permitted to authenticate. The banner displays the configured title "Authorized Use Only" and the accompanying message text, confirming the GPO applied successfully.</p>
+      <figure class="shot">
+        <img src="Images/gpupdate14.png" alt="Authorized Use Only logon banner on Windows 11 client login screen" loading="lazy">
+        <figcaption>"Authorized Use Only" logon banner confirmed on the Win11 client.</figcaption>
+      </figure>
+
+      <h2>2. Account Lockout Policy</h2>
+      <h3>GPO: Default Domain Policy</h3>
+      <p>Account lockout policy is a foundational domain security control that limits how many consecutive failed login attempts an account can accumulate before being temporarily locked. This protects domain accounts against brute-force and password-spraying attacks by enforcing an automatic lockout after a defined threshold.</p>
+      <div class="callout"><strong>Note:</strong> Account lockout policy must be configured at the domain level within the Default Domain Policy to apply to all domain accounts. Configuring it inside any other GPO or at an OU level will not affect domain accounts.</div>
+
+      <p>The Default Domain Policy is selected in the GPMC and its Scope tab is reviewed. The policy is linked to mtlab.local and applies to Authenticated Users, confirming domain-wide scope.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin15.png" alt="Default Domain Policy Scope tab, linked to mtlab.local, Authenticated Users" loading="lazy">
+        <figcaption>Default Domain Policy Scope tab — linked to mtlab.local, Authenticated Users.</figcaption>
+      </figure>
+
+      <p>The Default Domain Policy is opened for editing. The Group Policy Management Editor opens showing the Computer Configuration and User Configuration trees.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin16.png" alt="Group Policy Management Editor tree view for Default Domain Policy" loading="lazy">
+        <figcaption>Group Policy Management Editor — Default Domain Policy tree.</figcaption>
+      </figure>
+
+      <p>Navigating to Computer Configuration, Policies, Windows Settings, Security Settings, Account Policies, reveals the Account Lockout Policy node alongside Password Policy and Kerberos Policy.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin17.png" alt="Default Domain Policy, Account Policies node with Account Lockout Policy selected" loading="lazy">
+        <figcaption>Default Domain Policy — Account Policies node, Account Lockout Policy selected.</figcaption>
+      </figure>
+
+      <p>Clicking Account Lockout Policy displays the four configurable settings. All are initially at their default states: Account lockout threshold at 0 (disabled), duration and reset counter not defined.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin18.png" alt="Account Lockout Policy settings, all at default values" loading="lazy">
+        <figcaption>Account Lockout Policy — all four settings at default values.</figcaption>
+      </figure>
+
+      <p>Double-clicking Account lockout threshold opens its properties. The value is set to 5 invalid logon attempts, meaning an account will lock after 5 consecutive authentication failures.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin19.png" alt="Account lockout threshold properties, set to 5 invalid logon attempts" loading="lazy">
+        <figcaption>Account lockout threshold — set to 5 invalid logon attempts.</figcaption>
+      </figure>
+
+      <p>After setting the threshold, Windows automatically suggests values for the duration and reset counter. The Account lockout duration properties dialog is opened and set to 30 minutes, meaning a locked account automatically unlocks after 30 minutes.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin20.png" alt="Account lockout duration properties, set to 30 minutes" loading="lazy">
+        <figcaption>Account lockout duration — set to 30 minutes.</figcaption>
+      </figure>
+
+      <p>The Reset account lockout counter after properties dialog is opened and set to 15 minutes. This means the failed attempt counter resets back to zero after 15 minutes of no failed attempts.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin21.png" alt="Reset account lockout counter after properties, set to 15 minutes" loading="lazy">
+        <figcaption>Reset account lockout counter after — set to 15 minutes.</figcaption>
+      </figure>
+
+      <p>The Account Lockout Policy view now confirms all three values are configured: Account lockout duration at 30 minutes, Account lockout threshold at 5 invalid logon attempts, and Reset account lockout counter after at 15 minutes.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin22.png" alt="Account Lockout Policy view, all values configured and confirmed" loading="lazy">
+        <figcaption>All three Account Lockout Policy values confirmed.</figcaption>
+      </figure>
+
+      <div class="lesson"><strong>Note on FGPP:</strong> After configuring the domain-wide Account Lockout Policy, the MT.Admin account began receiving password expiration prompts at an unexpected interval. This was traced to the FGPP-DomainAdmins Fine-Grained Password Policy (PSO) configured in a previous lab, which had the Enforce maximum password age option checked and set to 42 days, matching the domain-wide password policy. Since MT.Admin is a member of Domain Admins, the FGPP was applying that expiration to it. The fix was to open Active Directory Administrative Center, navigate to the Password Settings Container, open FGPP-DomainAdmins, and uncheck Enforce maximum password age. Fine-Grained Password Policies allow different password controls to be applied per group, so administrative accounts can have different settings than standard domain users without one policy compromising the other.</div>
+
+      <h2>3. Restrict Control Panel for Standard Users</h2>
+      <h3>GPO: Corp-Users-Restrictions</h3>
+      <p>Restricting access to Control Panel and PC Settings for standard user accounts is a common administrative control in managed environments. It prevents standard users from modifying system settings, changing network configurations, or accessing sensitive areas of the operating system that are outside the scope of their role.</p>
+      <p>This demonstration also illustrates one of the most important lessons in Group Policy administration: the scope of a GPO must be deliberately controlled. An overly broad link combined with the default Authenticated Users security filtering caused this policy to apply to the MT.Admin account as well, blocking access to Credential Manager during the mapped drive configuration. The resolution involved configuring security filtering to scope the policy precisely to MT.User only.</p>
+
+      <h4>Creating and Configuring the GPO</h4>
+      <p>Right-clicking the domain in GPMC opens the context menu to create a new GPO. The New GPO dialog is used to name the policy Corp-Users-Restrictions.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin23.png" alt="Right-click mtlab.local, Create a GPO in this domain and Link it here" loading="lazy">
+        <figcaption>Right-click mtlab.local — Create a GPO in this domain, and Link it here.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/gpadmin24.png" alt="New GPO dialog, Name: Corp-Users-Restrictions" loading="lazy">
+        <figcaption>New GPO dialog — Name: Corp-Users-Restrictions.</figcaption>
+      </figure>
+
+      <p>Right-clicking the Corp-Users-Restrictions GPO opens the context menu. Edit is selected to open the Group Policy Management Editor.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin25.png" alt="Right-click Corp-Users-Restrictions, Edit option" loading="lazy">
+        <figcaption>Right-click Corp-Users-Restrictions — Edit.</figcaption>
+      </figure>
+
+      <p>Navigating to User Configuration, Policies, Administrative Templates, Control Panel reveals the available Control Panel policy settings. "Prohibit access to Control Panel and PC settings" is selected. The policy properties dialog opens in its default Not Configured state, then is switched to Enabled. This prevents Control Panel and PC Settings from launching on machines where the policy applies to the logged-in user.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin26.png" alt="Control Panel policy settings list, Prohibit access setting highlighted" loading="lazy">
+        <figcaption>Control Panel policy list — "Prohibit access to Control Panel and PC settings" selected.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/gpadmin27.png" alt="Prohibit access to Control Panel properties, Not Configured state" loading="lazy">
+        <figcaption>Prohibit access properties — default Not Configured state.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/gpadmin28.png" alt="Prohibit access to Control Panel properties, switched to Enabled" loading="lazy">
+        <figcaption>Setting switched to Enabled.</figcaption>
+      </figure>
+
+      <h4>Client-Side Verification</h4>
+      <p><code>gpupdate /force</code> is run on the Windows 11 client to immediately apply the updated policy. On the Windows 11 client, attempting to open Control Panel while logged in as MT.User triggers the restriction message: "This operation has been cancelled due to restrictions in effect on this computer. Please contact your system administrator." This confirms the GPO applied and is actively blocking Control Panel access.</p>
+      <figure class="shot">
+        <img src="Images/gpupdate29.png" alt="Searching for Control Panel on Windows 11 client as MT.User" loading="lazy">
+        <figcaption>Searching for Control Panel on the client, logged in as MT.User.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/gpupdate30.png" alt="Restrictions dialog blocking Control Panel access for MT.User" loading="lazy">
+        <figcaption>Restriction message — Control Panel access blocked for MT.User.</figcaption>
+      </figure>
+
+      <h4>Troubleshooting: Unintended Scope and Security Filtering</h4>
+      <p>After configuring the restriction, it became clear the policy was also affecting the MT.Admin account, blocking access to Control Panel and Credential Manager on the Windows 11 client. The root cause was that the GPO was linked at the domain root and applied to Authenticated Users by default, meaning it reached every authenticated account in the domain, not just standard users.</p>
+      <p>The resolution was to use security filtering to scope the GPO precisely to MT.User only.</p>
+
+      <p>The Corp-Users-Restrictions GPO is selected in GPMC. The Scope tab shows the current state: the GPO is linked to mtlab.local and Security Filtering shows Authenticated Users, which is why it applied broadly.</p>
+      <figure class="shot">
+        <img src="Images/sfil1.png" alt="Corp-Users-Restrictions Scope tab, Security Filtering shows Authenticated Users" loading="lazy">
+        <figcaption>Scope tab — Security Filtering currently set to Authenticated Users.</figcaption>
+      </figure>
+
+      <p>Clicking Remove on the Authenticated Users entry triggers a confirmation prompt.</p>
+      <figure class="shot">
+        <img src="Images/sfil2.png" alt="Confirmation prompt: Do you want to remove this delegation privilege" loading="lazy">
+        <figcaption>Confirmation prompt after clicking Remove on Authenticated Users.</figcaption>
+      </figure>
+
+      <p>A second prompt appears warning that removing Authenticated Users may prevent computers from reading the GPO data. This is an important warning: computer accounts still need read permission on the GPO for User Configuration settings to process correctly. For this lab the warning is acknowledged and the removal proceeds, with MT.User being added as the precise target.</p>
+      <figure class="shot">
+        <img src="Images/sfil3.png" alt="Warning about computer accounts needing read permission on GPO data" loading="lazy">
+        <figcaption>Warning — removing Authenticated Users may affect GPO read permissions.</figcaption>
+      </figure>
+
+      <p>The Select User, Computer, or Group dialog is used to add MT.User to Security Filtering, with the object name entered.</p>
+      <figure class="shot">
+        <img src="Images/sfil4.png" alt="Select User, Computer, or Group dialog, MT.User entered as Security Filtering target" loading="lazy">
+        <figcaption>Select User, Computer, or Group — MT.User entered as the Security Filtering target.</figcaption>
+      </figure>
+
+      <p><code>gpupdate /force</code> is run on the client to apply the corrected security filtering.</p>
+      <figure class="shot">
+        <img src="Images/sfil5.png" alt="gpupdate /force run on Win11 client after security filtering change" loading="lazy">
+        <figcaption>gpupdate /force — applying the corrected Security Filtering.</figcaption>
+      </figure>
+
+      <p>After <code>gpupdate /force</code> on the client, MT.Admin is now able to open Control Panel successfully, confirming the security filter is working correctly. MT.User still receives the restriction message when attempting to open Control Panel, confirming the policy continues to apply correctly to the intended account.</p>
+      <div class="pending">Closing screenshots confirming MT.Admin's restored Control Panel access and MT.User's continued restriction are still to be added.</div>
+
+      <div class="lesson"><strong>Key lesson:</strong> Group Policy scope must be intentional. The default Authenticated Users security filtering means a GPO linked at the domain root will reach every account in the domain. Security filtering is the mechanism for scoping a policy precisely to the intended principals. In production environments, this distinction matters significantly: misscoped policies can disrupt administrative accounts, service accounts, or entire OUs. Always verify the intended scope before linking a GPO, and use security filtering or OU-level linking rather than domain-root links for policies that target specific groups of users or computers.</div>
+
+      <h2>4. Block Removable Storage (USB Lockdown)</h2>
+      <h3>GPO: Corp-Workstation-Policy</h3>
+      <p>Blocking removable storage is a standard data loss prevention control in managed environments. By denying access to all removable storage classes via Group Policy, an administrator can prevent users from copying sensitive data to USB drives or introducing unauthorized media into the environment.</p>
+      <p>This setting is configured under Computer Configuration, meaning it applies to the machine rather than the user. Any user who logs into a workstation where this policy applies will be subject to the restriction regardless of their account.</p>
+
+      <p>Right-clicking the domain in GPMC opens the context menu to create a new GPO.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin31.png" alt="Right-click mtlab.local, Create a GPO in this domain and Link it here" loading="lazy">
+        <figcaption>Right-click mtlab.local — Create a GPO in this domain, and Link it here.</figcaption>
+      </figure>
+
+      <p>The New GPO dialog is used to name the policy Corp-Workstation-Policy.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin32.png" alt="New GPO dialog, Name: Corp-Workstation-Policy" loading="lazy">
+        <figcaption>New GPO dialog — Name: Corp-Workstation-Policy.</figcaption>
+      </figure>
+
+      <p>The GPMC tree now shows Corp-Workstation-Policy alongside the other configured GPOs, confirming it was created successfully.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin33.png" alt="GPMC tree showing Corp-Workstation-Policy present alongside other GPOs" loading="lazy">
+        <figcaption>Corp-Workstation-Policy confirmed present in the GPMC tree.</figcaption>
+      </figure>
+
+      <p>Right-clicking Corp-Workstation-Policy opens the context menu. Edit is selected to open the Group Policy Management Editor.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin34.png" alt="Right-click Corp-Workstation-Policy, Edit option" loading="lazy">
+        <figcaption>Right-click Corp-Workstation-Policy — Edit.</figcaption>
+      </figure>
+
+      <p>Navigating to Computer Configuration, Policies, Administrative Templates, System reveals the System subfolder list. Removable Storage Access is located in this list.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin35.png" alt="Navigating to System subfolder list in Group Policy Management Editor" loading="lazy">
+        <figcaption>Computer Configuration, Administrative Templates, System — subfolder list.</figcaption>
+      </figure>
+
+      <p>The Removable Storage Access node is selected, revealing the full list of removable storage policy settings. The setting "All Removable Storage classes: Deny all access" is visible in the list alongside more granular per-class settings.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin36.png" alt="Removable Storage Access settings list" loading="lazy">
+        <figcaption>Removable Storage Access — full list of removable storage policy settings.</figcaption>
+      </figure>
+
+      <p>Hovering over the setting shows the description panel explaining what the setting controls.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin37.png" alt="Hovering over a Removable Storage Access setting, description panel shown" loading="lazy">
+        <figcaption>Description panel for the selected Removable Storage Access setting.</figcaption>
+      </figure>
+
+      <p>Double-clicking the setting opens its properties dialog. The setting is switched to Enabled, denying access to removable storage devices on machines where this policy applies.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin38.png" alt="Removable Storage Access setting properties, switched to Enabled" loading="lazy">
+        <figcaption>Setting properties — switched to Enabled.</figcaption>
+      </figure>
+
+      <div class="callout"><strong>Note:</strong> USB lockdown was configured at the GPO level in this demonstration. A client-side verification screenshot showing a USB being blocked was not captured, as the configuration itself is the primary demonstration. In a production environment, verification would be confirmed by attempting to access a USB drive on a policy-applied workstation and observing the access denied result.</div>
+
+      <h2>5. Mapped Network Drive via GPO Preferences</h2>
+      <h3>GPO: Corp-Drive-Mapping</h3>
+      <p>Mapping network drives via Group Policy Preferences is a common sysadmin task in domain environments. Rather than requiring users to manually map drives or running logon scripts on every machine, GPO Preferences allow the drive mapping to be defined centrally and delivered automatically at logon.</p>
+      <p>In this demonstration, a shared folder on the Raspberry Pi 3 Samba NAS (192.168.10.20) is mapped as the S: drive for domain users. Because the Raspberry Pi is not domain-joined, it authenticates separately from the domain using a local Samba user account, which introduced additional steps that reflect a realistic real-world scenario involving non-domain file shares.</p>
+
+      <h4>Creating the GPO</h4>
+      <p>Right-clicking the domain in GPMC opens the context menu to create the Corp-Drive-Mapping GPO.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin39.png" alt="Right-click mtlab.local, Create a GPO in this domain and Link it here" loading="lazy">
+        <figcaption>Right-click mtlab.local — Create a GPO in this domain, and Link it here.</figcaption>
+      </figure>
+
+      <p>The New GPO dialog names the policy Corp-Drive-Mapping.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin40.png" alt="New GPO dialog, Name: Corp-Drive-Mapping" loading="lazy">
+        <figcaption>New GPO dialog — Name: Corp-Drive-Mapping.</figcaption>
+      </figure>
+
+      <p>The Corp OU is right-clicked to link the Corp-Drive-Mapping GPO to it, scoping the drive mapping to users and computers within the Corp organizational unit.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin41.png" alt="Right-click Corp OU, Create a GPO in this domain and Link it here" loading="lazy">
+        <figcaption>Right-click the Corp OU — Create a GPO in this domain, and Link it here.</figcaption>
+      </figure>
+
+      <p>The Select GPO dialog shows all available GPOs. Corp-Drive-Mapping is selected for linking.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin42.png" alt="Select GPO dialog, Corp-Drive-Mapping selected for linking" loading="lazy">
+        <figcaption>Select GPO dialog — Corp-Drive-Mapping selected.</figcaption>
+      </figure>
+
+      <p>The Corp OU now shows Corp-Drive-Mapping linked with Link Order 1, confirming it is the first policy applied at this OU level.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin43.png" alt="Corp OU showing Corp-Drive-Mapping linked with Link Order 1" loading="lazy">
+        <figcaption>Corp-Drive-Mapping linked to the Corp OU at Link Order 1.</figcaption>
+      </figure>
+
+      <p>Right-clicking Corp-Drive-Mapping opens the context menu. Edit is selected to open the Group Policy Management Editor.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin44.png" alt="Right-click Corp-Drive-Mapping, Edit option" loading="lazy">
+        <figcaption>Right-click Corp-Drive-Mapping — Edit.</figcaption>
+      </figure>
+
+      <h4>Configuring the Drive Map Preference</h4>
+      <p>In the Group Policy Management Editor, navigating to User Configuration, Preferences, Windows Settings, Drive Maps reveals the Drive Maps node. There are no items configured yet.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin45.png" alt="Drive Maps node in Group Policy Management Editor, no items configured" loading="lazy">
+        <figcaption>Drive Maps node — no items configured yet.</figcaption>
+      </figure>
+
+      <p>Using the Action menu, New, Mapped Drive creates a new drive map preference item.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin46.png" alt="Action menu, New, Mapped Drive" loading="lazy">
+        <figcaption>Action menu — New, Mapped Drive.</figcaption>
+      </figure>
+
+      <p>The New Drive Properties dialog is configured: Action set to Create, Location set to the Samba NAS share path, Reconnect checked, Label set to Shared, and the drive letter assigned to S:.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin47.png" alt="New Drive Properties dialog, Action Create, Location NAS share path, Label Shared, Drive Letter S" loading="lazy">
+        <figcaption>New Drive Properties — Action: Create, Location: \\192.168.10.20\NAS, Label: Shared, Drive Letter: S:.</figcaption>
+      </figure>
+
+      <p>The Common tab of the drive map preference item shows "Run in logged-on user's security context" is checked. This is required for the preference to process in the correct user session context, which is particularly important when mapping to non-domain shares where the credentials must match the logged-in user context.</p>
+      <figure class="shot">
+        <img src="Images/gpadmin48.png" alt="Common tab, Run in logged-on user's security context checked" loading="lazy">
+        <figcaption>Common tab — "Run in logged-on user's security context" checked.</figcaption>
+      </figure>
+
+      <h4>Troubleshooting: Non-Domain Share Authentication and UAC Session Isolation</h4>
+      <p>After configuring the GPO Preference, the S: drive did not appear in File Explorer on the Windows 11 client even after <code>gpupdate /force</code> and a reboot. The GPO was confirmed applied via <code>gpresult /r</code>, ruling out a delivery problem. The issue was specific to how Windows handles authentication to non-domain SMB shares combined with UAC session isolation.</p>
+      <p>Because the Raspberry Pi is not domain-joined, Windows cannot authenticate to its Samba share using domain credentials. A separate set of credentials (the local pi Samba account) must be provided. Additionally, drive mappings created in an elevated session do not appear in File Explorer running in a standard user context due to UAC session isolation: elevated and non-elevated processes run in different security contexts and do not share drive mappings.</p>
+      <p>The resolution was to store the Pi credentials in Windows Credential Manager under MT.Admin (once Control Panel access was restored via security filtering), and then map the drive using <code>net use</code> in a non-elevated Command Prompt running as MT.User.</p>
+
+      <p>Credential Manager is accessed from Control Panel to store the Raspberry Pi credentials.</p>
+      <figure class="shot">
+        <img src="Images/sfil6.png" alt="Credential Manager open on Windows 11 client, no Windows credentials stored yet" loading="lazy">
+        <figcaption>Credential Manager, opened from Control Panel — no Windows credentials stored yet.</figcaption>
+      </figure>
+
+      <p>The Add a Windows credential dialog is completed with the network address 192.168.10.20, username pi, and the Samba password. These stored credentials allow Windows to authenticate automatically to the Pi share.</p>
+      <figure class="shot">
+        <img src="Images/sfil7.png" alt="Add a Windows Credential dialog, network address 192.168.10.20, username pi" loading="lazy">
+        <figcaption>Add a Windows Credential — 192.168.10.20, username pi.</figcaption>
+      </figure>
+
+      <p>The <code>net use</code> command is run in a non-elevated Command Prompt as MT.User to map the drive in the correct security context:</p>
+      <pre><code>net use S: \\192.168.10.20\NAS /user:pi /persistent:yes</code></pre>
+      <p>After running the command in the correct context, File Explorer on the Windows 11 client shows the S: drive mapped to NAS (\\192.168.10.20) under Network locations, displaying available storage. This confirms the share is accessible.</p>
+      <figure class="shot">
+        <img src="Images/sfil8.png" alt="net use command completed successfully, File Explorer showing S: drive mapped to NAS" loading="lazy">
+        <figcaption>net use completed successfully — S: drive mapped to NAS (\\192.168.10.20) in File Explorer.</figcaption>
+      </figure>
+
+      <p>After a reboot, the S: drive mapping persists and is still visible under Network locations in This PC, confirming the <code>/persistent:yes</code> flag held the mapping across the session.</p>
+      <figure class="shot">
+        <img src="Images/sfil9AfterReboot.png" alt="This PC after reboot, S: drive to NAS still mapped and persistent" loading="lazy">
+        <figcaption>S: drive mapping confirmed persistent after reboot.</figcaption>
+      </figure>
+
+      <div class="lesson"><strong>Key lesson:</strong> GPO Preferences drive maps work well for domain-joined file shares. When mapping to non-domain shares such as a Samba NAS, two factors must be accounted for: the credentials must be stored in Windows Credential Manager for the target user session, and the net use command must be executed in the same non-elevated user context that File Explorer runs in. Attempting to map a drive in an elevated session will not make it visible in a standard user File Explorer window. In production environments, this scenario is common when mapping drives to Linux-based NAS devices or third-party file servers that are not integrated with Active Directory.</div>
+
+      <h2>Summary</h2>
+      <p>This lab demonstrated five Group Policy configurations representing common administrative use cases in a Windows domain environment. Each GPO was created, configured, linked, and verified against a domain-joined Windows 11 client running in the mtlab.local lab environment.</p>
+      <p>The troubleshooting encountered across this lab, particularly the security filtering issue with the Control Panel restriction and the non-domain authentication challenge with the mapped drive, reflects the real-world complexity of Group Policy administration. These are not edge cases: they are the kinds of situations that arise regularly when managing GPOs in environments with mixed account types, non-domain infrastructure, or policies that interact with each other in unexpected ways.</p>
+
+      <div class="summary-card">
+        <p style="margin-bottom:10px"><strong>The core takeaway from this lab:</strong></p>
+        <p style="margin-bottom:0">Group Policy is a force multiplier: it can enforce consistent configurations across hundreds of machines with a single setting. But that same reach makes precision essential. Understanding GPO scope, security filtering, link placement, and the difference between Computer Configuration and User Configuration settings is what separates effective Group Policy administration from configurations that create more problems than they solve.</p>
+      </div>
+
+      <p style="margin-top:24px"><em>Security-hardening GPO configurations including NTLMv2 enforcement, SMB signing, Kerberos AES encryption, anonymous enumeration restrictions, and Advanced Audit Policy are covered separately in the AD Security Hardening lab under the Security section.</em></p>
+
+    </article>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lb-close" id="lbClose">&times;</div>
+    <img id="lbImg" src="" alt="">
+  </div>
+
+  <script>
+    (function(){
+      var lightbox = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lbImg');
+      var lbClose = document.getElementById('lbClose');
+
+      document.querySelectorAll('.shot img').forEach(function(img){
+        img.addEventListener('click', function(){
+          lbImg.src = img.getAttribute('src');
+          lbImg.alt = img.getAttribute('alt') || '';
+          lightbox.classList.add('open');
+        });
+      });
+
+      function closeLightbox(){
+        lightbox.classList.remove('open');
+        lbImg.src = '';
+      }
+
+      lightbox.addEventListener('click', closeLightbox);
+      lbClose.addEventListener('click', function(e){
+        e.stopPropagation();
+        closeLightbox();
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape') closeLightbox();
+      });
+    })();
+  </script>
+</body>
+</html>
