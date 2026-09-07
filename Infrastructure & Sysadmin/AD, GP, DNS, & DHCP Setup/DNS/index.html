@@ -1,1 +1,606 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DNS Server Role Setup · Mark Thompson Portfolio</title>
+  <meta name="description" content="Configuring DNS forwarders and reverse lookup zones on DC01.mtlab.local." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+      --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:900px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumb{color:var(--muted);font-size:14px;margin:0 0 22px}
+    .crumb a{color:var(--muted);text-decoration:none}
+    .crumb a:hover{color:var(--brand)}
+    .crumb span{margin:0 6px;color:#4a5169}
+
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,40px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 8px;font-size:clamp(16px,2.2vw,18px);max-width:70ch}
+    .meta{color:#7f8599;font-size:14px;margin:0 0 40px;font-family:var(--mono)}
+
+    h2{
+      font-size:clamp(22px,3vw,26px);
+      font-weight:700;
+      margin:56px 0 14px;
+      padding-bottom:10px;
+      border-bottom:1px solid var(--card-border);
+    }
+    h3{
+      font-size:18px;
+      font-weight:700;
+      color:#cdd2e3;
+      margin:28px 0 10px;
+    }
+    p{color:#c7cadb;margin:0 0 16px;max-width:74ch}
+    ul{margin:0 0 16px;padding-left:22px;color:#c7cadb}
+    li{margin:0 0 6px;max-width:70ch}
+    strong{color:var(--text)}
+    code{
+      font-family:var(--mono);
+      background:rgba(77,163,255,.1);
+      color:#8fc4ff;
+      padding:2px 6px;
+      border-radius:6px;
+      font-size:.92em;
+    }
+
+    /* Terminal block for CLI config */
+    .term{
+      background:#0a0c11;
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      padding:18px 20px;
+      margin:0 0 20px;
+      overflow-x:auto;
+      box-shadow:var(--shadow);
+    }
+    .term pre{
+      margin:0;
+      font-family:var(--mono);
+      font-size:13.5px;
+      line-height:1.7;
+      color:#9fe6a0;
+      white-space:pre;
+    }
+
+    /* Callout */
+    .callout{
+      background:linear-gradient(180deg,rgba(77,163,255,.07),rgba(77,163,255,.03));
+      border:1px solid #2a3a55;
+      border-left:3px solid var(--brand);
+      border-radius:12px;
+      padding:16px 20px;
+      margin:0 0 20px;
+    }
+    .callout p{margin:0;color:#c7cadb;max-width:none}
+
+    /* Figures / screenshots */
+    figure{
+      margin:22px 0 28px;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      padding:14px;
+      box-shadow:var(--shadow);
+    }
+    figure img{
+      display:block;
+      width:100%;
+      height:auto;
+      border-radius:10px;
+      border:1px solid #232a3a;
+      cursor:zoom-in;
+      transition:filter .15s ease;
+    }
+    figure img:hover{filter:brightness(1.05)}
+    figcaption{
+      color:var(--muted);
+      font-size:14px;
+      margin-top:10px;
+      padding:0 4px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    figcaption .zoom-hint{
+      color:#6b7188;
+      font-size:12px;
+      margin-left:auto;
+      white-space:nowrap;
+    }
+
+    /* Two-up figure row */
+    .fig-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+    @media (max-width:720px){
+      .fig-row{grid-template-columns:1fr}
+    }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0;
+      background:rgba(6,8,12,.92);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:1000;
+      padding:40px 20px;
+      cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:min(1400px,94vw);
+      max-height:88vh;
+      border-radius:10px;
+      border:1px solid #333c52;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
+    .lightbox .lb-close{
+      position:fixed;
+      top:22px; right:28px;
+      color:#e6e7ee;
+      font-size:28px;
+      line-height:1;
+      background:rgba(255,255,255,.08);
+      border:1px solid #333c52;
+      width:44px; height:44px;
+      border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+    }
+    .lightbox .lb-close:hover{background:rgba(255,255,255,.15)}
+    .lightbox .lb-caption{
+      position:fixed;
+      bottom:26px; left:0; right:0;
+      text-align:center;
+      color:var(--muted);
+      font-size:14px;
+      padding:0 20px;
+    }
+
+    /* Summary card list, matches parent page's numbered-item styling */
+    .step-list{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      margin:18px 0 24px;
+    }
+    .step-item{
+      display:flex;
+      gap:16px;
+      align-items:flex-start;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:14px;
+      padding:16px 18px;
+    }
+    .step-num{
+      flex:0 0 auto;
+      width:32px; height:32px;
+      border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:.95rem;
+      color:var(--brand);
+      background:rgba(77,163,255,.08);
+      border:1px solid #2a3a55;
+    }
+    .step-body p{margin:0;color:#c7cadb}
+    .step-body strong{display:block;color:var(--text);margin-bottom:2px}
+
+    /* Prev/Next nav */
+    .pagenav{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      margin-top:56px;
+      padding-top:24px;
+      border-top:1px solid var(--card-border);
+    }
+    .pagenav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:15px;
+      padding:12px 18px;
+      border-radius:12px;
+      border:1px solid var(--card-border);
+      max-width:45%;
+    }
+    .pagenav a:hover{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.04)}
+    .pagenav .dir{display:block;color:#6b7188;font-size:12px;margin-bottom:3px}
+    .pagenav .next{margin-left:auto;text-align:right}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin" class="active">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <p class="crumb">
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <span>/</span>
+      <a href="/MTPortfolio/Infrastructure%20&%20Sysadmin/AD,%20GP,%20DNS,%20&%20DHCP%20Setup">Active Directory, Group Policy, DNS & DHCP Setup</a>
+      <span>/</span>
+      DNS Server Role Setup
+    </p>
+
+    <header>
+      <h1>DNS Server Role Setup</h1>
+      <p class="lead">Configuring DNS forwarders for external resolution and building out reverse lookup zones for every active VLAN on DC01.mtlab.local.</p>
+      <p class="meta">MTPortfolio Lab &nbsp;|&nbsp; DC01.mtlab.local &nbsp;|&nbsp; Windows Server 2022 Standard Evaluation</p>
+    </header>
+
+    <section>
+      <h2>Overview</h2>
+      <p>The DNS Server role was installed alongside Active Directory Domain Services during the original domain controller promotion. When a Windows Server is promoted to a domain controller, DNS is a required dependency: Active Directory uses DNS for everything from domain controller location to replication to service record registration. The role was already present and running on DC01 before any of the configuration steps covered here.</p>
+      <p>What was left to do was configure DNS to behave correctly for the lab environment. That meant three things:</p>
+      <div class="step-list">
+        <div class="step-item">
+          <span class="step-num">1</span>
+          <div class="step-body"><p>Reviewing the existing forward lookup zone and its records</p></div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">2</span>
+          <div class="step-body"><p>Configuring forwarders so the DNS server could resolve external names</p></div>
+        </div>
+        <div class="step-item">
+          <span class="step-num">3</span>
+          <div class="step-body"><p>Creating reverse lookup zones for each active subnet</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Reviewing the Forward Lookup Zone</h2>
+      <p>DNS Manager was opened from Server Manager via <strong>Tools</strong>. The initial view showed DNS &gt; DC01 in the tree.</p>
+
+      <figure>
+        <img src="Images/winsrvdns1.png" alt="Server Manager Tools menu open on DC01, showing DNS and other installed role consoles" data-caption="Server Manager &gt; Tools menu on DC01, with DNS listed alongside the other installed roles.">
+        <figcaption>Server Manager &gt; Tools menu on DC01, with DNS listed alongside the other installed roles.<span class="zoom-hint">Click to zoom</span></figcaption>
+      </figure>
+
+      <figure>
+        <img src="Images/winsrvdns2.png" alt="DNS Manager initial view showing DNS and DC01 in the tree" data-caption="DNS Manager's initial view: DNS &gt; DC01, before expanding the zone tree.">
+        <figcaption>DNS Manager's initial view: DNS &gt; DC01, before expanding the zone tree.<span class="zoom-hint">Click to zoom</span></figcaption>
+      </figure>
+
+      <p>Expanding DC01 revealed the standard zone structure that Active Directory creates automatically during domain promotion:</p>
+      <ul>
+        <li>Forward Lookup Zones</li>
+        <li>Reverse Lookup Zones (empty at this point)</li>
+        <li>Trust Points</li>
+        <li>Conditional Forwarders</li>
+      </ul>
+      <p>Under Forward Lookup Zones, two zones were present: <code>_msdcs.mtlab.local</code> and <code>mtlab.local</code>. The <code>_msdcs</code> zone is an AD-integrated zone that holds service records for domain controller discovery. The <code>mtlab.local</code> zone is the primary forward lookup zone for the domain.</p>
+
+      <figure>
+        <img src="Images/winsrvdns3.png" alt="mtlab.local forward lookup zone expanded showing SOA, NS, and Host A records" data-caption="mtlab.local zone records: SOA, NS, and the dc01 and MTClient1 Host (A) entries.">
+        <figcaption>mtlab.local zone records: SOA, NS, and the dc01 and MTClient1 Host (A) entries.<span class="zoom-hint">Click to zoom</span></figcaption>
+      </figure>
+
+      <p>Clicking on <code>mtlab.local</code> showed the existing records: the Start of Authority (SOA) for dc01.mtlab.local, the Name Server (NS) record for dc01.mtlab.local, a Host (A) record for dc01 at 192.168.20.10 (static), and a Host (A) record for MTClient1 at 192.168.50.101. The MTClient1 record was a dynamically registered record from a prior lab session, confirming that domain-joined clients were registering themselves in DNS correctly.</p>
+    </section>
+
+    <section>
+      <h2>Configuring DNS Forwarders</h2>
+      <p>By default, a DNS server that cannot resolve a name from its own zones will attempt to use root hints to walk down the DNS hierarchy and find the authoritative server for the queried name. For a lab environment, it is simpler and faster to configure explicit forwarders: upstream DNS servers that handle external resolution.</p>
+      <p>To configure forwarders, DC01 was right-clicked in the DNS Manager tree and <strong>Properties</strong> was selected.</p>
+
+      <figure>
+        <img src="Images/winsrvdns4.png" alt="Right-click context menu on DC01 in DNS Manager showing Properties and other server-level options" data-caption="Right-clicking DC01 in the DNS Manager tree to reach server Properties.">
+        <figcaption>Right-clicking DC01 in the DNS Manager tree to reach server Properties.<span class="zoom-hint">Click to zoom</span></figcaption>
+      </figure>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns5.png" alt="DC01 Properties dialog on the Forwarders tab with an empty forwarder list" data-caption="Forwarders tab on the DC01 Properties dialog — empty before any forwarders are added.">
+          <figcaption>Empty forwarder list.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns6.png" alt="Edit Forwarders dialog with 8.8.8.8 and 1.1.1.1 being added and validated" data-caption="Edit Forwarders dialog: 8.8.8.8 and 1.1.1.1 added and validating.">
+          <figcaption>Adding 8.8.8.8 and 1.1.1.1.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <p>The Properties dialog opened on the Forwarders tab with an empty list. Clicking <strong>Edit</strong> opened the Edit Forwarders dialog, where two forwarder addresses were added:</p>
+      <ul>
+        <li>8.8.8.8 (Google Public DNS)</li>
+        <li>1.1.1.1 (Cloudflare DNS)</li>
+      </ul>
+      <p>Both entries showed "Attempting to resolve... Validating..." while the server attempted to verify connectivity to the forwarders. This is expected behavior at configuration time.</p>
+
+      <figure>
+        <img src="Images/winsrvdns7.png" alt="DC01 Properties Forwarders tab showing 8.8.8.8 and 1.1.1.1 listed after being added" data-caption="Forwarders tab after applying the change, with both addresses listed and root hints left as fallback.">
+        <figcaption>Forwarders tab after applying the change, with both addresses listed and root hints left as fallback.<span class="zoom-hint">Click to zoom</span></figcaption>
+      </figure>
+
+      <p>After clicking OK and returning to the Forwarders tab, both addresses were listed with "Attempting to resolve..." shown in the Server FQDN column, which resolves once the server successfully contacts them. With forwarders configured, DNS queries for names outside the mtlab.local zone would be forwarded to 8.8.8.8 and 1.1.1.1 rather than relying on root hints. External resolution from domain-joined lab machines would now work correctly.</p>
+    </section>
+
+    <section>
+      <h2>Creating Reverse Lookup Zones</h2>
+      <p>Forward lookup zones resolve names to IP addresses. Reverse lookup zones do the opposite: they resolve IP addresses back to names. Reverse DNS is used by many tools and services for logging, authentication, and verification. In an Active Directory environment, having reverse lookup zones configured for your subnets is considered good practice, and some services rely on it for proper operation.</p>
+      <p>Three reverse lookup zones were created, one for each active VLAN subnet:</p>
+      <ul>
+        <li>192.168.10.0/24 (VLAN 10 Servers): <code>10.168.192.in-addr.arpa</code></li>
+        <li>192.168.20.0/24 (VLAN 20 Infrastructure): <code>20.168.192.in-addr.arpa</code></li>
+        <li>192.168.40.0/24 (VLAN 40 Clients): <code>40.168.192.in-addr.arpa</code></li>
+      </ul>
+      <p>Each zone was created using the New Zone Wizard, launched by right-clicking Reverse Lookup Zones in the DNS Manager tree and selecting New Zone. The same wizard settings were used for all three zones:</p>
+
+      <div class="callout">
+        <p><strong>Settings applied to all three zones —</strong> Primary zone with "Store the zone in Active Directory" checked; replication scope set to "To all DNS servers running on domain controllers in this domain: mtlab.local"; IPv4 Reverse Lookup Zone; and "Allow only secure dynamic updates," since nonsecure updates would let any client on the network register DNS records without authentication.</p>
+      </div>
+
+      <h3>Zone 1 — VLAN 10 Servers (10.168.192.in-addr.arpa)</h3>
+      <p>The wizard was launched from the Reverse Lookup Zones node, with Primary zone and Active Directory storage selected, followed by the replication scope and reverse lookup zone type.</p>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns8.png" alt="Right-click on Reverse Lookup Zones in DNS Manager, selecting New Zone" data-caption="Launching the New Zone Wizard from Reverse Lookup Zones.">
+          <figcaption>Launching the wizard.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns9.png" alt="Welcome to the New Zone Wizard screen" data-caption="Welcome screen of the New Zone Wizard.">
+          <figcaption>Welcome to the New Zone Wizard.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns10.png" alt="Zone Type step with Primary zone and Store the zone in Active Directory selected" data-caption="Zone Type: Primary zone, stored in Active Directory.">
+          <figcaption>Zone Type: Primary, AD-integrated.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns11.png" alt="Active Directory Zone Replication Scope set to all DNS servers in the domain" data-caption="Replication scope: all DNS servers running on domain controllers in mtlab.local.">
+          <figcaption>Replication scope: domain-wide.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns12.png" alt="Reverse Lookup Zone Name step, IPv4 Reverse Lookup Zone selected" data-caption="IPv4 Reverse Lookup Zone selected.">
+          <figcaption>IPv4 zone type selected.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns13.png" alt="Network ID entered as 192.168.10, generating zone name 10.168.192.in-addr.arpa" data-caption="Network ID 192.168.10 entered, generating 10.168.192.in-addr.arpa.">
+          <figcaption>Network ID: 192.168.10.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns14.png" alt="Dynamic Update step with Allow only secure dynamic updates selected" data-caption="Dynamic Update: secure updates only.">
+          <figcaption>Secure dynamic updates only.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns15.png" alt="Completing the New Zone Wizard for 10.168.192.in-addr.arpa" data-caption="Completing the wizard for 10.168.192.in-addr.arpa.">
+          <figcaption>Zone 1 complete.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <h3>Zone 2 — VLAN 20 Infrastructure (20.168.192.in-addr.arpa)</h3>
+      <p>The same wizard flow was repeated for VLAN 20, with the first zone now visible and running in the background.</p>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns16.png" alt="Zone Type step for the second zone, with zone 1 already listed as running" data-caption="Zone Type step, with 10.168.192.in-addr.arpa already Running.">
+          <figcaption>Zone Type — zone 1 already active.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns17.png" alt="Active Directory Zone Replication Scope for the second zone" data-caption="Replication scope selected for the second zone.">
+          <figcaption>Replication scope.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns18.png" alt="Reverse Lookup Zone Name step, IPv4 selected for the second zone" data-caption="IPv4 Reverse Lookup Zone selected for the second zone.">
+          <figcaption>IPv4 zone type selected.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns19.png" alt="Network ID entered as 192.168.20, generating zone name 20.168.192.in-addr.arpa" data-caption="Network ID 192.168.20 entered, generating 20.168.192.in-addr.arpa.">
+          <figcaption>Network ID: 192.168.20.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns20.png" alt="Dynamic Update step for the second zone with secure updates selected" data-caption="Dynamic Update: secure updates only.">
+          <figcaption>Secure dynamic updates only.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns21.png" alt="Completing the New Zone Wizard for 20.168.192.in-addr.arpa" data-caption="Completing the wizard for 20.168.192.in-addr.arpa.">
+          <figcaption>Zone 2 complete.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <h3>Zone 3 — VLAN 40 Clients (40.168.192.in-addr.arpa)</h3>
+      <p>The final zone followed the same pattern, with the first two zones now visible and running.</p>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns22.png" alt="Zone Type step for the third zone, with two zones already listed as running" data-caption="Zone Type step, with both prior zones already Running.">
+          <figcaption>Zone Type — zones 1 &amp; 2 already active.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winservdns23.png" alt="Active Directory Zone Replication Scope for the third zone" data-caption="Replication scope selected for the third zone.">
+          <figcaption>Replication scope.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrv23.png" alt="Reverse Lookup Zone Name step, IPv4 selected for the third zone" data-caption="IPv4 Reverse Lookup Zone selected for the third zone.">
+          <figcaption>IPv4 zone type selected.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns23.png" alt="Network ID entered as 192.168.40, generating zone name 40.168.192.in-addr.arpa" data-caption="Network ID 192.168.40 entered, generating 40.168.192.in-addr.arpa.">
+          <figcaption>Network ID: 192.168.40.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <div class="fig-row">
+        <figure>
+          <img src="Images/winsrvdns24.png" alt="Dynamic Update step for the third zone with secure updates selected" data-caption="Dynamic Update: secure updates only.">
+          <figcaption>Secure dynamic updates only.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+        <figure>
+          <img src="Images/winsrvdns25.png" alt="Completing the New Zone Wizard for 40.168.192.in-addr.arpa" data-caption="Completing the wizard for 40.168.192.in-addr.arpa.">
+          <figcaption>Zone 3 complete.<span class="zoom-hint">Click to zoom</span></figcaption>
+        </figure>
+      </div>
+
+      <p>Each zone was completed in sequence. After all three reverse lookup zones were created, the Reverse Lookup Zones folder in DNS Manager showed all three zones with their full in-addr.arpa names, each running as an Active Directory-Integrated Primary zone.</p>
+
+      <figure>
+        <img src="Images/winsrvdns26.png" alt="DNS Manager showing all three reverse lookup zones as Active Directory-Integrated Primary and Running" data-caption="All three reverse lookup zones — 10.168.192, 20.168.192, and 40.168.192.in-addr.arpa — Active Directory-Integrated and Running.">
+        <figcaption>All three reverse lookup zones running.<span class="zoom-hint">Click to zoom</span></figcaption>
+      </figure>
+
+      <p>With the reverse lookup zones in place, DNS on DC01 was now configured to handle both forward name resolution for the mtlab.local domain, external forwarding for names outside the lab, and reverse resolution for all three active subnets.</p>
+    </section>
+
+    <section>
+      <h2>Summary</h2>
+      <p>The DNS configuration on DC01.mtlab.local followed the standard Active Directory pattern: the forward lookup zone and its records were created automatically during domain promotion, forwarders were added for external resolution, and reverse lookup zones were manually created for each subnet. Storing all zones as Active Directory-integrated zones ensures the DNS data replicates through the same replication topology as the rest of the domain, rather than requiring separate DNS zone transfer configuration.</p>
+      <p>With DNS fully configured, the next piece of the lab's core infrastructure was DHCP: bringing IP address assignment for all three VLANs under DC01 and getting cross-VLAN leases working through an IP helper-address relay on the layer 3 switch.</p>
+    </section>
+
+    <nav class="pagenav" aria-label="Page navigation">
+      <a href="/MTPortfolio/Infrastructure%20&%20Sysadmin/AD,%20GP,%20DNS,%20&%20DHCP%20Setup">
+        <span class="dir">↑ Back to</span>
+        Active Directory, Group Policy, DNS & DHCP Setup
+      </a>
+      <a class="next" href="/MTPortfolio/Infrastructure%20&%20Sysadmin/AD,%20GP,%20DNS,%20&%20DHCP%20Setup/DHCP%20Server%20Role%20Setup">
+        <span class="dir">Next →</span>
+        DHCP Server Role Setup
+      </a>
+    </nav>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lb-close" id="lbClose">&times;</div>
+    <img id="lbImg" src="" alt="">
+    <div class="lb-caption" id="lbCaption"></div>
+  </div>
+
+  <script>
+    (function(){
+      var lb = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lbImg');
+      var lbCaption = document.getElementById('lbCaption');
+      var lbClose = document.getElementById('lbClose');
+
+      function openLightbox(src, caption){
+        lbImg.src = src;
+        lbImg.alt = caption || '';
+        lbCaption.textContent = caption || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLightbox(){
+        lb.classList.remove('open');
+        lbImg.src = '';
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('figure img').forEach(function(img){
+        img.addEventListener('click', function(){
+          openLightbox(img.getAttribute('src'), img.getAttribute('data-caption') || img.getAttribute('alt'));
+        });
+      });
+
+      lb.addEventListener('click', function(e){
+        if(e.target === lb){ closeLightbox(); }
+      });
+      lbClose.addEventListener('click', closeLightbox);
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape'){ closeLightbox(); }
+      });
+    })();
+  </script>
+</body>
+</html>
 
