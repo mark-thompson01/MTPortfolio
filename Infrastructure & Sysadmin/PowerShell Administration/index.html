@@ -531,7 +531,7 @@ whoami</code></pre>
           <p>Filesystem drives are queried to confirm available space on DC01. The C: drive shows approximately 16.7GB used and 109.8GB free.</p>
           <pre class="cmd-block"><code>Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free</code></pre>
           <figure class="shot">
-            <img src="Images/SysH_R1.png" alt="Get-PSDrive output showing used and free space on the C and D drives" loading="lazy" />
+            <img src="Images/SysH&R1.png" alt="Get-PSDrive output showing used and free space on the C and D drives" loading="lazy" />
             <figcaption><span>Disk space on DC01</span><span class="file">SysH_R1.png</span></figcaption>
           </figure>
         </div>
@@ -541,7 +541,7 @@ whoami</code></pre>
           <p>The five critical domain controller services are checked: Active Directory Web Services (ADWS), DHCP, DNS, Netlogon, and Windows Time (W32Time). All five are confirmed Running with Automatic start type.</p>
           <pre class="cmd-block"><code>Get-Service ADWS, DNS, DHCP, Netlogon, W32Time | Select-Object Name, Status, StartType</code></pre>
           <figure class="shot">
-            <img src="Images/SysH_R2.png" alt="Get-Service output showing ADWS, DHCP, DNS, Netlogon, and W32Time all Running" loading="lazy" />
+            <img src="Images/SysH&R2.png" alt="Get-Service output showing ADWS, DHCP, DNS, Netlogon, and W32Time all Running" loading="lazy" />
             <figcaption><span>Critical DC services status</span><span class="file">SysH_R2.png</span></figcaption>
           </figure>
         </div>
@@ -551,7 +551,7 @@ whoami</code></pre>
           <p>The 10 most recent System event log errors are returned. The majority are NETLOGON errors from AGENT11 and LABCLIENT0E, which are expected in a lab environment where machines come online and offline. Two Microsoft-Windows-Time-Service entries from 6/22 indicate minor time sync events, both benign.</p>
           <pre class="cmd-block"><code>Get-EventLog -LogName System -EntryType Error -Newest 10 | Select-Object TimeGenerated, Source, Message</code></pre>
           <figure class="shot">
-            <img src="Images/SysH_R3.png" alt="Get-EventLog output listing the 10 most recent System error events" loading="lazy" />
+            <img src="Images/SysH&R3.png" alt="Get-EventLog output listing the 10 most recent System error events" loading="lazy" />
             <figcaption><span>Most recent System event log errors</span><span class="file">SysH_R3.png</span></figcaption>
           </figure>
         </div>
@@ -561,7 +561,7 @@ whoami</code></pre>
           <p>DC01 uptime is calculated by subtracting the last boot time from the current date/time. The server had been running for approximately 15 hours at the time of the health check.</p>
           <pre class="cmd-block"><code>(Get-Date) - (gcim Win32_OperatingSystem).LastBootUpTime</code></pre>
           <figure class="shot">
-            <img src="Images/SysH_R4.png" alt="TimeSpan output showing DC01 uptime of approximately 15 hours" loading="lazy" />
+            <img src="Images/SysH&R4.png" alt="TimeSpan output showing DC01 uptime of approximately 15 hours" loading="lazy" />
             <figcaption><span>DC01 uptime calculation</span><span class="file">SysH_R4.png</span></figcaption>
           </figure>
         </div>
