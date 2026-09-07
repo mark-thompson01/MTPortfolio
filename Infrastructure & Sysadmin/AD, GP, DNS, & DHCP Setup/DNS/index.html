@@ -139,16 +139,6 @@
       white-space:nowrap;
     }
 
-    /* Two-up figure row */
-    .fig-row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:18px;
-    }
-    @media (max-width:720px){
-      .fig-row{grid-template-columns:1fr}
-    }
-
     /* Lightbox */
     .lightbox{
       position:fixed; inset:0;
@@ -219,28 +209,6 @@
     }
     .step-body p{margin:0;color:#c7cadb}
     .step-body strong{display:block;color:var(--text);margin-bottom:2px}
-
-    /* Prev/Next nav */
-    .pagenav{
-      display:flex;
-      justify-content:space-between;
-      gap:16px;
-      margin-top:56px;
-      padding-top:24px;
-      border-top:1px solid var(--card-border);
-    }
-    .pagenav a{
-      color:var(--muted);
-      text-decoration:none;
-      font-size:15px;
-      padding:12px 18px;
-      border-radius:12px;
-      border:1px solid var(--card-border);
-      max-width:45%;
-    }
-    .pagenav a:hover{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.04)}
-    .pagenav .dir{display:block;color:#6b7188;font-size:12px;margin-bottom:3px}
-    .pagenav .next{margin-left:auto;text-align:right}
 
     /* Footer */
     footer{
@@ -363,8 +331,7 @@
         <figcaption>Right-clicking DC01 in the DNS Manager tree to reach server Properties.<span class="zoom-hint">Click to zoom</span></figcaption>
       </figure>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns5.png" alt="DC01 Properties dialog on the Forwarders tab with an empty forwarder list" data-caption="Forwarders tab on the DC01 Properties dialog — empty before any forwarders are added.">
           <figcaption>Empty forwarder list.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -372,7 +339,6 @@
           <img src="Images/winsrvdns6.png" alt="Edit Forwarders dialog with 8.8.8.8 and 1.1.1.1 being added and validated" data-caption="Edit Forwarders dialog: 8.8.8.8 and 1.1.1.1 added and validating.">
           <figcaption>Adding 8.8.8.8 and 1.1.1.1.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
       <p>The Properties dialog opened on the Forwarders tab with an empty list. Clicking <strong>Edit</strong> opened the Edit Forwarders dialog, where two forwarder addresses were added:</p>
       <ul>
@@ -407,8 +373,7 @@
       <h3>Zone 1 — VLAN 10 Servers (10.168.192.in-addr.arpa)</h3>
       <p>The wizard was launched from the Reverse Lookup Zones node, with Primary zone and Active Directory storage selected, followed by the replication scope and reverse lookup zone type.</p>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns8.png" alt="Right-click on Reverse Lookup Zones in DNS Manager, selecting New Zone" data-caption="Launching the New Zone Wizard from Reverse Lookup Zones.">
           <figcaption>Launching the wizard.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -416,10 +381,8 @@
           <img src="Images/winsrvdns9.png" alt="Welcome to the New Zone Wizard screen" data-caption="Welcome screen of the New Zone Wizard.">
           <figcaption>Welcome to the New Zone Wizard.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns10.png" alt="Zone Type step with Primary zone and Store the zone in Active Directory selected" data-caption="Zone Type: Primary zone, stored in Active Directory.">
           <figcaption>Zone Type: Primary, AD-integrated.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -427,10 +390,8 @@
           <img src="Images/winsrvdns11.png" alt="Active Directory Zone Replication Scope set to all DNS servers in the domain" data-caption="Replication scope: all DNS servers running on domain controllers in mtlab.local.">
           <figcaption>Replication scope: domain-wide.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns12.png" alt="Reverse Lookup Zone Name step, IPv4 Reverse Lookup Zone selected" data-caption="IPv4 Reverse Lookup Zone selected.">
           <figcaption>IPv4 zone type selected.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -438,10 +399,8 @@
           <img src="Images/winsrvdns13.png" alt="Network ID entered as 192.168.10, generating zone name 10.168.192.in-addr.arpa" data-caption="Network ID 192.168.10 entered, generating 10.168.192.in-addr.arpa.">
           <figcaption>Network ID: 192.168.10.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns14.png" alt="Dynamic Update step with Allow only secure dynamic updates selected" data-caption="Dynamic Update: secure updates only.">
           <figcaption>Secure dynamic updates only.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -449,13 +408,11 @@
           <img src="Images/winsrvdns15.png" alt="Completing the New Zone Wizard for 10.168.192.in-addr.arpa" data-caption="Completing the wizard for 10.168.192.in-addr.arpa.">
           <figcaption>Zone 1 complete.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
       <h3>Zone 2 — VLAN 20 Infrastructure (20.168.192.in-addr.arpa)</h3>
       <p>The same wizard flow was repeated for VLAN 20, with the first zone now visible and running in the background.</p>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns16.png" alt="Zone Type step for the second zone, with zone 1 already listed as running" data-caption="Zone Type step, with 10.168.192.in-addr.arpa already Running.">
           <figcaption>Zone Type — zone 1 already active.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -463,10 +420,8 @@
           <img src="Images/winsrvdns17.png" alt="Active Directory Zone Replication Scope for the second zone" data-caption="Replication scope selected for the second zone.">
           <figcaption>Replication scope.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns18.png" alt="Reverse Lookup Zone Name step, IPv4 selected for the second zone" data-caption="IPv4 Reverse Lookup Zone selected for the second zone.">
           <figcaption>IPv4 zone type selected.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -474,10 +429,8 @@
           <img src="Images/winsrvdns19.png" alt="Network ID entered as 192.168.20, generating zone name 20.168.192.in-addr.arpa" data-caption="Network ID 192.168.20 entered, generating 20.168.192.in-addr.arpa.">
           <figcaption>Network ID: 192.168.20.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns20.png" alt="Dynamic Update step for the second zone with secure updates selected" data-caption="Dynamic Update: secure updates only.">
           <figcaption>Secure dynamic updates only.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -485,13 +438,11 @@
           <img src="Images/winsrvdns21.png" alt="Completing the New Zone Wizard for 20.168.192.in-addr.arpa" data-caption="Completing the wizard for 20.168.192.in-addr.arpa.">
           <figcaption>Zone 2 complete.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
       <h3>Zone 3 — VLAN 40 Clients (40.168.192.in-addr.arpa)</h3>
       <p>The final zone followed the same pattern, with the first two zones now visible and running.</p>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns22.png" alt="Zone Type step for the third zone, with two zones already listed as running" data-caption="Zone Type step, with both prior zones already Running.">
           <figcaption>Zone Type — zones 1 &amp; 2 already active.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -499,10 +450,8 @@
           <img src="Images/winservdns23.png" alt="Active Directory Zone Replication Scope for the third zone" data-caption="Replication scope selected for the third zone.">
           <figcaption>Replication scope.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrv23.png" alt="Reverse Lookup Zone Name step, IPv4 selected for the third zone" data-caption="IPv4 Reverse Lookup Zone selected for the third zone.">
           <figcaption>IPv4 zone type selected.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -510,10 +459,8 @@
           <img src="Images/winsrvdns23.png" alt="Network ID entered as 192.168.40, generating zone name 40.168.192.in-addr.arpa" data-caption="Network ID 192.168.40 entered, generating 40.168.192.in-addr.arpa.">
           <figcaption>Network ID: 192.168.40.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
-      <div class="fig-row">
-        <figure>
+      <figure>
           <img src="Images/winsrvdns24.png" alt="Dynamic Update step for the third zone with secure updates selected" data-caption="Dynamic Update: secure updates only.">
           <figcaption>Secure dynamic updates only.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
@@ -521,7 +468,6 @@
           <img src="Images/winsrvdns25.png" alt="Completing the New Zone Wizard for 40.168.192.in-addr.arpa" data-caption="Completing the wizard for 40.168.192.in-addr.arpa.">
           <figcaption>Zone 3 complete.<span class="zoom-hint">Click to zoom</span></figcaption>
         </figure>
-      </div>
 
       <p>Each zone was completed in sequence. After all three reverse lookup zones were created, the Reverse Lookup Zones folder in DNS Manager showed all three zones with their full in-addr.arpa names, each running as an Active Directory-Integrated Primary zone.</p>
 
@@ -538,17 +484,6 @@
       <p>The DNS configuration on DC01.mtlab.local followed the standard Active Directory pattern: the forward lookup zone and its records were created automatically during domain promotion, forwarders were added for external resolution, and reverse lookup zones were manually created for each subnet. Storing all zones as Active Directory-integrated zones ensures the DNS data replicates through the same replication topology as the rest of the domain, rather than requiring separate DNS zone transfer configuration.</p>
       <p>With DNS fully configured, the next piece of the lab's core infrastructure was DHCP: bringing IP address assignment for all three VLANs under DC01 and getting cross-VLAN leases working through an IP helper-address relay on the layer 3 switch.</p>
     </section>
-
-    <nav class="pagenav" aria-label="Page navigation">
-      <a href="/MTPortfolio/Infrastructure%20&%20Sysadmin/AD,%20GP,%20DNS,%20&%20DHCP%20Setup">
-        <span class="dir">↑ Back to</span>
-        Active Directory, Group Policy, DNS & DHCP Setup
-      </a>
-      <a class="next" href="/MTPortfolio/Infrastructure%20&%20Sysadmin/AD,%20GP,%20DNS,%20&%20DHCP%20Setup/DHCP%20Server%20Role%20Setup">
-        <span class="dir">Next →</span>
-        DHCP Server Role Setup
-      </a>
-    </nav>
 
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
@@ -603,4 +538,3 @@
   </script>
 </body>
 </html>
-
