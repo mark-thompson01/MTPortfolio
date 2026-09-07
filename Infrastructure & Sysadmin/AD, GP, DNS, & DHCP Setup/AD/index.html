@@ -125,21 +125,57 @@
       width:100%;
       height:auto;
       border-bottom:1px solid var(--card-border);
+      cursor:zoom-in;
+      transition:opacity .15s ease;
     }
+    .shot img:hover{opacity:.92}
     .shot figcaption{
       padding:12px 18px;
       color:var(--muted);
       font-size:.9rem;
       line-height:1.5;
     }
-    .shot-row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:20px;
+
+    /* Lightbox */
+    .lightbox{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:1000;
+      background:rgba(8,10,14,.92);
+      align-items:center;
+      justify-content:center;
+      padding:40px 20px;
+      cursor:zoom-out;
     }
-    @media (max-width:720px){
-      .shot-row{grid-template-columns:1fr}
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:min(1400px,94vw);
+      max-height:90vh;
+      width:auto;
+      height:auto;
+      border-radius:10px;
+      border:1px solid var(--card-border);
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
     }
+    .lightbox .lb-close{
+      position:fixed;
+      top:22px;
+      right:28px;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      border:1px solid var(--card-border);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      font-size:22px;
+      line-height:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+    .lightbox .lb-close:hover{background:rgba(255,255,255,.12)}
 
     /* Callout */
     .callout{
@@ -229,7 +265,6 @@
     </header>
 
     <article class="article">
-
       <h2>Overview</h2>
       <p>With the Hyper-V host configured and the Windows Server 2022 virtual machine deployed on SRV-HYPER-01, the next step in the lab build was to stand up Active Directory Domain Services (AD DS) and promote the server to a domain controller. This document covers the full process: installing the AD DS role through Server Manager, running the AD DS Configuration Wizard to promote the VM to a domain controller for a new forest, and then building out the initial Active Directory environment with an organizational unit structure, user accounts, and basic account security hardening.</p>
       <p>The domain established for the lab is mtlab.local, with DC01.mtlab.local serving as the primary domain controller at IP address 192.168.20.10. All work documented here was performed inside the Windows Server 2022 VM running on the Hyper-V host.</p>
@@ -249,30 +284,34 @@
       <p>Before the server can be promoted to a domain controller, the Active Directory Domain Services role must be installed. This is done through the Add Roles and Features Wizard in Server Manager.</p>
 
       <h3>Launching the Wizard</h3>
-      <p>From the Server Manager Dashboard, the Add Roles and Features Wizard was launched. The destination server shown at this stage is DC01.mtlab.local at 192.168.20.10, running Windows Server 2022 Standard Evaluation.</p>
+      <p>From the Server Manager Dashboard, the Add Roles and Features Wizard was launched. At this point the server already had DHCP, DNS, and File and Storage Services roles in place, with AD DS still to be added.</p>
       <figure class="shot">
-        <img src="Images/ADSetup12.png" alt="Add Roles and Features Wizard, Before You Begin page, DC01.mtlab.local" loading="lazy">
+        <img src="Images/ADSetup1.png" alt="Server Manager Dashboard before AD DS role installation" loading="lazy">
+        <figcaption>Server Manager Dashboard before the AD DS role is added.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/ADSetup2.png" alt="Add Roles and Features Wizard, Before You Begin page, DC01.mtlab.local" loading="lazy">
         <figcaption>Add Roles and Features Wizard — Before You Begin page, DC01.mtlab.local.</figcaption>
       </figure>
 
       <h3>Installation Type</h3>
       <p>Role-based or feature-based installation was selected, which configures a single server by adding roles, role services, and features.</p>
       <figure class="shot">
-        <img src="Images/ADSetup13.png" alt="Select installation type, Role-based or feature-based installation selected" loading="lazy">
+        <img src="Images/ADSetup3.png" alt="Select installation type, Role-based or feature-based installation selected" loading="lazy">
         <figcaption>Role-based or feature-based installation selected.</figcaption>
       </figure>
 
       <h3>Server Selection</h3>
       <p>DC01.mtlab.local was selected from the server pool as the destination server for the role installation.</p>
       <figure class="shot">
-        <img src="Images/ADSetup14.png" alt="Select destination server, DC01.mtlab.local" loading="lazy">
+        <img src="Images/ADSetup4.png" alt="Select destination server, DC01.mtlab.local" loading="lazy">
         <figcaption>DC01.mtlab.local / 192.168.20.10 / Windows Server 2022 Standard Evaluation.</figcaption>
       </figure>
 
       <h3>Selecting the AD DS Role</h3>
       <p>On the Server Roles page, Active Directory Domain Services was selected from the roles list.</p>
       <figure class="shot">
-        <img src="Images/ADSetup15.png" alt="Select server roles list, no roles selected yet" loading="lazy">
+        <img src="Images/ADSetup5.png" alt="Select server roles list, no roles selected yet" loading="lazy">
         <figcaption>Server roles list before any roles are selected.</figcaption>
       </figure>
 
@@ -284,66 +323,59 @@
         <li>AD DS Snap-Ins and Command-Line Tools</li>
       </ul>
       <p><strong>Add Features</strong> was clicked to include all required dependencies.</p>
-
-      <div class="shot-row">
-        <figure class="shot">
-          <img src="Images/ADSetup16.png" alt="Add features required for AD DS pop-up" loading="lazy">
-          <figcaption>Add features required for AD DS prompt.</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="Images/ADSetup17.png" alt="Active Directory Domain Services checked in roles list" loading="lazy">
-          <figcaption>Active Directory Domain Services checked in the roles list.</figcaption>
-        </figure>
-      </div>
+      <figure class="shot">
+        <img src="Images/ADSetup6.png" alt="Add features required for AD DS pop-up" loading="lazy">
+        <figcaption>Add features required for AD DS prompt.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/ADSetup7.png" alt="Active Directory Domain Services checked in roles list" loading="lazy">
+        <figcaption>Active Directory Domain Services checked in the roles list.</figcaption>
+      </figure>
 
       <h3>Features</h3>
       <p>On the Features page, Azure Arc Setup and Group Policy Management were checked. All other features were left at their defaults.</p>
       <figure class="shot">
-        <img src="Images/ADSetup18.png" alt="Select features, Azure Arc Setup and Group Policy Management checked" loading="lazy">
+        <img src="Images/ADSetup8.png" alt="Select features, Azure Arc Setup and Group Policy Management checked" loading="lazy">
         <figcaption>Azure Arc Setup and Group Policy Management checked on the Features page.</figcaption>
       </figure>
 
       <h3>AD DS Information Page</h3>
       <p>The wizard presented an informational page summarizing what AD DS is and noting key requirements: the need for a DNS server on the network, and the recommendation to have a minimum of two domain controllers for redundancy in a production environment. For this lab environment, a single DC is sufficient.</p>
       <figure class="shot">
-        <img src="Images/ADSetup19.png" alt="Active Directory Domain Services information page" loading="lazy">
+        <img src="Images/ADSetup9.png" alt="Active Directory Domain Services information page" loading="lazy">
         <figcaption>AD DS information page.</figcaption>
       </figure>
 
       <h3>Confirmation and Installation</h3>
       <p>The Confirm Installation Selections page showed the full list of roles and features to be installed. Auto-restart was initially unchecked.</p>
       <figure class="shot">
-        <img src="Images/ADSetup20.png" alt="Confirm installation selections, auto-restart unchecked" loading="lazy">
+        <img src="Images/ADSetup10.png" alt="Confirm installation selections, auto-restart unchecked" loading="lazy">
         <figcaption>Confirm installation selections — auto-restart unchecked.</figcaption>
       </figure>
 
       <p>The auto-restart option was then enabled. A confirmation dialog appeared warning that the server would restart automatically without additional notification if required. Yes was clicked to allow automatic restarts.</p>
-      <div class="shot-row">
-        <figure class="shot">
-          <img src="Images/ADSetup1.png" alt="Auto-restart confirmation dialog" loading="lazy">
-          <figcaption>Auto-restart confirmation dialog.</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="Images/ADSetup2.png" alt="Confirm installation selections, auto-restart now checked" loading="lazy">
-          <figcaption>Auto-restart now checked on the confirmation page.</figcaption>
-        </figure>
-      </div>
+      <figure class="shot">
+        <img src="Images/ADSetup11.png" alt="Auto-restart confirmation dialog" loading="lazy">
+        <figcaption>Auto-restart confirmation dialog.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/ADSetup12.png" alt="Confirm installation selections, auto-restart now checked" loading="lazy">
+        <figcaption>Auto-restart now checked on the confirmation page.</figcaption>
+      </figure>
 
       <p>Installation was started. The progress bar advanced through the role installation.</p>
-      <div class="shot-row">
-        <figure class="shot">
-          <img src="Images/ADSetup3.png" alt="Installation progress, starting" loading="lazy">
-          <figcaption>Installation progress — starting.</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="Images/ADSetup4.png" alt="Installation progress, advancing" loading="lazy">
-          <figcaption>Installation progress — advancing.</figcaption>
-        </figure>
-      </div>
+      <figure class="shot">
+        <img src="Images/ADSetup13.png" alt="Installation progress, starting" loading="lazy">
+        <figcaption>Installation progress — starting.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/ADSetup14.png" alt="Installation progress, advancing" loading="lazy">
+        <figcaption>Installation progress — advancing.</figcaption>
+      </figure>
 
       <p>Installation completed successfully. The Results page showed the message: <em>Configuration required. Installation succeeded on DC01.mtlab.local.</em> A prompt to promote this server to a domain controller appeared as a next step.</p>
       <figure class="shot">
-        <img src="Images/ADSetup5.png" alt="Installation complete, Promote this server to a domain controller link visible" loading="lazy">
+        <img src="Images/ADSetup15.png" alt="Installation complete, Promote this server to a domain controller link visible" loading="lazy">
         <figcaption>Installation complete — Promote this server to a domain controller link visible.</figcaption>
       </figure>
 
@@ -353,21 +385,25 @@
       <h3>Post-Deployment Notification</h3>
       <p>After the role installation completed, Server Manager displayed a post-deployment configuration alert under the flag icon: <em>Configuration required for Active Directory Domain Services at DC01.</em> The Promote this server to a domain controller link was clicked to launch the AD DS Configuration Wizard.</p>
       <figure class="shot">
-        <img src="Images/ADSetup6.png" alt="Server Manager Dashboard, post-deployment configuration notification" loading="lazy">
+        <img src="Images/ADSetup16.png" alt="Server Manager Dashboard, post-deployment configuration notification" loading="lazy">
         <figcaption>Server Manager Dashboard — post-deployment configuration notification.</figcaption>
       </figure>
 
       <h3>Deployment Configuration: Adding a New Forest</h3>
       <p>The AD DS Configuration Wizard opened to the Deployment Configuration page. The default selection of Add a domain controller to an existing domain was shown first, but since this is a new lab environment with no existing domain, Add a new forest was selected instead.</p>
       <figure class="shot">
-        <img src="Images/ADSetup7.png" alt="Deployment Configuration, default Add a domain controller to existing domain shown" loading="lazy">
+        <img src="Images/ADSetup17.png" alt="Deployment Configuration, default Add a domain controller to existing domain shown" loading="lazy">
         <figcaption>Deployment Configuration — default option shown before selecting Add a new forest.</figcaption>
       </figure>
 
       <p>With Add a new forest selected, the Root domain name field was filled in as mtlab.local.</p>
       <figure class="shot">
-        <img src="Images/ADSetup8.png" alt="Deployment Configuration, Add a new forest selected, Root domain name mtlab.local" loading="lazy">
+        <img src="Images/ADSetup18.png" alt="Deployment Configuration, Add a new forest selected, Root domain name mtlab.local" loading="lazy">
         <figcaption>Add a new forest selected — Root domain name: mtlab.local.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/ADSetup19.png" alt="Deployment Configuration, proceeding with Add a new forest" loading="lazy">
+        <figcaption>Proceeding with the new forest configuration.</figcaption>
       </figure>
 
       <h3>Domain Controller Options</h3>
@@ -381,7 +417,7 @@
       </table>
       <p>The Directory Services Restore Mode (DSRM) password was set on this page. This password is used to access the server in Directory Services Restore Mode for AD recovery purposes and is separate from the domain Administrator password.</p>
       <figure class="shot">
-        <img src="Images/ADSetup10.png" alt="Domain Controller Options, functional levels set to Windows Server 2016, DNS and GC checked" loading="lazy">
+        <img src="Images/ADSetup20.png" alt="Domain Controller Options, functional levels set to Windows Server 2016, DNS and GC checked" loading="lazy">
         <figcaption>Domain Controller Options — functional levels set to Windows Server 2016, DNS and GC checked.</figcaption>
       </figure>
 
@@ -436,16 +472,14 @@
         <li>Windows Server 2022 domain controllers have a default security setting that prevents weaker cryptography algorithms compatible with Windows NT 4.0. This is a default hardening setting and does not affect the lab.</li>
         <li>A delegation for this DNS server cannot be created because the authoritative parent zone cannot be found — the same message as the DNS Options page, expected in a standalone lab with no parent DNS zone.</li>
       </ul>
-      <div class="shot-row">
-        <figure class="shot">
-          <img src="Images/ADSetup25.png" alt="Prerequisites Check in progress" loading="lazy">
-          <figcaption>Prerequisites Check — in progress.</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="Images/ADSetup26.png" alt="Prerequisites Check in progress" loading="lazy">
-          <figcaption>Prerequisites Check — verifying prerequisites.</figcaption>
-        </figure>
-      </div>
+      <figure class="shot">
+        <img src="Images/ADSetup25.png" alt="Prerequisites Check in progress" loading="lazy">
+        <figcaption>Prerequisites Check — verifying prerequisites for domain controller operation.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/ADSetup26.png" alt="Prerequisites Check in progress" loading="lazy">
+        <figcaption>Prerequisites Check — still in progress.</figcaption>
+      </figure>
       <figure class="shot">
         <img src="Images/ADSetup27.png" alt="Prerequisites Check passed, green banner: All prerequisite checks passed successfully" loading="lazy">
         <figcaption>All prerequisite checks passed successfully.</figcaption>
@@ -453,16 +487,14 @@
 
       <h3>Installation and Reboot</h3>
       <p>Install was clicked to begin the DC promotion. The Installation page showed progress starting, then moved to configuring the DNS Server service as promotion proceeded.</p>
-      <div class="shot-row">
-        <figure class="shot">
-          <img src="Images/ADSetup28.png" alt="Installation, progress starting" loading="lazy">
-          <figcaption>Installation progress — starting.</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="Images/ADSetup29.png" alt="Installation, Configuring the DNS Server service" loading="lazy">
-          <figcaption>Installation progress — Configuring the DNS Server service.</figcaption>
-        </figure>
-      </div>
+      <figure class="shot">
+        <img src="Images/ADSetup28.png" alt="Installation, progress starting" loading="lazy">
+        <figcaption>Installation progress — starting.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/ADSetup29.png" alt="Installation, Configuring the DNS Server service" loading="lazy">
+        <figcaption>Installation progress — Configuring the DNS Server service.</figcaption>
+      </figure>
 
       <p>The Results page showed a green success banner: <em>This server was successfully configured as a domain controller.</em> Immediately after, a "You're about to be signed out" overlay appeared, indicating the server was restarting to complete the promotion.</p>
       <figure class="shot">
@@ -488,7 +520,7 @@
       <h3>Opening Active Directory Users and Computers</h3>
       <p>Active Directory Users and Computers (ADUC) was accessed from Server Manager via Tools &gt; Active Directory Users and Computers. At this stage, Server Manager showed four installed roles: AD DS, DHCP, DNS, and File and Storage Services.</p>
       <figure class="shot">
-        <img src="Images/adenvsetup8.png" alt="Server Manager Dashboard, Tools menu, Active Directory Users and Computers highlighted" loading="lazy">
+        <img src="Images/adenvsetup1.png" alt="Server Manager Dashboard, Tools menu, Active Directory Users and Computers highlighted" loading="lazy">
         <figcaption>Server Manager Tools menu — Active Directory Users and Computers highlighted.</figcaption>
       </figure>
 
@@ -502,32 +534,30 @@
         <li><strong>Users</strong> — default container for users and domain-level security groups</li>
       </ul>
       <figure class="shot">
-        <img src="Images/adenvsetup9.png" alt="ADUC, mtlab.local selected, default containers visible" loading="lazy">
+        <img src="Images/adenvsetup2.png" alt="ADUC, mtlab.local selected, default containers visible" loading="lazy">
         <figcaption>ADUC — default containers visible under mtlab.local.</figcaption>
       </figure>
 
       <h3>Creating the Corp Organizational Unit</h3>
       <p>Rather than placing user and group objects in the default Users container, a dedicated organizational unit structure was created to simulate a more realistic corporate environment and to demonstrate proper AD organization.</p>
       <p>The Corp OU was created at the domain root level by right-clicking mtlab.local, selecting New &gt; Organizational Unit, and entering Corp as the name. The Protect container from accidental deletion option was left checked.</p>
-      <div class="shot-row">
-        <figure class="shot">
-          <img src="Images/adenvsetup10.png" alt="Right-click mtlab.local, New > Organizational Unit" loading="lazy">
-          <figcaption>Right-click mtlab.local → New → Organizational Unit.</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="Images/adenvsetup11.png" alt="New Object - Organizational Unit, Name Corp, Create in mtlab.local" loading="lazy">
-          <figcaption>New Object — Organizational Unit, Name: Corp.</figcaption>
-        </figure>
-      </div>
       <figure class="shot">
-        <img src="Images/adenvsetup12.png" alt="Corp OU created, visible under mtlab.local" loading="lazy">
+        <img src="Images/adenvsetup3.png" alt="Right-click mtlab.local, New > Organizational Unit" loading="lazy">
+        <figcaption>Right-click mtlab.local → New → Organizational Unit.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/adenvsetup4.png" alt="New Object - Organizational Unit, Name Corp, Create in mtlab.local" loading="lazy">
+        <figcaption>New Object — Organizational Unit, Name: Corp.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/adenvsetup5.png" alt="Corp OU created, visible under mtlab.local" loading="lazy">
         <figcaption>Corp OU created, visible under mtlab.local.</figcaption>
       </figure>
 
       <h3>Creating Sub-OUs Inside Corp</h3>
       <p>With the Corp OU in place, department-level sub-OUs were created inside it to represent different functional areas of the simulated organization. Each was created by right-clicking Corp &gt; New &gt; Organizational Unit.</p>
       <figure class="shot">
-        <img src="Images/adenvsetup13.png" alt="Right-click Corp, New > Organizational Unit" loading="lazy">
+        <img src="Images/adenvsetup6.png" alt="Right-click Corp, New > Organizational Unit" loading="lazy">
         <figcaption>Right-click Corp → New → Organizational Unit.</figcaption>
       </figure>
 
@@ -539,23 +569,21 @@
         <li><strong>IT</strong> — for IT department accounts</li>
         <li><strong>Sales</strong> — for sales department users</li>
       </ul>
-      <div class="shot-row">
-        <figure class="shot">
-          <img src="Images/adenvsetup14.png" alt="New Object - Organizational Unit, Name Users, Create in mtlab.local/Corp" loading="lazy">
-          <figcaption>New Object — Organizational Unit, Name: Users.</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="Images/adenvsetup15.png" alt="Corp OU expanded, all sub-OUs visible: Users, Engineering, HR, IT, Sales" loading="lazy">
-          <figcaption>Corp OU expanded — all sub-OUs visible.</figcaption>
-        </figure>
-      </div>
+      <figure class="shot">
+        <img src="Images/adenvsetup7.png" alt="New Object - Organizational Unit, Name Users, Create in mtlab.local/Corp" loading="lazy">
+        <figcaption>New Object — Organizational Unit, Name: Users.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/adenvsetup8.png" alt="Corp OU expanded, all sub-OUs visible: Users, Engineering, HR, IT, Sales" loading="lazy">
+        <figcaption>Corp OU expanded — all sub-OUs visible.</figcaption>
+      </figure>
 
       <h3>Creating User Accounts</h3>
 
       <h3 style="color:var(--text);font-size:1.05rem;margin-top:24px">MT.User — Standard Domain User</h3>
       <p>A standard domain user account was created in the Corp\Users OU to represent a typical end user. This account is used to demonstrate user object creation and will serve as a test account for policy and permission testing.</p>
       <figure class="shot">
-        <img src="Images/adenvsetup3.png" alt="Right-click Corp Users, New > User" loading="lazy">
+        <img src="Images/adenvsetup16.png" alt="Right-click Corp Users, New > User" loading="lazy">
         <figcaption>Right-click Corp\Users → New → User.</figcaption>
       </figure>
       <table class="info-table">
@@ -566,21 +594,25 @@
         <tr><th>OU</th><td>mtlab.local/Corp/Users</td></tr>
       </table>
       <figure class="shot">
-        <img src="Images/adenvsetup4.png" alt="New Object - User, MT.User details" loading="lazy">
+        <img src="Images/adenvsetup17.png" alt="New Object - User, MT.User details" loading="lazy">
         <figcaption>New Object — User, MT.User details.</figcaption>
       </figure>
       <p>The password page was configured with User must change password at next logon checked, consistent with a real-world onboarding workflow.</p>
       <figure class="shot">
-        <img src="Images/adenvsetup5.png" alt="New Object - User, password page, must change at next logon checked" loading="lazy">
+        <img src="Images/adenvsetup18.png" alt="New Object - User, password page, must change at next logon checked" loading="lazy">
         <figcaption>Password page — must change at next logon checked.</figcaption>
       </figure>
       <figure class="shot">
-        <img src="Images/adenvsetup6.png" alt="Corp Users OU, MT.User visible in right pane" loading="lazy">
+        <img src="Images/adenvsetup19.png" alt="Corp Users OU, MT.User visible in right pane" loading="lazy">
         <figcaption>Corp\Users OU — MT.User visible in the right pane.</figcaption>
       </figure>
 
       <h3 style="color:var(--text);font-size:1.05rem;margin-top:24px">Security Operations — Engineering User</h3>
       <p>A second user was created in the Corp\Engineering OU to populate a department OU with a realistic user account.</p>
+      <figure class="shot">
+        <img src="Images/adenvsetup20.png" alt="Right-click Corp Engineering, New > User" loading="lazy">
+        <figcaption>Right-click Corp\Engineering → New → User.</figcaption>
+      </figure>
       <table class="info-table">
         <tr><th>First Name</th><td>Security</td></tr>
         <tr><th>Last Name</th><td>Operations</td></tr>
@@ -589,31 +621,29 @@
         <tr><th>Pre-Win 2000</th><td>LAB\SOperations</td></tr>
         <tr><th>OU</th><td>mtlab.local/Corp/Engineering</td></tr>
       </table>
-      <div class="shot-row">
-        <figure class="shot">
-          <img src="Images/adenvsetup21.png" alt="New Object - User, Security Operations, Create in mtlab.local/Corp/Engineering" loading="lazy">
-          <figcaption>New Object — User, Security Operations.</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="Images/adenvsetup22.png" alt="Corp Engineering OU, Security Operations visible in right pane" loading="lazy">
-          <figcaption>Corp\Engineering OU — Security Operations visible.</figcaption>
-        </figure>
-      </div>
+      <figure class="shot">
+        <img src="Images/adenvsetup21.png" alt="New Object - User, Security Operations, Create in mtlab.local/Corp/Engineering" loading="lazy">
+        <figcaption>New Object — User, Security Operations.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/adenvsetup22.png" alt="Corp Engineering OU, Security Operations visible in right pane" loading="lazy">
+        <figcaption>Corp\Engineering OU — Security Operations visible.</figcaption>
+      </figure>
 
       <h3 style="color:var(--text);font-size:1.05rem;margin-top:24px">MT.Admin — Domain Admin Account</h3>
       <p>A dedicated domain admin account was created to avoid using the built-in Administrator account for day-to-day administration. This follows the principle of least privilege at the admin level: the built-in Administrator is disabled, and a named admin account is used instead, making administrative actions attributable and auditable.</p>
       <figure class="shot">
-        <img src="Images/adenvsetup16.png" alt="MT.Admin Properties, General tab, First name MT.Admin" loading="lazy">
+        <img src="Images/adenvsetup9.png" alt="MT.Admin Properties, General tab, First name MT.Admin" loading="lazy">
         <figcaption>MT.Admin Properties — General tab.</figcaption>
       </figure>
       <p>MT.Admin was added to the Domain Admins security group to grant full domain administrative privileges.</p>
       <figure class="shot">
-        <img src="Images/adenvsetup1.png" alt="MT.Admin Properties, Member Of tab: Domain Admins and Domain Users" loading="lazy">
+        <img src="Images/adenvsetup14.png" alt="MT.Admin Properties, Member Of tab: Domain Admins and Domain Users" loading="lazy">
         <figcaption>MT.Admin Properties — Member Of tab: Domain Admins and Domain Users.</figcaption>
       </figure>
       <p>MT.Admin was also added to the Protected Users security group. Protected Users is a special security group in Windows Server 2012 R2 and later that applies additional authentication protections: it prevents the use of weaker authentication protocols such as NTLM, DES, and RC4, and limits credential caching. Adding privileged accounts to Protected Users is a security hardening best practice.</p>
       <figure class="shot">
-        <img src="Images/adenvsetup2.png" alt="Select Groups dialog, Protected Users typed in object names field" loading="lazy">
+        <img src="Images/adenvsetup15.png" alt="Select Groups dialog, Protected Users typed in object names field" loading="lazy">
         <figcaption>Select Groups dialog — Protected Users.</figcaption>
       </figure>
 
@@ -632,7 +662,7 @@
         <li><strong>Protected Users</strong> — accounts with additional authentication protections</li>
       </ul>
       <figure class="shot">
-        <img src="Images/adenvsetup17.png" alt="Users container, full list of default domain groups and built-in accounts" loading="lazy">
+        <img src="Images/adenvsetup10.png" alt="Users container, full list of default domain groups and built-in accounts" loading="lazy">
         <figcaption>Users container — full list of default domain groups and built-in accounts.</figcaption>
       </figure>
 
@@ -658,21 +688,19 @@
       <h3 style="color:var(--text);font-size:1.05rem;margin-top:24px">Disabling the Built-in Administrator Account</h3>
       <p>The built-in Administrator account in the Users container was disabled. With MT.Admin in place as a named domain admin account with a known password and audit trail, the built-in Administrator account serves no operational purpose and represents an unnecessary attack surface.</p>
       <p>The account was disabled by right-clicking Administrator &gt; Disable Account.</p>
-      <div class="shot-row">
-        <figure class="shot">
-          <img src="Images/adenvsetup18.png" alt="Right-click Administrator, context menu with Disable Account option" loading="lazy">
-          <figcaption>Right-click Administrator — Disable Account option.</figcaption>
-        </figure>
-        <figure class="shot">
-          <img src="Images/adenvsetup19.png" alt="Confirmation: Object Administrator has been disabled" loading="lazy">
-          <figcaption>Confirmation — Object Administrator has been disabled.</figcaption>
-        </figure>
-      </div>
+      <figure class="shot">
+        <img src="Images/adenvsetup11.png" alt="Right-click Administrator, context menu with Disable Account option" loading="lazy">
+        <figcaption>Right-click Administrator — Disable Account option.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="Images/adenvsetup12.png" alt="Confirmation: Object Administrator has been disabled" loading="lazy">
+        <figcaption>Confirmation — Object Administrator has been disabled.</figcaption>
+      </figure>
 
       <h3 style="color:var(--text);font-size:1.05rem;margin-top:24px">Guest Account: Already Disabled</h3>
       <p>The Guest account was reviewed and confirmed to already be in a disabled state. The context menu showed Enable Account as the available action, confirming it was disabled by default and no further action was required.</p>
       <figure class="shot">
-        <img src="Images/adenvsetup20.png" alt="Right-click Guest, context menu shows Enable Account, confirming it is currently disabled" loading="lazy">
+        <img src="Images/adenvsetup13.png" alt="Right-click Guest, context menu shows Enable Account, confirming it is currently disabled" loading="lazy">
         <figcaption>Right-click Guest — Enable Account option confirms it's already disabled.</figcaption>
       </figure>
 
@@ -695,7 +723,6 @@
       </div>
 
       <p style="margin-top:24px">The Active Directory environment is now operational and ready for further configuration including Group Policy, DHCP scope management, DNS review, and additional user and group provisioning.</p>
-
     </article>
 
     <footer>
@@ -706,5 +733,40 @@
       </div>
     </footer>
   </div>
+
+  <div class="lightbox" id="lightbox">
+    <div class="lb-close" id="lbClose">&times;</div>
+    <img id="lbImg" src="" alt="">
+  </div>
+
+  <script>
+    (function(){
+      var lightbox = document.getElementById('lightbox');
+      var lbImg = document.getElementById('lbImg');
+      var lbClose = document.getElementById('lbClose');
+
+      document.querySelectorAll('.shot img').forEach(function(img){
+        img.addEventListener('click', function(){
+          lbImg.src = img.getAttribute('src');
+          lbImg.alt = img.getAttribute('alt') || '';
+          lightbox.classList.add('open');
+        });
+      });
+
+      function closeLightbox(){
+        lightbox.classList.remove('open');
+        lbImg.src = '';
+      }
+
+      lightbox.addEventListener('click', closeLightbox);
+      lbClose.addEventListener('click', function(e){
+        e.stopPropagation();
+        closeLightbox();
+      });
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape') closeLightbox();
+      });
+    })();
+  </script>
 </body>
 </html>
