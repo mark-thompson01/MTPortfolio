@@ -1,1 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hyper-V Setup & Windows Server Config · Mark Thompson Portfolio</title>
+  <meta name="description" content="Enabling Hyper-V, configuring the virtual switch, and building out a Windows Server 2022 VM from the ground up." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb back link */
+    .backlink{
+      display:inline-flex; align-items:center; gap:8px;
+      color:var(--muted); text-decoration:none; font-size:15px;
+      margin-bottom:18px;
+    }
+    .backlink:hover{color:var(--brand)}
+
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,42px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px);text-align:center;max-width:760px;margin-left:auto;margin-right:auto}
+
+    /* Section headers */
+    .section{margin-top:56px}
+    .section-head{
+      display:flex; align-items:center; gap:14px;
+      margin-bottom:22px;
+    }
+    .section-num{
+      flex:0 0 auto;
+      width:40px; height:40px;
+      border-radius:12px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:1.05rem; color:var(--brand);
+      background:rgba(77,163,255,.08);
+      border:1px solid #2a3a55;
+    }
+    .section-titles h2{margin:0;font-size:clamp(20px,2.6vw,24px);font-weight:800}
+    .section-titles p{margin:4px 0 0;color:var(--muted);font-size:0.98rem}
+
+    /* Step grid */
+    .step-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+      gap:22px;
+    }
+    .step-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+      display:flex; flex-direction:column;
+    }
+    .step-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.45);border-color:#3a4a67}
+    .step-card img{
+      width:100%; display:block;
+      border-bottom:1px solid var(--card-border);
+      background:#0b0d12;
+    }
+    .step-body{padding:18px 22px 22px}
+    .step-tag{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:28px; height:28px; border-radius:8px;
+      font-size:0.85rem; font-weight:800; color:var(--brand);
+      background:rgba(77,163,255,.08); border:1px solid #2a3a55;
+      margin-bottom:10px;
+    }
+    .step-title{font:700 1.05rem/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0 0 6px;color:#d3d3d3}
+    .step-desc{color:#a9b0c3;font:400 0.95rem/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;margin:0}
+    code{
+      background:rgba(77,163,255,.08); border:1px solid #2a3a55;
+      border-radius:6px; padding:1px 6px; font-size:0.88em;
+      color:#cfe4ff;
+    }
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin" class="active">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <a class="backlink" href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">&larr; Back to Infrastructure & Sysadmin</a>
+
+    <header>
+      <h1>Hyper-V Setup & Windows Server Config</h1>
+      <p class="lead">Enabling the Hyper-V role, standing up a virtual switch bound to the physical NIC, and building out a Windows Server 2022 Evaluation VM from the New Virtual Machine Wizard through first login.</p>
+    </header>
+
+    <!-- SECTION 1 -->
+    <section class="section" aria-label="Enabling Hyper-V via PowerShell">
+      <div class="section-head">
+        <span class="section-num">1</span>
+        <span class="section-titles">
+          <h2>Enabling Hyper-V via PowerShell</h2>
+          <p>Turning on the Hyper-V role from an elevated PowerShell session instead of the GUI feature toggle.</p>
+        </span>
+      </div>
+      <div class="step-grid">
+
+        <article class="step-card">
+          <img src="Images/Enable1.png" alt="Running Enable-WindowsOptionalFeature to enable Hyper-V" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">1</span>
+            <h3 class="step-title">Kick off the feature install</h3>
+            <p class="step-desc">From an elevated PowerShell session: <code>Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V-All -NoRestart</code>. The <code>-NoRestart</code> flag lets the reboot happen on my terms rather than immediately.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Enable2.png" alt="Hyper-V feature installation progress bar" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">2</span>
+            <h3 class="step-title">Feature install running</h3>
+            <p class="step-desc">Windows begins staging the Hyper-V role components in the background.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Enable3.png" alt="Hyper-V feature installation still in progress" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">3</span>
+            <h3 class="step-title">Still installing</h3>
+            <p class="step-desc">The progress bar holds here for a bit while the full Hyper-V-All bundle (platform, services, management tools) gets pulled in.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Enable4.png" alt="Restart needed output and shutdown command to reboot" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">4</span>
+            <h3 class="step-title">Restart to finish</h3>
+            <p class="step-desc">Output confirms <code>RestartNeeded : True</code>. Rebooting immediately with <code>shutdown /r /t 00</code> to complete the install rather than waiting on a scheduled restart.</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="section" aria-label="Hyper-V Manager and Virtual Switch Setup">
+      <div class="section-head">
+        <span class="section-num">2</span>
+        <span class="section-titles">
+          <h2>Hyper-V Manager & Virtual Switch Setup</h2>
+          <p>Standing up an External virtual switch so future VMs can reach the physical network.</p>
+        </span>
+      </div>
+      <div class="step-grid">
+
+        <article class="step-card">
+          <img src="Images/Setup1.png" alt="Opening Hyper-V Manager from the Start menu" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">1</span>
+            <h3 class="step-title">Launch Hyper-V Manager</h3>
+            <p class="step-desc">Opening the Hyper-V Manager console after the reboot completes.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Setup2.png" alt="Hyper-V Manager connected to SRV-HYPERV-01 with no VMs" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">2</span>
+            <h3 class="step-title">Clean slate</h3>
+            <p class="step-desc">Connected to <code>SRV-HYPERV-01</code> with no virtual machines yet &mdash; the host is ready to be configured.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Setup3.png" alt="Right-click context menu with Virtual Switch Manager option" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">3</span>
+            <h3 class="step-title">Open Virtual Switch Manager</h3>
+            <p class="step-desc">Right-clicking the host and selecting <strong>Virtual Switch Manager...</strong> to create the network layer VMs will connect to.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Setup4.png" alt="Creating a new External virtual switch" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">4</span>
+            <h3 class="step-title">Create an External switch</h3>
+            <p class="step-desc">Choosing <strong>External</strong> so the switch binds to the physical NIC, giving VMs direct access to the LAN rather than being isolated behind NAT.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Setup5.png" alt="Naming the switch vSwitch0 and binding it to the Intel NIC" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">5</span>
+            <h3 class="step-title">Bind to the physical adapter</h3>
+            <p class="step-desc">Named it <code>vSwitch0</code> and pointed it at the Intel(R) Ethernet Connection (17) I219-LM, with <strong>Allow management operating system to share this network adapter</strong> checked so the host keeps connectivity too.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Setup6.png" alt="Apply networking changes warning about possible connectivity disruption" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">6</span>
+            <h3 class="step-title">Confirm the network change</h3>
+            <p class="step-desc">Hyper-V warns that applying the switch can briefly disrupt network connectivity while it rebinds the adapter &mdash; expected, so clicking through.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Setup7.png" alt="vSwitch0 confirmed bound to the Intel NIC" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">7</span>
+            <h3 class="step-title">Switch is live</h3>
+            <p class="step-desc"><code>vSwitch0</code> now shows bound to the Intel Ethernet Connection, ready to be assigned to virtual machines.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/Setup8.png" alt="Back to a clean Hyper-V Manager view" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">8</span>
+            <h3 class="step-title">Ready to build</h3>
+            <p class="step-desc">Back at the main Hyper-V Manager view &mdash; networking is in place, so the next step is creating the actual VM.</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="section" aria-label="Creating the Windows Server 2022 VM">
+      <div class="section-head">
+        <span class="section-num">3</span>
+        <span class="section-titles">
+          <h2>Creating the Windows Server 2022 VM</h2>
+          <p>Walking through the New Virtual Machine Wizard to define the hardware shell before installing an OS.</p>
+        </span>
+      </div>
+      <div class="step-grid">
+
+        <article class="step-card">
+          <img src="Images/winserver1.png" alt="Right-click New Virtual Machine context menu" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">1</span>
+            <h3 class="step-title">Start the New VM Wizard</h3>
+            <p class="step-desc">Right-clicking the host &rarr; <strong>New</strong> &rarr; <strong>Virtual Machine...</strong> to launch the wizard.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver2.png" alt="Before You Begin wizard page" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">2</span>
+            <h3 class="step-title">Before You Begin</h3>
+            <p class="step-desc">Skipping the defaults and going through the custom configuration path instead of clicking Finish early.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver3.png" alt="Specify Name and Location page" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">3</span>
+            <h3 class="step-title">Name and location</h3>
+            <p class="step-desc">Named it <code>Windows Server 2022 Eval</code> and stored it on the <code>D:\</code> volume rather than the default system drive.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver4.png" alt="Specify Generation page, Generation 2 selected" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">4</span>
+            <h3 class="step-title">Generation 2</h3>
+            <p class="step-desc">Choosing <strong>Generation 2</strong> for UEFI firmware and support for newer virtualization features, since this can't be changed later.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver5.png" alt="Assign Memory page, 8096 MB with Dynamic Memory enabled" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">5</span>
+            <h3 class="step-title">Assign memory</h3>
+            <p class="step-desc">8096 MB startup memory with <strong>Use Dynamic Memory</strong> enabled so the VM can flex based on actual demand.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver6.png" alt="Configure Networking page, vSwitch0 selected" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">6</span>
+            <h3 class="step-title">Attach to vSwitch0</h3>
+            <p class="step-desc">Connecting the VM's network adapter to the <code>vSwitch0</code> external switch built in the previous section.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver7.png" alt="Connect Virtual Hard Disk page, 127 GB VHDX" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">7</span>
+            <h3 class="step-title">Create the virtual disk</h3>
+            <p class="step-desc">A new 127 GB dynamically expanding VHDX, stored alongside the VM on <code>D:\</code>.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver8.png" alt="Installation Options page, browsing for an ISO" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">8</span>
+            <h3 class="step-title">Point to install media</h3>
+            <p class="step-desc">Choosing <strong>Install an operating system from a bootable image file</strong> and browsing to the downloaded ISO.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver9.png" alt="Installation Options page with SERVER_EVAL ISO selected" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">9</span>
+            <h3 class="step-title">ISO selected</h3>
+            <p class="step-desc">The Windows Server 2022 Evaluation ISO (<code>SERVER_EVAL_x64FRE...</code>) is set as the boot image.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver10.png" alt="Completing the New Virtual Machine Wizard summary" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">10</span>
+            <h3 class="step-title">Review and finish</h3>
+            <p class="step-desc">Summary confirms Generation 2, 8096 MB, <code>vSwitch0</code>, the 127 GB VHDX, and the ISO source before clicking Finish.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver11.png" alt="Hyper-V Manager showing the new VM next to the existing Ubuntu Server VM" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">11</span>
+            <h3 class="step-title">VM shell created</h3>
+            <p class="step-desc"><code>Windows Server 2022 Eval</code> now sits alongside the existing Ubuntu Server VM in the inventory, both powered off.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver12.png" alt="Right-click actions menu with Connect, Settings, Start, Checkpoint" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">12</span>
+            <h3 class="step-title">Connect to the VM</h3>
+            <p class="step-desc">Right-clicking the new VM to bring up <strong>Connect...</strong> and the rest of the VM action menu.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver13.png" alt="Virtual Machine Connection window showing the VM is off, with a Start button" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">13</span>
+            <h3 class="step-title">Ready to power on</h3>
+            <p class="step-desc">The VM Connection console confirms it's currently off &mdash; time to hit Start and boot from the ISO.</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section class="section" aria-label="Installing Windows Server 2022">
+      <div class="section-head">
+        <span class="section-num">4</span>
+        <span class="section-titles">
+          <h2>Installing Windows Server 2022</h2>
+          <p>From first boot off the ISO through the OS install to the initial desktop and Server Manager.</p>
+        </span>
+      </div>
+      <div class="step-grid">
+
+        <article class="step-card">
+          <img src="Images/winserver14.png" alt="Press any key to boot from CD or DVD prompt" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">1</span>
+            <h3 class="step-title">Boot from the ISO</h3>
+            <p class="step-desc">Catching the "Press any key to boot from CD or DVD" prompt to kick off setup from the attached image.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver15.png" alt="Language, time, and keyboard selection screen" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">2</span>
+            <h3 class="step-title">Locale settings</h3>
+            <p class="step-desc">Confirming language, time/currency format, and keyboard layout before proceeding.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver16.png" alt="Install now screen" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">3</span>
+            <h3 class="step-title">Install now</h3>
+            <p class="step-desc">Kicking off the actual OS installation from the setup splash screen.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver17.png" alt="Setup is starting screen" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">4</span>
+            <h3 class="step-title">Setup starting</h3>
+            <p class="step-desc">Brief loading screen while setup initializes.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver18.png" alt="Operating system selection, Standard Evaluation Desktop Experience chosen" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">5</span>
+            <h3 class="step-title">Choose the edition</h3>
+            <p class="step-desc">Selected <strong>Windows Server 2022 Standard Evaluation (Desktop Experience)</strong> for the full GUI environment.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver19.png" alt="Accepting the Microsoft license terms" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">6</span>
+            <h3 class="step-title">Accept license terms</h3>
+            <p class="step-desc">Reviewing and accepting the Microsoft Software License Terms.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver20.png" alt="Choosing a Custom install type" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">7</span>
+            <h3 class="step-title">Custom install</h3>
+            <p class="step-desc">Going with <strong>Custom: Install Microsoft Server Operating System only</strong> since this is a clean VM with no prior OS.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver21.png" alt="Selecting the unallocated drive to install to" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">8</span>
+            <h3 class="step-title">Select the target drive</h3>
+            <p class="step-desc">Installing to the full 127 GB of unallocated space on the virtual disk.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver22.png" alt="Installing Microsoft Server Operating System, getting files ready 0%" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">9</span>
+            <h3 class="step-title">Copying files</h3>
+            <p class="step-desc">Setup copies OS files and begins getting them ready for installation.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver23.png" alt="Installing features complete, installing updates next" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">10</span>
+            <h3 class="step-title">Installing features</h3>
+            <p class="step-desc">Files copied and features installed; updates and final setup steps are next.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver24.png" alt="Restart required to continue setup" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">11</span>
+            <h3 class="step-title">Restart to continue</h3>
+            <p class="step-desc">Setup requires a restart to finish applying the installation.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver25.png" alt="Hyper-V splash screen on first boot" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">12</span>
+            <h3 class="step-title">First boot</h3>
+            <p class="step-desc">The VM comes back up through the Hyper-V boot splash.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver26.png" alt="Getting ready screen" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">13</span>
+            <h3 class="step-title">Getting ready</h3>
+            <p class="step-desc">Windows finalizes the install and prepares the environment for first-time setup.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver27.png" alt="Customize settings, setting the local Administrator password" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">14</span>
+            <h3 class="step-title">Set the Administrator password</h3>
+            <p class="step-desc">First-run out-of-box experience &mdash; setting the password for the built-in local Administrator account.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver28.png" alt="Lock screen with time and date" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">15</span>
+            <h3 class="step-title">Lock screen</h3>
+            <p class="step-desc">Setup completes and drops to the lock screen.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver29.png" alt="Administrator login prompt" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">16</span>
+            <h3 class="step-title">First login</h3>
+            <p class="step-desc">Signing in with the Administrator account for the first time.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver30.png" alt="First desktop after install" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">17</span>
+            <h3 class="step-title">First desktop</h3>
+            <p class="step-desc">Clean desktop, ready for role and feature configuration.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver31.png" alt="Server Manager Dashboard" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">18</span>
+            <h3 class="step-title">Server Manager Dashboard</h3>
+            <p class="step-desc">Server Manager launches automatically, showing the local server and the default File and Storage Services role &mdash; the starting point for building out AD, DNS, and DHCP in the next write-up.</p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <img src="Images/winserver32.png" alt="Hyper-V Manager showing the running VM and an automatic checkpoint" loading="lazy">
+          <div class="step-body">
+            <span class="step-tag">19</span>
+            <h3 class="step-title">Snapshot the clean state</h3>
+            <p class="step-desc">Back in Hyper-V Manager, an automatic checkpoint captured the freshly installed state &mdash; a safe rollback point before role configuration begins.</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
