@@ -173,7 +173,7 @@ Switch001#write memory</code></pre>
     <p>Fa0/2–Fa0/5 and the Fa0/23 trunk were set as sources in <code>both</code> directions (RX and TX), with Fa0/6 as the dedicated destination port feeding the capture NIC. <code>show monitor session 1</code> confirms the session is active with ingress learning disabled on the destination port, which is expected — a SPAN destination port doesn't participate in normal switching.</p>
 
     <figure>
-      <img src="Images/span-01-switch-cli-config.png" alt="Cisco switch CLI configuring monitor session 1 with source and destination interfaces" onclick="openLightbox(this)">
+      <img src="Images/span1.png" alt="Cisco switch CLI configuring monitor session 1 with source and destination interfaces" onclick="openLightbox(this)">
       <figcaption>Configuring monitor session 1 on the Cisco switch — Fa0/2–5 and Fa0/23 as sources, Fa0/6 as the SPAN destination.</figcaption>
     </figure>
 
@@ -183,37 +183,37 @@ Switch001#write memory</code></pre>
     <h3>Creating a dedicated external virtual switch</h3>
     <p>In Hyper-V Manager, a new external virtual switch was created and bound to that dedicated adapter.</p>
     <figure>
-      <img src="Images/span-02-hyperv-vswitch-manager.png" alt="Hyper-V Manager Virtual Switch Manager menu option" onclick="openLightbox(this)">
+      <img src="Images/span2.png" alt="Hyper-V Manager Virtual Switch Manager menu option" onclick="openLightbox(this)">
       <figcaption>Opening the Virtual Switch Manager from Hyper-V Manager.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-03-create-vswitch-external.png" alt="Creating a new external virtual switch" onclick="openLightbox(this)">
+      <img src="Images/span3.png" alt="Creating a new external virtual switch" onclick="openLightbox(this)">
       <figcaption>Creating a new virtual switch of type External.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-04-vswitch-span-monitor-properties.png" alt="SPAN-Monitor virtual switch bound to the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
+      <img src="Images/span4.png" alt="SPAN-Monitor virtual switch bound to the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
       <figcaption>The <strong>SPAN-Monitor</strong> virtual switch, bound to the ASIX USB-to-Gigabit adapter with "Allow management operating system to share this network adapter" left unchecked — keeping the host itself off the mirrored segment.</figcaption>
     </figure>
 
     <h3>Attaching the capture VM</h3>
     <p>A Windows 11 client VM was given a second network adapter connected to the SPAN-Monitor switch, dedicated purely to receiving mirrored traffic.</p>
     <figure>
-      <img src="Images/span-05-vm-settings-menu.png" alt="Opening Settings for the Win11-Client VM in Hyper-V Manager" onclick="openLightbox(this)">
+      <img src="Images/span5.png" alt="Opening Settings for the Win11-Client VM in Hyper-V Manager" onclick="openLightbox(this)">
       <figcaption>Opening Settings on the Win11-Client capture VM.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-06-add-hardware-network-adapter.png" alt="Adding a second network adapter to the VM" onclick="openLightbox(this)">
+      <img src="Images/span6.png" alt="Adding a second network adapter to the VM" onclick="openLightbox(this)">
       <figcaption>Adding a second Network Adapter alongside the VM's existing LAB_INTERNAL adapter.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-07-nic-bound-to-span-monitor.png" alt="New network adapter bound to the SPAN-Monitor virtual switch" onclick="openLightbox(this)">
+      <img src="Images/span7.png" alt="New network adapter bound to the SPAN-Monitor virtual switch" onclick="openLightbox(this)">
       <figcaption>The new adapter connected to the SPAN-Monitor virtual switch.</figcaption>
     </figure>
 
     <h3>Setting the NIC to port-mirroring destination</h3>
     <p>Under the new adapter's Advanced Features, the mirroring mode was set to <strong>Destination</strong> — this is the setting that actually tells Hyper-V to hand this adapter a copy of traffic rather than treat it as a normal network connection.</p>
     <figure>
-      <img src="Images/span-08-port-mirroring-destination.png" alt="Hyper-V port mirroring mode set to Destination on the SPAN-Monitor adapter" onclick="openLightbox(this)">
+      <img src="Images/span8.png" alt="Hyper-V port mirroring mode set to Destination on the SPAN-Monitor adapter" onclick="openLightbox(this)">
       <figcaption>Setting the SPAN-Monitor adapter's mirroring mode to Destination under Advanced Features.</figcaption>
     </figure>
 
@@ -224,25 +224,25 @@ Switch001#write memory</code></pre>
     <h3>Confirming the physical adapter mapping</h3>
     <p>A quick check in Network Connections on the host confirms Ethernet 3 is the ASIX USB-to-Gigabit adapter carrying the SPAN feed — the same adapter bound to the SPAN-Monitor virtual switch above.</p>
     <figure>
-      <img src="Images/span-09-network-connections-asix-adapter.png" alt="Windows Network Connections showing Ethernet 3 as the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
+      <img src="Images/span9.png" alt="Windows Network Connections showing Ethernet 3 as the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
       <figcaption>Confirming Ethernet 3 maps to the ASIX USB-to-Gigabit adapter dedicated to the SPAN capture path.</figcaption>
     </figure>
 
     <h2><span class="step-num">4</span>Capturing Traffic with Wireshark</h2>
     <p>With the capture path in place, Wireshark was pointed at Ethernet 3 inside the capture VM to start pulling in the mirrored traffic.</p>
     <figure>
-      <img src="Images/span-10-wireshark-interface-list.png" alt="Wireshark interface selection screen with Ethernet 3 available" onclick="openLightbox(this)">
+      <img src="Images/span10.png" alt="Wireshark interface selection screen with Ethernet 3 available" onclick="openLightbox(this)">
       <figcaption>Wireshark's interface list, with Ethernet 3 (the SPAN feed) ready to capture on.</figcaption>
     </figure>
 
     <h3>First look: unfiltered capture</h3>
     <p>An unfiltered capture immediately showed a healthy amount of Layer 2 control-plane noise mixed in with real traffic — PVST+ BPDUs advertising the STP root bridge, ARP requests, and ICMP echo traffic between lab hosts.</p>
     <figure>
-      <img src="Images/span-11-wireshark-unfiltered-capture.png" alt="Unfiltered Wireshark capture showing mixed STP, ARP, and ICMP traffic" onclick="openLightbox(this)">
+      <img src="Images/span11.png" alt="Unfiltered Wireshark capture showing mixed STP, ARP, and ICMP traffic" onclick="openLightbox(this)">
       <figcaption>Unfiltered capture — STP, ARP, and ICMP all visible on the mirrored trunk.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-12-wireshark-stp-pvst-arp.png" alt="Wireshark capture showing PVST+ configuration BPDUs and an ARP who-has request" onclick="openLightbox(this)">
+      <img src="Images/span12.png" alt="Wireshark capture showing PVST+ configuration BPDUs and an ARP who-has request" onclick="openLightbox(this)">
       <figcaption>PVST+ configuration BPDUs advertising root bridge priority per VLAN, alongside an ARP "who has" broadcast.</figcaption>
     </figure>
 
@@ -250,15 +250,15 @@ Switch001#write memory</code></pre>
     <p>Since Fa0/23 (the inter-switch trunk) was one of the mirrored sources, STP BPDUs and ARP broadcasts dominated the capture. A simple display filter cleared that out and left the traffic actually worth reading:</p>
     <pre><code>not stp and not arp</code></pre>
     <figure>
-      <img src="Images/span-13-wireshark-filtered-not-stp-arp.png" alt="Wireshark filtered to exclude STP and ARP, showing TCP retransmissions and DNS/TLS traffic" onclick="openLightbox(this)">
+      <img src="Images/span13.png" alt="Wireshark filtered to exclude STP and ARP, showing TCP retransmissions and DNS/TLS traffic" onclick="openLightbox(this)">
       <figcaption>With STP and ARP filtered out, TCP retransmissions and TLS application data stand out clearly.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-14-wireshark-filtered-dns-icmp.png" alt="Filtered capture showing DNS queries and ICMP echo traffic" onclick="openLightbox(this)">
+      <img src="Images/span14.png" alt="Filtered capture showing DNS queries and ICMP echo traffic" onclick="openLightbox(this)">
       <figcaption>DNS queries to Cloudflare (1.1.1.1) alongside ICMP echo request/reply pairs between lab hosts.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-15-wireshark-filtered-ssdp-dns.png" alt="Filtered capture showing SSDP notify traffic and DNS queries with TCP retransmissions" onclick="openLightbox(this)">
+      <img src="Images/span15.png" alt="Filtered capture showing SSDP notify traffic and DNS queries with TCP retransmissions" onclick="openLightbox(this)">
       <figcaption>SSDP discovery traffic and DNS queries, with TCP retransmissions to 192.168.10.5 worth a closer look.</figcaption>
     </figure>
 
@@ -281,19 +281,19 @@ Switch001#write memory</code></pre>
     </div>
 
     <figure>
-      <img src="Images/span-16-wireshark-icmp-filter.png" alt="Wireshark ICMP filter showing echo request and reply traffic plus a destination unreachable response" onclick="openLightbox(this)">
+      <img src="Images/span16icmp.png" alt="Wireshark ICMP filter showing echo request and reply traffic plus a destination unreachable response" onclick="openLightbox(this)">
       <figcaption>ICMP filter: steady echo traffic, with one Destination Unreachable (Port Unreachable) response.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-17-wireshark-dns-filter.png" alt="Wireshark DNS filter showing standard queries and Server failure responses for NTP pool hostnames" onclick="openLightbox(this)">
+      <img src="Images/span17.png" alt="Wireshark DNS filter showing standard queries and Server failure responses for NTP pool hostnames" onclick="openLightbox(this)">
       <figcaption>DNS filter: NTP pool hostname lookups returning Server failure from the internal resolver.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-18-wireshark-smb-filter.png" alt="Wireshark SMB filter showing Host Announcement browser traffic naming DC01" onclick="openLightbox(this)">
+      <img src="Images/span18.png" alt="Wireshark SMB filter showing Host Announcement browser traffic naming DC01" onclick="openLightbox(this)">
       <figcaption>SMB filter: NetBIOS Host Announcements identifying DC01 as Workstation, Server, and Domain Controller.</figcaption>
     </figure>
     <figure>
-      <img src="Images/span-19-wireshark-smb2-filter.png" alt="Wireshark SMB2 filter showing a negotiate and NTLMSSP authentication exchange ending in STATUS_LOGON_FAILURE" onclick="openLightbox(this)">
+      <img src="Images/span19.png" alt="Wireshark SMB2 filter showing a negotiate and NTLMSSP authentication exchange ending in STATUS_LOGON_FAILURE" onclick="openLightbox(this)">
       <figcaption>SMB2 filter: negotiate → NTLMSSP authentication → STATUS_LOGON_FAILURE for a lab service account.</figcaption>
     </figure>
 
