@@ -1,1 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FortiGate 60E Firewall - Security Configuration · Mark Thompson Portfolio</title>
+  <meta name="description" content="Security hardening pass on a FortiGate 60E: administrative access control, firewall policy discipline, DoS protection, certificate management, SSL inspection, VPN, and logging." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+      --amber:#E8A63D; --purple:#B487F0; --teal:#3ECF9E;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.65; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:900px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 20px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted); text-decoration:none; padding:12px 20px;
+      border-radius:12px; border:1px solid transparent; font-size:16px; font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .breadcrumb{color:var(--muted);font-size:14px;margin:0 0 18px}
+    .breadcrumb a{color:var(--muted);text-decoration:none}
+    .breadcrumb a:hover{color:var(--brand)}
+
+    h1{margin:4px 0 8px;font-size:clamp(28px,4.5vw,40px);font-weight:800;letter-spacing:.2px;line-height:1.2}
+    .lead{color:var(--muted);margin:0 0 36px;font-size:clamp(16px,2.2vw,18px)}
+    .kicker{color:var(--brand);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:0 0 10px}
+
+    h2{
+      font-size:clamp(21px,3vw,26px); font-weight:800; color:var(--text);
+      margin:56px 0 16px; padding-bottom:10px; border-bottom:1px solid var(--card-border);
+    }
+    h3{
+      font-size:clamp(17px,2.4vw,19px); font-weight:700; color:#dbe0f0;
+      margin:32px 0 12px;
+    }
+    p{margin:0 0 16px; color:#c7cadb; font-size:16px}
+    p.body-tight{margin-bottom:12px}
+    ul.doc-list{margin:0 0 16px; padding-left:22px; color:#c7cadb}
+    ul.doc-list li{margin-bottom:10px}
+    strong{color:var(--text)}
+    code{
+      background:rgba(77,163,255,.09); border:1px solid #24344d; color:#9fd0ff;
+      padding:1px 6px; border-radius:6px; font-size:14px;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    }
+
+    /* Callouts */
+    .callout{
+      border-radius:14px; padding:18px 20px; margin:22px 0;
+      background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.01));
+      border:1px solid var(--card-border); border-left:4px solid var(--brand);
+    }
+    .callout .callout-title{
+      font-weight:800; font-size:13px; letter-spacing:.06em; text-transform:uppercase;
+      margin-bottom:8px; display:flex; align-items:center; gap:8px;
+    }
+    .callout p{margin-bottom:0; color:#c7cadb; font-size:15px}
+    .callout-constraint{border-left-color:var(--amber)}
+    .callout-constraint .callout-title{color:var(--amber)}
+    .callout-decision{border-left-color:var(--brand)}
+    .callout-decision .callout-title{color:var(--brand)}
+    .callout-lesson{border-left-color:var(--purple)}
+    .callout-lesson .callout-title{color:var(--purple)}
+    .callout-note{border-left-color:var(--teal)}
+    .callout-note .callout-title{color:var(--teal)}
+
+    /* Figures / images */
+    figure{margin:26px 0; text-align:center}
+    figure img{
+      width:100%; max-width:700px; height:auto; border-radius:12px;
+      border:1px solid var(--card-border); box-shadow:var(--shadow);
+      cursor:zoom-in; transition:transform .15s ease, border-color .15s ease;
+      display:block; margin:0 auto; background:#0b0d12;
+    }
+    figure img:hover{transform:translateY(-2px); border-color:#3a4a67}
+    figcaption{
+      color:var(--muted); font-size:13.5px; margin-top:10px; max-width:640px;
+      margin-left:auto; margin-right:auto; line-height:1.5; font-style:italic;
+    }
+    .zoom-hint{
+      display:inline-flex; align-items:center; gap:6px; color:#7f8599; font-size:11.5px;
+      margin-top:6px; font-style:normal;
+    }
+
+    /* Lightbox */
+    .lightbox-overlay{
+      display:none; position:fixed; inset:0; background:rgba(8,9,13,.92);
+      z-index:1000; align-items:center; justify-content:center; padding:40px 20px;
+      cursor:zoom-out; backdrop-filter: blur(2px);
+    }
+    .lightbox-overlay.open{display:flex}
+    .lightbox-overlay img{
+      max-width:min(1400px,94vw); max-height:88vh; border-radius:10px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6); border:1px solid #2a3447;
+    }
+    .lightbox-close{
+      position:fixed; top:22px; right:28px; color:#e6e7ee; font-size:34px;
+      background:rgba(255,255,255,.06); border:1px solid #2a3447; border-radius:10px;
+      width:44px; height:44px; display:flex; align-items:center; justify-content:center;
+      cursor:pointer; line-height:1;
+    }
+    .lightbox-caption{
+      position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+      color:var(--muted); font-size:14px; max-width:80vw; text-align:center;
+    }
+
+    /* Section list boxes (Licensing section) */
+    .split-cols{display:grid; grid-template-columns:1fr; gap:24px}
+    @media(min-width:720px){.split-cols{grid-template-columns:1fr 1fr}}
+    .list-card{
+      border:1px solid var(--card-border); border-radius:14px; padding:20px 22px;
+      background:rgba(255,255,255,.02);
+    }
+    .list-card h4{margin:0 0 12px; font-size:15px; color:var(--text)}
+
+    hr.divider{border:none; border-top:1px solid var(--card-border); margin:48px 0}
+
+    /* Footer */
+    footer{
+      margin-top:64px; padding-top:24px; padding-bottom:2px;
+      border-top:1px solid #232a3a; color:var(--muted); font-size:0.9rem;
+      background:linear-gradient(to bottom, rgba(20,24,33,0) 0%, rgba(20,24,33,0.65) 100%);
+    }
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security" class="active">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <p class="breadcrumb"><a href="/MTPortfolio/Security">Security</a> / FortiGate 60E Firewall - Security Configuration</p>
+
+    <header>
+      <p class="kicker">Security Hardening Pass — MTPortfolio Infrastructure &amp; Security</p>
+      <h1>FortiGate 60E Security Configuration</h1>
+      <p class="lead">This page covers the security hardening pass performed on the FortiGate 60E firewall, building on the initial deployment and connectivity work documented in the Infrastructure &amp; Sysadmin section. Where that earlier work focused on getting traffic to flow correctly (interfaces, routing, baseline policies), this section focuses on defending the device and the network behind it: administrative access control, firewall policy discipline, DoS protection, certificate management, SSL inspection, VPN access, and logging.</p>
+    </header>
+
+    <p>Before any of that, one thing needs to be stated plainly, because it shapes every decision documented below.</p>
+
+    <figure>
+      <img src="Images/FGS36.png" alt="FortiGate 60E admin GUI showing the critical severity vulnerability banner" onclick="openLightbox(this)">
+      <figcaption>The FortiGate 60E admin GUI, showing the critical severity vulnerability banner that persists across the device due to its unlicensed, unregistered state.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <div class="callout callout-constraint">
+      <div class="callout-title">Constraint</div>
+      <p>This FortiGate 60E does not have an active FortiCare subscription. As a result, firmware updates are blocked, and several UTM-dependent security features (IPS, Antivirus, Web Filtering, Application Control) are unavailable without a paid license. The hardware has also reached end-of-life as a widely deployed model. Rather than pay for a subscription on EOL hardware whose value here is portfolio and learning, not production uptime, the approach taken throughout this section was to harden everything genuinely available without a license, and document the licensing wall honestly where it applies. See the Licensing &amp; EOL Constraints section at the end of this page for the full reasoning.</p>
+    </div>
+
+    <h2>Jump Host Prerequisite: Administrative Access Setup</h2>
+    <p>FortiGate administrative access in this environment is restricted to trusted hosts (covered in the next section). Before that restriction could be configured, a dedicated administrative access point was needed. The choice of that access point, and the network path required to reach it, surfaced several real configuration issues worth documenting in detail.</p>
+
+    <h3>Choosing the Access Point</h3>
+    <p>The first instinct was to browse to the FortiGate directly from DC01, the domain controller, since it was the only always-on Windows machine readily available. On reflection, this was reconsidered: DC01 is the highest-value asset in the lab, holding every domain identity, and routinely using it as a general-purpose admin workstation for browsing to other infrastructure increases its exposure for no real benefit. A browser is one of the more common footholds for compromise, and standard practice is a dedicated admin or jump workstation separate from identity infrastructure.</p>
+    <p>The existing Win11-Client VM (MTCLIENT1) was repurposed for this role instead: moved onto the Management VLAN (VLAN 50), given a static IP, and used going forward as the standing jump host for FortiGate, switch, and other infrastructure administration.</p>
+
+    <div class="callout callout-decision">
+      <div class="callout-title">Design Decision</div>
+      <p>Network segmentation (which VLAN a device sits on) and credential tiering (which account logs into that device) are separate controls. Placing the jump host on the Management VLAN does not, by itself, make it safe to log into with a domain admin account. The Windows OS login on the jump host uses SOperations, a dedicated security-operations account, kept separate from MT.Admin. This avoids caching domain admin credentials on a workstation used for routine browsing and administrative tasks.</p>
+    </div>
+
+    <p>Worth being precise about the limits of this choice: SOperations is a domain account, not a local account scoped to this VM alone. Logging into Windows interactively with any domain account, even a lower-privilege one, still caches a domain-valid credential on that machine. If the jump host were ever compromised, whatever SOperations has rights to elsewhere in the domain becomes reachable, not just this VM. This is meaningfully better than using MT.Admin, since SOperations carries far less privilege than domain admin, but it is not equivalent to a genuinely local account that has no value outside this single machine. A dedicated local account would be the stricter isolation choice for a pure jump host; SOperations was used here as a reasonable middle ground, since it already existed as a scoped security-operations account and matched the credential-tiering pattern established elsewhere in this lab.</p>
+
+    <h3>Static IP and VLAN Tagging</h3>
+    <p>The Win11-Client VM was assigned a static IP of <code>192.168.50.20/24</code>, gateway <code>192.168.50.6</code> (the Management VLAN SVI on Switch002), with DC01 (<code>192.168.20.10</code>) set as the primary DNS server so the VM could authenticate to the domain. Static addressing was used deliberately, consistent with every other administrative or infrastructure device in the lab: management-plane devices should have predictable addresses, not DHCP leases that can change.</p>
+
+    <figure>
+      <img src="Images/FGS1.png" alt="Static IP configuration on the Win11-Client VM" onclick="openLightbox(this)">
+      <figcaption>Static IP configuration on the Win11-Client VM: 192.168.50.20/24, gateway 192.168.50.6, DNS 192.168.20.10 (DC01) and 192.168.10.5 (BIND9) as secondary.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <p>On the Hyper-V side, the VM's virtual network adapter was tagged with VLAN ID 50 in the adapter's settings, so its traffic would be correctly tagged as it left the host through the external virtual switch.</p>
+
+    <figure>
+      <img src="Images/FGS2.png" alt="Hyper-V Manager showing the Win11-Client VM" onclick="openLightbox(this)">
+      <figcaption>Hyper-V Manager showing the Win11-Client VM alongside the lab's other VMs on SRV-HYPERV-01.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS3.png" alt="VLAN ID 50 enabled on the Win11-Client VM network adapter" onclick="openLightbox(this)">
+      <figcaption>VLAN ID 50 enabled on the Win11-Client VM's network adapter, tagging its traffic for the Management VLAN.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS4.png" alt="Same VLAN configuration confirmed" onclick="openLightbox(this)">
+      <figcaption>Same VLAN configuration confirmed.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Discovering the Fa0/2 Access-Mode Misconfiguration</h3>
+    <p>With the VM tagged and addressed, it still could not reach its gateway. Systematic troubleshooting (confirming the VM's own configuration, checking ARP, checking the VLAN 50 SVI on Switch002, and finally checking the MAC address table on Switch001) traced the problem back to Switch001 Fa0/2, the port connecting SRV-HYPERV-01 to the switch stack.</p>
+
+    <figure>
+      <img src="Images/FGS5.png" alt="Original configuration on Switch001 Fa0/2" onclick="openLightbox(this)">
+      <figcaption>Original configuration on Switch001 Fa0/2: switchport mode access, VLAN 20, with port security enabled (five-MAC maximum, sticky addressing).<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <p>This was a real misconfiguration, not a new problem introduced by this work: Fa0/2 was set to access mode with a single VLAN (20) assigned, despite already needing to carry traffic for a Hyper-V host running VMs across multiple VLANs (10, 20, 40, and now 50). An access port can carry exactly one VLAN; trunk-allowed-VLAN and native-VLAN lines were present in the configuration but completely inert, since access mode ignores them entirely.</p>
+
+    <p>A first attempt to fix this by simply adding VLAN 50 to the trunk-allowed list did not resolve the issue, since the port was still in access mode:</p>
+
+    <figure>
+      <img src="Images/FGS6.png" alt="Initial attempt adding VLAN 50 to the trunk-allowed list" onclick="openLightbox(this)">
+      <figcaption>Initial attempt: adding VLAN 50 to the trunk-allowed list. This had no effect because the port was still configured in access mode.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS7-AccessMode-Inconsistency.png" alt="Confirming the port remained in access mode" onclick="openLightbox(this)">
+      <figcaption>Confirming the port remained in access mode after the trunk-allowed-VLAN change, explaining why VLAN 50 traffic still could not pass.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Removing Port Security and Converting to Trunk Mode</h3>
+    <p>Correcting this required two changes: converting Fa0/2 to trunk mode, and removing port security entirely. Port security is designed for edge or access ports defending against unauthorized device connections in physically accessible spaces; it is a poor fit for a shared hypervisor uplink, where the number of MAC addresses is inherently unpredictable as VMs are added, rebuilt, or migrated over time. A fixed MAC limit on this kind of port creates operational friction without addressing a realistic threat, since the actual trust boundary here is the physical security of the server room and the hypervisor host itself.</p>
+
+    <figure>
+      <img src="Images/FGS8-Fa0-2-PortSecRemoval.png" alt="Removing port security from Fa0/2" onclick="openLightbox(this)">
+      <figcaption>Removing port security from Fa0/2. A typo in one sticky MAC address (0015.4c68.011d instead of 00e0.4c68.011d) was correctly rejected by the switch and had no effect on the final configuration; the sequence continued and completed successfully.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS9-Fa0-2-TrunkPortConfig.png" alt="Converting Fa0/2 to trunk mode" onclick="openLightbox(this)">
+      <figcaption>Converting Fa0/2 to trunk mode: access VLAN assignment removed, switchport mode trunk applied, native VLAN and allowed VLAN list reapplied and saved.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS10.png" alt="Final clean Fa0/2 configuration" onclick="openLightbox(this)">
+      <figcaption>Final, clean Fa0/2 configuration: trunk mode, native VLAN 99, allowed VLANs 1, 10, 20, 40, 50, 99, no port security remaining.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Verifying the Fix</h3>
+
+    <figure>
+      <img src="Images/FGS11.png" alt="Confirming Fa0/2 and Fa0/23 are trunking correctly" onclick="openLightbox(this)">
+      <figcaption>Confirming both Fa0/2 and the Switch001-to-Switch002 uplink (Fa0/23) are trunking correctly with VLAN 50 in the allowed list on both ends.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS12.png" alt="Spanning tree state for VLAN 50" onclick="openLightbox(this)">
+      <figcaption>Spanning tree state for VLAN 50 confirming both Fa0/2 and Fa0/23 are forwarding (FWD), not blocking.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <p>One additional, harder-to-spot issue remained after the trunk conversion: the VM could intermittently reach its gateway, then lose connectivity entirely, even with the switch-side configuration correct. This traced back to the VM's Hyper-V network adapter itself: the VLAN identification checkbox had reverted to unchecked at some point during the VM's reboot cycles, causing its traffic to leave untagged and fall through to the trunk's native VLAN (99) instead of VLAN 50. Re-enabling VLAN tagging on the adapter resolved this immediately.</p>
+
+    <div class="callout callout-lesson">
+      <div class="callout-title">Lesson Learned</div>
+      <p>Two distinct failure modes can produce the identical symptom of an unreachable gateway on a trunked VLAN: the VLAN being blocked (not in the trunk's allowed list) and the VLAN never being applied in the first place (untagged traffic silently falling to the native VLAN). Both look the same from a simple ping test. Confirming where a device's traffic actually lands, via the switch's MAC address table, is a more reliable diagnostic step than testing connectivity alone.</p>
+    </div>
+
+    <p>This finding was also fed back into the Managed Switch Security documentation as a short addendum, since that document's original coverage of Fa0/2 predated this correction.</p>
+
+    <hr class="divider">
+
+    <h2>Administrative Access Hardening</h2>
+    <p>With the jump host in place and reachable, the FortiGate's administrative access itself was hardened: restricting which hosts can reach the admin interface, disabling unencrypted access, tightening session and lockout behavior, enforcing a real password policy, and replacing the default admin account.</p>
+
+    <h3>Trusted Hosts</h3>
+
+    <figure>
+      <img src="Images/FGS13.png" alt="Initial login screen at 192.168.100.1" onclick="openLightbox(this)">
+      <figcaption>Initial login screen at https://192.168.100.1, the FortiGate's internal interface on the transit subnet.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS14.png" alt="FortiGate dashboard on first login" onclick="openLightbox(this)">
+      <figcaption>FortiGate dashboard on first login: firmware v7.4.5, licenses not in service (unlicensed device), and an early notice that firmware v7.4.12 is available.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <p>Administrative access was restricted to the jump host's IP address specifically (<code>192.168.50.20/32</code>), rather than the broader Management VLAN subnet. This is a deliberate defense-in-depth choice: even though VLAN 50 is itself a restricted segment, scoping trust to a single host means that if another device ever ends up on that VLAN, misconfigured or otherwise, it still cannot reach the FortiGate admin interface without being explicitly added.</p>
+
+    <figure>
+      <img src="Images/FGS15.png" alt="Trusted host restriction applied to the admin account" onclick="openLightbox(this)">
+      <figcaption>Trusted host restriction applied to the admin account: 192.168.50.20/32.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Access Protocols and DHCP Cleanup</h3>
+    <p>Reviewing the internal interface's administrative access settings surfaced two items worth correcting: HTTP was still enabled alongside HTTPS, and a DHCP server was enabled on the interface serving an address range (192.168.1.110-192.168.1.210) that does not correspond to the interface's actual subnet (192.168.100.0/30, a four-address transit link to Switch002). This DHCP server could never actually hand out a usable address on this interface; it was a stale default left over from initial setup.</p>
+
+    <figure>
+      <img src="Images/FGS16.png" alt="Network interfaces overview" onclick="openLightbox(this)">
+      <figcaption>Network interfaces overview, showing the internal hardware switch interface, DMZ, WAN1, and WAN2.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS17UncheckHTTP.png" alt="Internal interface edit screen with HTTP unchecked" onclick="openLightbox(this)">
+      <figcaption>Internal interface edit screen: HTTP unchecked (HTTPS and SSH retained for admin access), and the stale DHCP server disabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <div class="callout callout-note">
+      <div class="callout-title">Note</div>
+      <p>HTTP access was disabled without incident since the active session was already using HTTPS. Disabling HTTP does not require a trusted TLS certificate; a self-signed certificate (even the FortiGate's factory default) still provides working, encrypted HTTPS, it is simply not trusted by the browser by default. Certificate replacement is covered separately in the Certificate Management section.</p>
+    </div>
+
+    <h3>Idle Timeout and Password Policy</h3>
+    <p>Admin idle timeout was reduced from the default to 5 minutes. A password policy was configured requiring a 12-character minimum. An initial pass at enforcing character complexity did not fully apply as intended; this was caught during a screenshot review and corrected to properly enforce upper case, lower case, numeric, and special character requirements, with password reuse disabled.</p>
+
+    <figure>
+      <img src="Images/FGS18.png" alt="Admin idle timeout set to 5 minutes" onclick="openLightbox(this)">
+      <figcaption>Admin idle timeout set to 5 minutes.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS19.png" alt="Password policy corrected" onclick="openLightbox(this)">
+      <figcaption>Password policy, corrected: 12-character minimum, character complexity requirements enforced, password reuse disabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Admin Account Replacement</h3>
+    <p>The default admin account name is well known on any FortiGate deployment, making it a predictable target. A named replacement account (SOperations) was created with an equivalent super_admin profile and the same trusted-host restriction, and the original admin account was locked down rather than deleted, since some firmware versions restrict deleting the last super_admin account. Its trusted host was set to an unreachable value (0.0.0.0/32), rendering it effectively unusable without being reachable from anywhere on the network.</p>
+
+    <figure>
+      <img src="Images/FGS20.png" alt="Administrators list before SOperations account" onclick="openLightbox(this)">
+      <figcaption>Administrators list showing the admin account with its trusted host restriction applied, prior to the SOperations account being created.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS21.png" alt="Creating the SOperations administrator account" onclick="openLightbox(this)">
+      <figcaption>Creating the SOperations administrator account: local user, super_admin profile.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS22.png" alt="Password requirements met and trusted host enabled" onclick="openLightbox(this)">
+      <figcaption>Password requirements met, trusted host restriction enabled for the new account.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS23.png" alt="Confirming login access with the new account" onclick="openLightbox(this)">
+      <figcaption>Confirming login access with the new account.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS24AdminAcctLockdown.png" alt="Original admin account locked down" onclick="openLightbox(this)">
+      <figcaption>Original admin account locked down: trusted host set to 0.0.0.0/32, rendering it unreachable from any real network location rather than deleting it outright.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <hr class="divider">
+
+    <h2>Firewall Policy Hardening Pass</h2>
+    <p>The FortiGate's implicit deny is enabled by default and does not require explicit configuration to function; anything not explicitly permitted is already dropped. However, the implicit deny does not log by default, making it invisible in day-to-day operation and impossible to point to as evidence of a working default-deny posture. This pass adds an explicit, logged deny-all policy for every interface pairing already in use, sitting below the existing legitimate allow rules.</p>
+
+    <figure>
+      <img src="Images/FGS25.png" alt="Firewall policy list prior to the hardening pass" onclick="openLightbox(this)">
+      <figcaption>Firewall policy list prior to this pass: LAN-to-LAN and LAN-to-WAN accept rules, with only the built-in implicit deny below them.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Explicit Deny-All Policies</h3>
+    <p>An explicit deny-all policy was added for each interface pairing already carrying traffic: internal to internal, internal to wan1, and wan1 to internal. Each was configured with source ALL, destination ALL, service ALL, action DENY, and logging enabled, then positioned below the corresponding allow rule for that pairing. The FortiGate GUI's Incoming Interface field only accepted a single interface at a time rather than a blanket 'any' option on this firmware, so each pairing was created as its own explicit policy via the CLI.</p>
+
+    <figure>
+      <img src="Images/FGS26.png" alt="Creating the internal-to-internal deny-all policy via CLI" onclick="openLightbox(this)">
+      <figcaption>Creating the internal-to-internal deny-all policy via the CLI: srcintf internal, dstintf internal, action deny, logtraffic all.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS27.png" alt="Creating the wan1-to-internal deny-all policy via CLI" onclick="openLightbox(this)">
+      <figcaption>Creating the wan1-to-internal deny-all policy via CLI: srcintf wan1, dstintf internal, action deny, logtraffic all.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <div class="callout callout-lesson">
+      <div class="callout-title">Lesson Learned</div>
+      <p>A duplicate deny-all policy on the internal-to-wan1 pairing was discovered during review (two policies, both matching the same interface pair with identical settings). Since FortiGate evaluates policies top to bottom and stops at the first match, the duplicate was functionally harmless but confirmed via the CLI's raw config output (srcintf and dstintf values) rather than the GUI's interface-pair grouping, which can be easy to misread. The redundant policy was deleted, leaving one explicit deny-all per interface pairing.</p>
+    </div>
+
+    <figure>
+      <img src="Images/FGS28.png" alt="Final clean firewall policy list" onclick="openLightbox(this)">
+      <figcaption>Final, clean firewall policy list: one accept rule and one explicit, logged deny-all for each of the three active interface pairings, with the built-in implicit deny beneath all of them.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <hr class="divider">
+
+    <h2>DoS Protection Policies</h2>
+    <p>DoS Policy is a core FortiOS feature that does not require a FortiGuard subscription, but it is hidden from the GUI navigation by default on this firmware. It was enabled through Feature Visibility before it could be configured.</p>
+
+    <figure>
+      <img src="Images/FGS29DOSEnable.png" alt="DoS Policy toggle in Feature Visibility, disabled by default" onclick="openLightbox(this)">
+      <figcaption>DoS Policy toggle in Feature Visibility, disabled by default.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS30DOSEnable.png" alt="DoS Policy enabled" onclick="openLightbox(this)">
+      <figcaption>DoS Policy enabled, now available under Policy &amp; Objects.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Anomaly Sensor Configuration</h3>
+    <p>A DoS protection policy was applied to the WAN1 interface, the internet-facing side of the firewall, where flood and scan attempts would first arrive. Anomaly sensors were enabled across Layer 3 (session-count based) and Layer 4 (protocol-specific flood and scan) categories, each set to Block with logging enabled, using FortiGate's suggested default thresholds rather than hand-tuned values, since no observed traffic baseline exists yet for this lab to tune against.</p>
+
+    <figure>
+      <img src="Images/FGS31.png" alt="DoS policy creation with Layer 3 anomaly sensors" onclick="openLightbox(this)">
+      <figcaption>DoS policy creation: name, incoming interface (wan1), source and destination set to all, and the Layer 3 session-based anomaly sensors.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS32.png" alt="Layer 4 anomaly sensors enabled and set to Block" onclick="openLightbox(this)">
+      <figcaption>Layer 4 anomaly sensors enabled and set to Block: TCP SYN flood, TCP port scan, TCP/UDP session limits, UDP flood and scan, ICMP flood and sweep.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS33.png" alt="L3 and L4 anomaly sections confirmed with logging enabled" onclick="openLightbox(this)">
+      <figcaption>Scrolled view of the same policy confirming L3 and L4 anomaly sections both configured with logging enabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS34.png" alt="Saved DoS policy applied to the wan1 interface" onclick="openLightbox(this)">
+      <figcaption>Saved DoS policy, DoS-Protection-WAN1, applied to the wan1 interface against all sources and destinations.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <hr class="divider">
+
+    <h2>Certificate Management</h2>
+    <p>The FortiGate ships with a self-signed factory default certificate (Fortinet_Factory) for admin GUI access. Replacing it with a device-specific certificate is legitimate hardening that requires no license, but current FortiOS firmware only exposes a Certificate Signing Request (CSR) workflow in both the GUI and CLI, meaning a certificate cannot be self-signed and completed on the device alone without an external certificate authority to sign the request.</p>
+
+    <div class="callout callout-constraint">
+      <div class="callout-title">Constraint</div>
+      <p>Attempting to generate a certificate directly, both through the GUI (Generate CSR is the only generation option present) and through the CLI (<code>execute vpn certificate local generate</code>, which is documented as producing a CSR as well, despite living under the vpn certificate command namespace for historical reasons), confirmed that current FortiOS firmware does not offer a one-step self-signed local certificate option the way older versions did.</p>
+    </div>
+
+    <p>The workaround: a self-signed certificate and private key were generated externally using PowerShell's <code>New-SelfSignedCertificate</code>, exported as a password-protected PKCS #12 (.pfx) file, and imported into the FortiGate directly as a complete local certificate, bypassing the CSR flow entirely.</p>
+
+    <figure>
+      <img src="Images/FGS35.png" alt="Generating a self-signed certificate in PowerShell" onclick="openLightbox(this)">
+      <figcaption>Generating a self-signed certificate in PowerShell (New-SelfSignedCertificate) and exporting it as a password-protected PFX file.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS36.png" alt="FortiGate certificate creation options" onclick="openLightbox(this)">
+      <figcaption>FortiGate's certificate creation options: Let's Encrypt (requires DDNS or a purchased domain), Generate Certificate (CSR-based, requires external signing), and Import Certificate.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS37.png" alt="Importing the externally generated certificate as PKCS 12" onclick="openLightbox(this)">
+      <figcaption>Importing the externally generated certificate as a PKCS #12 file, with its export password.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS38.png" alt="Certificate successfully imported and generated" onclick="openLightbox(this)">
+      <figcaption>Certificate successfully imported and generated on the FortiGate.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS39.png" alt="Certificates list showing the new local certificate" onclick="openLightbox(this)">
+      <figcaption>Certificates list showing the new local certificate alongside FortiGate's built-in factory and inspection certificates.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <p>The new certificate was then applied as the HTTPS server certificate for administrative access, replacing the factory default.</p>
+
+    <figure>
+      <img src="Images/FGS40.png" alt="New certificate applied as the HTTPS server certificate" onclick="openLightbox(this)">
+      <figcaption>New certificate applied as the HTTPS server certificate for administrative access.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <div class="callout callout-note">
+      <div class="callout-title">Note</div>
+      <p>The certificate is consistently named FTG60E-Admin-Cert (transposed letters) rather than FGT60E-Admin-Cert throughout the PowerShell commands, the PFX filename, and the FortiGate import, a naming typo carried through consistently rather than corrected mid-stream. It is functionally harmless and left as-is, in keeping with documenting the process as it actually happened rather than a cleaned-up version.</p>
+    </div>
+
+    <hr class="divider">
+
+    <h2>SSL Inspection (Certificate-Inspection Mode)</h2>
+    <p>Full SSL deep-inspection, which decrypts, scans, and re-encrypts traffic, depends on the UTM engine and is not available without a FortiGuard subscription. Certificate-inspection mode is a lighter alternative available without a license: it examines the server certificate and SNI (Server Name Indication) during the TLS handshake without decrypting the payload, and can flag or block based on certificate validity, without providing content-level scanning.</p>
+
+    <figure>
+      <img src="Images/FGS41.png" alt="Built-in SSL/SSH inspection profiles" onclick="openLightbox(this)">
+      <figcaption>FortiGate's built-in SSL/SSH inspection profiles, including the read-only certificate-inspection profile used here.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <p>The built-in certificate-inspection profile was reviewed and applied to the LAN-to-WAN policy, with server certificate validation set to block expired, revoked, and validation-failed certificates.</p>
+
+    <figure>
+      <img src="Images/FGS42.png" alt="Certificate-inspection profile settings" onclick="openLightbox(this)">
+      <figcaption>The certificate-inspection profile's settings: SSL Certificate Inspection method, using Fortinet_CA_SSL, with blocked and untrusted certificates set to Block.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS43.png" alt="Certificate validation settings within the profile" onclick="openLightbox(this)">
+      <figcaption>Certificate validation settings within the profile: expired, revoked, timed-out, and validation-failed certificates all set to Block.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS44.png" alt="LAN-to-WAN policy prior to applying the profile" onclick="openLightbox(this)">
+      <figcaption>LAN-to-WAN policy prior to applying the certificate-inspection profile.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS45.png" alt="Certificate-inspection profile applied to the LAN-to-WAN policy" onclick="openLightbox(this)">
+      <figcaption>The certificate-inspection profile applied to the LAN-to-WAN policy's Security Profiles section, with Log Allowed Traffic corrected to All Sessions.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Verifying the Profile Is Active</h3>
+    <p>An initial verification attempt (browsing to a known-bad certificate test site and expecting a corresponding FortiGate log entry) surfaced two separate issues rather than confirming success: Forward Traffic logs were empty entirely, and the policy's own Log Allowed Traffic setting was found set to Security Events only rather than All Sessions.</p>
+
+    <div class="callout callout-lesson">
+      <div class="callout-title">Lesson Learned</div>
+      <p>A browser's own certificate warning (Chrome's 'Your connection is not private') is generated entirely client-side and proves nothing about whether a firewall in the traffic path is inspecting anything. Confirming SSL inspection is actually functioning requires checking the FortiGate's own logs for the session and confirming the SSL Inspection Profile field is populated, not just observing that the browser flagged the certificate.</p>
+    </div>
+
+    <p>Correcting the policy's logging setting to All Sessions, and separately confirming <code>logtraffic all</code> was actually saved in the running configuration (an earlier GUI change had not persisted), resolved both issues. With logging correctly capturing all sessions, the badssl.com test session and a normal HTTPS session both appeared in Forward Traffic, confirming the certificate-inspection profile was actively evaluating traffic in both directions.</p>
+
+    <figure>
+      <img src="Images/FGS57.png" alt="Browsing to expired.badssl.com" onclick="openLightbox(this)">
+      <figcaption>Browsing to expired.badssl.com, a known-bad certificate test site, as part of verifying the profile was actually inspecting traffic.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS58.png" alt="Forward Traffic log showing the badssl.com session" onclick="openLightbox(this)">
+      <figcaption>Forward Traffic log, with logging corrected to All Sessions: the badssl.com test session and normal HTTPS traffic both appearing with full source, destination, and application detail.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <hr class="divider">
+
+    <h2>VPN</h2>
+    <p>SSL-VPN is a core, unlicensed FortiGate feature, and was configured to provide remote administrative access to the lab's Management VLAN. Like DoS Policy, SSL-VPN's GUI presence required enabling first.</p>
+
+    <figure>
+      <img src="Images/FGS46.png" alt="Existing user groups prior to creating the VPN group" onclick="openLightbox(this)">
+      <figcaption>Existing user groups on the FortiGate prior to creating the dedicated VPN group.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS47.png" alt="Enabling SSL-VPN GUI visibility via the CLI" onclick="openLightbox(this)">
+      <figcaption>Enabling SSL-VPN GUI visibility via the CLI (config system settings, set gui-sslvpn enable).<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Local VPN User and Group</h3>
+    <p>VPN authentication for this pass uses a local FortiGate user rather than a domain account. A local user (vpn.mark) and a corresponding user group (SSLVPN-User) were created to scope VPN access.</p>
+
+    <figure>
+      <img src="Images/FGS48.png" alt="Local users on the FortiGate" onclick="openLightbox(this)">
+      <figcaption>Local users on the FortiGate: guest (built-in) and vpn.mark, created for VPN authentication.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS49.png" alt="SSLVPN-User group created" onclick="openLightbox(this)">
+      <figcaption>SSLVPN-User group created with vpn.mark as its member.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Destination Scope and Policy</h3>
+    <p>A firewall address object was created for the Management VLAN subnet, used as the VPN policy's destination, and a firewall policy was created connecting the SSL-VPN tunnel interface to the internal interface, permitting SSLVPN-User group members to reach the Management VLAN.</p>
+
+    <figure>
+      <img src="Images/FGS50.png" alt="Firewall address object VLAN50-Management" onclick="openLightbox(this)">
+      <figcaption>Firewall address object VLAN50-Management: 192.168.50.0/24 on the internal interface.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <h3>Correcting Scope and NAT</h3>
+    <p>Two settings on the initial policy were tightened after review. NAT was disabled: with NAT enabled, VPN client traffic reaching internal resources would have been source-translated to the FortiGate's own internal address, obscuring which VPN session actually generated any given connection in downstream logs. Service was narrowed from ALL to HTTPS and SSH specifically, matching the intended administrative use case rather than leaving the policy open to any protocol.</p>
+
+    <figure>
+      <img src="Images/FGS51.png" alt="SSL-to-Management policy after correction" onclick="openLightbox(this)">
+      <figcaption>SSL-to-Management policy after correction: service scoped to HTTPS and SSH, source restricted to SSLVPN_TUNNEL_ADDR1 and the SSLVPN-User group, NAT disabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS52.png" alt="Firewall policy list showing the finalized SSL-to-Management policy" onclick="openLightbox(this)">
+      <figcaption>Firewall policy list confirming the SSL-VPN tunnel interface to internal policy, NAT disabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <p>Split tunneling was configured on the SSL-VPN portal using the 'Enable split tunneling, based on policy destination' option, which automatically derives the routed subnet from the firewall policy's destination object rather than requiring a separately maintained routing address list. Full tunnel was deliberately not used: its primary justification is centralized traffic inspection through UTM security profiles, which this device does not have licensed, so routing all client traffic through the tunnel would add overhead without the corresponding benefit.</p>
+
+    <hr class="divider">
+
+    <h2>Local Logging</h2>
+    <p>Log &amp; Report settings on this FortiGate 60E expose only a Memory logging toggle, with no Disk logging tab available in the GUI. This is consistent with the model's hardware: entry-level FortiGate appliances without an SD card installed typically have no onboard storage for persistent logs, meaning logging here is memory-based only and does not survive a reboot.</p>
+
+    <figure>
+      <img src="Images/FGS53.png" alt="Log Settings Local Logs tab" onclick="openLightbox(this)">
+      <figcaption>Log Settings, Local Logs tab: only a Memory toggle is present, with no Disk logging option available on this hardware.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <div class="callout callout-constraint">
+      <div class="callout-title">Constraint</div>
+      <p>Logging on this device is memory-resident only. This is treated as a documented hardware constraint consistent with the device's broader licensing and lifecycle limitations, not a misconfiguration. A production deployment needing persistent, reboot-surviving logs would require either an SD card (if supported on this model) or forwarding to an external log receiver such as FortiAnalyzer or syslog, neither of which is present in this lab.</p>
+    </div>
+
+    <h3>Verifying Logs Actually Populate</h3>
+    <p>With the LAN-to-WAN policy's Log Allowed Traffic setting corrected to All Sessions, and logtraffic all confirmed saved in the running configuration, Forward Traffic logging was retested end to end: fresh HTTPS traffic was generated from the jump host, and the resulting sessions were confirmed appearing in Forward Traffic with source, destination, and application detail populated.</p>
+
+    <figure>
+      <img src="Images/FGS54.png" alt="CLI verification of firewall policy configuration" onclick="openLightbox(this)">
+      <figcaption>Logging in as SOperations via the CLI and reviewing the running firewall policy configuration, including the ssl-ssh-profile and nat settings on LAN-to-WAN.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS55.png" alt="Setting logtraffic all via the CLI" onclick="openLightbox(this)">
+      <figcaption>Explicitly setting logtraffic all on the LAN-to-WAN policy via the CLI, after an earlier GUI change had not persisted.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGS56.png" alt="Confirming logtraffic all saved in the running configuration" onclick="openLightbox(this)">
+      <figcaption>Confirming logtraffic all was actually saved in the running configuration for the LAN-to-WAN policy.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <div class="callout callout-lesson">
+      <div class="callout-title">Lesson Learned</div>
+      <p>Forward Traffic logs were empty for an extended period during SSL inspection verification, which was initially assumed to be an SSL inspection problem. The actual cause was the policy's own logging scope (Security Events only, not All Sessions), unrelated to SSL inspection at all. When a verification step produces no data at all, checking whether logging itself is correctly scoped is a useful early diagnostic step, before concluding the feature under test is not working.</p>
+    </div>
+
+    <hr class="divider">
+
+    <h2>Licensing &amp; EOL Constraints</h2>
+    <p>This FortiGate 60E does not have an active FortiCare or UTM subscription, and the hardware has reached end-of-life as a widely deployed entry-level model. These two facts shape what this page does and does not cover, and are worth stating plainly rather than working around silently.</p>
+
+    <div class="split-cols">
+      <div class="list-card">
+        <h4>What Requires a License</h4>
+        <ul class="doc-list">
+          <li>Firmware updates. Current FortiOS versions actively check license status before allowing an upgrade to proceed; device registration itself is free, but the upgrade is gated behind at least a base FortiCare support contract.</li>
+          <li>IPS (Intrusion Prevention), Antivirus, Web Filtering, and Application Control, all of which depend on the UTM engine and FortiGuard content updates.</li>
+          <li>Full SSL deep-inspection with content scanning, as distinct from the certificate-inspection mode used in this document, which does not require a license.</li>
+        </ul>
+      </div>
+      <div class="list-card">
+        <h4>What Does Not Require a License</h4>
+        <p class="body-tight">Everything documented on this page was configured without any paid subscription: administrative access hardening, firewall policy discipline and explicit deny-all logging, DoS protection policies, local certificate management, certificate-inspection SSL mode, SSL-VPN with local authentication, and memory-based local logging. Taken together, this represents a genuinely complete hardening pass within the constraints of the hardware, not a partial one.</p>
+      </div>
+    </div>
+
+    <h3>Why Paying for a License Was Not Pursued</h3>
+    <p>Given that the FortiGate 60E is already end-of-life, a paid FortiCare or UTM subscription would unlock features on hardware that Fortinet has otherwise stopped supporting with security patches and updates once its lifecycle window closes. For a home lab whose purpose is demonstrable, hands-on portfolio work rather than production uptime, that expense does not provide proportionate value. Understanding and clearly articulating a vendor's licensing and lifecycle model, including which features are gated behind which subscription tier, and making a deliberate, cost-aware decision not to pursue that path, is itself a legitimate piece of operational judgment.</p>
+
+    <h3>Compensating Network Design</h3>
+    <p>The absence of licensed threat-inspection features is partially offset by the network's layered design. The FortiGate sits behind the SOHO router's own NAT boundary with no inbound port forwarding, meaning it is not directly reachable from the internet; opportunistic scanning and exploit attempts targeting known FortiGate CVEs cannot reach it from outside. The SOHO router's own LAN segment and the lab's internal VLANs are also separate broadcast domains, so a device on the SOHO segment has no Layer 2 visibility into the lab's VLANs without an explicit FortiGate policy permitting it.</p>
+
+    <p>This does not eliminate risk. It does not protect against lateral movement originating from an already-compromised device inside the lab's own VLANs, which is precisely why the administrative-access trusted-host restrictions and local-in policy scoping documented on this page matter as a compensating control, not the network segmentation alone. Reduced attack surface from unsolicited external traffic, combined with deliberate internal access controls, is the accurate way to describe this device's security posture; it is not accurate to describe it as invulnerable.</p>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lightbox-overlay" id="lightboxOverlay" onclick="closeLightbox()">
+    <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+
+  <script>
+    function openLightbox(imgEl){
+      const overlay = document.getElementById('lightboxOverlay');
+      const lbImg = document.getElementById('lightboxImg');
+      const lbCaption = document.getElementById('lightboxCaption');
+      lbImg.src = imgEl.src;
+      lbImg.alt = imgEl.alt;
+      const fig = imgEl.closest('figure');
+      const captionEl = fig ? fig.querySelector('figcaption') : null;
+      lbCaption.textContent = captionEl ? captionEl.firstChild.textContent.trim() : '';
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      const overlay = document.getElementById('lightboxOverlay');
+      overlay.classList.remove('open');
+      document.getElementById('lightboxImg').src = '';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+    document.getElementById('lightboxImg').addEventListener('click', function(e){
+      e.stopPropagation();
+    });
+  </script>
+</body>
+</html>
