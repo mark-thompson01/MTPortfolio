@@ -1,1 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PowerShell Administration · Mark Thompson Portfolio</title>
+  <meta name="description" content="PowerShell-based administration of the mtlab.local home lab environment: Active Directory, DHCP, DNS, Hyper-V, system health, and Group Policy." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px; --term-bg:#0a0d13;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted); text-decoration:none; padding:12px 20px;
+      border-radius:12px; border:1px solid transparent; font-size:16px; font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .breadcrumb{color:var(--muted);font-size:0.92rem;margin:0 0 18px}
+    .breadcrumb a{color:var(--muted);text-decoration:none}
+    .breadcrumb a:hover{color:var(--brand)}
+    .breadcrumb span.sep{margin:0 8px;color:#4a5573}
+    .breadcrumb span.here{color:var(--text)}
+
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,42px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 auto 8px;font-size:clamp(16px,2.2vw,18px);text-align:center;max-width:820px}
+
+    .meta-card{
+      max-width:820px;margin:28px auto 0;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:22px 26px;
+    }
+    .meta-card p{margin:0 0 10px;color:#c7cbd9;font-size:0.96rem}
+    .meta-card p:last-child{margin-bottom:0}
+    .meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:14px}
+    .meta-item{
+      background:rgba(77,163,255,.06); border:1px solid #2a3a55; border-radius:10px;
+      padding:10px 14px;
+    }
+    .meta-item .k{color:var(--brand);font-size:0.72rem;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px}
+    .meta-item .v{font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;font-size:0.88rem;color:var(--text)}
+
+    /* TOC */
+    .toc{
+      max-width:820px;margin:28px auto 0;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border); border-radius:var(--radius);
+      box-shadow:var(--shadow); padding:22px 26px;
+    }
+    .toc h4{margin:0 0 12px;font-size:0.82rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+    .toc ol{margin:0;padding-left:20px;columns:2;column-gap:28px}
+    .toc li{margin-bottom:8px;break-inside:avoid}
+    .toc a{color:var(--text);text-decoration:none;font-size:0.94rem}
+    .toc a:hover{color:var(--brand)}
+
+    main{max-width:820px;margin:0 auto}
+
+    .section-block{margin:60px 0 0; scroll-margin-top:20px}
+    .section-block h2{
+      font-size:1.7rem; font-weight:800; margin:0 0 14px;
+      border-bottom:1px solid var(--card-border); padding-bottom:14px;
+    }
+    .section-block > p{color:#c7cbd9;margin:0 0 6px}
+
+    .subsection{margin:34px 0 0; scroll-margin-top:20px}
+    .subsection h3{color:var(--brand);font-size:1.12rem;font-weight:700;margin:0 0 10px}
+    .subsection p{color:#c7cbd9;margin:0 0 14px}
+
+    pre.cmd-block{
+      background:var(--term-bg); border:1px solid var(--card-border); border-radius:12px;
+      padding:16px 20px; overflow-x:auto; margin:0 0 18px;
+      box-shadow:0 6px 18px rgba(0,0,0,.3);
+    }
+    pre.cmd-block code{
+      font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      font-size:0.88rem; line-height:1.6; color:#9fd0ff; white-space:pre;
+    }
+    pre.cmd-block .cmt{color:#6b7488}
+
+    figure.shot{
+      margin:0 0 20px; border:1px solid var(--card-border); border-radius:12px;
+      overflow:hidden; background:var(--term-bg); box-shadow:var(--shadow);
+    }
+    figure.shot img{width:100%;display:block}
+    figure.shot figcaption{
+      padding:9px 16px; font-size:0.78rem; color:var(--muted); border-top:1px solid var(--card-border);
+      font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+    }
+    figure.shot figcaption .file{color:#7f8ec9}
+
+    .summary-list{color:#c7cbd9;padding-left:22px;margin:0 0 18px}
+    .summary-list li{margin-bottom:9px}
+
+    .back-to-top{
+      display:inline-block;margin-top:8px;color:var(--muted);text-decoration:none;font-size:0.85rem;
+    }
+    .back-to-top:hover{color:var(--brand)}
+
+    /* Footer */
+    footer{
+      margin-top:64px; padding-top:24px; padding-bottom:2px; border-top:1px solid #232a3a;
+      color:var(--muted); font-size:0.9rem;
+      background:linear-gradient(to bottom, rgba(20,24,33,0) 0%, rgba(20,24,33,0.65) 100%);
+    }
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin" class="active">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <p class="breadcrumb">
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <span class="sep">/</span>
+      <span class="here">PowerShell Administration</span>
+    </p>
+
+    <header>
+      <h1>PowerShell Administration</h1>
+      <p class="lead">Administering the mtlab.local home lab entirely from the command line &mdash; Active Directory, DHCP, DNS, Hyper-V, system health, and Group Policy, all through a single consistent PowerShell interface.</p>
+    </header>
+
+    <div class="meta-card">
+      <p>This page walks through PowerShell-based administration of the mtlab.local home lab environment. Commands are executed against a Windows Server 2022 domain controller (DC01) and the Hyper-V host (SRV-HYPERV-01), covering the full stack of services deployed across the lab: Active Directory, DHCP, DNS, Hyper-V, and Group Policy.</p>
+      <p>All commands are run under the <code>LAB\MT.Admin</code> privileged account. The material below is organized into seven operational subsections, each targeting a distinct service layer of the environment. This reflects how PowerShell is used in enterprise environments &mdash; not as a series of one-off commands, but as a consistent administrative interface across all services from a single management point.</p>
+      <p>The Group Policy subsection requires WinRM to be enabled on client machines. The remote <code>gpresult</code> verification via <code>Invoke-Command</code> is demonstrated against MTClient1 after enabling PSRemoting and adding it to DC01's TrustedHosts list.</p>
+      <div class="meta-grid">
+        <div class="meta-item"><span class="k">Domain</span><span class="v">mtlab.local</span></div>
+        <div class="meta-item"><span class="k">Domain Controller</span><span class="v">DC01</span></div>
+        <div class="meta-item"><span class="k">Hyper-V Host</span><span class="v">SRV-HYPERV-01</span></div>
+        <div class="meta-item"><span class="k">Admin Account</span><span class="v">LAB\MT.Admin</span></div>
+      </div>
+    </div>
+
+    <nav class="toc" aria-label="Table of contents">
+      <h4>On this page</h4>
+      <ol>
+        <li><a href="#sec1">1. Environment Setup</a></li>
+        <li><a href="#sec2">2. Active Directory Administration</a></li>
+        <li><a href="#sec3">3. DHCP Administration</a></li>
+        <li><a href="#sec4">4. DNS Administration</a></li>
+        <li><a href="#sec5">5. Hyper-V Administration</a></li>
+        <li><a href="#sec6">6. System Health and Reporting</a></li>
+        <li><a href="#sec7">7. Group Policy Administration</a></li>
+        <li><a href="#summary">Summary</a></li>
+      </ol>
+    </nav>
+
+    <main>
+
+      <!-- ============ SECTION 1 ============ -->
+      <section class="section-block" id="sec1">
+        <h2>1. Environment Setup</h2>
+        <p>Before running any administrative cmdlets, the PowerShell environment is verified and prepared. This covers execution policy, module availability, and establishing remote connectivity to SRV-HYPERV-01, which is not domain-joined and requires explicit WinRM configuration.</p>
+
+        <div class="subsection" id="1-1">
+          <h3>1.1 Execution Policy</h3>
+          <p>The session opens on DC01 logged in as LAB\MT.Admin. The execution policy is checked before any scripts are run.</p>
+          <figure class="shot">
+            <img src="Images/start8.png" alt="Fresh PowerShell prompt on DC01 as MT.Admin" loading="lazy" />
+            <figcaption><span>Session opens on DC01</span><span class="file">start8.png</span></figcaption>
+          </figure>
+          <pre class="cmd-block"><code>Get-ExecutionPolicy -List</code></pre>
+          <figure class="shot">
+            <img src="Images/start9.png" alt="Get-ExecutionPolicy -List output showing LocalMachine RemoteSigned" loading="lazy" />
+            <figcaption><span>Checking the current execution policy</span><span class="file">start9.png</span></figcaption>
+          </figure>
+          <p>LocalMachine is already set to RemoteSigned, meaning scripts downloaded from the internet must be signed, while locally created scripts run without restriction. This is the correct enterprise baseline. The policy is explicitly confirmed and set to ensure consistency.</p>
+          <pre class="cmd-block"><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
+Get-ExecutionPolicy</code></pre>
+          <figure class="shot">
+            <img src="Images/start10.png" alt="Set-ExecutionPolicy RemoteSigned confirmation and Get-ExecutionPolicy result" loading="lazy" />
+            <figcaption><span>Setting and confirming RemoteSigned at LocalMachine scope</span><span class="file">start10.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="1-2">
+          <h3>1.2 Module Verification</h3>
+          <p>The key RSAT management modules are confirmed before proceeding. ActiveDirectory and DhcpServer were installed as part of the AD DS role setup. DnsServer is verified separately after importing the ActiveDirectory module.</p>
+          <pre class="cmd-block"><code>Get-Module -ListAvailable | Where-Object {$_.Name -in @('ActiveDirectory','DHCPServer')} | Select-Object Name, Version, ModuleType</code></pre>
+          <figure class="shot">
+            <img src="Images/start11.png" alt="Get-Module output listing ActiveDirectory and DhcpServer modules" loading="lazy" />
+            <figcaption><span>Confirming ActiveDirectory and DhcpServer modules</span><span class="file">start11.png</span></figcaption>
+          </figure>
+          <pre class="cmd-block"><code>Import-Module ActiveDirectory
+Get-Module -ListAvailable | Where-Object {$_.Name -in @('ActiveDirectory','DHCPServer','DNSServer')} | Select-Object Name, Version, ModuleType</code></pre>
+          <figure class="shot">
+            <img src="Images/start12.png" alt="Import-Module ActiveDirectory then Get-Module showing ActiveDirectory, DhcpServer, and DnsServer" loading="lazy" />
+            <figcaption><span>Importing ActiveDirectory and confirming DnsServer availability</span><span class="file">start12.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="1-3">
+          <h3>1.3 PSRemoting to SRV-HYPERV-01</h3>
+          <p>SRV-HYPERV-01 runs Windows 11 Pro and is not domain-joined. Establishing a remote PowerShell session requires two prerequisites: WinRM must be enabled on the host itself, and DC01 must trust it via the TrustedHosts list. Without TrustedHosts configured, Kerberos authentication fails because the host is outside the domain.</p>
+          <p>The initial PSSession attempt fails with a Kerberos error because the switches were powered off, cutting the L2 path between the DC01 VM and SRV-HYPERV-01. Once network connectivity is restored, TrustedHosts is configured on DC01 and Enable-PSRemoting is run on the host.</p>
+          <pre class="cmd-block"><code>Enter-PSSession -ComputerName SRV-HYPERV-01 -Credential (Get-Credential)</code></pre>
+          <figure class="shot">
+            <img src="Images/start13.png" alt="Credential prompt for MT.Admin before the initial PSSession attempt" loading="lazy" />
+            <figcaption><span>Initial attempt &mdash; credential prompt</span><span class="file">start13.png</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="Images/start14.png" alt="Enter-PSSession failing with a Kerberos WinRM error, PSRemotingTransportException" loading="lazy" />
+            <figcaption><span>Attempt fails &mdash; Kerberos error, switches were down</span><span class="file">start14.png</span></figcaption>
+          </figure>
+          <p>After powering on the switches and restoring network connectivity, Enable-PSRemoting is run on SRV-HYPERV-01 and TrustedHosts is configured on DC01.</p>
+          <pre class="cmd-block"><code><span class="cmt"># On SRV-HYPERV-01 (run locally on the host):</span>
+Enable-PSRemoting -Force</code></pre>
+          <figure class="shot">
+            <img src="Images/start1.png" alt="Enable-PSRemoting -Force run locally on SRV-HYPERV-01" loading="lazy" />
+            <figcaption><span>Enabling PSRemoting on the host</span><span class="file">start1.png</span></figcaption>
+          </figure>
+          <pre class="cmd-block"><code><span class="cmt"># On DC01:</span>
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value 'SRV-HYPERV-01' -Force
+Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
+          <figure class="shot">
+            <img src="Images/start2.png" alt="Set-Item and Get-Item confirming TrustedHosts value SRV-HYPERV-01 on DC01" loading="lazy" />
+            <figcaption><span>Adding SRV-HYPERV-01 to DC01's TrustedHosts</span><span class="file">start2.png</span></figcaption>
+          </figure>
+          <p>The PSSession is retried using the local Lab-Client account on SRV-HYPERV-01, since the host is not domain-joined and cannot authenticate domain credentials.</p>
+          <pre class="cmd-block"><code>Enter-PSSession -ComputerName SRV-HYPERV-01 -Credential (Get-Credential)</code></pre>
+          <figure class="shot">
+            <img src="Images/start3.png" alt="Credential prompt for the local Lab-Client account" loading="lazy" />
+            <figcaption><span>Retry &mdash; credential prompt for local Lab-Client account</span><span class="file">start3.png</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="Images/start4.png" alt="Remote session established, hostname confirms SRV-HYPERV-01" loading="lazy" />
+            <figcaption><span>Session established &mdash; hostname confirms SRV-HYPERV-01</span><span class="file">start4.png</span></figcaption>
+          </figure>
+          <p>With the remote session established, a quick VM inventory is run to confirm Hyper-V management is accessible before exiting.</p>
+          <pre class="cmd-block"><code>Get-VM</code></pre>
+          <figure class="shot">
+            <img src="Images/start5.png" alt="Get-VM output listing pfSense, Ubuntu Server, Win11-Client, and Windows Server 2022 Eval" loading="lazy" />
+            <figcaption><span>VM inventory via remote session</span><span class="file">start5.png</span></figcaption>
+          </figure>
+          <pre class="cmd-block"><code>Get-VM | Select-Object Name, State, CPUUsage, MemoryAssigned, Uptime</code></pre>
+          <figure class="shot">
+            <img src="Images/start6.png" alt="Get-VM piped to Select-Object showing formatted VM details" loading="lazy" />
+            <figcaption><span>Formatted VM detail view</span><span class="file">start6.png</span></figcaption>
+          </figure>
+          <pre class="cmd-block"><code>Exit-PSSession</code></pre>
+          <figure class="shot">
+            <img src="Images/start7.png" alt="Exit-PSSession returns to DC01, hostname confirms DC01" loading="lazy" />
+            <figcaption><span>Exiting the session &mdash; back on DC01</span><span class="file">start7.png</span></figcaption>
+          </figure>
+        </div>
+        <a class="back-to-top" href="#top">&uarr; Back to top</a>
+      </section>
+
+      <!-- ============ SECTION 2 ============ -->
+      <section class="section-block" id="sec2">
+        <h2>2. Active Directory Administration</h2>
+        <p>Active Directory is the identity foundation of the lab. These cmdlets demonstrate querying and managing the domain structure, user accounts, and security groups, reflecting day-to-day AD administration tasks common in enterprise environments.</p>
+
+        <div class="subsection" id="2-1">
+          <h3>2.1 Domain Structure Query</h3>
+          <p>The OU structure is queried to confirm the organizational layout built during the AD environment setup. This returns the full distinguished name path for each OU, which is important for GPO targeting and user placement.</p>
+          <pre class="cmd-block"><code>Get-ADOrganizationalUnit -Filter * | Select-Object Name, DistinguishedName</code></pre>
+          <figure class="shot">
+            <img src="Images/AD1.png" alt="Get-ADOrganizationalUnit output listing the OU structure" loading="lazy" />
+            <figcaption><span>OU structure: Corp, Users, Engineering, HR, IT, Sales</span><span class="file">AD1.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="2-2">
+          <h3>2.2 User Account Inventory</h3>
+          <p>All domain user accounts are returned with their enabled status. This confirms the accounts created during the AD environment setup and identifies any disabled accounts.</p>
+          <pre class="cmd-block"><code>Get-ADUser -Filter * | Select-Object Name, SamAccountName, Enabled</code></pre>
+          <figure class="shot">
+            <img src="Images/AD2.png" alt="Get-ADUser output listing all domain user accounts and enabled status" loading="lazy" />
+            <figcaption><span>Domain user accounts and enabled status</span><span class="file">AD2.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="2-3">
+          <h3>2.3 Security Group Membership</h3>
+          <p>Domain Admins and Protected Users group membership is verified. MT.Admin is confirmed in both groups, reflecting the privileged account configuration established during AD setup.</p>
+          <pre class="cmd-block"><code>Get-ADGroupMember -Identity 'Domain Admins' | Select-Object Name, SamAccountName, objectClass</code></pre>
+          <figure class="shot">
+            <img src="Images/AD3.png" alt="Get-ADGroupMember for Domain Admins showing Administrator and MT.Admin" loading="lazy" />
+            <figcaption><span>Domain Admins membership</span><span class="file">AD3.png</span></figcaption>
+          </figure>
+          <pre class="cmd-block"><code>Get-ADGroupMember -Identity 'Protected Users' | Select-Object Name, SamAccountName</code></pre>
+          <figure class="shot">
+            <img src="Images/AD4.png" alt="Get-ADGroupMember for Protected Users showing MT.Admin, followed by detailed Get-ADUser query" loading="lazy" />
+            <figcaption><span>Protected Users membership, plus MT.Admin attribute query below</span><span class="file">AD4.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="2-4">
+          <h3>2.4 Full Group Inventory</h3>
+          <p>All AD security groups are listed with their scope and category. This provides a complete view of the group structure including default built-in groups and the DHCP-related groups added when the DHCP Server role was installed.</p>
+          <pre class="cmd-block"><code>Get-ADGroup -Filter * | Select-Object Name, GroupScope, GroupCategory</code></pre>
+          <figure class="shot">
+            <img src="Images/AD5.png" alt="Get-ADGroup output listing the full set of built-in and default AD security groups" loading="lazy" />
+            <figcaption><span>Full group inventory (top of output)</span><span class="file">AD5.png</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="Images/AD6.png" alt="Get-ADGroup output continued, including DHCP Users and DHCP Administrators groups" loading="lazy" />
+            <figcaption><span>Full group inventory (scrolled), including DHCP-related groups</span><span class="file">AD6.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="2-5">
+          <h3>2.5 Detailed User Attribute Query</h3>
+          <p>A targeted query against MT.Admin returns extended properties including last logon date and password set timestamp. EmailAddress and Department are blank in the lab context, which is expected for a home lab environment.</p>
+          <pre class="cmd-block"><code>Get-ADUser -Identity 'MT.Admin' -Properties * | Select-Object Name, SamAccountName, EmailAddress, Department, Enabled, PasswordLastSet, LastLogonDate</code></pre>
+          <p style="color:var(--muted);font-size:0.88rem">Output shown in the second command of <span class="file" style="font-family:'SFMono-Regular',Consolas,monospace;color:#7f8ec9">AD4.png</span> above.</p>
+        </div>
+
+        <div class="subsection" id="2-6">
+          <h3>2.6 User Lifecycle: Create, Modify, Disable</h3>
+          <p>A test user account is provisioned to demonstrate the full AD user management lifecycle. The account is created in the Corp\Users OU with a secure password, updated with department and title attributes, and then disabled to simulate an offboarding workflow.</p>
+          <pre class="cmd-block"><code>New-ADUser -Name 'Test.User' -SamAccountName 'Test.User' -UserPrincipalName 'Test.User@mtlab.local' \
+  -Path 'OU=Users,OU=Corp,DC=mtlab,DC=local' \
+  -AccountPassword (ConvertTo-SecureString 'Lab@12345!' -AsPlainText -Force) -Enabled $true
+
+Get-ADUser -Identity 'Test.User' | Select-Object Name, SamAccountName, Enabled
+
+Set-ADUser -Identity 'Test.User' -Department 'IT' -Title 'Lab-Technician'
+Get-ADUser -Identity 'Test.User' -Properties Department, Title | Select-Object Name, Department, Title</code></pre>
+          <figure class="shot">
+            <img src="Images/usermgmt1.png" alt="New-ADUser creating Test.User, followed by Set-ADUser updating Department and Title" loading="lazy" />
+            <figcaption><span>Provisioning Test.User and setting Department/Title</span><span class="file">usermgmt1.png</span></figcaption>
+          </figure>
+          <pre class="cmd-block"><code>Disable-ADAccount -Identity 'Test.User'
+Get-ADUser -Identity 'Test.User' | Select-Object Name, Enabled</code></pre>
+          <figure class="shot">
+            <img src="Images/usermgmt2.png" alt="Disable-ADAccount for Test.User, confirming Enabled is now False" loading="lazy" />
+            <figcaption><span>Disabling the account to simulate offboarding</span><span class="file">usermgmt2.png</span></figcaption>
+          </figure>
+        </div>
+        <a class="back-to-top" href="#top">&uarr; Back to top</a>
+      </section>
+
+      <!-- ============ SECTION 3 ============ -->
+      <section class="section-block" id="sec3">
+        <h2>3. DHCP Administration</h2>
+        <p>The DHCP Server role is installed on DC01 and serves three VLAN scopes across the lab. These cmdlets query scope configuration, active lease data, and server authorization status, demonstrating programmatic visibility into DHCP without relying on the Server Manager GUI.</p>
+
+        <div class="subsection" id="3-1">
+          <h3>3.1 Scope Inventory</h3>
+          <p>All three VLAN scopes are returned with their subnet mask, state, lease range, and duration. Each scope maps directly to a VLAN SVI configured on the Cisco Catalyst 3550.</p>
+          <pre class="cmd-block"><code>Get-DhcpServerv4Scope</code></pre>
+          <figure class="shot">
+            <img src="Images/dhcpadmin1.png" alt="Get-DhcpServerv4Scope output listing VLAN10-Servers, VLAN20-Infrastructure, and VLAN40-Clients scopes" loading="lazy" />
+            <figcaption><span>Three VLAN scopes: Servers, Infrastructure, Clients</span><span class="file">dhcpadmin1.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="3-2">
+          <h3>3.2 Scope Statistics and Active Leases</h3>
+          <p>Scope statistics show current utilization across all three VLANs. VLAN 10 (Servers) shows zero leases as expected, since all server addresses are statically assigned. VLAN 20 (Infrastructure) and VLAN 40 (Clients) show active leases, confirming the DHCP relay configuration on the 3550 is functioning correctly.</p>
+          <pre class="cmd-block"><code>Get-DhcpServerv4ScopeStatistics
+Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
+          <figure class="shot">
+            <img src="Images/dhcpadmin2.png" alt="Get-DhcpServerv4ScopeStatistics and Get-DhcpServerv4Lease output for the VLAN 40 client scope" loading="lazy" />
+            <figcaption><span>Scope utilization and active leases on VLAN 40</span><span class="file">dhcpadmin2.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="3-3">
+          <h3>3.3 DHCP Server Settings</h3>
+          <p>The server-level DHCP configuration is queried to confirm authorization status and operational settings.</p>
+          <pre class="cmd-block"><code>Get-DhcpServerSetting</code></pre>
+          <figure class="shot">
+            <img src="Images/dhcpadmin3.png" alt="Get-DhcpServerSetting output confirming domain-joined and authorized status" loading="lazy" />
+            <figcaption><span>Server-level DHCP settings and authorization status</span><span class="file">dhcpadmin3.png</span></figcaption>
+          </figure>
+        </div>
+        <a class="back-to-top" href="#top">&uarr; Back to top</a>
+      </section>
+
+      <!-- ============ SECTION 4 ============ -->
+      <section class="section-block" id="sec4">
+        <h2>4. DNS Administration</h2>
+        <p>DC01 serves as the primary authoritative DNS server for the mtlab.local domain. The Raspberry Pi 5 at 192.168.10.5 operates as a secondary/backup resolver. These cmdlets provide visibility into zone configuration, forwarder settings, and registered resource records.</p>
+
+        <div class="subsection" id="4-1">
+          <h3>4.1 Zone Inventory</h3>
+          <p>All configured DNS zones are returned with their type, integration status, and direction. The mtlab.local forward zone is AD-integrated (IsDsIntegrated: True), which means zone data is stored in Active Directory and replicated automatically.</p>
+          <pre class="cmd-block"><code>Get-DnsServerZone | Select-Object ZoneName, ZoneType, IsAutoCreated, IsDsIntegrated, IsReverseLookupZone</code></pre>
+          <figure class="shot">
+            <img src="Images/dnsadmin1.png" alt="Get-DnsServerZone output listing forward and reverse lookup zones" loading="lazy" />
+            <figcaption><span>DNS zone inventory</span><span class="file">dnsadmin1.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="4-2">
+          <h3>4.2 Forwarder Configuration</h3>
+          <p>DNS forwarders are queried to confirm external resolution is configured correctly. DC01 forwards queries it cannot answer locally to 8.8.8.8 (Google) and 1.1.1.1 (Cloudflare). The absence of the Raspberry Pi or DC01's own IP in the forwarder list is expected: DC01 is authoritative and does not forward to itself, and the Pi is a peer resolver, not a forwarder.</p>
+          <pre class="cmd-block"><code>Get-DnsServerForwarder</code></pre>
+          <figure class="shot">
+            <img src="Images/dnsadmin2.png" alt="Get-DnsServerForwarder output showing 8.8.8.8 and 1.1.1.1" loading="lazy" />
+            <figcaption><span>Configured forwarders: Google and Cloudflare</span><span class="file">dnsadmin2.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="4-3">
+          <h3>4.3 Resource Record Query</h3>
+          <p>Resource records in the mtlab.local forward zone are listed. The output includes the standard AD SRV records for Kerberos, LDAP, and Global Catalog services, as well as A records for domain-joined machines including AGENT11, dc01, labclient0E, and MTClient1.</p>
+          <pre class="cmd-block"><code>Get-DnsServerResourceRecord -ZoneName 'mtlab.local' | Select-Object HostName, RecordType, TimeToLive</code></pre>
+          <figure class="shot">
+            <img src="Images/dnsadmin3.png" alt="Get-DnsServerResourceRecord output listing SRV and A records for the mtlab.local zone" loading="lazy" />
+            <figcaption><span>SRV and A records in the mtlab.local zone</span><span class="file">dnsadmin3.png</span></figcaption>
+          </figure>
+        </div>
+        <a class="back-to-top" href="#top">&uarr; Back to top</a>
+      </section>
+
+      <!-- ============ SECTION 5 ============ -->
+      <section class="section-block" id="sec5">
+        <h2>5. Hyper-V Administration</h2>
+        <p>Hyper-V management commands run inside a remote PSSession to SRV-HYPERV-01, since the Hyper-V module resides on the host itself and cannot be invoked remotely without the session context. The session is re-established using the local Lab-Client account.</p>
+
+        <div class="subsection" id="5-1">
+          <h3>5.1 Remote Session</h3>
+          <p>A new PSSession is opened to SRV-HYPERV-01 for Hyper-V management. The credential prompt accepts the local Lab-Client account. Connection is confirmed with hostname.</p>
+          <pre class="cmd-block"><code>Enter-PSSession -ComputerName SRV-HYPERV-01 -Credential (Get-Credential)</code></pre>
+          <figure class="shot">
+            <img src="Images/hypervadmin1.png" alt="Credential prompt for the local Lab-Client account when opening the Hyper-V session" loading="lazy" />
+            <figcaption><span>Credential prompt for Lab-Client</span><span class="file">hypervadmin1.png</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="Images/hypervadmin2.png" alt="Session established, hostname confirms SRV-HYPERV-01" loading="lazy" />
+            <figcaption><span>Session confirmed via hostname</span><span class="file">hypervadmin2.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="5-2">
+          <h3>5.2 VM Inventory</h3>
+          <p>All four VMs on the Hyper-V host are returned with state, CPU usage, memory, and uptime. pfSense and Ubuntu Server are powered off. Win11-Client and Windows Server 2022 Eval are running with confirmed uptime and memory allocation.</p>
+          <pre class="cmd-block"><code>Get-VM | Select-Object Name, State, CPUUsage, MemoryAssigned, Uptime</code></pre>
+          <figure class="shot">
+            <img src="Images/hypervadmin3.png" alt="Get-VM output listing pfSense (Off), Ubuntu Server (Off), Win11-Client (Running), and Windows Server 2022 Eval (Running)" loading="lazy" />
+            <figcaption><span>VM inventory with state, CPU, memory, and uptime</span><span class="file">hypervadmin3.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="5-3">
+          <h3>5.3 Virtual Switch Inventory</h3>
+          <p>All virtual switches are returned with their type and bound physical adapter. This confirms the Hyper-V networking configuration documented in the Hyper-V Configuration section.</p>
+          <pre class="cmd-block"><code>Get-VMSwitch | Select-Object Name, SwitchType, NetAdapterInterfaceDescription</code></pre>
+          <figure class="shot">
+            <img src="Images/hypervadmin4.png" alt="Get-VMSwitch output listing SPAN-Monitor, WAN_SWITCH, LAB_INTERNAL, and the default internal switch" loading="lazy" />
+            <figcaption><span>Virtual switch configuration</span><span class="file">hypervadmin4.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="5-4">
+          <h3>5.4 VM Disk Path</h3>
+          <p>The VHDX path for the Ubuntu Server VM is queried to confirm the virtual disk location on the D: drive of SRV-HYPERV-01.</p>
+          <pre class="cmd-block"><code>Get-VMHardDiskDrive -VMName 'Ubuntu Server' | Select-Object VMName, Path</code></pre>
+          <figure class="shot">
+            <img src="Images/hypervadmin5.png" alt="Get-VMHardDiskDrive output showing the Ubuntu Server VHDX path on the D: drive" loading="lazy" />
+            <figcaption><span>Ubuntu Server VHDX location</span><span class="file">hypervadmin5.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="5-5">
+          <h3>5.5 Exit Remote Session</h3>
+          <p>The PSSession to SRV-HYPERV-01 is closed and the return to DC01 is confirmed.</p>
+          <pre class="cmd-block"><code>Exit-PSSession
+hostname
+whoami</code></pre>
+          <figure class="shot">
+            <img src="Images/hypervadmin6.png" alt="Exit-PSSession returns to DC01, hostname and whoami confirm DC01 and lab\mt.admin" loading="lazy" />
+            <figcaption><span>Back on DC01 as lab\mt.admin</span><span class="file">hypervadmin6.png</span></figcaption>
+          </figure>
+        </div>
+        <a class="back-to-top" href="#top">&uarr; Back to top</a>
+      </section>
+
+      <!-- ============ SECTION 6 ============ -->
+      <section class="section-block" id="sec6">
+        <h2>6. System Health and Reporting</h2>
+        <p>A system health check is run against DC01 to confirm disk space, service status, recent event log errors, and server uptime. This reflects the kind of operational reporting a sysadmin would run routinely to validate server health.</p>
+
+        <div class="subsection" id="6-1">
+          <h3>6.1 Disk Space</h3>
+          <p>Filesystem drives are queried to confirm available space on DC01. The C: drive shows approximately 16.7GB used and 109.8GB free.</p>
+          <pre class="cmd-block"><code>Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free</code></pre>
+          <figure class="shot">
+            <img src="Images/SysH_R1.png" alt="Get-PSDrive output showing used and free space on the C and D drives" loading="lazy" />
+            <figcaption><span>Disk space on DC01</span><span class="file">SysH_R1.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="6-2">
+          <h3>6.2 Critical Service Status</h3>
+          <p>The five critical domain controller services are checked: Active Directory Web Services (ADWS), DHCP, DNS, Netlogon, and Windows Time (W32Time). All five are confirmed Running with Automatic start type.</p>
+          <pre class="cmd-block"><code>Get-Service ADWS, DNS, DHCP, Netlogon, W32Time | Select-Object Name, Status, StartType</code></pre>
+          <figure class="shot">
+            <img src="Images/SysH_R2.png" alt="Get-Service output showing ADWS, DHCP, DNS, Netlogon, and W32Time all Running" loading="lazy" />
+            <figcaption><span>Critical DC services status</span><span class="file">SysH_R2.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="6-3">
+          <h3>6.3 System Event Log Errors</h3>
+          <p>The 10 most recent System event log errors are returned. The majority are NETLOGON errors from AGENT11 and LABCLIENT0E, which are expected in a lab environment where machines come online and offline. Two Microsoft-Windows-Time-Service entries from 6/22 indicate minor time sync events, both benign.</p>
+          <pre class="cmd-block"><code>Get-EventLog -LogName System -EntryType Error -Newest 10 | Select-Object TimeGenerated, Source, Message</code></pre>
+          <figure class="shot">
+            <img src="Images/SysH_R3.png" alt="Get-EventLog output listing the 10 most recent System error events" loading="lazy" />
+            <figcaption><span>Most recent System event log errors</span><span class="file">SysH_R3.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="6-4">
+          <h3>6.4 Server Uptime</h3>
+          <p>DC01 uptime is calculated by subtracting the last boot time from the current date/time. The server had been running for approximately 15 hours at the time of the health check.</p>
+          <pre class="cmd-block"><code>(Get-Date) - (gcim Win32_OperatingSystem).LastBootUpTime</code></pre>
+          <figure class="shot">
+            <img src="Images/SysH_R4.png" alt="TimeSpan output showing DC01 uptime of approximately 15 hours" loading="lazy" />
+            <figcaption><span>DC01 uptime calculation</span><span class="file">SysH_R4.png</span></figcaption>
+          </figure>
+        </div>
+        <a class="back-to-top" href="#top">&uarr; Back to top</a>
+      </section>
+
+      <!-- ============ SECTION 7 ============ -->
+      <section class="section-block" id="sec7">
+        <h2>7. Group Policy Administration</h2>
+        <p>Group Policy cmdlets require the GroupPolicy module, which is part of the GPMC RSAT tools installed on DC01. These commands demonstrate querying, auditing, and verifying GPO configuration across the mtlab.local domain.</p>
+        <p>Remote policy verification via Invoke-Command requires WinRM to be enabled on the target client. MTClient1 is prepared by enabling PSRemoting and adding it to DC01's TrustedHosts list before the remote gpresult command is run.</p>
+
+        <div class="subsection" id="7-1">
+          <h3>7.1 Preparing Remote Client for Policy Verification</h3>
+          <p>WinRM is enabled on MTClient1 (the Win11-Client VM on VLAN 20) and DC01's TrustedHosts list is updated to include it. This allows Invoke-Command to run gpresult remotely against the client.</p>
+          <pre class="cmd-block"><code><span class="cmt"># On DC01:</span>
+Set-Item WSMan:\localhost\Client\TrustedHosts -Value 'SRV-HYPERV-01,MTClient1' -Force
+
+<span class="cmt"># On MTClient1 (run locally on the VM):</span>
+Enable-PSRemoting -Force</code></pre>
+          <figure class="shot">
+            <img src="Images/gppasdmin0.png" alt="Set-Item updating TrustedHosts on DC01 and Enable-PSRemoting run on the Win11-Client VM" loading="lazy" />
+            <figcaption><span>Updating TrustedHosts and enabling PSRemoting on MTClient1</span><span class="file">gppasdmin0.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="7-2">
+          <h3>7.2 GPO Inventory</h3>
+          <p>All GPOs in the domain are returned with their status and creation/modification timestamps. Six GPOs are confirmed: the two default policies created at domain promotion, and four custom GPOs configured for the lab environment.</p>
+          <pre class="cmd-block"><code>Get-GPO -All | Select-Object DisplayName, GpoStatus, CreationTime, ModificationTime</code></pre>
+          <figure class="shot">
+            <img src="Images/gppsadmin1.png" alt="Get-GPO -All output listing six GPOs including default and custom policies" loading="lazy" />
+            <figcaption><span>Full GPO inventory</span><span class="file">gppsadmin1.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="7-3">
+          <h3>7.3 Individual GPO Detail</h3>
+          <p>Specific GPOs are queried by name to return their GUID and status. The GUID is used internally by Active Directory to uniquely identify each GPO and is referenced in SYSVOL replication.</p>
+          <pre class="cmd-block"><code>Get-GPO -Name 'Workstation-Logon-Banner' | Select-Object DisplayName, Id, GpoStatus
+Get-GPO -Name 'Corp-Drive-Mapping' | Select-Object DisplayName, Id, GpoStatus</code></pre>
+          <figure class="shot">
+            <img src="Images/gppsadmin2.png" alt="Get-GPO by name for Workstation-Logon-Banner and Corp-Drive-Mapping showing GUIDs and status" loading="lazy" />
+            <figcaption><span>Individual GPO GUID and status lookups</span><span class="file">gppsadmin2.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="7-4">
+          <h3>7.4 GPO Inheritance</h3>
+          <p>GPO inheritance is queried for the Corp\Users OU to confirm which policies apply to user objects in that container. The output shows all inherited GPO links and confirms inheritance is not blocked.</p>
+          <pre class="cmd-block"><code>Get-GPInheritance -Target 'OU=Users,OU=Corp,DC=mtlab,DC=local'</code></pre>
+          <figure class="shot">
+            <img src="Images/gppsadmin3.png" alt="Get-GPInheritance output for the Corp Users OU showing inherited GPO links" loading="lazy" />
+            <figcaption><span>Inheritance chain for OU=Users,OU=Corp</span><span class="file">gppsadmin3.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="7-5">
+          <h3>7.5 GPO Security Filtering</h3>
+          <p>The security permissions on Corp-Drive-Mapping are queried to show which principals have rights to apply, edit, or read the policy. Authenticated Users having GpoApply permission means the policy applies to all authenticated domain users by default.</p>
+          <pre class="cmd-block"><code>Get-GPPermission -Name 'Corp-Drive-Mapping' -All</code></pre>
+          <figure class="shot">
+            <img src="Images/gppsadmin4.png" alt="Get-GPPermission output showing trustees and permissions for Corp-Drive-Mapping" loading="lazy" />
+            <figcaption><span>Security filtering on Corp-Drive-Mapping</span><span class="file">gppsadmin4.png</span></figcaption>
+          </figure>
+        </div>
+
+        <div class="subsection" id="7-6">
+          <h3>7.6 Remote Policy Verification</h3>
+          <p>The applied Group Policy result set is queried remotely from MTClient1 using Invoke-Command. This confirms which GPOs have been applied to both the computer and the currently logged-in user, and identifies any policies that were filtered out.</p>
+          <pre class="cmd-block"><code>Invoke-Command -ComputerName MTClient1 -ScriptBlock { gpresult /r }</code></pre>
+          <figure class="shot">
+            <img src="Images/gppsadmin5.png" alt="Remote gpresult output showing computer settings and applied GPOs on MTClient1" loading="lazy" />
+            <figcaption><span>Remote gpresult &mdash; computer settings</span><span class="file">gppsadmin5.png</span></figcaption>
+          </figure>
+          <figure class="shot">
+            <img src="Images/gppsadmin6.png" alt="Remote gpresult output continued, showing user settings and applied GPOs" loading="lazy" />
+            <figcaption><span>Remote gpresult &mdash; user settings</span><span class="file">gppsadmin6.png</span></figcaption>
+          </figure>
+        </div>
+        <a class="back-to-top" href="#top">&uarr; Back to top</a>
+      </section>
+
+      <!-- ============ SUMMARY ============ -->
+      <section class="section-block" id="summary">
+        <h2>Summary</h2>
+        <p>This page covered PowerShell-based administration of the mtlab.local lab environment across seven operational subsections. All commands were executed under the LAB\MT.Admin privileged account from DC01.mtlab.local, with Hyper-V management performed via a remote PSSession to SRV-HYPERV-01.</p>
+        <p>The following was demonstrated:</p>
+        <ul class="summary-list">
+          <li>Verified and configured PowerShell execution policy (RemoteSigned at LocalMachine scope)</li>
+          <li>Confirmed availability of ActiveDirectory, DhcpServer, and DnsServer RSAT modules</li>
+          <li>Established a remote PSSession to SRV-HYPERV-01 using local Lab-Client credentials, after enabling PSRemoting on the host and configuring TrustedHosts on DC01</li>
+          <li>Queried the full Active Directory environment: OU structure, user accounts, group membership, and detailed user attributes</li>
+          <li>Demonstrated the complete user lifecycle: provisioned Test.User in Corp\Users, updated department and title attributes, and disabled the account</li>
+          <li>Queried DHCP scopes, utilization statistics, and active leases across VLAN 10, 20, and 40 subnets</li>
+          <li>Confirmed DHCP server is domain-joined and authorized in Active Directory</li>
+          <li>Queried DNS zones, forwarder configuration, and resource records in the mtlab.local forward zone</li>
+          <li>Managed Hyper-V remotely: VM inventory, virtual switch configuration, and VHDX disk path verification</li>
+          <li>Performed a system health check covering disk space, critical service status, recent event log errors, and server uptime</li>
+          <li>Queried the full GPO inventory, individual GPO GUIDs, OU inheritance chain, and security filtering permissions</li>
+          <li>Enabled WinRM on MTClient1 and verified applied Group Policy via remote Invoke-Command gpresult</li>
+        </ul>
+        <p>Group Policy and Ubuntu Server/Ansible subsections will be expanded in future iterations as those lab configurations are completed. PowerShell cmdlets targeting GPO management (Backup-GPO, Get-GPOReport) and cross-platform Linux interop via Ansible will be added as additional subsections once those environments are fully built out.</p>
+        <a class="back-to-top" href="#top">&uarr; Back to top</a>
+      </section>
+
+    </main>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
