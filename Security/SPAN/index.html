@@ -1,1 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SPAN - Switch Port Analyzer Configuration · Mark Thompson Portfolio</title>
+  <meta name="description" content="Configuring a Cisco SPAN session and a dedicated Hyper-V monitor VM to mirror and analyze switch traffic with Wireshark." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .breadcrumb{color:var(--muted);font-size:14px;margin:0 0 18px}
+    .breadcrumb a{color:var(--muted);text-decoration:none}
+    .breadcrumb a:hover{color:var(--brand)}
+
+    h1{margin:4px 0 10px;font-size:clamp(28px,4vw,38px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 36px;font-size:clamp(16px,2.2vw,18px);max-width:820px}
+
+    h2{
+      font-size:clamp(20px,2.6vw,24px);
+      font-weight:700;
+      margin:52px 0 6px;
+      padding-top:6px;
+      border-top:1px solid #232a3a;
+      display:flex; align-items:center; gap:12px;
+    }
+    h2:first-of-type{border-top:none;padding-top:0;margin-top:8px}
+    .step-num{
+      flex:0 0 auto; width:34px; height:34px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:0.95rem; color:var(--brand);
+      background:rgba(77,163,255,.08); border:1px solid #2a3a55;
+    }
+    h3{font-size:1.05rem;font-weight:700;margin:26px 0 8px;color:#d3d3d3}
+    p{color:#c7cadb;margin:10px 0}
+    ul, ol{color:#c7cadb;margin:10px 0;padding-left:22px}
+    li{margin:6px 0}
+    code, pre{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background:#0b0e14; border:1px solid var(--card-border); border-radius:10px;
+    }
+    code{padding:2px 6px;font-size:0.92em;color:#9fd0ff}
+    pre{padding:16px 18px;overflow-x:auto;font-size:0.88rem;line-height:1.55;color:#d7e2f2;box-shadow:var(--shadow)}
+    pre code{background:none;border:none;padding:0;color:inherit}
+
+    figure{margin:24px auto 32px;max-width:820px}
+    figure img{
+      width:100%; display:block; border-radius:var(--radius);
+      border:1px solid var(--card-border); box-shadow:var(--shadow);
+      cursor:zoom-in; transition:border-color .18s ease, transform .18s ease;
+    }
+    figure img:hover{border-color:#3a4a67;transform:translateY(-2px)}
+    figcaption{color:var(--muted);font-size:0.9rem;margin-top:10px;text-align:center}
+
+    /* Lightbox */
+    .lightbox{
+      display:none; position:fixed; inset:0; z-index:1000;
+      background:rgba(8,10,15,.92);
+      align-items:center; justify-content:center;
+      padding:32px; cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:min(1400px,94vw); max-height:90vh;
+      border-radius:12px; border:1px solid #3a4a67;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
+    .lightbox-close{
+      position:fixed; top:22px; right:28px;
+      color:var(--text); font-size:32px; line-height:1; font-weight:300;
+      background:rgba(255,255,255,.06); border:1px solid var(--card-border);
+      border-radius:50%; width:44px; height:44px;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; z-index:1001;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.12)}
+    .lightbox-hint{
+      position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+      color:var(--muted); font-size:0.85rem; z-index:1001;
+    }
+
+    .callout{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border); border-left:3px solid var(--brand);
+      border-radius:12px; padding:16px 20px; margin:22px 0;
+    }
+    .callout p{margin:0;color:#dfe2ee}
+    .callout strong{color:var(--text)}
+
+    .findings{
+      display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:18px 0 30px;
+    }
+    @media (max-width:680px){ .findings{grid-template-columns:1fr} }
+    .finding-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border); border-radius:14px; padding:18px 20px;
+    }
+    .finding-card h4{margin:0 0 8px;font-size:1rem;color:var(--brand)}
+    .finding-card p{margin:0;font-size:0.94rem}
+
+    footer{
+      margin-top:60px; padding-top:24px; padding-bottom:2px;
+      border-top:1px solid #232a3a; color:var(--muted); font-size:0.9rem;
+    }
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security" class="active">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <p class="breadcrumb"><a href="/MTPortfolio/Security">Security</a> / SPAN - Switch Port Analyzer Configuration</p>
+
+    <header>
+      <h1>SPAN - Switch Port Analyzer Configuration</h1>
+      <p class="lead">Mirroring live switch traffic to a dedicated capture VM using a Cisco SPAN session, an isolated Hyper-V virtual switch, and Wireshark — to get real visibility into what's actually crossing the wire in the lab.</p>
+    </header>
+
+    <h2><span class="step-num">1</span>Objective</h2>
+    <p>Port mirroring (SPAN — Switch Port Analyzer) copies traffic from one or more source ports to a destination port, so a packet analyzer can see traffic it would never normally receive on a switched network. The goal here was to mirror the uplinks and trunk carrying inter-VLAN and lab traffic to a capture point, then use Wireshark to baseline normal traffic and spot anything worth investigating — retransmissions, failed auth, unexpected broadcast/multicast chatter, DNS failures, and so on.</p>
+    <p>The setup has two halves: configuring the SPAN session on the physical Cisco switch, and building an isolated capture path on the Hyper-V host so a VM's NIC receives that mirrored traffic without ever touching the routed lab network.</p>
+
+    <h2><span class="step-num">2</span>Configuring the SPAN Session on the Switch</h2>
+    <p>On the Cisco switch, a local SPAN session was created with multiple source ports feeding a single destination port dedicated to monitoring:</p>
+    <pre><code>Switch001#conf t
+Switch001(config)#monitor session 1 source interface fa0/2 both
+Switch001(config)#monitor session 1 source interface fa0/3 both
+Switch001(config)#monitor session 1 source interface fa0/4 both
+Switch001(config)#monitor session 1 source interface fa0/5 both
+Switch001(config)#monitor session 1 source interface fa0/23 both
+Switch001(config)#monitor session 1 destination interface fa0/6
+Switch001(config)#end
+Switch001#write memory</code></pre>
+    <p>Fa0/2–Fa0/5 and the Fa0/23 trunk were set as sources in <code>both</code> directions (RX and TX), with Fa0/6 as the dedicated destination port feeding the capture NIC. <code>show monitor session 1</code> confirms the session is active with ingress learning disabled on the destination port, which is expected — a SPAN destination port doesn't participate in normal switching.</p>
+
+    <figure>
+      <img src="Images/span-01-switch-cli-config.png" alt="Cisco switch CLI configuring monitor session 1 with source and destination interfaces" onclick="openLightbox(this)">
+      <figcaption>Configuring monitor session 1 on the Cisco switch — Fa0/2–5 and Fa0/23 as sources, Fa0/6 as the SPAN destination.</figcaption>
+    </figure>
+
+    <h2><span class="step-num">3</span>Building an Isolated Capture Path in Hyper-V</h2>
+    <p>Rather than feeding mirrored traffic into an existing lab switch, a second physical NIC on the Hyper-V host (a USB-to-Gigabit adapter) was cabled directly to the SPAN destination port and dedicated entirely to capture traffic. This keeps mirrored traffic off the routed lab network and avoids any risk of loops or duplicate frames reaching production VMs.</p>
+
+    <h3>Creating a dedicated external virtual switch</h3>
+    <p>In Hyper-V Manager, a new external virtual switch was created and bound to that dedicated adapter.</p>
+    <figure>
+      <img src="Images/span-02-hyperv-vswitch-manager.png" alt="Hyper-V Manager Virtual Switch Manager menu option" onclick="openLightbox(this)">
+      <figcaption>Opening the Virtual Switch Manager from Hyper-V Manager.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-03-create-vswitch-external.png" alt="Creating a new external virtual switch" onclick="openLightbox(this)">
+      <figcaption>Creating a new virtual switch of type External.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-04-vswitch-span-monitor-properties.png" alt="SPAN-Monitor virtual switch bound to the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
+      <figcaption>The <strong>SPAN-Monitor</strong> virtual switch, bound to the ASIX USB-to-Gigabit adapter with "Allow management operating system to share this network adapter" left unchecked — keeping the host itself off the mirrored segment.</figcaption>
+    </figure>
+
+    <h3>Attaching the capture VM</h3>
+    <p>A Windows 11 client VM was given a second network adapter connected to the SPAN-Monitor switch, dedicated purely to receiving mirrored traffic.</p>
+    <figure>
+      <img src="Images/span-05-vm-settings-menu.png" alt="Opening Settings for the Win11-Client VM in Hyper-V Manager" onclick="openLightbox(this)">
+      <figcaption>Opening Settings on the Win11-Client capture VM.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-06-add-hardware-network-adapter.png" alt="Adding a second network adapter to the VM" onclick="openLightbox(this)">
+      <figcaption>Adding a second Network Adapter alongside the VM's existing LAB_INTERNAL adapter.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-07-nic-bound-to-span-monitor.png" alt="New network adapter bound to the SPAN-Monitor virtual switch" onclick="openLightbox(this)">
+      <figcaption>The new adapter connected to the SPAN-Monitor virtual switch.</figcaption>
+    </figure>
+
+    <h3>Setting the NIC to port-mirroring destination</h3>
+    <p>Under the new adapter's Advanced Features, the mirroring mode was set to <strong>Destination</strong> — this is the setting that actually tells Hyper-V to hand this adapter a copy of traffic rather than treat it as a normal network connection.</p>
+    <figure>
+      <img src="Images/span-08-port-mirroring-destination.png" alt="Hyper-V port mirroring mode set to Destination on the SPAN-Monitor adapter" onclick="openLightbox(this)">
+      <figcaption>Setting the SPAN-Monitor adapter's mirroring mode to Destination under Advanced Features.</figcaption>
+    </figure>
+
+    <div class="callout">
+      <p><strong>Why a second NIC and a dedicated vSwitch instead of just plugging Wireshark into the trunk:</strong> isolating the mirrored feed on its own virtual switch and physical adapter means the capture VM never sees — or injects into — live lab traffic. It's a passive tap in spirit, built out of what was on hand rather than a purpose-built TAP device.</p>
+    </div>
+
+    <h3>Confirming the physical adapter mapping</h3>
+    <p>A quick check in Network Connections on the host confirms Ethernet 3 is the ASIX USB-to-Gigabit adapter carrying the SPAN feed — the same adapter bound to the SPAN-Monitor virtual switch above.</p>
+    <figure>
+      <img src="Images/span-09-network-connections-asix-adapter.png" alt="Windows Network Connections showing Ethernet 3 as the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
+      <figcaption>Confirming Ethernet 3 maps to the ASIX USB-to-Gigabit adapter dedicated to the SPAN capture path.</figcaption>
+    </figure>
+
+    <h2><span class="step-num">4</span>Capturing Traffic with Wireshark</h2>
+    <p>With the capture path in place, Wireshark was pointed at Ethernet 3 inside the capture VM to start pulling in the mirrored traffic.</p>
+    <figure>
+      <img src="Images/span-10-wireshark-interface-list.png" alt="Wireshark interface selection screen with Ethernet 3 available" onclick="openLightbox(this)">
+      <figcaption>Wireshark's interface list, with Ethernet 3 (the SPAN feed) ready to capture on.</figcaption>
+    </figure>
+
+    <h3>First look: unfiltered capture</h3>
+    <p>An unfiltered capture immediately showed a healthy amount of Layer 2 control-plane noise mixed in with real traffic — PVST+ BPDUs advertising the STP root bridge, ARP requests, and ICMP echo traffic between lab hosts.</p>
+    <figure>
+      <img src="Images/span-11-wireshark-unfiltered-capture.png" alt="Unfiltered Wireshark capture showing mixed STP, ARP, and ICMP traffic" onclick="openLightbox(this)">
+      <figcaption>Unfiltered capture — STP, ARP, and ICMP all visible on the mirrored trunk.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-12-wireshark-stp-pvst-arp.png" alt="Wireshark capture showing PVST+ configuration BPDUs and an ARP who-has request" onclick="openLightbox(this)">
+      <figcaption>PVST+ configuration BPDUs advertising root bridge priority per VLAN, alongside an ARP "who has" broadcast.</figcaption>
+    </figure>
+
+    <h3>Cutting the noise: filtering out STP and ARP</h3>
+    <p>Since Fa0/23 (the inter-switch trunk) was one of the mirrored sources, STP BPDUs and ARP broadcasts dominated the capture. A simple display filter cleared that out and left the traffic actually worth reading:</p>
+    <pre><code>not stp and not arp</code></pre>
+    <figure>
+      <img src="Images/span-13-wireshark-filtered-not-stp-arp.png" alt="Wireshark filtered to exclude STP and ARP, showing TCP retransmissions and DNS/TLS traffic" onclick="openLightbox(this)">
+      <figcaption>With STP and ARP filtered out, TCP retransmissions and TLS application data stand out clearly.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-14-wireshark-filtered-dns-icmp.png" alt="Filtered capture showing DNS queries and ICMP echo traffic" onclick="openLightbox(this)">
+      <figcaption>DNS queries to Cloudflare (1.1.1.1) alongside ICMP echo request/reply pairs between lab hosts.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-15-wireshark-filtered-ssdp-dns.png" alt="Filtered capture showing SSDP notify traffic and DNS queries with TCP retransmissions" onclick="openLightbox(this)">
+      <figcaption>SSDP discovery traffic and DNS queries, with TCP retransmissions to 192.168.10.5 worth a closer look.</figcaption>
+    </figure>
+
+    <h2><span class="step-num">5</span>Protocol-Level Analysis</h2>
+    <p>With a clean feed established, protocol-specific filters were used to dig into what individual hosts were actually doing.</p>
+
+    <div class="findings">
+      <div class="finding-card">
+        <h4>ICMP</h4>
+        <p>Filtering on <code>icmp</code> surfaced steady echo request/reply pairs between 192.168.20.10 and 192.168.10.20, plus a <strong>Destination Unreachable (Port Unreachable)</strong> response from 192.168.10.5 — a clear sign that host was rejecting traffic on a closed port rather than silently dropping it.</p>
+      </div>
+      <div class="finding-card">
+        <h4>DNS</h4>
+        <p>Filtering on <code>dns</code> showed repeated queries for <code>1.debian.pool.ntp.org</code> and <code>0.freebsd.pool.ntp.org</code> returning <strong>Server failure</strong> responses from the internal resolver at 192.168.10.5 — a useful flag that NTP resolution wasn't fully healthy for at least one lab host.</p>
+      </div>
+      <div class="finding-card">
+        <h4>SMB / SMB2</h4>
+        <p>Filtering on <code>smb</code> caught NetBIOS Host Announcements naming DC01 as a Domain Controller. Filtering on <code>smb2</code> traced a full negotiate-and-authenticate exchange ending in <strong>STATUS_LOGON_FAILURE</strong> for a service account — worth following up as a possible stale credential or misconfigured account.</p>
+      </div>
+    </div>
+
+    <figure>
+      <img src="Images/span-16-wireshark-icmp-filter.png" alt="Wireshark ICMP filter showing echo request and reply traffic plus a destination unreachable response" onclick="openLightbox(this)">
+      <figcaption>ICMP filter: steady echo traffic, with one Destination Unreachable (Port Unreachable) response.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-17-wireshark-dns-filter.png" alt="Wireshark DNS filter showing standard queries and Server failure responses for NTP pool hostnames" onclick="openLightbox(this)">
+      <figcaption>DNS filter: NTP pool hostname lookups returning Server failure from the internal resolver.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-18-wireshark-smb-filter.png" alt="Wireshark SMB filter showing Host Announcement browser traffic naming DC01" onclick="openLightbox(this)">
+      <figcaption>SMB filter: NetBIOS Host Announcements identifying DC01 as Workstation, Server, and Domain Controller.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/span-19-wireshark-smb2-filter.png" alt="Wireshark SMB2 filter showing a negotiate and NTLMSSP authentication exchange ending in STATUS_LOGON_FAILURE" onclick="openLightbox(this)">
+      <figcaption>SMB2 filter: negotiate → NTLMSSP authentication → STATUS_LOGON_FAILURE for a lab service account.</figcaption>
+    </figure>
+
+    <h2><span class="step-num">6</span>Takeaways</h2>
+    <ul>
+      <li>SPAN plus an isolated capture VM gives real visibility into switched traffic without touching production VLANs or risking a loop on the destination port.</li>
+      <li>Mirroring a trunk means STP and ARP will dominate the raw capture — <code>not stp and not arp</code> is the fastest way back to signal.</li>
+      <li>Protocol-specific filters (<code>icmp</code>, <code>dns</code>, <code>smb2</code>) turned up concrete, actionable findings: a port-unreachable host, unhealthy NTP resolution, and a failing service account logon — exactly the kind of thing packet analysis is for.</li>
+    </ul>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox-hint">Click anywhere to close</div>
+  </div>
+
+  <script>
+    function openLightbox(imgEl){
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      lbImg.src = imgEl.src;
+      lbImg.alt = imgEl.alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('open');
+      document.getElementById('lightbox-img').src = '';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
