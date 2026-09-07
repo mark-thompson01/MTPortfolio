@@ -1,1 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Managed Switch Security · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hardening Layer 2 access controls across the lab's managed switches: port security, trunk security, and VLAN segmentation with the VLAN 999 blackhole." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    .breadcrumb{color:var(--muted);font-size:14px;margin:0 0 18px}
+    .breadcrumb a{color:var(--muted);text-decoration:none}
+    .breadcrumb a:hover{color:var(--brand)}
+
+    h1{margin:4px 0 6px;font-size:clamp(28px,4vw,38px);font-weight:800;letter-spacing:.2px}
+    .subtitle{color:var(--brand);font-size:0.9rem;font-weight:600;letter-spacing:.3px;margin:0 0 16px;text-transform:uppercase}
+    .lead{color:var(--muted);margin:0 0 36px;font-size:clamp(16px,2.2vw,18px);max-width:820px}
+
+    h2{
+      font-size:clamp(20px,2.6vw,24px);
+      font-weight:700;
+      margin:56px 0 6px;
+      padding-top:6px;
+      border-top:1px solid #232a3a;
+      display:flex; align-items:center; gap:12px;
+    }
+    h2:first-of-type{border-top:none;padding-top:0;margin-top:8px}
+    .step-num{
+      flex:0 0 auto; width:34px; height:34px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:0.95rem; color:var(--brand);
+      background:rgba(77,163,255,.08); border:1px solid #2a3a55;
+    }
+    h3{font-size:1.15rem;font-weight:700;margin:36px 0 8px;color:#e2e4ee}
+    h4{font-size:0.98rem;font-weight:700;margin:22px 0 6px;color:#d3d3d3}
+    p{color:#c7cadb;margin:10px 0}
+    ul, ol{color:#c7cadb;margin:10px 0;padding-left:22px}
+    li{margin:6px 0}
+    code, pre{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background:#0b0e14; border:1px solid var(--card-border); border-radius:10px;
+    }
+    code{padding:2px 6px;font-size:0.92em;color:#9fd0ff}
+    pre{padding:16px 18px;overflow-x:auto;font-size:0.88rem;line-height:1.55;color:#d7e2f2;box-shadow:var(--shadow)}
+    pre code{background:none;border:none;padding:0;color:inherit}
+
+    figure{margin:22px auto 30px;max-width:900px}
+    figure img{
+      width:100%; display:block; border-radius:var(--radius);
+      border:1px solid var(--card-border); box-shadow:var(--shadow);
+      cursor:zoom-in; transition:border-color .18s ease, transform .18s ease;
+    }
+    figure img:hover{border-color:#3a4a67;transform:translateY(-2px)}
+    figcaption{color:var(--muted);font-size:0.9rem;margin-top:10px;text-align:center}
+
+    .callout{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border); border-left:3px solid var(--brand);
+      border-radius:12px; padding:16px 20px; margin:22px 0;
+    }
+    .callout p{margin:0;color:#dfe2ee}
+    .callout p + p{margin-top:10px}
+    .callout strong{color:var(--text)}
+    .callout.issue{border-left-color:#e0a63f}
+    .callout.gap{border-left-color:#7f8599}
+    .callout.resolved{border-left-color:#4dd08a}
+
+    table{width:100%;border-collapse:collapse;margin:18px 0 30px;font-size:0.92rem}
+    th, td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--card-border);color:#c7cadb;vertical-align:top}
+    th{color:var(--text);font-weight:700;background:rgba(255,255,255,.03)}
+    tr:last-child td{border-bottom:none}
+
+    footer{
+      margin-top:60px; padding-top:24px; padding-bottom:2px;
+      border-top:1px solid #232a3a; color:var(--muted); font-size:0.9rem;
+    }
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
+
+    /* Lightbox */
+    .lightbox{
+      display:none; position:fixed; inset:0; z-index:1000;
+      background:rgba(8,10,15,.92);
+      align-items:center; justify-content:center;
+      padding:32px; cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:min(1400px,94vw); max-height:90vh;
+      border-radius:12px; border:1px solid #3a4a67;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
+    .lightbox-close{
+      position:fixed; top:22px; right:28px;
+      color:var(--text); font-size:32px; line-height:1; font-weight:300;
+      background:rgba(255,255,255,.06); border:1px solid var(--card-border);
+      border-radius:50%; width:44px; height:44px;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; z-index:1001;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.12)}
+    .lightbox-hint{
+      position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+      color:var(--muted); font-size:0.85rem; z-index:1001;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security" class="active">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <p class="breadcrumb"><a href="/MTPortfolio/Security">Security</a> / Managed Switch Security</p>
+
+    <header>
+      <h1>Managed Switch Security</h1>
+      <p class="subtitle">Security · Section 2 of 8</p>
+      <p class="lead">Hardening Layer 2 access controls across all three managed switches in the lab: the Cisco Catalyst 2950 (Switch001), the Cisco Catalyst 3550 (Switch002), and the Dell PowerConnect 6248P (Switch003) — covering switch port security, trunk security, and VLAN segmentation, including the VLAN 999 blackhole for unused ports.</p>
+    </header>
+
+    <p>This document does not sanitize the process. Two genuine issues were discovered during verification: a pair of ports where sticky MAC learning had not yet occurred at the time of the verification snapshot, and a native VLAN tagging mismatch on the Switch002-to-Switch003 trunk link that was found, diagnosed, and corrected in the course of this work. Both are documented in full below, including the diagnostic commands used and the reasoning behind each fix.</p>
+
+    <h2><span class="step-num">1</span>Switch Port Security</h2>
+    <p>Switch port security limits which device is allowed to communicate on a given access port. Rather than trusting any device plugged into a live jack, each secured port is configured with a maximum number of allowed MAC addresses. Using sticky learning, the switch treats whatever device is transmitting on the port at the time of configuration as the authorized device, writes that MAC address into the running configuration as a static entry, and rejects traffic from any other MAC address that later appears on that port.</p>
+    <p>This control is applied only to active, in-use access ports. Ports that are unused are handled separately, through administrative shutdown and reassignment to the VLAN 999 blackhole (see Section 3), since a port that is already down and isolated has no need for MAC-based restriction on top of that.</p>
+
+    <h3>1.1 Switch001 (Cisco Catalyst 2950)</h3>
+    <p>Switch001 hosts four active access ports carrying server and infrastructure traffic: the Hyper-V host (Fa0/2), TrueNAS (Fa0/3), the Raspberry Pi 5 DNS server (Fa0/4), and the Raspberry Pi 3 Samba NAS (Fa0/5). All four were configured identically, as a contiguous interface range, with a maximum of one MAC address per port, sticky learning, and a restrict violation action so that an unauthorized device is blocked without taking the entire port down.</p>
+    <pre><code>interface range fa0/2 - 5
+switchport mode access
+switchport port-security
+switchport port-security maximum 1
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+end
+write memory</code></pre>
+    <figure>
+      <img src="Images/Switch001-Config.png" alt="Switch001 port security configuration applied to Fa0/2 through Fa0/5" onclick="openLightbox(this)">
+      <figcaption>Switch001: port security configuration applied to Fa0/2 through Fa0/5.</figcaption>
+    </figure>
+
+    <p>Verification confirms the control is enabled and active on all four ports, with a restrict violation action:</p>
+    <figure>
+      <img src="Images/Switch001-Verify.png" alt="Switch001 show port-security and show port-security address output" onclick="openLightbox(this)">
+      <figcaption>Switch001: <code>show port-security</code> and <code>show port-security address</code> output.</figcaption>
+    </figure>
+
+    <div class="callout">
+      <p><strong>Verification Note:</strong> Fa0/3 (TrueNAS) shows a Current Address count of 0 and does not appear in the Secure MAC Address table, while Fa0/2, Fa0/4, and Fa0/5 all show a learned sticky address. This is expected, not a failure. Sticky learning only occurs once traffic actually passes through the port, and TrueNAS was not actively transmitting at the moment this snapshot was captured. A follow-up verification pass, taken after TrueNAS generates traffic on the port, would be expected to show a learned sticky MAC entry.</p>
+    </div>
+
+    <h4>Issue Discovered: Shared Hypervisor Uplink Exceeded Port Security Limit</h4>
+    <p>After the entire lab was powered off for several days and then brought back online, Domain Controller DC01 showed a valid IP assignment but could not reach any host on the network, not even its own default gateway. DC01 runs as a VM on the SRV-HYPERV-01 Hyper-V host, and its traffic path runs from the VM through the Hyper-V external vSwitch, out a dedicated USB-to-Ethernet adapter, into Switch001 Fa0/2, the same port secured earlier in this section with a maximum of one MAC address.</p>
+    <p>That maximum of one is the root cause. Fa0/2 is not a single-device access port; it is a shared uplink carrying traffic for every VM bridged onto that external vSwitch, DC01 included, each with its own distinct MAC address. With the port limited to one MAC and sticky learning enabled, whichever VM transmitted first after power-on had its MAC locked in as the sole authorized address. Every other VM sharing that same physical adapter, including DC01, had its frames silently discarded under the restrict violation action from that point forward. The port itself stayed up throughout, which is why DC01 showed a normal IP configuration while remaining completely unreachable.</p>
+    <figure>
+      <img src="Images/MistakeFix.png" alt="Switch001 PSECURE_VIOLATION log entry for Fa0/2 followed by the fix" onclick="openLightbox(this)">
+      <figcaption>Switch001: PSECURE_VIOLATION log entry for Fa0/2, followed by the fix — maximum raised to 5 and the sticky table cleared.</figcaption>
+    </figure>
+    <p>The console log confirms the violation directly: a security violation on Fa0/2 caused by a specific MAC address that exceeded the port's one-address limit. The fix raises the maximum to account for every MAC expected to transit that shared uplink, three current VMs plus headroom for a planned fourth, and clears the existing sticky entry so the port can relearn from a clean state rather than staying pinned to whichever device won the race after the last reboot:</p>
+    <pre><code>enable
+configure terminal
+interface fa0/2
+switchport port-security maximum 5
+end
+clear port-security sticky interface fa0/2
+write memory</code></pre>
+
+    <div class="callout resolved">
+      <p><strong>Resolved:</strong> Raising the maximum to 5 and clearing the stale sticky entry restored connectivity for DC01 and every other VM sharing Fa0/2. The underlying lesson matters more than the fix itself: port security's default model assumes one device per port, and that assumption does not hold on a port that is structurally a shared hypervisor uplink. The maximum on a port like this is not a value to set once; it is a running total tied to how many VMs live on that host, and it needs to be revisited every time that inventory changes, or the same outage will recur after the next reboot.</p>
+    </div>
+
+    <h3>1.2 Switch002 (Cisco Catalyst 3550)</h3>
+    <p>Switch002 has a single active client access port, Fa0/2, connected to the HT Technology Mini PC on VLAN 40. The remaining relevant ports on this switch are either trunk links (Fa0/20, Fa0/23) or a Layer 3 routed uplink to the FortiGate 60E (Fa0/24), none of which take port security since it applies only to Layer 2 access ports.</p>
+    <pre><code>interface fa0/2
+switchport mode access
+switchport port-security
+switchport port-security maximum 1
+switchport port-security violation restrict
+switchport port-security mac-address sticky
+end
+write memory</code></pre>
+    <figure>
+      <img src="Images/Switch002-Config.png" alt="Switch002 port security configuration applied to Fa0/2" onclick="openLightbox(this)">
+      <figcaption>Switch002: port security configuration applied to Fa0/2.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/Switch002-Verify1.png" alt="Switch002 show port-security interface fa0/2 output" onclick="openLightbox(this)">
+      <figcaption>Switch002: <code>show port-security interface fa0/2</code> output.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/Switch002-Verify2.png" alt="Switch002 show port-security and show port-security address output" onclick="openLightbox(this)">
+      <figcaption>Switch002: <code>show port-security</code> and <code>show port-security address</code> output.</figcaption>
+    </figure>
+
+    <div class="callout">
+      <p><strong>Verification Note:</strong> Fa0/2 shows zero total, configured, and sticky MAC addresses, with a Last Source Address of 0000.0000.0000. As with Fa0/3 on Switch001, this reflects the fact that the HT Technology Mini PC was not actively passing traffic at the time port security was enabled and verified. The control is correctly applied and will lock in the device's MAC address the next time it transmits on this port.</p>
+    </div>
+
+    <h3>1.3 Switch003 (Dell PowerConnect 6248P)</h3>
+    <p>Switch003 carries two active client access ports: ThinkPad E15 #1 on 1/g11 and ThinkPad E15 #2 on 1/g25. The Dell PowerConnect CLI departs meaningfully from Cisco IOS syntax for this feature. There is no sticky mode; the 6248P supports either dynamic locking, where the switch learns the connected MAC and holds it as long as the link stays up, or static locking, where the MAC is entered manually. There is also no configurable violation action; unauthorized frames are simply discarded by default rather than triggering a selectable restrict, shutdown, or protect mode as on Cisco IOS.</p>
+    <pre><code>configure
+interface ethernet 1/g11
+port security max 1
+port security
+exit
+configure
+interface ethernet 1/g25
+port security max 1
+port security
+exit
+copy running-config startup-config</code></pre>
+    <figure>
+      <img src="Images/Switch003-Config.png" alt="Switch003 port security configuration applied to 1/g11 and 1/g25" onclick="openLightbox(this)">
+      <figcaption>Switch003: port security configuration applied to 1/g11 and 1/g25.</figcaption>
+    </figure>
+
+    <p>Verification on 1/g11 confirms the port is locked, with a discard action, a maximum of one address, and SNMP trap notifications disabled:</p>
+    <figure>
+      <img src="Images/Switch003-Verify.png" alt="Switch003 show ports security ethernet 1/g11 output" onclick="openLightbox(this)">
+      <figcaption>Switch003: <code>show ports security ethernet 1/g11</code> output.</figcaption>
+    </figure>
+
+    <div class="callout gap">
+      <p><strong>Documentation Gap:</strong> No verification screenshot exists for 1/g25 (ThinkPad E15 #2). The configuration command was issued and saved alongside 1/g11 in the same session, but a corresponding <code>show ports security ethernet 1/g25</code> was not captured. This is noted honestly rather than omitted. The configuration is presumed applied based on the shared configuration screenshot, and a follow-up verification screenshot is a known outstanding item for this section.</p>
+    </div>
+
+    <h3>1.4 Cisco IOS vs. Dell PowerConnect: Command Comparison</h3>
+    <p>Because this section spans two different vendor CLIs, the table below summarizes the practical differences encountered while implementing the same security control across platforms.</p>
+    <table>
+      <thead>
+        <tr><th>Concept</th><th>Cisco IOS (2950 / 3550)</th><th>Dell PowerConnect (6248P)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Enable port security</td><td><code>switchport port-security</code></td><td><code>port security</code></td></tr>
+        <tr><td>Set maximum MACs</td><td><code>switchport port-security maximum 1</code></td><td><code>port security max 1</code></td></tr>
+        <tr><td>Sticky learning</td><td><code>switchport port-security mac-address sticky</code></td><td>Not supported; dynamic or static locking only</td></tr>
+        <tr><td>Violation action</td><td>Configurable: restrict, shutdown, or protect</td><td>Fixed; unauthorized frames are discarded</td></tr>
+        <tr><td>Verification</td><td><code>show port-security interface</code></td><td><code>show ports security ethernet</code></td></tr>
+      </tbody>
+    </table>
+
+    <h2><span class="step-num">2</span>Trunk Security</h2>
+    <p>Trunk security governs how VLAN traffic is carried across the switch-to-switch links that form the backbone of the lab network. Two trunk links exist in the current topology: Switch001 to Switch002 over Fa0/23 on both ends, and Switch002 to Switch003 over Fa0/20 (Cisco trunk) to 1/g48 (Dell general-mode port). The core security concern on any trunk is consistent handling of the native VLAN. A mismatch between what one end sends untagged and what the other end expects tagged is a textbook VLAN hopping exposure, and this section documents one such mismatch being found and corrected.</p>
+
+    <h3>2.1 Switch001 to Switch002 (Fa0/23)</h3>
+    <p>Both ends of this link are Cisco Catalyst switches, which keeps the configuration syntax identical on both sides. VLAN 99 is used as the native VLAN, with VLANs 1, 10, 20, 40, and 99 permitted across the link. VLAN 50 (Management) does not appear in the allowed list shown below because these screenshots were captured before VLAN 50 existed as a concept in this lab at all. VLAN 50 was created later, during the FortiGate 60E deployment documented in the Infrastructure &amp; Sysadmin section, after ping tests from the FortiGate to the switch management IPs failed. The root cause was that switch management was still running on VLAN 1, the default VLAN present on every port by default and a recognized security risk. That failure prompted a dedicated Management VLAN migration: VLAN 50 was created on Switch001 and Switch002, their management interfaces were moved off VLAN 1 onto new VLAN 50 SVIs (Switch001 at 192.168.50.2, Switch002 at 192.168.50.6), and VLAN 50 was added to the Fa0/23 trunk allowed list on both switches at that time. Switch003 was not part of that migration; its own VLAN 50 gap was a separate, later discovery covered in Section 2.2.</p>
+    <pre><code>interface fa0/23
+description Trunk-to-Switch002-3550
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk native vlan 99
+switchport trunk allowed vlan 1,10,20,40,99
+no shutdown
+exit</code></pre>
+    <figure>
+      <img src="Images/switch001-25-Trunk.png" alt="Switch001 Fa0/23 trunk configuration to Switch002" onclick="openLightbox(this)">
+      <figcaption>Switch001: Fa0/23 trunk configuration to Switch002.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/switch001-29.png" alt="Switch001 show interfaces trunk output for Fa0/23" onclick="openLightbox(this)">
+      <figcaption>Switch001: <code>show interfaces trunk</code> output for Fa0/23.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/switch002-20.png" alt="Switch002 Fa0/23 trunk configuration to Switch001" onclick="openLightbox(this)">
+      <figcaption>Switch002: Fa0/23 trunk configuration to Switch001.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/switch002-25.png" alt="Switch002 show interfaces trunk output for Fa0/23" onclick="openLightbox(this)">
+      <figcaption>Switch002: <code>show interfaces trunk</code> output for Fa0/23.</figcaption>
+    </figure>
+    <p>Both sides report identical trunking status, encapsulation, native VLAN, and allowed VLAN list. This link required no troubleshooting. VLAN 50's presence on this link following the Management VLAN migration is confirmed in the final trunk verification shown at the end of Section 2.2, once Switch003 was also brought into agreement.</p>
+
+    <h3>2.2 Switch002 to Switch003 (Fa0/20 / 1/g48)</h3>
+    <p>This link connects a Cisco trunk port to a Dell PowerConnect port running in General mode, the Dell equivalent used for links that need explicit tagged and untagged VLAN membership rather than Cisco's single native-VLAN model. The original configuration on 1/g48 declared VLAN 99 as untagged and VLANs 10, 20, and 40 as tagged. VLAN 50 (Management) does not appear yet in this initial configuration; it was added to this trunk in a later pass, described immediately below, so its absence here is expected rather than an oversight.</p>
+    <pre><code>interface ethernet 1/g48
+description Trunk-to-Switch002-3550
+switchport mode general
+switchport general pvid 99
+switchport general allowed vlan add 99 untagged
+switchport general allowed vlan add 10,20,40 tagged</code></pre>
+    <figure>
+      <img src="Images/6248P6.png" alt="Switch003 original 1/g48 configuration, VLAN 99 declared untagged, VLAN 50 not yet present" onclick="openLightbox(this)">
+      <figcaption>Switch003: original 1/g48 configuration, VLAN 99 declared untagged, VLAN 50 not yet present.</figcaption>
+    </figure>
+
+    <p>VLAN 50 (Management) was added to this trunk later, during the VLAN 999 blackhole audit documented in the Infrastructure &amp; Sysadmin section. When that addition was applied, VLAN 99 was re-added in the same command alongside 10, 20, 40, and 50, which changed its tagging state from untagged to tagged in the process. The two verification screenshots below capture that resulting state, with VLAN 50 now present.</p>
+    <figure>
+      <img src="Images/6248P-TrunkVerify1.png" alt="Switch003 show interfaces switchport ethernet 1/g48, showing VLAN 99 as Tagged following the VLAN 50 addition" onclick="openLightbox(this)">
+      <figcaption>Switch003: <code>show interfaces switchport ethernet 1/g48</code>, showing VLAN 99 as Tagged following the VLAN 50 addition.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/6248P-TrunkVerify2.png" alt="Switch003 show running-config interface ethernet 1/g48, VLANs 10, 20, 40, 50, and 99 all tagged" onclick="openLightbox(this)">
+      <figcaption>Switch003: <code>show running-config interface ethernet 1/g48</code>, VLANs 10, 20, 40, 50, and 99 all tagged.</figcaption>
+    </figure>
+
+    <h4>Issue Discovered: Native VLAN Tagging Mismatch</h4>
+    <p>Reviewing the running configuration on 1/g48 side by side with the Switch002 trunk configuration surfaced a genuine inconsistency. Switch002's Fa0/20 is a true Cisco trunk port with a native VLAN of 99, meaning it sends VLAN 99 traffic untagged by default, standard IEEE 802.1Q behavior. Switch003's 1/g48, however, had VLAN 99 explicitly declared as tagged following the VLAN 50 update. One end of the link was sending VLAN 99 untagged while the other end expected to receive it tagged.</p>
+    <figure>
+      <img src="Images/6248P-TrunkVerify2.png" alt="Switch003 running-config confirming VLAN 99 still tagged, the state that prompted the mismatch investigation" onclick="openLightbox(this)">
+      <figcaption>Switch003: running-config confirming VLAN 99 still tagged — the state that prompted the mismatch investigation.</figcaption>
+    </figure>
+
+    <h4>Diagnosis</h4>
+    <p>To confirm the mismatch before making any changes, two read-only commands were run on Switch002 to check the Fa0/20 side of the link directly, since no prior screenshot had captured that port from Switch002's perspective:</p>
+    <pre><code>show run interface fa0/20
+show interfaces fa0/20 switchport</code></pre>
+
+    <div class="callout gap">
+      <p><strong>Documentation Gap:</strong> The initial diagnostic pass on Fa0/20 reported an Administrative Mode of trunk but an Operational Mode of down, because the Dell PowerConnect 6248P was powered off at the time and Fa0/20 had no active link partner to negotiate trunking with. No screenshot of that initial down-state output was captured; the diagnostic screenshots that follow were taken after the 6248P was confirmed powered on and the same two commands were re-run. Noted honestly rather than reconstructed after the fact.</p>
+    </div>
+
+    <figure>
+      <img src="Images/IssueFix1.png" alt="Switch002 Fa0/20 configuration, re-verified with the 6248P powered on" onclick="openLightbox(this)">
+      <figcaption>Switch002: Fa0/20 configuration, re-verified with the 6248P powered on.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/IssueFix2.png" alt="Switch002 Fa0/20 now reports Operational Mode trunk, confirming the link is active" onclick="openLightbox(this)">
+      <figcaption>Switch002: Fa0/20 now reports Operational Mode: trunk, confirming the link is active.</figcaption>
+    </figure>
+
+    <h4>Fix Applied</h4>
+    <p>With the link confirmed active, VLAN 99 was corrected on the Switch003 side to match Switch002's native, untagged handling:</p>
+    <pre><code>enable
+configure
+interface ethernet 1/g48
+switchport general allowed vlan add 99 untagged
+exit
+copy running-config startup-config</code></pre>
+    <figure>
+      <img src="Images/IssueFix3.png" alt="Switch003 VLAN 99 tagging corrected to untagged on 1/g48" onclick="openLightbox(this)">
+      <figcaption>Switch003: VLAN 99 tagging corrected to untagged on 1/g48.</figcaption>
+    </figure>
+
+    <h4>Fix Verified</h4>
+    <p>Post-fix verification confirms VLAN 99 now shows an egress rule of Untagged, while VLANs 10, 20, 40, and 50 remain correctly Tagged:</p>
+    <figure>
+      <img src="Images/IssueFix4.png" alt="Switch003 show interfaces switchport ethernet 1/g48 after the fix, VLAN 99 now Untagged" onclick="openLightbox(this)">
+      <figcaption>Switch003: <code>show interfaces switchport ethernet 1/g48</code> after the fix, VLAN 99 now Untagged.</figcaption>
+    </figure>
+    <p>The running configuration reflects the corrected state as two separate allowed-VLAN statements: VLAN 99 on its own line, defaulting to untagged, and VLANs 10, 20, 40, and 50 declared tagged. This split is simply how the Dell CLI represents mixed tagged and untagged membership on the same port; it is not a leftover duplicate command.</p>
+    <figure>
+      <img src="Images/IssueFix5.png" alt="Switch003 running-config for 1/g48 after the fix, showing the split tagged and untagged declarations" onclick="openLightbox(this)">
+      <figcaption>Switch003: running-config for 1/g48 after the fix, showing the split tagged/untagged declarations.</figcaption>
+    </figure>
+    <p>As a final consistency check, Switch002's trunk table was reviewed once more to confirm both trunk links now report matching status, native VLAN, and allowed VLAN lists:</p>
+    <figure>
+      <img src="Images/IssueFix6.png" alt="Switch002 show interfaces trunk confirming Fa0/20 and Fa0/23 both trunking with matching native VLAN and allowed VLAN lists" onclick="openLightbox(this)">
+      <figcaption>Switch002: <code>show interfaces trunk</code>, confirming Fa0/20 and Fa0/23 both trunking with matching native VLAN and allowed VLAN lists.</figcaption>
+    </figure>
+
+    <div class="callout resolved">
+      <p><strong>Resolved:</strong> The Switch002-to-Switch003 trunk link now has consistent native VLAN handling on both ends. The discovery, diagnosis, and correction of this issue is retained here in full rather than only documenting the final clean state, since it reflects the kind of cross-vendor trunk verification a production environment would require.</p>
+    </div>
+
+    <h2><span class="step-num">3</span>VLAN Security</h2>
+    <p>VLAN security in this lab covers two related pieces of work: establishing the segmentation scheme itself across all three switches, and eliminating the attack surface presented by unused switch ports by shutting them down and reassigning them to an isolated, non-routed blackhole VLAN.</p>
+
+    <h3>3.1 VLAN Creation and Naming</h3>
+    <p>The same four functional VLANs, plus the native VLAN, were created and named consistently across all three switches: VLAN 10 (Servers), VLAN 20 (Infrastructure), VLAN 40 (Clients), and VLAN 99 (Native). Consistent naming across switches matters operationally; it means <code>show vlan brief</code> output is self-documenting on any switch in the topology without needing to cross-reference a separate naming key.</p>
+    <pre><code>vlan 10
+name Servers
+exit
+vlan 20
+name Infrastructure
+exit
+vlan 40
+name Clients
+exit
+vlan 99
+name Native
+exit</code></pre>
+    <figure>
+      <img src="Images/switch001-18.png" alt="Switch001 VLAN creation and naming" onclick="openLightbox(this)">
+      <figcaption>Switch001: VLAN creation and naming.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/switch002-15.png" alt="Switch002 VLAN creation and naming, including ip routing for Layer 3 support" onclick="openLightbox(this)">
+      <figcaption>Switch002: VLAN creation and naming, including <code>ip routing</code> for Layer 3 support.</figcaption>
+    </figure>
+    <p>The Dell PowerConnect syntax for VLAN creation differs slightly, entering a dedicated VLAN database configuration mode rather than creating VLANs directly under global configuration:</p>
+    <pre><code>vlan database
+vlan 10
+vlan 20
+vlan 40
+vlan 99
+exit</code></pre>
+    <figure>
+      <img src="Images/6248P3.png" alt="Switch003 VLAN creation via VLAN database mode" onclick="openLightbox(this)">
+      <figcaption>Switch003: VLAN creation via VLAN database mode.</figcaption>
+    </figure>
+
+    <h3>3.2 VLAN 999 Blackhole: Unused Port Isolation</h3>
+    <p>Every port not actively carrying traffic across all three switches was administratively shut down and reassigned to VLAN 999, a dedicated blackhole VLAN with no routing, no DHCP scope, and no legitimate purpose beyond acting as a dead end for any device plugged into an unused jack. This is a deliberate defense against an attacker, or a curious houseguest, simply plugging into an open port and receiving a live network connection. Combining shutdown with VLAN reassignment is intentionally redundant: even if the port were manually re-enabled, it would still land in an isolated VLAN with no path anywhere.</p>
+
+    <h4>Switch001</h4>
+    <figure>
+      <img src="Images/1788761393779_Switch001vlan999-1.png" alt="Switch001 VLAN 999 created and named Blackhole" onclick="openLightbox(this)">
+      <figcaption>Switch001: VLAN 999 created and named Blackhole.</figcaption>
+    </figure>
+    <p>Before reassignment, the default VLAN 1 port membership was reviewed to confirm exactly which ports still needed to be moved:</p>
+    <figure>
+      <img src="Images/1788761393780_Switch001vlan999-2.png" alt="Switch001 show vlan id 1, confirming ports still on the default VLAN" onclick="openLightbox(this)">
+      <figcaption>Switch001: <code>show vlan id 1</code>, confirming ports still on the default VLAN.</figcaption>
+    </figure>
+    <pre><code>interface range fa0/1
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+interface range fa0/6 - 22
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+interface range fa0/24 - 48
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+interface range gi0/1 - 2
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+end
+write memory</code></pre>
+    <figure>
+      <img src="Images/1788761393780_Switch001vlan999-3.png" alt="Switch001 Fa0/1 shut down and reassigned to VLAN 999" onclick="openLightbox(this)">
+      <figcaption>Switch001: Fa0/1 shut down and reassigned to VLAN 999.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393780_Switch001vlan999-4.png" alt="Switch001 Fa0/6-22 reassigned to VLAN 999, part 1" onclick="openLightbox(this)">
+      <figcaption>Switch001: Fa0/6-22 reassigned to VLAN 999 (part 1).</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393781_Switch001vlan999-5.png" alt="Switch001 Fa0/6-22 reassigned to VLAN 999, part 2, continued log output" onclick="openLightbox(this)">
+      <figcaption>Switch001: Fa0/6-22 reassigned to VLAN 999 (part 2, continued log output).</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393781_Switch001vlan999-6.png" alt="Switch001 Fa0/24-48 reassigned to VLAN 999" onclick="openLightbox(this)">
+      <figcaption>Switch001: Fa0/24-48 reassigned to VLAN 999.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393781_Switch001vlan999-7.png" alt="Switch001 Gi0/1-2 reassigned to VLAN 999" onclick="openLightbox(this)">
+      <figcaption>Switch001: Gi0/1-2 reassigned to VLAN 999.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393781_Switch001vlan999-8.png" alt="Switch001 configuration saved after full blackhole rollout" onclick="openLightbox(this)">
+      <figcaption>Switch001: configuration saved after full blackhole rollout.</figcaption>
+    </figure>
+
+    <h4>Switch002</h4>
+    <figure>
+      <img src="Images/1788761393782_Switch002vlan999-10.png" alt="Switch002 VLAN 999 created and named Blackhole" onclick="openLightbox(this)">
+      <figcaption>Switch002: VLAN 999 created and named Blackhole.</figcaption>
+    </figure>
+    <pre><code>interface range fa0/3 - 19
+switchport mode access
+switchport access vlan 999
+shutdown
+
+interface range fa0/21 - 22
+switchport mode access
+switchport access vlan 999
+shutdown
+
+interface range gi0/1 - 2
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+end
+write memory</code></pre>
+    <figure>
+      <img src="Images/1788761393782_Switch002vlan999-11.png" alt="Switch002 Fa0/3-19 reassigned to VLAN 999" onclick="openLightbox(this)">
+      <figcaption>Switch002: Fa0/3-19 reassigned to VLAN 999.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393782_Switch002vlan999-12.png" alt="Switch002 Fa0/21-22 reassigned to VLAN 999" onclick="openLightbox(this)">
+      <figcaption>Switch002: Fa0/21-22 reassigned to VLAN 999.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393783_Switch002vlan999-13.png" alt="Switch002 Gi0/1-2 reassigned to VLAN 999, configuration saved" onclick="openLightbox(this)">
+      <figcaption>Switch002: Gi0/1-2 reassigned to VLAN 999, configuration saved.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393782_Switch002vlan999-9.png" alt="Switch002 show vlan id 1, confirming default VLAN membership prior to reassignment" onclick="openLightbox(this)">
+      <figcaption>Switch002: <code>show vlan id 1</code>, confirming default VLAN membership prior to reassignment.</figcaption>
+    </figure>
+
+    <h4>Switch003</h4>
+    <p>The Dell PowerConnect 6248P was addressed in three interface ranges to cover its full 48-port layout, using the platform's ethernet range syntax rather than Cisco's <code>fa0/x - y</code> notation:</p>
+    <figure>
+      <img src="Images/1788761393783_Switch003vlan999-20.png" alt="Switch003 VLAN 999 created and named Blackhole" onclick="openLightbox(this)">
+      <figcaption>Switch003: VLAN 999 created and named Blackhole.</figcaption>
+    </figure>
+    <pre><code>interface range ethernet 1/g1-1/g10
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+interface range ethernet 1/g12-1/g24
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+interface range ethernet 1/g26-1/g47
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+copy running-config startup-config</code></pre>
+    <figure>
+      <img src="Images/1788761393783_Switch003vlan999-21.png" alt="Switch003 1/g1-1/g10 reassigned to VLAN 999" onclick="openLightbox(this)">
+      <figcaption>Switch003: 1/g1-1/g10 reassigned to VLAN 999.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393783_Switch003vlan999-22.png" alt="Switch003 1/g12-1/g24 reassigned to VLAN 999" onclick="openLightbox(this)">
+      <figcaption>Switch003: 1/g12-1/g24 reassigned to VLAN 999.</figcaption>
+    </figure>
+    <figure>
+      <img src="Images/1788761393779_Switch003vlan999-23.png" alt="Switch003 1/g26-1/g47 reassigned to VLAN 999, configuration saved" onclick="openLightbox(this)">
+      <figcaption>Switch003: 1/g26-1/g47 reassigned to VLAN 999, configuration saved.</figcaption>
+    </figure>
+
+    <div class="callout">
+      <p><strong>Coverage Note:</strong> Across all three switches, the blackholed ranges intentionally exclude every port with an active role documented elsewhere in this section: client and server access ports (Switch Port Security), trunk links (Trunk Security), and the FortiGate uplink and SPAN destination port on Switch001/Switch002. Every remaining physical port is accounted for and isolated.</p>
+    </div>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-close" onclick="closeLightbox()">&times;</div>
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox-hint">Click anywhere to close</div>
+  </div>
+
+  <script>
+    function openLightbox(imgEl){
+      const lb = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      lbImg.src = imgEl.src;
+      lbImg.alt = imgEl.alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('open');
+      document.getElementById('lightbox-img').src = '';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
