@@ -273,6 +273,7 @@ Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
             <img src="Images/start3.png" alt="Credential prompt for the local Lab-Client account" loading="lazy" />
             <figcaption><span>Retry &mdash; credential prompt for local Lab-Client account</span><span class="file">start3.png</span></figcaption>
           </figure>
+          <pre class="cmd-block"><code>hostname</code></pre>
           <figure class="shot shot-lg">
             <img src="Images/start4.png" alt="Remote session established, hostname confirms SRV-HYPERV-01" loading="lazy" />
             <figcaption><span>Session established &mdash; hostname confirms SRV-HYPERV-01</span><span class="file">start4.png</span></figcaption>
@@ -288,7 +289,8 @@ Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
             <img src="Images/start6.png" alt="Get-VM piped to Select-Object showing formatted VM details" loading="lazy" />
             <figcaption><span>Formatted VM detail view</span><span class="file">start6.png</span></figcaption>
           </figure>
-          <pre class="cmd-block"><code>Exit-PSSession</code></pre>
+          <pre class="cmd-block"><code>Exit-PSSession
+hostname</code></pre>
           <figure class="shot shot-lg">
             <img src="Images/start7.png" alt="Exit-PSSession returns to DC01, hostname confirms DC01" loading="lazy" />
             <figcaption><span>Exiting the session &mdash; back on DC01</span><span class="file">start7.png</span></figcaption>
@@ -331,10 +333,7 @@ Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
             <figcaption><span>Domain Admins membership</span><span class="file">AD3.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>Get-ADGroupMember -Identity 'Protected Users' | Select-Object Name, SamAccountName</code></pre>
-          <figure class="shot shot-lg">
-            <img src="Images/AD4.png" alt="Get-ADGroupMember for Protected Users showing MT.Admin, followed by detailed Get-ADUser query" loading="lazy" />
-            <figcaption><span>Protected Users membership, plus MT.Admin attribute query below</span><span class="file">AD4.png</span></figcaption>
-          </figure>
+          <p style="color:var(--muted);font-size:0.88rem">This was run in the same terminal session as the detailed MT.Admin attribute query below &mdash; see the combined screenshot under <a href="#2-5" style="color:#7f8ec9">2.5</a>.</p>
         </div>
 
         <div class="subsection" id="2-4">
@@ -354,8 +353,12 @@ Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
         <div class="subsection" id="2-5">
           <h3>2.5 Detailed User Attribute Query</h3>
           <p>A targeted query against MT.Admin returns extended properties including last logon date and password set timestamp. EmailAddress and Department are blank in the lab context, which is expected for a home lab environment.</p>
-          <pre class="cmd-block"><code>Get-ADUser -Identity 'MT.Admin' -Properties * | Select-Object Name, SamAccountName, EmailAddress, Department, Enabled, PasswordLastSet, LastLogonDate</code></pre>
-          <p style="color:var(--muted);font-size:0.88rem">Output shown in the second command of <span class="file" style="font-family:'SFMono-Regular',Consolas,monospace;color:#7f8ec9">AD4.png</span> above.</p>
+          <pre class="cmd-block"><code>Get-ADGroupMember -Identity 'Protected Users' | Select-Object Name, SamAccountName
+Get-ADUser -Identity 'MT.Admin' -Properties * | Select-Object Name, SamAccountName, EmailAddress, Department, Enabled, PasswordLastSet, LastLogonDate</code></pre>
+          <figure class="shot shot-lg">
+            <img src="Images/AD4.png" alt="Get-ADGroupMember for Protected Users showing MT.Admin, followed by detailed Get-ADUser query" loading="lazy" />
+            <figcaption><span>Protected Users membership, then the detailed MT.Admin attribute query</span><span class="file">AD4.png</span></figcaption>
+          </figure>
         </div>
 
         <div class="subsection" id="2-6">
@@ -471,6 +474,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
             <img src="Images/hypervadmin1.png" alt="Credential prompt for the local Lab-Client account when opening the Hyper-V session" loading="lazy" />
             <figcaption><span>Credential prompt for Lab-Client</span><span class="file">hypervadmin1.png</span></figcaption>
           </figure>
+          <pre class="cmd-block"><code>hostname</code></pre>
           <figure class="shot shot-lg">
             <img src="Images/hypervadmin2.png" alt="Session established, hostname confirms SRV-HYPERV-01" loading="lazy" />
             <figcaption><span>Session confirmed via hostname</span><span class="file">hypervadmin2.png</span></figcaption>
@@ -530,8 +534,8 @@ whoami</code></pre>
           <h3>6.1 Disk Space</h3>
           <p>Filesystem drives are queried to confirm available space on DC01. The C: drive shows approximately 16.7GB used and 109.8GB free.</p>
           <pre class="cmd-block"><code>Get-PSDrive -PSProvider FileSystem | Select-Object Name, Used, Free</code></pre>
-          <figure class="shot">
-            <img src="Images/SysH&R1.png" alt="Get-PSDrive output showing used and free space on the C and D drives" loading="lazy" />
+          <figure class="shot shot-lg">
+            <img src="Images/SysH_R1.png" alt="Get-PSDrive output showing used and free space on the C and D drives" loading="lazy" />
             <figcaption><span>Disk space on DC01</span><span class="file">SysH_R1.png</span></figcaption>
           </figure>
         </div>
@@ -540,8 +544,8 @@ whoami</code></pre>
           <h3>6.2 Critical Service Status</h3>
           <p>The five critical domain controller services are checked: Active Directory Web Services (ADWS), DHCP, DNS, Netlogon, and Windows Time (W32Time). All five are confirmed Running with Automatic start type.</p>
           <pre class="cmd-block"><code>Get-Service ADWS, DNS, DHCP, Netlogon, W32Time | Select-Object Name, Status, StartType</code></pre>
-          <figure class="shot">
-            <img src="Images/SysH&R2.png" alt="Get-Service output showing ADWS, DHCP, DNS, Netlogon, and W32Time all Running" loading="lazy" />
+          <figure class="shot shot-lg">
+            <img src="Images/SysH_R2.png" alt="Get-Service output showing ADWS, DHCP, DNS, Netlogon, and W32Time all Running" loading="lazy" />
             <figcaption><span>Critical DC services status</span><span class="file">SysH_R2.png</span></figcaption>
           </figure>
         </div>
@@ -550,8 +554,8 @@ whoami</code></pre>
           <h3>6.3 System Event Log Errors</h3>
           <p>The 10 most recent System event log errors are returned. The majority are NETLOGON errors from AGENT11 and LABCLIENT0E, which are expected in a lab environment where machines come online and offline. Two Microsoft-Windows-Time-Service entries from 6/22 indicate minor time sync events, both benign.</p>
           <pre class="cmd-block"><code>Get-EventLog -LogName System -EntryType Error -Newest 10 | Select-Object TimeGenerated, Source, Message</code></pre>
-          <figure class="shot">
-            <img src="Images/SysH&R3.png" alt="Get-EventLog output listing the 10 most recent System error events" loading="lazy" />
+          <figure class="shot shot-lg">
+            <img src="Images/SysH_R3.png" alt="Get-EventLog output listing the 10 most recent System error events" loading="lazy" />
             <figcaption><span>Most recent System event log errors</span><span class="file">SysH_R3.png</span></figcaption>
           </figure>
         </div>
@@ -561,7 +565,7 @@ whoami</code></pre>
           <p>DC01 uptime is calculated by subtracting the last boot time from the current date/time. The server had been running for approximately 15 hours at the time of the health check.</p>
           <pre class="cmd-block"><code>(Get-Date) - (gcim Win32_OperatingSystem).LastBootUpTime</code></pre>
           <figure class="shot">
-            <img src="Images/SysH&R4.png" alt="TimeSpan output showing DC01 uptime of approximately 15 hours" loading="lazy" />
+            <img src="Images/SysH_R4.png" alt="TimeSpan output showing DC01 uptime of approximately 15 hours" loading="lazy" />
             <figcaption><span>DC01 uptime calculation</span><span class="file">SysH_R4.png</span></figcaption>
           </figure>
         </div>
