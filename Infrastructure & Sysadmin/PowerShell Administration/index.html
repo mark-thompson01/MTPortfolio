@@ -207,20 +207,20 @@
           <h3>1.1 Execution Policy</h3>
           <p>The session opens on DC01 logged in as LAB\MT.Admin. The execution policy is checked before any scripts are run.</p>
           <figure class="shot">
-            <img src="Images/start8.png" alt="Fresh PowerShell prompt on DC01 as MT.Admin" loading="lazy" />
-            <figcaption><span>Session opens on DC01</span><span class="file">start8.png</span></figcaption>
+            <img src="Images/start1.png" alt="Fresh PowerShell prompt on DC01 as MT.Admin" loading="lazy" />
+            <figcaption><span>Session opens on DC01</span><span class="file">start1.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>Get-ExecutionPolicy -List</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start9.png" alt="Get-ExecutionPolicy -List output showing LocalMachine RemoteSigned" loading="lazy" />
-            <figcaption><span>Checking the current execution policy</span><span class="file">start9.png</span></figcaption>
+            <img src="Images/start2.png" alt="Get-ExecutionPolicy -List output showing LocalMachine RemoteSigned" loading="lazy" />
+            <figcaption><span>Checking the current execution policy</span><span class="file">start2.png</span></figcaption>
           </figure>
           <p>LocalMachine is already set to RemoteSigned, meaning scripts downloaded from the internet must be signed, while locally created scripts run without restriction. This is the correct enterprise baseline. The policy is explicitly confirmed and set to ensure consistency.</p>
           <pre class="cmd-block"><code>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine
 Get-ExecutionPolicy</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start10.png" alt="Set-ExecutionPolicy RemoteSigned confirmation and Get-ExecutionPolicy result" loading="lazy" />
-            <figcaption><span>Setting and confirming RemoteSigned at LocalMachine scope</span><span class="file">start10.png</span></figcaption>
+            <img src="Images/start3.png" alt="Set-ExecutionPolicy RemoteSigned confirmation and Get-ExecutionPolicy result" loading="lazy" />
+            <figcaption><span>Setting and confirming RemoteSigned at LocalMachine scope</span><span class="file">start3.png</span></figcaption>
           </figure>
         </div>
 
@@ -229,14 +229,14 @@ Get-ExecutionPolicy</code></pre>
           <p>The key RSAT management modules are confirmed before proceeding. ActiveDirectory and DhcpServer were installed as part of the AD DS role setup. DnsServer is verified separately after importing the ActiveDirectory module.</p>
           <pre class="cmd-block"><code>Get-Module -ListAvailable | Where-Object {$_.Name -in @('ActiveDirectory','DHCPServer')} | Select-Object Name, Version, ModuleType</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start11.png" alt="Get-Module output listing ActiveDirectory and DhcpServer modules" loading="lazy" />
-            <figcaption><span>Confirming ActiveDirectory and DhcpServer modules</span><span class="file">start11.png</span></figcaption>
+            <img src="Images/start4.png" alt="Get-Module output listing ActiveDirectory and DhcpServer modules" loading="lazy" />
+            <figcaption><span>Confirming ActiveDirectory and DhcpServer modules</span><span class="file">start4.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>Import-Module ActiveDirectory
 Get-Module -ListAvailable | Where-Object {$_.Name -in @('ActiveDirectory','DHCPServer','DNSServer')} | Select-Object Name, Version, ModuleType</code></pre>
           <figure class="shot">
-            <img src="Images/start12.png" alt="Import-Module ActiveDirectory then Get-Module showing ActiveDirectory, DhcpServer, and DnsServer" loading="lazy" />
-            <figcaption><span>Importing ActiveDirectory and confirming DnsServer availability</span><span class="file">start12.png</span></figcaption>
+            <img src="Images/start5.png" alt="Import-Module ActiveDirectory then Get-Module showing ActiveDirectory, DhcpServer, and DnsServer" loading="lazy" />
+            <figcaption><span>Importing ActiveDirectory and confirming DnsServer availability</span><span class="file">start5.png</span></figcaption>
           </figure>
         </div>
 
@@ -246,54 +246,54 @@ Get-Module -ListAvailable | Where-Object {$_.Name -in @('ActiveDirectory','DHCPS
           <p>The initial PSSession attempt fails with a Kerberos error because the switches were powered off, cutting the L2 path between the DC01 VM and SRV-HYPERV-01. Once network connectivity is restored, TrustedHosts is configured on DC01 and Enable-PSRemoting is run on the host.</p>
           <pre class="cmd-block"><code>Enter-PSSession -ComputerName SRV-HYPERV-01 -Credential (Get-Credential)</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start13.png" alt="Credential prompt for MT.Admin before the initial PSSession attempt" loading="lazy" />
-            <figcaption><span>Initial attempt &mdash; credential prompt</span><span class="file">start13.png</span></figcaption>
+            <img src="Images/start6.png" alt="Credential prompt for MT.Admin before the initial PSSession attempt" loading="lazy" />
+            <figcaption><span>Initial attempt &mdash; credential prompt</span><span class="file">start6.png</span></figcaption>
           </figure>
           <figure class="shot shot-lg">
-            <img src="Images/start14.png" alt="Enter-PSSession failing with a Kerberos WinRM error, PSRemotingTransportException" loading="lazy" />
-            <figcaption><span>Attempt fails &mdash; Kerberos error, switches were down</span><span class="file">start14.png</span></figcaption>
+            <img src="Images/start7.png" alt="Enter-PSSession failing with a Kerberos WinRM error, PSRemotingTransportException" loading="lazy" />
+            <figcaption><span>Attempt fails &mdash; Kerberos error, switches were down</span><span class="file">start7.png</span></figcaption>
           </figure>
           <p>After powering on the switches and restoring network connectivity, Enable-PSRemoting is run on SRV-HYPERV-01 and TrustedHosts is configured on DC01.</p>
           <pre class="cmd-block"><code><span class="cmt"># On SRV-HYPERV-01 (run locally on the host):</span>
 Enable-PSRemoting -Force</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start1.png" alt="Enable-PSRemoting -Force run locally on SRV-HYPERV-01" loading="lazy" />
-            <figcaption><span>Enabling PSRemoting on the host</span><span class="file">start1.png</span></figcaption>
+            <img src="Images/start8.png" alt="Enable-PSRemoting -Force run locally on SRV-HYPERV-01" loading="lazy" />
+            <figcaption><span>Enabling PSRemoting on the host</span><span class="file">start8.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code><span class="cmt"># On DC01:</span>
 Set-Item WSMan:\localhost\Client\TrustedHosts -Value 'SRV-HYPERV-01' -Force
 Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start2.png" alt="Set-Item and Get-Item confirming TrustedHosts value SRV-HYPERV-01 on DC01" loading="lazy" />
-            <figcaption><span>Adding SRV-HYPERV-01 to DC01's TrustedHosts</span><span class="file">start2.png</span></figcaption>
+            <img src="Images/start9.png" alt="Set-Item and Get-Item confirming TrustedHosts value SRV-HYPERV-01 on DC01" loading="lazy" />
+            <figcaption><span>Adding SRV-HYPERV-01 to DC01's TrustedHosts</span><span class="file">start9.png</span></figcaption>
           </figure>
           <p>The PSSession is retried using the local Lab-Client account on SRV-HYPERV-01, since the host is not domain-joined and cannot authenticate domain credentials.</p>
           <pre class="cmd-block"><code>Enter-PSSession -ComputerName SRV-HYPERV-01 -Credential (Get-Credential)</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start3.png" alt="Credential prompt for the local Lab-Client account" loading="lazy" />
-            <figcaption><span>Retry &mdash; credential prompt for local Lab-Client account</span><span class="file">start3.png</span></figcaption>
+            <img src="Images/start10.png" alt="Credential prompt for the local Lab-Client account" loading="lazy" />
+            <figcaption><span>Retry &mdash; credential prompt for local Lab-Client account</span><span class="file">start10.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>hostname</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start4.png" alt="Remote session established, hostname confirms SRV-HYPERV-01" loading="lazy" />
-            <figcaption><span>Session established &mdash; hostname confirms SRV-HYPERV-01</span><span class="file">start4.png</span></figcaption>
+            <img src="Images/start11.png" alt="Remote session established, hostname confirms SRV-HYPERV-01" loading="lazy" />
+            <figcaption><span>Session established &mdash; hostname confirms SRV-HYPERV-01</span><span class="file">start11.png</span></figcaption>
           </figure>
           <p>With the remote session established, a quick VM inventory is run to confirm Hyper-V management is accessible before exiting.</p>
           <pre class="cmd-block"><code>Get-VM</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start5.png" alt="Get-VM output listing pfSense, Ubuntu Server, Win11-Client, and Windows Server 2022 Eval" loading="lazy" />
-            <figcaption><span>VM inventory via remote session</span><span class="file">start5.png</span></figcaption>
+            <img src="Images/start12.png" alt="Get-VM output listing pfSense, Ubuntu Server, Win11-Client, and Windows Server 2022 Eval" loading="lazy" />
+            <figcaption><span>VM inventory via remote session</span><span class="file">start12.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>Get-VM | Select-Object Name, State, CPUUsage, MemoryAssigned, Uptime</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start6.png" alt="Get-VM piped to Select-Object showing formatted VM details" loading="lazy" />
-            <figcaption><span>Formatted VM detail view</span><span class="file">start6.png</span></figcaption>
+            <img src="Images/start13.png" alt="Get-VM piped to Select-Object showing formatted VM details" loading="lazy" />
+            <figcaption><span>Formatted VM detail view</span><span class="file">start13.png</span></figcaption>
           </figure>
           <pre class="cmd-block"><code>Exit-PSSession
 hostname</code></pre>
           <figure class="shot shot-lg">
-            <img src="Images/start7.png" alt="Exit-PSSession returns to DC01, hostname confirms DC01" loading="lazy" />
-            <figcaption><span>Exiting the session &mdash; back on DC01</span><span class="file">start7.png</span></figcaption>
+            <img src="Images/start14.png" alt="Exit-PSSession returns to DC01, hostname confirms DC01" loading="lazy" />
+            <figcaption><span>Exiting the session &mdash; back on DC01</span><span class="file">start14.png</span></figcaption>
           </figure>
         </div>
         <a class="back-to-top" href="#top">&uarr; Back to top</a>
