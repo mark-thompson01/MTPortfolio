@@ -21,7 +21,7 @@
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
       line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+    .wrap{max-width:1360px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
     .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
@@ -69,8 +69,8 @@
     /* Step grid */
     .step-grid{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
-      gap:22px;
+      grid-template-columns:repeat(auto-fit,minmax(480px,1fr));
+      gap:26px;
     }
     .step-card{
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
@@ -82,11 +82,33 @@
       display:flex; flex-direction:column;
     }
     .step-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.45);border-color:#3a4a67}
-    .step-card img{
-      width:100%; display:block;
-      border-bottom:1px solid var(--card-border);
+
+    /* Zoomable screenshot wrapper */
+    .step-img-wrap{
+      position:relative;
+      overflow:hidden;
+      cursor:zoom-in;
       background:#0b0d12;
+      border-bottom:1px solid var(--card-border);
     }
+    .step-img-wrap img{
+      width:100%; display:block;
+      transition:transform .25s ease;
+    }
+    .step-img-wrap:hover img{transform:scale(1.03)}
+    .step-img-wrap::after{
+      content:"🔍 Click to zoom";
+      position:absolute; right:12px; bottom:12px;
+      background:rgba(10,12,16,.78);
+      color:#e6e7ee;
+      font-size:0.75rem; font-weight:600;
+      padding:5px 12px; border-radius:20px;
+      border:1px solid rgba(255,255,255,.08);
+      opacity:0; transform:translateY(6px);
+      transition:opacity .18s ease, transform .18s ease;
+      pointer-events:none;
+    }
+    .step-img-wrap:hover::after{opacity:1;transform:translateY(0)}
     .step-body{padding:18px 22px 22px}
     .step-tag{
       display:inline-flex; align-items:center; justify-content:center;
@@ -134,6 +156,42 @@
       color:var(--brand);
       text-decoration:none;
     }
+
+    /* Lightbox */
+    .lightbox{
+      display:none;
+      position:fixed; inset:0;
+      background:rgba(6,8,12,.94);
+      z-index:999;
+      align-items:center; justify-content:center;
+      padding:48px;
+      cursor:zoom-out;
+      animation:fadeIn .15s ease;
+    }
+    .lightbox.active{display:flex}
+    .lightbox img{
+      max-width:96vw; max-height:92vh;
+      width:auto; height:auto;
+      border-radius:12px;
+      border:1px solid var(--card-border);
+      box-shadow:0 24px 70px rgba(0,0,0,.6);
+      cursor:default;
+    }
+    .lightbox-close{
+      position:fixed; top:22px; right:32px;
+      font-size:2.4rem; line-height:1;
+      color:#fff; opacity:.85;
+      cursor:pointer; z-index:1000;
+      font-family:system-ui,sans-serif;
+    }
+    .lightbox-close:hover{opacity:1;color:var(--brand)}
+    .lightbox-caption{
+      position:fixed; left:0; right:0; bottom:20px;
+      text-align:center; color:var(--muted);
+      font-size:0.9rem; padding:0 20px;
+      pointer-events:none;
+    }
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
   </style>
 </head>
 <body>
@@ -168,7 +226,7 @@
       <div class="step-grid">
 
         <article class="step-card">
-          <img src="Images/Enable1.png" alt="Running Enable-WindowsOptionalFeature to enable Hyper-V" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Enable1.png','Running Enable-WindowsOptionalFeature to enable Hyper-V')"><img src="Images/Enable1.png" alt="Running Enable-WindowsOptionalFeature to enable Hyper-V" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">1</span>
             <h3 class="step-title">Kick off the feature install</h3>
@@ -177,7 +235,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Enable2.png" alt="Hyper-V feature installation progress bar" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Enable2.png','Hyper-V feature installation progress bar')"><img src="Images/Enable2.png" alt="Hyper-V feature installation progress bar" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">2</span>
             <h3 class="step-title">Feature install running</h3>
@@ -186,7 +244,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Enable3.png" alt="Hyper-V feature installation still in progress" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Enable3.png','Hyper-V feature installation still in progress')"><img src="Images/Enable3.png" alt="Hyper-V feature installation still in progress" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">3</span>
             <h3 class="step-title">Still installing</h3>
@@ -195,7 +253,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Enable4.png" alt="Restart needed output and shutdown command to reboot" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Enable4.png','Restart needed output and shutdown command to reboot')"><img src="Images/Enable4.png" alt="Restart needed output and shutdown command to reboot" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">4</span>
             <h3 class="step-title">Restart to finish</h3>
@@ -218,7 +276,7 @@
       <div class="step-grid">
 
         <article class="step-card">
-          <img src="Images/Setup1.png" alt="Opening Hyper-V Manager from the Start menu" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Setup1.png','Opening Hyper-V Manager from the Start menu')"><img src="Images/Setup1.png" alt="Opening Hyper-V Manager from the Start menu" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">1</span>
             <h3 class="step-title">Launch Hyper-V Manager</h3>
@@ -227,7 +285,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Setup2.png" alt="Hyper-V Manager connected to SRV-HYPERV-01 with no VMs" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Setup2.png','Hyper-V Manager connected to SRV-HYPERV-01 with no VMs')"><img src="Images/Setup2.png" alt="Hyper-V Manager connected to SRV-HYPERV-01 with no VMs" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">2</span>
             <h3 class="step-title">Clean slate</h3>
@@ -236,7 +294,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Setup3.png" alt="Right-click context menu with Virtual Switch Manager option" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Setup3.png','Right-click context menu with Virtual Switch Manager option')"><img src="Images/Setup3.png" alt="Right-click context menu with Virtual Switch Manager option" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">3</span>
             <h3 class="step-title">Open Virtual Switch Manager</h3>
@@ -245,7 +303,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Setup4.png" alt="Creating a new External virtual switch" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Setup4.png','Creating a new External virtual switch')"><img src="Images/Setup4.png" alt="Creating a new External virtual switch" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">4</span>
             <h3 class="step-title">Create an External switch</h3>
@@ -254,7 +312,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Setup5.png" alt="Naming the switch vSwitch0 and binding it to the Intel NIC" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Setup5.png','Naming the switch vSwitch0 and binding it to the Intel NIC')"><img src="Images/Setup5.png" alt="Naming the switch vSwitch0 and binding it to the Intel NIC" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">5</span>
             <h3 class="step-title">Bind to the physical adapter</h3>
@@ -263,7 +321,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Setup6.png" alt="Apply networking changes warning about possible connectivity disruption" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Setup6.png','Apply networking changes warning about possible connectivity disruption')"><img src="Images/Setup6.png" alt="Apply networking changes warning about possible connectivity disruption" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">6</span>
             <h3 class="step-title">Confirm the network change</h3>
@@ -272,7 +330,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Setup7.png" alt="vSwitch0 confirmed bound to the Intel NIC" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Setup7.png','vSwitch0 confirmed bound to the Intel NIC')"><img src="Images/Setup7.png" alt="vSwitch0 confirmed bound to the Intel NIC" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">7</span>
             <h3 class="step-title">Switch is live</h3>
@@ -281,7 +339,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/Setup8.png" alt="Back to a clean Hyper-V Manager view" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/Setup8.png','Back to a clean Hyper-V Manager view')"><img src="Images/Setup8.png" alt="Back to a clean Hyper-V Manager view" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">8</span>
             <h3 class="step-title">Ready to build</h3>
@@ -304,7 +362,7 @@
       <div class="step-grid">
 
         <article class="step-card">
-          <img src="Images/winserver1.png" alt="Right-click New Virtual Machine context menu" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver1.png','Right-click New Virtual Machine context menu')"><img src="Images/winserver1.png" alt="Right-click New Virtual Machine context menu" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">1</span>
             <h3 class="step-title">Start the New VM Wizard</h3>
@@ -313,7 +371,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver2.png" alt="Before You Begin wizard page" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver2.png','Before You Begin wizard page')"><img src="Images/winserver2.png" alt="Before You Begin wizard page" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">2</span>
             <h3 class="step-title">Before You Begin</h3>
@@ -322,7 +380,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver3.png" alt="Specify Name and Location page" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver3.png','Specify Name and Location page')"><img src="Images/winserver3.png" alt="Specify Name and Location page" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">3</span>
             <h3 class="step-title">Name and location</h3>
@@ -331,7 +389,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver4.png" alt="Specify Generation page, Generation 2 selected" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver4.png','Specify Generation page, Generation 2 selected')"><img src="Images/winserver4.png" alt="Specify Generation page, Generation 2 selected" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">4</span>
             <h3 class="step-title">Generation 2</h3>
@@ -340,7 +398,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver5.png" alt="Assign Memory page, 8096 MB with Dynamic Memory enabled" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver5.png','Assign Memory page, 8096 MB with Dynamic Memory enabled')"><img src="Images/winserver5.png" alt="Assign Memory page, 8096 MB with Dynamic Memory enabled" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">5</span>
             <h3 class="step-title">Assign memory</h3>
@@ -349,7 +407,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver6.png" alt="Configure Networking page, vSwitch0 selected" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver6.png','Configure Networking page, vSwitch0 selected')"><img src="Images/winserver6.png" alt="Configure Networking page, vSwitch0 selected" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">6</span>
             <h3 class="step-title">Attach to vSwitch0</h3>
@@ -358,7 +416,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver7.png" alt="Connect Virtual Hard Disk page, 127 GB VHDX" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver7.png','Connect Virtual Hard Disk page, 127 GB VHDX')"><img src="Images/winserver7.png" alt="Connect Virtual Hard Disk page, 127 GB VHDX" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">7</span>
             <h3 class="step-title">Create the virtual disk</h3>
@@ -367,7 +425,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver8.png" alt="Installation Options page, browsing for an ISO" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver8.png','Installation Options page, browsing for an ISO')"><img src="Images/winserver8.png" alt="Installation Options page, browsing for an ISO" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">8</span>
             <h3 class="step-title">Point to install media</h3>
@@ -376,7 +434,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver9.png" alt="Installation Options page with SERVER_EVAL ISO selected" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver9.png','Installation Options page with SERVER_EVAL ISO selected')"><img src="Images/winserver9.png" alt="Installation Options page with SERVER_EVAL ISO selected" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">9</span>
             <h3 class="step-title">ISO selected</h3>
@@ -385,7 +443,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver10.png" alt="Completing the New Virtual Machine Wizard summary" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver10.png','Completing the New Virtual Machine Wizard summary')"><img src="Images/winserver10.png" alt="Completing the New Virtual Machine Wizard summary" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">10</span>
             <h3 class="step-title">Review and finish</h3>
@@ -394,7 +452,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver11.png" alt="Hyper-V Manager showing the new VM next to the existing Ubuntu Server VM" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver11.png','Hyper-V Manager showing the new VM next to the existing Ubuntu Server VM')"><img src="Images/winserver11.png" alt="Hyper-V Manager showing the new VM next to the existing Ubuntu Server VM" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">11</span>
             <h3 class="step-title">VM shell created</h3>
@@ -403,7 +461,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver12.png" alt="Right-click actions menu with Connect, Settings, Start, Checkpoint" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver12.png','Right-click actions menu with Connect, Settings, Start, Checkpoint')"><img src="Images/winserver12.png" alt="Right-click actions menu with Connect, Settings, Start, Checkpoint" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">12</span>
             <h3 class="step-title">Connect to the VM</h3>
@@ -412,7 +470,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver13.png" alt="Virtual Machine Connection window showing the VM is off, with a Start button" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver13.png','Virtual Machine Connection window showing the VM is off, with a Start button')"><img src="Images/winserver13.png" alt="Virtual Machine Connection window showing the VM is off, with a Start button" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">13</span>
             <h3 class="step-title">Ready to power on</h3>
@@ -435,7 +493,7 @@
       <div class="step-grid">
 
         <article class="step-card">
-          <img src="Images/winserver14.png" alt="Press any key to boot from CD or DVD prompt" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver14.png','Press any key to boot from CD or DVD prompt')"><img src="Images/winserver14.png" alt="Press any key to boot from CD or DVD prompt" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">1</span>
             <h3 class="step-title">Boot from the ISO</h3>
@@ -444,7 +502,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver15.png" alt="Language, time, and keyboard selection screen" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver15.png','Language, time, and keyboard selection screen')"><img src="Images/winserver15.png" alt="Language, time, and keyboard selection screen" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">2</span>
             <h3 class="step-title">Locale settings</h3>
@@ -453,7 +511,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver16.png" alt="Install now screen" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver16.png','Install now screen')"><img src="Images/winserver16.png" alt="Install now screen" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">3</span>
             <h3 class="step-title">Install now</h3>
@@ -462,7 +520,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver17.png" alt="Setup is starting screen" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver17.png','Setup is starting screen')"><img src="Images/winserver17.png" alt="Setup is starting screen" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">4</span>
             <h3 class="step-title">Setup starting</h3>
@@ -471,7 +529,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver18.png" alt="Operating system selection, Standard Evaluation Desktop Experience chosen" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver18.png','Operating system selection, Standard Evaluation Desktop Experience chosen')"><img src="Images/winserver18.png" alt="Operating system selection, Standard Evaluation Desktop Experience chosen" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">5</span>
             <h3 class="step-title">Choose the edition</h3>
@@ -480,7 +538,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver19.png" alt="Accepting the Microsoft license terms" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver19.png','Accepting the Microsoft license terms')"><img src="Images/winserver19.png" alt="Accepting the Microsoft license terms" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">6</span>
             <h3 class="step-title">Accept license terms</h3>
@@ -489,7 +547,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver20.png" alt="Choosing a Custom install type" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver20.png','Choosing a Custom install type')"><img src="Images/winserver20.png" alt="Choosing a Custom install type" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">7</span>
             <h3 class="step-title">Custom install</h3>
@@ -498,7 +556,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver21.png" alt="Selecting the unallocated drive to install to" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver21.png','Selecting the unallocated drive to install to')"><img src="Images/winserver21.png" alt="Selecting the unallocated drive to install to" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">8</span>
             <h3 class="step-title">Select the target drive</h3>
@@ -507,7 +565,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver22.png" alt="Installing Microsoft Server Operating System, getting files ready 0%" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver22.png','Installing Microsoft Server Operating System, getting files ready 0%')"><img src="Images/winserver22.png" alt="Installing Microsoft Server Operating System, getting files ready 0%" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">9</span>
             <h3 class="step-title">Copying files</h3>
@@ -516,7 +574,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver23.png" alt="Installing features complete, installing updates next" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver23.png','Installing features complete, installing updates next')"><img src="Images/winserver23.png" alt="Installing features complete, installing updates next" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">10</span>
             <h3 class="step-title">Installing features</h3>
@@ -525,7 +583,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver24.png" alt="Restart required to continue setup" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver24.png','Restart required to continue setup')"><img src="Images/winserver24.png" alt="Restart required to continue setup" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">11</span>
             <h3 class="step-title">Restart to continue</h3>
@@ -534,7 +592,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver25.png" alt="Hyper-V splash screen on first boot" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver25.png','Hyper-V splash screen on first boot')"><img src="Images/winserver25.png" alt="Hyper-V splash screen on first boot" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">12</span>
             <h3 class="step-title">First boot</h3>
@@ -543,7 +601,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver26.png" alt="Getting ready screen" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver26.png','Getting ready screen')"><img src="Images/winserver26.png" alt="Getting ready screen" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">13</span>
             <h3 class="step-title">Getting ready</h3>
@@ -552,7 +610,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver27.png" alt="Customize settings, setting the local Administrator password" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver27.png','Customize settings, setting the local Administrator password')"><img src="Images/winserver27.png" alt="Customize settings, setting the local Administrator password" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">14</span>
             <h3 class="step-title">Set the Administrator password</h3>
@@ -561,7 +619,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver28.png" alt="Lock screen with time and date" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver28.png','Lock screen with time and date')"><img src="Images/winserver28.png" alt="Lock screen with time and date" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">15</span>
             <h3 class="step-title">Lock screen</h3>
@@ -570,7 +628,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver29.png" alt="Administrator login prompt" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver29.png','Administrator login prompt')"><img src="Images/winserver29.png" alt="Administrator login prompt" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">16</span>
             <h3 class="step-title">First login</h3>
@@ -579,7 +637,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver30.png" alt="First desktop after install" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver30.png','First desktop after install')"><img src="Images/winserver30.png" alt="First desktop after install" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">17</span>
             <h3 class="step-title">First desktop</h3>
@@ -588,7 +646,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver31.png" alt="Server Manager Dashboard" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver31.png','Server Manager Dashboard')"><img src="Images/winserver31.png" alt="Server Manager Dashboard" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">18</span>
             <h3 class="step-title">Server Manager Dashboard</h3>
@@ -597,7 +655,7 @@
         </article>
 
         <article class="step-card">
-          <img src="Images/winserver32.png" alt="Hyper-V Manager showing the running VM and an automatic checkpoint" loading="lazy">
+          <div class="step-img-wrap" onclick="openLightbox('Images/winserver32.png','Hyper-V Manager showing the running VM and an automatic checkpoint')"><img src="Images/winserver32.png" alt="Hyper-V Manager showing the running VM and an automatic checkpoint" loading="lazy"></div>
           <div class="step-body">
             <span class="step-tag">19</span>
             <h3 class="step-title">Snapshot the clean state</h3>
@@ -616,5 +674,32 @@
       </div>
     </footer>
   </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <img id="lightbox-img" src="" alt="">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
+
+  <script>
+    function openLightbox(src, alt){
+      var lb = document.getElementById('lightbox');
+      var img = document.getElementById('lightbox-img');
+      var caption = document.getElementById('lightbox-caption');
+      img.src = src;
+      img.alt = alt;
+      caption.textContent = alt;
+      lb.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      var lb = document.getElementById('lightbox');
+      lb.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+  </script>
 </body>
 </html>
