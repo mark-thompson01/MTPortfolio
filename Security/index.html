@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Offensive Security Labs from Previous Studies · Mark Thompson Portfolio</title>
-  <meta name="description" content="Prior coursework and labs covering offensive security concepts and techniques, including ARP spoofing, hash cracking, RDP brute force, web enumeration, active reconnaissance, and NAS attack & defense." />
+  <title>Security · Mark Thompson Portfolio</title>
+  <meta name="description" content="SPAN configuration, managed switch security, FortiGate hardening, Windows Server hardening, offensive security labs, and cybersecurity baselines." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -37,31 +37,22 @@
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    .crumbs{
-      color:var(--muted);
-      font-size:14px;
-      margin:2px 0 8px;
-      text-align:center;
-    }
-    .crumbs a{color:var(--muted);text-decoration:none}
-    .crumbs a:hover{color:var(--text)}
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 40px;font-size:clamp(17px,2.4vw,19px);text-align:center}
 
-    h1{margin:8px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px;text-align:center}
-    .lead{color:var(--muted);margin:0 auto 18px;max-width:820px;font-size:clamp(17px,2.4vw,19px);text-align:center}
-
-    /* Vertical numbered listing */
-    .lab-list{
+    /* Vertical listing */
+    .infra-list{
       display:flex;
       flex-direction:column;
       align-items:center;
       gap:22px;
-      margin-top:36px;
+      margin-top:8px;
       max-width:760px;
       margin-left:auto;
       margin-right:auto;
     }
 
-    .lab-item{
+    .infra-item{
       width:100%;
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
       border:1px solid var(--card-border);
@@ -69,9 +60,9 @@
       box-shadow:var(--shadow);
       transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
     }
-    .lab-item:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.45);border-color:#3a4a67}
+    .infra-item:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.45);border-color:#3a4a67}
 
-    .lab-link{
+    .infra-link{
       display:flex;
       align-items:center;
       gap:22px;
@@ -80,7 +71,7 @@
       text-decoration:none;
     }
 
-    .lab-num{
+    .infra-num{
       flex:0 0 auto;
       width:44px;
       height:44px;
@@ -95,20 +86,20 @@
       border:1px solid #2a3a55;
     }
 
-    .lab-text{flex:1 1 auto;text-align:center}
+    .infra-text{flex:1 1 auto;text-align:center}
 
-    .lab-title{
+    .infra-title{
       font:700 1.3rem/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
       margin:0;
       color:#d3d3d3;
     }
-    .lab-sub{
+    .infra-sub{
       color:#a9b0c3;
       font:400 0.98rem/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
       margin:0.4rem 0 0 0;
     }
 
-    .lab-arrow{
+    .infra-arrow{
       flex:0 0 auto;
       color:#7f8599;
       font-size:1.1rem;
@@ -136,8 +127,15 @@
       flex-wrap:wrap;
       align-items:center;
     }
-    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
-    footer a:hover{color:var(--brand);text-decoration:none}
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
   </style>
 </head>
 <body>
@@ -153,102 +151,76 @@
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav>
 
-    <div class="crumbs">
-      <a href="/MTPortfolio/Security">Security</a> · <span>Offensive Security Labs from Previous Studies</span>
-    </div>
-
     <header>
-      <h1>Offensive Security Labs from Previous Studies</h1>
-      <p class="lead">Prior coursework and labs covering offensive security concepts and techniques. I explore simulated attack examples in a contained environment, applying what I learned in my pentesting & offensive security studies. I run through some Cyber Attack examples, and then further discuss how these attacks can be mitigated and protected against.</p>
+      <h1>Security</h1>
+      <p class="lead">Security-focused builds and hardening work from the home lab. Traffic analysis, switch and firewall security, Windows hardening, offensive security labs, and cybersecurity baselines.</p>
     </header>
 
-    <section class="lab-list" aria-label="Offensive security labs">
+    <section class="infra-list" aria-label="Security sections">
 
-      <article class="lab-item">
-        <a class="lab-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Active%20Reconnaissance">
-          <span class="lab-num">1</span>
-          <span class="lab-text">
-            <h3 class="lab-title">Active Reconnaissance</h3>
-            <p class="lab-sub">Probing targets and services to build a picture of the environment.</p>
+      <article class="infra-item">
+        <a class="infra-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/SPAN">
+          <span class="infra-num">1</span>
+          <span class="infra-text">
+            <h3 class="infra-title">SPAN - Switch Port Analyzer Configuration</h3>
+            <p class="infra-sub">Mirroring switch traffic for monitoring and analysis using SPAN ports.</p>
           </span>
-          <span class="lab-arrow">→</span>
+          <span class="infra-arrow">→</span>
         </a>
       </article>
 
-      <article class="lab-item">
-        <a class="lab-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Network%20Traffic%20Analysis">
-          <span class="lab-num">2</span>
-          <span class="lab-text">
-            <h3 class="lab-title">Network Traffic Analysis</h3>
-            <p class="lab-sub">Inspecting packets/flows to identify protocols, anomalies, and potential issues.</p>
+      <article class="infra-item">
+        <a class="infra-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Managed%20Switch%20Security">
+          <span class="infra-num">2</span>
+          <span class="infra-text">
+            <h3 class="infra-title">Managed Switch Security</h3>
+            <p class="infra-sub">Locking down managed switching hardware against common attack vectors.</p>
           </span>
-          <span class="lab-arrow">→</span>
+          <span class="infra-arrow">→</span>
         </a>
       </article>
 
-      <article class="lab-item">
-        <a class="lab-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Web%20Server%20Enumeration%20and%20Exploitation">
-          <span class="lab-num">3</span>
-          <span class="lab-text">
-            <h3 class="lab-title">Web Server Enumeration & Exploitation</h3>
-            <p class="lab-sub">Reconnaissance, service mapping, and exploitation on a lab web stack.</p>
+      <article class="infra-item">
+        <a class="infra-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Fortigate%20Firewall%20Configuration">
+          <span class="infra-num">3</span>
+          <span class="infra-text">
+            <h3 class="infra-title">FortiGate 60E Firewall - Security Configuration</h3>
+            <p class="infra-sub">Hardening firewall policies, profiles, and access rules on the FortiGate 60E.</p>
           </span>
-          <span class="lab-arrow">→</span>
+          <span class="infra-arrow">→</span>
         </a>
       </article>
 
-      <article class="lab-item">
-        <a class="lab-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/ARP%20Spoofing">
-          <span class="lab-num">4</span>
-          <span class="lab-text">
-            <h3 class="lab-title">ARP Spoofing</h3>
-            <p class="lab-sub">Lab demonstration of ARP spoofing to simulate a man-in-the-middle attack.</p>
+      <article class="infra-item">
+        <a class="infra-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Windows%20Server%20&%20Security%20Hardening">
+          <span class="infra-num">4</span>
+          <span class="infra-text">
+            <h3 class="infra-title">Active Directory & Group Policy Security Hardening</h3>
+            <p class="infra-sub">Applying hardening practices and security baselines to Windows Server systems.</p>
           </span>
-          <span class="lab-arrow">→</span>
+          <span class="infra-arrow">→</span>
         </a>
       </article>
 
-      <article class="lab-item">
-        <a class="lab-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Network%20Hash%20Capture%20and%20Cracking">
-          <span class="lab-num">5</span>
-          <span class="lab-text">
-            <h3 class="lab-title">Network Hash Capture & Cracking</h3>
-            <p class="lab-sub">Capturing authentication material and testing cracking workflows in a lab setting.</p>
+      <article class="infra-item">
+        <a class="infra-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Offensive%20Security">
+          <span class="infra-num">5</span>
+          <span class="infra-text">
+            <h3 class="infra-title">Offensive Security Labs from Previous Studies</h3>
+            <p class="infra-sub">Prior coursework and labs covering offensive security concepts and techniques.</p>
           </span>
-          <span class="lab-arrow">→</span>
+          <span class="infra-arrow">→</span>
         </a>
       </article>
 
-      <article class="lab-item">
-        <a class="lab-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/RDP%20Brute%20Force%20Attack%20and%20Remote%20Login">
-          <span class="lab-num">6</span>
-          <span class="lab-text">
-            <h3 class="lab-title">RDP Brute Force & Remote Login</h3>
-            <p class="lab-sub">Demonstrating brute force and remote login of RDP in a lab environment.</p>
+      <article class="infra-item">
+        <a class="infra-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Cybersecurity%20Baselines%20%26%20IT%20Best%20Practices">
+          <span class="infra-num">6</span>
+          <span class="infra-text">
+            <h3 class="infra-title">Cybersecurity Baselines & IT Best Practices</h3>
+            <p class="infra-sub">Documenting baseline configurations and best practices applied across the lab.</p>
           </span>
-          <span class="lab-arrow">→</span>
-        </a>
-      </article>
-
-      <article class="lab-item">
-        <a class="lab-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Raspberry%20Pi%20Web%20App%20Tinkering">
-          <span class="lab-num">7</span>
-          <span class="lab-text">
-            <h3 class="lab-title">Raspberry Pi Web App Tinkering</h3>
-            <p class="lab-sub">Raspberry Pi–hosted web app for practice and experimentation.</p>
-          </span>
-          <span class="lab-arrow">→</span>
-        </a>
-      </article>
-
-      <article class="lab-item">
-        <a class="lab-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/TrueNAS%20Attack%20%26%20Defense%20Lab">
-          <span class="lab-num">8</span>
-          <span class="lab-text">
-            <h3 class="lab-title">NAS Security Attack & Defense Lab</h3>
-            <p class="lab-sub">TrueNAS lab: privilege escalation, detection, response, and hardening.</p>
-          </span>
-          <span class="lab-arrow">→</span>
+          <span class="infra-arrow">→</span>
         </a>
       </article>
 
@@ -261,7 +233,6 @@
         <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
       </div>
     </footer>
-
   </div>
 </body>
 </html>
