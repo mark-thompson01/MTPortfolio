@@ -1,1 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NAS Security Attack &amp; Defense Lab 3 · Mark Thompson Portfolio</title>
+  <meta name="description" content="Lab 3: Privilege escalation via misconfigured SUID binary (vim), detection in logs/process list, and immediate response." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
 
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar{width:12px}
+    ::-webkit-scrollbar-track{background:var(--bg-2)}
+    ::-webkit-scrollbar-thumb{background:#2a3447;border-radius:6px}
+    ::-webkit-scrollbar-thumb:hover{background:#3a4a67}
+    * {scrollbar-width:thin;scrollbar-color:#2a3447 var(--bg-2)}
+
+    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    /* Breadcrumb */
+    .crumbs{color:var(--muted);font-size:14px;margin:2px 0 8px}
+    .crumbs a{color:var(--muted);text-decoration:none}
+    .crumbs a:hover{color:var(--text)}
+
+    /* Page header */
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(17px,2.4vw,19px)}
+
+    /* Links */
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    /* Content area */
+    .content{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+      margin-top:16px;
+    }
+    .content h2{
+      font-size:28px;
+      font-weight:700;
+      margin:48px 0 20px 0;
+      color:var(--text);
+      padding-bottom:12px;
+      border-bottom:2px solid var(--card-border);
+    }
+    .content h2:first-of-type{margin-top:32px}
+
+    /* Step Section Cards */
+    .step-section{
+      margin:40px 0;
+      padding:24px;
+      background:rgba(77,163,255,.04);
+      border:1px solid var(--card-border);
+      border-radius:12px;
+    }
+    .step-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 12px 0;
+    }
+    .step-section p:last-child{margin:0}
+    .step-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 12px 0;
+      padding-left:24px;
+    }
+    .step-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
+    .step-section pre{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      padding:14px 16px;
+      font-size:14px;
+      color:#a8d8ff;
+      overflow-x:auto;
+      margin:12px 0;
+    }
+    .step-section pre code{background:none;border:none;padding:0;font-size:inherit}
+
+    /* Sub-section */
+    .sub-section{
+      margin-top:24px;
+      padding:20px;
+      background:rgba(0,0,0,.2);
+      border:1px solid var(--card-border);
+      border-radius:10px;
+    }
+    .sub-section h4{
+      font-size:17px;
+      font-weight:700;
+      color:var(--brand);
+      margin:0 0 10px 0;
+    }
+    .sub-section p{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.75;
+      margin:0 0 10px 0;
+    }
+    .sub-section p:last-child{margin:0}
+    .sub-section ul{
+      color:var(--muted);
+      font-size:17px;
+      line-height:1.9;
+      margin:0 0 10px 0;
+      padding-left:24px;
+    }
+    .sub-section code{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:4px;
+      padding:1px 6px;
+      font-size:14px;
+      color:#a8d8ff;
+    }
+    .sub-section pre{
+      background:rgba(0,0,0,.35);
+      border:1px solid var(--card-border);
+      border-radius:8px;
+      padding:14px 16px;
+      font-size:14px;
+      color:#a8d8ff;
+      overflow-x:auto;
+      margin:12px 0;
+    }
+    .sub-section pre code{background:none;border:none;padding:0;font-size:inherit}
+
+    /* Figures */
+    .figure{
+      border:1px solid var(--card-border);
+      border-radius:12px;
+      background:#0e1220;
+      padding:8px;
+      margin:16px auto;
+      max-width:100%;
+      text-align:center;
+    }
+    .figure img{
+      display:block;
+      margin:0 auto;
+      border-radius:10px;
+      object-fit:contain;
+      width:auto;
+      max-width:100%;
+      height:auto;
+      cursor:zoom-in;
+    }
+    .figcap{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Side-by-side pair */
+    .pair{display:grid;gap:12px;margin:16px 0}
+    @media (min-width:780px){ .pair{grid-template-columns:1fr 1fr} }
+    .pair .figure{margin:0}
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed;inset:0;display:none;place-items:center;
+      background:rgba(0,0,0,.85);z-index:9999;
+    }
+    .lightbox.open{display:grid}
+    .lightbox img{
+      max-width:95vw;max-height:95vh;border-radius:12px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);cursor:zoom-out;
+    }
+    .lightbox .cap{
+      margin-top:10px;color:#cfd6e6;font-size:14px;text-align:center;max-width:92vw;
+    }
+
+    /* Back link */
+    .back-link{
+      display:inline-block;
+      margin-top:24px;
+      color:var(--brand);
+      text-decoration:none;
+      font-size:15px;
+    }
+    .back-link:hover{text-decoration:underline}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- Site nav -->
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security" class="active">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="crumbs">
+      <a href="/MTPortfolio/Security">Security</a> ·
+      <a href="/MTPortfolio/Security/Offensive%20Security">Offensive Security</a> ·
+      <a href="https://mark-thompson01.github.io/MTPortfolio/Security/Offensive%20Security/TrueNAS%20Attack%20%26%20Defense%20Lab">NAS Security Attack &amp; Defense Lab</a> ·
+      <span>Lab 3 — Privilege Escalation</span>
+    </div>
+
+    <!-- Header -->
+    <header>
+      <h1>Lab 3 — Privilege Escalation</h1>
+      <p class="lead">Exploit: misconfigured SUID on <code style="background:rgba(0,0,0,.3);border:1px solid var(--card-border);border-radius:4px;padding:1px 6px;font-size:15px;color:#a8d8ff;">vim</code> to gain root. Detect via logs and process list; respond by killing sessions and hardening.</p>
+    </header>
+
+    <!-- Main content -->
+    <main class="content">
+
+      <!-- Scenario -->
+      <h2>Scenario</h2>
+      <div class="step-section">
+        <p>Following the successful SSH compromise in Lab 2, access was upgraded from a BSD shell to a Meterpreter session. The user lacks root privileges, so the next step is privilege escalation. For this lab, the <code>vim</code> binary is intentionally misconfigured with the SUID bit to demonstrate a common escalation path.</p>
+      </div>
+
+      <!-- SUID -->
+      <h2>SUID: What It Is</h2>
+      <div class="step-section">
+        <p>The SUID (Set User ID) permission causes an executable to run with the file owner's privileges, not the caller's. It appears as an <strong style="color:var(--brand);">s</strong> in the owner's execute position in <code>ls -l</code> output.</p>
+        <pre><code>-rwsr-xr-x 1 root root 12345 Dec 27 12:00 example_program</code></pre>
+        <p>When a non-root user runs <code>example_program</code>, it executes with <code>root</code> privileges. Misconfiguring SUID on powerful binaries (like editors or shells) can enable trivial escalation.</p>
+      </div>
+
+      <!-- Offensive -->
+      <h2>Offensive</h2>
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>Spawning an Interactive Shell</h4>
+          <p>From Meterpreter, spawn an interactive shell:</p>
+          <pre><code>/bin/sh -i</code></pre>
+          <figure class="figure">
+            <img src="Images/shell.png" alt="Spawning an interactive /bin/sh from Meterpreter" loading="lazy" decoding="async">
+            <figcaption class="figcap">Interactive shell obtained.</figcaption>
+          </figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Fixing the Terminal Environment</h4>
+          <p>Initially, <code>vim</code> behaved oddly inside this pseudo-tty (missing editor commands). Inspecting environment variables revealed the <code>TERM</code> variable was unset.</p>
+          <figure class="figure">
+            <img src="Images/snv.png" alt="Environment inspection showing missing TERM variable" loading="lazy" decoding="async">
+            <figcaption class="figcap"><code>TERM</code> not set.</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/xtermvim.png" alt="Exporting TERM=xterm so vim behaves correctly" loading="lazy" decoding="async">
+            <figcaption class="figcap">Fixing terminal with <code>export TERM=xterm</code>.</figcaption>
+          </figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Exploiting SUID vim for Root</h4>
+          <p>With SUID on <code>vim</code>, invoking a shell from inside the editor yields a root shell:</p>
+          <pre><code>vim
+:!sh</code></pre>
+          <figure class="figure">
+            <img src="Images/%3A%21sh.png" alt="Using :!sh inside vim to spawn a shell" loading="lazy" decoding="async">
+            <figcaption class="figcap"><code>:!sh</code> spawns a privileged shell.</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/rootaccessgained.png" alt="Proof of root after exploiting SUID vim" loading="lazy" decoding="async">
+            <figcaption class="figcap">Root access confirmed.</figcaption>
+          </figure>
+        </div>
+
+      </div>
+
+      <!-- Defensive -->
+      <h2>Defensive</h2>
+      <div class="step-section">
+
+        <div class="sub-section">
+          <h4>Incident Detection</h4>
+          <p>Review authentication and command logs to confirm abuse of <code>vim</code> to spawn a shell:</p>
+          <figure class="figure">
+            <img src="Images/LogData.png" alt="Logs showing vim execution with -c /bin/sh and sudo attempts" loading="lazy" decoding="async">
+            <figcaption class="figcap">Log events highlight suspicious <code>vim</code> usage launching <code>/bin/sh</code>.</figcaption>
+          </figure>
+          <p>Correlate with process listings to confirm interactive shells and ownership changes:</p>
+          <figure class="figure">
+            <img src="Images/psaux.png" alt="ps aux output showing shells under ronny and root, indicating escalation" loading="lazy" decoding="async">
+            <figcaption class="figcap">Processes show escalation from user <code>ronny</code> to <code>root</code>.</figcaption>
+          </figure>
+        </div>
+
+        <div class="sub-section">
+          <h4>Response</h4>
+          <p>Terminate malicious sessions and clean up. Kill processes tied to the compromised user and any suspicious root shells:</p>
+          <figure class="figure">
+            <img src="Images/processkill2.png" alt="Killing processes tied to the compromised session" loading="lazy" decoding="async">
+            <figcaption class="figcap">Stopping rogue shells and sessions.</figcaption>
+          </figure>
+          <p>On the attacker side, access is lost:</p>
+          <figure class="figure">
+            <img src="Images/commandterminated.png" alt="Attacker session terminated after defensive actions" loading="lazy" decoding="async">
+            <figcaption class="figcap">Command terminated after response actions.</figcaption>
+          </figure>
+        </div>
+
+      </div>
+
+      <!-- Analysis -->
+      <h2>Privilege Escalation via SUID &amp; Environment</h2>
+      <div class="step-section">
+        <p>This lab demonstrates how a misconfigured SUID binary and an improperly configured environment (<code>TERM</code>) can be combined to achieve root. While production systems rarely ship with SUID on editors, legacy systems and ad-hoc admin changes can introduce these flaws. The workflow mirrors real assessments: identify SUID candidates, fix environment/pty issues, and pivot to a root shell.</p>
+
+        <div class="sub-section">
+          <h4>Real-World Takeaways</h4>
+          <ul>
+            <li>Audit SUID binaries regularly; remove SUID from unnecessary tools (especially editors, interpreters).</li>
+            <li>Harden shells and terminal handling in constrained environments (proper PTY, env sanitization).</li>
+            <li>Monitor for suspicious command lines (e.g., editors launching shells) and unusual root-owned interactive shells.</li>
+          </ul>
+        </div>
+      </div>
+
+    </main>
+
+    <a class="back-link" href="https://mark-thompson01.github.io/MTPortfolio/Security/Offensive%20Security/TrueNAS%20Attack%20%26%20Defense%20Lab">← Back to NAS Security Attack &amp; Defense Lab</a>
+
+    <!-- Footer -->
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightbox -->
+  <script>
+    (function(){
+      const lb = document.createElement('div');
+      lb.className = 'lightbox';
+      lb.innerHTML = '<div class="inner"><img alt=""><div class="cap" aria-live="polite"></div></div>';
+      document.body.appendChild(lb);
+      const lbImg = lb.querySelector('img');
+      const lbCap = lb.querySelector('.cap');
+
+      function openLB(src, alt, capText){
+        lbImg.src = src;
+        lbImg.alt = alt || '';
+        lbCap.textContent = capText || alt || '';
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeLB(){
+        lb.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+      }
+      lb.addEventListener('click', closeLB);
+      document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && lb.classList.contains('open')) closeLB(); });
+
+      document.querySelectorAll('.figure img').forEach((img)=>{
+        img.addEventListener('click', ()=>{
+          openLB(img.currentSrc || img.src, img.alt, img.closest('.figure')?.querySelector('.figcap')?.textContent);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
