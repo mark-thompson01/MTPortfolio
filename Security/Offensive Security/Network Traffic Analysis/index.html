@@ -290,25 +290,21 @@
         <div class="sub-section">
           <h4>1) Ping Sweeps and Network Scans</h4>
           <p>Run a sweep/scan from Kali using <code>arp-scan</code>, <code>fping</code>, and <code>nmap -sn</code> to find live hosts. The first three can create significant ARP traffic.</p>
-          <div class="pair">
-            <figure class="figure">
-              <img src="Images/arp-scan%20fping%20and%20nmap%20sn.PNG" alt="ARP scan and ping sweep (nmap -sn)" loading="lazy" decoding="async">
-              <figcaption class="figcap">ARP/ping discovery activity.</figcaption>
-            </figure>
-            <figure class="figure">
-              <img src="Images/Ubuntu%20Port%20Scan.PNG" alt="Ubuntu port scan" loading="lazy" decoding="async">
-              <figcaption class="figcap">Port probing against Ubuntu target.</figcaption>
-            </figure>
-          </div>
+          <figure class="figure">
+            <img src="Images/arp-scan%20fping%20and%20nmap%20sn.PNG" alt="ARP scan and ping sweep (nmap -sn)" loading="lazy" decoding="async">
+            <figcaption class="figcap">ARP/ping discovery activity.</figcaption>
+          </figure>
+          <figure class="figure">
+            <img src="Images/Ubuntu%20Port%20Scan.PNG" alt="Ubuntu port scan" loading="lazy" decoding="async">
+            <figcaption class="figcap">Port probing against Ubuntu target.</figcaption>
+          </figure>
         </div>
 
         <div class="sub-section">
           <h4>2) File Transfers via SSH</h4>
           <p>Establish SSH from Kali to Ubuntu and use <code>scp</code> to move files.</p>
-          <div class="pair">
-            <figure class="figure"><img src="Images/SSH%20Login.PNG" alt="SSH login success" loading="lazy"></figure>
-            <figure class="figure"><img src="Images/Test%20File%20Creation%20and%20Transfer%20to%20Ubuntu.PNG" alt="Create file and scp to Ubuntu" loading="lazy"></figure>
-          </div>
+          <figure class="figure"><img src="Images/SSH%20Login.PNG" alt="SSH login success" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/Test%20File%20Creation%20and%20Transfer%20to%20Ubuntu.PNG" alt="Create file and scp to Ubuntu" loading="lazy"></figure>
           <figure class="figure">
             <img src="Images/File%20Transfer%20Verification.PNG" alt="File transfer verification on Ubuntu" loading="lazy">
             <figcaption class="figcap">Verified file presence on the destination.</figcaption>
@@ -318,14 +314,10 @@
         <div class="sub-section">
           <h4>3) Simulated Malicious Activity</h4>
           <p>Use <code>hping3</code> to craft suspicious packets and floods.</p>
-          <div class="pair">
-            <figure class="figure"><img src="Images/hping%20port%2080%20flood.PNG" alt="hping SYN flood on port 80" loading="lazy"><figcaption class="figcap">Port 80 flood.</figcaption></figure>
-            <figure class="figure"><img src="Images/hping%20icmp%20flood%20116.PNG" alt="hping ICMP flood" loading="lazy"><figcaption class="figcap">ICMP flood.</figcaption></figure>
-          </div>
-          <div class="pair">
-            <figure class="figure"><img src="Images/hping%20Fragmented%20Packets%20116.PNG" alt="hping fragmented packets" loading="lazy"><figcaption class="figcap">Fragmentation.</figcaption></figure>
-            <figure class="figure"><img src="Images/hping%20data%20injection.PNG" alt="hping data injection" loading="lazy"><figcaption class="figcap">Payload injection.</figcaption></figure>
-          </div>
+          <figure class="figure"><img src="Images/hping%20port%2080%20flood.PNG" alt="hping SYN flood on port 80" loading="lazy"><figcaption class="figcap">Port 80 flood.</figcaption></figure>
+          <figure class="figure"><img src="Images/hping%20icmp%20flood%20116.PNG" alt="hping ICMP flood" loading="lazy"><figcaption class="figcap">ICMP flood.</figcaption></figure>
+          <figure class="figure"><img src="Images/hping%20Fragmented%20Packets%20116.PNG" alt="hping fragmented packets" loading="lazy"><figcaption class="figcap">Fragmentation.</figcaption></figure>
+          <figure class="figure"><img src="Images/hping%20data%20injection.PNG" alt="hping data injection" loading="lazy"><figcaption class="figcap">Payload injection.</figcaption></figure>
           <figure class="figure"><img src="Images/hping%20spoofed%20IP%20source%20116.PNG" alt="hping spoofed IP source" loading="lazy"><figcaption class="figcap">Spoofed source IP.</figcaption></figure>
         </div>
 
@@ -359,10 +351,8 @@
         <div class="sub-section">
           <h4>ARP-Scan Traffic</h4>
           <p>Large bursts of ARP requests/replies reveal active hosts and MAC addresses (classic network mapping behavior).</p>
-          <div class="pair">
-            <figure class="figure"><img src="Images/Lots%20of%20ARP.PNG" alt="ARP storm" loading="lazy"></figure>
-            <figure class="figure"><img src="Images/ARP%20Request.PNG" alt="ARP request" loading="lazy"></figure>
-          </div>
+          <figure class="figure"><img src="Images/Lots%20of%20ARP.PNG" alt="ARP storm" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/ARP%20Request.PNG" alt="ARP request" loading="lazy"></figure>
           <figure class="figure"><img src="Images/ARP%20Reply.PNG" alt="ARP reply" loading="lazy"></figure>
         </div>
 
@@ -378,10 +368,8 @@
           <h4>Nmap Scan Traffic</h4>
           <p>SYN scans probe many ports; closed ports reset, open ones reply with SYN/ACK.</p>
           <figure class="figure"><img src="Images/Screenshot%20from%202024-12-13%2023-20-00.png" alt="Nmap SYN scan" loading="lazy"></figure>
-          <div class="pair">
-            <figure class="figure"><img src="Images/Port%2022%20Open.png" alt="Port 22 open (SYN,ACK)" loading="lazy"><figcaption class="figcap">Port 22 open.</figcaption></figure>
-            <figure class="figure"><img src="Images/Port%2080%20Open.png" alt="Port 80 open (SYN,ACK)" loading="lazy"><figcaption class="figcap">Port 80 open.</figcaption></figure>
-          </div>
+          <figure class="figure"><img src="Images/Port%2022%20Open.png" alt="Port 22 open (SYN,ACK)" loading="lazy"><figcaption class="figcap">Port 22 open.</figcaption></figure>
+          <figure class="figure"><img src="Images/Port%2080%20Open.png" alt="Port 80 open (SYN,ACK)" loading="lazy"><figcaption class="figcap">Port 80 open.</figcaption></figure>
         </div>
 
       </div>
@@ -393,10 +381,8 @@
           <img src="Images/SSH%20Connection%20TCP%20Handshake.png" alt="SSH TCP three-way handshake" loading="lazy">
           <figcaption class="figcap">Follow &gt; TCP Stream to view the handshake.</figcaption>
         </figure>
-        <div class="pair">
-          <figure class="figure"><img src="Images/SSH%20Traffic%20Details%201.png" alt="SSH traffic details 1" loading="lazy"></figure>
-          <figure class="figure"><img src="Images/SSH%20Traffic%20Details%202.png" alt="SSH traffic details 2" loading="lazy"></figure>
-        </div>
+        <figure class="figure"><img src="Images/SSH%20Traffic%20Details%201.png" alt="SSH traffic details 1" loading="lazy"></figure>
+        <figure class="figure"><img src="Images/SSH%20Traffic%20Details%202.png" alt="SSH traffic details 2" loading="lazy"></figure>
         <figure class="figure">
           <img src="Images/SCP%20File%20Transfer.png" alt="SCP file transfer pattern over SSH" loading="lazy">
           <figcaption class="figcap">Encrypted SSHv2 packets; size/frequency patterns align with file transfer.</figcaption>
@@ -420,10 +406,8 @@
         <div class="sub-section">
           <h4>Malformed (Fragmented) Packets</h4>
           <p>Deliberate fragmentation (MF flag) can stress reassembly and slip past defenses.</p>
-          <div class="pair">
-            <figure class="figure"><img src="Images/Malform0.PNG" alt="Malformed fragmented packets" loading="lazy"></figure>
-            <figure class="figure"><img src="Images/Capture%201.PNG" alt="Fragmented packets view" loading="lazy"></figure>
-          </div>
+          <figure class="figure"><img src="Images/Malform0.PNG" alt="Malformed fragmented packets" loading="lazy"></figure>
+          <figure class="figure"><img src="Images/Capture%201.PNG" alt="Fragmented packets view" loading="lazy"></figure>
         </div>
 
         <div class="sub-section">
