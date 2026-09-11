@@ -10,7 +10,6 @@
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
       --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
       --radius:18px;
-      --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
     }
     html,body{height:100%}
     body{
@@ -20,58 +19,46 @@
         radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
         radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
-      line-height:1.6; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
     .wrap{max-width:1300px;margin:0 auto;padding:40px 20px 64px}
 
-    /* Top nav */
     .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
     .topnav a{
-      color:var(--muted);
-      text-decoration:none;
-      padding:12px 20px;
-      border-radius:12px;
-      border:1px solid transparent;
-      font-size:16px;
-      font-weight:500;
+      color:var(--muted); text-decoration:none; padding:12px 20px;
+      border-radius:12px; border:1px solid transparent; font-size:16px; font-weight:500;
     }
     .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
     .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
 
-    /* Breadcrumb */
-    .crumb{color:var(--muted);font-size:14px;margin:0 0 22px}
+    .crumb{
+      max-width:820px;margin:0 auto 18px;text-align:left;
+      color:var(--muted);font-size:14px;
+    }
     .crumb a{color:var(--muted);text-decoration:none}
     .crumb a:hover{color:var(--brand)}
-    .crumb span{margin:0 6px;color:#4a5169}
+    .crumb span.sep{margin:0 8px;color:#4a5573}
 
-    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,40px);font-weight:800;letter-spacing:.2px}
-    .lead{color:var(--muted);margin:0 0 8px;font-size:clamp(16px,2.2vw,18px);max-width:70ch}
-    .meta{color:#7f8599;font-size:14px;margin:0 0 40px;font-family:var(--mono)}
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,40px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 12px;font-size:clamp(16px,2.2vw,18px);text-align:center}
+    .meta{color:var(--muted);font-size:14px;text-align:center;margin:0 0 40px}
+    .meta span{margin:0 10px}
 
-    h2{
-      font-size:clamp(22px,3vw,26px);
-      font-weight:700;
-      margin:56px 0 14px;
-      padding-bottom:10px;
-      border-bottom:1px solid var(--card-border);
+    .article{max-width:820px;margin:0 auto}
+    .article h2{
+      font-size:1.55rem; font-weight:800; color:var(--text);
+      margin:52px 0 6px; padding-bottom:12px; border-bottom:1px solid var(--card-border);
     }
-    h3{
-      font-size:18px;
-      font-weight:700;
-      color:#cdd2e3;
-      margin:28px 0 10px;
-    }
-    p{color:#c7cadb;margin:0 0 16px;max-width:74ch}
-    ul{margin:0 0 16px;padding-left:22px;color:#c7cadb}
-    li{margin:0 0 6px;max-width:70ch}
-    strong{color:var(--text)}
-    code{
-      font-family:var(--mono);
-      background:rgba(77,163,255,.1);
-      color:#8fc4ff;
-      padding:2px 6px;
-      border-radius:6px;
-      font-size:.92em;
+    .article h2:first-child{margin-top:0}
+    .article h3{font-size:1.15rem;font-weight:700;color:var(--brand);margin:32px 0 10px}
+    .article h4{font-size:1rem;font-weight:700;color:var(--text);margin:24px 0 10px}
+    .article p{color:#c7cadb;font-size:1rem;margin:0 0 16px}
+    .article ul{color:#c7cadb;margin:0 0 16px;padding-left:22px}
+    .article li{margin:0 0 8px}
+    .article strong{color:var(--text)}
+    .article code{
+      background:rgba(77,163,255,.1); color:#8fc2ff; padding:2px 6px;
+      border-radius:5px; font-size:.9em; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
     }
 
     /* Terminal block for CLI config */
@@ -86,102 +73,26 @@
     }
     .term pre{
       margin:0;
-      font-family:var(--mono);
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
       font-size:13.5px;
       line-height:1.7;
       color:#9fe6a0;
       white-space:pre;
     }
 
-    /* Callout */
-    .callout{
-      background:linear-gradient(180deg,rgba(77,163,255,.07),rgba(77,163,255,.03));
-      border:1px solid #2a3a55;
-      border-left:3px solid var(--brand);
-      border-radius:12px;
-      padding:16px 20px;
-      margin:0 0 20px;
-    }
-    .callout p{margin:0;color:#c7cadb;max-width:none}
-
-    /* Figures / screenshots */
-    figure{
-      margin:22px 0 28px;
+    .info-table{
+      width:100%; border-collapse:collapse; margin:12px 0 24px;
       background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);
-      border-radius:var(--radius);
-      padding:14px;
-      box-shadow:var(--shadow);
+      border:1px solid var(--card-border); border-radius:14px; overflow:hidden;
     }
-    figure img{
-      display:block;
-      width:100%;
-      height:auto;
-      border-radius:10px;
-      border:1px solid #232a3a;
-      cursor:zoom-in;
-      transition:filter .15s ease;
+    .info-table th, .info-table td{
+      text-align:left; padding:12px 18px; font-size:.95rem; border-bottom:1px solid var(--card-border);
     }
-    figure img:hover{filter:brightness(1.05)}
-    figcaption{
-      color:var(--muted);
-      font-size:14px;
-      margin-top:10px;
-      padding:0 4px;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-    figcaption .zoom-hint{
-      color:#6b7188;
-      font-size:12px;
-      margin-left:auto;
-      white-space:nowrap;
-    }
+    .info-table tr:last-child th, .info-table tr:last-child td{border-bottom:none}
+    .info-table th{color:var(--brand);font-weight:700;width:42%;background:rgba(77,163,255,.05)}
+    .info-table td{color:#c7cadb}
 
-    /* Lightbox */
-    .lightbox{
-      position:fixed; inset:0;
-      background:rgba(6,8,12,.92);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:1000;
-      padding:40px 20px;
-      cursor:zoom-out;
-    }
-    .lightbox.open{display:flex}
-    .lightbox img{
-      max-width:min(1400px,94vw);
-      max-height:88vh;
-      border-radius:10px;
-      border:1px solid #333c52;
-      box-shadow:0 20px 60px rgba(0,0,0,.6);
-    }
-    .lightbox .lb-close{
-      position:fixed;
-      top:22px; right:28px;
-      color:#e6e7ee;
-      font-size:28px;
-      line-height:1;
-      background:rgba(255,255,255,.08);
-      border:1px solid #333c52;
-      width:44px; height:44px;
-      border-radius:10px;
-      display:flex; align-items:center; justify-content:center;
-      cursor:pointer;
-    }
-    .lightbox .lb-close:hover{background:rgba(255,255,255,.15)}
-    .lightbox .lb-caption{
-      position:fixed;
-      bottom:26px; left:0; right:0;
-      text-align:center;
-      color:var(--muted);
-      font-size:14px;
-      padding:0 20px;
-    }
-
-    /* Summary card list, matches parent page's numbered-item styling */
+    /* Step list, matches GP-page numbered intro items */
     .step-list{
       display:flex;
       flex-direction:column;
@@ -210,64 +121,55 @@
     .step-body p{margin:0;color:#c7cadb}
     .step-body strong{display:block;color:var(--text);margin-bottom:2px}
 
-    /* Simple data table for scope specs */
-    table.spec{
-      width:100%;
-      border-collapse:collapse;
-      margin:0 0 20px;
-      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
-      border:1px solid var(--card-border);
-      border-radius:12px;
-      overflow:hidden;
+    .shot{
+      width:min(1300px, 94vw);
+      margin:24px 0 32px; margin-left:50%; transform:translateX(-50%);
+      border:1px solid var(--card-border); border-radius:var(--radius);
+      overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      box-shadow:var(--shadow);
     }
-    table.spec th, table.spec td{
-      text-align:left;
-      padding:10px 16px;
-      font-size:14.5px;
-      color:#c7cadb;
-      border-bottom:1px solid var(--card-border);
-    }
-    table.spec th{
-      color:#8b93ab;
-      font-weight:600;
-      font-size:13px;
-      text-transform:none;
-      background:rgba(255,255,255,.02);
-    }
-    table.spec tr:last-child td{border-bottom:none}
-    table.spec td code{white-space:nowrap}
+    .shot img{display:block;width:100%;height:auto;border-bottom:1px solid var(--card-border);cursor:zoom-in;transition:opacity .15s ease}
+    .shot img:hover{opacity:.92}
+    .shot figcaption{padding:12px 18px;color:var(--muted);font-size:.9rem;line-height:1.5}
 
-    /* Footer */
+    .lightbox{
+      display:none;position:fixed;inset:0;z-index:1000;background:rgba(8,10,14,.92);
+      align-items:center;justify-content:center;padding:40px 20px;cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:min(1400px,94vw); max-height:90vh; width:auto; height:auto;
+      border-radius:10px; border:1px solid var(--card-border); box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
+    .lightbox .lb-close{
+      position:fixed;top:22px;right:28px;width:44px;height:44px;border-radius:12px;
+      border:1px solid var(--card-border);background:rgba(255,255,255,.06);color:var(--text);
+      font-size:22px;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    }
+    .lightbox .lb-close:hover{background:rgba(255,255,255,.12)}
+
+    .callout{
+      border:1px solid #3a4a67; background:rgba(77,163,255,.06); border-radius:14px;
+      padding:14px 18px; margin:0 0 20px; color:#c7cadb; font-size:.95rem;
+    }
+    .callout strong{color:var(--brand)}
+
+    .summary-card{
+      border:1px solid var(--card-border); border-radius:var(--radius);
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      box-shadow:var(--shadow); padding:24px 28px; margin-top:16px;
+    }
+    .summary-card ul{margin-bottom:0}
+
     footer{
-      margin-top:48px;
-      padding-top:24px;
-      padding-bottom:2px;
-      border-top:1px solid #232a3a;
-      color:var(--muted);
-      font-size:0.9rem;
-      background:linear-gradient(
-        to bottom,
-        rgba(20,24,33,0) 0%,
-        rgba(20,24,33,0.65) 100%
-      );
+      margin-top:64px;padding-top:24px;padding-bottom:2px;border-top:1px solid #232a3a;
+      color:var(--muted);font-size:0.9rem;
+      background:linear-gradient(to bottom, rgba(20,24,33,0) 0%, rgba(20,24,33,0.65) 100%);
       flex-shrink:0;
     }
-    footer .links{
-      margin-top:6px;
-      gap:8px;
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-    }
-    footer a{
-      color:var(--muted);
-      text-decoration:none;
-      white-space:nowrap;
-    }
-    footer a:hover{
-      color:var(--brand);
-      text-decoration:none;
-    }
+    footer .links{margin-top:6px;gap:8px;display:flex;flex-wrap:wrap;align-items:center}
+    footer a{color:var(--muted);text-decoration:none;white-space:nowrap}
+    footer a:hover{color:var(--brand);text-decoration:none}
   </style>
 </head>
 <body>
@@ -283,17 +185,21 @@
       <a href="/MTPortfolio/Blogs">Blog</a>
     </nav><br><br>
 
-
     <header>
       <h1>DHCP Server Role Setup</h1>
       <p class="lead">Installing the DHCP Server role on DC01, building scopes for all three active VLANs, and solving cross-VLAN lease delivery with an IP helper-address relay.</p>
-      <p class="meta">MTPortfolio Lab &nbsp;|&nbsp; DC01.mtlab.local &nbsp;|&nbsp; Windows Server 2022 Standard Evaluation</p>
+      <p class="meta">
+        <span>Domain: mtlab.local</span>·
+        <span>Domain Controller: DC01.mtlab.local</span>·
+        <span>OS: Windows Server 2022 Standard Evaluation</span>
+      </p>
     </header>
 
-    <section>
+    <article class="article">
+
       <h2>Overview</h2>
       <p>With the core infrastructure of the lab in place — the FortiGate firewall, the Cisco managed switches, Hyper-V, and Active Directory — the next step was to bring DHCP under the domain controller. Without DHCP, clients cannot receive IP addresses automatically, and getting it right on a segmented VLAN environment required more than just clicking through wizards. It required understanding how DHCP broadcasts behave across layer 3 boundaries and configuring the switch infrastructure to relay them correctly.</p>
-      <p>This page covers four things:</p>
+      <p>This page covers three things:</p>
       <div class="step-list">
         <div class="step-item">
           <span class="step-num">1</span>
@@ -308,400 +214,385 @@
           <div class="step-body"><p>Configuring an IP helper-address relay so cross-VLAN DHCP actually works</p></div>
         </div>
       </div>
-    </section>
 
-    <section>
       <h2>Environment Context</h2>
       <p>The lab runs three active VLANs across the managed switch infrastructure:</p>
-      <table class="spec">
-        <tr><th>VLAN</th><th>Subnet</th><th>Purpose</th></tr>
-        <tr><td>VLAN 10 — Servers</td><td><code>192.168.10.0/24</code></td><td>Server infrastructure, mostly statically assigned</td></tr>
-        <tr><td>VLAN 20 — Infrastructure</td><td><code>192.168.20.0/24</code></td><td>DC01 lives here at 192.168.20.10</td></tr>
-        <tr><td>VLAN 40 — Clients</td><td><code>192.168.40.0/24</code></td><td>Client network — dynamic DHCP matters most here</td></tr>
+      <table class="info-table">
+        <tr><th>VLAN 10 — Servers</th><td>192.168.10.0/24 — server infrastructure, mostly statically assigned</td></tr>
+        <tr><th>VLAN 20 — Infrastructure</th><td>192.168.20.0/24 — DC01 lives here at 192.168.20.10</td></tr>
+        <tr><th>VLAN 40 — Clients</th><td>192.168.40.0/24 — client network, dynamic DHCP matters most here</td></tr>
       </table>
       <p>DC01.mtlab.local is the only server in the lab running DHCP. It also runs DNS and Active Directory Domain Services — all three roles coexist on the same VM, a common configuration in small environments and MSP client sites. The Raspberry Pi 5 at 192.168.10.5 handles BIND9 DNS as a secondary DNS resource, which is why it shows up alongside 192.168.50.10 in the DHCP scope options below — an artifact of an iterative DNS configuration process documented honestly rather than cleaned up after the fact.</p>
-    </section>
 
-    <section>
       <h2>Prerequisite: Static IP on the Domain Controller</h2>
       <p>Before the DHCP role was installed, DC01 needed a static IP address. A DHCP server handing out addresses to clients can't rely on a dynamically assigned address itself — if the server's IP changed, every scope option pointing to it as a gateway or DNS server would become invalid.</p>
       <p>The NIC on DC01 was configured with static settings through Network Connections in the Control Panel: IP address 192.168.20.10, subnet mask 255.255.255.0, default gateway 192.168.20.1, and preferred DNS server 127.0.0.1. The loopback address is standard practice for a domain controller running the DNS role — pointing the server at itself ensures it uses its own DNS service for internal domain queries rather than reaching out to an external resolver.</p>
 
-      <figure>
-        <img src="Images/ac1-DomainStaticIP.png" alt="Ethernet Properties, IPv4 settings showing static IP 192.168.20.10, gateway 192.168.20.1, and preferred DNS 127.0.0.1" data-caption="Static IP configuration on DC01: 192.168.20.10, gateway 192.168.20.1, preferred DNS 127.0.0.1 (loopback).">
-        <figcaption>Static IP configuration on DC01, with DNS pointed at loopback.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/ac1-DomainStaticIP.png" alt="Ethernet Properties, IPv4 settings showing static IP 192.168.20.10, gateway 192.168.20.1, and preferred DNS 127.0.0.1" loading="lazy">
+        <figcaption>Static IP configuration on DC01, with DNS pointed at loopback.</figcaption>
       </figure>
 
       <p>With the static IP set, the server was ready for the DHCP role installation.</p>
-    </section>
 
-    <section>
       <h2>DHCP Server Role Installation</h2>
       <p>The DHCP Server role was added through Server Manager on DC01.mtlab.local. At the time of installation, the server was already running three roles: AD DS, DNS, and File and Storage Services — the dashboard showed Roles: 3 in the server groups panel before the installation began.</p>
 
-      <figure>
-        <img src="Images/dhcp1.png" alt="Server Manager dashboard showing Roles: 3, before the DHCP role is added" data-caption="Server Manager dashboard before installation: Roles: 3 (AD DS, DNS, File and Storage Services).">
-        <figcaption>Starting point: Roles: 3, before DHCP is added.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp1.png" alt="Server Manager dashboard showing Roles: 3, before the DHCP role is added" loading="lazy">
+        <figcaption>Starting point: Roles: 3, before DHCP is added.</figcaption>
       </figure>
 
       <h3>Add Roles and Features Wizard</h3>
       <p>The Add Roles and Features Wizard was launched from Server Manager via <strong>Manage</strong>. The wizard walked through the standard installation flow, opening on the "Before You Begin" screen and confirming the prerequisites: administrator account password set, static IP configured, and current security updates installed.</p>
 
-      <figure>
-        <img src="Images/dhcp2.png" alt="Add Roles and Features Wizard, Before You Begin screen" data-caption="Before You Begin.">
-        <figcaption>Before You Begin.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp2.png" alt="Add Roles and Features Wizard, Before You Begin screen" loading="lazy">
+        <figcaption>Before You Begin.</figcaption>
       </figure>
 
       <p>"Role-based or feature-based installation" was selected — the standard choice for adding a role to the local machine rather than deploying a Virtual Desktop Infrastructure configuration.</p>
 
-      <figure>
-        <img src="Images/dhcp3.png" alt="Installation Type step, Role-based or feature-based installation selected" data-caption="Installation Type: Role-based or feature-based installation.">
-        <figcaption>Installation Type.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp3.png" alt="Installation Type step, Role-based or feature-based installation selected" loading="lazy">
+        <figcaption>Installation Type.</figcaption>
       </figure>
 
       <p>The server pool showed DC01.mtlab.local running Microsoft Windows Server 2022 Standard Evaluation — one server, one target.</p>
 
-      <figure>
-        <img src="Images/dhcp4.png" alt="Server Selection step showing DC01.mtlab.local in the server pool" data-caption="Server Selection: DC01.mtlab.local.">
-        <figcaption>Server Selection.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp4.png" alt="Server Selection step showing DC01.mtlab.local in the server pool" loading="lazy">
+        <figcaption>Server Selection.</figcaption>
       </figure>
 
       <p>From the roles list, DHCP Server was selected. AD DS and DNS were already marked as Installed.</p>
 
-      <figure>
-        <img src="Images/dhcp5.png" alt="Server Roles step, DHCP Server highlighted but not yet checked" data-caption="Server Roles: DHCP Server highlighted, before checking the box.">
-        <figcaption>DHCP Server highlighted, not yet checked.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp5.png" alt="Server Roles step, DHCP Server highlighted but not yet checked" loading="lazy">
+        <figcaption>DHCP Server highlighted, not yet checked.</figcaption>
       </figure>
 
       <p>When DHCP Server was checked, the wizard immediately prompted to add the required management tools: Remote Server Administration Tools, Role Administration Tools, and DHCP Server Tools. "Add Features" was clicked to accept these dependencies.</p>
 
-      <figure>
-        <img src="Images/dhcp6.png" alt="Add features that are required for DHCP Server prompt" data-caption="Add Features prompt for DHCP Server's management tools.">
-        <figcaption>Add Features prompt.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp6.png" alt="Add features that are required for DHCP Server prompt" loading="lazy">
+        <figcaption>Add Features prompt.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp7.png" alt="Server Roles step, DHCP Server now checked" data-caption="Server Roles: DHCP Server checked, ready to continue.">
-        <figcaption>DHCP Server checked.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp7.png" alt="Server Roles step, DHCP Server now checked" loading="lazy">
+        <figcaption>DHCP Server checked.</figcaption>
       </figure>
 
       <p>The DHCP Server information page appeared before confirmation, noting two important points: the server should have at least one static IP address configured, and scope planning should be completed before installation. Both conditions were already met.</p>
 
-      <figure>
-        <img src="Images/dhcp8.png" alt="DHCP Server info page with Things to note about static IP and scope planning" data-caption="DHCP Server info page — prerequisites already satisfied.">
-        <figcaption>DHCP Server info page.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp8.png" alt="DHCP Server info page with Things to note about static IP and scope planning" loading="lazy">
+        <figcaption>DHCP Server info page.</figcaption>
       </figure>
 
       <p>The confirmation screen listed the components to be installed. The option to restart the server automatically if required was initially left unchecked.</p>
 
-      <figure>
-        <img src="Images/dhcp9.png" alt="Confirmation screen, restart automatically checkbox unchecked" data-caption="Confirmation, first pass: automatic restart left unchecked.">
-        <figcaption>Confirmation — restart checkbox unchecked.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp9.png" alt="Confirmation screen, restart automatically checkbox unchecked" loading="lazy">
+        <figcaption>Confirmation — restart checkbox unchecked.</figcaption>
       </figure>
 
       <p>A second pass through the confirmation screen prompted whether to allow automatic restarts, and the answer was yes.</p>
 
-      <figure>
-        <img src="Images/dhcp10.png" alt="Confirmation screen with popup asking whether to allow automatic restarts, checkbox now checked" data-caption="Confirmation, second pass: automatic restart allowed.">
-        <figcaption>Confirmation — automatic restart allowed.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp10.png" alt="Confirmation screen with popup asking whether to allow automatic restarts, checkbox now checked" loading="lazy">
+        <figcaption>Confirmation — automatic restart allowed.</figcaption>
       </figure>
 
       <p>Installation began on DC01.mtlab.local, moving through feature installation.</p>
 
-      <figure>
-        <img src="Images/dhcp11.png" alt="Installation progress bar at roughly one third complete" data-caption="Installation progress, early.">
-        <figcaption>Installation progress.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp11.png" alt="Installation progress bar at roughly one third complete" loading="lazy">
+        <figcaption>Installation progress.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp12.png" alt="Installation progress bar further along" data-caption="Installation progress, further along.">
-        <figcaption>Installation progress, continued.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp12.png" alt="Installation progress bar further along" loading="lazy">
+        <figcaption>Installation progress, continued.</figcaption>
       </figure>
 
       <p>The installation completed with the message "Configuration required. Installation succeeded on DC01.mtlab.local," along with a link to <strong>Complete DHCP configuration</strong> — the next step.</p>
 
-      <figure>
-        <img src="Images/dhcp13.png" alt="Results page showing installation succeeded with a link to complete DHCP configuration" data-caption="Installation succeeded — Complete DHCP configuration is the next step.">
-        <figcaption>Installation succeeded.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp13.png" alt="Results page showing installation succeeded with a link to complete DHCP configuration" loading="lazy">
+        <figcaption>Installation succeeded.</figcaption>
       </figure>
 
       <p>After closing the wizard, a notification appeared in the Server Manager banner: "Post-deployment Configuration: Configuration required for DHCP Server at DC01." The dashboard now showed Roles: 4.</p>
 
-      <figure>
-        <img src="Images/dhcp14.png" alt="Server Manager notification banner showing post-deployment configuration required for DHCP, Roles: 4" data-caption="Post-deployment configuration notification, with Roles: 4 now showing.">
-        <figcaption>Post-deployment configuration notification.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp14.png" alt="Server Manager notification banner showing post-deployment configuration required for DHCP, Roles: 4" loading="lazy">
+        <figcaption>Post-deployment configuration notification.</figcaption>
       </figure>
-    </section>
 
-    <section>
       <h2>DHCP Post-Install Configuration</h2>
       <p>Clicking "Complete DHCP configuration" launched the DHCP Post-Install Configuration Wizard. The Description page explained what the wizard would do: create the DHCP Administrators and DHCP Users security groups, and authorize the DHCP server in Active Directory. Active Directory environments require DHCP servers to be explicitly authorized before they can hand out leases — this prevents rogue DHCP servers from operating on the domain network.</p>
 
-      <figure>
-        <img src="Images/dhcp15.png" alt="DHCP Post-Install Configuration Wizard, Description step" data-caption="Description: security groups to create and authorization to perform.">
-        <figcaption>Description.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp15.png" alt="DHCP Post-Install Configuration Wizard, Description step" loading="lazy">
+        <figcaption>Description.</figcaption>
       </figure>
 
       <p>The Authorization page prompted for credentials to authorize the DHCP server in AD DS. The current user credentials were used: <code>LAB\MT.Admin</code> — the privileged domain admin account used for administrative tasks in the lab, following the tiered administration model established during the Active Directory configuration.</p>
 
-      <figure>
-        <img src="Images/dhcp16.png" alt="Authorization step with LAB\MT.Admin credentials specified" data-caption="Authorization using LAB\MT.Admin.">
-        <figcaption>Authorization.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp16.png" alt="Authorization step with LAB\MT.Admin credentials specified" loading="lazy">
+        <figcaption>Authorization.</figcaption>
       </figure>
 
       <p>The Summary page confirmed both tasks completed successfully: creating security groups, and authorizing the DHCP server. The wizard noted that the DHCP Server service should be restarted for the new security groups to take effect.</p>
 
-      <figure>
-        <img src="Images/dhcp17.png" alt="Summary step showing both post-install tasks Done, viewed within Server Manager" data-caption="Summary: both post-install tasks completed.">
-        <figcaption>Summary.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp17.png" alt="Summary step showing both post-install tasks Done, viewed within Server Manager" loading="lazy">
+        <figcaption>Summary.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp18.png" alt="Summary step, close-up view of the completed post-install wizard" data-caption="Summary, close-up.">
-        <figcaption>Summary, close-up.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp18.png" alt="Summary step, close-up view of the completed post-install wizard" loading="lazy">
+        <figcaption>Summary, close-up.</figcaption>
       </figure>
 
       <p>The DHCP console was then accessible from Server Manager under Tools, and the dashboard showed four roles: AD DS, DHCP, DNS, and File and Storage Services.</p>
-    </section>
 
-    <section>
       <h2>DHCP Scope Configuration</h2>
       <p>With the DHCP role installed and authorized, the next step was creating scopes for each VLAN. A scope defines the range of IP addresses the DHCP server can distribute on a given subnet, along with the options clients receive alongside their lease: the default gateway, DNS servers, lease duration, and any exclusions.</p>
       <p>Three scopes were created, one for each active VLAN, each through the New Scope Wizard launched by right-clicking IPv4 under dc01.mtlab.local in the DHCP console and selecting New Scope.</p>
 
-      <figure>
-        <img src="Images/dhcp19.png" alt="Server Manager Tools menu with DHCP listed" data-caption="Opening the DHCP console from Server Manager > Tools.">
-        <figcaption>Opening the DHCP console.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp19.png" alt="Server Manager Tools menu with DHCP listed" loading="lazy">
+        <figcaption>Opening the DHCP console.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp20.png" alt="DHCP console initial view showing DHCP and dc01.mtlab.local in the tree" data-caption="DHCP console's initial view.">
-        <figcaption>DHCP console, initial view.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp20.png" alt="DHCP console initial view showing DHCP and dc01.mtlab.local in the tree" loading="lazy">
+        <figcaption>DHCP console, initial view.</figcaption>
       </figure>
 
       <h3>VLAN 10 Scope: Servers (192.168.10.0/24)</h3>
       <p>The first scope created was for VLAN 10, the Servers subnet. Most devices on this VLAN are statically assigned: the Raspberry Pi DNS server at 192.168.10.5, TrueNAS at 192.168.10.10, and the Raspberry Pi 3 NAS at 192.168.10.20. Because of this, the scope was configured primarily to define the subnet parameters rather than to actively hand out many leases.</p>
 
-      <figure>
-        <img src="Images/dhcp21.png" alt="Right-click on IPv4 in the DHCP console, selecting New Scope" data-caption="Launching the New Scope Wizard from IPv4.">
-        <figcaption>Launching the wizard.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp21.png" alt="Right-click on IPv4 in the DHCP console, selecting New Scope" loading="lazy">
+        <figcaption>Launching the wizard.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp22.png" alt="Welcome to the New Scope Wizard screen" data-caption="Welcome screen of the New Scope Wizard.">
-        <figcaption>Welcome to the New Scope Wizard.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp22.png" alt="Welcome to the New Scope Wizard screen" loading="lazy">
+        <figcaption>Welcome to the New Scope Wizard.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp23.png" alt="Scope Name step with VLAN10-Servers entered" data-caption="Scope Name: VLAN10-Servers.">
-        <figcaption>Scope Name: VLAN10-Servers.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp23.png" alt="Scope Name step with VLAN10-Servers entered" loading="lazy">
+        <figcaption>Scope Name: VLAN10-Servers.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp24.png" alt="IP Address Range step, fields empty" data-caption="IP Address Range, before entry.">
-        <figcaption>IP Address Range, empty.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp24.png" alt="IP Address Range step, fields empty" loading="lazy">
+        <figcaption>IP Address Range, empty.</figcaption>
       </figure>
 
       <p>Start IP address 192.168.10.10, end IP address 192.168.10.254, subnet mask 255.255.255.0 (/24).</p>
 
-      <figure>
-        <img src="Images/dhcp25.png" alt="IP Address Range filled in with 192.168.10.10 through 192.168.10.254" data-caption="IP Address Range: 192.168.10.10 – 192.168.10.254.">
-        <figcaption>IP Address Range filled in.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp25.png" alt="IP Address Range filled in with 192.168.10.10 through 192.168.10.254" loading="lazy">
+        <figcaption>IP Address Range filled in.</figcaption>
       </figure>
 
       <p>The exclusion range was set to cover 192.168.10.10 through 192.168.10.254 — the entire upper portion of the scope excluded from dynamic distribution. This effectively reserved the address space for static assignments while still defining the subnet parameters within the DHCP server. Only addresses .1 through .9 remained outside the exclusion, providing a small dynamic pool if needed.</p>
 
-      <figure>
-        <img src="Images/dhcp26.png" alt="Add Exclusions and Delay step with 192.168.10.10 to 192.168.10.254 excluded" data-caption="Exclusion range committed: 192.168.10.10 to 192.168.10.254.">
-        <figcaption>Exclusions: entire dynamic range reserved for statics.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp26.png" alt="Add Exclusions and Delay step with 192.168.10.10 to 192.168.10.254 excluded" loading="lazy">
+        <figcaption>Exclusions: entire dynamic range reserved for statics.</figcaption>
       </figure>
 
       <p>Lease duration was set to 8 days, 0 hours, 0 minutes — appropriate for a stable server subnet where most devices are statically assigned.</p>
 
-      <figure>
-        <img src="Images/dhcp27.png" alt="Lease Duration step set to 8 days" data-caption="Lease Duration: 8 days.">
-        <figcaption>Lease Duration: 8 days.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp27.png" alt="Lease Duration step set to 8 days" loading="lazy">
+        <figcaption>Lease Duration: 8 days.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp28.png" alt="Configure DHCP Options step, Yes selected" data-caption="Configure DHCP Options: Yes.">
-        <figcaption>Configure DHCP Options: Yes.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp28.png" alt="Configure DHCP Options step, Yes selected" loading="lazy">
+        <figcaption>Configure DHCP Options: Yes.</figcaption>
       </figure>
 
       <p>Router (default gateway) 192.168.10.1, parent domain mtlab.local, and a single DNS server: 192.168.10.5 (RPI-DNS).</p>
 
-      <figure>
-        <img src="Images/dhcp29.png" alt="Router default gateway step with 192.168.10.1 added" data-caption="Router (Default Gateway): 192.168.10.1.">
-        <figcaption>Router: 192.168.10.1.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp29.png" alt="Router default gateway step with 192.168.10.1 added" loading="lazy">
+        <figcaption>Router: 192.168.10.1.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp30.png" alt="Domain Name and DNS Servers step with RPI-DNS at 192.168.10.5 added" data-caption="DNS server: 192.168.10.5 (RPI-DNS).">
-        <figcaption>DNS server: RPI-DNS at 192.168.10.5.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp30.png" alt="Domain Name and DNS Servers step with RPI-DNS at 192.168.10.5 added" loading="lazy">
+        <figcaption>DNS server: RPI-DNS at 192.168.10.5.</figcaption>
       </figure>
 
       <p>The scope was activated immediately upon completion.</p>
 
-      <figure>
-        <img src="Images/dhcp31.png" alt="Activate Scope step, Yes selected" data-caption="Activate Scope: Yes.">
-        <figcaption>Activate Scope: Yes.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp31.png" alt="Activate Scope step, Yes selected" loading="lazy">
+        <figcaption>Activate Scope: Yes.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp32.png" alt="Completing the New Scope Wizard for VLAN10-Servers" data-caption="Completing the New Scope Wizard.">
-        <figcaption>Scope complete.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp32.png" alt="Completing the New Scope Wizard for VLAN10-Servers" loading="lazy">
+        <figcaption>Scope complete.</figcaption>
       </figure>
 
       <p>After activation, the DHCP console showed Scope [192.168.10.0] VLAN10-Servers with a status of Active.</p>
 
-      <figure>
-        <img src="Images/dhcp33.png" alt="DHCP console showing Scope 192.168.10.0 VLAN10-Servers as Active" data-caption="VLAN10-Servers scope Active.">
-        <figcaption>VLAN10-Servers, Active.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp33.png" alt="DHCP console showing Scope 192.168.10.0 VLAN10-Servers as Active" loading="lazy">
+        <figcaption>VLAN10-Servers, Active.</figcaption>
       </figure>
 
       <h3>VLAN 20 Scope: Infrastructure (192.168.20.0/24)</h3>
       <p>The second scope was for VLAN 20, the Infrastructure VLAN — where DC01 itself lives at 192.168.20.10, along with the Hyper-V host at 192.168.20.11. Like VLAN 10, most devices on this subnet are statically assigned, but defining the scope ensures the DHCP server has the subnet fully documented and can serve any infrastructure devices that come online dynamically.</p>
 
-      <figure>
-        <img src="Images/dhcp35.png" alt="Right-click IPv4 to start a new scope, with VLAN10-Servers already shown Active" data-caption="Launching the wizard for the second scope, VLAN10-Servers already Active.">
-        <figcaption>Launching the wizard for VLAN 20.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp35.png" alt="Right-click IPv4 to start a new scope, with VLAN10-Servers already shown Active" loading="lazy">
+        <figcaption>Launching the wizard for VLAN 20.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp34.png" alt="Scope Name step with VLAN20-Infrastructure entered" data-caption="Scope Name: VLAN20-Infrastructure.">
-        <figcaption>Scope Name: VLAN20-Infrastructure.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp34.png" alt="Scope Name step with VLAN20-Infrastructure entered" loading="lazy">
+        <figcaption>Scope Name: VLAN20-Infrastructure.</figcaption>
       </figure>
 
       <p>Start IP address 192.168.20.10, end IP address 192.168.20.254, subnet mask 255.255.255.0 (/24).</p>
 
-      <figure>
-        <img src="Images/dhcp36.png" alt="IP Address Range filled with 192.168.20.10 through 192.168.20.254" data-caption="IP Address Range: 192.168.20.10 – 192.168.20.254.">
-        <figcaption>IP Address Range.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp36.png" alt="IP Address Range filled with 192.168.20.10 through 192.168.20.254" loading="lazy">
+        <figcaption>IP Address Range.</figcaption>
       </figure>
 
       <p>The exclusion step was visited but no exclusion range was added for this scope — the start field showed 192.168.20.1 prefilled but was not committed. Static address management on VLAN 20 would be handled by convention rather than exclusion.</p>
 
-      <figure>
-        <img src="Images/dhcp37.png" alt="Add Exclusions and Delay step with 192.168.20.1 prefilled but not added" data-caption="Exclusion step visited, nothing committed.">
-        <figcaption>No exclusion committed.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp37.png" alt="Add Exclusions and Delay step with 192.168.20.1 prefilled but not added" loading="lazy">
+        <figcaption>No exclusion committed.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp38.png" alt="Lease Duration step set to 8 days" data-caption="Lease Duration: 8 days.">
-        <figcaption>Lease Duration: 8 days.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp38.png" alt="Lease Duration step set to 8 days" loading="lazy">
+        <figcaption>Lease Duration: 8 days.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp39.png" alt="Configure DHCP Options step, Yes selected" data-caption="Configure DHCP Options: Yes.">
-        <figcaption>Configure DHCP Options: Yes.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp39.png" alt="Configure DHCP Options step, Yes selected" loading="lazy">
+        <figcaption>Configure DHCP Options: Yes.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp40.png" alt="Router default gateway step with 192.168.20.1 added" data-caption="Router (Default Gateway): 192.168.20.1.">
-        <figcaption>Router: 192.168.20.1.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp40.png" alt="Router default gateway step with 192.168.20.1 added" loading="lazy">
+        <figcaption>Router: 192.168.20.1.</figcaption>
       </figure>
 
       <p>Two DNS entries were configured here: 192.168.50.10 appeared as an existing entry in the list, and 192.168.10.5 (RPI-DNS) was added as the second.</p>
 
-      <figure>
-        <img src="Images/dhcp41.png" alt="Domain Name and DNS Servers step with 192.168.50.10 already listed, about to add 192.168.10.5" data-caption="192.168.50.10 already listed; adding 192.168.10.5 next.">
-        <figcaption>DNS servers, before the second entry.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp41.png" alt="Domain Name and DNS Servers step with 192.168.50.10 already listed, about to add 192.168.10.5" loading="lazy">
+        <figcaption>DNS servers, before the second entry.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp42.png" alt="Domain Name and DNS Servers step with both 192.168.50.10 and 192.168.10.5 listed" data-caption="Both DNS servers listed: 192.168.50.10 and 192.168.10.5.">
-        <figcaption>DNS servers: both entries added.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp42.png" alt="Domain Name and DNS Servers step with both 192.168.50.10 and 192.168.10.5 listed" loading="lazy">
+        <figcaption>DNS servers: both entries added.</figcaption>
       </figure>
 
       <p>The scope was activated immediately. The DHCP console then showed both VLAN10-Servers and VLAN20-Infrastructure as Active.</p>
 
-      <figure>
-        <img src="Images/dhcp43.png" alt="Activate Scope step, Yes selected" data-caption="Activate Scope: Yes.">
-        <figcaption>Activate Scope: Yes.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp43.png" alt="Activate Scope step, Yes selected" loading="lazy">
+        <figcaption>Activate Scope: Yes.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp44.png" alt="DHCP console showing both VLAN20-Infrastructure and VLAN10-Servers scopes Active" data-caption="VLAN20-Infrastructure and VLAN10-Servers, both Active.">
-        <figcaption>Both scopes Active.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp44.png" alt="DHCP console showing both VLAN20-Infrastructure and VLAN10-Servers scopes Active" loading="lazy">
+        <figcaption>Both scopes Active.</figcaption>
       </figure>
 
       <h3>VLAN 40 Scope: Clients (192.168.40.0/24)</h3>
       <p>The third scope was for VLAN 40, the Clients VLAN — where dynamic DHCP assignment matters most. Client machines joining the lab network need to receive an IP address automatically, along with the correct gateway and DNS server information.</p>
 
-      <figure>
-        <img src="Images/dhcp45.png" alt="Scope Name step with VLAN40-Clients entered" data-caption="Scope Name: VLAN40-Clients.">
-        <figcaption>Scope Name: VLAN40-Clients.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp45.png" alt="Scope Name step with VLAN40-Clients entered" loading="lazy">
+        <figcaption>Scope Name: VLAN40-Clients.</figcaption>
       </figure>
 
       <p>Start IP address 192.168.40.10, end IP address 192.168.40.254, subnet mask 255.255.255.0 (/24).</p>
 
-      <figure>
-        <img src="Images/dhcp46.png" alt="IP Address Range filled with 192.168.40.10 through 192.168.40.254" data-caption="IP Address Range: 192.168.40.10 – 192.168.40.254.">
-        <figcaption>IP Address Range.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp46.png" alt="IP Address Range filled with 192.168.40.10 through 192.168.40.254" loading="lazy">
+        <figcaption>IP Address Range.</figcaption>
       </figure>
 
       <p>The exclusion step was visited with 192.168.40.1 prefilled in the start field. No exclusion range was committed, leaving the full 192.168.40.10 through 192.168.40.254 range available for dynamic distribution.</p>
 
-      <figure>
-        <img src="Images/dhcp47.png" alt="Add Exclusions and Delay step with 192.168.40.1 prefilled but not added" data-caption="Exclusion step visited, nothing committed.">
-        <figcaption>No exclusion committed — full range stays dynamic.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp47.png" alt="Add Exclusions and Delay step with 192.168.40.1 prefilled but not added" loading="lazy">
+        <figcaption>No exclusion committed — full range stays dynamic.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp48.png" alt="Lease Duration step set to 8 days" data-caption="Lease Duration: 8 days.">
-        <figcaption>Lease Duration: 8 days.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp48.png" alt="Lease Duration step set to 8 days" loading="lazy">
+        <figcaption>Lease Duration: 8 days.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp49.png" alt="Configure DHCP Options step, Yes selected" data-caption="Configure DHCP Options: Yes.">
-        <figcaption>Configure DHCP Options: Yes.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp49.png" alt="Configure DHCP Options step, Yes selected" loading="lazy">
+        <figcaption>Configure DHCP Options: Yes.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp50.png" alt="Router default gateway step with 192.168.40.1 added" data-caption="Router (Default Gateway): 192.168.40.1.">
-        <figcaption>Router: 192.168.40.1.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp50.png" alt="Router default gateway step with 192.168.40.1 added" loading="lazy">
+        <figcaption>Router: 192.168.40.1.</figcaption>
       </figure>
 
       <p>The same dual DNS configuration was applied as on VLAN 20: 192.168.50.10 and 192.168.10.5 (RPI-DNS).</p>
 
-      <figure>
-        <img src="Images/dchp51.png" alt="Domain Name and DNS Servers step with 192.168.50.10 already listed, about to add 192.168.10.5" data-caption="192.168.50.10 already listed; adding 192.168.10.5 next.">
-        <figcaption>DNS servers, before the second entry.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dchp51.png" alt="Domain Name and DNS Servers step with 192.168.50.10 already listed, about to add 192.168.10.5" loading="lazy">
+        <figcaption>DNS servers, before the second entry.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp51.png" alt="Domain Name and DNS Servers step with both 192.168.50.10 and 192.168.10.5 listed" data-caption="Both DNS servers listed: 192.168.50.10 and 192.168.10.5.">
-        <figcaption>DNS servers: both entries added.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp51.png" alt="Domain Name and DNS Servers step with both 192.168.50.10 and 192.168.10.5 listed" loading="lazy">
+        <figcaption>DNS servers: both entries added.</figcaption>
       </figure>
 
       <p>The scope was activated immediately. After completion, the DHCP console showed all three scopes active.</p>
 
-      <figure>
-        <img src="Images/dhcp52.png" alt="Activate Scope step, Yes selected" data-caption="Activate Scope: Yes.">
-        <figcaption>Activate Scope: Yes.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp52.png" alt="Activate Scope step, Yes selected" loading="lazy">
+        <figcaption>Activate Scope: Yes.</figcaption>
       </figure>
 
-      <figure>
-        <img src="Images/dhcp53.png" alt="DHCP console showing all three scopes VLAN40-Clients, VLAN20-Infrastructure, and VLAN10-Servers as Active" data-caption="All three scopes Active: VLAN40-Clients, VLAN20-Infrastructure, VLAN10-Servers.">
-        <figcaption>All three scopes Active.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/dhcp53.png" alt="DHCP console showing all three scopes VLAN40-Clients, VLAN20-Infrastructure, and VLAN10-Servers as Active" loading="lazy">
+        <figcaption>All three scopes Active.</figcaption>
       </figure>
-    </section>
 
-    <section>
       <h2>Additional Configuration: Making Cross-VLAN DHCP Work</h2>
       <p>At this point, the DHCP server was installed, authorized, and had three active scopes. But there was a problem: a Windows client on VLAN 40 would not receive a DHCP lease.</p>
       <p>The reason comes down to how DHCP works at a network level. DHCP discovery packets are broadcast traffic, and broadcast traffic does not cross layer 3 boundaries by default. In a segmented VLAN environment, a client on VLAN 40 sends a DHCPDISCOVER broadcast that never reaches the DHCP server sitting on VLAN 20, because the router or layer 3 switch between them drops broadcasts at the VLAN boundary.</p>
 
-      <div class="callout">
-        <p><strong>The fix — an IP helper-address (DHCP relay):</strong> it tells the layer 3 device to intercept DHCP broadcasts on a given interface and forward them as unicast packets to a specified IP address — here, the DHCP server at 192.168.20.10. The DHCP server receives the forwarded request, determines which scope to respond from based on the originating subnet, and sends the lease back through the same path.</p>
-      </div>
+      <div class="callout"><strong>The fix — an IP helper-address (DHCP relay):</strong> it tells the layer 3 device to intercept DHCP broadcasts on a given interface and forward them as unicast packets to a specified IP address — here, the DHCP server at 192.168.20.10. The DHCP server receives the forwarded request, determines which scope to respond from based on the originating subnet, and sends the lease back through the same path.</div>
 
       <h3>Configuring IP Helper-Address on Switch002</h3>
       <p>Switch002 is the Catalyst 3550, which functions as the layer 3 core of the lab — inter-VLAN routing runs through its VLAN SVIs (switched virtual interfaces). Since Switch002 is the routing point between VLANs, it's also the right place to configure the DHCP relay.</p>
       <p>The configuration was applied via PuTTY on COM4, entering privileged exec mode and then global configuration mode:</p>
 
       <div class="term">
-        <pre>Switch002&gt;enable
+        <pre><code>Switch002&gt;enable
 Switch002#conf t
 Switch002(config)#interface vlan 10
 Switch002(config-if)#ip helper-address 192.168.20.10
@@ -714,23 +605,33 @@ Switch002(config-if)#ip helper-address 192.168.20.10
 Switch002(config-if)#exit
 Switch002(config)#end
 Switch002#write memory
-Building configuration... [OK]</pre>
+Building configuration... [OK]</code></pre>
       </div>
 
-      <figure>
-        <img src="Images/ac2-S2DHCPReplay.png" alt="PuTTY session on Switch002 configuring ip helper-address 192.168.20.10 on VLAN 10, 20, and 40 interfaces" data-caption="Applying ip helper-address 192.168.20.10 to the VLAN 10, 20, and 40 SVIs on Switch002.">
-        <figcaption>ip helper-address applied to all three VLAN SVIs on Switch002.<span class="zoom-hint">Click to zoom</span></figcaption>
+      <figure class="shot">
+        <img src="Images/ac2-S2DHCPReplay.png" alt="PuTTY session on Switch002 configuring ip helper-address 192.168.20.10 on VLAN 10, 20, and 40 interfaces" loading="lazy">
+        <figcaption>ip helper-address applied to all three VLAN SVIs on Switch002.</figcaption>
       </figure>
 
       <p>The <code>ip helper-address</code> command was applied to all three VLAN SVIs, each pointing to 192.168.20.10 — the static IP of DC01. The configuration was saved with <code>write memory</code>.</p>
       <p>With the relay in place, DHCP broadcasts from clients on VLANs 10, 20, and 40 were now forwarded to the DHCP server as unicast packets. DC01 could receive the requests, identify which scope to respond from based on the originating subnet, and issue leases correctly. Cross-VLAN DHCP was working.</p>
-    </section>
 
-    <section>
       <h2>Summary</h2>
       <p>The <code>ip helper-address</code> configuration on Switch002 was the piece that made the DHCP deployment actually functional. Installing the role and creating scopes is straightforward — getting DHCP to work across VLANs requires understanding how broadcast traffic behaves at layer 3 boundaries and configuring the relay correctly on the right device. In this lab, that meant Switch002, the Catalyst 3550 handling inter-VLAN routing, needed the relay configured on all three VLAN SVIs before clients on those VLANs could receive leases.</p>
-      <p>With DHCP and DNS both operational, the lab network is now fully functional as a domain environment: clients on any VLAN can receive IP addresses automatically, resolve both internal and external names, and communicate across the segmented network through the layer 3 infrastructure established on the managed switches.</p>
-    </section>
+
+      <div class="summary-card">
+        <p style="margin-bottom:10px"><strong>The following was completed:</strong></p>
+        <ul>
+          <li>Configured a static IP on DC01 as a prerequisite for the DHCP role</li>
+          <li>Installed the DHCP Server role and completed post-install authorization in Active Directory</li>
+          <li>Created three IPv4 scopes — VLAN10-Servers, VLAN20-Infrastructure, VLAN40-Clients — each with appropriate exclusions and lease durations</li>
+          <li>Diagnosed the cross-VLAN broadcast problem and configured an IP helper-address relay on all three VLAN SVIs on Switch002</li>
+        </ul>
+      </div>
+
+      <p style="margin-top:24px">With DHCP and DNS both operational, the lab network is now fully functional as a domain environment: clients on any VLAN can receive IP addresses automatically, resolve both internal and external names, and communicate across the segmented network through the layer 3 infrastructure established on the managed switches.</p>
+
+    </article>
 
     <footer>
       <div>Mark Thompson · MTPortfolio</div>
@@ -741,45 +642,37 @@ Building configuration... [OK]</pre>
     </footer>
   </div>
 
-  <!-- Lightbox -->
   <div class="lightbox" id="lightbox">
     <div class="lb-close" id="lbClose">&times;</div>
     <img id="lbImg" src="" alt="">
-    <div class="lb-caption" id="lbCaption"></div>
   </div>
 
   <script>
     (function(){
-      var lb = document.getElementById('lightbox');
+      var lightbox = document.getElementById('lightbox');
       var lbImg = document.getElementById('lbImg');
-      var lbCaption = document.getElementById('lbCaption');
       var lbClose = document.getElementById('lbClose');
 
-      function openLightbox(src, caption){
-        lbImg.src = src;
-        lbImg.alt = caption || '';
-        lbCaption.textContent = caption || '';
-        lb.classList.add('open');
-        document.body.style.overflow = 'hidden';
-      }
-      function closeLightbox(){
-        lb.classList.remove('open');
-        lbImg.src = '';
-        document.body.style.overflow = '';
-      }
-
-      document.querySelectorAll('figure img').forEach(function(img){
+      document.querySelectorAll('.shot img').forEach(function(img){
         img.addEventListener('click', function(){
-          openLightbox(img.getAttribute('src'), img.getAttribute('data-caption') || img.getAttribute('alt'));
+          lbImg.src = img.getAttribute('src');
+          lbImg.alt = img.getAttribute('alt') || '';
+          lightbox.classList.add('open');
         });
       });
 
-      lb.addEventListener('click', function(e){
-        if(e.target === lb){ closeLightbox(); }
+      function closeLightbox(){
+        lightbox.classList.remove('open');
+        lbImg.src = '';
+      }
+
+      lightbox.addEventListener('click', closeLightbox);
+      lbClose.addEventListener('click', function(e){
+        e.stopPropagation();
+        closeLightbox();
       });
-      lbClose.addEventListener('click', closeLightbox);
       document.addEventListener('keydown', function(e){
-        if(e.key === 'Escape'){ closeLightbox(); }
+        if(e.key === 'Escape') closeLightbox();
       });
     })();
   </script>
