@@ -76,6 +76,13 @@
     .section-block h2{
       font-size:1.7rem; font-weight:800; margin:0 0 14px;
       border-bottom:1px solid var(--card-border); padding-bottom:14px;
+      display:flex; align-items:center; gap:14px;
+    }
+    .section-block h2 .sec-num{
+      flex:0 0 auto; width:34px; height:34px; border-radius:9px;
+      background:rgba(77,163,255,.08); border:1px solid #3a4a67;
+      color:var(--brand); display:flex; align-items:center; justify-content:center;
+      font-size:1rem; font-weight:700;
     }
     .section-block > p{color:#c7cbd9;margin:0 0 6px}
 
@@ -196,7 +203,7 @@
 
       <!-- ============ SECTION 1 ============ -->
       <section class="section-block" id="sec1">
-        <h2>1. Environment Setup</h2>
+        <h2><span class="sec-num">1</span>Environment Setup</h2>
         <p>Before running any administrative cmdlets, the PowerShell environment is verified and prepared. This covers execution policy, module availability, and establishing remote connectivity to SRV-HYPERV-01, which is not domain-joined and requires explicit WinRM configuration.</p>
 
         <div class="subsection" id="1-1">
@@ -297,7 +304,7 @@ hostname</code></pre>
 
       <!-- ============ SECTION 2 ============ -->
       <section class="section-block" id="sec2">
-        <h2>2. Active Directory Administration</h2>
+        <h2><span class="sec-num">2</span>Active Directory Administration</h2>
         <p>Active Directory is the identity foundation of the lab. These cmdlets demonstrate querying and managing the domain structure, user accounts, and security groups, reflecting day-to-day AD administration tasks common in enterprise environments.</p>
 
         <div class="subsection" id="2-1">
@@ -384,7 +391,7 @@ Get-ADUser -Identity 'Test.User' | Select-Object Name, Enabled</code></pre>
 
       <!-- ============ SECTION 3 ============ -->
       <section class="section-block" id="sec3">
-        <h2>3. DHCP Administration</h2>
+        <h2><span class="sec-num">3</span>DHCP Administration</h2>
         <p>The DHCP Server role is installed on DC01 and serves three VLAN scopes across the lab. These cmdlets query scope configuration, active lease data, and server authorization status, demonstrating programmatic visibility into DHCP without relying on the Server Manager GUI.</p>
 
         <div class="subsection" id="3-1">
@@ -422,7 +429,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
 
       <!-- ============ SECTION 4 ============ -->
       <section class="section-block" id="sec4">
-        <h2>4. DNS Administration</h2>
+        <h2><span class="sec-num">4</span>DNS Administration</h2>
         <p>DC01 serves as the primary authoritative DNS server for the mtlab.local domain. The Raspberry Pi 5 at 192.168.10.5 operates as a secondary/backup resolver. These cmdlets provide visibility into zone configuration, forwarder settings, and registered resource records.</p>
 
         <div class="subsection" id="4-1">
@@ -459,7 +466,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
 
       <!-- ============ SECTION 5 ============ -->
       <section class="section-block" id="sec5">
-        <h2>5. Hyper-V Administration</h2>
+        <h2><span class="sec-num">5</span>Hyper-V Administration</h2>
         <p>Hyper-V management commands run inside a remote PSSession to SRV-HYPERV-01, since the Hyper-V module resides on the host itself and cannot be invoked remotely without the session context. The session is re-established using the local Lab-Client account.</p>
 
         <div class="subsection" id="5-1">
@@ -523,7 +530,7 @@ whoami</code></pre>
 
       <!-- ============ SECTION 6 ============ -->
       <section class="section-block" id="sec6">
-        <h2>6. System Health and Reporting</h2>
+        <h2><span class="sec-num">6</span>System Health and Reporting</h2>
         <p>A system health check is run against DC01 to confirm disk space, service status, recent event log errors, and server uptime. This reflects the kind of operational reporting a sysadmin would run routinely to validate server health.</p>
 
         <div class="subsection" id="6-1">
@@ -570,7 +577,7 @@ whoami</code></pre>
 
       <!-- ============ SECTION 7 ============ -->
       <section class="section-block" id="sec7">
-        <h2>7. Group Policy Administration</h2>
+        <h2><span class="sec-num">7</span>Group Policy Administration</h2>
         <p>Group Policy cmdlets require the GroupPolicy module, which is part of the GPMC RSAT tools installed on DC01. These commands demonstrate querying, auditing, and verifying GPO configuration across the mtlab.local domain.</p>
         <p>Remote policy verification via Invoke-Command requires WinRM to be enabled on the target client. MTClient1 is prepared by enabling PSRemoting and adding it to DC01's TrustedHosts list before the remote gpresult command is run.</p>
 
