@@ -22,7 +22,7 @@
         linear-gradient(180deg, var(--bg-1), var(--bg-2));
       line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    .wrap{max-width:1100px;margin:0 auto;padding:40px 20px 64px}
+    .wrap{max-width:1300px;margin:0 auto;padding:40px 20px 64px}
 
     /* Top nav */
     .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
@@ -101,17 +101,6 @@
     figure{
       margin:22px 0;
     }
-    .step-header{
-      display:flex;align-items:center;gap:14px;
-      margin:0 0 12px;
-    }
-    .step-num{
-      flex:0 0 auto;width:32px;height:32px;border-radius:9px;
-      display:flex;align-items:center;justify-content:center;
-      font-weight:800;font-size:.9rem;color:var(--brand);
-      background:rgba(77,163,255,.08);border:1px solid #2a3a55;
-    }
-    .step-title{margin:0;font-size:1rem;font-weight:600;color:var(--text)}
     figure img{
       display:block;
       width:100%;
@@ -180,12 +169,9 @@
       <a href="/MTPortfolio/Security">Security</a>
       <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation & Scripting</a>
       <a href="/MTPortfolio/Blogs">Blog</a>
-    </nav>
+    </nav><br><br>
 
-    <p class="breadcrumb">
-      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure & Sysadmin</a>
-      <span>/</span> FortiGate 60E Firewall Setup & Config
-    </p>
+   
 
     <header>
       <h1>FortiGate 60E Firewall Setup & Config</h1>
@@ -220,7 +206,6 @@
         <h2>Initial Access</h2>
         <p>The FortiGate 60E was configured entirely via serial console using PuTTY on COM6, as the WebGUI was inaccessible prior to initial configuration. This is standard procedure for first-time FortiGate deployment. Initial login used the default admin credentials via the serial console connection.</p>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Serial console login</h3></div>
           <img src="Images/ftg1.png" alt="Serial console login to the FortiGate 60E via PuTTY on COM6">
           <figcaption>Initial login to the FortiGate 60E via serial console (COM6, PuTTY)</figcaption>
         </figure>
@@ -231,12 +216,10 @@
         <h3>WAN1</h3>
         <p>WAN1 was configured for DHCP to obtain an IP address from the SOHO router:</p>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">WAN1 configured for DHCP</h3></div>
           <img src="Images/ftg2.png" alt="Configuring the WAN1 interface for DHCP on the FortiGate 60E">
           <figcaption><span class="inline-code">config system interface</span> → <span class="inline-code">edit wan1</span> → <span class="inline-code">set mode dhcp</span> → <span class="inline-code">set allowaccess ping</span></figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Confirming WAN1 came up</h3></div>
           <img src="Images/ftg3.png" alt="show system interface output confirming WAN1 obtained an IP via DHCP">
           <figcaption><span class="inline-code">show system interface</span> confirming WAN1 is up at <span class="inline-code">192.168.1.148</span> via DHCP</figcaption>
         </figure>
@@ -250,7 +233,6 @@
           <p>Reconfiguring via <span class="inline-code">edit internal</span> with <span class="inline-code">set ip 192.168.50.1 255.255.255.0</span> and <span class="inline-code">set allowaccess http https ping ssh</span> applied successfully, as confirmed by <span class="inline-code">show system interface</span>.</p>
         </div>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Internal interface set to 192.168.50.1</h3></div>
           <img src="Images/ftg4.png" alt="Successfully setting the internal interface IP to 192.168.50.1 on the FortiGate 60E">
           <figcaption>Internal interface reconfigured at <span class="inline-code">192.168.50.1/24</span> with management access enabled</figcaption>
         </figure>
@@ -264,7 +246,6 @@
           <li>3550 Fa0/24: <span class="inline-code">192.168.100.2/30</span></li>
         </ul>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Internal interface moved to the transit subnet</h3></div>
           <img src="Images/ftg7-FortiGate-Config-Sys-Interface.png" alt="Reconfiguring the FortiGate internal interface onto the 192.168.100.0/30 transit subnet">
           <figcaption>FortiGate internal interface reassigned to the transit subnet</figcaption>
         </figure>
@@ -279,12 +260,10 @@
           <p>The fix was to reconfigure Fa0/24 as the dedicated uplink to the FortiGate on the <span class="inline-code">192.168.100.0/30</span> transit subnet, assign it <span class="inline-code">192.168.100.2/30</span>, and update the 3550's default route to point to the FortiGate at <span class="inline-code">192.168.100.1</span> rather than the SOHO router at <span class="inline-code">192.168.1.1</span>.</p>
         </div>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">3550 Fa0/24 reconfigured as the FortiGate uplink</h3></div>
           <img src="Images/ftg8-3550-Port24-Reconfig.png" alt="Reconfiguring 3550 Fa0/24 to the transit subnet as the uplink to the FortiGate">
           <figcaption>Fa0/24 reassigned to <span class="inline-code">192.168.100.2/30</span> and relabeled as the FortiGate uplink</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">3550 default route updated</h3></div>
           <img src="Images/ftg9-Update-Default-Route.png" alt="Updating the 3550's default route to point to the FortiGate">
           <figcaption>3550 default route updated to point to the FortiGate at <span class="inline-code">192.168.100.1</span></figcaption>
         </figure>
@@ -298,12 +277,10 @@
           <li><strong>LAN-to-LAN:</strong> allows inter-VLAN traffic to flow between internal segments</li>
         </ul>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">LAN-to-WAN policy configured</h3></div>
           <img src="Images/ftg10-Add-Fortigate-Policy.png" alt="Configuring the LAN-to-WAN firewall policy on the FortiGate 60E">
           <figcaption>LAN-to-WAN policy configured with NAT enabled</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">LAN-to-LAN policy added</h3></div>
           <img src="Images/ftg30-PingFix-ConfigFirewallPolicy.png" alt="Configuring the LAN-to-LAN firewall policy on the FortiGate 60E">
           <figcaption>LAN-to-LAN policy added to explicitly permit inter-VLAN traffic between internal segments</figcaption>
         </figure>
@@ -319,7 +296,6 @@
           <li><span class="inline-code">192.168.50.0/24</span> via <span class="inline-code">192.168.100.2</span> (VLAN 50 — Management)</li>
         </ul>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Static routes added for each VLAN</h3></div>
           <img src="Images/ftg11-Static-VLAN-Routes_on_Fortigate.png" alt="Static routes for each internal VLAN configured on the FortiGate">
           <figcaption>Static routes for VLANs 10, 20, 40, and 50 pointing back to the 3550</figcaption>
         </figure>
@@ -335,44 +311,36 @@
           <li>2950 (Switch001) VLAN 50 SVI: <span class="inline-code">192.168.50.2/24</span></li>
         </ul>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">VLAN 50 created on Switch002</h3></div>
           <img src="Images/ftg16-3550-VLAN50-Config.png" alt="Creating VLAN 50 and adding it to the trunk allowed list on Switch002 (3550)">
           <figcaption>VLAN 50 created and added to the trunk allowed list on Switch002 (3550)</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">VLAN 50 created on Switch001</h3></div>
           <img src="Images/ftg17-3550-VLAN50-Config.png" alt="Creating VLAN 50 and adding it to the trunk allowed list on Switch001 (2950)">
           <figcaption>VLAN 50 created and added to the trunk allowed list on Switch001 (2950)</figcaption>
         </figure>
         <p>With VLAN 50 created and trunked on both switches, the management IP addresses were moved off the VLAN 1 SVI and reassigned to the new VLAN 50 SVI:</p>
         <figure>
-          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Management IP moved on Switch001</h3></div>
           <img src="Images/ftg18-Move-Mgmt-VLAN.png" alt="Removing the VLAN 1 IP address and assigning the management IP to VLAN 50 on Switch001">
           <figcaption>Switch001 (2950): management IP removed from VLAN 1 and reassigned to VLAN 50 (<span class="inline-code">192.168.50.2</span>)</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Management IP moved on Switch002</h3></div>
           <img src="Images/ftg19-Move-Mgmt-VLAN.png" alt="Removing the VLAN 1 IP address and assigning the management IP to VLAN 50 on Switch002">
           <figcaption>Switch002 (3550): management IP removed from VLAN 1 and reassigned to VLAN 50 (<span class="inline-code">192.168.50.6</span>)</figcaption>
         </figure>
         <p>The migration was confirmed with <span class="inline-code">show vlan brief</span> and <span class="inline-code">show ip interface brief</span>, and the trunk allowed-VLAN list was verified on both switches' Fa0/23 uplink:</p>
         <figure>
-          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Verifying VLAN 50</h3></div>
           <img src="Images/ftg20-show-vlan-brief.png" alt="show vlan brief output confirming VLAN 50 Management is active">
           <figcaption>VLAN 50 ("Management") active on Switch002</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Verifying the VLAN 50 SVI</h3></div>
           <img src="Images/ftg21-3550-showipinterfacebrief.png" alt="show ip interface brief output confirming the VLAN 50 SVI is up at 192.168.50.6">
           <figcaption>VLAN 50 SVI up at <span class="inline-code">192.168.50.6</span> on Switch002</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Verifying the trunk on Switch001</h3></div>
           <img src="Images/ftg22-2550-showinterface-fa0-23.png" alt="show running-config interface fa0/23 on Switch001 confirming VLAN 50 is in the trunk allowed list">
           <figcaption>Switch001 Fa0/23 trunk to Switch002 — allowed VLANs include 50</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Verifying the trunk on Switch002</h3></div>
           <img src="Images/ftg23-3550-showinterface-fa0-23.png" alt="show running-config interface fa0/23 on Switch002 confirming VLAN 50 is in the trunk allowed list">
           <figcaption>Switch002 Fa0/23 trunk to Switch001 — allowed VLANs include 50</figcaption>
         </figure>
@@ -394,22 +362,18 @@
         <h3>Initial Checks</h3>
         <p>With the LAN-to-WAN policy and static routes in place, the first round of checks confirmed the transit link, a VLAN 20 host, and internet reachability from the FortiGate, plus internet reachability from the Windows Server DC:</p>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Pinging the transit subnet</h3></div>
           <img src="Images/ftg12-PingTest1.png" alt="FortiGate pinging the 3550 transit subnet address 192.168.100.2 successfully">
           <figcaption>FortiGate → 3550 transit subnet (<span class="inline-code">192.168.100.2</span>)</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Pinging a VLAN 20 host</h3></div>
           <img src="Images/ftg13-PingTest2.png" alt="FortiGate pinging a VLAN 20 device successfully">
           <figcaption>FortiGate → VLAN 20 device (<span class="inline-code">192.168.20.10</span>)</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Pinging the internet</h3></div>
           <img src="Images/ftg14-PingTest3.png" alt="FortiGate pinging 8.8.8.8 successfully, confirming internet access">
           <figcaption>FortiGate → internet (<span class="inline-code">8.8.8.8</span>)</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Pinging the internet from the DC</h3></div>
           <img src="Images/frg15-PingTestDC.png" alt="Windows Server DC pinging 8.8.8.8 successfully from within the Hyper-V console">
           <figcaption>Windows Server DC → internet (<span class="inline-code">8.8.8.8</span>)</figcaption>
         </figure>
@@ -418,27 +382,22 @@
         <h3>Post-Migration Diagnostics</h3>
         <p>After the management VLAN migration, further diagnostics from both the FortiGate console and the Windows Server DC confirmed reachability across the management subnet, internal VLANs, and the internet, ahead of adding the dedicated LAN-to-LAN policy for inter-VLAN traffic:</p>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Pinging the switch management IPs</h3></div>
           <img src="Images/ftg24-pingswitches.png" alt="FortiGate pinging both switch management IPs 192.168.50.2 and 192.168.50.6 successfully">
           <figcaption>FortiGate → switch management IPs (<span class="inline-code">192.168.50.2</span>, <span class="inline-code">192.168.50.6</span>)</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Pinging VLAN 10 hosts</h3></div>
           <img src="Images/ftg25-ping_5-_10.png" alt="FortiGate pinging VLAN 10 hosts 192.168.10.5 and 192.168.10.10 successfully">
           <figcaption>FortiGate → VLAN 10 hosts (<span class="inline-code">192.168.10.5</span>, <span class="inline-code">192.168.10.10</span>)</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Pinging VLAN 10 and VLAN 20 hosts</h3></div>
           <img src="Images/ftg26-ping_20-_10.png" alt="FortiGate pinging VLAN 10 and VLAN 20 hosts successfully">
           <figcaption>FortiGate → VLAN 10 / VLAN 20 hosts</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Re-confirming internet access</h3></div>
           <img src="Images/ftg27-ping8_8_8_8.png" alt="FortiGate confirming internet reachability during the post-migration diagnostic pass">
           <figcaption>FortiGate → internet, re-confirmed after the management VLAN migration</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Pinging from the DC</h3></div>
           <img src="Images/ftg29-PingsFromDC.png" alt="Windows Server DC pinging the internet and both switch management IPs successfully">
           <figcaption>Windows Server DC → internet and switch management IPs (<span class="inline-code">192.168.50.6</span>, <span class="inline-code">192.168.50.2</span>)</figcaption>
         </figure>
@@ -446,37 +405,30 @@
         <h3>Final Verification</h3>
         <p>With the LAN-to-LAN policy added, a final comprehensive pass confirmed every path was working as expected:</p>
         <figure>
-          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Test 1 — switch management IPs</h3></div>
           <img src="Images/ftg31PingTest1.png" alt="Ping test 1: FortiGate to both switch management IPs">
           <figcaption>Test 1 — FortiGate → switch management IPs</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Test 2 — VLAN 10 hosts</h3></div>
           <img src="Images/ftg32PingTest2VLAN10.png" alt="Ping test 2: FortiGate to VLAN 10 hosts">
           <figcaption>Test 2 — FortiGate → VLAN 10 hosts</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Test 3 — VLAN 20 hosts</h3></div>
           <img src="Images/ftg33PingTest3VLAN20.png" alt="Ping test 3: FortiGate to VLAN 20 hosts">
           <figcaption>Test 3 — FortiGate → VLAN 20 hosts</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Test 4 — from the DC</h3></div>
           <img src="Images/ftg34PingTest4FromDC.png" alt="Ping test 4: Windows Server DC to VLAN 10 hosts">
           <figcaption>Test 4 — Windows Server DC → VLAN 10 hosts</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Test 5 — internet from the FortiGate</h3></div>
           <img src="Images/ftg35PingTest5FromFortiGateInternet.png" alt="Ping test 5: FortiGate to the internet">
           <figcaption>Test 5 — FortiGate → internet (<span class="inline-code">8.8.8.8</span>)</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Test 6 — DC to internet</h3></div>
           <img src="Images/ftg36PingTest6DC-to-Internet.png" alt="Ping test 6: Windows Server DC to the internet">
           <figcaption>Test 6 — Windows Server DC → internet</figcaption>
         </figure>
         <figure>
-          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Test 7 — Raspberry Pi 5</h3></div>
           <img src="Images/ftg37PingTest7RaspberryPi5.png" alt="Ping test 7: Raspberry Pi 5 to VLAN 20, the transit subnet, and the internet">
           <figcaption>Test 7 — Raspberry Pi 5 → VLAN 20, transit subnet, and internet</figcaption>
         </figure>
