@@ -1,1 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hybrid Cloud / Azure · Mark Thompson Portfolio</title>
+  <meta name="description" content="Hybrid identity and Azure integration labs — connecting on-prem Active Directory to Microsoft Entra ID." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1300px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    h1{margin:4px 0 8px;font-size:clamp(32px,4.5vw,44px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 40px;font-size:clamp(17px,2.4vw,19px);text-align:center}
+
+    /* Vertical listing */
+    .infra-list{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:22px;
+      margin-top:8px;
+      max-width:760px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+
+    .infra-item{
+      width:100%;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+    }
+    .infra-item:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,.45);border-color:#3a4a67}
+
+    .infra-link{
+      display:flex;
+      align-items:center;
+      gap:22px;
+      padding:24px 30px;
+      color:inherit;
+      text-decoration:none;
+    }
+
+    .infra-num{
+      flex:0 0 auto;
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-size:1.15rem;
+      color:var(--brand);
+      background:rgba(77,163,255,.08);
+      border:1px solid #2a3a55;
+    }
+
+    .infra-text{flex:1 1 auto;text-align:center}
+
+    .infra-title{
+      font:700 1.3rem/1.4 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      margin:0;
+      color:#d3d3d3;
+    }
+    .infra-sub{
+      color:#a9b0c3;
+      font:400 0.98rem/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+      margin:0.4rem 0 0 0;
+    }
+
+    .infra-arrow{
+      flex:0 0 auto;
+      color:#7f8599;
+      font-size:1.1rem;
+    }
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure &amp; Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure" class="active">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation &amp; Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav><br><br>
+
+    <header>
+      <h1>Hybrid Cloud / Azure</h1>
+      <p class="lead">Connecting the on-prem lab to Microsoft's cloud. Hybrid identity, directory synchronization, and Azure administration built on top of the existing Active Directory environment.</p>
+    </header>
+
+    <section class="infra-list" aria-label="Hybrid Cloud / Azure sections">
+
+      <article class="infra-item">
+        <a class="infra-link" href="https://mark-thompson01.github.io/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure/Entra%20Connect">
+          <span class="infra-num">1</span>
+          <span class="infra-text">
+            <h3 class="infra-title">Entra Connect</h3>
+            <p class="infra-sub">Syncing the on-prem mtlab.local domain to Microsoft Entra ID for hybrid identity.</p>
+          </span>
+          <span class="infra-arrow">→</span>
+        </a>
+      </article>
+
+    </section>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
