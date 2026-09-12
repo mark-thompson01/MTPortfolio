@@ -1,1 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Entra Connect · Mark Thompson Portfolio</title>
+  <meta name="description" content="Syncing the on-prem mtlab.local domain to Microsoft Entra ID for hybrid identity using Microsoft Entra Connect." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1300px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,40px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 40px;font-size:clamp(16px,2.2vw,18px);text-align:center;max-width:820px;margin-left:auto;margin-right:auto}
+
+    /* Device summary card */
+    .device-card{
+      max-width:900px;margin:0 auto 48px;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:24px 28px;
+    }
+    .device-card h2{margin:0 0 6px;font-size:1.3rem;color:var(--text)}
+    .device-card .model{color:var(--brand);font-weight:600;font-size:.95rem;margin:0 0 14px}
+    .device-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:10px 20px;margin:0;
+    }
+    .device-grid dt{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;margin:0}
+    .device-grid dd{color:var(--text);font-size:.95rem;margin:2px 0 10px}
+
+    /* Section headers */
+    .section-block{max-width:900px;margin:0 auto 56px}
+    .section-head{margin:0 0 8px;display:flex;align-items:baseline;gap:12px}
+    .section-head h2{margin:0;font-size:1.5rem;font-weight:700;color:var(--text)}
+    .section-head .step-count{color:var(--muted);font-size:.9rem}
+    .section-desc{color:var(--muted);margin:0 0 28px;font-size:.98rem}
+
+    /* Callouts */
+    .callout{
+      max-width:900px;margin:0 auto 28px;
+      border-radius:14px;
+      padding:16px 20px;
+      font-size:.95rem;
+      line-height:1.55;
+      border-left:4px solid;
+    }
+    .callout strong{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+    .callout.note{background:rgba(77,163,255,.07);border-color:var(--brand);color:#cfe3fb}
+    .callout.note strong{color:var(--brand)}
+    .callout.warning{background:rgba(240,180,60,.08);border-color:#e0b34c;color:#f2ddb0}
+    .callout.warning strong{color:#e0b34c}
+    .callout.resolved{background:rgba(90,200,120,.08);border-color:#5ac878;color:#c9ecd6}
+    .callout.resolved strong{color:#5ac878}
+    .callout a{color:inherit;text-decoration:underline}
+
+    /* Screenshot steps */
+    .steps{display:flex;flex-direction:column;gap:28px}
+    .step{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .step-header{
+      display:flex;align-items:center;gap:14px;
+      padding:16px 22px;border-bottom:1px solid var(--card-border);
+    }
+    .step-num{
+      flex:0 0 auto;width:32px;height:32px;border-radius:9px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:.9rem;color:var(--brand);
+      background:rgba(77,163,255,.08);border:1px solid #2a3a55;
+    }
+    .step-title{margin:0;font-size:1rem;font-weight:600;color:var(--text)}
+    .step-shot{display:block;width:100%;background:#000;cursor:zoom-in;position:relative}
+    .step-shot img{display:block;width:100%;height:auto}
+    .step-shot::after{
+      content:"⤢";
+      position:absolute; top:12px; right:12px;
+      width:34px;height:34px;border-radius:9px;
+      background:rgba(15,17,21,.72);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--text);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;
+      opacity:0; transition:opacity .15s ease;
+      pointer-events:none;
+    }
+    .step-shot:hover::after,.step-shot:focus-visible::after{opacity:1}
+    .step-shot:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+    .step-caption{padding:16px 22px 20px;color:var(--muted);font-size:.92rem;margin:0}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0; z-index:1000;
+      background:rgba(6,7,10,.92);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:min(6vh,60px) min(6vw,60px);
+      cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:100%; max-height:100%;
+      width:auto; height:auto;
+      border-radius:10px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      border:1px solid rgba(255,255,255,.1);
+      cursor:default;
+    }
+    .lightbox-close{
+      position:fixed; top:20px; right:24px;
+      width:44px;height:44px;border-radius:12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.16);
+      color:var(--text);
+      font-size:1.4rem; line-height:1;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.12)}
+    .lightbox-caption{
+      position:fixed; left:0; right:0; bottom:18px;
+      text-align:center; color:var(--muted);
+      font-size:.9rem; padding:0 24px;
+      pointer-events:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure &amp; Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20%2F%20Azure" class="active">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation &amp; Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav><br><br>
+
+    <header>
+      <h1>Entra Connect</h1>
+      <p class="lead">Syncing the on-prem mtlab.local domain to Microsoft Entra ID with Microsoft Entra Connect — the UPN suffix planning, account-scoping decisions, and the install itself, walked through step by step.</p>
+    </header>
+
+    <div class="device-card">
+      <h2>Sync Environment</h2>
+      <p class="model">Microsoft Entra Connect Sync — Password Hash Synchronization</p>
+      <dl class="device-grid">
+        <dt>Entra ID Tenant</dt><dd>markandrewt01outlook075.onmicrosoft.com</dd>
+        <dt>On-Prem Directory</dt><dd>mtlab.local (LAB)</dd>
+        <dt>Sync Server</dt><dd>SRV-ADMIN01 (PAW)</dd>
+        <dt>Sign-In Method</dt><dd>Password Hash Synchronization</dd>
+      </dl>
+    </div>
+
+    <!-- ===================== UPN SUFFIX CONFIGURATION ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Alternate UPN Suffix Configuration</h2>
+        <span class="step-count">12 steps</span>
+      </div>
+      <p class="section-desc">Before syncing anything, mtlab.local's accounts needed a usable UPN suffix — .local isn't a domain Entra ID can verify. Added mtlab.com as an alternate UPN suffix on-prem, demonstrated the change on MT.Admin through the GUI, then applied it to the remaining in-scope accounts via PowerShell.</p>
+
+      <div class="callout note">
+        <strong>Note</strong>
+        RSAT (AD DS and AD LDS Tools) was already installed on SRV-ADMIN01 as part of the PAW setup — see <a href="https://mark-thompson01.github.io/MTPortfolio/Automation%20%26%20Scripting">Automation &amp; Scripting &gt; Setup (PAW/SRV-ADMIN01 walkthrough)</a>. This section picks up from there, using the console rather than the domain controller directly, in line with the Tier 0 PAW model.
+      </div>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Opening Active Directory Domains and Trusts</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/9-AD-DomainsandTrusts.png', 'Active Directory Domains and Trusts open, showing mtlab.local')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/9-AD-DomainsandTrusts.png', 'Active Directory Domains and Trusts open, showing mtlab.local')" aria-label="Zoom image: Active Directory Domains and Trusts open, showing mtlab.local"><img src="Images/9-AD-DomainsandTrusts.png" alt="Active Directory Domains and Trusts open, showing mtlab.local"></div>
+          <p class="step-caption">Launched Active Directory Domains and Trusts from SRV-ADMIN01, logged in as LAB\MT.Admin — <code>mtlab.local</code> visible in the tree.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Opening Properties on the root node</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/10-AD-DomainsandTrusts.png', 'Right-clicking the root node to open Properties')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/10-AD-DomainsandTrusts.png', 'Right-clicking the root node to open Properties')" aria-label="Zoom image: Right-clicking the root node to open Properties"><img src="Images/10-AD-DomainsandTrusts.png" alt="Right-clicking the root node to open Properties"></div>
+          <p class="step-caption">Right-clicked the root node (<em>Active Directory Domains and Trusts</em>) and selected <strong>Properties</strong> to reach the UPN Suffixes tab.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">UPN Suffixes tab — empty</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/11-AD-DomainandTrustsAlternateUPNSuffixAdd.png', 'UPN Suffixes tab with an empty alternative UPN suffixes list')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/11-AD-DomainandTrustsAlternateUPNSuffixAdd.png', 'UPN Suffixes tab with an empty alternative UPN suffixes list')" aria-label="Zoom image: UPN Suffixes tab with an empty alternative UPN suffixes list"><img src="Images/11-AD-DomainandTrustsAlternateUPNSuffixAdd.png" alt="UPN Suffixes tab with an empty alternative UPN suffixes list"></div>
+          <p class="step-caption">The UPN Suffixes tab, with no alternative suffixes configured yet.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Entering mtlab.com</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/12-AD-DomainandTrustsAlternateUPNSuffixAdd.png', 'Typing mtlab.com into the alternative UPN suffix field')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/12-AD-DomainandTrustsAlternateUPNSuffixAdd.png', 'Typing mtlab.com into the alternative UPN suffix field')" aria-label="Zoom image: Typing mtlab.com into the alternative UPN suffix field"><img src="Images/12-AD-DomainandTrustsAlternateUPNSuffixAdd.png" alt="Typing mtlab.com into the alternative UPN suffix field"></div>
+          <p class="step-caption">Typed <code>mtlab.com</code> into the alternative UPN suffix field — a cleaner login suffix than the unusable <code>.local</code> domain.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">mtlab.com added</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/13-AD-DomainandTrustsAlternateUPNSuffixAdd.png', 'mtlab.com added to the alternative UPN suffixes list')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/13-AD-DomainandTrustsAlternateUPNSuffixAdd.png', 'mtlab.com added to the alternative UPN suffixes list')" aria-label="Zoom image: mtlab.com added to the alternative UPN suffixes list"><img src="Images/13-AD-DomainandTrustsAlternateUPNSuffixAdd.png" alt="mtlab.com added to the alternative UPN suffixes list"></div>
+          <p class="step-caption">Clicked <strong>Add</strong> — <code>mtlab.com</code> now appears in the list, available to assign to accounts domain-wide.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Opening Active Directory Users and Computers</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/14-ADDSOpen.png', 'Opening Active Directory Users and Computers from the Tools menu')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/14-ADDSOpen.png', 'Opening Active Directory Users and Computers from the Tools menu')" aria-label="Zoom image: Opening Active Directory Users and Computers from the Tools menu"><img src="Images/14-ADDSOpen.png" alt="Opening Active Directory Users and Computers from the Tools menu"></div>
+          <p class="step-caption">Opened <strong>Active Directory Users and Computers</strong> next, to demonstrate reassigning the suffix on an actual account.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">MT.Admin in the IT OU</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/15-ADDSAccountModify.png', 'Active Directory Users and Computers showing MT.Admin and MT.AdminScripts in the IT OU')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/15-ADDSAccountModify.png', 'Active Directory Users and Computers showing MT.Admin and MT.AdminScripts in the IT OU')" aria-label="Zoom image: Active Directory Users and Computers showing MT.Admin and MT.AdminScripts in the IT OU"><img src="Images/15-ADDSAccountModify.png" alt="Active Directory Users and Computers showing MT.Admin and MT.AdminScripts in the IT OU"></div>
+          <p class="step-caption">Navigated to the <strong>IT</strong> OU under Corp, where MT.Admin and MT.AdminScripts live.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Opening MT.Admin's Properties</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/16-ADDSAccountModProperties.png', 'Right-clicking MT.Admin to open Properties')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/16-ADDSAccountModProperties.png', 'Right-clicking MT.Admin to open Properties')" aria-label="Zoom image: Right-clicking MT.Admin to open Properties"><img src="Images/16-ADDSAccountModProperties.png" alt="Right-clicking MT.Admin to open Properties"></div>
+          <p class="step-caption">Right-clicked <strong>MT.Admin</strong> and selected <strong>Properties</strong>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Account tab — before (@mtlab.local)</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/17-ADDSAccountModProperties.png', 'MT.Admin Account tab showing the UPN suffix set to mtlab.local')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/17-ADDSAccountModProperties.png', 'MT.Admin Account tab showing the UPN suffix set to mtlab.local')" aria-label="Zoom image: MT.Admin Account tab showing the UPN suffix set to mtlab.local"><img src="Images/17-ADDSAccountModProperties.png" alt="MT.Admin Account tab showing the UPN suffix set to mtlab.local"></div>
+          <p class="step-caption">The <strong>Account</strong> tab, before the change — <code>MT.Admin@mtlab.local</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Account tab — after (@mtlab.com)</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/18-ADDSAccountModProperties.png', 'MT.Admin Account tab showing the UPN suffix changed to mtlab.com')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/18-ADDSAccountModProperties.png', 'MT.Admin Account tab showing the UPN suffix changed to mtlab.com')" aria-label="Zoom image: MT.Admin Account tab showing the UPN suffix changed to mtlab.com"><img src="Images/18-ADDSAccountModProperties.png" alt="MT.Admin Account tab showing the UPN suffix changed to mtlab.com"></div>
+          <p class="step-caption">Switched the suffix dropdown to <code>@mtlab.com</code> and applied — <code>MT.Admin@mtlab.com</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">11</span><h3 class="step-title">Verifying with PowerShell</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/19-PowerShellUPNVerify.png', 'Get-ADUser confirming MT.Admin UserPrincipalName is MT.Admin@mtlab.com')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/19-PowerShellUPNVerify.png', 'Get-ADUser confirming MT.Admin UserPrincipalName is MT.Admin@mtlab.com')" aria-label="Zoom image: Get-ADUser confirming MT.Admin UserPrincipalName is MT.Admin@mtlab.com"><img src="Images/19-PowerShellUPNVerify.png" alt="Get-ADUser confirming MT.Admin UserPrincipalName is MT.Admin@mtlab.com"></div>
+          <p class="step-caption"><code>Get-ADUser -Identity MT.Admin -Properties UserPrincipalName</code> confirms <code>UserPrincipalName: MT.Admin@mtlab.com</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Applying the suffix to the remaining accounts</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/20-PowerShellUPNAccountModify.png', 'Set-ADUser and Get-ADUser confirming the UPN suffix update on MT.AdminScripts and MT.User')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/20-PowerShellUPNAccountModify.png', 'Set-ADUser and Get-ADUser confirming the UPN suffix update on MT.AdminScripts and MT.User')" aria-label="Zoom image: Set-ADUser and Get-ADUser confirming the UPN suffix update on MT.AdminScripts and MT.User"><img src="Images/20-PowerShellUPNAccountModify.png" alt="Set-ADUser and Get-ADUser confirming the UPN suffix update on MT.AdminScripts and MT.User"></div>
+          <p class="step-caption">Rather than repeat the GUI steps, applied the same suffix change via <code>Set-ADUser -Identity "&lt;name&gt;" -UserPrincipalName "&lt;name&gt;@mtlab.com"</code> for <code>MT.AdminScripts</code> and <code>MT.User</code>, verifying each with <code>Get-ADUser</code> immediately after.</p>
+        </article>
+      </div>
+
+      <div class="callout warning">
+        <strong>Constraint</strong>
+        mtlab.com isn't a domain I actually own, so it can't be verified as a custom domain inside Entra ID — that requires proving ownership via a DNS TXT record. This on-prem suffix change is real and confirmed above, but the cloud-side verification step is a separate mechanism that this lab can't complete. The practical effect shows up later: synced accounts still resolve to the default <code>.onmicrosoft.com</code> UPN in the cloud, which is expected behavior given the constraint, not a bug.
+      </div>
+    </section>
+
+    <!-- ===================== ENTRA CONNECT INSTALLATION ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Microsoft Entra Connect Installation</h2>
+        <span class="step-count">25 steps</span>
+      </div>
+      <p class="section-desc">With the UPN suffix in place, moved to installing Microsoft Entra Connect itself on SRV-ADMIN01 — downloading the current installer from the Microsoft Entra admin center, running a Custom install with Password Hash Synchronization, and scoping the sync to specific OUs.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Azure portal — navigating to Entra</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/33-SettingUpEntraConnect.png', 'Microsoft Cloud navigation menu in the Azure portal with Entra listed')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/33-SettingUpEntraConnect.png', 'Microsoft Cloud navigation menu in the Azure portal with Entra listed')" aria-label="Zoom image: Microsoft Cloud navigation menu in the Azure portal with Entra listed"><img src="Images/33-SettingUpEntraConnect.png" alt="Microsoft Cloud navigation menu in the Azure portal with Entra listed"></div>
+          <p class="step-caption">From the Azure portal, opened the Microsoft Cloud menu to navigate toward Entra — as of a recent Microsoft change, the Entra Connect installer now lives in the separate Microsoft Entra admin center rather than the old Download Center.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Microsoft Entra Connect — Get started</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/34-SettingUpEntraConnect.png', 'Microsoft Entra Connect Get Started page in the Entra admin center')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/34-SettingUpEntraConnect.png', 'Microsoft Entra Connect Get Started page in the Entra admin center')" aria-label="Zoom image: Microsoft Entra Connect Get Started page in the Entra admin center"><img src="Images/34-SettingUpEntraConnect.png" alt="Microsoft Entra Connect Get Started page in the Entra admin center"></div>
+          <p class="step-caption">Landed on the Microsoft Entra Connect &gt; Get started page in entra.microsoft.com, with the option to download the Connect Sync Agent.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Accepting terms &amp; downloading</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/35-SettingUpEntraConnect.png', 'Download Connect Sync Agent panel with Accept terms and download button')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/35-SettingUpEntraConnect.png', 'Download Connect Sync Agent panel with Accept terms and download button')" aria-label="Zoom image: Download Connect Sync Agent panel with Accept terms and download button"><img src="Images/35-SettingUpEntraConnect.png" alt="Download Connect Sync Agent panel with Accept terms and download button"></div>
+          <p class="step-caption">Clicked <strong>Accept terms &amp; download</strong> to begin the installer download.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Download in progress</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/36-SettingUpEntraConnect.png', 'AzureADConnect.msi downloading, 63.8 of 180 MB')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/36-SettingUpEntraConnect.png', 'AzureADConnect.msi downloading, 63.8 of 180 MB')" aria-label="Zoom image: AzureADConnect.msi downloading, 63.8 of 180 MB"><img src="Images/36-SettingUpEntraConnect.png" alt="AzureADConnect.msi downloading, 63.8 of 180 MB"></div>
+          <p class="step-caption"><code>AzureADConnect.msi</code> (180 MB) downloading.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Installer in Downloads</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/37-SettingUpEntraConnect.png', 'AzureADConnect installer file in the Downloads folder')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/37-SettingUpEntraConnect.png', 'AzureADConnect installer file in the Downloads folder')" aria-label="Zoom image: AzureADConnect installer file in the Downloads folder"><img src="Images/37-SettingUpEntraConnect.png" alt="AzureADConnect installer file in the Downloads folder"></div>
+          <p class="step-caption">Installer landed in the Downloads folder, ready to run.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Welcome &amp; license terms</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/38-SettingUpEntraConnect.png', 'Welcome to Microsoft Entra Connect Sync screen with license terms checkbox')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/38-SettingUpEntraConnect.png', 'Welcome to Microsoft Entra Connect Sync screen with license terms checkbox')" aria-label="Zoom image: Welcome to Microsoft Entra Connect Sync screen with license terms checkbox"><img src="Images/38-SettingUpEntraConnect.png" alt="Welcome to Microsoft Entra Connect Sync screen with license terms checkbox"></div>
+          <p class="step-caption">Accepted the license terms and privacy notice, then clicked <strong>Continue</strong>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Choosing Customize over Express</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/39-SettingUpEntraConnect.png', 'Express Settings screen warning that mtlab.local is not a routable domain, recommending custom settings')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/39-SettingUpEntraConnect.png', 'Express Settings screen warning that mtlab.local is not a routable domain, recommending custom settings')" aria-label="Zoom image: Express Settings screen warning that mtlab.local is not a routable domain, recommending custom settings"><img src="Images/39-SettingUpEntraConnect.png" alt="Express Settings screen warning that mtlab.local is not a routable domain, recommending custom settings"></div>
+          <p class="step-caption">The wizard itself flagged that <code>mtlab.local</code> isn't a routable domain and recommended Customize over Express Settings — selected <strong>Customize</strong> to control OU scoping and sign-in options directly.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Install required components</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/40-SettingUpEntraConnect.png', 'Install required components screen with all optional checkboxes left unchecked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/40-SettingUpEntraConnect.png', 'Install required components screen with all optional checkboxes left unchecked')" aria-label="Zoom image: Install required components screen with all optional checkboxes left unchecked"><img src="Images/40-SettingUpEntraConnect.png" alt="Install required components screen with all optional checkboxes left unchecked"></div>
+          <p class="step-caption">Left every optional checkbox unchecked — letting the wizard install its own SQL Server Express LocalDB instance and default sync groups rather than pointing at existing infrastructure.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Installing SQL Server Express LocalDB</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/41-SettingUpEntraConnect.png', 'Progress bar installing Microsoft SQL Server Express LocalDB')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/41-SettingUpEntraConnect.png', 'Progress bar installing Microsoft SQL Server Express LocalDB')" aria-label="Zoom image: Progress bar installing Microsoft SQL Server Express LocalDB"><img src="Images/41-SettingUpEntraConnect.png" alt="Progress bar installing Microsoft SQL Server Express LocalDB"></div>
+          <p class="step-caption">Required components installing — SQL Server Express LocalDB first.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Installing the Synchronization Service</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/42-SettingUpEntraConnect.png', 'Progress bar installing the Synchronization Service')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/42-SettingUpEntraConnect.png', 'Progress bar installing the Synchronization Service')" aria-label="Zoom image: Progress bar installing the Synchronization Service"><img src="Images/42-SettingUpEntraConnect.png" alt="Progress bar installing the Synchronization Service"></div>
+          <p class="step-caption">Followed by the core Synchronization Service.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">11</span><h3 class="step-title">User Sign-In — Password Hash Synchronization</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/43-SettingUpEntraConnect.png', 'User sign-in screen with Password Hash Synchronization selected')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/43-SettingUpEntraConnect.png', 'User sign-in screen with Password Hash Synchronization selected')" aria-label="Zoom image: User sign-in screen with Password Hash Synchronization selected"><img src="Images/43-SettingUpEntraConnect.png" alt="User sign-in screen with Password Hash Synchronization selected"></div>
+          <p class="step-caption">Selected <strong>Password Hash Synchronization</strong> — the simplest sign-in method, with no ADFS or pass-through auth infrastructure required. Left <strong>Enable single sign-on</strong> unchecked to keep this pass focused on directory sync before layering on SSO later.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Connect to Microsoft Entra ID</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/44-SettingUpEntraConnect.png', 'Connect to Microsoft Entra ID screen prompting for a Hybrid Identity Administrator or Global Administrator username')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/44-SettingUpEntraConnect.png', 'Connect to Microsoft Entra ID screen prompting for a Hybrid Identity Administrator or Global Administrator username')" aria-label="Zoom image: Connect to Microsoft Entra ID screen prompting for a Hybrid Identity Administrator or Global Administrator username"><img src="Images/44-SettingUpEntraConnect.png" alt="Connect to Microsoft Entra ID screen prompting for a Hybrid Identity Administrator or Global Administrator username"></div>
+          <p class="step-caption">Prompted for a Hybrid Identity Administrator (preferred) or Global Administrator account — signed in with the tenant's Global Admin identity.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">13</span><h3 class="step-title">Connect your directories — initial</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/45-SettingUpEntraConnect.png', 'Connect your directories screen with no directories currently configured')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/45-SettingUpEntraConnect.png', 'Connect your directories screen with no directories currently configured')" aria-label="Zoom image: Connect your directories screen with no directories currently configured"><img src="Images/45-SettingUpEntraConnect.png" alt="Connect your directories screen with no directories currently configured"></div>
+          <p class="step-caption">Landed on <strong>Connect your directories</strong> with <code>mtlab.local</code> pre-filled as the forest to add, no directories configured yet.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">14</span><h3 class="step-title">AD forest account</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/46-SettingUpEntraConnect.png', 'AD forest account dialog entering LAB backslash MT.Admin as the Enterprise Admin username')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/46-SettingUpEntraConnect.png', 'AD forest account dialog entering LAB backslash MT.Admin as the Enterprise Admin username')" aria-label="Zoom image: AD forest account dialog entering LAB backslash MT.Admin as the Enterprise Admin username"><img src="Images/46-SettingUpEntraConnect.png" alt="AD forest account dialog entering LAB backslash MT.Admin as the Enterprise Admin username"></div>
+          <p class="step-caption">Chose <strong>Create new AD account</strong> and authenticated with <code>LAB\MT.Admin</code> as the Enterprise Admin credential the wizard uses to create its own AD DS connector account.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">15</span><h3 class="step-title">Validating forest credentials</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/21-InstallingEntraConnect.png', 'Connect your directories screen validating forest credentials and domain connectivity')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/21-InstallingEntraConnect.png', 'Connect your directories screen validating forest credentials and domain connectivity')" aria-label="Zoom image: Connect your directories screen validating forest credentials and domain connectivity"><img src="Images/21-InstallingEntraConnect.png" alt="Connect your directories screen validating forest credentials and domain connectivity"></div>
+          <p class="step-caption">Wizard validates the forest credentials and domain connectivity.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">16</span><h3 class="step-title">Directory added</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/22-InstallingEntraConnect.png', 'mtlab.local Active Directory added to configured directories with a green checkmark')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/22-InstallingEntraConnect.png', 'mtlab.local Active Directory added to configured directories with a green checkmark')" aria-label="Zoom image: mtlab.local Active Directory added to configured directories with a green checkmark"><img src="Images/22-InstallingEntraConnect.png" alt="mtlab.local Active Directory added to configured directories with a green checkmark"></div>
+          <p class="step-caption"><code>mtlab.local (Active Directory)</code> now shows under Configured Directories with a green checkmark.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">17</span><h3 class="step-title">Microsoft Entra sign-in configuration</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/23-InstallingEntraConnect.png', 'UPN suffix table showing both mtlab.local and mtlab.com as Not Added to Microsoft Entra ID')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/23-InstallingEntraConnect.png', 'UPN suffix table showing both mtlab.local and mtlab.com as Not Added to Microsoft Entra ID')" aria-label="Zoom image: UPN suffix table showing both mtlab.local and mtlab.com as Not Added to Microsoft Entra ID"><img src="Images/23-InstallingEntraConnect.png" alt="UPN suffix table showing both mtlab.local and mtlab.com as Not Added to Microsoft Entra ID"></div>
+          <p class="step-caption">The wizard lists both on-prem UPN suffixes — <code>mtlab.local</code> and <code>mtlab.com</code> — as <strong>Not Added</strong> to Microsoft Entra ID, since neither has been verified as a custom domain (see the domain-verification constraint above).</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">18</span><h3 class="step-title">Continuing without matching a verified domain</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/24-InstallingEntraConnect.png', 'Continue without matching all UPN suffixes to verified domains checkbox checked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/24-InstallingEntraConnect.png', 'Continue without matching all UPN suffixes to verified domains checkbox checked')" aria-label="Zoom image: Continue without matching all UPN suffixes to verified domains checkbox checked"><img src="Images/24-InstallingEntraConnect.png" alt="Continue without matching all UPN suffixes to verified domains checkbox checked"></div>
+          <p class="step-caption">Checked <strong>Continue without matching all UPN suffixes to verified domains</strong> to proceed — synced accounts will authenticate fine, just under the default <code>.onmicrosoft.com</code> UPN rather than <code>@mtlab.com</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">19</span><h3 class="step-title">Switching to selected domains and OUs</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/25-InstallingEntraConnect.png', 'Domain and OU filtering screen with Sync selected domains and OUs radio chosen, tree unchecked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/25-InstallingEntraConnect.png', 'Domain and OU filtering screen with Sync selected domains and OUs radio chosen, tree unchecked')" aria-label="Zoom image: Domain and OU filtering screen with Sync selected domains and OUs radio chosen, tree unchecked"><img src="Images/25-InstallingEntraConnect.png" alt="Domain and OU filtering screen with Sync selected domains and OUs radio chosen, tree unchecked"></div>
+          <p class="step-caption">Switched from <strong>Sync all domains and OUs</strong> to <strong>Sync selected domains and OUs</strong>, ready to scope the sync deliberately rather than sync the whole directory.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">20</span><h3 class="step-title">Scoping to Corp, minus Engineering</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/26-InstallingEntraConnect.png', 'HR, IT, Sales, and Users OUs checked under Corp, Engineering left unchecked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/26-InstallingEntraConnect.png', 'HR, IT, Sales, and Users OUs checked under Corp, Engineering left unchecked')" aria-label="Zoom image: HR, IT, Sales, and Users OUs checked under Corp, Engineering left unchecked"><img src="Images/26-InstallingEntraConnect.png" alt="HR, IT, Sales, and Users OUs checked under Corp, Engineering left unchecked"></div>
+          <p class="step-caption">Checked <strong>HR</strong>, <strong>IT</strong>, <strong>Sales</strong>, and <strong>Users</strong> under Corp — leaving <strong>Engineering</strong> unchecked. Neither Builtin, Domain Controllers, Managed Service Accounts, nor any other top-level container was selected, so accounts like SOperations (scoped to a locked-down FortiGate-management role with no reason to exist in the cloud) stay out of sync automatically.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">21</span><h3 class="step-title">Uniquely identifying users</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/27-InstallingEntraConnectExpressMenuCustomize.png', 'Uniquely identifying your users screen with default settings, users represented once across all directories')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/27-InstallingEntraConnectExpressMenuCustomize.png', 'Uniquely identifying your users screen with default settings, users represented once across all directories')" aria-label="Zoom image: Uniquely identifying your users screen with default settings, users represented once across all directories"><img src="Images/27-InstallingEntraConnectExpressMenuCustomize.png" alt="Uniquely identifying your users screen with default settings, users represented once across all directories"></div>
+          <p class="step-caption">Left the defaults on <strong>Uniquely identifying your users</strong> — a single-forest lab has no need for cross-directory identity matching, and Azure managing the source anchor is the simplest option.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">22</span><h3 class="step-title">Filter users and devices</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/28-InstallingEntraConnectInstall.png', 'Filter users and devices screen with Synchronize all users and devices selected')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/28-InstallingEntraConnectInstall.png', 'Filter users and devices screen with Synchronize all users and devices selected')" aria-label="Zoom image: Filter users and devices screen with Synchronize all users and devices selected"><img src="Images/28-InstallingEntraConnectInstall.png" alt="Filter users and devices screen with Synchronize all users and devices selected"></div>
+          <p class="step-caption">Left <strong>Synchronize all users and devices</strong> selected — the OU filtering already handled the scoping decision, so no additional group-based filter was needed.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">23</span><h3 class="step-title">Ready to configure</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/29-InstallingEntraConnect.png', 'Ready to configure screen listing the AAD Connector, mtlab.local Connector, and password hash sync enablement')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/29-InstallingEntraConnect.png', 'Ready to configure screen listing the AAD Connector, mtlab.local Connector, and password hash sync enablement')" aria-label="Zoom image: Ready to configure screen listing the AAD Connector, mtlab.local Connector, and password hash sync enablement"><img src="Images/29-InstallingEntraConnect.png" alt="Ready to configure screen listing the AAD Connector, mtlab.local Connector, and password hash sync enablement"></div>
+          <p class="step-caption">Summary confirms the configuration about to be applied: the AAD connector for the tenant, the <code>mtlab.local</code> connector, password hash sync enabled, and <strong>Start the synchronization process when configuration completes</strong> checked.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">24</span><h3 class="step-title">Configuring</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/30-InstallingEntraConnect.png', 'Configuring screen showing application-based authentication being configured to Microsoft Entra ID')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/30-InstallingEntraConnect.png', 'Configuring screen showing application-based authentication being configured to Microsoft Entra ID')" aria-label="Zoom image: Configuring screen showing application-based authentication being configured to Microsoft Entra ID"><img src="Images/30-InstallingEntraConnect.png" alt="Configuring screen showing application-based authentication being configured to Microsoft Entra ID"></div>
+          <p class="step-caption">Configuration in progress.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">25</span><h3 class="step-title">Configuration complete</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/31-InstallingEntraConnect.png', 'Configuration complete screen confirming Microsoft Entra Connect Sync succeeded and the synchronization process was initiated')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/31-InstallingEntraConnect.png', 'Configuration complete screen confirming Microsoft Entra Connect Sync succeeded and the synchronization process was initiated')" aria-label="Zoom image: Configuration complete screen confirming Microsoft Entra Connect Sync succeeded and the synchronization process was initiated"><img src="Images/31-InstallingEntraConnect.png" alt="Configuration complete screen confirming Microsoft Entra Connect Sync succeeded and the synchronization process was initiated"></div>
+          <p class="step-caption"><strong>Configuration complete</strong> — Microsoft Entra Connect Sync succeeded and the synchronization process was initiated automatically.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== POST-INSTALL VERIFICATION ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Post-Install Verification</h2>
+        <span class="step-count">4 steps</span>
+      </div>
+      <p class="section-desc">A completed sync isn't proof the hybrid identity actually works — verified the scope on the cloud side, the sync engine's own operations log, and finished with an end-to-end sign-in test from a standard client rather than the domain controller.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Entra ID Users — synced accounts</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/47-SettingUpEntraConnect.png', 'Microsoft Entra admin center Users list showing synced accounts from mtlab.local')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/47-SettingUpEntraConnect.png', 'Microsoft Entra admin center Users list showing synced accounts from mtlab.local')" aria-label="Zoom image: Microsoft Entra admin center Users list showing synced accounts from mtlab.local"><img src="Images/47-SettingUpEntraConnect.png" alt="Microsoft Entra admin center Users list showing synced accounts from mtlab.local"></div>
+          <p class="step-caption">Entra ID &gt; Users confirms the on-prem accounts came across correctly — MT.Admin, MT.AdminScripts, and MT.User all show <code>On-prem: Yes</code>, alongside other accounts from the synced OUs. SOperations and the built-in accounts, correctly, do not appear.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Full user list</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/48-SettingUpEntraConnect.png', 'Full Entra ID Users list scrolled further, showing additional synced accounts')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/48-SettingUpEntraConnect.png', 'Full Entra ID Users list scrolled further, showing additional synced accounts')" aria-label="Zoom image: Full Entra ID Users list scrolled further, showing additional synced accounts"><img src="Images/48-SettingUpEntraConnect.png" alt="Full Entra ID Users list scrolled further, showing additional synced accounts"></div>
+          <p class="step-caption">The rest of the list, confirming the full scope of what synced from the selected OUs.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Synchronization Service Manager</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/49-EntraConnectVerify.png', 'Synchronization Service Manager on SRV-ADMIN01 showing successful Export, Full Synchronization, and Full Import operations for both connectors')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/49-EntraConnectVerify.png', 'Synchronization Service Manager on SRV-ADMIN01 showing successful Export, Full Synchronization, and Full Import operations for both connectors')" aria-label="Zoom image: Synchronization Service Manager on SRV-ADMIN01 showing successful Export, Full Synchronization, and Full Import operations for both connectors"><img src="Images/49-EntraConnectVerify.png" alt="Synchronization Service Manager on SRV-ADMIN01 showing successful Export, Full Synchronization, and Full Import operations for both connectors"></div>
+          <p class="step-caption">On SRV-ADMIN01, Synchronization Service Manager confirms the full pipeline — Full Import, Full Synchronization, and Export all show <code>success</code> for both the <code>mtlab.local</code> and Entra ID connectors, with no synchronization errors logged.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">End-to-end sign-in test</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/50-EntraConnectVerify.png', 'MT.User successfully signed into myaccount.microsoft.com from the Win11-Client VM using their on-prem password')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/50-EntraConnectVerify.png', 'MT.User successfully signed into myaccount.microsoft.com from the Win11-Client VM using their on-prem password')" aria-label="Zoom image: MT.User successfully signed into myaccount.microsoft.com from the Win11-Client VM using their on-prem password"><img src="Images/50-EntraConnectVerify.png" alt="MT.User successfully signed into myaccount.microsoft.com from the Win11-Client VM using their on-prem password"></div>
+          <p class="step-caption">From the Win11-Client VM — a standard client, not the domain controller — signed into <code>myaccount.microsoft.com</code> as <code>MT.User</code> using the same password set on-prem. The successful sign-in confirms Password Hash Sync is genuinely authenticating against the on-prem credential, closing the loop from Active Directory to Microsoft Entra ID.</p>
+        </article>
+      </div>
+
+      <div class="callout resolved">
+        <strong>Lesson Learned</strong>
+        Password Hash Sync runs on its own two-minute cycle, independent of the standard 30-minute directory delta sync — a password change (like the one needed to test MT.User's login) shows up in the cloud far faster than the rest of a sync cycle would suggest.
+      </div>
+    </section>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()" aria-label="Close">✕</button>
+    <img id="lightbox-img" src="" alt="">
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <script>
+    function openLightbox(src, alt){
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      img.src = src;
+      img.alt = alt;
+      cap.textContent = alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
