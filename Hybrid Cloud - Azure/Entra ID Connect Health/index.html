@@ -1,1 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Entra ID Connect Health · Mark Thompson Portfolio</title>
+  <meta name="description" content="Installing and verifying the Microsoft Entra Connect Health agent to monitor on-prem to Entra ID sync from the cloud, without needing to RDP into the sync server." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1300px;margin:0 auto;padding:40px 20px 64px}
 
+    /* Top nav */
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,40px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 40px;font-size:clamp(16px,2.2vw,18px);text-align:center;max-width:820px;margin-left:auto;margin-right:auto}
+
+    /* Device summary card */
+    .device-card{
+      max-width:900px;margin:0 auto 48px;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:24px 28px;
+    }
+    .device-card h2{margin:0 0 6px;font-size:1.3rem;color:var(--text)}
+    .device-card .model{color:var(--brand);font-weight:600;font-size:.95rem;margin:0 0 14px}
+    .device-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:10px 20px;margin:0;
+    }
+    .device-grid dt{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;margin:0}
+    .device-grid dd{color:var(--text);font-size:.95rem;margin:2px 0 10px}
+
+    /* Section headers */
+    .section-block{max-width:900px;margin:0 auto 56px}
+    .section-head{margin:0 0 8px;display:flex;align-items:baseline;gap:12px}
+    .section-head h2{margin:0;font-size:1.5rem;font-weight:700;color:var(--text)}
+    .section-head .step-count{color:var(--muted);font-size:.9rem}
+    .section-desc{color:var(--muted);margin:0 0 28px;font-size:.98rem}
+
+    /* Callouts */
+    .callout{
+      max-width:900px;margin:0 auto 28px;
+      border-radius:14px;
+      padding:16px 20px;
+      font-size:.95rem;
+      line-height:1.55;
+      border-left:4px solid;
+    }
+    .callout strong{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+    .callout.note{background:rgba(77,163,255,.07);border-color:var(--brand);color:#cfe3fb}
+    .callout.note strong{color:var(--brand)}
+    .callout.warning{background:rgba(240,180,60,.08);border-color:#e0b34c;color:#f2ddb0}
+    .callout.warning strong{color:#e0b34c}
+    .callout.resolved{background:rgba(90,200,120,.08);border-color:#5ac878;color:#c9ecd6}
+    .callout.resolved strong{color:#5ac878}
+    .callout a{color:inherit;text-decoration:underline}
+
+    /* Screenshot steps */
+    .steps{display:flex;flex-direction:column;gap:28px}
+    .step{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .step-header{
+      display:flex;align-items:center;gap:14px;
+      padding:16px 22px;border-bottom:1px solid var(--card-border);
+    }
+    .step-num{
+      flex:0 0 auto;width:32px;height:32px;border-radius:9px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:.9rem;color:var(--brand);
+      background:rgba(77,163,255,.08);border:1px solid #2a3a55;
+    }
+    .step-title{margin:0;font-size:1rem;font-weight:600;color:var(--text)}
+    .step-shot{display:block;width:100%;background:#000;cursor:zoom-in;position:relative}
+    .step-shot img{display:block;width:100%;height:auto}
+    .step-shot::after{
+      content:"⤢";
+      position:absolute; top:12px; right:12px;
+      width:34px;height:34px;border-radius:9px;
+      background:rgba(15,17,21,.72);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--text);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;
+      opacity:0; transition:opacity .15s ease;
+      pointer-events:none;
+    }
+    .step-shot:hover::after,.step-shot:focus-visible::after{opacity:1}
+    .step-shot:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+    .step-caption{padding:16px 22px 20px;color:var(--muted);font-size:.92rem;margin:0}
+
+    /* Footer */
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+
+    /* Lightbox */
+    .lightbox{
+      position:fixed; inset:0; z-index:1000;
+      background:rgba(6,7,10,.92);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:min(6vh,60px) min(6vw,60px);
+      cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:100%; max-height:100%;
+      width:auto; height:auto;
+      border-radius:10px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      border:1px solid rgba(255,255,255,.1);
+      cursor:default;
+    }
+    .lightbox-close{
+      position:fixed; top:20px; right:24px;
+      width:44px;height:44px;border-radius:12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.16);
+      color:var(--text);
+      font-size:1.4rem; line-height:1;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.12)}
+    .lightbox-caption{
+      position:fixed; left:0; right:0; bottom:18px;
+      text-align:center; color:var(--muted);
+      font-size:.9rem; padding:0 24px;
+      pointer-events:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure &amp; Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20-%20Azure" class="active">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation &amp; Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav><br><br>
+
+    <header>
+      <h1>Entra ID Connect Health</h1>
+      <p class="lead">The Entra ID Connect lab proved the sync pipe works. This lab proves it can be monitored, activating a P2 trial, installing the Connect Health agent on the sync server, and confirming the operational view a real admin would rely on day to day, without ever needing to RDP into the box.</p>
+    </header>
+
+    <div class="device-card">
+      <h2>Health Monitoring Environment</h2>
+      <p class="model">Microsoft Entra Connect Health Agent for Sync</p>
+      <dl class="device-grid">
+        <dt>Entra ID Tenant</dt><dd>markandrewt01outlook075.onmicrosoft.com</dd>
+        <dt>On-Prem Directory</dt><dd>mtlab.local (LAB)</dd>
+        <dt>Monitored Server</dt><dd>SRV-ADMIN01 (PAW)</dd>
+        <dt>Agent Version</dt><dd>4.5.2549.0</dd>
+        <dt>License Tier</dt><dd>Microsoft Entra ID P2 (Trial)</dd>
+      </dl>
+    </div>
+
+    <!-- ===================== P2 TRIAL AND LICENSING ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Microsoft Entra ID P2 Trial and Licensing</h2>
+        <span class="step-count">8 steps</span>
+      </div>
+      <p class="section-desc">Connect Health requires an Entra ID P1 or P2 license at the tenant level, a tier this lab does not carry by default. Activated the free 30 day P2 trial under SyncAdmin, an account already provisioned as a Global Administrator for hybrid identity work, then assigned the license before touching the agent installer.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">SyncAdmin account overview</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/1-P2LicenseSetup.png', 'SyncAdmin account overview in the Microsoft Entra admin center')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/1-P2LicenseSetup.png', 'SyncAdmin account overview in the Microsoft Entra admin center')" aria-label="Zoom image: SyncAdmin account overview in the Microsoft Entra admin center"><img src="Images/1-P2LicenseSetup.png" alt="SyncAdmin account overview in the Microsoft Entra admin center"></div>
+          <p class="step-caption">SyncAdmin, the account used for hybrid identity administration in this tenant, with UPN <code>syncadmin@markandrewt01outlook075.onmicrosoft.com</code>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Confirming the Global Administrator role</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/2-P2LicenseSetup.png', 'SyncAdmin assigned roles showing Global Administrator checked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/2-P2LicenseSetup.png', 'SyncAdmin assigned roles showing Global Administrator checked')" aria-label="Zoom image: SyncAdmin assigned roles showing Global Administrator checked"><img src="Images/2-P2LicenseSetup.png" alt="SyncAdmin assigned roles showing Global Administrator checked"></div>
+          <p class="step-caption">SyncAdmin already carries <strong>Global Administrator</strong>, the role needed to activate a tenant wide trial and manage licensing. Hybrid Identity Administrator is visible in the same list as the narrower alternative for agent registration alone.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Opening Licenses</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/3-P2LicenseSetup.png', 'Licenses Overview blade in the Azure portal')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/3-P2LicenseSetup.png', 'Licenses Overview blade in the Azure portal')" aria-label="Zoom image: Licenses Overview blade in the Azure portal"><img src="Images/3-P2LicenseSetup.png" alt="Licenses Overview blade in the Azure portal"></div>
+          <p class="step-caption">Opened <strong>Licenses</strong> under Microsoft Entra ID in the Azure portal to start the trial activation.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Activating the Entra ID P2 free trial</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/4-P2LicenseSetup.png', 'Activate panel with Microsoft Entra ID P2 free trial expanded')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/4-P2LicenseSetup.png', 'Activate panel with Microsoft Entra ID P2 free trial expanded')" aria-label="Zoom image: Activate panel with Microsoft Entra ID P2 free trial expanded"><img src="Images/4-P2LicenseSetup.png" alt="Activate panel with Microsoft Entra ID P2 free trial expanded"></div>
+          <p class="step-caption">Expanded the <strong>Microsoft Entra ID P2</strong> free trial panel, confirmed the default 100 license count and 30 day window, and clicked <strong>Activate</strong>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Completing trial signup</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/5-P2LicenseSetup.png', 'Microsoft Entra ID P2 Trial signup screen with Continue button')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/5-P2LicenseSetup.png', 'Microsoft Entra ID P2 Trial signup screen with Continue button')" aria-label="Zoom image: Microsoft Entra ID P2 Trial signup screen with Continue button"><img src="Images/5-P2LicenseSetup.png" alt="Microsoft Entra ID P2 Trial signup screen with Continue button"></div>
+          <p class="step-caption">Signed in as SyncAdmin on the trial signup page and clicked <strong>Continue</strong> to complete activation for the tenant.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Entra ID P2 now listed</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/6-P2LicenseSetup.png', 'Microsoft Entra ID overview panel now showing Entra ID P2 in the license list')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/6-P2LicenseSetup.png', 'Microsoft Entra ID overview panel now showing Entra ID P2 in the license list')" aria-label="Zoom image: Microsoft Entra ID overview panel now showing Entra ID P2 in the license list"><img src="Images/6-P2LicenseSetup.png" alt="Microsoft Entra ID overview panel now showing Entra ID P2 in the license list"></div>
+          <p class="step-caption">Back on the Microsoft Entra ID overview, the license list now shows <strong>Entra ID P2</strong> alongside the tenant's existing 10 synced users.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Confirming license availability</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/7-P2LicenseSetupP2LicenseAvailableConfirm.png', 'Licenses All products showing Microsoft Entra ID P2 with 100 total and 100 available')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/7-P2LicenseSetupP2LicenseAvailableConfirm.png', 'Licenses All products showing Microsoft Entra ID P2 with 100 total and 100 available')" aria-label="Zoom image: Licenses All products showing Microsoft Entra ID P2 with 100 total and 100 available"><img src="Images/7-P2LicenseSetupP2LicenseAvailableConfirm.png" alt="Licenses All products showing Microsoft Entra ID P2 with 100 total and 100 available"></div>
+          <p class="step-caption"><strong>Licenses &gt; All products</strong> confirms Microsoft Entra ID P2 is active with 100 total licenses and 100 available, none assigned yet. This blade shows totals only; assignment happens elsewhere.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Assigning the license from the M365 admin center</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/8-P2LicenseSetupM365AdminCenterLicenseAssign.png', 'Microsoft 365 admin center user details panel assigning the P2 license to SyncAdmin')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/8-P2LicenseSetupM365AdminCenterLicenseAssign.png', 'Microsoft 365 admin center user details panel assigning the P2 license to SyncAdmin')" aria-label="Zoom image: Microsoft 365 admin center user details panel assigning the P2 license to SyncAdmin"><img src="Images/8-P2LicenseSetupM365AdminCenterLicenseAssign.png" alt="Microsoft 365 admin center user details panel assigning the P2 license to SyncAdmin"></div>
+          <p class="step-caption">Assigned the P2 trial license to <strong>SyncAdmin</strong> from the Microsoft 365 admin center, the surface that actually handles license assignment. The panel also flags the trial's expiration date of 10/12/2026.</p>
+        </article>
+      </div>
+
+      <div class="callout resolved">
+        <strong>Lesson Learned</strong>
+        License assignment is not available from the Licenses blade in the Azure portal, it only reports totals and availability. Assigning a license to a specific account has to happen from the Microsoft 365 admin center's user details panel instead, a small but easy to miss distinction between the two admin surfaces.
+      </div>
+
+      <div class="callout warning">
+        <strong>Constraint</strong>
+        The P2 trial expires on 10/12/2026, 30 days from activation. A calendar reminder is set for day 25 to either cancel the trial or unassign the license, since ongoing P2 licensing is not something this lab environment needs to carry once the agent has been demonstrated and documented.
+      </div>
+    </section>
+
+    <!-- ===================== INSTALLING THE CONNECT HEALTH AGENT ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Downloading and Installing the Connect Health Agent</h2>
+        <span class="step-count">7 steps</span>
+      </div>
+      <p class="section-desc">With P2 active, moved to SRV-ADMIN01 to download and install the Connect Health agent for Sync. Unlike the core Entra Connect installer, this agent is not bundled into the Entra admin center flow, it lives on its own Microsoft Download Center page.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Microsoft Download Center</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/9-EntraConnectHealthAgentDownload.png', 'Microsoft Entra Connect Health download page, version 4.5.2549.0')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/9-EntraConnectHealthAgentDownload.png', 'Microsoft Entra Connect Health download page, version 4.5.2549.0')" aria-label="Zoom image: Microsoft Entra Connect Health download page, version 4.5.2549.0"><img src="Images/9-EntraConnectHealthAgentDownload.png" alt="Microsoft Entra Connect Health download page, version 4.5.2549.0"></div>
+          <p class="step-caption">Located the agent on microsoft.com, version 4.5.2549.0, published 2/23/2026, and clicked <strong>Download</strong>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Installer in Downloads</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/10-EntraConnectHealthAgentInstall.png', 'File Explorer Downloads folder on SRV-ADMIN01 with the health agent installer and the original AzureADConnect installer')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/10-EntraConnectHealthAgentInstall.png', 'File Explorer Downloads folder on SRV-ADMIN01 with the health agent installer and the original AzureADConnect installer')" aria-label="Zoom image: File Explorer Downloads folder on SRV-ADMIN01 with the health agent installer and the original AzureADConnect installer"><img src="Images/10-EntraConnectHealthAgentInstall.png" alt="File Explorer Downloads folder on SRV-ADMIN01 with the health agent installer and the original AzureADConnect installer"></div>
+          <p class="step-caption"><code>MicrosoftEntraConnectHealthAgentSetup.exe</code> landed in Downloads on SRV-ADMIN01, sitting next to the original <code>AzureADConnect</code> installer from the earlier Entra Connect sync lab.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Selecting the service to monitor</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/11-EntraConnectHealthAgentInstall.png', 'Health Agent Package Setup with Microsoft Entra Connect Sync Service checked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/11-EntraConnectHealthAgentInstall.png', 'Health Agent Package Setup with Microsoft Entra Connect Sync Service checked')" aria-label="Zoom image: Health Agent Package Setup with Microsoft Entra Connect Sync Service checked"><img src="Images/11-EntraConnectHealthAgentInstall.png" alt="Health Agent Package Setup with Microsoft Entra Connect Sync Service checked"></div>
+          <p class="step-caption">Checked <strong>Microsoft Entra Connect Sync Service</strong> as the role to monitor, leaving AD Domain Service, AD Federation Service, and Microsoft Identity Manager Service unchecked, since SRV-ADMIN01 is the sync server in this lab, not a domain controller or federation server.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Accepting license terms</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/12-EntraConnectHealthAgentInstall.png', 'License terms screen for the Microsoft Entra Connect Health Agent with Install button')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/12-EntraConnectHealthAgentInstall.png', 'License terms screen for the Microsoft Entra Connect Health Agent with Install button')" aria-label="Zoom image: License terms screen for the Microsoft Entra Connect Health Agent with Install button"><img src="Images/12-EntraConnectHealthAgentInstall.png" alt="License terms screen for the Microsoft Entra Connect Health Agent with Install button"></div>
+          <p class="step-caption">Accepted the license terms and conditions and clicked <strong>Install</strong>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Registering with SyncAdmin</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/13-EntraConnectHealthAgentInstall.png', 'Sign in prompt during setup showing the SyncAdmin account')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/13-EntraConnectHealthAgentInstall.png', 'Sign in prompt during setup showing the SyncAdmin account')" aria-label="Zoom image: Sign in prompt during setup showing the SyncAdmin account"><img src="Images/13-EntraConnectHealthAgentInstall.png" alt="Sign in prompt during setup showing the SyncAdmin account"></div>
+          <p class="step-caption">Mid install, the wizard prompted for a sign in to register the agent against the tenant. Selected the <strong>SyncAdmin</strong> account already active on the box, matching the Global Administrator credential used for the trial and the original Entra Connect install.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Setup in progress</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/14-EntraConnectHealthAgentInstall.png', 'Setup Progress screen processing the Microsoft Entra Connect Health Agent')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/14-EntraConnectHealthAgentInstall.png', 'Setup Progress screen processing the Microsoft Entra Connect Health Agent')" aria-label="Zoom image: Setup Progress screen processing the Microsoft Entra Connect Health Agent"><img src="Images/14-EntraConnectHealthAgentInstall.png" alt="Setup Progress screen processing the Microsoft Entra Connect Health Agent"></div>
+          <p class="step-caption">Setup proceeded with the registration handshake to the Microsoft Entra Connect Health service running in the background.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Setup successful</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/15-EntraConnectHealthAgentInstall.png', 'Setup Successful screen with links to the Setup Bundle, Installation, and Registration logs')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/15-EntraConnectHealthAgentInstall.png', 'Setup Successful screen with links to the Setup Bundle, Installation, and Registration logs')" aria-label="Zoom image: Setup Successful screen with links to the Setup Bundle, Installation, and Registration logs"><img src="Images/15-EntraConnectHealthAgentInstall.png" alt="Setup Successful screen with links to the Setup Bundle, Installation, and Registration logs"></div>
+          <p class="step-caption"><strong>Setup Successful</strong>, with links to the Setup Bundle, Installation, and Registration logs. The agent registered on the first attempt, no manual re-registration or connectivity workaround needed.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== VERIFYING REGISTRATION AND EXPLORING THE DASHBOARD ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Verifying Registration and Exploring the Dashboard</h2>
+        <span class="step-count">3 steps</span>
+      </div>
+      <p class="section-desc">The point of this lab was demonstrating the operational side, not just getting an install to finish. Everything below runs entirely in the cloud, in the Entra admin center, exactly the kind of no RDP needed visibility Connect Health exists to provide once it is wired up.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Locating Connect Health from Entra Connect</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/16-RegistrationVerificationEntraAdminCenter.png', 'Microsoft Entra Connect Connect Sync page with a Health and Analytics link out to Microsoft Entra Connect Health')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/16-RegistrationVerificationEntraAdminCenter.png', 'Microsoft Entra Connect Connect Sync page with a Health and Analytics link out to Microsoft Entra Connect Health')" aria-label="Zoom image: Microsoft Entra Connect Connect Sync page with a Health and Analytics link out to Microsoft Entra Connect Health"><img src="Images/16-RegistrationVerificationEntraAdminCenter.png" alt="Microsoft Entra Connect Connect Sync page with a Health and Analytics link out to Microsoft Entra Connect Health"></div>
+          <p class="step-caption">From <strong>Microsoft Entra Connect &gt; Connect Sync</strong>, the Health and Analytics section links out to Microsoft Entra Connect Health, confirming the two are related but separate blades in the admin center.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Sync services, healthy</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/17-RegistrationVerificationEntraAdminCenter.png', 'Microsoft Entra Connect Health Sync services listing the tenant sync service as Healthy')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/17-RegistrationVerificationEntraAdminCenter.png', 'Microsoft Entra Connect Health Sync services listing the tenant sync service as Healthy')" aria-label="Zoom image: Microsoft Entra Connect Health Sync services listing the tenant sync service as Healthy"><img src="Images/17-RegistrationVerificationEntraAdminCenter.png" alt="Microsoft Entra Connect Health Sync services listing the tenant sync service as Healthy"></div>
+          <p class="step-caption"><strong>Sync services</strong> lists the tenant's sync service with a status of <strong>Healthy</strong>, zero active alerts, and a last updated timestamp inside the expected 30 minute reporting cycle. This is the registration proof, SRV-ADMIN01's agent is reporting in.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Sync errors, clean across every category</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/18-RegistrationVerificationEntraAdminCenter.png', 'Sync errors report showing zero errors across every category')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/18-RegistrationVerificationEntraAdminCenter.png', 'Sync errors report showing zero errors across every category')" aria-label="Zoom image: Sync errors report showing zero errors across every category"><img src="Images/18-RegistrationVerificationEntraAdminCenter.png" alt="Sync errors report showing zero errors across every category"></div>
+          <p class="step-caption"><strong>Sync errors</strong> shows zero across every category: Duplicate Attribute, Data Mismatch, Data Validation Failure, Large Attribute, Others, Federated Domain Change, and Role Membership Match Failure. A clean report here is what an admin would check first thing every morning, without touching the sync server at all.</p>
+        </article>
+      </div>
+
+      <div class="callout note">
+        <strong>Note</strong>
+        Connect Health has no local console of its own. Everything above lives entirely in the cloud, with the agent on SRV-ADMIN01 only responsible for collecting data and phoning it home on a roughly 30 minute cycle. If the agent ever lost connectivity to the health service, the fallback would be the same tools that predate Connect Health entirely: Synchronization Service Manager (<code>miisclient.exe</code>) and Event Viewer's Directory Synchronization log, both run directly on the sync server.
+      </div>
+    </section>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()" aria-label="Close">✕</button>
+    <img id="lightbox-img" src="" alt="">
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <script>
+    function openLightbox(src, alt){
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      img.src = src;
+      img.alt = alt;
+      cap.textContent = alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
