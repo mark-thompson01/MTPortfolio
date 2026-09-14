@@ -1,1 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Conditional Access Policies · Mark Thompson Portfolio</title>
+  <meta name="description" content="Building and enforcing two Microsoft Entra Conditional Access policies, MFA for a test group and a legacy authentication block, including the real troubleshooting along the way." />
+  <style>
+    :root{
+      --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
+      --brand:#4DA3FF; --card-border:#2A3447; --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    html,body{height:100%}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial,"Noto Sans";
+      background:
+        radial-gradient(1200px 800px at 30% -20%, #1a2233 0%, transparent 70%),
+        radial-gradient(1200px 800px at 90% -10%, #0e1c2f 0%, transparent 70%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      line-height:1.55; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    .wrap{max-width:1300px;margin:0 auto;padding:40px 20px 64px}
 
+    .topnav{margin:0 0 24px;display:flex;gap:18px;flex-wrap:wrap}
+    .topnav a{
+      color:var(--muted);
+      text-decoration:none;
+      padding:12px 20px;
+      border-radius:12px;
+      border:1px solid transparent;
+      font-size:16px;
+      font-weight:500;
+    }
+    .topnav a:hover{color:var(--text);border-color:#2a3447;background:rgba(255,255,255,.04)}
+    .topnav a.active{color:var(--text);border-color:#3a4a67;background:rgba(255,255,255,.06)}
+
+    h1{margin:4px 0 8px;font-size:clamp(30px,4.2vw,40px);font-weight:800;letter-spacing:.2px;text-align:center}
+    .lead{color:var(--muted);margin:0 0 40px;font-size:clamp(16px,2.2vw,18px);text-align:center;max-width:820px;margin-left:auto;margin-right:auto}
+
+    .device-card{
+      max-width:900px;margin:0 auto 48px;
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:24px 28px;
+    }
+    .device-card h2{margin:0 0 6px;font-size:1.3rem;color:var(--text)}
+    .device-card .model{color:var(--brand);font-weight:600;font-size:.95rem;margin:0 0 14px}
+    .device-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:10px 20px;margin:0;
+    }
+    .device-grid dt{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;margin:0}
+    .device-grid dd{color:var(--text);font-size:.95rem;margin:2px 0 10px}
+
+    .section-block{max-width:900px;margin:0 auto 56px}
+    .section-head{margin:0 0 8px;display:flex;align-items:baseline;gap:12px}
+    .section-head h2{margin:0;font-size:1.5rem;font-weight:700;color:var(--text)}
+    .section-head .step-count{color:var(--muted);font-size:.9rem}
+    .section-desc{color:var(--muted);margin:0 0 28px;font-size:.98rem}
+
+    .callout{
+      max-width:900px;margin:0 auto 28px;
+      border-radius:14px;
+      padding:16px 20px;
+      font-size:.95rem;
+      line-height:1.55;
+      border-left:4px solid;
+    }
+    .callout strong{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+    .callout.note{background:rgba(77,163,255,.07);border-color:var(--brand);color:#cfe3fb}
+    .callout.note strong{color:var(--brand)}
+    .callout.warning{background:rgba(240,180,60,.08);border-color:#e0b34c;color:#f2ddb0}
+    .callout.warning strong{color:#e0b34c}
+    .callout.resolved{background:rgba(90,200,120,.08);border-color:#5ac878;color:#c9ecd6}
+    .callout.resolved strong{color:#5ac878}
+    .callout a{color:inherit;text-decoration:underline}
+
+    .steps{display:flex;flex-direction:column;gap:28px}
+    .step{
+      background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .step-header{
+      display:flex;align-items:center;gap:14px;
+      padding:16px 22px;border-bottom:1px solid var(--card-border);
+    }
+    .step-num{
+      flex:0 0 auto;width:32px;height:32px;border-radius:9px;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:.9rem;color:var(--brand);
+      background:rgba(77,163,255,.08);border:1px solid #2a3a55;
+    }
+    .step-title{margin:0;font-size:1rem;font-weight:600;color:var(--text)}
+    .step-shot{display:block;width:100%;background:#000;cursor:zoom-in;position:relative}
+    .step-shot img{display:block;width:100%;height:auto}
+    .step-shot::after{
+      content:"⤢";
+      position:absolute; top:12px; right:12px;
+      width:34px;height:34px;border-radius:9px;
+      background:rgba(15,17,21,.72);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--text);
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;
+      opacity:0; transition:opacity .15s ease;
+      pointer-events:none;
+    }
+    .step-shot:hover::after,.step-shot:focus-visible::after{opacity:1}
+    .step-shot:focus-visible{outline:2px solid var(--brand);outline-offset:-2px}
+    .step-caption{padding:16px 22px 20px;color:var(--muted);font-size:.92rem;margin:0}
+
+    footer{
+      margin-top:48px;
+      padding-top:24px;
+      padding-bottom:2px;
+      border-top:1px solid #232a3a;
+      color:var(--muted);
+      font-size:0.9rem;
+      background:linear-gradient(
+        to bottom,
+        rgba(20,24,33,0) 0%,
+        rgba(20,24,33,0.65) 100%
+      );
+      flex-shrink:0;
+    }
+    footer .links{
+      margin-top:6px;
+      gap:8px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    footer a{
+      color:var(--muted);
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    footer a:hover{
+      color:var(--brand);
+      text-decoration:none;
+    }
+
+    .lightbox{
+      position:fixed; inset:0; z-index:1000;
+      background:rgba(6,7,10,.92);
+      display:none;
+      align-items:center; justify-content:center;
+      padding:min(6vh,60px) min(6vw,60px);
+      cursor:zoom-out;
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      max-width:100%; max-height:100%;
+      width:auto; height:auto;
+      border-radius:10px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+      border:1px solid rgba(255,255,255,.1);
+      cursor:default;
+    }
+    .lightbox-close{
+      position:fixed; top:20px; right:24px;
+      width:44px;height:44px;border-radius:12px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.16);
+      color:var(--text);
+      font-size:1.4rem; line-height:1;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.12)}
+    .lightbox-caption{
+      position:fixed; left:0; right:0; bottom:18px;
+      text-align:center; color:var(--muted);
+      font-size:.9rem; padding:0 24px;
+      pointer-events:none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <nav class="topnav" aria-label="Sections">
+      <a href="/MTPortfolio/">Home</a>
+      <a href="/MTPortfolio/The%20Lab%20Environment">The Lab Environment</a>
+      <a href="/MTPortfolio/Infrastructure%20%26%20Sysadmin">Infrastructure &amp; Sysadmin</a>
+      <a href="/MTPortfolio/Hybrid%20Cloud%20-%20Azure" class="active">Hybrid Cloud / Azure</a>
+      <a href="/MTPortfolio/Security">Security</a>
+      <a href="/MTPortfolio/Automation%20%26%20Scripting">Automation &amp; Scripting</a>
+      <a href="/MTPortfolio/Blogs">Blog</a>
+    </nav><br><br>
+
+    <header>
+      <h1>Conditional Access Policies</h1>
+      <p class="lead">With hybrid sync healthy and monitored, this lab turns to access control: building two Microsoft Entra Conditional Access policies from scratch, a group scoped MFA requirement and a legacy authentication block, and pushing both from Report-only through to full enforcement.</p>
+    </header>
+
+    <div class="device-card">
+      <h2>Conditional Access Environment</h2>
+      <p class="model">Microsoft Entra Conditional Access</p>
+      <dl class="device-grid">
+        <dt>Entra ID Tenant</dt><dd>markandrewt01outlook075.onmicrosoft.com</dd>
+        <dt>Test Group</dt><dd>CA-MFA-Test</dd>
+        <dt>Test Account</dt><dd>Test.User (synced, hybrid identity)</dd>
+        <dt>License Tier</dt><dd>Microsoft Entra ID P2 (Trial)</dd>
+        <dt>Policies Built</dt><dd>CA01, CA02</dd>
+      </dl>
+    </div>
+
+    <!-- ===================== TEST GROUP AND LICENSE SETUP ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Test Group and License Setup</h2>
+        <span class="step-count">7 steps</span>
+      </div>
+      <p class="section-desc">Conditional Access requires an Entra ID P1 or P2 license on any user a policy targets, so Test.User needed a license from the P2 trial before anything else. From there, a dedicated security group kept the blast radius of two potentially disruptive policies contained to a single disposable test account rather than a daily driver identity.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Licensing Test.User with Entra ID P2</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/1-AssignP2LicenseToTest_User.png', 'Microsoft 365 admin center user details panel assigning the P2 trial license to Test.User')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/1-AssignP2LicenseToTest_User.png', 'Microsoft 365 admin center user details panel assigning the P2 trial license to Test.User')" aria-label="Zoom image: Microsoft 365 admin center user details panel assigning the P2 trial license to Test.User"><img src="Images/1-AssignP2LicenseToTest_User.png" alt="Microsoft 365 admin center user details panel assigning the P2 trial license to Test.User"></div>
+          <p class="step-caption">Assigned the <strong>Microsoft Entra ID P2</strong> trial license to Test.User from the Microsoft 365 admin center, with 98 of 100 trial licenses remaining afterward.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Groups overview, before creation</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/2-CreateGroupInEntra.png', 'Groups Overview blade showing zero groups in the tenant')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/2-CreateGroupInEntra.png', 'Groups Overview blade showing zero groups in the tenant')" aria-label="Zoom image: Groups Overview blade showing zero groups in the tenant"><img src="Images/2-CreateGroupInEntra.png" alt="Groups Overview blade showing zero groups in the tenant"></div>
+          <p class="step-caption">Starting point in <strong>Entra ID &gt; Groups &gt; Overview</strong>, no groups exist yet in the tenant.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Creating the CA-MFA-Test group</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/3-CreateGroupInEntra.png', 'New Group form with Security type, CA-MFA-Test name, description, and Assigned membership type')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/3-CreateGroupInEntra.png', 'New Group form with Security type, CA-MFA-Test name, description, and Assigned membership type')" aria-label="Zoom image: New Group form with Security type, CA-MFA-Test name, description, and Assigned membership type"><img src="Images/3-CreateGroupInEntra.png" alt="New Group form with Security type, CA-MFA-Test name, description, and Assigned membership type"></div>
+          <p class="step-caption">Set up a new <strong>Security</strong> group named <strong>CA-MFA-Test</strong>, described as the MFA security group for this Conditional Access policy, with <strong>Assigned</strong> membership.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Adding an owner</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/4-CreateGroupInEntra.png', 'Add owners panel with Test.User selected')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/4-CreateGroupInEntra.png', 'Add owners panel with Test.User selected')" aria-label="Zoom image: Add owners panel with Test.User selected"><img src="Images/4-CreateGroupInEntra.png" alt="Add owners panel with Test.User selected"></div>
+          <p class="step-caption">Selected <strong>Test.User</strong> as the group owner.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Adding the member</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/5-CreateGroupInEntra.png', 'Add members panel with Test.User selected')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/5-CreateGroupInEntra.png', 'Add members panel with Test.User selected')" aria-label="Zoom image: Add members panel with Test.User selected"><img src="Images/5-CreateGroupInEntra.png" alt="Add members panel with Test.User selected"></div>
+          <p class="step-caption">Added <strong>Test.User</strong> as the group's sole member, the account this lab's two policies would target.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Final review before creating the group</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/6-CreateGroupInEntra.png', 'New Group form showing 1 owner and 1 member selected, ready to create')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/6-CreateGroupInEntra.png', 'New Group form showing 1 owner and 1 member selected, ready to create')" aria-label="Zoom image: New Group form showing 1 owner and 1 member selected, ready to create"><img src="Images/6-CreateGroupInEntra.png" alt="New Group form showing 1 owner and 1 member selected, ready to create"></div>
+          <p class="step-caption">With 1 owner and 1 member selected, clicked <strong>Create</strong>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">CA-MFA-Test created</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/7-GroupCreated.png', 'All groups list confirming CA-MFA-Test as a Security group with Assigned membership')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/7-GroupCreated.png', 'All groups list confirming CA-MFA-Test as a Security group with Assigned membership')" aria-label="Zoom image: All groups list confirming CA-MFA-Test as a Security group with Assigned membership"><img src="Images/7-GroupCreated.png" alt="All groups list confirming CA-MFA-Test as a Security group with Assigned membership"></div>
+          <p class="step-caption"><strong>Groups &gt; All groups</strong> confirms CA-MFA-Test exists as a Security group with Assigned membership, ready to be targeted by a Conditional Access policy.</p>
+        </article>
+      </div>
+
+      <div class="callout note">
+        <strong>Note</strong>
+        Test.User was set as both the group's owner and its member. In a production tenant, ownership of a security group that gates a person's own access would normally sit with an administrator, not the account the policy is scoped to test. Left as-is here since it does not affect how Conditional Access evaluates membership, but worth calling out as a deliberate simplification rather than an oversight.
+      </div>
+    </section>
+
+    <!-- ===================== BUILDING CA01 ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Building CA01: Require MFA for Test Group</h2>
+        <span class="step-count">13 steps</span>
+      </div>
+      <p class="section-desc">With the group in place, moved to Conditional Access to scope a policy that requires multifactor authentication for anyone in CA-MFA-Test, targeting every resource in the tenant. Built in Report-only mode first, the standard practice for any new Conditional Access policy, so nothing would actually enforce until the policy's behavior had been verified against a real sign-in.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Conditional Access overview</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/8-ConditionalAccess.png', 'Conditional Access Policies landing page with the New policy button')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/8-ConditionalAccess.png', 'Conditional Access Policies landing page with the New policy button')" aria-label="Zoom image: Conditional Access Policies landing page with the New policy button"><img src="Images/8-ConditionalAccess.png" alt="Conditional Access Policies landing page with the New policy button"></div>
+          <p class="step-caption">Landed on <strong>Entra ID &gt; Conditional Access &gt; Policies</strong>, with zero policies created so far.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Starting a new policy</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/9-ConditionalAccess.png', 'Blank New Conditional Access policy screen with Report-only default and a security defaults warning')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/9-ConditionalAccess.png', 'Blank New Conditional Access policy screen with Report-only default and a security defaults warning')" aria-label="Zoom image: Blank New Conditional Access policy screen with Report-only default and a security defaults warning"><img src="Images/9-ConditionalAccess.png" alt="Blank New Conditional Access policy screen with Report-only default and a security defaults warning"></div>
+          <p class="step-caption">Blank policy screen defaults <strong>Enable policy</strong> to Report-only, and already flags that Security defaults will need to be disabled before a policy can actually enforce.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Naming the policy</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/10-ConditionalAccess.png', 'Name field filled in with CA01 - Require MFA for Test Group')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/10-ConditionalAccess.png', 'Name field filled in with CA01 - Require MFA for Test Group')" aria-label="Zoom image: Name field filled in with CA01 - Require MFA for Test Group"><img src="Images/10-ConditionalAccess.png" alt="Name field filled in with CA01 - Require MFA for Test Group"></div>
+          <p class="step-caption">Named it <strong>CA01 - Require MFA for Test Group</strong>, the first of a numbered pair to keep this and the follow-on legacy auth policy easy to tell apart.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Opening the Users assignment</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/11-ConditionalAccess.png', 'Users and groups Include options with None, All users, and Select users and groups')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/11-ConditionalAccess.png', 'Users and groups Include options with None, All users, and Select users and groups')" aria-label="Zoom image: Users and groups Include options with None, All users, and Select users and groups"><img src="Images/11-ConditionalAccess.png" alt="Users and groups Include options with None, All users, and Select users and groups"></div>
+          <p class="step-caption">Under Assignments, opened <strong>Users or workload identities</strong> to scope who this policy applies to.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Selecting users and groups</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/12-ConditionalAccess.png', 'Select users and groups chosen, showing an unconfigured warning until a group is picked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/12-ConditionalAccess.png', 'Select users and groups chosen, showing an unconfigured warning until a group is picked')" aria-label="Zoom image: Select users and groups chosen, showing an unconfigured warning until a group is picked"><img src="Images/12-ConditionalAccess.png" alt="Select users and groups chosen, showing an unconfigured warning until a group is picked"></div>
+          <p class="step-caption">Chose <strong>Select users and groups</strong>, which flags as unconfigured until an actual group is picked.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Targeting CA-MFA-Test</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/13-ConditionalAccess.png', 'Select users and groups picker with CA-MFA-Test checked in the Groups tab')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/13-ConditionalAccess.png', 'Select users and groups picker with CA-MFA-Test checked in the Groups tab')" aria-label="Zoom image: Select users and groups picker with CA-MFA-Test checked in the Groups tab"><img src="Images/13-ConditionalAccess.png" alt="Select users and groups picker with CA-MFA-Test checked in the Groups tab"></div>
+          <p class="step-caption">Selected the <strong>CA-MFA-Test</strong> group rather than Test.User directly, so the policy demonstrates group-based targeting the way it would actually be built in a real environment.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Scoping target resources</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/14-ConditionalAccess.png', 'Target resources Include options with All resources selected')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/14-ConditionalAccess.png', 'Target resources Include options with All resources selected')" aria-label="Zoom image: Target resources Include options with All resources selected"><img src="Images/14-ConditionalAccess.png" alt="Target resources Include options with All resources selected"></div>
+          <p class="step-caption">Under Target resources, selected <strong>All resources (formerly 'All cloud apps')</strong>, the simplest scope for a lab demonstration.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Opening Grant</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/15-ConditionalAccess.png', 'Grant panel with Block access and Grant access options and unchecked controls')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/15-ConditionalAccess.png', 'Grant panel with Block access and Grant access options and unchecked controls')" aria-label="Zoom image: Grant panel with Block access and Grant access options and unchecked controls"><img src="Images/15-ConditionalAccess.png" alt="Grant panel with Block access and Grant access options and unchecked controls"></div>
+          <p class="step-caption">Opened the <strong>Grant</strong> panel under Access controls, defaulted to Grant access with no controls checked yet.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Requiring multifactor authentication</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/16-ConditionalAccess.png', 'Grant access with Require multifactor authentication checked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/16-ConditionalAccess.png', 'Grant access with Require multifactor authentication checked')" aria-label="Zoom image: Grant access with Require multifactor authentication checked"><img src="Images/16-ConditionalAccess.png" alt="Grant access with Require multifactor authentication checked"></div>
+          <p class="step-caption">Checked <strong>Require multifactor authentication</strong> under Grant access.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Excluding the admin account</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/17-ConditionalAccess.png', 'Exclude tab with Users and groups checked, showing an unconfigured warning')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/17-ConditionalAccess.png', 'Exclude tab with Users and groups checked, showing an unconfigured warning')" aria-label="Zoom image: Exclude tab with Users and groups checked, showing an unconfigured warning"><img src="Images/17-ConditionalAccess.png" alt="Exclude tab with Users and groups checked, showing an unconfigured warning"></div>
+          <p class="step-caption">Switched to the <strong>Exclude</strong> tab and checked Users and groups, standard practice to keep the admin account signed in with from ever being locked out by its own policy.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">11</span><h3 class="step-title">Selecting the excluded account</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/18-ConditionalAccess.png', 'Select excluded users and groups picker with Mark Thompson selected')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/18-ConditionalAccess.png', 'Select excluded users and groups picker with Mark Thompson selected')" aria-label="Zoom image: Select excluded users and groups picker with Mark Thompson selected"><img src="Images/18-ConditionalAccess.png" alt="Select excluded users and groups picker with Mark Thompson selected"></div>
+          <p class="step-caption">Excluded the <strong>Mark Thompson</strong> admin account from the policy.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Final review before creating</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/19-ConditionalAccess.png', 'Policy summary screen with 1 control selected and Report-only enabled, ready to Create')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/19-ConditionalAccess.png', 'Policy summary screen with 1 control selected and Report-only enabled, ready to Create')" aria-label="Zoom image: Policy summary screen with 1 control selected and Report-only enabled, ready to Create"><img src="Images/19-ConditionalAccess.png" alt="Policy summary screen with 1 control selected and Report-only enabled, ready to Create"></div>
+          <p class="step-caption">With Grant, Target resources, and Assignments all configured and Enable policy left on <strong>Report-only</strong>, clicked <strong>Create</strong>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">13</span><h3 class="step-title">CA01 created</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/20-ConditionalAccess.png', 'Policy list showing CA01 created with a State of Report-only')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/20-ConditionalAccess.png', 'Policy list showing CA01 created with a State of Report-only')" aria-label="Zoom image: Policy list showing CA01 created with a State of Report-only"><img src="Images/20-ConditionalAccess.png" alt="Policy list showing CA01 created with a State of Report-only"></div>
+          <p class="step-caption">CA01 now shows in the policy list with a State of <strong>Report-only</strong>, evaluating sign-ins without enforcing anything yet.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== TESTING AND TROUBLESHOOTING ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Testing CA01 in Report-Only Mode</h2>
+        <span class="step-count">16 steps</span>
+      </div>
+      <p class="section-desc">Verifying a Report-only policy sounds simple, sign in as the test user and check the logs, but this stretch surfaced two real gotchas along the way: a tenant-wide setting that silences Conditional Access entirely, and a sign-in log layout that separates enforced results from report-only ones. Both are documented here as they actually happened.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">First interactive sign-in as Test.User</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/21-ConditionalAccess.png', 'Microsoft sign in screen with Test.User entered')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/21-ConditionalAccess.png', 'Microsoft sign in screen with Test.User entered')" aria-label="Zoom image: Microsoft sign in screen with Test.User entered"><img src="Images/21-ConditionalAccess.png" alt="Microsoft sign in screen with Test.User entered"></div>
+          <p class="step-caption">Opened an InPrivate window and signed in as <strong>Test.User</strong> to trigger the first evaluation of CA01.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Mandatory Authenticator registration</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/22-ConditionalAccess.png', 'Install Microsoft Authenticator prompt during first sign-in')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/22-ConditionalAccess.png', 'Install Microsoft Authenticator prompt during first sign-in')" aria-label="Zoom image: Install Microsoft Authenticator prompt during first sign-in"><img src="Images/22-ConditionalAccess.png" alt="Install Microsoft Authenticator prompt during first sign-in"></div>
+          <p class="step-caption">First sign-in required registering an authentication method, driven by Security defaults being active on the tenant at this point, not by CA01 which was still Report-only.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Checking the sign-in log</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/23-Test_User_SignIn.png', 'Sign-in events list under User sign-ins interactive')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/23-Test_User_SignIn.png', 'Sign-in events list under User sign-ins interactive')" aria-label="Zoom image: Sign-in events list under User sign-ins interactive"><img src="Images/23-Test_User_SignIn.png" alt="Sign-in events list under User sign-ins interactive"></div>
+          <p class="step-caption">Switched to <strong>Monitoring &amp; health &gt; Sign-in logs</strong>, User sign-ins (interactive) tab, to review the Test.User event against OfficeHome.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Basic info: single-factor authentication</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/24-Test_User_SignInLogReview.png', 'Activity Details Basic info tab showing single-factor authentication and MFA satisfied by claim in the token')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/24-Test_User_SignInLogReview.png', 'Activity Details Basic info tab showing single-factor authentication and MFA satisfied by claim in the token')" aria-label="Zoom image: Activity Details Basic info tab showing single-factor authentication and MFA satisfied by claim in the token"><img src="Images/24-Test_User_SignInLogReview.png" alt="Activity Details Basic info tab showing single-factor authentication and MFA satisfied by claim in the token"></div>
+          <p class="step-caption">Basic info showed <strong>Single-factor authentication</strong>, Status Success, with a note that MFA was satisfied by a claim already present in the token from the registration step.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Conditional access tab shows Security Defaults, not CA01</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/25-Test_User_SignInLogReview.png', 'Conditional access tab listing Security Defaults as the matching policy')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/25-Test_User_SignInLogReview.png', 'Conditional access tab listing Security Defaults as the matching policy')" aria-label="Zoom image: Conditional access tab listing Security Defaults as the matching policy"><img src="Images/25-Test_User_SignInLogReview.png" alt="Conditional access tab listing Security Defaults as the matching policy"></div>
+          <p class="step-caption">The Conditional access tab lists only <strong>Security Defaults</strong>, not CA01. Security defaults and Conditional Access are mutually exclusive, so with defaults on, CA01 was never being evaluated at all.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Confirming Security defaults is enabled</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/26-SecurityDefaultsReview.png', 'Tenant Properties page confirming the organization is protected by security defaults')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/26-SecurityDefaultsReview.png', 'Tenant Properties page confirming the organization is protected by security defaults')" aria-label="Zoom image: Tenant Properties page confirming the organization is protected by security defaults"><img src="Images/26-SecurityDefaultsReview.png" alt="Tenant Properties page confirming the organization is protected by security defaults"></div>
+          <p class="step-caption">Confirmed in <strong>Entra ID &gt; Overview &gt; Properties</strong> that the tenant is protected by Security defaults.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Opening the Security defaults panel</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/27-SecurityDefaultsReview.png', 'Security defaults panel with the setting shown as Enabled')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/27-SecurityDefaultsReview.png', 'Security defaults panel with the setting shown as Enabled')" aria-label="Zoom image: Security defaults panel with the setting shown as Enabled"><img src="Images/27-SecurityDefaultsReview.png" alt="Security defaults panel with the setting shown as Enabled"></div>
+          <p class="step-caption">Opened <strong>Manage security defaults</strong>, currently set to Enabled.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Disabling Security defaults</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/28-SecurityDefaultsReview.png', 'Security defaults panel set to Disabled with a reason selected for using Conditional Access')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/28-SecurityDefaultsReview.png', 'Security defaults panel set to Disabled with a reason selected for using Conditional Access')" aria-label="Zoom image: Security defaults panel set to Disabled with a reason selected for using Conditional Access"><img src="Images/28-SecurityDefaultsReview.png" alt="Security defaults panel set to Disabled with a reason selected for using Conditional Access"></div>
+          <p class="step-caption">Switched the setting to <strong>Disabled</strong>, selecting "My organization is planning to use Conditional Access" as the reason, and saved.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Signing in again post-disable</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/29-Test_UserSignInConditionalAccessPolicyTest.png', 'Fresh InPrivate sign-in screen for Test.User after disabling security defaults')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/29-Test_UserSignInConditionalAccessPolicyTest.png', 'Fresh InPrivate sign-in screen for Test.User after disabling security defaults')" aria-label="Zoom image: Fresh InPrivate sign-in screen for Test.User after disabling security defaults"><img src="Images/29-Test_UserSignInConditionalAccessPolicyTest.png" alt="Fresh InPrivate sign-in screen for Test.User after disabling security defaults"></div>
+          <p class="step-caption">Opened a fresh InPrivate window and signed in as Test.User again, now that Security defaults was out of the way.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Sign-in succeeds with no MFA prompt</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/30-Test_UserSignLoginSuccessfulWithout2FAPrompt.png', 'Copilot landing page after Test.User signs in with no MFA prompt')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/30-Test_UserSignLoginSuccessfulWithout2FAPrompt.png', 'Copilot landing page after Test.User signs in with no MFA prompt')" aria-label="Zoom image: Copilot landing page after Test.User signs in with no MFA prompt"><img src="Images/30-Test_UserSignLoginSuccessfulWithout2FAPrompt.png" alt="Copilot landing page after Test.User signs in with no MFA prompt"></div>
+          <p class="step-caption">Sign-in completed with no MFA prompt, exactly as expected for a Report-only policy, which evaluates but never enforces.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">11</span><h3 class="step-title">Reviewing the new sign-in event</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/31-Test_UserSignInLogReview.png', 'Sign-in events list with new Test.User entries after disabling security defaults')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/31-Test_UserSignInLogReview.png', 'Sign-in events list with new Test.User entries after disabling security defaults')" aria-label="Zoom image: Sign-in events list with new Test.User entries after disabling security defaults"><img src="Images/31-Test_UserSignInLogReview.png" alt="Sign-in events list with new Test.User entries after disabling security defaults"></div>
+          <p class="step-caption">Back in Sign-in logs, the newest Test.User event was ready to inspect.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Conditional access tab shows Not applicable</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/32-Test_UserSignInLogReview.png', 'Conditional access tab showing Not applicable')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/32-Test_UserSignInLogReview.png', 'Conditional access tab showing Not applicable')" aria-label="Zoom image: Conditional access tab showing Not applicable"><img src="Images/32-Test_UserSignInLogReview.png" alt="Conditional access tab showing Not applicable"></div>
+          <p class="step-caption">The main <strong>Conditional access</strong> tab reads <strong>Not applicable</strong>. This tab only lists what was actually enforced, and Report-only policies never enforce anything, so this looked like a failure at first.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">13</span><h3 class="step-title">Finding CA01 under the Report only tab</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/33-Test_UserSignInLogReview.png', 'Report only tab listing CA01 with a Report-only User action required result')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/33-Test_UserSignInLogReview.png', 'Report only tab listing CA01 with a Report-only User action required result')" aria-label="Zoom image: Report only tab listing CA01 with a Report-only User action required result"><img src="Images/33-Test_UserSignInLogReview.png" alt="Report only tab listing CA01 with a Report-only User action required result"></div>
+          <p class="step-caption">A separate <strong>Report only</strong> tab lists <strong>CA01</strong> with Grant control Mfa, confirming the policy matched and evaluated exactly as intended.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">14</span><h3 class="step-title">Policy list still shows Report-only</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/34-ConditionalAccessPolicyEnable.png', 'Conditional Access policy list showing CA01 with a State of Report-only')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/34-ConditionalAccessPolicyEnable.png', 'Conditional Access policy list showing CA01 with a State of Report-only')" aria-label="Zoom image: Conditional Access policy list showing CA01 with a State of Report-only"><img src="Images/34-ConditionalAccessPolicyEnable.png" alt="Conditional Access policy list showing CA01 with a State of Report-only"></div>
+          <p class="step-caption">Confirmed CA01's State is still <strong>Report-only</strong> in the policy list before making any changes.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">15</span><h3 class="step-title">Policy details panel</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/35-ConditionalAccessPolicyEnable.png', 'Policy details panel for CA01 showing State Report-only and requirements for access')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/35-ConditionalAccessPolicyEnable.png', 'Policy details panel for CA01 showing State Report-only and requirements for access')" aria-label="Zoom image: Policy details panel for CA01 showing State Report-only and requirements for access"><img src="Images/35-ConditionalAccessPolicyEnable.png" alt="Policy details panel for CA01 showing State Report-only and requirements for access"></div>
+          <p class="step-caption">The Policy details view lays out CA01's full configuration in one place, 1 group included, 1 user excluded, all resources, MFA required, state Report-only.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">16</span><h3 class="step-title">Opening the policy to flip the toggle</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/36-ConditionalAccessPolicyEnable.png', 'CA01 edit screen with the Enable policy toggle still on Report-only')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/36-ConditionalAccessPolicyEnable.png', 'CA01 edit screen with the Enable policy toggle still on Report-only')" aria-label="Zoom image: CA01 edit screen with the Enable policy toggle still on Report-only"><img src="Images/36-ConditionalAccessPolicyEnable.png" alt="CA01 edit screen with the Enable policy toggle still on Report-only"></div>
+          <p class="step-caption">With Report-only confirmed working correctly, opened CA01's edit screen ready to move Enable policy to On.</p>
+        </article>
+      </div>
+
+      <div class="callout warning">
+        <strong>Constraint</strong>
+        Security defaults and Conditional Access cannot run at the same time. With Security defaults enabled, CA01 evaluated silently in the background but never appeared as the matching policy in the sign-in log, Security Defaults did instead. Security defaults has to be disabled before a Conditional Access policy's Report-only or enforced results become visible.
+      </div>
+
+      <div class="callout resolved">
+        <strong>Lesson Learned</strong>
+        The sign-in log's Conditional access tab only shows policies that actually enforced. A policy running in Report-only never shows up there, it lives under a separate Report only tab instead. Seeing Not applicable on the main tab does not mean a Report-only policy failed to evaluate, it means the Report only tab is the one to check.
+      </div>
+    </section>
+
+    <!-- ===================== ENFORCING CA01 ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Enforcing CA01</h2>
+        <span class="step-count">7 steps</span>
+      </div>
+      <p class="section-desc">With CA01 verified in Report-only, moved to enforcement, the point where the policy actually starts requiring MFA rather than just observing.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Flipping Enable policy to On</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/37-ConditionalAccessPolicyEnable.png', 'CA01 edit screen with Enable policy toggled to On and a Save button')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/37-ConditionalAccessPolicyEnable.png', 'CA01 edit screen with Enable policy toggled to On and a Save button')" aria-label="Zoom image: CA01 edit screen with Enable policy toggled to On and a Save button"><img src="Images/37-ConditionalAccessPolicyEnable.png" alt="CA01 edit screen with Enable policy toggled to On and a Save button"></div>
+          <p class="step-caption">Moved <strong>Enable policy</strong> to <strong>On</strong> and clicked Save.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Policy list confirms State: On</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/38-ConditionalAccessPolicyEnable.png', 'Policy list showing CA01 with a State of On')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/38-ConditionalAccessPolicyEnable.png', 'Policy list showing CA01 with a State of On')" aria-label="Zoom image: Policy list showing CA01 with a State of On"><img src="Images/38-ConditionalAccessPolicyEnable.png" alt="Policy list showing CA01 with a State of On"></div>
+          <p class="step-caption">CA01 now shows <strong>State: On</strong>, actively enforcing.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Testing sign-in with enforcement live</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/39-Test_UserSignInTest.png', 'Fresh InPrivate sign-in screen for Test.User with CA01 enforced')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/39-Test_UserSignInTest.png', 'Fresh InPrivate sign-in screen for Test.User with CA01 enforced')" aria-label="Zoom image: Fresh InPrivate sign-in screen for Test.User with CA01 enforced"><img src="Images/39-Test_UserSignInTest.png" alt="Fresh InPrivate sign-in screen for Test.User with CA01 enforced"></div>
+          <p class="step-caption">Opened a fresh InPrivate session and signed in as Test.User again, this time with CA01 fully enforced.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">The MFA prompt appears</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/40-Test_UserSignInTestAuthPrompt.png', 'Approve sign in request screen with a number match prompt for Microsoft Authenticator')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/40-Test_UserSignInTestAuthPrompt.png', 'Approve sign in request screen with a number match prompt for Microsoft Authenticator')" aria-label="Zoom image: Approve sign in request screen with a number match prompt for Microsoft Authenticator"><img src="Images/40-Test_UserSignInTestAuthPrompt.png" alt="Approve sign in request screen with a number match prompt for Microsoft Authenticator"></div>
+          <p class="step-caption">This time the sign-in stopped for a real <strong>Approve sign in request</strong> prompt, a number match challenge through Microsoft Authenticator, the first concrete proof CA01 was doing its job.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Sign-in completes after approval</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/41-Test_UserSignInLoginSuccessAfter2FAPrompt.png', 'Copilot landing page after Test.User approves the MFA challenge')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/41-Test_UserSignInLoginSuccessAfter2FAPrompt.png', 'Copilot landing page after Test.User approves the MFA challenge')" aria-label="Zoom image: Copilot landing page after Test.User approves the MFA challenge"><img src="Images/41-Test_UserSignInLoginSuccessAfter2FAPrompt.png" alt="Copilot landing page after Test.User approves the MFA challenge"></div>
+          <p class="step-caption">After approving the request, the sign-in completed normally.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Reviewing the enforced sign-in</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/42-EntraMonitorSignInLoginReview.png', 'Sign-in events list with the newest Test.User entry after MFA enforcement')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/42-EntraMonitorSignInLoginReview.png', 'Sign-in events list with the newest Test.User entry after MFA enforcement')" aria-label="Zoom image: Sign-in events list with the newest Test.User entry after MFA enforcement"><img src="Images/42-EntraMonitorSignInLoginReview.png" alt="Sign-in events list with the newest Test.User entry after MFA enforcement"></div>
+          <p class="step-caption">Opened the newest sign-in event in Sign-in logs to confirm enforcement in the record.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">CA01 shows Success on the Conditional access tab</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/43-EntraMonitorSignInLoginReview.png', 'Conditional access tab listing CA01 with Grant control Mfa and Result Success')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/43-EntraMonitorSignInLoginReview.png', 'Conditional access tab listing CA01 with Grant control Mfa and Result Success')" aria-label="Zoom image: Conditional access tab listing CA01 with Grant control Mfa and Result Success"><img src="Images/43-EntraMonitorSignInLoginReview.png" alt="Conditional access tab listing CA01 with Grant control Mfa and Result Success"></div>
+          <p class="step-caption">This time the main <strong>Conditional access</strong> tab lists <strong>CA01</strong> directly, Grant control Mfa, Result Success, full end to end confirmation from Report-only through live enforcement.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===================== BUILDING AND ENABLING CA02 ===================== -->
+    <section class="section-block">
+      <div class="section-head">
+        <h2>Building and Enabling CA02: Block Legacy Authentication</h2>
+        <span class="step-count">13 steps</span>
+      </div>
+      <p class="section-desc">With CA01 proven end to end, built a second policy targeting legacy authentication protocols, the ones that predate modern auth and cannot satisfy MFA or Conditional Access at all. Same test group, same Report-only discipline before enforcing.</p>
+
+      <div class="steps">
+        <article class="step">
+          <div class="step-header"><span class="step-num">1</span><h3 class="step-title">Clean baseline before CA02</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/44-CA02CAPolicyCreation.png', 'Policy list showing only CA01 with a State of On before CA02 is created')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/44-CA02CAPolicyCreation.png', 'Policy list showing only CA01 with a State of On before CA02 is created')" aria-label="Zoom image: Policy list showing only CA01 with a State of On before CA02 is created"><img src="Images/44-CA02CAPolicyCreation.png" alt="Policy list showing only CA01 with a State of On before CA02 is created"></div>
+          <p class="step-caption">Confirmed CA01 alone, State On, before starting the second policy.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">2</span><h3 class="step-title">Naming CA02</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/45-CA02CAPolicyCreation.png', 'New policy Name field filled in with CA02 - Block Legacy Authentication')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/45-CA02CAPolicyCreation.png', 'New policy Name field filled in with CA02 - Block Legacy Authentication')" aria-label="Zoom image: New policy Name field filled in with CA02 - Block Legacy Authentication"><img src="Images/45-CA02CAPolicyCreation.png" alt="New policy Name field filled in with CA02 - Block Legacy Authentication"></div>
+          <p class="step-caption">Named the new policy <strong>CA02 - Block Legacy Authentication</strong>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">3</span><h3 class="step-title">Selecting users and groups</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/46-CA02CAPolicyCreation.png', 'Users Include tab with Select users and groups chosen and an unconfigured warning')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/46-CA02CAPolicyCreation.png', 'Users Include tab with Select users and groups chosen and an unconfigured warning')" aria-label="Zoom image: Users Include tab with Select users and groups chosen and an unconfigured warning"><img src="Images/46-CA02CAPolicyCreation.png" alt="Users Include tab with Select users and groups chosen and an unconfigured warning"></div>
+          <p class="step-caption">Same as CA01, chose Select users and groups, unconfigured until a group is picked.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">4</span><h3 class="step-title">Reusing CA-MFA-Test</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/47-CA02CAPolicyCreation.png', 'Select users and groups picker with CA-MFA-Test checked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/47-CA02CAPolicyCreation.png', 'Select users and groups picker with CA-MFA-Test checked')" aria-label="Zoom image: Select users and groups picker with CA-MFA-Test checked"><img src="Images/47-CA02CAPolicyCreation.png" alt="Select users and groups picker with CA-MFA-Test checked"></div>
+          <p class="step-caption">Reused <strong>CA-MFA-Test</strong> rather than scoping to All users, keeping a potentially disruptive block policy contained to the test account.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">5</span><h3 class="step-title">Target resources: All resources</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/48-CA02CAPolicyCreation.png', 'Target resources Include tab with All resources selected')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/48-CA02CAPolicyCreation.png', 'Target resources Include tab with All resources selected')" aria-label="Zoom image: Target resources Include tab with All resources selected"><img src="Images/48-CA02CAPolicyCreation.png" alt="Target resources Include tab with All resources selected"></div>
+          <p class="step-caption">Selected <strong>All resources</strong> under Target resources, same as CA01.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">6</span><h3 class="step-title">Opening Conditions</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/49-CA02CAPolicyCreation.png', 'Conditions section with 0 conditions selected and other fields not configured')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/49-CA02CAPolicyCreation.png', 'Conditions section with 0 conditions selected and other fields not configured')" aria-label="Zoom image: Conditions section with 0 conditions selected and other fields not configured"><img src="Images/49-CA02CAPolicyCreation.png" alt="Conditions section with 0 conditions selected and other fields not configured"></div>
+          <p class="step-caption">Scrolled to <strong>Conditions</strong>, the section this policy actually depends on, since legacy auth is defined by client app type rather than group or resource.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">7</span><h3 class="step-title">Client apps panel, unconfigured</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/50-CA02CAPolicyCreation.png', 'Client apps panel with Configure set to No and every client app option unchecked')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/50-CA02CAPolicyCreation.png', 'Client apps panel with Configure set to No and every client app option unchecked')" aria-label="Zoom image: Client apps panel with Configure set to No and every client app option unchecked"><img src="Images/50-CA02CAPolicyCreation.png" alt="Client apps panel with Configure set to No and every client app option unchecked"></div>
+          <p class="step-caption">Opened <strong>Client apps</strong> under Conditions, defaulted to Configure: No.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">8</span><h3 class="step-title">Scoping to legacy authentication clients</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/51-CA02CAPolicyCreation.png', 'Client apps panel with Configure set to Yes and Exchange ActiveSync clients and Other clients checked under Legacy authentication clients')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/51-CA02CAPolicyCreation.png', 'Client apps panel with Configure set to Yes and Exchange ActiveSync clients and Other clients checked under Legacy authentication clients')" aria-label="Zoom image: Client apps panel with Configure set to Yes and Exchange ActiveSync clients and Other clients checked under Legacy authentication clients"><img src="Images/51-CA02CAPolicyCreation.png" alt="Client apps panel with Configure set to Yes and Exchange ActiveSync clients and Other clients checked under Legacy authentication clients"></div>
+          <p class="step-caption">Set Configure to <strong>Yes</strong> and checked only <strong>Exchange ActiveSync clients</strong> and <strong>Other clients</strong> under Legacy authentication clients, leaving Browser and Mobile apps and desktop clients unchecked. This is the step most likely to get missed, checking a modern auth box here would defeat the point of the policy.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">9</span><h3 class="step-title">Setting Grant to Block access</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/52-CA02CAPolicyCreation.png', 'Grant panel with Block access selected')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/52-CA02CAPolicyCreation.png', 'Grant panel with Block access selected')" aria-label="Zoom image: Grant panel with Block access selected"><img src="Images/52-CA02CAPolicyCreation.png" alt="Grant panel with Block access selected"></div>
+          <p class="step-caption">Under Grant, selected <strong>Block access</strong> rather than Grant access, since the goal here is to deny legacy auth outright rather than layer a control on top of it.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">10</span><h3 class="step-title">Final review before creating CA02</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/53-CA02CAPolicyCreation.png', 'Policy summary screen with Block access, 1 condition selected, and Report-only enabled')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/53-CA02CAPolicyCreation.png', 'Policy summary screen with Block access, 1 condition selected, and Report-only enabled')" aria-label="Zoom image: Policy summary screen with Block access, 1 condition selected, and Report-only enabled"><img src="Images/53-CA02CAPolicyCreation.png" alt="Policy summary screen with Block access, 1 condition selected, and Report-only enabled"></div>
+          <p class="step-caption">With Grant, Target resources, and Conditions all configured and Enable policy left on <strong>Report-only</strong>, clicked <strong>Create</strong>.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">11</span><h3 class="step-title">CA02 created alongside CA01</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/54-CA02CAPolicyCreation.png', 'Policy list showing CA01 On and CA02 Report-only')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/54-CA02CAPolicyCreation.png', 'Policy list showing CA01 On and CA02 Report-only')" aria-label="Zoom image: Policy list showing CA01 On and CA02 Report-only"><img src="Images/54-CA02CAPolicyCreation.png" alt="Policy list showing CA01 On and CA02 Report-only"></div>
+          <p class="step-caption">The policy list now shows both policies, CA01 On and CA02 Report-only.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">12</span><h3 class="step-title">Enabling CA02</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/55-CA02CAPolicyCreation.png', 'CA02 detail page with Enable policy toggled to On and a Save button')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/55-CA02CAPolicyCreation.png', 'CA02 detail page with Enable policy toggled to On and a Save button')" aria-label="Zoom image: CA02 detail page with Enable policy toggled to On and a Save button"><img src="Images/55-CA02CAPolicyCreation.png" alt="CA02 detail page with Enable policy toggled to On and a Save button"></div>
+          <p class="step-caption">Moved CA02's <strong>Enable policy</strong> to <strong>On</strong> and saved.</p>
+        </article>
+
+        <article class="step">
+          <div class="step-header"><span class="step-num">13</span><h3 class="step-title">Both policies enforcing</h3></div>
+          <div class="step-shot" onclick="openLightbox('Images/56-CA02CAPolicyCreation.png', 'Final policy list showing both CA01 and CA02 with a State of On')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openLightbox('Images/56-CA02CAPolicyCreation.png', 'Final policy list showing both CA01 and CA02 with a State of On')" aria-label="Zoom image: Final policy list showing both CA01 and CA02 with a State of On"><img src="Images/56-CA02CAPolicyCreation.png" alt="Final policy list showing both CA01 and CA02 with a State of On"></div>
+          <p class="step-caption">The final state of this lab: <strong>CA01</strong> and <strong>CA02</strong> both showing <strong>State: On</strong>, a group scoped MFA requirement and a legacy authentication block, both fully enforcing.</p>
+        </article>
+      </div>
+
+      <div class="callout note">
+        <strong>Note</strong>
+        Testing CA02 against a live legacy auth connection was attempted using PowerShell with basic authentication against Exchange Online, and it failed immediately with a WinRM transport error rather than an authentication denial. That failure turned out to have nothing to do with CA02, Microsoft fully retired Remote PowerShell basic-auth connections to Exchange Online tenant-wide back in October 2022, independent of any Conditional Access configuration. Rather than chase an increasingly rare legacy client just to force a green result, CA02 was enabled as-is. It serves as defense-in-depth against a protocol surface Microsoft has already been closing off at the platform level, and that finding is itself a more accurate picture of the current state of legacy authentication than a manufactured test would have been.
+      </div>
+    </section>
+
+    <footer>
+      <div>Mark Thompson · MTPortfolio</div>
+      <div class="links">
+        <a href="https://www.linkedin.com/in/mark-thompson-9361a81a9/" target="_blank" rel="noopener">LinkedIn</a> ·
+        <a href="https://github.com/mark-thompson01" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()" aria-label="Close">✕</button>
+    <img id="lightbox-img" src="" alt="">
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <script>
+    function openLightbox(src, alt){
+      const lb = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      img.src = src;
+      img.alt = alt;
+      cap.textContent = alt;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox(){
+      const lb = document.getElementById('lightbox');
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape') closeLightbox();
+    });
+  </script>
+</body>
+</html>
