@@ -254,7 +254,7 @@
       </section>
 
       <section>
-        <h2>pfSense — Initial Implementation and Limitations</h2>
+        <h2>pfSense - Initial Implementation and Limitations</h2>
         <p>pfSense was initially deployed as a virtualized firewall running on the Hyper-V host (SRV-HYPERV-01). While pfSense is a capable open-source firewall platform, its integration into this lab environment exposed a critical architectural constraint.</p>
         <p>The pfSense LAN interface relied on a USB network adapter connected to the 2950 Fa0/2 port on VLAN 20. This meant the same physical USB adapter was carrying both pfSense LAN traffic and VM traffic from the Hyper-V host, with no dedicated physical separation between the firewall and the network it was protecting. This created persistent connectivity issues that could not be resolved without additional hardware.</p>
         <p>The decision was made to replace pfSense with a physical FortiGate 60E, eliminating the shared adapter problem entirely and introducing enterprise-grade firewall hardware directly relevant to the target employer environment.</p>
