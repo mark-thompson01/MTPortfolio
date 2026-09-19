@@ -270,7 +270,7 @@ Get-Item WSMan:\localhost\Client\TrustedHosts</code></pre>
             <img src="Images/start9.png" alt="Set-Item and Get-Item confirming TrustedHosts value SRV-HYPERV-01 on DC01" loading="lazy" />
             <figcaption><span>Adding SRV-HYPERV-01 to DC01's TrustedHosts</span></figcaption>
           </figure>
-          <p>The PSSession is retried using the local Lab-Client account on SRV-HYPERV-01, since the host is not domain-joined and cannot authenticate domain credentials.</p>
+          <p>Here I learned that the Hyper-V host can't be used for authentication without it being domain connected. So the PSSession is retried using the local Lab-Client account on SRV-HYPERV-01, since the host is not domain-joined and cannot authenticate domain credentials.</p>
           <pre class="cmd-block"><code>Enter-PSSession -ComputerName SRV-HYPERV-01 -Credential (Get-Credential)</code></pre>
           <figure class="shot shot-lg">
             <img src="Images/start10.png" alt="Credential prompt for the local Lab-Client account" loading="lazy" />
