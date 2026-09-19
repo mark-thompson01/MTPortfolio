@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>FortiGate 60E Firewall Setup & Config · Mark Thompson Portfolio</title>
-  <meta name="description" content="Replacing pfSense with a physical FortiGate 60E as the lab's perimeter firewall — WAN/LAN interface setup, transit subnet routing, firewall policy, and VLAN management migration." />
+  <meta name="description" content="Replacing pfSense with a physical FortiGate 60E as the lab's perimeter firewall - WAN/LAN interface setup, transit subnet routing, firewall policy, and VLAN management migration." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -125,6 +125,19 @@
     }
     .callout p:last-child{margin-bottom:0}
 
+    /* Numbered section headings */
+    article.content h2.numbered{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .step-num{
+      flex:0 0 auto; width:34px; height:34px; border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:0.95rem; color:var(--brand);
+      background:rgba(77,163,255,.08); border:1px solid #2a3a55;
+    }
+
     /* Image zoom / lightbox */
     article.content figure img{
       cursor:zoom-in;
@@ -243,14 +256,14 @@
 
     <header>
       <h1>FortiGate 60E Firewall Setup & Config</h1>
-      <p class="lead">Replacing a virtualized pfSense firewall with a physical FortiGate 60E as the lab's perimeter firewall — dedicated WAN/LAN interfaces, a routed transit subnet to the core switch, firewall policy, static routing, and a management VLAN migration.</p>
+      <p class="lead">Replacing a virtualized pfSense firewall with a physical FortiGate 60E as the lab's perimeter firewall - dedicated WAN/LAN interfaces, a routed transit subnet to the core switch, firewall policy, static routing, and a management VLAN migration.</p>
     </header>
 
     <article class="content">
 
       <section>
         <h2>Overview</h2>
-        <p>The FortiGate 60E was introduced as a replacement for pfSense, which had persistent connectivity issues stemming from a fundamental architectural limitation. The FortiGate 60E is a physical enterprise-grade next-generation firewall manufactured by Fortinet, providing dedicated WAN and LAN interfaces, hardware-accelerated packet processing, and FortiOS — the same operating system used in production enterprise and MSP environments.</p>
+        <p>The FortiGate 60E was introduced as a replacement for pfSense, which had persistent connectivity issues stemming from a fundamental architectural limitation. The FortiGate 60E is a physical enterprise-grade next-generation firewall manufactured by Fortinet, providing dedicated WAN and LAN interfaces, hardware-accelerated packet processing, and FortiOS - the same operating system used in production enterprise and MSP environments.</p>
       </section>
 
       <section>
@@ -271,7 +284,7 @@
       </section>
 
       <section>
-        <h2>Initial Access</h2>
+        <h2 class="numbered"><span class="step-num">1</span>Initial Access</h2>
         <p>The FortiGate 60E was configured entirely via serial console using PuTTY on COM6, as the WebGUI was inaccessible prior to initial configuration. This is standard procedure for first-time FortiGate deployment. Initial login used the default admin credentials via the serial console connection.</p>
         <figure>
           <img src="Images/ftg1.png" alt="Serial console login to the FortiGate 60E via PuTTY on COM6">
@@ -280,7 +293,7 @@
       </section>
 
       <section>
-        <h2>Interface Configuration</h2>
+        <h2 class="numbered"><span class="step-num">2</span>Interface Configuration</h2>
         <h3>WAN1</h3>
         <p>WAN1 was configured for DHCP to obtain an IP address from the SOHO router:</p>
         <figure>
@@ -294,10 +307,10 @@
       </section>
 
       <section>
-        <h2>Initial LAN Interface Configuration — Troubleshooting</h2>
+        <h2 class="numbered"><span class="step-num">3</span>Initial LAN Interface Configuration - Troubleshooting</h2>
         <div class="callout">
           <p>After completing WAN1 configuration, the next step was assigning the LAN-side IP address (<span class="inline-code">192.168.50.1/24</span>) to the FortiGate's internal interface. Initial attempts to configure this via <span class="inline-code">edit internal1</span> returned a <span class="inline-code">command parse error before 'ip'</span> and <span class="inline-code">Command fail. Return code -61</span>.</p>
-          <p>Investigation revealed that on the FortiGate 60E, <span class="inline-code">internal1</span> through <span class="inline-code">internal7</span> are physical member ports of a virtual switch — they are Layer 2 ports and cannot be assigned IP addresses directly. The routable interface is the parent virtual switch interface, <span class="inline-code">internal</span>.</p>
+          <p>Investigation revealed that on the FortiGate 60E, <span class="inline-code">internal1</span> through <span class="inline-code">internal7</span> are physical member ports of a virtual switch - they are Layer 2 ports and cannot be assigned IP addresses directly. The routable interface is the parent virtual switch interface, <span class="inline-code">internal</span>.</p>
           <p>Reconfiguring via <span class="inline-code">edit internal</span> with <span class="inline-code">set ip 192.168.50.1 255.255.255.0</span> and <span class="inline-code">set allowaccess http https ping ssh</span> applied successfully, as confirmed by <span class="inline-code">show system interface</span>.</p>
         </div>
         <figure>
@@ -307,7 +320,7 @@
       </section>
 
       <section>
-        <h2>Transit Subnet Architecture</h2>
+        <h2 class="numbered"><span class="step-num">4</span>Transit Subnet Architecture</h2>
         <p>Rather than placing the FortiGate directly on an existing VLAN subnet, a dedicated /30 transit subnet (<span class="inline-code">192.168.100.0/30</span>) was established between the FortiGate and the 3550. This follows enterprise best practices by creating a clean point-to-point routed link between the firewall and the core switch, keeping the perimeter firewall logically separate from internal VLAN segments.</p>
         <ul>
           <li>FortiGate internal interface: <span class="inline-code">192.168.100.1/30</span></li>
@@ -320,11 +333,11 @@
       </section>
 
       <section>
-        <h2>3550 Fa0/24 Reconfiguration — Uplink to FortiGate</h2>
+        <h2 class="numbered"><span class="step-num">5</span>3550 Fa0/24 Reconfiguration - Uplink to FortiGate</h2>
         <div class="callout">
           <p>After successfully configuring the FortiGate's internal interface at <span class="inline-code">192.168.50.1/24</span>, attempting to access the FortiGate WebGUI from the Hyper-V host at <span class="inline-code">https://192.168.50.1</span> failed. The Hyper-V host was able to ping the FortiGate's WAN1 address (<span class="inline-code">192.168.1.148</span>) via the SOHO network, but could not reach <span class="inline-code">192.168.50.1</span> at all.</p>
-          <p>Investigation revealed the root cause — the <span class="inline-code">192.168.50.0/24</span> subnet had never existed as a routed segment in the lab. Previously, <span class="inline-code">192.168.50.1</span> was pfSense's LAN address, which was connected directly via USB adapter and never integrated into the 3550's routing table. The FortiGate was now assigned that address but no path existed for lab devices to reach it.</p>
-          <p><span class="inline-code">show interface fa0/24</span> on the 3550 confirmed the port still had its old configuration — a routed port with IP <span class="inline-code">192.168.1.2/24</span> and description "Uplink-to-SOHO-Router" — left over from when the 3550 connected directly to the SOHO router before the FortiGate was introduced.</p>
+          <p>Investigation revealed the root cause - the <span class="inline-code">192.168.50.0/24</span> subnet had never existed as a routed segment in the lab. Previously, <span class="inline-code">192.168.50.1</span> was pfSense's LAN address, which was connected directly via USB adapter and never integrated into the 3550's routing table. The FortiGate was now assigned that address but no path existed for lab devices to reach it.</p>
+          <p><span class="inline-code">show interface fa0/24</span> on the 3550 confirmed the port still had its old configuration - a routed port with IP <span class="inline-code">192.168.1.2/24</span> and description "Uplink-to-SOHO-Router" - left over from when the 3550 connected directly to the SOHO router before the FortiGate was introduced.</p>
           <p>The fix was to reconfigure Fa0/24 as the dedicated uplink to the FortiGate on the <span class="inline-code">192.168.100.0/30</span> transit subnet, assign it <span class="inline-code">192.168.100.2/30</span>, and update the 3550's default route to point to the FortiGate at <span class="inline-code">192.168.100.1</span> rather than the SOHO router at <span class="inline-code">192.168.1.1</span>.</p>
         </div>
         <figure>
@@ -338,7 +351,7 @@
       </section>
 
       <section>
-        <h2>Firewall Policies</h2>
+        <h2 class="numbered"><span class="step-num">6</span>Firewall Policies</h2>
         <p>Two firewall policies were configured on the FortiGate:</p>
         <ul>
           <li><strong>LAN-to-WAN:</strong> allows all internal traffic to reach the internet with NAT enabled</li>
@@ -355,13 +368,13 @@
       </section>
 
       <section>
-        <h2>Static Routes</h2>
+        <h2 class="numbered"><span class="step-num">7</span>Static Routes</h2>
         <p>Static routes were added to the FortiGate so return traffic destined for internal VLANs is correctly forwarded back through the 3550:</p>
         <ul>
-          <li><span class="inline-code">192.168.10.0/24</span> via <span class="inline-code">192.168.100.2</span> (VLAN 10 — Servers)</li>
-          <li><span class="inline-code">192.168.20.0/24</span> via <span class="inline-code">192.168.100.2</span> (VLAN 20 — Infrastructure)</li>
-          <li><span class="inline-code">192.168.40.0/24</span> via <span class="inline-code">192.168.100.2</span> (VLAN 40 — Clients)</li>
-          <li><span class="inline-code">192.168.50.0/24</span> via <span class="inline-code">192.168.100.2</span> (VLAN 50 — Management)</li>
+          <li><span class="inline-code">192.168.10.0/24</span> via <span class="inline-code">192.168.100.2</span> (VLAN 10 - Servers)</li>
+          <li><span class="inline-code">192.168.20.0/24</span> via <span class="inline-code">192.168.100.2</span> (VLAN 20 - Infrastructure)</li>
+          <li><span class="inline-code">192.168.40.0/24</span> via <span class="inline-code">192.168.100.2</span> (VLAN 40 - Clients)</li>
+          <li><span class="inline-code">192.168.50.0/24</span> via <span class="inline-code">192.168.100.2</span> (VLAN 50 - Management)</li>
         </ul>
         <figure>
           <img src="Images/ftg11-Static-VLAN-Routes%20on%20Fortigate.png" alt="Static routes for each internal VLAN configured on the FortiGate">
@@ -370,7 +383,7 @@
       </section>
 
       <section>
-        <h2>Management VLAN Migration — VLAN 1 to VLAN 50</h2>
+        <h2 class="numbered"><span class="step-num">8</span>Management VLAN Migration - VLAN 1 to VLAN 50</h2>
         <p>During connectivity verification, ping tests from the FortiGate to the switch management IPs (<span class="inline-code">192.168.50.2</span>, <span class="inline-code">192.168.50.4</span>) failed. Investigation revealed that while the switches had management IPs assigned on the <span class="inline-code">192.168.50.0/24</span> subnet, they were configured on VLAN 1 rather than a dedicated management VLAN.</p>
         <p>In enterprise environments, using VLAN 1 for management traffic is considered a security risk. VLAN 1 is the default VLAN on Cisco switches and is present on all ports by default, making it more susceptible to VLAN hopping attacks. Best practice is to configure a dedicated management VLAN and disable VLAN 1 where possible.</p>
         <p>To align with enterprise security standards, VLAN 50 was created as a dedicated management VLAN on both switches. Switch management IPs were migrated from VLAN 1 SVIs to VLAN 50 SVIs, and VLAN 50 was added to the trunk allowed list on both the 3550 and 2950.</p>
@@ -406,16 +419,16 @@
         </figure>
         <figure>
           <img src="Images/ftg22-2550-showinterface-fa0-23.png" alt="show running-config interface fa0/23 on Switch001 confirming VLAN 50 is in the trunk allowed list">
-          <figcaption>Switch001 Fa0/23 trunk to Switch002 — allowed VLANs include 50</figcaption>
+          <figcaption>Switch001 Fa0/23 trunk to Switch002 - allowed VLANs include 50</figcaption>
         </figure>
         <figure>
           <img src="Images/ftg23-3550-showinterface-fa0-23.png" alt="show running-config interface fa0/23 on Switch002 confirming VLAN 50 is in the trunk allowed list">
-          <figcaption>Switch002 Fa0/23 trunk to Switch001 — allowed VLANs include 50</figcaption>
+          <figcaption>Switch002 Fa0/23 trunk to Switch001 - allowed VLANs include 50</figcaption>
         </figure>
       </section>
 
       <section>
-        <h2>Connectivity Verification</h2>
+        <h2 class="numbered"><span class="step-num">9</span>Connectivity Verification</h2>
         <p>End-to-end connectivity was verified across all VLANs following the completion of all configurations:</p>
         <ul>
           <li>FortiGate to internet (<span class="inline-code">8.8.8.8</span>): Success</li>
@@ -425,7 +438,7 @@
           <li>Windows Server DC to VLAN 10 devices: Success</li>
           <li>Raspberry Pi 5 to other VLANs and internet: Success</li>
         </ul>
-        <p>Note: the Hyper-V host (<span class="inline-code">192.168.20.11</span>) does not respond to inbound ping requests from other devices due to Windows Firewall blocking inbound ICMP by default. This is expected behavior and confirmed correct security posture — the Hyper-V host can successfully initiate outbound connections to all VLANs and the internet.</p>
+        <p>Note: the Hyper-V host (<span class="inline-code">192.168.20.11</span>) does not respond to inbound ping requests from other devices due to Windows Firewall blocking inbound ICMP by default. This is expected behavior and confirmed correct security posture - the Hyper-V host can successfully initiate outbound connections to all VLANs and the internet.</p>
 
         <h3>Initial Checks</h3>
         <p>With the LAN-to-WAN policy and static routes in place, the first round of checks confirmed the transit link, a VLAN 20 host, and internet reachability from the FortiGate, plus internet reachability from the Windows Server DC:</p>
@@ -474,31 +487,31 @@
         <p>With the LAN-to-LAN policy added, a final comprehensive pass confirmed every path was working as expected:</p>
         <figure>
           <img src="Images/ftg31PingTest1.png" alt="Ping test 1: FortiGate to both switch management IPs">
-          <figcaption>Test 1 — FortiGate → switch management IPs</figcaption>
+          <figcaption>Test 1 - FortiGate → switch management IPs</figcaption>
         </figure>
         <figure>
           <img src="Images/ftg32PingTest2VLAN10.png" alt="Ping test 2: FortiGate to VLAN 10 hosts">
-          <figcaption>Test 2 — FortiGate → VLAN 10 hosts</figcaption>
+          <figcaption>Test 2 - FortiGate → VLAN 10 hosts</figcaption>
         </figure>
         <figure>
           <img src="Images/ftg33PingTest3VLAN20.png" alt="Ping test 3: FortiGate to VLAN 20 hosts">
-          <figcaption>Test 3 — FortiGate → VLAN 20 hosts</figcaption>
+          <figcaption>Test 3 - FortiGate → VLAN 20 hosts</figcaption>
         </figure>
         <figure>
           <img src="Images/ftg34PingTest4FromDC.png" alt="Ping test 4: Windows Server DC to VLAN 10 hosts">
-          <figcaption>Test 4 — Windows Server DC → VLAN 10 hosts</figcaption>
+          <figcaption>Test 4 - Windows Server DC → VLAN 10 hosts</figcaption>
         </figure>
         <figure>
           <img src="Images/ftg35PingTest5FromFortiGateInternet.png" alt="Ping test 5: FortiGate to the internet">
-          <figcaption>Test 5 — FortiGate → internet (<span class="inline-code">8.8.8.8</span>)</figcaption>
+          <figcaption>Test 5 - FortiGate → internet (<span class="inline-code">8.8.8.8</span>)</figcaption>
         </figure>
         <figure>
           <img src="Images/ftg36PingTest6DC-to-Internet.png" alt="Ping test 6: Windows Server DC to the internet">
-          <figcaption>Test 6 — Windows Server DC → internet</figcaption>
+          <figcaption>Test 6 - Windows Server DC → internet</figcaption>
         </figure>
         <figure>
           <img src="Images/ftg37PingTest7RaspberryPi5.png" alt="Ping test 7: Raspberry Pi 5 to VLAN 20, the transit subnet, and the internet">
-          <figcaption>Test 7 — Raspberry Pi 5 → VLAN 20, transit subnet, and internet</figcaption>
+          <figcaption>Test 7 - Raspberry Pi 5 → VLAN 20, transit subnet, and internet</figcaption>
         </figure>
       </section>
 
