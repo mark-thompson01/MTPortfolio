@@ -237,7 +237,7 @@ Get-ExecutionPolicy</code></pre>
           </figure>
           <pre class="cmd-block"><code>Import-Module ActiveDirectory
 Get-Module -ListAvailable | Where-Object {$_.Name -in @('ActiveDirectory','DHCPServer','DNSServer')} | Select-Object Name, Version, ModuleType</code></pre>
-          <figure class="shot">
+          <figure class="shot shot-lg">
             <img src="Images/start5.png" alt="Import-Module ActiveDirectory then Get-Module showing ActiveDirectory, DhcpServer, and DnsServer" loading="lazy" />
             <figcaption><span>Importing ActiveDirectory and confirming DnsServer availability</span></figcaption>
           </figure>
