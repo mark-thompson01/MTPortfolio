@@ -125,6 +125,74 @@
     }
     .callout p:last-child{margin-bottom:0}
 
+    /* Image zoom / lightbox */
+    article.content figure img{
+      cursor:zoom-in;
+      transition:border-color .15s ease;
+    }
+    article.content figure img:hover{border-color:#3a4a67}
+    article.content figure img:focus-visible{
+      outline:2px solid var(--brand);
+      outline-offset:3px;
+    }
+
+    .lightbox{
+      position:fixed;
+      inset:0;
+      z-index:1000;
+      display:none;
+      box-sizing:border-box;
+      padding:24px;
+      overflow:auto;
+      background:rgba(8,10,15,.92);
+    }
+    .lightbox.open{display:flex}
+    .lightbox img{
+      margin:auto;               /* stays centered without clipping when zoomed */
+      max-width:100%;
+      max-height:100%;
+      border-radius:10px;
+      border:1px solid var(--card-border);
+      box-shadow:var(--shadow);
+      cursor:zoom-in;
+    }
+    .lightbox.zoomed img{
+      max-width:none;            /* native resolution, scroll to pan */
+      max-height:none;
+      cursor:zoom-out;
+    }
+    .lightbox-close{
+      position:fixed;
+      top:16px;
+      right:20px;
+      z-index:1001;
+      width:42px;
+      height:42px;
+      border-radius:12px;
+      border:1px solid #3a4a67;
+      background:rgba(20,24,33,.85);
+      color:var(--text);
+      font-size:24px;
+      line-height:1;
+      cursor:pointer;
+    }
+    .lightbox-close:hover{background:rgba(255,255,255,.1)}
+    .lightbox-close:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+    .lightbox-hint{
+      position:fixed;
+      left:50%;
+      bottom:16px;
+      transform:translateX(-50%);
+      z-index:1001;
+      padding:6px 14px;
+      border-radius:999px;
+      background:rgba(20,24,33,.85);
+      border:1px solid var(--card-border);
+      color:var(--muted);
+      font-size:.85rem;
+      pointer-events:none;
+    }
+
     /* Footer */
     footer{
       margin-top:48px;
@@ -444,5 +512,81 @@
       </div>
     </footer>
   </div>
+
+  <!-- Image zoom lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Enlarged image">
+    <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Close enlarged image">&times;</button>
+    <img id="lightbox-img" alt="">
+    <div class="lightbox-hint" id="lightbox-hint">Click image for full size · Esc to close</div>
+  </div>
+
+  <script>
+  (function () {
+    var lb = document.getElementById('lightbox');
+    var lbImg = document.getElementById('lightbox-img');
+    var lbClose = document.getElementById('lightbox-close');
+    var lbHint = document.getElementById('lightbox-hint');
+    var lastFocused = null;
+
+    function openLightbox(img) {
+      lastFocused = img;
+      lbImg.src = img.currentSrc || img.src;
+      lbImg.alt = img.alt || '';
+      lb.classList.remove('zoomed');
+      lbHint.textContent = 'Click image for full size · Esc to close';
+      lb.classList.add('open');
+      lb.scrollTop = 0;
+      lb.scrollLeft = 0;
+      document.body.style.overflow = 'hidden';
+      lbClose.focus();
+    }
+
+    function closeLightbox() {
+      lb.classList.remove('open', 'zoomed');
+      lbImg.removeAttribute('src');
+      document.body.style.overflow = '';
+      if (lastFocused) lastFocused.focus();
+    }
+
+    function toggleZoom() {
+      var zoomed = lb.classList.toggle('zoomed');
+      lbHint.textContent = zoomed
+        ? 'Scroll to pan · click image to fit screen · Esc to close'
+        : 'Click image for full size · Esc to close';
+      if (!zoomed) {
+        lb.scrollTop = 0;
+        lb.scrollLeft = 0;
+      }
+    }
+
+    // Attach to every screenshot in the article
+    document.querySelectorAll('article.content figure img').forEach(function (img) {
+      img.tabIndex = 0;
+      img.setAttribute('role', 'button');
+      img.addEventListener('click', function () { openLightbox(img); });
+      img.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openLightbox(img);
+        }
+      });
+    });
+
+    // Click image = toggle full size; click backdrop or X = close
+    lbImg.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleZoom();
+    });
+    lb.addEventListener('click', closeLightbox);
+    lbClose.addEventListener('click', function (e) {
+      e.stopPropagation();
+      closeLightbox();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && lb.classList.contains('open')) closeLightbox();
+    });
+  })();
+  </script>
 </body>
 </html>
