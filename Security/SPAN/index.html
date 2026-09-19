@@ -148,11 +148,11 @@
 
     <header>
       <h1>SPAN - Switch Port Analyzer Configuration</h1>
-      <p class="lead">Mirroring live switch traffic to a dedicated capture VM using a Cisco SPAN session, an isolated Hyper-V virtual switch, and Wireshark — to get real visibility into what's actually crossing the wire in the lab.</p>
+      <p class="lead">Mirroring live switch traffic to a dedicated capture VM using a Cisco SPAN session, an isolated Hyper-V virtual switch, and Wireshark, to get real visibility into what's actually crossing the wire in the lab.</p>
     </header>
 
     <h2><span class="step-num">1</span>Objective</h2>
-    <p>Port mirroring (SPAN — Switch Port Analyzer) copies traffic from one or more source ports to a destination port, so a packet analyzer can see traffic it would never normally receive on a switched network. The goal here was to mirror the uplinks and trunk carrying inter-VLAN and lab traffic to a capture point, then use Wireshark to baseline normal traffic and spot anything worth investigating — retransmissions, failed auth, unexpected broadcast/multicast chatter, DNS failures, and so on.</p>
+    <p>Port mirroring (SPAN, or Switch Port Analyzer) copies traffic from one or more source ports to a destination port, so a packet analyzer can see traffic it would never normally receive on a switched network. The goal here was to mirror the uplinks and trunk carrying inter-VLAN and lab traffic to a capture point, then use Wireshark to baseline normal traffic and spot anything worth investigating: retransmissions, failed auth, unexpected broadcast/multicast chatter, DNS failures, and so on.</p>
     <p>The setup has two halves: configuring the SPAN session on the physical Cisco switch, and building an isolated capture path on the Hyper-V host so a VM's NIC receives that mirrored traffic without ever touching the routed lab network.</p>
 
     <h2><span class="step-num">2</span>Configuring the SPAN Session on the Switch</h2>
@@ -166,11 +166,11 @@ Switch001(config)#monitor session 1 source interface fa0/23 both
 Switch001(config)#monitor session 1 destination interface fa0/6
 Switch001(config)#end
 Switch001#write memory</code></pre>
-    <p>Fa0/2–Fa0/5 and the Fa0/23 trunk were set as sources in <code>both</code> directions (RX and TX), with Fa0/6 as the dedicated destination port feeding the capture NIC. <code>show monitor session 1</code> confirms the session is active with ingress learning disabled on the destination port, which is expected — a SPAN destination port doesn't participate in normal switching.</p>
+    <p>Fa0/2–Fa0/5 and the Fa0/23 trunk were set as sources in <code>both</code> directions (RX and TX), with Fa0/6 as the dedicated destination port feeding the capture NIC. <code>show monitor session 1</code> confirms the session is active with ingress learning disabled on the destination port, which is expected since a SPAN destination port doesn't participate in normal switching.</p>
 
     <figure>
       <img src="Images/span1.png" alt="Cisco switch CLI configuring monitor session 1 with source and destination interfaces" onclick="openLightbox(this)">
-      <figcaption>Configuring monitor session 1 on the Cisco switch — Fa0/2–5 and Fa0/23 as sources, Fa0/6 as the SPAN destination.</figcaption>
+      <figcaption>Configuring monitor session 1 on the Cisco switch: Fa0/2–5 and Fa0/23 as sources, Fa0/6 as the SPAN destination.</figcaption>
     </figure>
 
     <h2><span class="step-num">3</span>Building an Isolated Capture Path in Hyper-V</h2>
@@ -188,7 +188,7 @@ Switch001#write memory</code></pre>
     </figure>
     <figure>
       <img src="Images/span4.png" alt="SPAN-Monitor virtual switch bound to the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
-      <figcaption>The <strong>SPAN-Monitor</strong> virtual switch, bound to the ASIX USB-to-Gigabit adapter with "Allow management operating system to share this network adapter" left unchecked — keeping the host itself off the mirrored segment.</figcaption>
+      <figcaption>The <strong>SPAN-Monitor</strong> virtual switch, bound to the ASIX USB-to-Gigabit adapter with "Allow management operating system to share this network adapter" left unchecked, keeping the host itself off the mirrored segment.</figcaption>
     </figure>
 
     <h3>Attaching the capture VM</h3>
@@ -207,18 +207,18 @@ Switch001#write memory</code></pre>
     </figure>
 
     <h3>Setting the NIC to port-mirroring destination</h3>
-    <p>Under the new adapter's Advanced Features, the mirroring mode was set to <strong>Destination</strong> — this is the setting that actually tells Hyper-V to hand this adapter a copy of traffic rather than treat it as a normal network connection.</p>
+    <p>Under the new adapter's Advanced Features, the mirroring mode was set to <strong>Destination</strong>. This is the setting that actually tells Hyper-V to hand this adapter a copy of traffic rather than treat it as a normal network connection.</p>
     <figure>
       <img src="Images/span8.png" alt="Hyper-V port mirroring mode set to Destination on the SPAN-Monitor adapter" onclick="openLightbox(this)">
       <figcaption>Setting the SPAN-Monitor adapter's mirroring mode to Destination under Advanced Features.</figcaption>
     </figure>
 
     <div class="callout">
-      <p><strong>Why a second NIC and a dedicated vSwitch instead of just plugging Wireshark into the trunk:</strong> isolating the mirrored feed on its own virtual switch and physical adapter means the capture VM never sees — or injects into — live lab traffic. It's a passive tap in spirit, built out of what was on hand rather than a purpose-built TAP device.</p>
+      <p><strong>Why a second NIC and a dedicated vSwitch instead of just plugging Wireshark into the trunk:</strong> isolating the mirrored feed on its own virtual switch and physical adapter means the capture VM never sees, or injects into, live lab traffic. It's a passive tap in spirit, built out of what was on hand rather than a purpose-built TAP device.</p>
     </div>
 
     <h3>Confirming the physical adapter mapping</h3>
-    <p>A quick check in Network Connections on the host confirms Ethernet 3 is the ASIX USB-to-Gigabit adapter carrying the SPAN feed — the same adapter bound to the SPAN-Monitor virtual switch above.</p>
+    <p>A quick check in Network Connections on the host confirms Ethernet 3 is the ASIX USB-to-Gigabit adapter carrying the SPAN feed, the same adapter bound to the SPAN-Monitor virtual switch above.</p>
     <figure>
       <img src="Images/span9.png" alt="Windows Network Connections showing Ethernet 3 as the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
       <figcaption>Confirming Ethernet 3 maps to the ASIX USB-to-Gigabit adapter dedicated to the SPAN capture path.</figcaption>
@@ -232,10 +232,10 @@ Switch001#write memory</code></pre>
     </figure>
 
     <h3>First look: unfiltered capture</h3>
-    <p>An unfiltered capture immediately showed a healthy amount of Layer 2 control-plane noise mixed in with real traffic — PVST+ BPDUs advertising the STP root bridge, ARP requests, and ICMP echo traffic between lab hosts.</p>
+    <p>An unfiltered capture immediately showed a healthy amount of Layer 2 control-plane noise mixed in with real traffic: PVST+ BPDUs advertising the STP root bridge, ARP requests, and ICMP echo traffic between lab hosts.</p>
     <figure class="figure-wide">
       <img src="Images/span11.png" alt="Unfiltered Wireshark capture showing mixed STP, ARP, and ICMP traffic" onclick="openLightbox(this)">
-      <figcaption>Unfiltered capture — STP, ARP, and ICMP all visible on the mirrored trunk.</figcaption>
+      <figcaption>Unfiltered capture: STP, ARP, and ICMP all visible on the mirrored trunk.</figcaption>
     </figure>
     <figure class="figure-wide">
       <img src="Images/span12.png" alt="Wireshark capture showing PVST+ configuration BPDUs and an ARP who-has request" onclick="openLightbox(this)">
@@ -264,15 +264,15 @@ Switch001#write memory</code></pre>
     <div class="findings">
       <div class="finding-card">
         <h4>ICMP</h4>
-        <p>Filtering on <code>icmp</code> surfaced steady echo request/reply pairs between 192.168.20.10 and 192.168.10.20, plus a <strong>Destination Unreachable (Port Unreachable)</strong> response from 192.168.10.5 — a clear sign that host was rejecting traffic on a closed port rather than silently dropping it.</p>
+        <p>Filtering on <code>icmp</code> surfaced steady echo request/reply pairs between 192.168.20.10 and 192.168.10.20, plus a <strong>Destination Unreachable (Port Unreachable)</strong> response from 192.168.10.5, a clear sign that host was rejecting traffic on a closed port rather than silently dropping it.</p>
       </div>
       <div class="finding-card">
         <h4>DNS</h4>
-        <p>Filtering on <code>dns</code> showed repeated queries for <code>1.debian.pool.ntp.org</code> and <code>0.freebsd.pool.ntp.org</code> returning <strong>Server failure</strong> responses from the internal resolver at 192.168.10.5 — a useful flag that NTP resolution wasn't fully healthy for at least one lab host.</p>
+        <p>Filtering on <code>dns</code> showed repeated queries for <code>1.debian.pool.ntp.org</code> and <code>0.freebsd.pool.ntp.org</code> returning <strong>Server failure</strong> responses from the internal resolver at 192.168.10.5, a useful flag that NTP resolution wasn't fully healthy for at least one lab host.</p>
       </div>
       <div class="finding-card">
         <h4>SMB / SMB2</h4>
-        <p>Filtering on <code>smb</code> caught NetBIOS Host Announcements naming DC01 as a Domain Controller. Filtering on <code>smb2</code> traced a full negotiate-and-authenticate exchange ending in <strong>STATUS_LOGON_FAILURE</strong> for a service account — worth following up as a possible stale credential or misconfigured account.</p>
+        <p>Filtering on <code>smb</code> caught NetBIOS Host Announcements naming DC01 as a Domain Controller. Filtering on <code>smb2</code> traced a full negotiate-and-authenticate exchange ending in <strong>STATUS_LOGON_FAILURE</strong> for a service account, worth following up as a possible stale credential or misconfigured account.</p>
       </div>
     </div>
 
@@ -296,8 +296,8 @@ Switch001#write memory</code></pre>
     <h2><span class="step-num">6</span>Takeaways</h2>
     <ul>
       <li>SPAN plus an isolated capture VM gives real visibility into switched traffic without touching production VLANs or risking a loop on the destination port.</li>
-      <li>Mirroring a trunk means STP and ARP will dominate the raw capture — <code>not stp and not arp</code> is the fastest way back to signal.</li>
-      <li>Protocol-specific filters (<code>icmp</code>, <code>dns</code>, <code>smb2</code>) turned up concrete, actionable findings: a port-unreachable host, unhealthy NTP resolution, and a failing service account logon — exactly the kind of thing packet analysis is for.</li>
+      <li>Mirroring a trunk means STP and ARP will dominate the raw capture, and <code>not stp and not arp</code> is the fastest way back to signal.</li>
+      <li>Protocol-specific filters (<code>icmp</code>, <code>dns</code>, <code>smb2</code>) turned up concrete, actionable findings: a port-unreachable host, unhealthy NTP resolution, and a failing service account logon, exactly the kind of thing packet analysis is for.</li>
     </ul>
 
     <footer>
