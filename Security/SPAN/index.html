@@ -153,7 +153,7 @@
 
     <h2><span class="step-num">1</span>Objective</h2>
     <p>Port mirroring (SPAN, or Switch Port Analyzer) copies traffic from one or more source ports to a destination port, so a packet analyzer can see traffic it would never normally receive on a switched network. The goal here was to mirror the uplinks and trunk carrying inter-VLAN and lab traffic to a capture point, then use Wireshark to baseline normal traffic and spot anything worth investigating: retransmissions, failed auth, unexpected broadcast/multicast chatter, DNS failures, and so on.</p>
-    <p>The setup has two halves: configuring the SPAN session on the physical Cisco switch, and building an isolated capture path on the Hyper-V host so a VM's NIC receives that mirrored traffic without ever touching the routed lab network.</p>
+    <p>The setup has two halves: configuring the SPAN session on the physical Cisco switch, and building an isolated capture path on the Hyper-V host by setting up a Hyper-V vSwitch with a dedicated Ethernet adapter to receive that mirrored traffic without ever touching the routed lab network.</p>
 
     <h2><span class="step-num">2</span>Configuring the SPAN Session on the Switch</h2>
     <p>On the Cisco switch, a local SPAN session was created with multiple source ports feeding a single destination port dedicated to monitoring:</p>
