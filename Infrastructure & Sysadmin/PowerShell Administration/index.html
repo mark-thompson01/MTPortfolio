@@ -506,7 +506,7 @@ Get-DhcpServerv4Lease -ScopeId 192.168.40.0</code></pre>
 
         <div class="subsection" id="5-4">
           <h3>5.4 VM Disk Path</h3>
-          <p>The VHDX path for the Ubuntu Server VM is queried to confirm the virtual disk location on the D: drive of SRV-HYPERV-01.</p>
+          <p>The VHDX path for the Ubuntu Server VM created earlier is queried to confirm the virtual disk location on the D: drive of SRV-HYPERV-01.</p>
           <pre class="cmd-block"><code>Get-VMHardDiskDrive -VMName 'Ubuntu Server' | Select-Object VMName, Path</code></pre>
           <figure class="shot shot-lg">
             <img src="Images/hypervadmin5.png" alt="Get-VMHardDiskDrive output showing the Ubuntu Server VHDX path on the D: drive" loading="lazy" />
