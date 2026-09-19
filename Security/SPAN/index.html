@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SPAN - Switch Port Analyzer Configuration · Mark Thompson Portfolio</title>
-  <meta name="description" content="Configuring a Cisco SPAN session and a dedicated Hyper-V monitor VM to mirror and analyze switch traffic with Wireshark." />
+  <meta name="description" content="Configuring a Cisco SPAN session and capturing the mirrored traffic with Wireshark on the Hyper-V host, including lessons learned from a capture VM design that did not work." />
   <style>
     :root{
       --bg-1:#0f1115; --bg-2:#141821; --text:#E6E7EE; --muted:#A9ADBE;
@@ -148,14 +148,38 @@
 
     <header>
       <h1>SPAN - Switch Port Analyzer Configuration</h1>
-      <p class="lead">Mirroring live switch traffic to a dedicated capture host using a Cisco SPAN session, an isolated Hyper-V virtual switch, and Wireshark, to get real visibility into what's actually crossing the wire in the lab.</p>
+      <p class="lead">Mirroring live switch traffic to a dedicated capture NIC on the Hyper-V host using a Cisco SPAN session and Wireshark, to get real visibility into what's actually crossing the wire in the lab.</p>
     </header>
 
-    <h2><span class="step-num">1</span>Objective</h2>
-    <p>Port mirroring (SPAN, or Switch Port Analyzer) copies traffic from one or more source ports to a destination port, so a packet analyzer can see traffic it would never normally receive on a switched network. The goal here was to mirror the uplinks and trunk carrying inter-VLAN and lab traffic to a capture point, then use Wireshark to baseline normal traffic and spot anything worth investigating: retransmissions, failed auth, unexpected broadcast/multicast chatter, DNS failures, and so on.</p>
-    <p>The setup has two halves: configuring the SPAN session on the physical Cisco switch, and building an isolated capture path on the Hyper-V host by setting up a Hyper-V vSwitch with a dedicated Ethernet adapter to receive that mirrored traffic without ever touching the routed lab network.</p>
+    <h2><span class="step-num">1</span>Lessons Learned: Why the Hyper-V Host Is the Capture Machine</h2>
+    <p>This lab was not built the way it was first designed. The original plan used a dedicated capture VM as the SPAN destination. That plan ran into a limitation that changed the design, and the reasoning behind that change is as useful as the final configuration, so it comes first.</p>
 
-    <h2><span class="step-num">2</span>Configuring the SPAN Session on the Switch</h2>
+    <h3>The original plan: a dedicated capture VM</h3>
+    <p>The first design cabled a second physical NIC on the Hyper-V host (a USB-to-Gigabit adapter) to the SPAN destination port, bound that adapter to a dedicated external virtual switch named <strong>SPAN-Monitor</strong>, and attached a second virtual NIC on a Windows 11 client VM. That virtual NIC was set to Hyper-V's <strong>Port Mirroring: Destination</strong> mode, with Wireshark running inside the VM.</p>
+
+    <h3>Why it didn't work</h3>
+    <p>The VM saw only a thin slice of the mirrored traffic, while capturing on the host's adapter directly showed far more. The limitation comes from how the virtual switch works:</p>
+    <ul>
+      <li>A Hyper-V virtual switch forwards frames like a Layer 2 switch. A frame arriving from the physical port is delivered to a VM only if it is broadcast, multicast, or addressed to that VM's MAC address. Mirrored frames belonging to other devices are addressed elsewhere, so they never reach the VM's virtual NIC.</li>
+      <li>The Port Mirroring Destination setting mirrors traffic between VMs on the same virtual switch. It does not turn a virtual NIC into a listener for frames arriving from the physical adapter, so it did not solve the problem.</li>
+      <li>The traffic worth analyzing here crosses the physical switch: the inter-switch trunk and the devices on the mirrored ports. Traffic between two VMs on the same host never leaves the virtual switch, so SPAN could not see it anyway. Hyper-V port mirroring is the right tool for that case, and a physical SPAN feed is the right tool for everything else.</li>
+    </ul>
+
+    <h3>The design decision: capture on the host</h3>
+    <p>The fix was to remove the virtual switch and the VM from the capture path entirely. The <strong>Hyper-V host is the destination capture machine</strong> in this lab: the SPAN destination port (Fa0/6) is cabled to a dedicated physical adapter on the host, and Wireshark runs directly on the host and captures on that adapter. The host sees every frame the adapter receives, with no virtual switch deciding what to forward. Every capture on this page was taken this way.</p>
+
+    <div class="callout">
+      <p><strong>Takeaway:</strong> a virtual switch is a poor place to receive a SPAN feed. Put the capture tool on the physical interface that receives the mirrored traffic, and use Hyper-V port mirroring only for VM-to-VM traffic.</p>
+    </div>
+
+    <h3>A note on the capture hardware</h3>
+    <p>The capture NIC here is a USB-to-Gigabit adapter, which works for a lab but is the weak link in the design. USB adapters used for this capture path have dropped the link under sustained mirrored load, and one had to be replaced. Mirroring a trunk as a source makes that worse, since it carries every VLAN on the link. For sustained captures, a PCIe NIC (an Intel i210 or i350 class card) is the better choice, and keeping the source list narrow helps.</p>
+
+    <h2><span class="step-num">2</span>Objective</h2>
+    <p>Port mirroring (SPAN, or Switch Port Analyzer) copies traffic from one or more source ports to a destination port, so a packet analyzer can see traffic it would never normally receive on a switched network. The goal here was to mirror the uplinks and trunk carrying inter-VLAN and lab traffic to a capture point, then use Wireshark to baseline normal traffic and spot anything worth investigating: retransmissions, failed auth, unexpected broadcast/multicast chatter, DNS failures, and so on.</p>
+    <p>The setup has two halves: configuring the SPAN session on the physical Cisco switch, and dedicating a physical NIC on the Hyper-V host to receive that mirrored traffic, with Wireshark running directly on the host as the destination capture machine.</p>
+
+    <h2><span class="step-num">3</span>Configuring the SPAN Session on the Switch</h2>
     <p>On the Cisco switch, a local SPAN session was created with multiple source ports feeding a single destination port dedicated to monitoring:</p>
     <pre><code>Switch001#conf t
 Switch001(config)#monitor session 1 source interface fa0/2 both
@@ -166,69 +190,32 @@ Switch001(config)#monitor session 1 source interface fa0/23 both
 Switch001(config)#monitor session 1 destination interface fa0/6
 Switch001(config)#end
 Switch001#write memory</code></pre>
-    <p>Fa0/2–Fa0/5 and the Fa0/23 trunk were set as sources in <code>both</code> directions (RX and TX), with Fa0/6 as the dedicated destination port feeding the capture NIC. <code>show monitor session 1</code> confirms the session is active with ingress learning disabled on the destination port, which is expected since a SPAN destination port doesn't participate in normal switching.</p>
+    <p>Fa0/2 through Fa0/5 and the Fa0/23 trunk were set as sources in <code>both</code> directions (RX and TX), with Fa0/6 as the dedicated destination port feeding the capture NIC. <code>show monitor session 1</code> confirms the session is active with ingress learning disabled on the destination port, which is expected since a SPAN destination port doesn't participate in normal switching.</p>
 
     <figure>
       <img src="Images/span1.png" alt="Cisco switch CLI configuring monitor session 1 with source and destination interfaces" onclick="openLightbox(this)">
-      <figcaption>Configuring monitor session 1 on the Cisco switch: Fa0/2–5 and Fa0/23 as sources, Fa0/6 as the SPAN destination.</figcaption>
+      <figcaption>Configuring monitor session 1 on the Cisco switch: Fa0/2 through Fa0/5 and Fa0/23 as sources, Fa0/6 as the SPAN destination.</figcaption>
     </figure>
 
-    <h2><span class="step-num">3</span>Building an Isolated Capture Path in Hyper-V</h2>
-    <p>Rather than feeding mirrored traffic into an existing lab switch, a second physical NIC on the Hyper-V host (a USB-to-Gigabit adapter) was cabled directly to the SPAN destination port and dedicated entirely to capture traffic. This keeps mirrored traffic off the routed lab network and avoids any risk of loops or duplicate frames reaching production VMs.</p>
-
-    <h3>Creating a dedicated external virtual switch</h3>
-    <p>In Hyper-V Manager, a new external virtual switch was created and bound to that dedicated adapter.</p>
-    <figure>
-      <img src="Images/span2.png" alt="Hyper-V Manager Virtual Switch Manager menu option" onclick="openLightbox(this)">
-      <figcaption>Opening the Virtual Switch Manager from Hyper-V Manager.</figcaption>
-    </figure>
-    <figure>
-      <img src="Images/span3.png" alt="Creating a new external virtual switch" onclick="openLightbox(this)">
-      <figcaption>Creating a new virtual switch of type External.</figcaption>
-    </figure>
-    <figure>
-      <img src="Images/span4.png" alt="SPAN-Monitor virtual switch bound to the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
-      <figcaption>The <strong>SPAN-Monitor</strong> virtual switch, bound to the ASIX USB-to-Gigabit adapter with "Allow management operating system to share this network adapter" left unchecked, keeping the host itself off the mirrored segment.</figcaption>
-    </figure>
-
-    <h3>Attaching the capture VM</h3>
-    <p>A Windows 11 client VM was given a second network adapter connected to the SPAN-Monitor switch, dedicated purely to receiving mirrored traffic.</p>
-    <figure>
-      <img src="Images/span5.png" alt="Opening Settings for the Win11-Client VM in Hyper-V Manager" onclick="openLightbox(this)">
-      <figcaption>Opening Settings on the Win11-Client capture VM.</figcaption>
-    </figure>
-    <figure>
-      <img src="Images/span6.png" alt="Adding a second network adapter to the VM" onclick="openLightbox(this)">
-      <figcaption>Adding a second Network Adapter alongside the VM's existing LAB_INTERNAL adapter.</figcaption>
-    </figure>
-    <figure>
-      <img src="Images/span7.png" alt="New network adapter bound to the SPAN-Monitor virtual switch" onclick="openLightbox(this)">
-      <figcaption>The new adapter connected to the SPAN-Monitor virtual switch.</figcaption>
-    </figure>
-
-    <h3>Setting the NIC to port-mirroring destination</h3>
-    <p>Under the new adapter's Advanced Features, the mirroring mode was set to <strong>Destination</strong>. This is the setting that actually tells Hyper-V to hand this adapter a copy of traffic rather than treat it as a normal network connection.</p>
-    <figure>
-      <img src="Images/span8.png" alt="Hyper-V port mirroring mode set to Destination on the SPAN-Monitor adapter" onclick="openLightbox(this)">
-      <figcaption>Setting the SPAN-Monitor adapter's mirroring mode to Destination under Advanced Features.</figcaption>
-    </figure>
-
-    <div class="callout">
-      <p><strong>Why a second NIC and a dedicated vSwitch instead of just plugging Wireshark into the trunk:</strong> isolating the mirrored feed on its own virtual switch and physical adapter means the capture VM never sees, or injects into, live lab traffic. It's a passive tap in spirit, built out of what was on hand rather than a purpose-built TAP device.</p>
-    </div>
+    <h2><span class="step-num">4</span>Dedicating a Capture NIC on the Hyper-V Host</h2>
+    <p>Rather than feeding mirrored traffic into an existing lab switch, a second physical NIC on the Hyper-V host (a USB-to-Gigabit adapter) was cabled directly to the SPAN destination port and dedicated entirely to capture traffic. The Hyper-V host itself is the destination capture machine in this lab: Wireshark runs on the host and captures on that adapter directly, with no virtual switch or VM in the path. This keeps mirrored traffic off the routed lab network.</p>
 
     <h3>Confirming the physical adapter mapping</h3>
-    <p>A quick check in Network Connections on the host confirms Ethernet 3 is the ASIX USB-to-Gigabit adapter carrying the SPAN feed, the same adapter bound to the SPAN-Monitor virtual switch above.</p>
+    <p>A quick check in Network Connections on the host confirms Ethernet 3 is the ASIX USB-to-Gigabit adapter carrying the SPAN feed from Fa0/6.</p>
     <figure>
       <img src="Images/span9.png" alt="Windows Network Connections showing Ethernet 3 as the ASIX USB to Gigabit Ethernet adapter" onclick="openLightbox(this)">
       <figcaption>Confirming Ethernet 3 maps to the ASIX USB-to-Gigabit adapter dedicated to the SPAN capture path.</figcaption>
     </figure>
 
-    <h2><span class="step-num">4</span>Capturing Traffic with Wireshark</h2>
-    <p>With the capture path in place, Wireshark was pointed at Ethernet 3 inside the capture VM to start pulling in the mirrored traffic.</p>
+    <div class="callout">
+      <p><strong>Why a dedicated NIC on the host instead of a capture VM:</strong> the adapter carries only the mirrored feed from Fa0/6, so the capture never sees or injects into live lab traffic, and Wireshark sees every frame the adapter receives instead of only what a virtual switch chooses to forward. It's a passive tap in spirit, built out of what was on hand rather than a purpose-built TAP device.</p>
+    </div>
+
+    <h2><span class="step-num">5</span>Capturing Traffic with Wireshark</h2>
+    <p>With the capture NIC in place, Wireshark on the Hyper-V host was pointed at Ethernet 3 to start pulling in the mirrored traffic.</p>
     <figure class="figure-wide">
       <img src="Images/span10.png" alt="Wireshark interface selection screen with Ethernet 3 available" onclick="openLightbox(this)">
-      <figcaption>Wireshark's interface list, with Ethernet 3 (the SPAN feed) ready to capture on.</figcaption>
+      <figcaption>Wireshark's interface list on the Hyper-V host, with Ethernet 3 (the SPAN feed) ready to capture on.</figcaption>
     </figure>
 
     <h3>First look: unfiltered capture</h3>
@@ -258,7 +245,7 @@ Switch001#write memory</code></pre>
       <figcaption>SSDP discovery traffic and DNS queries, with TCP retransmissions to 192.168.10.5 worth a closer look.</figcaption>
     </figure>
 
-    <h2><span class="step-num">5</span>Protocol-Level Analysis</h2>
+    <h2><span class="step-num">6</span>Protocol-Level Analysis</h2>
     <p>With a clean feed established, protocol-specific filters were used to dig into what individual hosts were actually doing.</p>
 
     <div class="findings">
@@ -293,9 +280,10 @@ Switch001#write memory</code></pre>
       <figcaption>SMB2 filter: negotiate → NTLMSSP authentication → STATUS_LOGON_FAILURE for a lab service account.</figcaption>
     </figure>
 
-    <h2><span class="step-num">6</span>Takeaways</h2>
+    <h2><span class="step-num">7</span>Takeaways</h2>
     <ul>
-      <li>SPAN plus an isolated capture VM gives real visibility into switched traffic without touching production VLANs or risking a loop on the destination port.</li>
+      <li>SPAN plus a dedicated capture NIC on the Hyper-V host gives real visibility into switched traffic without touching production VLANs or risking a loop on the destination port.</li>
+      <li>A capture VM behind a virtual switch only sees a fraction of a SPAN feed. Capturing on the host's physical adapter avoids that limitation.</li>
       <li>Mirroring a trunk means STP and ARP will dominate the raw capture, and <code>not stp and not arp</code> is the fastest way back to signal.</li>
       <li>Protocol-specific filters (<code>icmp</code>, <code>dns</code>, <code>smb2</code>) turned up concrete, actionable findings: a port-unreachable host, unhealthy NTP resolution, and a failing service account logon, exactly the kind of thing packet analysis is for.</li>
     </ul>
