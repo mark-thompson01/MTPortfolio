@@ -283,7 +283,7 @@
 
     <header>
       <h1>Raspberry Pi 5 DNS Server Config</h1>
-      <p class="lead">BIND9 configuration showcase — standing up a Raspberry Pi 5 as the secondary, failover DNS resolver for the MTPortfolio lab network.</p>
+      <p class="lead">BIND9 configuration showcase, standing up a Raspberry Pi 5 as the secondary, failover DNS resolver for the MTPortfolio lab network.</p>
     </header>
 
     <!-- 1. Overview -->
@@ -303,7 +303,7 @@
         <tr><td>DNS Software</td><td>BIND9 (Berkeley Internet Name Domain)</td></tr>
         <tr><td>Network Interface</td><td>eth0 (wired Ethernet)</td></tr>
         <tr><td>Static IP Address</td><td>192.168.10.5</td></tr>
-        <tr><td>VLAN</td><td>VLAN 10 — Servers (192.168.10.0/24)</td></tr>
+        <tr><td>VLAN</td><td>VLAN 10 - Servers (192.168.10.0/24)</td></tr>
         <tr><td>Switch Port</td><td>2950 (Switch001) Fa0/4</td></tr>
         <tr><td>Hostname</td><td>RPI-DNS</td></tr>
       </table>
@@ -340,7 +340,7 @@
       <p>Reviewing the default configuration file before adding the static interface block:</p>
       <figure>
         <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="Images/rpdns2.png" alt="dhclient.conf default file contents in nano">
-        <figcaption>Default dhclient.conf contents — request/send directives and commented-out examples.</figcaption>
+        <figcaption>Default dhclient.conf contents, request/send directives and commented-out examples.</figcaption>
       </figure>
 
       <p>Adding the static interface definition to the bottom of the file:</p>
@@ -353,7 +353,7 @@
 }</code></pre>
       <figure>
         <img class="zoomable shot-md" onclick="openLightbox(this.src)" src="Images/rpdns3.png" alt="Static eth0 interface block added to dhclient.conf">
-        <figcaption>Static interface block appended to dhclient.conf — fixed address 192.168.10.5, DNS pointed to itself (127.0.0.1) with the Windows Server DC as secondary.</figcaption>
+        <figcaption>Static interface block appended to dhclient.conf, fixed address 192.168.10.5, DNS pointed to itself (127.0.0.1) with the Windows Server DC as secondary.</figcaption>
       </figure>
       <p class="note">Note: The DNS server points to itself (127.0.0.1) as primary since it runs BIND9, with the Windows Server DC as secondary.</p>
 
@@ -370,7 +370,7 @@
 <span class="cmt"># inet 192.168.10.5/24 brd 192.168.10.255 scope global noprefixroute eth0</span></code></pre>
       <figure>
         <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns5.png" alt="ip addr show eth0 output confirming static IP 192.168.10.5">
-        <figcaption>Verifying the static IP assignment — 192.168.10.5/24 on eth0.</figcaption>
+        <figcaption>Verifying the static IP assignment, 192.168.10.5/24 on eth0.</figcaption>
       </figure>
     </section>
 
@@ -404,8 +404,8 @@
       <h2><span class="num">6</span>BIND9 Configuration</h2>
       <p>BIND9 uses two primary configuration files that need to be edited for the MTPortfolio lab environment:</p>
       <ul>
-        <li><strong>named.conf.options</strong> — Global DNS server options including forwarders and query permissions</li>
-        <li><strong>named.conf.local</strong> — Local zone definitions for internal domains</li>
+        <li><strong>named.conf.options</strong>: Global DNS server options including forwarders and query permissions</li>
+        <li><strong>named.conf.local</strong>: Local zone definitions for internal domains</li>
       </ul>
 
       <h3>6.1 Configure named.conf.options</h3>
@@ -421,11 +421,11 @@
         <figcaption>Default named.conf.options template, prior to setting forwarders and locking down allow-query.</figcaption>
       </figure>
 
-      <p>Replacing the contents with the corrected configuration — forwarders pointed at Google and Cloudflare, with queries restricted to lab subnets only:</p>
+      <p>Replacing the contents with the corrected configuration, forwarders pointed at Google and Cloudflare, with queries restricted to lab subnets only:</p>
       <pre><code>options {
         directory "/var/cache/bind";
 
-        <span class="cmt">// Forwarders — where BIND9 sends queries it cannot resolve locally</span>
+        <span class="cmt">// Forwarders, where BIND9 sends queries it cannot resolve locally</span>
         forwarders {
                 8.8.8.8;        <span class="cmt">// Google DNS</span>
                 1.1.1.1;        <span class="cmt">// Cloudflare DNS fallback</span>
@@ -449,7 +449,7 @@
 };</code></pre>
       <figure>
         <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="Images/rpdns11.png" alt="named.conf.options edited in nano with forwarders and allow-query restricted to lab subnets">
-        <figcaption>Final named.conf.options — forwarders and allow-query restrictions in place.</figcaption>
+        <figcaption>Final named.conf.options, forwarders and allow-query restrictions in place.</figcaption>
       </figure>
       <figure>
         <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="Images/rpdns12.png" alt="cat output confirming named.conf.options contents">
@@ -465,13 +465,13 @@
 
       <pre><code><span class="cmt">// MTPortfolio Lab DNS Configuration
 // BIND9 named.conf.local
-// No internal zones defined — Pi handles external resolution only
+// No internal zones defined, Pi handles external resolution only
 // Internal mtlab.local resolution is handled by the Windows Server DC</span></code></pre>
       <figure>
         <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns14.png" alt="named.conf.local with no zones defined, comments explaining internal resolution is handled elsewhere">
-        <figcaption>named.conf.local left with no zone definitions — internal mtlab.local resolution stays with the Windows Server DC.</figcaption>
+        <figcaption>named.conf.local left with no zone definitions, internal mtlab.local resolution stays with the Windows Server DC.</figcaption>
       </figure>
-      <p class="note">Note: The named.conf.local file contains no zone definitions. The Pi does not handle internal mtlab.local resolution — that remains the responsibility of the Windows Server DC as the authoritative primary DNS. The Pi forwards all external queries to upstream public resolvers and serves as a failover DNS only.</p>
+      <p class="note">Note: The named.conf.local file contains no zone definitions. The Pi does not handle internal mtlab.local resolution, that remains the responsibility of the Windows Server DC as the authoritative primary DNS. The Pi forwards all external queries to upstream public resolvers and serves as a failover DNS only.</p>
     </section>
 
     <!-- 7. Verify Configuration & Enable Service -->
@@ -486,7 +486,7 @@
 # Any errors will be displayed with line numbers</span></code></pre>
       <figure>
         <img class="zoomable" onclick="openLightbox(this.src)" src="Images/rpdns15.png" alt="named-checkconf run with no output, confirming valid syntax">
-        <figcaption>No output from named-checkconf — configuration syntax is valid.</figcaption>
+        <figcaption>No output from named-checkconf, configuration syntax is valid.</figcaption>
       </figure>
 
       <h3>7.2 – 7.4 Enable, Start, and Verify the Service</h3>
@@ -500,7 +500,7 @@ sudo systemctl status named
 <span class="cmt"># Both bind9 and named should show active (running)</span></code></pre>
       <figure>
         <img class="zoomable shot-lg" onclick="openLightbox(this.src)" src="Images/rpdns17.png" alt="systemctl status named showing the service active and running, with all zones loaded">
-        <figcaption>named.service active (running) — zones loaded, service started successfully.</figcaption>
+        <figcaption>named.service active (running), zones loaded, service started successfully.</figcaption>
       </figure>
       <p class="note">The "Unable to fetch DNSKEY" line at the bottom is a routine root-key refresh timeout and does not affect DNS resolution.</p>
     </section>
@@ -551,9 +551,9 @@ dig @192.168.10.5 google.com</code></pre>
         <tr><td>IP Address</td><td>192.168.10.5</td></tr>
         <tr><td>Subnet Mask</td><td>255.255.255.0 (/24)</td></tr>
         <tr><td>Default Gateway</td><td>192.168.10.1 (3550 VLAN 10 SVI)</td></tr>
-        <tr><td>Primary DNS</td><td>127.0.0.1 (self — BIND9)</td></tr>
+        <tr><td>Primary DNS</td><td>127.0.0.1 (self, BIND9)</td></tr>
         <tr><td>Secondary DNS</td><td>192.168.20.10 (Windows Server DC)</td></tr>
-        <tr><td>VLAN</td><td>VLAN 10 — Servers</td></tr>
+        <tr><td>VLAN</td><td>VLAN 10 - Servers</td></tr>
         <tr><td>Switch Port</td><td>2950 (Switch001) Fa0/4</td></tr>
         <tr><td>Hostname</td><td>RPI-DNS</td></tr>
       </table>
