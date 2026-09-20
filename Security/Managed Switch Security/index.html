@@ -90,6 +90,7 @@
     .callout.issue{border-left-color:#e0a63f}
     .callout.gap{border-left-color:#7f8599}
     .callout.resolved{border-left-color:#4dd08a}
+    .callout.correction{border-left-color: #ff4d4d;}
 
     table{width:100%;border-collapse:collapse;margin:18px 0 30px;font-size:0.92rem}
     th, td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--card-border);color:#c7cadb;vertical-align:top}
@@ -201,6 +202,12 @@ write memory</code></pre>
     <div class="callout resolved">
       <p><strong>Resolved:</strong> Raising the maximum to 5 and clearing the stale sticky entry restored connectivity for DC01 and every other VM sharing Fa0/2. The underlying lesson matters more than the fix itself: port security's default model assumes one device per port, and that assumption does not hold on a port that is structurally a shared hypervisor uplink. The maximum on a port like this is not a value to set once; it is a running total tied to how many VMs live on that host, and it needs to be revisited every time that inventory changes, or the same outage will recur after the next reboot.</p>
     </div>
+
+    <div class="callout correction">
+      <p><strong>Correction</strong> Later on in this lab, switch port security was removed from the Hyper-V uplink port fa0/2 entirely. Primarily due to the fact that applying switch port security on a Hyper-V uplink isn't a
+      feasible practice in active production environments where there are often too many MAC addresses traversing the port to realistically assign a maximum number to. Along with that, a managed switch configured with a 
+      Hyper-V uplink is generally stored in a heavily secured <strong>MDF - Main Distribution Frame</strong>, where an intruder physically plugging into that port wouldn't be the first consideration of concern in a secured
+      Hyper-V MDF running Hyper-V infrastructure.</p>
 
     <h3>1.2 Switch002 (Cisco Catalyst 3550)</h3>
     <p>Switch002 has a single active client access port, Fa0/2, connected to the HT Technology Mini PC on VLAN 40. The remaining relevant ports on this switch are either trunk links (Fa0/20, Fa0/23) or a Layer 3 routed uplink to the FortiGate 60E (Fa0/24), none of which take port security since it applies only to Layer 2 access ports.</p>
