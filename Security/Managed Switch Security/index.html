@@ -207,7 +207,7 @@ write memory</code></pre>
       <p><strong>Correction:</strong> Later on in this lab, switch port security was removed from the Hyper-V uplink port fa0/2 entirely. Primarily due to the fact that applying switch port security on a Hyper-V uplink isn't a
       feasible practice in active production environments, where there are often too many MAC addresses traversing the port to realistically assign a maximum number to. Along with that, a managed switch configured with a 
       Hyper-V uplink is generally stored in a heavily secured <strong>MDF - Main Distribution Frame</strong>, where an intruder physically plugging into that port wouldn't be the first consideration of concern in a secured
-      MDF running Hyper-V infrastructure.</p>
+      MDF running Hyper-V infrastructure. Port fa0/2 on the Cisco Catalyst 2950 also became a trunk port later on in this lab to be able to function with Hyper-V VMs configured with different VLANs.</p>
     </div>
 
     <h3>1.2 Switch002 (Cisco Catalyst 3550)</h3>
