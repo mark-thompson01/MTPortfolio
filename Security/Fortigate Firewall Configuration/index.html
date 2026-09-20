@@ -86,6 +86,7 @@
       display:block; margin:0 auto; background:#0b0d12;
     }
     figure img:hover{transform:translateY(-2px); border-color:#3a4a67}
+    figure img.img-narrow{max-width:650px}
     figcaption{
       color:var(--muted); font-size:13.5px; margin-top:10px; max-width:640px;
       margin-left:auto; margin-right:auto; line-height:1.5; font-style:italic;
@@ -214,7 +215,7 @@
     <p>With the VM tagged and addressed, it still could not reach its gateway. Systematic troubleshooting (confirming the VM's own configuration, checking ARP, checking the VLAN 50 SVI on Switch002, and finally checking the MAC address table on Switch001) traced the problem back to Switch001 Fa0/2, the port connecting SRV-HYPERV-01 to the switch stack.</p>
 
     <figure>
-      <img src="Images/FGS5.png" alt="Original configuration on Switch001 Fa0/2" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS5.png" alt="Original configuration on Switch001 Fa0/2" onclick="openLightbox(this)">
       <figcaption>Original configuration on Switch001 Fa0/2: switchport mode access, VLAN 20, with port security enabled (five-MAC maximum, sticky addressing).<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
@@ -223,12 +224,12 @@
     <p>A first attempt to fix this by simply adding VLAN 50 to the trunk-allowed list did not resolve the issue, since the port was still in access mode:</p>
 
     <figure>
-      <img src="Images/FGS6.png" alt="Initial attempt adding VLAN 50 to the trunk-allowed list" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS6.png" alt="Initial attempt adding VLAN 50 to the trunk-allowed list" onclick="openLightbox(this)">
       <figcaption>Initial attempt: adding VLAN 50 to the trunk-allowed list. This had no effect because the port was still configured in access mode.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img src="Images/FGS7-AccessMode-Inconsistency.png" alt="Confirming the port remained in access mode" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS7-AccessMode-Inconsistency.png" alt="Confirming the port remained in access mode" onclick="openLightbox(this)">
       <figcaption>Confirming the port remained in access mode after the trunk-allowed-VLAN change, explaining why VLAN 50 traffic still could not pass.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
@@ -236,29 +237,29 @@
     <p>Correcting this required two changes: converting Fa0/2 to trunk mode, and removing port security entirely. Port security is designed for edge or access ports defending against unauthorized device connections in physically accessible spaces; it is a poor fit for a shared hypervisor uplink, where the number of MAC addresses is inherently unpredictable as VMs are added, rebuilt, or migrated over time. A fixed MAC limit on this kind of port creates operational friction without addressing a realistic threat, since the actual trust boundary here is the physical security of the server room and the hypervisor host itself.</p>
 
     <figure>
-      <img src="Images/FGS8-Fa0-2-PortSecRemoval.png" alt="Removing port security from Fa0/2" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS8-Fa0-2-PortSecRemoval.png" alt="Removing port security from Fa0/2" onclick="openLightbox(this)">
       <figcaption>Removing port security from Fa0/2. A typo in one sticky MAC address (0015.4c68.011d instead of 00e0.4c68.011d) was correctly rejected by the switch and had no effect on the final configuration; the sequence continued and completed successfully.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img src="Images/FGS9-Fa0-2-TrunkPortConfig.png" alt="Converting Fa0/2 to trunk mode" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS9-Fa0-2-TrunkPortConfig.png" alt="Converting Fa0/2 to trunk mode" onclick="openLightbox(this)">
       <figcaption>Converting Fa0/2 to trunk mode: access VLAN assignment removed, switchport mode trunk applied, native VLAN and allowed VLAN list reapplied and saved.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img src="Images/FGS10.png" alt="Final clean Fa0/2 configuration" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS10.png" alt="Final clean Fa0/2 configuration" onclick="openLightbox(this)">
       <figcaption>Final, clean Fa0/2 configuration: trunk mode, native VLAN 99, allowed VLANs 1, 10, 20, 40, 50, 99, no port security remaining.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <h3>Verifying the Fix</h3>
 
     <figure>
-      <img src="Images/FGS11.png" alt="Confirming Fa0/2 and Fa0/23 are trunking correctly" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS11.png" alt="Confirming Fa0/2 and Fa0/23 are trunking correctly" onclick="openLightbox(this)">
       <figcaption>Confirming both Fa0/2 and the Switch001-to-Switch002 uplink (Fa0/23) are trunking correctly with VLAN 50 in the allowed list on both ends.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img src="Images/FGS12.png" alt="Spanning tree state for VLAN 50" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS12.png" alt="Spanning tree state for VLAN 50" onclick="openLightbox(this)">
       <figcaption>Spanning tree state for VLAN 50 confirming both Fa0/2 and Fa0/23 are forwarding (FWD), not blocking.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
@@ -596,17 +597,17 @@
     <p>With the LAN-to-WAN policy's Log Allowed Traffic setting corrected to All Sessions, and logtraffic all confirmed saved in the running configuration, Forward Traffic logging was retested end to end: fresh HTTPS traffic was generated from the jump host, and the resulting sessions were confirmed appearing in Forward Traffic with source, destination, and application detail populated.</p>
 
     <figure>
-      <img src="Images/FGS54.png" alt="CLI verification of firewall policy configuration" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS54.png" alt="CLI verification of firewall policy configuration" onclick="openLightbox(this)">
       <figcaption>Logging in as SOperations via the CLI and reviewing the running firewall policy configuration, including the ssl-ssh-profile and nat settings on LAN-to-WAN.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img src="Images/FGS55.png" alt="Setting logtraffic all via the CLI" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS55.png" alt="Setting logtraffic all via the CLI" onclick="openLightbox(this)">
       <figcaption>Explicitly setting logtraffic all on the LAN-to-WAN policy via the CLI, after an earlier GUI change had not persisted.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img src="Images/FGS56.png" alt="Confirming logtraffic all saved in the running configuration" onclick="openLightbox(this)">
+      <img class="img-narrow" src="Images/FGS56.png" alt="Confirming logtraffic all saved in the running configuration" onclick="openLightbox(this)">
       <figcaption>Confirming logtraffic all was actually saved in the running configuration for the LAN-to-WAN policy.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
