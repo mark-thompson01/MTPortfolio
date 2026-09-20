@@ -87,6 +87,7 @@
     }
     figure img:hover{transform:translateY(-2px); border-color:#3a4a67}
     figure img.img-narrow{max-width:850px}
+    figure img.img-medium{max-width:950px}
     figcaption{
       color:var(--muted); font-size:13.5px; margin-top:10px; max-width:640px;
       margin-left:auto; margin-right:auto; line-height:1.5; font-style:italic;
@@ -197,12 +198,12 @@
     <p>On the Hyper-V side, the VM's virtual network adapter was tagged with VLAN ID 50 in the adapter's settings, so its traffic would be correctly tagged as it left the host through the external virtual switch.</p>
 
     <figure>
-      <img class="img-narrow" src="Images/FGS2.png" alt="Hyper-V Manager showing the Win11-Client VM" onclick="openLightbox(this)">
+      <img class="img-medium" src="Images/FGS2.png" alt="Hyper-V Manager showing the Win11-Client VM" onclick="openLightbox(this)">
       <figcaption>Hyper-V Manager showing the Win11-Client VM alongside the lab's other VMs on SRV-HYPERV-01.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img class="img-narrow" src="Images/FGS3.png" alt="VLAN ID 50 enabled on the Win11-Client VM network adapter" onclick="openLightbox(this)">
+      <img class="img-medium" src="Images/FGS3.png" alt="VLAN ID 50 enabled on the Win11-Client VM network adapter" onclick="openLightbox(this)">
       <figcaption>VLAN ID 50 enabled on the Win11-Client VM's network adapter, tagging its traffic for the Management VLAN.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
