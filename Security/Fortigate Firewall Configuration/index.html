@@ -498,11 +498,16 @@
       <figcaption>certificate-inspection-custom now appears in the profile list without the read-only lock icon, alongside the original built-in profiles.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
-    <p>The cloned profile was then configured with server certificate validation set to block on every failure condition: blocked, untrusted, expired, revoked, timed-out, and validation-failed certificates were all set to Block, with SNI checking enabled and SSL anomalies logged.</p>
+    <p>The cloned profile initially carried over its parent's default values. It was then configured with server certificate validation set to block on every failure condition: blocked, untrusted, expired, revoked, timed-out, and validation-failed certificates were all set to Block, with SNI checking enabled and SSL anomalies logged.</p>
 
     <figure>
-      <img src="Images/FGSSSLCertClone4.png" alt="certificate-inspection-custom profile settings" onclick="openLightbox(this)">
-      <figcaption>certificate-inspection-custom: SSL Certificate Inspection method, using Fortinet_CA_SSL, with Blocked certificates and Untrusted SSL certificates both set to Block, and Server certificate SNI check enabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+      <img src="Images/FGSSSLCertClone4.png" alt="certificate-inspection-custom profile settings before configuration" onclick="openLightbox(this)">
+      <figcaption>certificate-inspection-custom immediately after cloning, before its validation settings were adjusted.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGSSSLCertClone5.png" alt="certificate-inspection-custom profile settings after configuration" onclick="openLightbox(this)">
+      <figcaption>certificate-inspection-custom after configuration: SSL Certificate Inspection method, using Fortinet_CA_SSL, with Blocked certificates and Untrusted SSL certificates both set to Block, and Server certificate SNI check enabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
