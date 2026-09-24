@@ -481,31 +481,60 @@
     <h2>SSL Inspection (Certificate-Inspection Mode)</h2>
     <p>Full SSL deep-inspection, which decrypts, scans, and re-encrypts traffic, depends on the UTM engine and is not available without a FortiGuard subscription. Certificate-inspection mode is a lighter alternative available without a license: it examines the server certificate and SNI (Server Name Indication) during the TLS handshake without decrypting the payload, and can flag or block based on certificate validity, without providing content-level scanning.</p>
 
-    <figure>
-      <img src="Images/FGS41.png" alt="Built-in SSL/SSH inspection profiles" onclick="openLightbox(this)">
-      <figcaption>FortiGate's built-in SSL/SSH inspection profiles, including the read-only certificate-inspection profile used here.<br><span class="zoom-hint">Click to zoom</span></figcaption>
-    </figure>
-
-    <p>The built-in certificate-inspection profile was reviewed and applied to the LAN-to-WAN policy, with server certificate validation set to block expired, revoked, and validation-failed certificates.</p>
+    <p>FortiOS ships several built-in SSL/SSH inspection profiles, but built-in profiles are read-only. To get a fully configurable profile, one where every validation setting can be set explicitly rather than left at factory defaults, the built-in <code>certificate-inspection</code> profile was cloned into a new, editable profile named <code>certificate-inspection-custom</code>.</p>
 
     <figure>
-      <img src="Images/FGS42.png" alt="Certificate-inspection profile settings" onclick="openLightbox(this)">
-      <figcaption>The certificate-inspection profile's settings: SSL Certificate Inspection method, using Fortinet_CA_SSL, with blocked and untrusted certificates set to Block.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+      <img src="Images/FGSSSLCertClone1.png" alt="Built-in SSL/SSH inspection profiles, all read-only" onclick="openLightbox(this)">
+      <figcaption>FortiGate's built-in SSL/SSH inspection profiles: certificate-inspection, deep-inspection, and no-inspection are all read-only (lock icon), leaving only View rather than Edit available. certificate-inspection was selected as the base for a new, editable clone.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img src="Images/FGS43.png" alt="Certificate validation settings within the profile" onclick="openLightbox(this)">
-      <figcaption>Certificate validation settings within the profile: expired, revoked, timed-out, and validation-failed certificates all set to Block.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+      <img src="Images/FGSSSLCertClone2.png" alt="Cloning the certificate-inspection profile" onclick="openLightbox(this)">
+      <figcaption>Cloning certificate-inspection into a new profile named certificate-inspection-custom.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img src="Images/FGS44.png" alt="LAN-to-WAN policy prior to applying the profile" onclick="openLightbox(this)">
-      <figcaption>LAN-to-WAN policy prior to applying the certificate-inspection profile.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+      <img src="Images/FGSSSLCertClone3.png" alt="certificate-inspection-custom now listed as an editable profile" onclick="openLightbox(this)">
+      <figcaption>certificate-inspection-custom now appears in the profile list without the read-only lock icon, alongside the original built-in profiles.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <p>The cloned profile was then configured with server certificate validation set to block on every failure condition: blocked, untrusted, expired, revoked, timed-out, and validation-failed certificates were all set to Block, with SNI checking enabled and SSL anomalies logged.</p>
+
+    <figure>
+      <img src="Images/FGSSSLCertClone4.png" alt="certificate-inspection-custom profile settings" onclick="openLightbox(this)">
+      <figcaption>certificate-inspection-custom: SSL Certificate Inspection method, using Fortinet_CA_SSL, with Blocked certificates and Untrusted SSL certificates both set to Block, and Server certificate SNI check enabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <figure>
-      <img src="Images/FGS45.png" alt="Certificate-inspection profile applied to the LAN-to-WAN policy" onclick="openLightbox(this)">
-      <figcaption>The certificate-inspection profile applied to the LAN-to-WAN policy's Security Profiles section, with Log Allowed Traffic corrected to All Sessions.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+      <img src="Images/FGSSSLCertClone6.png" alt="Certificate validation settings within the custom profile" onclick="openLightbox(this)">
+      <figcaption>Certificate validation settings within the custom profile: expired, revoked, timed-out, and validation-failed certificates all set to Block, with SSL anomaly logging enabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGSSSLCertClone7.png" alt="Final SSL/SSH inspection profile list" onclick="openLightbox(this)">
+      <figcaption>Final profile list: certificate-inspection-custom sits alongside the original read-only profiles, ready to be applied to a policy.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <p>With the profile configured, it was applied to the LAN-to-WAN policy, the internet-bound traffic path where certificate inspection actually matters.</p>
+
+    <figure>
+      <img src="Images/FGSSSLCertClone8.png" alt="Firewall policy list showing LAN-to-WAN" onclick="openLightbox(this)">
+      <figcaption>Firewall policy list: LAN-to-WAN, the internal-to-wan1 accept rule, selected for editing.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGSSSLCertClone10.png" alt="LAN-to-WAN policy edit screen, SSL inspection field" onclick="openLightbox(this)">
+      <figcaption>LAN-to-WAN policy's Security Profiles section, SSL inspection field open for editing.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGSSSLCertClone11.png" alt="certificate-inspection-custom selected as the SSL inspection profile" onclick="openLightbox(this)">
+      <figcaption>certificate-inspection-custom selected as the policy's SSL inspection profile.<br><span class="zoom-hint">Click to zoom</span></figcaption>
+    </figure>
+
+    <figure>
+      <img src="Images/FGSSSLCertClone12.png" alt="LAN-to-WAN policy confirmed with the custom profile and full logging" onclick="openLightbox(this)">
+      <figcaption>LAN-to-WAN policy confirmed: SSL inspection set to certificate-inspection-custom, Log Allowed Traffic set to All Sessions, policy enabled.<br><span class="zoom-hint">Click to zoom</span></figcaption>
     </figure>
 
     <h3>Verifying the Profile Is Active</h3>
