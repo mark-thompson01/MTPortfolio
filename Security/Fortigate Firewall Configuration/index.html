@@ -316,7 +316,8 @@
     </div>
 
     <h3>Idle Timeout and Password Policy</h3>
-    <p>Admin idle timeout was reduced from the default to 5 minutes. A password policy was configured requiring a 12-character minimum. An initial pass at enforcing character complexity did not fully apply as intended; this was caught during a screenshot review and corrected to properly enforce upper case, lower case, numeric, and special character requirements, with password reuse disabled.</p>
+    <p>Admin idle timeout was reduced from the default to 5 minutes. A password policy was configured requiring a 12-character minimum. An
+      initial pass at enforcing character complexity did not fully apply as intended; this was caught during a screenshot review and corrected to properly enforce upper case, lower case, numeric, and special character requirements, with password reuse disabled.</p>
 
     <figure>
       <img src="Images/FGS18.png" alt="Admin idle timeout set to 5 minutes" onclick="openLightbox(this)">
@@ -538,7 +539,7 @@
     </figure>
 
     <h3>Verifying the Profile Is Active</h3>
-    <p>An initial verification attempt (browsing to a known-bad certificate test site and expecting a corresponding FortiGate log entry) surfaced two separate issues rather than confirming success: Forward Traffic logs were empty entirely, and the policy's own Log Allowed Traffic setting was found set to Security Events only rather than All Sessions.</p>
+    <p>In an initial verification attempt (browsing to a known-bad certificate test site and expecting a corresponding FortiGate log entry) surfaced two separate issues rather than confirming success: Forward Traffic logs were empty entirely, and the policy's own Log Allowed Traffic setting was found set to Security Events only rather than All Sessions.</p>
 
     <div class="callout callout-lesson">
       <div class="callout-title">Lesson Learned</div>
