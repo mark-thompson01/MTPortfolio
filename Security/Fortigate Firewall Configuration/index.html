@@ -550,17 +550,35 @@
       <p>A browser's own certificate warning (Chrome's 'Your connection is not private') is generated entirely client-side and proves nothing about whether a firewall in the traffic path is inspecting anything. Confirming SSL inspection is actually functioning requires checking the FortiGate's own logs for the session and confirming the SSL Inspection Profile field is populated, not just observing that the browser flagged the certificate.</p>
     </div>
 
-    <p>Correcting the policy's logging setting to All Sessions, and separately confirming <code>logtraffic all</code> was actually saved in the running configuration (an earlier GUI change had not persisted), resolved both issues. With logging correctly capturing all sessions, the badssl.com test session and a normal HTTPS session both appeared in Forward Traffic, confirming the certificate-inspection profile was actively evaluating traffic in both directions.</p>
+    <p>Correcting the policy's logging setting to All Sessions, and separately confirming <code>logtraffic all</code> was actually saved in the running configuration (an earlier GUI change had not persisted), resolved the logging gap. Sessions to the test site now appeared correctly in Forward Traffic. But re-testing against <code>expired.badssl.com</code> still produced the browser's own native certificate warning rather than a FortiGate-generated block — meaning the connection was passing through untouched, despite every setting in the profile and policy being individually correct.</p>
 
-    <figure>
-      <img src="Images/FGS57.png" alt="Browsing to expired.badssl.com" onclick="openLightbox(this)">
-      <figcaption>Browsing to expired.badssl.com, a known-bad certificate test site, as part of verifying the profile was actually inspecting traffic.<br><span class="zoom-hint">Click to zoom</span></figcaption>
-    </figure>
+    <h3>Root Cause: Proxy-Based Inspection Is Unsupported on This Hardware</h3>
+    <p>Tracking down why a fully correct configuration still wasn't blocking anything took several rounds of diagnostics: a live flow trace, ruling out NPU/ASIC session offloading, confirming <code>utm-status</code> was enabled on the policy, and re-verifying every individual certificate-validation setting in the profile. Each of these was a real, separately-worth-fixing finding along the way, but none of them was the actual root cause.</p>
 
-    <figure>
-      <img src="Images/FGS58.png" alt="Forward Traffic log showing the badssl.com session" onclick="openLightbox(this)">
-      <figcaption>Forward Traffic log, with logging corrected to All Sessions: the badssl.com test session and normal HTTPS traffic both appearing with full source, destination, and application detail.<br><span class="zoom-hint">Click to zoom</span></figcaption>
-    </figure>
+    <p>The real explanation is a documented FortiOS behavior: when a firewall policy runs in <strong>flow-based</strong> inspection mode, a <code>certificate-inspection</code> profile's Common Options — Expired, Revoked, Untrusted, Validation timed-out, and Validation failed certificates — are never actually evaluated. Fortinet's own troubleshooting material confirms this using the exact same test case as here:</p>
+
+    <div class="callout callout-constraint">
+      <div class="callout-title">Constraint (Fortinet-documented)</div>
+      <p>"Common Options are only validated by the IPS engine for policies in proxy mode or for Full SSL Inspection mode." — Fortinet Community, <em>Troubleshooting Tip: SSL Certificate Inspection not blocking sessions with expired certificates</em>. ("IPS engine" here refers to FortiOS's internal flow-based content-inspection engine, not the IPS security profile feature — the two happen to share the same underlying processing engine.)</p>
+    </div>
+
+    <p>Switching the LAN-to-WAN policy to proxy-based inspection should have been a one-line fix (<code>set inspection-mode proxy</code>). Instead, the CLI rejected the command outright with a parse error, and no Inspection Mode toggle appeared in the GUI at all. That pointed to something more fundamental than a policy setting.</p>
+
+    <p>The FortiGate 60E is a <strong>2GB RAM model</strong> (confirmed via <code>diagnose hardware sysinfo conserve</code>), and Fortinet removed proxy-based inspection support entirely from every 2GB RAM FortiGate model, effective FortiOS 7.4.4:</p>
+
+    <div class="callout callout-constraint">
+      <div class="callout-title">Constraint (Fortinet-documented)</div>
+      <p>"The affected models are the FortiGate 40F, 60E, 60F, 80E, and 90E series devices and their variants." — Fortinet, <em>FortiOS 7.4.2 Release Notes</em>. Separately: "FortiOS no longer supports proxy-related features on FortiGates with 2 GB RAM or less starting from v7.4.4." — Fortinet Community, <em>Technical Tip: Firewall Policies displaying as Proxy-Based... on 2 GB RAM Devices</em>.</p>
+    </div>
+
+    <p>This lab's FortiGate 60E is running FortiOS 7.4.5 — past that cutoff. Put together: proxy-based inspection, the one mode in which certificate-inspection's Common Options actually function, has been removed from this exact hardware class as of the firmware version installed here. This is a genuine hardware-and-firmware ceiling, not a configuration gap.</p>
+
+    <div class="callout callout-lesson">
+      <div class="callout-title">Lesson Learned</div>
+      <p>Every individual setting in this profile and policy was correct throughout most of this troubleshooting process — the block still wasn't happening because the feature it depends on (proxy-based inspection) had been deprecated out from under this hardware tier by a firmware update, independent of anything in the configuration. Confirming a documented platform limitation, rather than continuing to re-check settings that were already right, was the actual resolution here.</p>
+    </div>
+
+    <p>Everything upstream of this limitation remains correctly configured and does provide real value: certificate-inspection still performs its lightweight SNI/handshake-level parsing in flow mode, the custom profile and policy assignment are exactly as intended, and the same configuration would fully enforce Common Options validation if run on 4GB+ RAM hardware, or on this hardware prior to firmware 7.4.4. On this specific device and firmware, though, blocking on expired, revoked, untrusted, or otherwise invalid certificates cannot be achieved through certificate-inspection's Common Options — a limitation worth stating plainly rather than working around with a downgraded firmware version just to force a demo result.</p>
 
     <hr class="divider">
 
